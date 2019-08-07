@@ -109,8 +109,15 @@ namespace Isotope_fitting
         int current_peak_index;
         public static List<double[]> peak_points = new List<double[]>();
 
-        public static double ppmError=8.0;
-        public static double min_intes=50.0;
+        public static double ppmError = 8.0;
+        public static double min_intes = 50.0;
+
+        public System.Diagnostics.Stopwatch sw1 = new System.Diagnostics.Stopwatch();
+        public System.Diagnostics.Stopwatch sw2 = new System.Diagnostics.Stopwatch();
+        public System.Diagnostics.Stopwatch sw3 = new System.Diagnostics.Stopwatch();
+        public System.Diagnostics.Stopwatch sw4 = new System.Diagnostics.Stopwatch();
+        public System.Diagnostics.Stopwatch sw5 = new System.Diagnostics.Stopwatch();
+        public System.Diagnostics.Stopwatch sw6 = new System.Diagnostics.Stopwatch();
 
         Form6 frm6 = new Form6();
         #endregion
@@ -142,11 +149,140 @@ namespace Isotope_fitting
 
 
 
-        
-        public IEnumerable<Control> GetControls(Control c)
+        #region Import data
+        private void loadExp_Btn_Click(object sender, EventArgs e)
         {
-            return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
+            load_experimental_sequence();
         }
+
+        private void load_experimental_sequence()
+        {
+            sw1.Reset(); sw1.Start();
+            load_experimental();
+            sw1.Stop(); Console.WriteLine(sw1.ElapsedMilliseconds.ToString());
+
+            sw1.Reset(); sw1.Start();
+            post_load_actions();
+            sw1.Stop(); Console.WriteLine(sw1.ElapsedMilliseconds.ToString());
+
+            sw1.Reset(); sw1.Start();
+            peakDetect_and_resolutionRef();
+            sw1.Stop(); Console.WriteLine(sw1.ElapsedMilliseconds.ToString());
+        }
+
+
+        private void load_experimental()
+        {
+            if (!is_loading && !is_calc)
+            {
+                OpenFileDialog expData = new OpenFileDialog();
+                List<string> lista = new List<string>();
+                string fullPath = "";
+
+                // Open dialogue properties
+                expData.InitialDirectory = Application.StartupPath + "\\Data";
+                expData.Title = "Load experimental data"; expData.FileName = "";
+                expData.Filter = "data file|*.txt|All files|*.*";
+
+                if (expData.ShowDialog() != DialogResult.Cancel)
+                {
+                    fullPath = expData.FileName;
+                    StreamReader objReader = new StreamReader(fullPath);
+                    file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
+                    do { lista.Add(objReader.ReadLine()); }
+                    while (objReader.Peek() != -1);
+                    objReader.Close();
+
+                    int arrayPositionIndex = 0;
+                    experimental.Clear();
+
+                    //add toolstrip progress bar
+                    ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = lista.Count, Size = new Size(227, 23), AutoSize = false };
+                    user_grpBox.Controls.Add(tlPrgBr);
+                    max_exp = 0.0;
+                    for (int j = 0; j != (lista.Count); j++)
+                    {
+                        try
+                        {
+                            string[] tmp_str = lista[j].Split('\t');
+                            if (tmp_str.Length == 2) experimental.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]) });
+                            if (max_exp < dParser(tmp_str[1])) max_exp = dParser(tmp_str[1]);
+                        }
+                        catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
+                        arrayPositionIndex++;
+                        tlPrgBr.Value++;
+                    }
+                    tlPrgBr.Dispose();
+                }
+            }
+            else { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+        }
+
+        private void post_load_actions()
+        {
+            insert_exp = true;
+            recalc = true;
+
+            // post load actions
+            fitMin_Box.Enabled = fitMax_Box.Enabled = fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
+            Fitting_chkBox.Checked = false;
+
+            selected_window = 1000000;
+            fitMin_Box.Text = experimental[0][0].ToString();
+            fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
+            //fix_experimentalTo_100(max_exp);
+
+            parse_data(0);
+
+            if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
+            else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+
+            //add experimental to plot
+            selectedFragments.Add(0);
+            if (all_data.Count > 1) { refix_data_to_max_exp(); step_Fitting(); }
+            if (!is_loading && !is_calc)
+            {
+                if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); }
+                refresh_iso_plot();
+            }
+            start_idx = 0;
+            end_idx = experimental.Count;
+            //fix_experimental_gaps(max_exp);                
+            loadFit_Btn.Enabled = false;
+        }
+
+        private void peakDetect_and_resolutionRef()
+        {
+            if (experimental.Count() > 0)
+            {
+                peak_detect();
+                if (peak_points.Count() > 0)
+                {
+                    displayPeakList_btn.Enabled = true;
+                    exp_res++;
+                    //plot_peak(); 
+                    List<float> tmp1 = new List<float>();
+                    List<float> tmp2 = new List<float>();
+                    foreach (double[] peak in peak_points)
+                    {
+                        if (peak[5] > 200000)
+                        {
+                            tmp1.Add((float)(peak[1] + peak[4]));
+                            tmp2.Add((float)peak[3]);
+                        }
+                    }
+                    if (tmp1.Count > 0)
+                    {
+                        Resolution_List.L.Add("resolution from file" + exp_res.ToString(), new Resolution_List.MachineR(tmp1.ToArray(), tmp2.ToArray()));
+                        add_machine(true);
+                        display_peakList();
+                    }
+                }
+            }
+        }
+        #endregion
+
+
 
         #region OxyPlot
         private void Initialize_Oxy()
@@ -252,7 +388,9 @@ namespace Isotope_fitting
             MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
             ctxMn1.MenuItems.AddRange(new MenuItem[] { copyRow, colorSelection });
             frag_listView.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
-            
+
+            displayPeakList_btn.Click += (s, e) => { display_peakList(); };
+
             #region unused
             ////index menu for fragment type ckeckboxes
             //ContextMenu ctxMn2 = new ContextMenu() { };
@@ -2617,130 +2755,6 @@ namespace Isotope_fitting
             saveCalc_Btn.Enabled = false;
         }
 
-        private void loadExp_Btn_Click(object sender, EventArgs e)
-        {
-            load_experimental();
-           
-        }
-        private void load_experimental()
-        {
-            if (!is_loading && !is_calc)
-            {
-                OpenFileDialog expData = new OpenFileDialog();
-                List<string> lista = new List<string>();
-                string fullPath = "";
-
-                // Open dialogue properties
-                expData.InitialDirectory = Application.StartupPath + "\\Data";
-                expData.Title = "Load experimental data"; expData.FileName = "";
-                expData.Filter = "data file|*.txt|All files|*.*";
-
-                if (expData.ShowDialog() != DialogResult.Cancel)
-                {
-                    fullPath = expData.FileName;
-                    System.IO.StreamReader objReader = new System.IO.StreamReader(fullPath);
-                    file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
-                    do { lista.Add(objReader.ReadLine()); }
-                    while (objReader.Peek() != -1);
-                    objReader.Close();
-
-                    int arrayPositionIndex = 0;
-                    experimental.Clear();
-
-                    //add toolstrip progress bar
-                    ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = lista.Count, Size = new Size(227, 23), AutoSize = false };
-                    user_grpBox.Controls.Add(tlPrgBr);
-                    max_exp = 0.0;
-                    for (int j = 0; j != (lista.Count); j++)
-                    {
-                        try
-                        {
-                            string[] tmp_str = lista[j].Split('\t');
-                            if (tmp_str.Length == 2) experimental.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]) });
-                            if (max_exp < dParser(tmp_str[1])) max_exp = dParser(tmp_str[1]);
-                        }
-                        catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
-                        arrayPositionIndex++;
-                        tlPrgBr.Value++;
-                    }
-                    tlPrgBr.Dispose();
-                    insert_exp = true;
-                    recalc = true;
-                    // post load actions
-                    fitMin_Box.Enabled = true;
-                    fitMax_Box.Enabled = true;
-                    fitStep_Box.Enabled = true;
-                    Fitting_chkBox.Enabled = true;
-                    Fitting_chkBox.Checked = false;
-                    selected_window = 1000000;
-                    fitMin_Box.Text = experimental[0][0].ToString();
-                    fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
-                    //fix_experimentalTo_100(max_exp);
-                    parse_data(0);
-                    if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                    else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
-                    //add experimental to plot
-                    selectedFragments.Add(0);
-                    if (all_data.Count > 1) { refix_data_to_max_exp(); step_Fitting(); }
-                    if (!is_loading && !is_calc)
-                    {
-                        if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); }
-                        refresh_iso_plot();
-                    }
-                    start_idx = 0;
-                    end_idx = experimental.Count;
-                    //fix_experimental_gaps(max_exp);                
-                    loadFit_Btn.Enabled = false;
-
-                    MessageBox.Show("Experimental data file data was read successfully! Please wait for the peak detection process to end.");
-                    if (experimental.Count() > 0)
-                    {
-                        peak_detect();
-                        if (peak_points.Count() > 0)
-                        {
-                            exp_res++;
-                            //plot_peak(); 
-                            List<float> tmp1 = new List<float>();
-                            List<float> tmp2 = new List<float>();
-                            foreach (double[] peak in peak_points)
-                            {
-                                if (peak[5] > 200000)
-                                {
-                                    tmp1.Add((float)(peak[1] + peak[4]));
-                                    tmp2.Add((float)peak[3]);
-                                }
-                            }
-                            if (tmp1.Count > 0)
-                            {
-                                Resolution_List.L.Add("resolution from file" + exp_res.ToString(), new Resolution_List.MachineR(tmp1.ToArray(), tmp2.ToArray()));
-                                //SaveFileDialog save = new SaveFileDialog() { Title = "Save 'Custom Resolution' data", FileName = "Custom", Filter = "Data Files (*.cr)|*.cr", DefaultExt = "cr", OverwritePrompt = true, AddExtension = true };
-
-                                //if (save.ShowDialog() == DialogResult.OK)
-                                //{
-                                //    System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
-
-                                //    file.WriteLine("Mode:\tCustom Resolution");
-                                //    for (int r = 0; r < tmp1.Count(); r++) file.WriteLine(tmp1[r] + "\t" + tmp2[r]);
-
-                                //    file.Flush(); file.Close(); file.Dispose();
-
-                                //}
-                                add_machine(true);
-                                Form5 frm5 = new Form5();
-                                frm5.Show();
-                            }
-
-                        }
-
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return;
-            }
-
-        }
         private void refix_data_to_max_exp()
         {
             foreach (FragForm fra in Fragments2)
@@ -4654,14 +4668,8 @@ namespace Isotope_fitting
 
         private void peak_detect()
         {
-            // spectrum -1 is the live. From 0 and on are the loaded
-            // if (series_idx == -1) peak_points.Clear();
-
-            //s1.Reset(); s1.Start();
             peak_points.Clear();
-            peak_points = LIMPIC_mod();
-            //s1.Stop(); Console.WriteLine(s1.ElapsedMilliseconds.ToString());
-
+            peak_points = LIMPIC_mod();            
         }
 
         private List<double[]> LIMPIC_mod()
@@ -4726,14 +4734,9 @@ namespace Isotope_fitting
                         point[4] = pair[1];             // adjusted relative time
                         point[5] = pair[2];             // adjusted height
                         point[6] = pair[3];             // FWHM dt [bins]
-                        //point[6] = pair[4];
-                        //point[7] = pair[5];
-
-                        //if (series_idx == -1) point[3] = Math.Round(1e3 * point[3], 0);    // very nasty correction of realTime spectrum resolution
 
                         temp_peaks.Add(point);
                         last_detected_index = i;
-
                     }
                 }
             }
@@ -4746,7 +4749,7 @@ namespace Isotope_fitting
             var normal = estimate_alglib_normal(pos, dataX, dataY);
 
             double fwhm_norm = 2.3548 * normal[0] * bin_size;
-            double res_norm = dataX[pos] / /*2.0 /*/ fwhm_norm;
+            double res_norm = dataX[pos] / fwhm_norm;
 
             double[] d = new double[4] { res_norm, normal[1] * bin_size, normal[2], normal[0] };
             return d;
@@ -4794,8 +4797,23 @@ namespace Isotope_fitting
             }
         }
 
+        private void display_peakList()
+        {
+            Form5 frm5 = new Form5();
+            frm5.Show();
+        }
+
         #endregion
-        
+
+
+        #region Helpers
+        public IEnumerable<Control> GetControls(Control c)
+        {
+            return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
+        }
+
+
+        #endregion
 
         #region unused_code
         private void save_data()

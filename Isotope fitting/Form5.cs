@@ -19,10 +19,8 @@ namespace Isotope_fitting
             peak_listView.Items.Clear();
             foreach (double[] peak in Form2.peak_points)
             {
-                var listviewitem = new ListViewItem(Math.Round((peak[1] + peak[4]), 6).ToString());
-                listviewitem.SubItems.Add(Math.Round((peak[5]), 2).ToString());
-                listviewitem.SubItems.Add(Math.Round((peak[3]), 0).ToString());
-                peak_listView.Items.Add(listviewitem);
+                ListViewItem listviewitem = new ListViewItem(new string[] { Math.Round((peak[1] + peak[4]), 6).ToString(), Math.Round((peak[5]), 2).ToString(), Math.Round((peak[3]), 0).ToString() });
+                peak_listView.Items.Add(listviewitem);                
             }
             peak_listView.EndUpdate();
         }
