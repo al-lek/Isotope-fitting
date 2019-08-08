@@ -45,7 +45,6 @@
             this.peak_listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.peak_listView.FullRowSelect = true;
             this.peak_listView.GridLines = true;
-            this.peak_listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.peak_listView.HoverSelection = true;
             this.peak_listView.Location = new System.Drawing.Point(0, 0);
             this.peak_listView.Name = "peak_listView";
