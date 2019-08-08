@@ -119,6 +119,7 @@ namespace Isotope_fitting
         public System.Diagnostics.Stopwatch sw6 = new System.Diagnostics.Stopwatch();
         ProgressBar tlPrgBr;
         int max_fragment_charge = 0;
+        string precursor_carbons = "C0";
 
         Form6 frm6 = new Form6();
         #endregion
@@ -281,6 +282,7 @@ namespace Isotope_fitting
                 Peptide = Path.GetFileNameWithoutExtension(fragment_import.FileName);
 
                 lista.RemoveAt(0);
+                get_precursor_carbons(lista.Last());
                 progress_display_start(lista.Count);
 
                 for (int j = 0; j != (lista.Count); j++)
@@ -297,6 +299,15 @@ namespace Isotope_fitting
                 progress_display_stop();
                 post_import_fragments();
             }
+        }
+
+        private void get_precursor_carbons(string last_line)
+        {
+            //
+            string[] tmp_str = last_line.Split('\t');
+
+            if (tmp_str[1] == "MH")
+                precursor_carbons = tmp_str[4].Split(' ').First();
         }
 
         private void assign_resolve_fragment(string[] frag_info)
@@ -363,7 +374,7 @@ namespace Isotope_fitting
                 }
                 else substring[0] = ChemFormulas[i].Ion;
 
-                if (substring[0].StartsWith("MH"))
+                if (substring[0].StartsWith("MH") && ChemFormulas[i].InputFormula.StartsWith(precursor_carbons))  // an internal b could be MHQRP for example, so check also carbons
                 {
                     ChemFormulas[i].Ion_type = "M" + substring[1];
                     ChemFormulas[i].Color = OxyColors.DarkRed;
@@ -406,53 +417,22 @@ namespace Isotope_fitting
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
             mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
 
-            if (MHpresent)
-            {
-                int c_ = ChemFormulas.Last().InputFormula.IndexOf('C');
-                int start_idx = c_;
-                c_++;
-                do
-                {
-                    c_++;
-                } while ((c_ < ChemFormulas.Last().InputFormula.Length) && (Char.IsNumber(ChemFormulas.Last().InputFormula[c_]) == true));
-                int end_idx = c_ - 1;
-                int length = end_idx - start_idx + 1;
-                Cnumber = ChemFormulas.Last().InputFormula.Substring(start_idx, length);
-                foreach (ChemiForm chem in ChemFormulas)
-                {
-                    if (chem.Ion.Contains("MH") && chem.InputFormula.Contains(Cnumber))
-                    {
-                        string curr = chem.Ion_type;
-                        chem.Ion_type = "M" + curr.Remove(0, 10);
-                        chem.Index = 0.ToString();
-                        chem.IndexTo = (Peptide.Length - 1).ToString();
-                        chem.Color = OxyColors.DarkRed;
-                        var radioString = chem.Ion_type;
-                        chem.Radio_label = radioString;
-                        var radio_name = string.Empty;
-                        if (chem.Charge > 0) radio_name = radioString + "_+" + chem.Charge.ToString();
-                        else radio_name = radioString + "_" + chem.Charge.ToString();
-                        chem.Name = radio_name;
-
-                    }
-                }
-            }
-            if (x_index.Count > 0)
-            {
-                foreach (int xi in x_index)
-                {
-                    if (Convert.ToInt32(ChemFormulas[xi].Index) != 1) add_x(ChemFormulas[xi], max_fragment_charge, xi);
-                }
-                ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
-                i = 0;
-                for (int cha = 1; cha < ChemFormulas.Count(); cha++)
-                {
-                    if (Double.Parse(ChemFormulas[cha].Mz) < Double.Parse(ChemFormulas[cha - 1].Mz))
-                    {
-                        MessageBox.Show("Error. The fragments' list is not sorted properly!");
-                    }
-                }
-            }
+            //if (x_index.Count > 0)
+            //{
+            //    foreach (int xi in x_index)
+            //    {
+            //        if (Convert.ToInt32(ChemFormulas[xi].Index) != 1) add_x(ChemFormulas[xi], max_fragment_charge, xi);
+            //    }
+            //    ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
+            //    i = 0;
+            //    for (int cha = 1; cha < ChemFormulas.Count(); cha++)
+            //    {
+            //        if (Double.Parse(ChemFormulas[cha].Mz) < Double.Parse(ChemFormulas[cha - 1].Mz))
+            //        {
+            //            MessageBox.Show("Error. The fragments' list is not sorted properly!");
+            //        }
+            //    }
+            //}
 
             clearCalc_Btn.Enabled = true;
             mzMax_Box.Enabled = true;
