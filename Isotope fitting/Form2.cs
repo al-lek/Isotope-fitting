@@ -414,25 +414,12 @@ namespace Isotope_fitting
 
         private void post_import_fragments()
         {
-            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
-            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
+            // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
+            generate_x();
+            ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
 
-            //if (x_index.Count > 0)
-            //{
-            //    foreach (int xi in x_index)
-            //    {
-            //        if (Convert.ToInt32(ChemFormulas[xi].Index) != 1) add_x(ChemFormulas[xi], max_fragment_charge, xi);
-            //    }
-            //    ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
-            //    i = 0;
-            //    for (int cha = 1; cha < ChemFormulas.Count(); cha++)
-            //    {
-            //        if (Double.Parse(ChemFormulas[cha].Mz) < Double.Parse(ChemFormulas[cha - 1].Mz))
-            //        {
-            //            MessageBox.Show("Error. The fragments' list is not sorted properly!");
-            //        }
-            //    }
-            //}
+            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
+            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();                
 
             clearCalc_Btn.Enabled = true;
             mzMax_Box.Enabled = true;
@@ -451,323 +438,99 @@ namespace Isotope_fitting
             loadFit_Btn.Enabled = false;
         }
 
-        private void import_fragments2()
+        private void generate_x()
         {
-            int i = 0;
-            int max_charge = 1;
-            List<int> x_index = new List<int>();
-            bool MHpresent = true;
-            string Cnumber = string.Empty;
+            // this adds all x fragments msProduct does not generate (x multiCharged and x with adducts)
 
-            if (string.IsNullOrEmpty(pep_Box.Text)) { MessageBox.Show("Please insert AA Sequence"); }
-            else
+            // PROG: Very rare deadlock!!! ChemFormulas.Count CANNOT be used in for loop, it is augmented inside the loop and loop will never end!!!!!
+            int total_fragments_fromFile = ChemFormulas.Count;
+
+            for (int i = 0; i < total_fragments_fromFile; i++)
             {
-                Peptide = pep_Box.Text;
-
-                OpenFileDialog fragment_import = new OpenFileDialog() { InitialDirectory = "c:\\", Filter = "txt files (*.txt)|*.txt", FilterIndex = 2, RestoreDirectory = true, CheckFileExists = true, CheckPathExists = true };
-                List<string> lista = new List<string>();
-
-                if (fragment_import.ShowDialog() != DialogResult.Cancel)
+                if (ChemFormulas[i].Ion.StartsWith("y"))
                 {
-                    Stream fileStream = fragment_import.OpenFile();
-                    using (StreamReader sr = new StreamReader(fileStream))
+                    bool adduct = ChemFormulas[i].Ion.Contains("-");
+                    int charge = ChemFormulas[i].Charge;
+
+                    if (adduct || (!adduct && charge > 1))
                     {
-                        string headerLine = sr.ReadLine();
-                        string line;
-                        int lineCount = 0;
-                        ChemFormulas.Clear();
+                        // x have +CO -2H
+                        string mz = Math.Round(Convert.ToDouble(ChemFormulas[i].Mz) + (11.99945142 + 15.99436604 - 2 * 1.007276452) / Convert.ToDouble(charge), 4).ToString();
+                        string ion = ChemFormulas[i].Ion.Replace('y', 'x');
+                        string index = ChemFormulas[i].Index;
+                        string charges = ChemFormulas[i].Charge.ToString();
 
-                        while ((line = sr.ReadLine()) != null)
+                        string[] tmp = ChemFormulas[i].InputFormula.Split(' ');
+                        for (int j = 0; j < tmp.Length; j++)
                         {
-                            //call the method to each chemical form
-
-                            string[] inputs = Regex.Split(line, "\t");
-                            ChemFormulas.Add(new ChemiForm
-                            {
-                                InputFormula = inputs[4],
-                                Adduct = string.Empty,
-                                Deduct = string.Empty,
-                                Multiplier = 1,
-                                Charge = 0,
-                                Mz = inputs[0],
-                                Ion = inputs[1],
-                                Ion_type = string.Empty,
-                                Index = inputs[2],
-                                IndexTo = inputs[2],
-                                Error = false,
-                                Elements_set = new List<Element_set>(),
-                                Iso_total_amount = 0,
-                                Monoisotopic = new CompoundMulti(),
-                                Points = new List<PointPlot>(),
-                                Machine = string.Empty,
-                                Resolution = new float(),
-                                Combinations = new List<Combination_1>(),
-                                Profile = new List<PointPlot>(),
-                                Centroid = new List<PointPlot>(),
-                                Combinations4 = new List<Combination_4>(),
-                                FinalFormula = string.Empty,
-                                PrintFormula = inputs[4],
-                                Radio_label = string.Empty,
-                                Color = new OxyColor(),
-                                Name = string.Empty
-
-
-                            });
-                            ChemFormulas[i].PrintFormula = fix_formula(ChemFormulas[i].InputFormula);
-                            try
-                            {
-                                ChemFormulas[i].Charge = Int32.Parse(inputs[3]);
-                            }
-                            catch (FormatException e1)
-                            {
-                                MessageBox.Show("The file.txt must consist of the columns : " +
-                                        "'m/z' 'Ion Type' 'Index' 'Charge' 'Element Formula' Error: {0}", e1.Message);
-                            }
-                            if (ChemFormulas[i].Charge > max_charge) max_charge = ChemFormulas[i].Charge;
-                            if (ChemFormulas[i].Charge > 1)
-                            {
-                                ChemFormulas[i].Adduct = "H" + (ChemFormulas[i].Charge - 1);
-                            }
-                            if (Int32.TryParse(ChemFormulas[i].Index, out int k))
-                            {
-                                ChemFormulas[i].Ion_type = ChemFormulas[i].Ion;
-                                if (ChemFormulas[i].Ion.Contains('d') || ChemFormulas[i].Ion.Contains('w') || ChemFormulas[i].Ion.Contains('v')) ChemFormulas[i].Color = OxyColors.Turquoise;
-                                else if (ChemFormulas[i].Ion.Contains('a')) ChemFormulas[i].Color = OxyColors.Green;
-                                else if (ChemFormulas[i].Ion.Contains('b')) ChemFormulas[i].Color = OxyColors.Blue;
-                                else if (ChemFormulas[i].Ion.Contains('x')) { ChemFormulas[i].Color = OxyColors.LimeGreen; x_index.Add(i); }
-                                else if (ChemFormulas[i].Ion.Contains('y')) ChemFormulas[i].Color = OxyColors.DodgerBlue;
-                                else if (ChemFormulas[i].Ion.Contains('z')) ChemFormulas[i].Color = OxyColors.Tomato;
-                                else if (ChemFormulas[i].Ion.Contains('c')) ChemFormulas[i].Color = OxyColors.Firebrick;
-                                else ChemFormulas[i].Color = OxyColors.PaleGoldenrod;
-                            }
-                            else if (ChemFormulas[i].Ion.Contains("-CO"))
-                            {
-                                string substringIon = ChemFormulas[i].Ion.Replace("-CO", "");
-                                ChemFormulas[i].Ion_type = "internal a";
-                                ChemFormulas[i].Color = OxyColors.DarkViolet;
-                                if (ChemFormulas[i].Ion.Contains("NH3"))
-                                {
-                                    int n = -1;
-                                    n = ChemFormulas[i].Ion.IndexOf("NH3");
-                                    if (Char.IsNumber(ChemFormulas[i].Ion[n - 1]) != true)
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 1, 4);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 1, 4), "");
-                                        substringIon = substringIon.Remove(n - 1);
-                                    }
-                                    else
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 2, 5);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 2, 5), "");
-                                        substringIon = substringIon.Remove(n - 2);
-                                    }
-                                }
-                                if (ChemFormulas[i].Ion.Contains("H2O"))
-                                {
-                                    int n = -1;
-                                    n = ChemFormulas[i].Ion.IndexOf("H2O");
-                                    if (Char.IsNumber(ChemFormulas[i].Ion[n - 1]) != true)
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 1, 4);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 1, 4), "");
-                                        substringIon = substringIon.Remove(n - 1);
-                                    }
-                                    else
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 2, 5);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 2, 5), "");
-                                        substringIon = substringIon.Remove(n - 2);
-                                    }
-                                }
-                                if (Peptide.IndexOf(substringIon) > -1)
-                                {
-                                    ChemFormulas[i].Index = (Peptide.IndexOf(substringIon) + 1).ToString();
-                                    ChemFormulas[i].IndexTo = (Peptide.IndexOf(substringIon) + substringIon.Length).ToString();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Error in line:" + (lineCount + 1).ToString() + "./n Internal fragment " + substringIon + " could not be found in peptide sequence: " + Peptide);
-                                    ChemFormulas.Clear(); i = 0;
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                bool fix_need = false;
-                                int h2o = 0;
-                                string substringIon = ChemFormulas[i].Ion;
-                                string supp = ChemFormulas[i].Ion;
-                                ChemFormulas[i].Ion_type = "internal b";
-                                ChemFormulas[i].Color = OxyColors.MediumOrchid;
-                                if (ChemFormulas[i].Ion.Contains("H2O") && ChemFormulas[i].Ion.Contains("NH3")) { fix_need = true; }
-                                if (ChemFormulas[i].Ion.Contains("NH3"))
-                                {
-                                    int n = -1;
-                                    n = ChemFormulas[i].Ion.IndexOf("NH3");
-                                    if (Char.IsNumber(ChemFormulas[i].Ion[n - 1]) != true)
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 1, 4);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 1, 4), "");
-                                        substringIon = supp.Remove(n - 1);
-                                    }
-                                    else
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 2, 5);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 2, 5), "");
-                                        substringIon = supp.Remove(n - 2);
-                                    }
-                                }
-                                if (ChemFormulas[i].Ion.Contains("H2O"))
-                                {
-                                    int n = -1;
-                                    n = ChemFormulas[i].Ion.IndexOf("H2O");
-                                    if (Char.IsNumber(ChemFormulas[i].Ion[n - 1]) != true)
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 1, 4);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 1, 4), "");
-                                        substringIon = supp.Remove(n - 1);
-                                    }
-                                    else
-                                    {
-                                        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion_type + ChemFormulas[i].Ion.Substring(n - 2, 5);
-                                        //substringIon = substringIon.Replace(ChemFormulas[i].Ion.Substring(n - 2, 5), "");
-                                        substringIon = supp.Remove(n - 2);
-                                    }
-                                }
-
-                                //MessageBox.Show(substringIon.ToString());
-                                if (Peptide.IndexOf(substringIon) > -1)
-                                {
-                                    ChemFormulas[i].Index = (Peptide.IndexOf(substringIon) + 1).ToString();
-                                    ChemFormulas[i].IndexTo = (Peptide.IndexOf(substringIon) + substringIon.Length).ToString();
-                                }
-                                else if (substringIon.Equals("MH"))
-                                {
-                                    MHpresent = false;
-                                    string curr = ChemFormulas[i].Ion_type;
-                                    ChemFormulas[i].Ion_type = "M" + curr.Remove(0, 10);
-                                    ChemFormulas[i].Color = OxyColors.DarkRed;
-                                    ChemFormulas[i].Index = 0.ToString();
-                                    ChemFormulas[i].IndexTo = (Peptide.Length - 1).ToString();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Error in line:" + (lineCount + 1).ToString() + "./n Internal fragment " + substringIon + " could not be found in peptide sequence: " + Peptide);
-                                    ChemFormulas.Clear(); i = 0;
-                                    return;
-                                }
-
-                            }
-                            if (ChemFormulas[i].Ion_type.Contains("internal"))
-                            {
-
-                                var radioString = ChemFormulas[i].Ion_type;
-                                var radioBuider = new StringBuilder(radioString);
-                                radioBuider.Replace(" ", "_");
-                                radioBuider.Insert(10, "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]");
-                                radioString = radioBuider.ToString();
-                                ChemFormulas[i].Radio_label = radioString;
-                                var radio_name = string.Empty;
-                                if (ChemFormulas[i].Charge > 0) radio_name = radioString + "_+" + ChemFormulas[i].Charge.ToString();
-                                else radio_name = radioString + "_" + ChemFormulas[i].Charge.ToString();
-                                ChemFormulas[i].Name = radio_name;
-                            }
-                            else if (ChemFormulas[i].Ion_type.Contains("M"))
-                            {
-                                var radioString = ChemFormulas[i].Ion_type;
-                                ChemFormulas[i].Radio_label = radioString;
-                                var radio_name = string.Empty;
-                                if (ChemFormulas[i].Charge > 0) radio_name = radioString + "_+" + ChemFormulas[i].Charge.ToString();
-                                else radio_name = radioString + "_" + ChemFormulas[i].Charge.ToString();
-                                ChemFormulas[i].Name = radio_name;
-                            }
-                            else
-                            {
-                                var radioString = ChemFormulas[i].Ion_type;
-                                var radioBuider = new StringBuilder(radioString);
-                                radioBuider.Insert(1, ChemFormulas[i].Index);
-                                radioString = radioBuider.ToString();
-                                ChemFormulas[i].Radio_label = radioString;
-                                var radio_name = string.Empty;
-                                if (ChemFormulas[i].Charge > 0) radio_name = radioString + "_+" + ChemFormulas[i].Charge.ToString();
-                                else radio_name = radioString + "_" + ChemFormulas[i].Charge.ToString();
-                                ChemFormulas[i].Name = radio_name;
-                            }
-
-                            i++;
-                            lineCount++;
+                            if (tmp[j].StartsWith("C")) tmp[j] = "C" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) + 1).ToString();          //+C
+                            else if (tmp[j].StartsWith("O")) tmp[j] = "O" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) + 1).ToString();     //+O
+                            else if (tmp[j].StartsWith("H")) tmp[j] = "H" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) - 2).ToString();     //-2H
                         }
+                        string InputFormula = string.Join(" ", tmp);
+
+                        string[] frag_info = new string[] { ChemFormulas[i].Mz, ChemFormulas[i].Ion, ChemFormulas[i].Index, ChemFormulas[i].Charge.ToString(), ChemFormulas[i].InputFormula };
+                        assign_resolve_fragment(frag_info);                        
                     }
-                    mzMin_Box.Text = ChemFormulas.FirstOrDefault().Mz.ToString();
-                    mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
-                    if (MHpresent)
-                    {
-                        int c_ = ChemFormulas.Last().InputFormula.IndexOf('C');
-                        int start_idx = c_;
-                        c_++;
-                        do
-                        {
-                            c_++;
-                        } while ((c_ < ChemFormulas.Last().InputFormula.Length) && (Char.IsNumber(ChemFormulas.Last().InputFormula[c_]) == true));
-                        int end_idx = c_ - 1;
-                        int length = end_idx - start_idx + 1;
-                        Cnumber = ChemFormulas.Last().InputFormula.Substring(start_idx, length);
-                        foreach (ChemiForm chem in ChemFormulas)
-                        {
-                            if (chem.Ion.Contains("MH") && chem.InputFormula.Contains(Cnumber))
-                            {
-                                string curr = chem.Ion_type;
-                                chem.Ion_type = "M" + curr.Remove(0, 10);
-                                chem.Index = 0.ToString();
-                                chem.IndexTo = (Peptide.Length - 1).ToString();
-                                chem.Color = OxyColors.DarkRed;
-                                var radioString = chem.Ion_type;
-                                chem.Radio_label = radioString;
-                                var radio_name = string.Empty;
-                                if (chem.Charge > 0) radio_name = radioString + "_+" + chem.Charge.ToString();
-                                else radio_name = radioString + "_" + chem.Charge.ToString();
-                                chem.Name = radio_name;
-
-                            }
-                        }
-                    }
-                    if (x_index.Count > 0)
-                    {
-                        foreach (int xi in x_index)
-                        {
-                            if (Convert.ToInt32(ChemFormulas[xi].Index) != 1) add_x(ChemFormulas[xi], max_charge, xi);
-                        }
-                        ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
-                        i = 0;
-                        for (int cha = 1; cha < ChemFormulas.Count(); cha++)
-                        {
-                            if (Double.Parse(ChemFormulas[cha].Mz) < Double.Parse(ChemFormulas[cha - 1].Mz))
-                            {
-                                MessageBox.Show("Error. The fragments' list is not sorted properly!");
-                            }
-                        }
-                    }
-                    clearCalc_Btn.Enabled = true;
-                    mzMax_Box.Enabled = true;
-                    mzMin_Box.Enabled = true;
-                    mzMax_Label.Enabled = true;
-                    mzMin_Label.Enabled = true;
-                    chargeMax_Box.Enabled = true;
-                    chargeMin_Box.Enabled = true;
-                    chargeAll_Btn.Enabled = true;
-                    idxPr_Box.Enabled = true;
-                    idxTo_Box.Enabled = true;
-                    idxFrom_Box.Enabled = true;
-                    resolution_Box.Enabled = true;
-                    machine_listBox.Enabled = true;
-                    calc_Btn.Enabled = true;
-                    loadFit_Btn.Enabled = false;
-                    //ionItems = ChemFormulas.Select(x => x.Ion_type).Distinct().OrderBy(p => p).ToList();
-
-                    MessageBox.Show("The file was read successfully");
-                }                    
+                }
             }
         }
+
+
+        private void add_x(ChemiForm chem, int max_charge, int list_index)
+        {
+            double mass = double.Parse(chem.Mz, NumberStyles.AllowDecimalPoint);
+            double mass_h = 1.007825;
+            double mz = 0.0;
+            int index = Convert.ToInt32(chem.Index);
+            if (index <= 4 && max_charge > 2) max_charge = 2;
+            else if (index <= 11 && index >= 5 && max_charge > 5) max_charge = 5;
+            else if (index <= 22 && index >= 12 && max_charge > 8) max_charge = 8;
+            else if (index <= 53 && index >= 23 && max_charge > 12) max_charge = 12;
+            else if (index <= 75 && index >= 54 && max_charge > 15) max_charge = 15;
+            else if (index <= 100 && index >= 76 && max_charge > 20) max_charge = 20;
+
+            for (int c = 2; c <= max_charge; c++)
+            {
+                mz = (mass + (c - 1) * mass_h) / c;
+                ChemFormulas.Add(new ChemiForm
+                {
+                    InputFormula = chem.InputFormula,
+                    Adduct = 'H' + (c - 1).ToString(),
+                    Deduct = chem.Deduct,
+                    Multiplier = chem.Multiplier,
+                    Charge = c,
+                    Mz = mz.ToString(),
+                    Ion = chem.Ion,
+                    Ion_type = chem.Ion_type,
+                    Index = chem.Index,
+                    IndexTo = chem.IndexTo,
+                    Error = false,
+                    Elements_set = new List<Element_set>(),
+                    Iso_total_amount = 0,
+                    Monoisotopic = new CompoundMulti(),
+                    Points = new List<PointPlot>(),
+                    Machine = string.Empty,
+                    Resolution = new float(),
+                    Combinations = new List<Combination_1>(),
+                    Profile = new List<PointPlot>(),
+                    Centroid = new List<PointPlot>(),
+                    Combinations4 = new List<Combination_4>(),
+                    FinalFormula = string.Empty,
+                    PrintFormula = chem.PrintFormula,
+                    Radio_label = chem.Radio_label,
+                    Color = chem.Color,
+                    Name = string.Empty
+                });
+
+                var radioString = chem.Radio_label;
+                var radio_name = string.Empty;
+                if (ChemFormulas.Last().Charge > 0) radio_name = radioString + "_+" + ChemFormulas.Last().Charge.ToString();
+                else radio_name = radioString + "_" + ChemFormulas.Last().Charge.ToString();
+                ChemFormulas.Last().Name = radio_name;
+            }
+        }
+
         #endregion
 
 
@@ -3270,59 +3033,6 @@ namespace Isotope_fitting
             }
             iso_plot.Model.InvalidatePlot(true);
         }
-        private void add_x(ChemiForm chem,int max_charge, int list_index)
-        {
-            double mass= double.Parse(chem.Mz, NumberStyles.AllowDecimalPoint);
-            double mass_h = 1.007825;
-            double mz = 0.0;
-            int index = Convert.ToInt32(chem.Index);
-            if (index <= 4  && max_charge > 2) max_charge = 2;
-            else if (index <= 11 && index >= 5 && max_charge > 5) max_charge = 5;
-            else if(index <= 22 && index >= 12 && max_charge > 8) max_charge = 8;
-            else if (index <= 53 && index >= 23 && max_charge > 12) max_charge =12;
-            else if (index <= 75 && index >= 54 && max_charge > 15) max_charge = 15;
-            else if (index <= 100 && index >= 76 && max_charge > 20) max_charge = 20;           
-
-            for (int c=2;c<=max_charge ;c++)
-            {
-                mz = (mass + (c-1)*mass_h )/c;
-                ChemFormulas.Add(new ChemiForm
-                {
-                    InputFormula = chem.InputFormula,
-                    Adduct = 'H'+(c-1).ToString(),
-                    Deduct = chem.Deduct,
-                    Multiplier = chem.Multiplier,
-                    Charge = c,
-                    Mz = mz.ToString(),
-                    Ion = chem.Ion,
-                    Ion_type = chem.Ion_type,
-                    Index = chem.Index,
-                    IndexTo = chem.IndexTo,
-                    Error = false,
-                    Elements_set = new List<Element_set>(),
-                    Iso_total_amount = 0,
-                    Monoisotopic = new CompoundMulti(),
-                    Points = new List<PointPlot>(),
-                    Machine = string.Empty,
-                    Resolution = new float(),
-                    Combinations = new List<Combination_1>(),
-                    Profile = new List<PointPlot>(),
-                    Centroid = new List<PointPlot>(),
-                    Combinations4 = new List<Combination_4>(),
-                    FinalFormula = string.Empty,
-                    PrintFormula = chem.PrintFormula,
-                    Radio_label = chem.Radio_label,
-                    Color = chem.Color,
-                    Name = string.Empty
-                });
-                
-                var radioString = chem.Radio_label;                           
-                var radio_name = string.Empty;
-                if (ChemFormulas.Last().Charge > 0) radio_name = radioString + "_+" + ChemFormulas.Last().Charge.ToString();
-                else radio_name = radioString + "_" + ChemFormulas.Last().Charge.ToString();
-                ChemFormulas.Last().Name = radio_name;
-            }
-        }
         private string fix_formula(string input, bool simple = true,int h=-1, int h2o = 0, int nh3 = 0)
         {
             string formula = "";
@@ -3412,6 +3122,7 @@ namespace Isotope_fitting
         #region Calculate
         private void Calc_Btn_Click(object sender, EventArgs e)
         {
+            sw1.Reset(); sw1.Start();
             is_calc = true;
             #region check if resolution inputs are correct and then calculate
             if (string.IsNullOrEmpty(resolution_Box.Text) && machine_listBox.SelectedItems.Count == 0)
@@ -4331,7 +4042,7 @@ namespace Isotope_fitting
                                 listViewItem.SubItems.Add(cen[0].Y.ToString());// max centroid
                                 frag_listView.Items.Add(listViewItem);                               
                             }
-                            Console.WriteLine(tlPrgBr.Value);
+                            //Console.WriteLine(tlPrgBr.Value);
 
                             tlPrgBr.Value++;
                         }
@@ -4344,8 +4055,11 @@ namespace Isotope_fitting
                     }
                     #endregion
                     tlPrgBr.Dispose();
-
                     frag_listView.EndUpdate();
+
+                    sw1.Stop(); Debug.WriteLine("Pre allign: " + sw1.ElapsedMilliseconds.ToString());
+                    sw1.Reset(); sw1.Start();
+
                     if (counter != Fragments2.Count)
                     {
                         MessageBox.Show("Error in 'Fragments2'!Restart the program!");
@@ -4366,7 +4080,11 @@ namespace Isotope_fitting
                         fit_Btn.Enabled = true;
                         loadFit_Btn.Enabled = false;
 
+                        sw1.Stop(); Debug.WriteLine("Post allign: " + sw1.ElapsedMilliseconds.ToString());
+
                         MessageBox.Show("Done!");
+
+                        
                     }
 
                 }
@@ -5107,6 +4825,58 @@ namespace Isotope_fitting
             experimental.Clear();
             experimental = new_exp;
         }
+
+        private void generate_x_multiChraged_withoutAducts()
+        {
+            // max charge depends on lenght of the fragment. We will follow y-type rules
+            // will run through all frags once to find x_idxs and max_charge for each y of different length
+
+            List<int> x_idxs = new List<int>();
+            List<int[]> max_charge_y = new List<int[]>();
+            int tempo = 0;
+            for (int i = 0; i < ChemFormulas.Count; i++)
+            {
+                if (ChemFormulas[i].Ion.StartsWith("x")) x_idxs.Add(i); //store x indexes
+                else if (ChemFormulas[i].Ion.StartsWith("y"))
+                {
+                    tempo++;
+                    int y_num = Convert.ToInt16(ChemFormulas[i].Index);
+                    int charge = ChemFormulas[i].Charge;
+
+                    if (max_charge_y.Count == 0 || max_charge_y.Find(p => p[0] == y_num) == null)
+                    {
+                        max_charge_y.Add(new int[] { y_num, charge });
+                    }
+                    else if (max_charge_y[max_charge_y.FindIndex(p => p[0] == y_num)][1] < charge)
+                    {
+                        max_charge_y[max_charge_y.FindIndex(p => p[0] == y_num)][1] = charge;
+                    }
+                }
+            }
+
+            int temp = 0;
+
+            for (int i = 0; i < x_idxs.Count; i++)
+            {
+                int x_num = Convert.ToInt16(ChemFormulas[i].Index);
+                int max_charge = max_charge_y[max_charge_y.FindIndex(p => p[0] == x_num)][1];
+
+                for (int j = 2; j < max_charge + 1; j++)
+                {
+                    //add_fragment(); temp++;
+                }
+            }
+
+            // copy results to clipboard
+            max_charge_y = max_charge_y.OrderBy(p => p[0]).ToList();
+            string export = "";
+            for (int i = 0; i < max_charge_y.Count; i++)
+            {
+                export += max_charge_y[i][0] + " " + max_charge_y[i][1] + "\r\n";
+            }
+            Clipboard.SetText(export);
+        }
+
         #endregion
 
         private void optionBtn_Click(object sender, EventArgs e)
