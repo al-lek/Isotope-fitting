@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections;
 using System.Windows.Forms;
 
@@ -13,6 +14,9 @@ namespace Isotope_fitting
             InitializeComponent();
             init_peak_listView();
             fill_peak_listView();
+
+            // event on RightClick to copy peaks to clipboard 
+            peak_listView.MouseClick += (s, e) => { if (e.Button == MouseButtons.Right) peaks_toClipboard(); };
         }
 
         private void init_peak_listView()
@@ -59,6 +63,21 @@ namespace Isotope_fitting
 
             // Perform the sort with these new sort options.
             peak_listView.Sort();
+        }
+
+        private void peaks_toClipboard()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (double[] peak in Form2.peak_points)
+            {
+                foreach(double peak_data in peak)
+                {
+                    sb.Append(peak_data.ToString() + "\t");
+                }
+                sb.Append("\r\n");
+            }
+            Clipboard.SetText(sb.ToString());
         }
     }
 

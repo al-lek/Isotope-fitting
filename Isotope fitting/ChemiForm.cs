@@ -708,7 +708,7 @@ namespace Isotope_fitting
             set
             {
                 this.profile = value;
-            }
+            }            
         }
         public List<PointPlot> Centroid
         {
