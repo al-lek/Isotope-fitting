@@ -210,13 +210,11 @@ namespace Isotope_fitting
             recalc = true;
 
             // post load actions
-            fitMin_Box.Enabled = fitMax_Box.Enabled = fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
-            Fitting_chkBox.Checked = false;
+            enable_controls("post load");
 
             selected_window = 1000000;
             fitMin_Box.Text = experimental[0][0].ToString();
             fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
-            //fix_experimentalTo_100(max_exp);
 
             parse_data(0);
 
@@ -232,9 +230,7 @@ namespace Isotope_fitting
                 refresh_iso_plot();
             }
             start_idx = 0;
-            end_idx = experimental.Count;
-            //fix_experimental_gaps(max_exp);                
-            loadFit_Btn.Enabled = false;
+            end_idx = experimental.Count;            
         }
 
         private void peakDetect_and_resolutionRef()
@@ -427,23 +423,9 @@ namespace Isotope_fitting
             ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
 
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
-            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();                
+            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
 
-            clearCalc_Btn.Enabled = true;
-            mzMax_Box.Enabled = true;
-            mzMin_Box.Enabled = true;
-            mzMax_Label.Enabled = true;
-            mzMin_Label.Enabled = true;
-            chargeMax_Box.Enabled = true;
-            chargeMin_Box.Enabled = true;
-            chargeAll_Btn.Enabled = true;
-            idxPr_Box.Enabled = true;
-            idxTo_Box.Enabled = true;
-            idxFrom_Box.Enabled = true;
-            resolution_Box.Enabled = true;
-            machine_listBox.Enabled = true;
-            calc_Btn.Enabled = true;
-            loadFit_Btn.Enabled = false;
+            enable_controls("post import fragments");
         }
 
         private void generate_x()
@@ -518,11 +500,10 @@ namespace Isotope_fitting
             populate_frag_listView();
 
             // 3. 
-            //if (string.IsNullOrEmpty(fitStep_Box.Text))
-            //{
-                iso_plot.Model.Series.Clear();
-                recalculate_all_data_aligned();
-            //}
+            iso_plot.Model.Series.Clear();
+
+            recalculate_all_data_aligned();
+
             refresh_iso_plot();
 
             if (insert_exp) step_Fitting();
@@ -1392,7 +1373,7 @@ namespace Isotope_fitting
         private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
-            sw1.Reset(); sw1.Start();
+            //sw1.Reset(); sw1.Start();
             int progress = 0; 
             progress_display_start(selected_fragments.Count);
 
@@ -1402,14 +1383,14 @@ namespace Isotope_fitting
                 
                 // safelly keep track of progress
                 Interlocked.Increment(ref progress);
-                if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); Debug.WriteLine(progress.ToString()); }
+                if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
             });
 
             progress_display_stop();
             is_calc = false;
 
             MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
-            sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM: " + sw1.ElapsedMilliseconds.ToString());
+            //sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM: " + sw1.ElapsedMilliseconds.ToString());
 
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
@@ -1758,6 +1739,435 @@ namespace Isotope_fitting
 
         #endregion
 
+        #region UI control
+        private void enable_controls(string status)
+        {
+            if (status == "post load")
+            {
+                fitMin_Box.Enabled = fitMax_Box.Enabled = fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
+                Fitting_chkBox.Checked = loadFit_Btn.Enabled = false;
+            }
+            else if (status == "post import fragments")
+            {
+                clearCalc_Btn.Enabled = mzMax_Box.Enabled = mzMin_Box.Enabled = mzMax_Label.Enabled = mzMin_Label.Enabled = chargeMax_Box.Enabled = true;
+                chargeMin_Box.Enabled = chargeAll_Btn.Enabled = idxPr_Box.Enabled = idxTo_Box.Enabled = idxFrom_Box.Enabled = resolution_Box.Enabled = true;
+                machine_listBox.Enabled = calc_Btn.Enabled = true;
+                loadFit_Btn.Enabled = false;
+            }
+        }
+
+        #endregion
+
+        #region Toolbar control
+        private void progress_display_init()
+        {
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
+            user_grpBox.Controls.Add(tlPrgBr);
+        }
+
+        private void progress_display_start(int barMax)
+        {
+            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Maximum = barMax));   //thread safe call
+            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Value = 0));   //thread safe call
+            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Visible = true));   //thread safe call
+        }
+
+        private void progress_display_stop()
+        {
+            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Visible = false));   //thread safe call
+        }
+
+        private void progress_display_update(int idx)
+        {
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 1));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 2));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Update()));   //thread safe call
+        }
+        #endregion
+
+        #region peak detection
+
+        private void peak_detect()
+        {
+            sw1.Reset(); sw1.Start();
+            peak_points.Clear();
+            peak_points = LIMPIC_parallel();
+            //peak_points = LIMPIC_mod();
+            // it has to be sorted because of paralellism
+            peak_points = peak_points.OrderBy(m => m[1] + m[4]).ToList();
+            //peak_points = peak_points.OrderBy(m => m[1]).ToList();
+            sw1.Stop(); Debug.WriteLine("peak detect: " + sw1.ElapsedMilliseconds.ToString());
+        }
+
+        private List<double[]> LIMPIC_parallel()
+        {
+            progress_display_start(experimental.Count);
+
+            // ALL detection calculations are in time domain, all time is in μs, results also in time
+            // will return List { [0]index of data array, [1]time_raw, [2]intensity_raw, [3]Res_fit, [4]time_diff_fit, [5]intensity_fit, [6]σ_fit,    }
+            bool hard_flag;
+
+            List<double[]> temp_peaks = new List<double[]>();
+            int peak_width = 2;
+
+            double[] dataX, dataY;
+
+            dataX = experimental.Select(a => a[0]).ToArray();
+            dataY = experimental.Select(a => a[1]).ToArray();
+
+            int len = dataY.Length;
+
+            //double hard_threshold = Convert.ToDouble(hardThres_txtBox.Text);
+            double hard_threshold = min_intes;
+
+            double[] diff_y = new double[len - 1];
+            for (int i = 0; i < dataY.Length - 1; i++)
+                diff_y[i] = dataY[i + 1] - dataY[i];
+
+            int starting_points_to_omit = 0;
+            int progress = 0;
+            Parallel.For(starting_points_to_omit, len - peak_width - 1, (i, state) =>
+            {
+                // safelly keep track of progress
+                Interlocked.Increment(ref progress);
+
+                // check intensity restriction
+                hard_flag = dataY[i + 1] > hard_threshold;
+
+                if (hard_flag)
+                {
+                    // detect local maxima
+                    bool local_max = false;
+
+                    if (diff_y[i] >= 0 & diff_y[i + 1] <= 0)
+                    {
+                        local_max = true;
+
+                        for (int j = i - peak_width + 1; j < i; j++)
+                            if (diff_y[j] < 0) local_max = false;
+
+                        for (int j = i + 2; j < i + peak_width + 1; j++)
+                            if (diff_y[j] > 0) local_max = false;
+                    }
+
+                    if (local_max)
+                    {
+                        double[] point = new double[8];
+                        point[0] = i + 1;                           // index
+                        point[1] = dataX[i + 1];                    // experimental time
+                        point[2] = dataY[i + 1];                    // experimental height
+
+                        var pair = find_centroid(i + 1, dataX, dataY, dataX[i + 1] - dataX[i]);
+
+                        point[3] = pair[0];             // resolution
+                        point[4] = pair[1];             // adjusted relative time
+                        point[5] = pair[2];             // adjusted height
+                        point[6] = pair[3];             // FWHM dt [bins]
+
+                        lock (_locker) { temp_peaks.Add(point); }
+                    }
+                }
+                if (progress % 5000 == 0 && progress > 0) progress_display_update(progress);
+            });
+            progress_display_stop();
+
+            return temp_peaks;
+        }
+
+        private List<double[]> LIMPIC_mod()
+        {
+            progress_display_start(experimental.Count);
+
+            // ALL detection calculations are in time domain, all time is in μs, results also in time
+            // will return List { [0]index of data array, [1]time_raw, [2]intensity_raw, [3]Res_fit, [4]time_diff_fit, [5]intensity_fit, [6]σ_fit,    }
+            bool hard_flag;
+
+            List<double[]> temp_peaks = new List<double[]>();
+            int peak_width = 2;
+
+            double[] dataX, dataY;
+
+            dataX = experimental.Select(a => a[0]).ToArray();
+            dataY = experimental.Select(a => a[1]).ToArray();
+
+            int len = dataY.Length;
+
+            //double hard_threshold = Convert.ToDouble(hardThres_txtBox.Text);
+            double hard_threshold = min_intes;
+
+            double[] diff_y = new double[len - 1];
+            for (int i = 0; i < dataY.Length - 1; i++)
+                diff_y[i] = dataY[i + 1] - dataY[i];
+
+            int starting_points_to_omit = 0;
+            int last_detected_index = 0;
+
+            for (int i = starting_points_to_omit; i < len - peak_width - 2; i++)
+            {
+                // check intensity restriction
+                hard_flag = dataY[i + 1] > hard_threshold;
+
+                if (hard_flag)
+                {
+                    // detect local maxima
+                    bool local_max = false;
+
+                    if (diff_y[i] >= 0 & diff_y[i + 1] <= 0)
+                    {
+                        local_max = true;
+
+                        for (int j = i - peak_width + 1; j < i; j++)
+                            if (diff_y[j] < 0) local_max = false;
+
+                        for (int j = i + 2; j < i + peak_width + 1; j++)
+                            if (diff_y[j] > 0) local_max = false;
+                    }
+
+                    if (local_max)
+                    {
+                        double[] point = new double[8];
+                        point[0] = i + 1;                           // index
+                        point[1] = dataX[i + 1];                    // experimental time
+                        point[2] = dataY[i + 1];                    // experimental height
+
+                        var pair = find_centroid(i + 1, dataX, dataY, dataX[i + 1] - dataX[i]);
+                        point[3] = pair[0];             // resolution
+                        point[4] = pair[1];             // adjusted relative time
+                        point[5] = pair[2];             // adjusted height
+                        point[6] = pair[3];             // FWHM dt [bins]
+
+                        temp_peaks.Add(point);
+                        last_detected_index = i;
+                    }
+                }
+                if (i % 10000 == 0 && i > 0) progress_display_update(i);
+            }
+
+            progress_display_stop();
+            return temp_peaks;
+        }
+
+        private double[] find_centroid(int pos, double[] dataX, double[] dataY, double bin_size)
+        {
+            double height = dataY[pos];
+            var normal = estimate_alglib_normal(pos, dataX, dataY);
+
+            double fwhm_norm = 2.3548 * normal[0] * bin_size;
+            double res_norm = dataX[pos] / fwhm_norm;
+
+            double[] d = new double[4] { res_norm, normal[1] * bin_size, normal[2], normal[0] };
+            return d;
+        }
+
+        private double[] estimate_alglib_normal(int locMax_index, double[] dataX, double[] dataY)
+        {
+            double height = dataY[locMax_index];
+            object data = new object[2] { dataY, locMax_index };
+
+            // 2. initialize needed params
+            double[] coeficients = new double[] { 2.0, 0.0, 1.1 * height };
+            double epsx = 0.0000000001;
+            int maxits = 100000;
+            double[] bndl = new double[3] { 1e-1, -1, 1.00 * height };
+            double[] bndh = new double[3] { 10, 1, 1.2 * height };
+            double[] scale = new double[3] { 1, 0.5, 0.1 * height };
+
+            alglib.minlmstate state;
+            alglib.minlmreport rep;
+
+            alglib.minlmcreatev(2, coeficients, 0.001, out state);
+            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
+            alglib.minlmsetcond(state, epsx, maxits);
+            alglib.minlmsetscale(state, scale);
+            alglib.minlmoptimize(state, function, null, data);
+            alglib.minlmresults(state, out coeficients, out rep);
+
+            // 4. save result
+            double[] minimum = new double[3] { coeficients[0], coeficients[1], coeficients[2] };
+            return minimum;
+        }
+
+        public void function(double[] x, double[] func, object data)
+        {
+            func[0] = 0;
+            double gauss_point, temp, temp2;
+
+            double[] dataY = ((double[])((object[])data)[0]);
+            int idx = ((int)((object[])data)[1]);
+
+            for (int i = 5; i < 16; i++)
+            {
+                temp2 = ((double)i - 10.0 - x[1]) / (1.4142 * x[0]);
+                gauss_point = x[2] * Math.Exp(-1.0 * temp2 * temp2);
+                temp = dataY[idx + (i - 10)] - gauss_point;
+                func[0] += temp * temp;
+            }
+        }
+
+        private void display_peakList()
+        {
+            Form5 frm5 = new Form5();
+            frm5.Show();
+        }
+
+        #endregion
+
+
+        #region Helpers
+        public IEnumerable<Control> GetControls(Control c)
+        {
+            return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
+        }
+
+        private double dParser(string t)
+        {
+            if (double.TryParse(t, out double d)) return d;
+
+            return double.NaN;
+        }
+
+        public class ListViewItemComparer : IComparer
+        {
+            // Specifies the column to be sorted
+            private int ColumnToSort;
+
+            // Specifies the order in which to sort (i.e. 'Ascending').
+            private SortOrder OrderOfSort;
+
+            // Case insensitive comparer object
+            private CaseInsensitiveComparer ObjectCompare;
+
+            // Class constructor, initializes various elements
+            public ListViewItemComparer()
+            {
+                // Initialize the column to '1'
+                ColumnToSort = 1;
+
+                // Initialize the sort order to 'none'
+                OrderOfSort = SortOrder.None;
+
+                // Initialize the CaseInsensitiveComparer object
+                ObjectCompare = new CaseInsensitiveComparer();
+            }
+
+            // This method is inherited from the IComparer interface.
+            //
+            // x: First object to be compared
+            // y: Second object to be compared
+            //
+            // The result of the comparison. "0" if equal,
+            // negative if 'x' is less than 'y' and
+            // positive if 'x' is greater than 'y'
+            public int Compare(object x, object y)
+            {
+                int compareResult;
+                ListViewItem listviewX, listviewY;
+
+                // Cast the objects to be compared to ListViewItem objects
+                listviewX = (ListViewItem)x;
+                listviewY = (ListViewItem)y;
+
+                // Determine the type being compared  //  Columns: 0:Ion type, 1:m/z, 2:charge ,3:Chemical Formula,4:factor,5:code,6:intensity
+                if (Form4.active)
+                {
+                    try
+                    {
+                        compareResult = CompareDecimal(listviewX, listviewY);
+                    }
+                    catch
+                    {
+                        compareResult = CompareString(listviewX, listviewY);
+                    }
+                }
+                else if (ColumnToSort == 0 || ColumnToSort == 3)
+                {
+                    compareResult = CompareString(listviewX, listviewY);
+                }
+                else
+                {
+                    try
+                    {
+                        compareResult = CompareDecimal(listviewX, listviewY);
+                    }
+                    catch
+                    {
+                        compareResult = CompareString(listviewX, listviewY);
+                    }
+                }
+
+                // Simple String Compare
+                // compareResult = String.Compare (
+                //  listviewX.SubItems[ColumnToSort].Text,
+                //  listviewY.SubItems[ColumnToSort].Text
+                // );
+
+                // Calculate correct return value based on object comparison
+                if (OrderOfSort == SortOrder.Ascending)
+                {
+                    // Ascending sort is selected, return normal result of compare operation
+                    return compareResult;
+                }
+                else if (OrderOfSort == SortOrder.Descending)
+                {
+                    // Descending sort is selected, return negative result of compare operation
+                    return (-compareResult);
+                }
+                else
+                {
+                    // Return '0' to indicate they are equal
+                    return 0;
+                }
+            }
+            public int CompareDecimal(ListViewItem listviewX, ListViewItem listviewY)
+            {
+
+                System.Decimal firstValue = Decimal.Parse(listviewX.SubItems[ColumnToSort].Text);
+                System.Decimal secondValue = Decimal.Parse(listviewY.SubItems[ColumnToSort].Text);
+
+                // Compare the two dates.
+                int compareResult = Decimal.Compare(firstValue, secondValue);
+                return compareResult;
+            }
+            public int CompareString(ListViewItem listviewX, ListViewItem listviewY)
+            {
+                // Case Insensitive Compare
+                int compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+                return compareResult;
+            }
+
+            // Gets or sets the number of the column to which to
+            // apply the sorting operation (Defaults to '0').
+            public int SortColumn
+            {
+                set
+                {
+                    ColumnToSort = value;
+                }
+                get
+                {
+                    return ColumnToSort;
+                }
+            }
+            // Gets or sets the order of sorting to apply
+            // (for example, 'Ascending' or 'Descending').
+            public SortOrder Order
+            {
+                set
+                {
+                    OrderOfSort = value;
+                }
+                get
+                {
+                    return OrderOfSort;
+                }
+            }
+        }
+
+        #endregion
+
+
+
+
 
 
 
@@ -1869,8 +2279,7 @@ namespace Isotope_fitting
             frag_listView.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
 
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
-            progress_display_init();
-            
+            progress_display_init();            
 
             #region unused
             ////index menu for fragment type ckeckboxes
@@ -2288,13 +2697,6 @@ namespace Isotope_fitting
                 else UI_intensities.Add(tmpD);
             }
             return UI_intensities;
-        }
-        
-        private double dParser(string t)
-        {
-            if (double.TryParse(t, out double d)) return d;
-
-            return double.NaN;
         }
         private void parse_data(int idx,bool replace=false)
         {
@@ -3292,147 +3694,6 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region Column Sort
-        // This class is an implementation of the 'IComparer' interface.
-        public class ListViewItemComparer : IComparer
-        {
-            // Specifies the column to be sorted
-            private int ColumnToSort;
-
-            // Specifies the order in which to sort (i.e. 'Ascending').
-            private SortOrder OrderOfSort;
-
-            // Case insensitive comparer object
-            private CaseInsensitiveComparer ObjectCompare;
-
-            // Class constructor, initializes various elements
-            public ListViewItemComparer()
-            {
-                // Initialize the column to '1'
-                ColumnToSort = 1;
-
-                // Initialize the sort order to 'none'
-                OrderOfSort = SortOrder.None;
-
-                // Initialize the CaseInsensitiveComparer object
-                ObjectCompare = new CaseInsensitiveComparer();
-            }
-
-            // This method is inherited from the IComparer interface.
-            //
-            // x: First object to be compared
-            // y: Second object to be compared
-            //
-            // The result of the comparison. "0" if equal,
-            // negative if 'x' is less than 'y' and
-            // positive if 'x' is greater than 'y'
-            public int Compare(object x, object y)
-            {
-                int compareResult;
-                ListViewItem listviewX, listviewY;
-
-                // Cast the objects to be compared to ListViewItem objects
-                listviewX = (ListViewItem)x;
-                listviewY = (ListViewItem)y;
-
-                // Determine the type being compared  //  Columns: 0:Ion type, 1:m/z, 2:charge ,3:Chemical Formula,4:factor,5:code,6:intensity
-                if (Form4.active)
-                {
-                    try
-                    {
-                        compareResult = CompareDecimal(listviewX, listviewY);
-                    }
-                    catch
-                    {
-                        compareResult = CompareString(listviewX, listviewY);
-                    }
-                }
-                else if (ColumnToSort==0 || ColumnToSort==3)
-                {
-                    compareResult = CompareString(listviewX, listviewY);
-                }
-                else
-                {
-                    try
-                    {
-                        compareResult = CompareDecimal(listviewX, listviewY);
-                    }
-                    catch
-                    {
-                        compareResult = CompareString(listviewX, listviewY);
-                    }
-                } 
-
-                // Simple String Compare
-                // compareResult = String.Compare (
-                //  listviewX.SubItems[ColumnToSort].Text,
-                //  listviewY.SubItems[ColumnToSort].Text
-                // );
-
-                // Calculate correct return value based on object comparison
-                if (OrderOfSort == SortOrder.Ascending)
-                {
-                    // Ascending sort is selected, return normal result of compare operation
-                    return compareResult;
-                }
-                else if (OrderOfSort == SortOrder.Descending)
-                {
-                    // Descending sort is selected, return negative result of compare operation
-                    return (-compareResult);
-                }
-                else
-                {
-                    // Return '0' to indicate they are equal
-                    return 0;
-                }
-            }
-            public int CompareDecimal(ListViewItem listviewX, ListViewItem listviewY)
-            {
-           
-                System.Decimal firstValue = Decimal.Parse(listviewX.SubItems[ColumnToSort].Text);
-                System.Decimal secondValue = Decimal.Parse(listviewY.SubItems[ColumnToSort].Text);
-
-                // Compare the two dates.
-                int compareResult = Decimal.Compare(firstValue, secondValue);
-                return compareResult;
-            }
-            public int CompareString(ListViewItem listviewX, ListViewItem listviewY)
-            {
-                // Case Insensitive Compare
-                int compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text );
-                return compareResult;
-            }
-
-            // Gets or sets the number of the column to which to
-            // apply the sorting operation (Defaults to '0').
-            public int SortColumn
-            {
-                set
-                {
-                    ColumnToSort = value;
-                }
-                get
-                {
-                    return ColumnToSort;
-                }
-            }
-            // Gets or sets the order of sorting to apply
-            // (for example, 'Ascending' or 'Descending').
-            public SortOrder Order
-            {
-                set
-                {
-                    OrderOfSort = value;
-                }
-                get
-                {
-                    return OrderOfSort;
-                }
-            }
-        }
-
-        #endregion
-
         #region Fragments' List
 
         private void copyRowList(object sender, EventArgs e)
@@ -4345,8 +4606,188 @@ namespace Isotope_fitting
         
 
         #endregion
+      
+        #region refresh plot
+        private void refresh_iso_plot()
+        {
+            //(M) to text box pou dexetai einai ekeino pou tou exoun ginei paste ta data pou tha plotaroume
 
-        #region Calculate
+            // 0. gather info on which fragments are selected to plot, and their respective intensities
+            List<int> to_plot = selectedFragments.OrderBy(p => p).ToList();//(M) vriskei poia indexes tou all_data einai checked
+            List<double> UI_intensities = get_UI_intensities(to_plot.ToArray()); //(M)epistrefei list me tous factors
+
+            // to_plot and UI_intensities contain ONLY the selected indexes and intensities
+
+            // 1b. reset iso plot
+            reset_iso_plot();//(M)ftiaxnei series gia OLA ta stoixeia tou all_data(experimental kai fragments2) , to fit kai to residual
+
+            if (insert_exp == false)
+            {
+                for (int i = 0; i < to_plot.Count; i++)
+                {
+                    int curr_idx = to_plot[i];
+                    if (all_data.Count != 0)
+                    {
+                        // get name of each line to be ploted
+                        if (curr_idx == 0) { }
+                        else
+                        {
+                            string name_str = Fragments2[curr_idx - 1].Name;
+                            (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+                            for (int j = 0; j < all_data[curr_idx].Count; j++)
+                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
+                        }
+                    }
+                }
+                invalidate_all();
+                return;
+            }
+            if (to_plot.Count == 0) return;
+
+            // 1a. rerun calculations for fit and residual
+
+            //(M)ola ta 'to_plot' thelw na tou valw,apo ola ta parathira
+            recalculate_fitted_residual(to_plot, UI_intensities);
+
+            ////for experimental data only
+            //(iso_plot.Model.Series[0] as LineSeries).Title ="Exp" ;
+            //for (int j = 0; j < all_data_aligned.Count; j++)
+            //    (iso_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[0][j][0], UI_intensities[i] * all_data_aligned[j][0]));
+
+            // 2. replot all isotopes
+            for (int i = 0; i < to_plot.Count; i++)
+            {
+                int curr_idx = to_plot[i];
+                if (all_data.Count != 0)
+                {
+                    // get name of each line to be ploted
+                    if (curr_idx == 0)
+                    {
+                        (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
+                        for (int j = 0; j < all_data[curr_idx].Count; j++)
+                        {
+                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], UI_intensities[i] * all_data[curr_idx][j][1]));
+                        }
+                    }
+                    else
+                    {
+                        string name_str = Fragments2[curr_idx - 1].Name;
+                        (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+                        if (Fitting_chkBox.Checked)
+                        {
+                            for (int j = 0; j < all_data[0].Count; j++)
+                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[0][j][0], UI_intensities[i] * all_data_aligned[j][curr_idx]));
+                        }
+                        else
+                        {
+                            for (int j = 0; j < all_data[curr_idx].Count; j++)
+                            {
+                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
+                            }
+                        }
+                    }
+
+                }
+
+
+            }
+
+            // 3. fitted plot (if more than 2 fragments(except the experimental))
+            if (summation.Count > 0)//(M)to summation ypologizetai mono otan to_plot.Count>=2
+                if (Fitting_chkBox.Checked)
+                    for (int j = 0; j < summation.Count; j++)
+                        (iso_plot.Model.Series[all_data.Count] as LineSeries).Points.Add(new OxyPlot.DataPoint(summation[j][0], summation[j][1]));
+
+            // 4. residual plot
+            if (residual.Count > 0)
+                for (int j = 0; j < residual.Count; j++)
+                    (res_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(residual[j][0], residual[j][1]));
+
+            invalidate_all();
+        }
+
+        private void reset_iso_plot()
+        {
+            iso_plot.Model.Series.Clear();
+
+            for (int i = 0; i < all_data.Count; i++)
+            {
+                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = get_fragment_color(i) };
+                if (i == 0) tmp.StrokeThickness = 1;
+                iso_plot.Model.Series.Add(tmp);
+            }
+            if (insert_exp == true)
+            {
+                LineSeries fit = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black, LineStyle = LineStyle.Dot };
+                iso_plot.Model.Series.Add(fit);
+            }
+            res_plot.Model.Series.Clear();
+            if (insert_exp == true)
+            {
+                LineSeries res = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black };
+                res_plot.Model.Series.Add(res);
+            }
+        }
+        private void recalculate_fitted_residual(List<int> to_plot, List<double> UI_intensities)
+        {
+            // calculate addition of selected fragments, and the respective residual
+            // it is always called on every refresh of the plot 
+            // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
+            // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
+            // shallow copy to_plot and UI_intensities so as not to fuck up original Lists
+
+            //
+            //(M)edw lew na tou vazw ola ta dedomena apo ola ta parathira na ta plotarei,eksallou apla me factors paizei
+            //
+
+            List<int> plot_idxs = new List<int>(to_plot);
+            List<double> intensities = new List<double>(UI_intensities);
+            if (plot_idxs[0] == 0) { plot_idxs.RemoveAt(0); intensities.RemoveAt(0); }
+            // 1. calculate addition of fragments
+            summation.Clear();
+            if (plot_idxs.Count >= 2)
+            {
+                for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
+                {
+                    double intensity = 0.0;
+
+                    for (int j = 0; j < plot_idxs.Count; j++)
+                        intensity += all_data_aligned[i][plot_idxs[j]] * intensities[j];
+
+                    summation.Add(new double[] { all_data[0][i][0], intensity });
+                }
+            }
+
+            // 3. calculate residual
+            residual.Clear();
+            if (plot_idxs.Count >= 2)
+            {
+                // this case is for many fragmants (addition)
+                for (int i = 0; i < summation.Count; i++)
+                    residual.Add(new double[] { summation[i][0], all_data_aligned[i][0] - summation[i][1] });
+            }
+            else if (plot_idxs.Count == 1)
+            {
+                // this case is for one fragment only
+                for (int i = 0; i < all_data_aligned.Count; i++)
+                    residual.Add(new double[] { all_data[0][i][0], all_data_aligned[i][0] - all_data_aligned[i][plot_idxs[0]] * intensities[0] });
+            }
+        }
+        private void invalidate_all()
+        {
+            iso_plot.InvalidatePlot(true);
+            res_plot.InvalidatePlot(true);
+        }
+        private OxyColor get_fragment_color(int idx)
+        {
+            //idx is the all_data structure index not the Fragments2 index
+            OxyColor clr = OxyColor.FromUInt32((uint)custom_colors[idx]);
+            return clr;
+        }
+        #endregion
+
+
+        #region unused_code
         private void Calc_Btn_Click2()
         {
             sw1.Reset(); sw1.Start();
@@ -4390,7 +4831,7 @@ namespace Isotope_fitting
                         {
                             keeplistitem.Add(chem);
                         }
-                        else if (mz>max)
+                        else if (mz > max)
                         {
                             break;
                         }
@@ -4456,7 +4897,7 @@ namespace Isotope_fitting
                                     }
                                     else
                                     {
-                                        if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("NH3") &&!chem.Ion_type.Contains("H2O"))
+                                        if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
                                         {
                                             keeplistitem.Add(chem.DeepCopy()); break;
                                         }
@@ -4493,7 +4934,7 @@ namespace Isotope_fitting
                                         {
                                             keeplistitem.Last().Adduct = "H" + ion[2].ToString();
                                             keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint)+ 1.007825).ToString() ;
+                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
 
                                         }
@@ -4517,7 +4958,7 @@ namespace Isotope_fitting
                                         keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
                                         keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
 
-                                        keeplistitem.Last().Ion_type="("+ion+")";
+                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         var radioString = keeplistitem.Last().Radio_label;
                                         var radioBuider = new StringBuilder(radioString);
                                         radioBuider.Replace("a", "(" + ion + ")");
@@ -4559,13 +5000,13 @@ namespace Isotope_fitting
                                             keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
                                             c += keeplistitem.Last().Charge - 1;
                                             keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";                                           
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         }
                                         else
                                         {
                                             keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";     
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint)+ 1.007825).ToString() ;
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
+                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
 
                                         }
@@ -4631,13 +5072,13 @@ namespace Isotope_fitting
 
                                             c += keeplistitem.Last().Charge - 1;
                                             keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";                                            
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         }
                                         else
                                         {
                                             keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";     
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint)+ 1.007825).ToString() ;
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
+                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
 
                                         }
@@ -4701,13 +5142,13 @@ namespace Isotope_fitting
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
 
                                             c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";                                            
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         }
                                         else
                                         {
                                             keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";             
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint)+ 1.007825).ToString() ;
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
+                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
 
                                         }
@@ -4730,7 +5171,7 @@ namespace Isotope_fitting
                                         keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
                                         keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true,-c);
+                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
                                         var radioString = keeplistitem.Last().Radio_label;
                                         var radioBuider = new StringBuilder(radioString);
                                         radioBuider.Replace("y", "(" + ion + ")");
@@ -4773,13 +5214,13 @@ namespace Isotope_fitting
 
                                             c += keeplistitem.Last().Charge - 1;
                                             keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";                                            
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         }
                                         else
                                         {
                                             keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";       
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint)+ 1.007825).ToString() ;
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
+                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
 
                                         }
@@ -4845,13 +5286,13 @@ namespace Isotope_fitting
 
                                             c += keeplistitem.Last().Charge - 1;
                                             keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";                                            
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         }
                                         else
                                         {
                                             keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";      
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint)+ 1.007825).ToString() ;
+                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
+                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
                                             keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
 
                                         }
@@ -4873,7 +5314,7 @@ namespace Isotope_fitting
                                         keeplistitem.Last().Deduct += "H" + ion[2];
                                         keeplistitem.Last().Ion_type = "(" + ion + ")";
                                         int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c* 1.007825)).ToString();
+                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
                                         keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
                                         var radioString = keeplistitem.Last().Radio_label;
                                         var radioBuider = new StringBuilder(radioString);
@@ -4907,7 +5348,7 @@ namespace Isotope_fitting
                                 {
                                     if (ion.Contains("b") && chem.Ion_type.Contains("b"))
                                     {
-                                        if (ion.Contains("H2O") )
+                                        if (ion.Contains("H2O"))
                                         {
                                             if (chem.Ion_type.Contains("H2O"))
                                             {
@@ -4918,28 +5359,28 @@ namespace Isotope_fitting
                                                         keeplistitem.Add(chem.DeepCopy()); break;
                                                     }
                                                 }
-                                                else if(!chem.Ion_type.Contains("NH3"))
+                                                else if (!chem.Ion_type.Contains("NH3"))
                                                 {
                                                     keeplistitem.Add(chem.DeepCopy()); break;
                                                 }
                                             }
-                                            
+
                                         }
                                         else if (ion.Contains("NH3"))
                                         {
                                             if (chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
                                             {
                                                 keeplistitem.Add(chem.DeepCopy()); break;
-                                            }                                            
+                                            }
                                         }
-                                        else if(!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+                                        else if (!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
                                         {
                                             keeplistitem.Add(chem.DeepCopy()); break;
                                         }
                                     }
                                     else if (chem.Ion_type.Contains(" a"))
                                     {
-                                        if (ion.Contains("H2O") )
+                                        if (ion.Contains("H2O"))
                                         {
                                             if (chem.Ion_type.Contains("H2O"))
                                             {
@@ -4950,20 +5391,20 @@ namespace Isotope_fitting
                                                         keeplistitem.Add(chem.DeepCopy()); break;
                                                     }
                                                 }
-                                                else if(!chem.Ion_type.Contains("NH3"))
+                                                else if (!chem.Ion_type.Contains("NH3"))
                                                 {
                                                     keeplistitem.Add(chem.DeepCopy()); break;
                                                 }
-                                            }                                            
+                                            }
                                         }
                                         else if (ion.Contains("NH3"))
                                         {
-                                            if (chem.Ion_type.Contains("NH3")&&!chem.Ion_type.Contains("H2O"))
+                                            if (chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
                                             {
                                                 keeplistitem.Add(chem.DeepCopy()); break;
-                                            }                                           
+                                            }
                                         }
-                                        else if(!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+                                        else if (!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
                                         {
                                             keeplistitem.Add(chem.DeepCopy()); break;
                                         }
@@ -5181,7 +5622,7 @@ namespace Isotope_fitting
 
                     calc_Btn.Enabled = false;
                     frag_listView.BeginUpdate();
-                    
+
                     #region Calculation                    
                     foreach (ChemiForm chem in Selected_options)
                     {
@@ -5195,7 +5636,7 @@ namespace Isotope_fitting
                             chem.Resolution = float.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
                         }
                         #endregion
-                       
+
                         ChemiForm.CheckChem(chem);
                         if (chem.Resolution == 0)
                         {
@@ -5205,7 +5646,7 @@ namespace Isotope_fitting
                             }
                             else
                             {
-                                ChemiForm.Get_R(chem,calc_resolution);
+                                ChemiForm.Get_R(chem, calc_resolution);
                                 if (chem.Resolution == 0) chem.Error = true;
                                 calc_resolution = false;//the resolution matrix is calculated only once for the forst fragment, and is constant for the other fragments
                             }
@@ -5227,12 +5668,12 @@ namespace Isotope_fitting
                             }
                             ChemiForm.Envelope(chem);
                         }
-                        
+
                         if (chem.Error == false)
                         {
                             ChemiForm.Vdetect(chem);
                             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                            if (insert_exp==true)
+                            if (insert_exp == true)
                             {
                                 //Console.WriteLine(chem.Centroid[cen_int].X.ToString());
                                 chem.Resolution = ppm_calculator2(cen[0].X);
@@ -5255,10 +5696,10 @@ namespace Isotope_fitting
                                         frag_listView.Items.Add(listViewItem);
 
                                     }
-                                }                                
+                                }
                             }
                             else
-                            {                               
+                            {
                                 counter++;//o counter antistoixei ston index tou fragment sto all_data
                                 Fragments2.Add(new FragForm() { Centroid = cen, Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = counter, To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
                                 initialize_fragments();
@@ -5268,7 +5709,7 @@ namespace Isotope_fitting
                                 listViewItem.SubItems.Add("1.0");//"factor" column
                                 listViewItem.SubItems.Add(counter.ToString());// "No" (aka code) column
                                 listViewItem.SubItems.Add(cen[0].Y.ToString());// max centroid
-                                frag_listView.Items.Add(listViewItem);                               
+                                frag_listView.Items.Add(listViewItem);
                             }
                             //Console.WriteLine(tlPrgBr.Value);
 
@@ -5278,7 +5719,7 @@ namespace Isotope_fitting
                         {
                             string message = "Formula with m/z:" + chem.Mz + " and ion type:" + chem.Ion + " encountered an error";
                             MessageBox.Show(message, "Error Detected in Input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
-                        }                       
+                        }
 
                     }
                     #endregion
@@ -5297,7 +5738,7 @@ namespace Isotope_fitting
                         if (insert_exp) step_Fitting();
                         if (!is_loading)
                         {
-                            if (string.IsNullOrEmpty(fitStep_Box.Text)){ recalculate_all_data_aligned(); }
+                            if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); }
                             refresh_iso_plot();
                         }
 
@@ -5312,7 +5753,7 @@ namespace Isotope_fitting
 
                         MessageBox.Show("Done!");
 
-                        
+
                     }
 
                 }
@@ -5331,483 +5772,38 @@ namespace Isotope_fitting
         private float ppm_calculator2(double centroid)
         {
             float res = 0f;
-            double ppm = 0.0;            
+            double ppm = 0.0;
             double diff = 0.0;
             int d = 1;
-            if (peak_points[peak_points.Count()-1][1] - centroid < 0)
+            if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
             {
-                ppm = Math.Abs(peak_points[0][1]+ peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
+                ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
                 if (ppm < ppmError) { res = (float)peak_points[0][3]; return res; }
                 else return res;
             }
-                       
+
             do
             {
                 diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                while (diff<0)
+                while (diff < 0)
                 {
                     d++;
-                    diff = peak_points[d][1] + peak_points[d][4] - centroid;                    
+                    diff = peak_points[d][1] + peak_points[d][4] - centroid;
                 }
                 diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                if (diff>=0)
+                if (diff >= 0)
                 {
                     ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
                     if (ppm < ppmError) { res = (float)peak_points[d][3]; return res; }
-                    ppm = Math.Abs(peak_points[d-1][1] + peak_points[d-1][4] - centroid) * 1000000 / (peak_points[d-1][1] + peak_points[d-1][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d-1][3]; return res; }
-                    else  return res; 
+                    ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
+                    if (ppm < ppmError) { res = (float)peak_points[d - 1][3]; return res; }
+                    else return res;
                 }
 
-            } while (d< peak_points[0].Count()-1);
+            } while (d < peak_points[0].Count() - 1);
             return res;
         }
 
-        #endregion
-      
-        #region refresh plot
-        private void refresh_iso_plot()
-        {
-            //(M) to text box pou dexetai einai ekeino pou tou exoun ginei paste ta data pou tha plotaroume
-
-            // 0. gather info on which fragments are selected to plot, and their respective intensities
-            List<int> to_plot = selectedFragments.OrderBy(p => p).ToList();//(M) vriskei poia indexes tou all_data einai checked
-            List<double> UI_intensities = get_UI_intensities(to_plot.ToArray()); //(M)epistrefei list me tous factors
-
-            // to_plot and UI_intensities contain ONLY the selected indexes and intensities
-
-            // 1b. reset iso plot
-            reset_iso_plot();//(M)ftiaxnei series gia OLA ta stoixeia tou all_data(experimental kai fragments2) , to fit kai to residual
-
-            if (insert_exp == false)
-            {
-                for (int i = 0; i < to_plot.Count; i++)
-                {
-                    int curr_idx = to_plot[i];
-                    if (all_data.Count != 0)
-                    {
-                        // get name of each line to be ploted
-                        if (curr_idx == 0) { }
-                        else
-                        {
-                            string name_str = Fragments2[curr_idx - 1].Name;
-                            (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
-                            for (int j = 0; j < all_data[curr_idx].Count; j++)
-                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
-                        }
-                    }
-                }
-                invalidate_all();
-                return;
-            }
-            if (to_plot.Count == 0) return;
-
-            // 1a. rerun calculations for fit and residual
-
-            //(M)ola ta 'to_plot' thelw na tou valw,apo ola ta parathira
-            recalculate_fitted_residual(to_plot, UI_intensities);
-
-            ////for experimental data only
-            //(iso_plot.Model.Series[0] as LineSeries).Title ="Exp" ;
-            //for (int j = 0; j < all_data_aligned.Count; j++)
-            //    (iso_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[0][j][0], UI_intensities[i] * all_data_aligned[j][0]));
-
-            // 2. replot all isotopes
-            for (int i = 0; i < to_plot.Count; i++)
-            {
-                int curr_idx = to_plot[i];
-                if (all_data.Count != 0)
-                {
-                    // get name of each line to be ploted
-                    if (curr_idx == 0)
-                    {
-                        (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
-                        for (int j = 0; j < all_data[curr_idx].Count; j++)
-                        {
-                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], UI_intensities[i] * all_data[curr_idx][j][1]));
-                        }
-                    }
-                    else
-                    {
-                        string name_str = Fragments2[curr_idx - 1].Name;
-                        (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
-                        if (Fitting_chkBox.Checked)
-                        {
-                            for (int j = 0; j < all_data[0].Count; j++)
-                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[0][j][0], UI_intensities[i] * all_data_aligned[j][curr_idx]));
-                        }
-                        else
-                        {
-                            for (int j = 0; j < all_data[curr_idx].Count; j++)
-                            {
-                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
-                            }
-                        }
-                    }
-
-                }
-
-
-            }
-
-            // 3. fitted plot (if more than 2 fragments(except the experimental))
-            if (summation.Count > 0)//(M)to summation ypologizetai mono otan to_plot.Count>=2
-                if (Fitting_chkBox.Checked)
-                    for (int j = 0; j < summation.Count; j++)
-                        (iso_plot.Model.Series[all_data.Count] as LineSeries).Points.Add(new OxyPlot.DataPoint(summation[j][0], summation[j][1]));
-
-            // 4. residual plot
-            if (residual.Count > 0)
-                for (int j = 0; j < residual.Count; j++)
-                    (res_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(residual[j][0], residual[j][1]));
-
-            invalidate_all();
-        }
-
-        private void reset_iso_plot()
-        {
-            iso_plot.Model.Series.Clear();
-
-            for (int i = 0; i < all_data.Count; i++)
-            {
-                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = get_fragment_color(i) };
-                if (i == 0) tmp.StrokeThickness = 1;
-                iso_plot.Model.Series.Add(tmp);
-            }
-            if (insert_exp == true)
-            {
-                LineSeries fit = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black, LineStyle = LineStyle.Dot };
-                iso_plot.Model.Series.Add(fit);
-            }
-            res_plot.Model.Series.Clear();
-            if (insert_exp == true)
-            {
-                LineSeries res = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black };
-                res_plot.Model.Series.Add(res);
-            }
-        }
-        private void recalculate_fitted_residual(List<int> to_plot, List<double> UI_intensities)
-        {
-            // calculate addition of selected fragments, and the respective residual
-            // it is always called on every refresh of the plot 
-            // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
-            // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
-            // shallow copy to_plot and UI_intensities so as not to fuck up original Lists
-
-            //
-            //(M)edw lew na tou vazw ola ta dedomena apo ola ta parathira na ta plotarei,eksallou apla me factors paizei
-            //
-
-            List<int> plot_idxs = new List<int>(to_plot);
-            List<double> intensities = new List<double>(UI_intensities);
-            if (plot_idxs[0] == 0) { plot_idxs.RemoveAt(0); intensities.RemoveAt(0); }
-            // 1. calculate addition of fragments
-            summation.Clear();
-            if (plot_idxs.Count >= 2)
-            {
-                for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
-                {
-                    double intensity = 0.0;
-
-                    for (int j = 0; j < plot_idxs.Count; j++)
-                        intensity += all_data_aligned[i][plot_idxs[j]] * intensities[j];
-
-                    summation.Add(new double[] { all_data[0][i][0], intensity });
-                }
-            }
-
-            // 3. calculate residual
-            residual.Clear();
-            if (plot_idxs.Count >= 2)
-            {
-                // this case is for many fragmants (addition)
-                for (int i = 0; i < summation.Count; i++)
-                    residual.Add(new double[] { summation[i][0], all_data_aligned[i][0] - summation[i][1] });
-            }
-            else if (plot_idxs.Count == 1)
-            {
-                // this case is for one fragment only
-                for (int i = 0; i < all_data_aligned.Count; i++)
-                    residual.Add(new double[] { all_data[0][i][0], all_data_aligned[i][0] - all_data_aligned[i][plot_idxs[0]] * intensities[0] });
-            }
-        }
-        private void invalidate_all()
-        {
-            iso_plot.InvalidatePlot(true);
-            res_plot.InvalidatePlot(true);
-        }
-        private OxyColor get_fragment_color(int idx)
-        {
-            //idx is the all_data structure index not the Fragments2 index
-            OxyColor clr = OxyColor.FromUInt32((uint)custom_colors[idx]);
-            return clr;
-        }
-        #endregion
-
-        #region peak detection
-
-        private void peak_detect()
-        {
-            sw1.Reset(); sw1.Start();
-            peak_points.Clear();
-            peak_points = LIMPIC_parallel();
-            //peak_points = LIMPIC_mod();
-            // it has to be sorted because of paralellism
-            peak_points = peak_points.OrderBy(m => m[1] + m[4]).ToList();
-            //peak_points = peak_points.OrderBy(m => m[1]).ToList();
-            sw1.Stop(); Debug.WriteLine("peak detect: " + sw1.ElapsedMilliseconds.ToString());
-        }
-
-        private List<double[]> LIMPIC_parallel()
-        {
-            progress_display_start(experimental.Count);
-
-            // ALL detection calculations are in time domain, all time is in μs, results also in time
-            // will return List { [0]index of data array, [1]time_raw, [2]intensity_raw, [3]Res_fit, [4]time_diff_fit, [5]intensity_fit, [6]σ_fit,    }
-            bool hard_flag;
-
-            List<double[]> temp_peaks = new List<double[]>();
-            int peak_width = 2;
-
-            double[] dataX, dataY;
-
-            dataX = experimental.Select(a => a[0]).ToArray();
-            dataY = experimental.Select(a => a[1]).ToArray();
-
-            int len = dataY.Length;
-
-            //double hard_threshold = Convert.ToDouble(hardThres_txtBox.Text);
-            double hard_threshold = min_intes;
-
-            double[] diff_y = new double[len - 1];
-            for (int i = 0; i < dataY.Length - 1; i++)
-                diff_y[i] = dataY[i + 1] - dataY[i];
-
-            int starting_points_to_omit = 0;
-            int progress = 0;
-            Parallel.For(starting_points_to_omit, len - peak_width - 1, (i, state) =>
-            {
-                // safelly keep track of progress
-                Interlocked.Increment(ref progress);
-
-                // check intensity restriction
-                hard_flag = dataY[i + 1] > hard_threshold;
-
-                if (hard_flag)
-                {
-                    // detect local maxima
-                    bool local_max = false;
-
-                    if (diff_y[i] >= 0 & diff_y[i + 1] <= 0)
-                    {
-                        local_max = true;
-
-                        for (int j = i - peak_width + 1; j < i; j++)
-                            if (diff_y[j] < 0) local_max = false;
-
-                        for (int j = i + 2; j < i + peak_width + 1; j++)
-                            if (diff_y[j] > 0) local_max = false;
-                    }
-
-                    if (local_max)
-                    {   
-                        double[] point = new double[8];
-                        point[0] = i + 1;                           // index
-                        point[1] = dataX[i + 1];                    // experimental time
-                        point[2] = dataY[i + 1];                    // experimental height
-                        
-                        var pair = find_centroid(i + 1, dataX, dataY, dataX[i + 1] - dataX[i]);
-                        
-                        point[3] = pair[0];             // resolution
-                        point[4] = pair[1];             // adjusted relative time
-                        point[5] = pair[2];             // adjusted height
-                        point[6] = pair[3];             // FWHM dt [bins]
-
-                        lock (_locker) { temp_peaks.Add(point); }
-                    }
-                }
-                if (progress % 5000 == 0 && progress > 0) progress_display_update(progress);
-            });
-            progress_display_stop();
-
-            return temp_peaks;
-        }
-
-        private List<double[]> LIMPIC_mod()
-        {
-            progress_display_start(experimental.Count);
-
-            // ALL detection calculations are in time domain, all time is in μs, results also in time
-            // will return List { [0]index of data array, [1]time_raw, [2]intensity_raw, [3]Res_fit, [4]time_diff_fit, [5]intensity_fit, [6]σ_fit,    }
-            bool hard_flag;
-
-            List<double[]> temp_peaks = new List<double[]>();
-            int peak_width = 2;
-
-            double[] dataX, dataY;
-
-            dataX = experimental.Select(a => a[0]).ToArray();
-            dataY = experimental.Select(a => a[1]).ToArray();
-
-            int len = dataY.Length;
-
-            //double hard_threshold = Convert.ToDouble(hardThres_txtBox.Text);
-            double hard_threshold = min_intes;
-
-            double[] diff_y = new double[len - 1];
-            for (int i = 0; i < dataY.Length - 1; i++)
-                diff_y[i] = dataY[i + 1] - dataY[i];
-
-            int starting_points_to_omit = 0;
-            int last_detected_index = 0;
-
-            for (int i = starting_points_to_omit; i < len - peak_width - 2; i++)
-            {
-                // check intensity restriction
-                hard_flag = dataY[i + 1] > hard_threshold;
-
-                if (hard_flag)
-                {
-                    // detect local maxima
-                    bool local_max = false;
-
-                    if (diff_y[i] >= 0 & diff_y[i + 1] <= 0)
-                    {
-                        local_max = true;
-
-                        for (int j = i - peak_width + 1; j < i; j++)
-                            if (diff_y[j] < 0) local_max = false;
-
-                        for (int j = i + 2; j < i + peak_width + 1; j++)
-                            if (diff_y[j] > 0) local_max = false;
-                    }
-
-                    if (local_max)
-                    {
-                        double[] point = new double[8];
-                        point[0] = i + 1;                           // index
-                        point[1] = dataX[i + 1];                    // experimental time
-                        point[2] = dataY[i + 1];                    // experimental height
-
-                        var pair = find_centroid(i + 1, dataX, dataY, dataX[i + 1] - dataX[i]);
-                        point[3] = pair[0];             // resolution
-                        point[4] = pair[1];             // adjusted relative time
-                        point[5] = pair[2];             // adjusted height
-                        point[6] = pair[3];             // FWHM dt [bins]
-
-                        temp_peaks.Add(point);
-                        last_detected_index = i;
-                    }
-                }
-                if (i % 10000 == 0 && i > 0) progress_display_update(i); 
-            }
-
-            progress_display_stop();
-            return temp_peaks;
-        }
-
-        private double[] find_centroid(int pos, double[] dataX, double[] dataY, double bin_size)
-        {
-            double height = dataY[pos];
-            var normal = estimate_alglib_normal(pos, dataX, dataY);
-
-            double fwhm_norm = 2.3548 * normal[0] * bin_size;
-            double res_norm = dataX[pos] / fwhm_norm;
-
-            double[] d = new double[4] { res_norm, normal[1] * bin_size, normal[2], normal[0] };
-            return d;
-        }
-
-        private double[] estimate_alglib_normal(int locMax_index, double[] dataX, double[] dataY)
-        {
-            double height = dataY[locMax_index];
-            object data = new object[2] { dataY , locMax_index };
-
-            // 2. initialize needed params
-            double[] coeficients = new double[] { 2.0, 0.0, 1.1 * height };
-            double epsx = 0.0000000001;
-            int maxits = 100000;
-            double[] bndl = new double[3] { 1e-1, -1, 1.00 * height };
-            double[] bndh = new double[3] { 10, 1, 1.2 * height };
-            double[] scale = new double[3] { 1, 0.5, 0.1 * height };
-
-            alglib.minlmstate state;
-            alglib.minlmreport rep;
-
-            alglib.minlmcreatev(2, coeficients, 0.001, out state);
-            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
-            alglib.minlmsetcond(state, epsx, maxits);
-            alglib.minlmsetscale(state, scale);
-            alglib.minlmoptimize(state, function, null, data);
-            alglib.minlmresults(state, out coeficients, out rep);
-
-            // 4. save result
-            double[] minimum = new double[3] { coeficients[0], coeficients[1], coeficients[2] };
-            return minimum;
-        }
-
-        public void function(double[] x, double[] func, object data)
-        {
-            func[0] = 0;
-            double gauss_point, temp, temp2;
-
-            double[] dataY = ((double[])((object[])data)[0]);
-            int idx = ((int)((object[])data)[1]);
-
-            for (int i = 5; i < 16; i++)
-            {
-                temp2 = ((double)i - 10.0 - x[1]) / (1.4142 * x[0]);
-                gauss_point = x[2] * Math.Exp(-1.0 * temp2 * temp2);
-                temp = dataY[idx + (i - 10)] - gauss_point;
-                func[0] += temp * temp;
-            }
-        }
-
-        private void display_peakList()
-        {
-            Form5 frm5 = new Form5();
-            frm5.Show();
-        }
-
-        #endregion
-
-        #region Toolbar control
-        private void progress_display_init()
-        {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
-            user_grpBox.Controls.Add(tlPrgBr);
-        }
-
-        private void progress_display_start(int barMax)
-        {
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Maximum = barMax));   //thread safe call
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Value = 0));   //thread safe call
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Visible = true));   //thread safe call
-        }
-
-        private void progress_display_stop()
-        {
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Visible = false));   //thread safe call
-        }
-
-        private void progress_display_update(int idx)
-        {
-            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 1));   //thread safe call
-            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 2));   //thread safe call
-            tlPrgBr.Invoke(new Action(() => tlPrgBr.Update()));   //thread safe call
-        }
-        #endregion
-
-        #region Helpers
-        public IEnumerable<Control> GetControls(Control c)
-        {
-            return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
-        }
-
-
-        #endregion
-
-        #region unused_code
         private void save_data()
         {
 
