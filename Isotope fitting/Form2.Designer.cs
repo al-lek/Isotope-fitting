@@ -60,6 +60,7 @@ namespace Isotope_fitting
             this.factor_Box = new System.Windows.Forms.TextBox();
             this.options_grpBox = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.displayPeakList_btn = new System.Windows.Forms.Button();
             this.optionBtn = new System.Windows.Forms.Button();
             this.loadExp_Btn = new System.Windows.Forms.Button();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
@@ -116,7 +117,6 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.displayPeakList_btn = new System.Windows.Forms.Button();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -485,6 +485,16 @@ namespace Isotope_fitting
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(318, 568);
             this.panel1.TabIndex = 0;
+            // 
+            // displayPeakList_btn
+            // 
+            this.displayPeakList_btn.Enabled = false;
+            this.displayPeakList_btn.Location = new System.Drawing.Point(237, 6);
+            this.displayPeakList_btn.Name = "displayPeakList_btn";
+            this.displayPeakList_btn.Size = new System.Drawing.Size(63, 23);
+            this.displayPeakList_btn.TabIndex = 40;
+            this.displayPeakList_btn.Text = "peak list";
+            this.displayPeakList_btn.UseVisualStyleBackColor = true;
             // 
             // optionBtn
             // 
@@ -1143,16 +1153,6 @@ namespace Isotope_fitting
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
             // 
-            // displayPeakList_btn
-            // 
-            this.displayPeakList_btn.Enabled = false;
-            this.displayPeakList_btn.Location = new System.Drawing.Point(237, 6);
-            this.displayPeakList_btn.Name = "displayPeakList_btn";
-            this.displayPeakList_btn.Size = new System.Drawing.Size(63, 23);
-            this.displayPeakList_btn.TabIndex = 40;
-            this.displayPeakList_btn.Text = "peak list";
-            this.displayPeakList_btn.UseVisualStyleBackColor = true;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1161,7 +1161,7 @@ namespace Isotope_fitting
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
-            this.Text = "Fragment fitting v10";
+            this.Text = "Fragment fitting v11";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.tabControl1.ResumeLayout(false);
             this.tabFit.ResumeLayout(false);

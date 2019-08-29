@@ -17,6 +17,8 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Runtime;
+using System.Runtime.CompilerServices;
 
 
 namespace Isotope_fitting
@@ -159,7 +161,7 @@ namespace Isotope_fitting
             sw1.Reset(); sw1.Start();
             post_load_actions();
             sw1.Stop(); Debug.WriteLine("post_load_actions: " + sw1.ElapsedMilliseconds.ToString());
-
+            
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
             peak_detection.Start();
         }
@@ -171,7 +173,7 @@ namespace Isotope_fitting
                 OpenFileDialog expData = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
                 List<string> lista = new List<string>();
 
-                if (expData.ShowDialog() != DialogResult.Cancel)
+                if (expData.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader objReader = new StreamReader(expData.FileName);
                     file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
@@ -508,27 +510,29 @@ namespace Isotope_fitting
         public void fragments_and_calculations_sequence_B()
         {
             GC.Collect();
-            Debug.WriteLine("fragments_and_calculations_sequence_B");
 
+            // 1. Pass Fragments info to all_data array
             initialize_fragments();
 
+            // 2. rebuild frag_listView in UI
             populate_frag_listView();
 
-            //if (insert_exp) step_Fitting();
+            // 3. 
             //if (string.IsNullOrEmpty(fitStep_Box.Text))
             //{
-            //    iso_plot.Model.Series.Clear();
-            //    recalculate_all_data_aligned();
+                iso_plot.Model.Series.Clear();
+                recalculate_all_data_aligned();
             //}
-            //refresh_iso_plot();
+            refresh_iso_plot();
 
-            //saveCalc_Btn.Enabled = true;
-            //clearCalc_Btn.Enabled = true;
-            //calc_Btn.Enabled = true;
-            //fit_Btn.Enabled = true;
-            //loadFit_Btn.Enabled = false;
+            if (insert_exp) step_Fitting();
 
-            //is_calc = false;
+
+            saveCalc_Btn.Enabled = true;
+            clearCalc_Btn.Enabled = true;
+            calc_Btn.Enabled = true;
+            fit_Btn.Enabled = true;
+            loadFit_Btn.Enabled = false;
         }
 
         private List<ChemiForm> select_fragments()
@@ -1402,6 +1406,8 @@ namespace Isotope_fitting
             });
 
             progress_display_stop();
+            is_calc = false;
+
             MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM: " + sw1.ElapsedMilliseconds.ToString());
 
@@ -1475,10 +1481,14 @@ namespace Isotope_fitting
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
             {
-                Fragments2.Add(new FragForm() { Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = counter, To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
+                Fragments2.Add(new FragForm() { Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error,
+                    Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine,
+                    Multiplier = chem.Multiplier, Mz = chem.Mz, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = new int(),
+                    To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
 
                 Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
+                Fragments2.Last().Counter = Fragments2.Count;
 
                 if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
@@ -1519,14 +1529,15 @@ namespace Isotope_fitting
 
         private void populate_frag_listView()
         {
-            // adds all matched fragments to frag_listView
+            // adds all matched fragments to frag_listView, rebuilds it from sctatch
             frag_listView.BeginUpdate();
+            frag_listView.Items.Clear();
 
             for (int i = 0; i < Fragments2.Count; i++)
             {
                 var listViewItem = new ListViewItem(Fragments2[i].ListName);
                 listViewItem.SubItems.Add("1.0");//"factor" column
-                listViewItem.SubItems.Add(i.ToString());// "No" (aka code) column
+                listViewItem.SubItems.Add(Fragments2[i].Counter.ToString());// "No" (aka code) column
                 listViewItem.SubItems.Add(Fragments2[i].Centroid[0].Y.ToString());// max centroid
 
                 frag_listView.Items.Add(listViewItem);
@@ -1571,6 +1582,185 @@ namespace Isotope_fitting
         }
 
         #endregion
+
+        #region Recalculate data aligned
+
+        private void recalculate_all_data_aligned()
+        {
+            //kaleitai kathe fora pou prostithetai neo stoixeio sto all_data
+            List<int> idxs = new List<int>();//einai mia lista 0 1 2 3..osa kai ta stoixeia tou all data
+            int start = 0;
+            // will recalculate all data aligned                      
+            if (all_data_aligned.Count > 0)
+            {
+                if (all_data_aligned[0].Count() < Fragments2.Count + 1)
+                {
+                    start = all_data_aligned[0].Count();
+                    for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
+                    all_data_aligned = align_distros(idxs, true, true);
+                    recalc = false;
+                    return;
+                }
+            }
+            for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
+            //(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
+            //(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
+            all_data_aligned = align_distros(idxs, true);
+            recalc = false;
+
+        }
+
+        private List<double[]> align_distros(List<int> distro_fragm_idxs, bool initial = false, bool add = false, bool Lbl = true)
+        {
+            List<double[]> aligned_intensities = new List<double[]>();//(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
+                                                                      //(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
+
+            ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = all_data[0].Count, Size = new Size(227, 23), AutoSize = false };
+            //user_grpBox.Controls.Add(tlPrgBr);
+            if (add && initial)
+            {
+                // generate alligned (in m/z) isotope distributions at the same step as the experimental
+                // pickup each point in experimental and find (interpolate) the intensity of each fragment
+                for (int i = 0; i < all_data[0].Count; i++) //(M)loop for all the experimental points count
+                {
+                    // one by one for all points
+                    List<double> one_aligned_point = new List<double>();
+                    foreach (double o in all_data_aligned[i])
+                    {
+                        one_aligned_point.Add(o);
+                    }
+                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo  ta experimental ola ta x-->m/z
+                    int so_far = all_data_aligned[0].Count();
+                    for (int j = 0; j < distro_fragm_idxs.Count; j++)
+                    {
+                        int distro_idx = distro_fragm_idxs[j];
+
+                        // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
+                        double aligned_value = 0.0;
+
+                        for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
+                        {
+                            if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                            {
+                                aligned_value = 0.0; break;
+                            }
+                            if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
+                            {
+                                aligned_value = 0.0; break;
+                            }
+                            if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
+                            {
+                                aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
+                                break;
+                            }
+                        }
+                        one_aligned_point.Add(aligned_value);
+                    }
+                    aligned_intensities.Add(one_aligned_point.ToArray());
+                    //Console.WriteLine(tlPrgBr.Value);
+                    tlPrgBr.Value++;
+                }
+            }
+            else if (window_count == 1 || initial)
+            {
+                // generate alligned (in m/z) isotope distributions at the same step as the experimental
+                // pickup each point in experimental and find (interpolate) the intensity of each fragment
+                for (int i = 0; i < all_data[0].Count; i++) //(M)loop for all the experimental points count
+                {
+                    // one by one for all points
+                    List<double> one_aligned_point = new List<double>();
+
+                    // add experimental
+                    one_aligned_point.Add(all_data[0][i][1]);//(M)prosthetei apo ta experimental data ola ta y-->intensity
+
+                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo  ta experimental ola ta x-->m/z
+
+                    for (int j = 1; j < distro_fragm_idxs.Count; j++)
+                    {
+                        int distro_idx = distro_fragm_idxs[j];
+
+                        // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
+                        double aligned_value = 0.0;
+
+                        for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
+                        {
+                            if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                            {
+                                aligned_value = 0.0; break;
+                            }
+                            if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
+                            {
+                                aligned_value = 0.0; break;
+                            }
+                            if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
+                            {
+                                aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
+                                break;
+                            }
+                        }
+                        one_aligned_point.Add(aligned_value);
+                    }
+                    aligned_intensities.Add(one_aligned_point.ToArray());
+                    //Console.WriteLine(tlPrgBr.Value);
+                    tlPrgBr.Value++;
+                }
+            }
+            else
+            {
+                //efarmozetai MONO sta checked_mono_fragments
+                //start-->starting index in each window
+                //end-->ending index in each window
+                int w = selected_window;
+                int start = windowList[w].Starting;
+                int end = windowList[w].Ending;
+                // generate alligned (in m/z) isotope distributions at the same step as the experimental
+                // pickup each point in experimental and find (interpolate) the intensity of each fragment
+                for (int i = start; i < end + 1; i++) //(M)loop for all the experimental points count
+                {
+                    // one by one for all points
+                    List<double> one_aligned_point = new List<double>();
+
+                    // add experimental
+                    one_aligned_point.Add(all_data[0][i][1]);//(M)prosthetei apo ta experimental data ola ta y-->intensity
+
+                    //double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ola ta experimental ola ta x-->m/z
+
+                    for (int j = 0; j < distro_fragm_idxs.Count; j++)
+                    {
+                        int distro_idx = distro_fragm_idxs[j];
+                        double aligned_value = all_data_aligned[i][distro_idx];
+                        //// interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
+                        //double aligned_value = 0.0;
+
+                        //for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
+                        //{
+                        //    if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
+                        //    {
+                        //        aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
+                        //        break;
+                        //    }
+                        //}
+                        one_aligned_point.Add(aligned_value);
+                    }
+                    aligned_intensities.Add(one_aligned_point.ToArray());
+                    tlPrgBr.Value++;
+                }
+
+            }
+            tlPrgBr.Dispose();
+            return aligned_intensities;
+        }
+
+        private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
+        {
+            return ((x_inter - x1) * y2 + (x2 - x_inter) * y1) / (x2 - x1);
+        }
+
+        #endregion
+
+
+
+
 
 
         #region OxyPlot
@@ -2287,7 +2477,7 @@ namespace Isotope_fitting
             }
             
         }
-        private void step_play(bool window_1=false)
+        private void step_play(bool window_1 = false)
         {
             //stepIndeces.Clear();
             if (selected_all_data.Count == 0)
@@ -5175,181 +5365,6 @@ namespace Isotope_fitting
 
         #endregion
       
-        #region Recalculate data aligned
-
-        private void recalculate_all_data_aligned()
-        {
-            //kaleitai kathe fora pou prostithetai neo stoixeio sto all_data
-            List<int> idxs = new List<int>();//einai mia lista 0 1 2 3..osa kai ta stoixeia tou all data
-            int start = 0;
-            // will recalculate all data aligned                      
-            if (all_data_aligned.Count >0)
-            {
-                if (all_data_aligned[0].Count()<Fragments2.Count+1)
-                {
-                    start = all_data_aligned[0].Count();
-                    for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
-                    all_data_aligned = align_distros(idxs, true,true);
-                    recalc = false;
-                    return;
-                }
-            }
-            for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
-            //(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
-            //(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
-            all_data_aligned = align_distros(idxs, true);            
-            recalc = false;
-            
-        }
-        private List<double[]> align_distros(List<int> distro_fragm_idxs, bool initial = false,bool add=false,bool Lbl=true)
-        {
-            List<double[]> aligned_intensities = new List<double[]>();//(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
-                                                                      //(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
-
-            ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = all_data[0].Count, Size = new Size(227, 23), AutoSize = false };
-            //user_grpBox.Controls.Add(tlPrgBr);
-            if (add && initial)
-            {
-                // generate alligned (in m/z) isotope distributions at the same step as the experimental
-                // pickup each point in experimental and find (interpolate) the intensity of each fragment
-                for (int i = 0; i < all_data[0].Count; i++) //(M)loop for all the experimental points count
-                {
-                    // one by one for all points
-                    List<double> one_aligned_point = new List<double>();
-                    foreach (double o in all_data_aligned[i])
-                    {
-                        one_aligned_point.Add(o);
-                    }
-                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo  ta experimental ola ta x-->m/z
-                    int so_far = all_data_aligned[0].Count();
-                    for (int j = 0; j < distro_fragm_idxs.Count; j++)
-                    {
-                        int distro_idx = distro_fragm_idxs[j];
-
-                        // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
-                        double aligned_value = 0.0;
-                        
-                        for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
-                        {
-                            if (k==0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
-                            {
-                                aligned_value = 0.0; break;
-                            }
-                            if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
-                            {
-                                aligned_value = 0.0; break;
-                            }
-                            if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
-                            {
-                                aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
-                                break;
-                            }                            
-                        }
-                        one_aligned_point.Add(aligned_value);
-                    }
-                    aligned_intensities.Add(one_aligned_point.ToArray());
-                    //Console.WriteLine(tlPrgBr.Value);
-                    tlPrgBr.Value++;
-                }
-            }
-            else if (window_count == 1 || initial)
-            {               
-                // generate alligned (in m/z) isotope distributions at the same step as the experimental
-                // pickup each point in experimental and find (interpolate) the intensity of each fragment
-                for (int i = 0; i < all_data[0].Count; i++) //(M)loop for all the experimental points count
-                {
-                    // one by one for all points
-                    List<double> one_aligned_point = new List<double>();
-
-                    // add experimental
-                    one_aligned_point.Add(all_data[0][i][1]);//(M)prosthetei apo ta experimental data ola ta y-->intensity
-
-                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo  ta experimental ola ta x-->m/z
-
-                    for (int j = 1; j < distro_fragm_idxs.Count; j++)
-                    {
-                        int distro_idx = distro_fragm_idxs[j];
-
-                        // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
-                        double aligned_value = 0.0;
-
-                        for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
-                        {
-                            if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
-                            {
-                                aligned_value = 0.0; break;
-                            }
-                            if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
-                            {
-                                aligned_value = 0.0; break;
-                            }
-                            if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
-                            {
-                                aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
-                                break;
-                            }
-                        }
-                        one_aligned_point.Add(aligned_value);
-                    }
-                    aligned_intensities.Add(one_aligned_point.ToArray());
-                    //Console.WriteLine(tlPrgBr.Value);
-                    tlPrgBr.Value++;
-                }               
-            }
-            else
-            {
-
-                
-                //efarmozetai MONO sta checked_mono_fragments
-                //start-->starting index in each window
-                //end-->ending index in each window
-                int w = selected_window;
-                int start = windowList[w].Starting;
-                int end = windowList[w].Ending;               
-                // generate alligned (in m/z) isotope distributions at the same step as the experimental
-                // pickup each point in experimental and find (interpolate) the intensity of each fragment
-                for (int i = start; i < end + 1; i++) //(M)loop for all the experimental points count
-                {
-                    // one by one for all points
-                    List<double> one_aligned_point = new List<double>();
-
-                    // add experimental
-                    one_aligned_point.Add(all_data[0][i][1]);//(M)prosthetei apo ta experimental data ola ta y-->intensity
-
-                    //double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ola ta experimental ola ta x-->m/z
-
-                    for (int j = 0; j < distro_fragm_idxs.Count; j++)
-                    {
-                        int distro_idx = distro_fragm_idxs[j];
-                        double aligned_value = all_data_aligned[i][distro_idx];
-                        //// interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
-                        //double aligned_value = 0.0;
-
-                        //for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
-                        //{
-                        //    if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
-                        //    {
-                        //        aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
-                        //        break;
-                        //    }
-                        //}
-                        one_aligned_point.Add(aligned_value);
-                    }
-                    aligned_intensities.Add(one_aligned_point.ToArray());
-                    tlPrgBr.Value++;
-                }
-                
-            }
-            tlPrgBr.Dispose();
-            return aligned_intensities;
-        }
-        private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
-        {
-            return ((x_inter - x1) * y2 + (x2 - x_inter) * y1) / (x2 - x1);
-        }
-
-        #endregion
-
         #region refresh plot
         private void refresh_iso_plot()
         {
@@ -5535,8 +5550,8 @@ namespace Isotope_fitting
         {
             sw1.Reset(); sw1.Start();
             peak_points.Clear();
-            //peak_points = LIMPIC_parallel();
-            peak_points = LIMPIC_mod();
+            peak_points = LIMPIC_parallel();
+            //peak_points = LIMPIC_mod();
             // it has to be sorted because of paralellism
             peak_points = peak_points.OrderBy(m => m[1] + m[4]).ToList();
             //peak_points = peak_points.OrderBy(m => m[1]).ToList();
@@ -5569,7 +5584,6 @@ namespace Isotope_fitting
                 diff_y[i] = dataY[i + 1] - dataY[i];
 
             int starting_points_to_omit = 0;
-
             int progress = 0;
             Parallel.For(starting_points_to_omit, len - peak_width - 1, (i, state) =>
             {
@@ -5601,8 +5615,9 @@ namespace Isotope_fitting
                         point[0] = i + 1;                           // index
                         point[1] = dataX[i + 1];                    // experimental time
                         point[2] = dataY[i + 1];                    // experimental height
-
+                        
                         var pair = find_centroid(i + 1, dataX, dataY, dataX[i + 1] - dataX[i]);
+                        
                         point[3] = pair[0];             // resolution
                         point[4] = pair[1];             // adjusted relative time
                         point[5] = pair[2];             // adjusted height
@@ -5613,8 +5628,8 @@ namespace Isotope_fitting
                 }
                 if (progress % 5000 == 0 && progress > 0) progress_display_update(progress);
             });
-
             progress_display_stop();
+
             return temp_peaks;
         }
 
@@ -5686,6 +5701,7 @@ namespace Isotope_fitting
                 }
                 if (i % 10000 == 0 && i > 0) progress_display_update(i); 
             }
+
             progress_display_stop();
             return temp_peaks;
         }
@@ -5735,14 +5751,14 @@ namespace Isotope_fitting
             func[0] = 0;
             double gauss_point, temp, temp2;
 
-            //double[] dataY = ((data as object[])[0] as double[]);
-            //int idx = ((int)((object[])data)[1]);
+            double[] dataY = ((double[])((object[])data)[0]);
+            int idx = ((int)((object[])data)[1]);
 
             for (int i = 5; i < 16; i++)
             {
                 temp2 = ((double)i - 10.0 - x[1]) / (1.4142 * x[0]);
                 gauss_point = x[2] * Math.Exp(-1.0 * temp2 * temp2);
-                temp = ((data as object[])[0] as double[])[((int)((object[])data)[1]) + (i - 10)] - gauss_point;
+                temp = dataY[idx + (i - 10)] - gauss_point;
                 func[0] += temp * temp;
             }
         }
