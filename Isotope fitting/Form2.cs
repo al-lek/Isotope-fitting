@@ -210,31 +210,30 @@ namespace Isotope_fitting
             recalc = true;
 
             // post load actions
-            enable_controls("post load");
+            enable_UIcontrols("post load");
 
             selected_window = 1000000;
             fitMin_Box.Text = experimental[0][0].ToString();
             fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
 
-            parse_data(0);
+            // copy experimental to all_data
+            experimental_to_all_data();
 
+            // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
             else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
 
-            //add experimental to plot
+            // add experimental to plot
             selectedFragments.Add(0);
-            if (all_data.Count > 1) { refix_data_to_max_exp(); step_Fitting(); }
-            if (!is_loading && !is_calc)
-            {
-                if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); }
-                refresh_iso_plot();
-            }
+            refresh_iso_plot();
+
             start_idx = 0;
             end_idx = experimental.Count;            
         }
 
         private void peakDetect_and_resolutionRef()
         {
+             // run peak detection and add new resolution map from experimental
             if (experimental.Count() > 0)
             {
                 peak_detect();
@@ -425,7 +424,7 @@ namespace Isotope_fitting
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
             mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
 
-            enable_controls("post import fragments");
+            enable_UIcontrols("post import fragments");
         }
 
         private void generate_x()
@@ -500,20 +499,9 @@ namespace Isotope_fitting
             populate_frag_listView();
 
             // 3. 
-            iso_plot.Model.Series.Clear();
-
             recalculate_all_data_aligned();
 
-            refresh_iso_plot();
-
-            if (insert_exp) step_Fitting();
-
-
-            saveCalc_Btn.Enabled = true;
-            clearCalc_Btn.Enabled = true;
-            calc_Btn.Enabled = true;
-            fit_Btn.Enabled = true;
-            loadFit_Btn.Enabled = false;
+            enable_UIcontrols("post calculations");
         }
 
         private List<ChemiForm> select_fragments()
@@ -1734,13 +1722,14 @@ namespace Isotope_fitting
 
         private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
         {
+            // linear interpolation
             return ((x_inter - x1) * y2 + (x2 - x_inter) * y1) / (x2 - x1);
         }
 
         #endregion
 
         #region UI control
-        private void enable_controls(string status)
+        private void enable_UIcontrols(string status)
         {
             if (status == "post load")
             {
@@ -1752,6 +1741,11 @@ namespace Isotope_fitting
                 clearCalc_Btn.Enabled = mzMax_Box.Enabled = mzMin_Box.Enabled = mzMax_Label.Enabled = mzMin_Label.Enabled = chargeMax_Box.Enabled = true;
                 chargeMin_Box.Enabled = chargeAll_Btn.Enabled = idxPr_Box.Enabled = idxTo_Box.Enabled = idxFrom_Box.Enabled = resolution_Box.Enabled = true;
                 machine_listBox.Enabled = calc_Btn.Enabled = true;
+                loadFit_Btn.Enabled = false;
+            }
+            else if (status == "post calculations")
+            {
+                saveCalc_Btn.Enabled = clearCalc_Btn.Enabled = calc_Btn.Enabled = fit_Btn.Enabled = true;
                 loadFit_Btn.Enabled = false;
             }
         }
@@ -2012,6 +2006,24 @@ namespace Isotope_fitting
 
         #endregion
 
+
+        #region Data manipulation Clear
+        private void experimental_to_all_data(bool selected_part = false)
+        {
+            // copy experimental to all data. After loading the whole range. After cahnge in fit range, only selected region
+            if (all_data.Count < 1) all_data.Add(new List<double[]>());
+            all_data[0].Clear();
+
+            if (selected_part)
+                foreach (double[] exp in selected_all_data[0])
+                    all_data[0].Add(exp);
+            else
+                foreach (double[] exp in experimental)
+                    all_data[0].Add(exp);
+        }
+
+
+        #endregion
 
         #region Helpers
         public IEnumerable<Control> GetControls(Control c)
@@ -2698,34 +2710,6 @@ namespace Isotope_fitting
             }
             return UI_intensities;
         }
-        private void parse_data(int idx,bool replace=false)
-        {
-            // reset data
-            while (all_data.Count<=idx) { all_data.Add(new List<double[]>()); }
-            all_data[idx].Clear();
-            if (idx == 0 && replace==true)//region of experimental data
-            {
-                if (selected_all_data[idx].Count > 0) foreach (double[] exp in selected_all_data[idx]) { all_data[idx].Add(exp); }                
-                else { MessageBox.Show("Error! Selected experimental data region couldn't be parsed","Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }                
-            }
-            else if (idx == 0)//exprimental data
-            {
-                foreach (double[] exp in experimental) { all_data[idx].Add(exp); }
-            }
-            else//for fragment data
-            {
-                if (all_data.Count == idx + 1)
-                {
-                    foreach (PointPlot p in Fragments2[idx - 1].Profile)
-                    {
-                        all_data[idx].Add(new double[] { p.X, p.Y });                        
-                    }
-                    custom_colors.Add(Fragments2[idx-1].Color.ToColor().ToArgb());
-                }
-                else if (custom_colors.Count == idx + 1) custom_colors[idx] = Fragments2[idx-1].Color.ToColor().ToArgb();
-                else MessageBox.Show(Text="Data parsing wasn't successful", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
-            }   
-        }
         private void select_from_experimental(string start_txt, string stop_txt,bool text_box_entry=false,bool later=false,bool fix=false)
         {            
             // will seach for the closest experimental mass to the input value and refresh distribution 0.
@@ -2752,12 +2736,13 @@ namespace Isotope_fitting
                 if (end > experimental[i][0]) { if (text_box_entry) { fitMax_Box.Text = experimental[i + 1][0].ToString(); } end_idx = i + 1; break; }
 
             // copy experimental data range to distribution 0
-            StringBuilder strBldr = new StringBuilder();
             for (int i = start_idx; i < end_idx + 1; i++)
             {
                 selected_all_data[0].Add(new double[] {experimental[i][0], experimental[i][1]});
-            }            
-            parse_data(0,true);
+            }
+
+            experimental_to_all_data(true); // WHY?
+
             if (fix)
             {
                 max_exp = selected_all_data[0].Select(d => d[1]).Max();
@@ -2771,6 +2756,20 @@ namespace Isotope_fitting
             }            
            
         }
+
+        private void refix_data_to_max_exp()
+        {
+            foreach (FragForm fra in Fragments2)
+            {
+                fra.Fix = 0.2 * max_exp / fra.Max_intensity;
+            }
+            foreach (ListViewItem item in frag_listView.Items)
+            {
+                int item_code = Int32.Parse(item.SubItems[5].Text, NumberStyles.Integer);
+                item.SubItems[6].Text = (Fragments2[item_code - 1].Factor * Fragments2[item_code - 1].Fix * Fragments2[item_code - 1].Centroid[0].Y).ToString();
+            }
+        }
+
         #endregion
 
         #region Fitting + Windows
@@ -4024,7 +4023,7 @@ namespace Isotope_fitting
         }
         private void loadFit_Btn_Click(object sender, EventArgs e)
         {
-            clear_data();
+            reset_all();
             experimental.Clear();
             Fragments2.Clear();
             ChemFormulas.Clear();
@@ -4055,10 +4054,6 @@ namespace Isotope_fitting
             mark_neues = false;
             load_data();
 
-        }
-        private void clear_data()
-        {
-            reset_all();
         }
         private void load_data()
         {
@@ -4222,7 +4217,7 @@ namespace Isotope_fitting
         }
         private void new_Btn_Click(object sender, EventArgs e)
         {
-            clear_data();
+            reset_all();
             insert_exp = false;
             saveFit_Btn.Enabled = false;
             loadMS_Btn.Enabled = true;
@@ -4497,30 +4492,6 @@ namespace Isotope_fitting
             saveCalc_Btn.Enabled = false;
         }
 
-        private void refix_data_to_max_exp()
-        {
-            foreach (FragForm fra in Fragments2)
-            {
-                fra.Fix = 0.2 * max_exp / fra.Max_intensity;
-            }
-            foreach (ListViewItem item in frag_listView.Items)
-            {
-                int item_code = Int32.Parse(item.SubItems[5].Text, NumberStyles.Integer);
-                item.SubItems[6].Text = (Fragments2[item_code - 1].Factor * Fragments2[item_code - 1].Fix * Fragments2[item_code - 1].Centroid[0].Y).ToString();
-            }
-
-        }
-        private void plot_peak()
-        {
-
-            iso_plot.Model.Series.Add(new LineSeries() { StrokeThickness = 2, Color = OxyColors.Red, LineStyle = LineStyle.Dash });
-            (iso_plot.Model.Series[2] as LineSeries).Title = "Peak";
-            for (int j = 0; j < peak_points.Count; j++)
-            {
-                (iso_plot.Model.Series[2] as LineSeries).Points.Add(new OxyPlot.DataPoint(peak_points[j][1], peak_points[j][2]));
-            }
-            iso_plot.Model.InvalidatePlot(true);
-        }
         private string fix_formula(string input, bool simple = true,int h=-1, int h2o = 0, int nh3 = 0)
         {
             string formula = "";
@@ -4788,1242 +4759,1254 @@ namespace Isotope_fitting
 
 
         #region unused_code
-        private void Calc_Btn_Click2()
-        {
-            sw1.Reset(); sw1.Start();
-            is_calc = true;
-            #region check if resolution inputs are correct and then calculate
-            if (string.IsNullOrEmpty(resolution_Box.Text) && machine_listBox.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("You need to set a Resolution value. " +
-                                        "You can either select the machine used or complete the 'Resolution' text box.");
-
-            }
-            else if (machine_listBox.SelectedItems.Count == 0 && float.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat) < 1)
-            {
-                MessageBox.Show("Please choose a resolution higher or equal to 1");
-            }
-            else
-            {
-                List<ChemiForm> Selected_options = new List<ChemiForm>();
-                Selected_options = ChemFormulas;
-                List<int[]> selectedIndex1 = new List<int[]>();
-                List<int[]> selectedIndex2 = new List<int[]>();
-                HashSet<int> selectedPrimaryIndex = new HashSet<int>();
-                #region m/z boundaries opptions
-                if (!string.IsNullOrEmpty(mzMax_Box.Text) && !string.IsNullOrEmpty(mzMin_Box.Text))
-                {
-                    List<ChemiForm> keeplistitem = new List<ChemiForm>();
-                    double max = Double.Parse(Selected_options.Last().Mz, CultureInfo.InvariantCulture.NumberFormat);
-                    double min = 0.0;
-                    if (!string.IsNullOrEmpty(mzMax_Box.Text))
-                    {
-                        max = Double.Parse(mzMax_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
-                    }
-                    if (!string.IsNullOrEmpty(mzMin_Box.Text))
-                    {
-                        min = Double.Parse(mzMin_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
-                    }
-                    foreach (ChemiForm chem in Selected_options)
-                    {
-                        double mz = Double.Parse(chem.Mz, CultureInfo.InvariantCulture.NumberFormat);
-                        if (mz <= max && mz >= min)
-                        {
-                            keeplistitem.Add(chem);
-                        }
-                        else if (mz > max)
-                        {
-                            break;
-                        }
-                    }
-                    Selected_options = keeplistitem;
-                }
-                #endregion
-
-                #region charge options
-                if (!string.IsNullOrEmpty(chargeMax_Box.Text) || !string.IsNullOrEmpty(chargeMin_Box.Text))
-                {
-                    List<ChemiForm> keeplistitem = new List<ChemiForm>();
-                    double max = 25;
-                    double min = 0.0;
-                    if (!string.IsNullOrEmpty(chargeMax_Box.Text))
-                    {
-                        max = Double.Parse(chargeMax_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
-                    }
-                    if (!string.IsNullOrEmpty(chargeMin_Box.Text))
-                    {
-                        min = Double.Parse(chargeMin_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
-                    }
-                    foreach (ChemiForm chem in Selected_options)
-                    {
-                        int charge = chem.Charge;
-                        if (charge <= max && charge >= min)
-                        {
-                            keeplistitem.Add(chem);
-                        }
-                    }
-                    Selected_options = keeplistitem;
-                }
-                #endregion
-
-                #region ion mode options            
-                if (addin_lstBox.SelectedItems.Count > 0 || a_lstBox.SelectedItems.Count > 0 || b_lstBox.SelectedItems.Count > 0 || c_lstBox.SelectedItems.Count > 0 || x_lstBox.SelectedItems.Count > 0 || y_lstBox.SelectedItems.Count > 0 || z_lstBox.SelectedItems.Count > 0 || internal_lstBox.SelectedItems.Count > 0 || dvw_lstBox.SelectedItems.Count > 0)
-                {
-                    List<ChemiForm> keeplistitem = new List<ChemiForm>();
-                    //add-in list box
-                    if (addin_lstBox.CheckedItems.Count > 0)
-                    {
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            string ion_type_sub = chem.Ion_type.Substring(0, 1);
-                            if (chem.Ion_type.Length > 4)
-                            {
-                                foreach (string ion in addin_lstBox.CheckedItems)
-                                {
-                                    string form = ion.Substring(0, 1);
-                                    if (ion.Contains("H2O") && ion.Contains("NH3"))
-                                    {
-                                        if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("NH3") && chem.Ion_type.Contains("H2O"))
-                                        {
-                                            keeplistitem.Add(chem.DeepCopy()); break;
-                                        }
-                                    }
-                                    else if (ion.Contains("H2O"))
-                                    {
-                                        if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("H2O") && !chem.Ion_type.Contains("NH3"))
-                                        {
-                                            keeplistitem.Add(chem.DeepCopy()); break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
-                                        {
-                                            keeplistitem.Add(chem.DeepCopy()); break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //a list box
-                    if (a_lstBox.CheckedItems.Count > 0)
-                    {
-
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Equals("a"))
-                            {
-                                foreach (string ion in a_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("+"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        if (keeplistitem.Last().Charge > 1)
-                                        {
-                                            int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
-                                            c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-
-                                        }
-                                        else
-                                        {
-                                            keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
-
-                                        }
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("a", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("a", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else if (ion.Contains("-"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        keeplistitem.Last().Deduct += "H" + ion[2];
-                                        int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
-
-                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("a", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("a", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //b list box
-                    if (b_lstBox.CheckedItems.Count > 0)
-                    {
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Equals("b"))
-                            {
-                                foreach (string ion in b_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("+"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        if (keeplistitem.Last().Charge > 1)
-                                        {
-                                            int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
-
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
-                                            c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        }
-                                        else
-                                        {
-                                            keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
-
-                                        }
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("b", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("b", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else if (ion.Contains("-"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        keeplistitem.Last().Deduct += "H" + ion[2];
-                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("b", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("b", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //c list box
-                    if (c_lstBox.CheckedItems.Count > 0)
-                    {
-
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Equals("c"))
-                            {
-                                foreach (string ion in c_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("+"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        if (keeplistitem.Last().Charge > 1)
-                                        {
-                                            int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
-
-                                            c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        }
-                                        else
-                                        {
-                                            keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
-
-                                        }
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("c", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("c", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else if (ion.Contains("-"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        keeplistitem.Last().Deduct += "H" + ion[2];
-                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("c", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("c", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //y list box
-                    if (y_lstBox.CheckedItems.Count > 0)
-                    {
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Equals("y"))
-                            {
-                                foreach (string ion in y_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("+"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        if (keeplistitem.Last().Charge > 1)
-                                        {
-                                            int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
-
-                                            c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        }
-                                        else
-                                        {
-                                            keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
-
-                                        }
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("y", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("y", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else if (ion.Contains("-"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        keeplistitem.Last().Deduct += "H" + ion[2];
-                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("y", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("y", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //x list box
-                    if (x_lstBox.CheckedItems.Count > 0)
-                    {
-
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Equals("x"))
-                            {
-                                foreach (string ion in x_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("+"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        if (keeplistitem.Last().Charge > 1)
-                                        {
-                                            int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
-
-                                            c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        }
-                                        else
-                                        {
-                                            keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
-
-                                        }
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("x", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("x", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else if (ion.Contains("-"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        keeplistitem.Last().Deduct += "H" + ion[2];
-                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("x", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("x", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //z list box
-                    if (z_lstBox.CheckedItems.Count > 0)
-                    {
-
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Equals("z"))
-                            {
-                                foreach (string ion in z_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("+"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        if (keeplistitem.Last().Charge > 1)
-                                        {
-                                            int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
-
-                                            c += keeplistitem.Last().Charge - 1;
-                                            keeplistitem.Last().Adduct = "H" + c.ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        }
-                                        else
-                                        {
-                                            keeplistitem.Last().Adduct = "H" + ion[2].ToString();
-                                            keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                            keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
-                                            keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
-
-                                        }
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("z", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("z", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString1;
-
-                                    }
-                                    else if (ion.Contains("-"))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                        keeplistitem.Last().Deduct += "H" + ion[2];
-                                        keeplistitem.Last().Ion_type = "(" + ion + ")";
-                                        int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
-                                        keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
-                                        keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
-                                        var radioString = keeplistitem.Last().Radio_label;
-                                        var radioBuider = new StringBuilder(radioString);
-                                        radioBuider.Replace("z", "(" + ion + ")");
-                                        radioString = radioBuider.ToString();
-                                        keeplistitem.Last().Radio_label = radioString;
-                                        var radioString1 = keeplistitem.Last().Name;
-                                        var radioBuider1 = new StringBuilder(radioString1);
-                                        radioBuider1.Replace("z", "(" + ion + ")");
-                                        radioString1 = radioBuider1.ToString();
-                                        keeplistitem.Last().Name = radioString;
-
-                                    }
-                                    else
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //internal list box
-                    if (internal_lstBox.CheckedItems.Count > 0)
-                    {
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Ion_type.Length > 8 && chem.Ion_type.Contains("int"))
-                            {
-                                foreach (string ion in internal_lstBox.CheckedItems)
-                                {
-                                    if (ion.Contains("b") && chem.Ion_type.Contains("b"))
-                                    {
-                                        if (ion.Contains("H2O"))
-                                        {
-                                            if (chem.Ion_type.Contains("H2O"))
-                                            {
-                                                if (ion.Contains("NH3"))
-                                                {
-                                                    if (chem.Ion_type.Contains("NH3"))
-                                                    {
-                                                        keeplistitem.Add(chem.DeepCopy()); break;
-                                                    }
-                                                }
-                                                else if (!chem.Ion_type.Contains("NH3"))
-                                                {
-                                                    keeplistitem.Add(chem.DeepCopy()); break;
-                                                }
-                                            }
-
-                                        }
-                                        else if (ion.Contains("NH3"))
-                                        {
-                                            if (chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
-                                            {
-                                                keeplistitem.Add(chem.DeepCopy()); break;
-                                            }
-                                        }
-                                        else if (!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
-                                        {
-                                            keeplistitem.Add(chem.DeepCopy()); break;
-                                        }
-                                    }
-                                    else if (chem.Ion_type.Contains(" a"))
-                                    {
-                                        if (ion.Contains("H2O"))
-                                        {
-                                            if (chem.Ion_type.Contains("H2O"))
-                                            {
-                                                if (ion.Contains("NH3"))
-                                                {
-                                                    if (chem.Ion_type.Contains("NH3"))
-                                                    {
-                                                        keeplistitem.Add(chem.DeepCopy()); break;
-                                                    }
-                                                }
-                                                else if (!chem.Ion_type.Contains("NH3"))
-                                                {
-                                                    keeplistitem.Add(chem.DeepCopy()); break;
-                                                }
-                                            }
-                                        }
-                                        else if (ion.Contains("NH3"))
-                                        {
-                                            if (chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
-                                            {
-                                                keeplistitem.Add(chem.DeepCopy()); break;
-                                            }
-                                        }
-                                        else if (!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
-                                        {
-                                            keeplistitem.Add(chem.DeepCopy()); break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    //dvw list box               
-                    if (dvw_lstBox.CheckedItems.Count > 0)
-                    {
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            foreach (string ion in dvw_lstBox.CheckedItems)
-                            {
-                                if (chem.Ion_type.Equals(ion))
-                                {
-                                    keeplistitem.Add(chem.DeepCopy()); break;
-                                }
-                            }
-                        }
-
-                    }
-                    Selected_options = keeplistitem;
-                }
-                #endregion
-
-                #region index options //--> prepei na rwtisw
-                if (!string.IsNullOrEmpty(idxPr_Box.Text) || !string.IsNullOrEmpty(idxTo_Box.Text) || !string.IsNullOrEmpty(idxFrom_Box.Text))
-                {
-                    //primary index --> 1 input number that indicates the min index number that the formula must have to be calculated 
-                    List<ChemiForm> keeplistitem = new List<ChemiForm>();
-                    if (!string.IsNullOrEmpty(idxPr_Box.Text))
-                    {
-                        string[] inputs = Regex.Split(idxPr_Box.Text, ",");
-                        string[] my_ions = new string[] { "a", "b", "c", "x", "y", "z", "d", "v", "w" };
-
-                        if (my_ions.Any(inputs[0].Contains))
-                        {
-                            foreach (string word in inputs)
-                            {
-                                string type = word[0].ToString();
-                                string primin = word.Substring(1);
-                                if (primin.Contains("-"))
-                                {
-                                    string[] wordTo = Regex.Split(primin, "-");
-                                    int pr1 = int.Parse(wordTo[0], CultureInfo.InvariantCulture.NumberFormat);
-                                    int pr2 = int.Parse(wordTo[1], CultureInfo.InvariantCulture.NumberFormat);
-                                    int pr_ = pr1;
-                                    while (pr_ <= pr2)
-                                    {
-                                        selectedPrimaryIndex.Add(pr_);
-                                        pr_++;
-                                    }
-                                }
-                                else
-                                {
-                                    int to = int.Parse(primin, CultureInfo.InvariantCulture.NumberFormat);
-                                    while (to <= Peptide.Length)
-                                    {
-                                        selectedPrimaryIndex.Add(to); to++;
-                                    }
-                                }
-                                foreach (ChemiForm chem in Selected_options)
-                                {
-                                    if (chem.Ion_type.Equals(type))
-                                    {
-                                        int index = int.Parse(chem.Index, CultureInfo.InvariantCulture.NumberFormat);
-                                        int indexTo = int.Parse(chem.IndexTo, CultureInfo.InvariantCulture.NumberFormat);
-                                        if (index == indexTo && selectedPrimaryIndex.Contains(index))
-                                        {
-                                            keeplistitem.Add(chem.DeepCopy());
-                                        }
-                                    }
-                                }
-                                selectedPrimaryIndex.Clear();
-                                selectedPrimaryIndex.TrimExcess();
-                            }
-                        }
-                        else
-                        {
-                            foreach (string word in inputs)
-                            {
-                                if (word.Contains("-"))
-                                {
-                                    string[] wordTo = Regex.Split(word, "-");
-                                    int pr1 = int.Parse(wordTo[0], CultureInfo.InvariantCulture.NumberFormat);
-                                    int pr2 = int.Parse(wordTo[1], CultureInfo.InvariantCulture.NumberFormat);
-                                    int pr_ = pr1;
-                                    while (pr_ <= pr2)
-                                    {
-                                        selectedPrimaryIndex.Add(pr_); pr_++;
-                                    }
-                                }
-                                else
-                                {
-                                    int to = int.Parse(word, CultureInfo.InvariantCulture.NumberFormat);
-                                    while (to <= Peptide.Length)
-                                    {
-                                        selectedPrimaryIndex.Add(to); to++;
-                                    }
-                                }
-                            }
-                            foreach (ChemiForm chem in Selected_options)
-                            {
-                                int index = int.Parse(chem.Index, CultureInfo.InvariantCulture.NumberFormat);
-                                int indexTo = int.Parse(chem.IndexTo, CultureInfo.InvariantCulture.NumberFormat);
-                                if (index == indexTo)
-                                {
-                                    if (selectedPrimaryIndex.Contains(index))
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy());
-                                    }
-                                }
-                            }
-                            selectedPrimaryIndex.Clear();
-                            selectedPrimaryIndex.TrimExcess();
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(idxTo_Box.Text) && !string.IsNullOrEmpty(idxFrom_Box.Text))
-                    {
-                        string[] inputsTo = Regex.Split(idxTo_Box.Text, ",");
-                        string[] inputsFrom = Regex.Split(idxFrom_Box.Text, ",");
-                        foreach (string word in inputsTo)
-                        {
-                            List<int> indeces = new List<int>();
-                            if (word.Contains("-"))
-                            {
-                                string[] wordTo = Regex.Split(word, "-");
-                                int to1 = int.Parse(wordTo[0], CultureInfo.InvariantCulture.NumberFormat);
-                                int to2 = int.Parse(wordTo[1], CultureInfo.InvariantCulture.NumberFormat);
-                                int to_ = to1;
-                                while (to_ <= to2)
-                                {
-                                    indeces.Add(to_);
-                                    to_++;
-                                }
-                            }
-                            else
-                            {
-                                int to = int.Parse(word, CultureInfo.InvariantCulture.NumberFormat);
-                                indeces.Add(to);
-                            }
-                            selectedIndex2.Add(indeces.ToArray());
-                        }
-                        foreach (string word in inputsFrom)
-                        {
-                            List<int> indeces = new List<int>();
-                            if (word.Contains("-"))
-                            {
-                                string[] wordFrom = Regex.Split(word, "-");
-                                int from1 = int.Parse(wordFrom[0], CultureInfo.InvariantCulture.NumberFormat);
-                                int from2 = int.Parse(wordFrom[1], CultureInfo.InvariantCulture.NumberFormat);
-                                int from_ = from1;
-                                while (from_ <= from2) { indeces.Add(from_); from_++; }
-                            }
-                            else
-                            {
-                                int from = int.Parse(word, CultureInfo.InvariantCulture.NumberFormat); indeces.Add(from);
-                            }
-                            selectedIndex1.Add(indeces.ToArray());
-                        }
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            int indexFrom = int.Parse(chem.Index, CultureInfo.InvariantCulture.NumberFormat);
-                            int indexTo = int.Parse(chem.IndexTo, CultureInfo.InvariantCulture.NumberFormat);
-                            if (indexFrom != indexTo)
-                            {
-                                for (int d = 0; d < selectedIndex1.Count(); d++)
-                                {
-                                    int idx1 = Array.IndexOf(selectedIndex1[d], indexFrom);
-                                    int idx2 = Array.IndexOf(selectedIndex2[d], indexTo);
-                                    if (idx1 > -1 && idx2 > -1)
-                                    {
-                                        keeplistitem.Add(chem.DeepCopy()); break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Selected_options = keeplistitem;
-                }
-
-                #endregion
-
-                #region Last check if items in Selected_options are already included in Fragments 2
-                if (Fragments2.Count != 0)
-                {
-                    List<ChemiForm> duplicateItem = new List<ChemiForm>();
-                    foreach (FragForm fra in Fragments2)
-                    {
-                        foreach (ChemiForm chem in Selected_options)
-                        {
-                            if (chem.Mz.Equals(fra.Mz) && chem.Radio_label.Equals(fra.Radio_label) && chem.Adduct.Equals(fra.Adduct) && chem.Deduct.Equals(fra.Deduct))
-                            {
-                                duplicateItem.Add(chem);
-                            }
-                        }
-                    }
-                    foreach (ChemiForm chem in duplicateItem)
-                    {
-                        Selected_options.Remove(chem);
-                    }
-                }
-                #endregion
-
-                if (Selected_options.Count != 0)
-                {
-                    calc_resolution = true;
-                    recalc = true;
-                    neues = Fragments2.Count();
-                    ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = Selected_options.Count, Size = new Size(227, 23), AutoSize = false };
-                    user_grpBox.Controls.Add(tlPrgBr);
-
-                    calc_Btn.Enabled = false;
-                    frag_listView.BeginUpdate();
-
-                    #region Calculation                    
-                    foreach (ChemiForm chem in Selected_options)
-                    {
-                        #region Resolution
-                        if (machine_listBox.SelectedItems.Count > 0)
-                        {
-                            chem.Machine = machine_listBox.SelectedItem.ToString();
-                        }
-                        else
-                        {
-                            chem.Resolution = float.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
-                        }
-                        #endregion
-
-                        ChemiForm.CheckChem(chem);
-                        if (chem.Resolution == 0)
-                        {
-                            if (String.IsNullOrEmpty(chem.Machine.ToString()))
-                            {
-                                chem.Error = true;
-                            }
-                            else
-                            {
-                                ChemiForm.Get_R(chem, calc_resolution);
-                                if (chem.Resolution == 0) chem.Error = true;
-                                calc_resolution = false;//the resolution matrix is calculated only once for the forst fragment, and is constant for the other fragments
-                            }
-                        }
-                        if (chem.Error == false)
-                        {
-                            algo = 1;
-                            int idx = chem.FinalFormula.IndexOf("C");
-                            if (Char.IsNumber(chem.FinalFormula[idx + 2]) != true) algo = 1;
-                            else if (Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
-
-                            if (algo == 1)
-                            {
-                                ChemiForm.Isopattern(chem, 1000000, 1, 0, 0.01);
-                            }
-                            else
-                            {
-                                ChemiForm.Isopattern(chem, 1000000, 2, 0, 0.01);
-                            }
-                            ChemiForm.Envelope(chem);
-                        }
-
-                        if (chem.Error == false)
-                        {
-                            ChemiForm.Vdetect(chem);
-                            List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                            if (insert_exp == true)
-                            {
-                                //Console.WriteLine(chem.Centroid[cen_int].X.ToString());
-                                chem.Resolution = ppm_calculator2(cen[0].X);
-                                if (chem.Resolution != 0f)
-                                {
-                                    if (ppm_calculator2(cen[1].X) != 0f || (cen.Count() > 2 && ppm_calculator2(cen[2].X) != 0f))
-                                    {
-                                        chem.Profile.Clear();
-                                        ChemiForm.Envelope(chem);
-                                        counter++;//o counter antistoixei ston index tou fragment sto all_data
-                                        Fragments2.Add(new FragForm() { Centroid = cen, Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = counter, To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
-                                        Debug.WriteLine(Fragments2.Count.ToString());
-                                        initialize_fragments();
-                                        if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
-                                        else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-                                        var listViewItem = new ListViewItem(Fragments2.Last().ListName);
-                                        listViewItem.SubItems.Add("1.0");//"factor" column
-                                        listViewItem.SubItems.Add(counter.ToString());// "No" (aka code) column
-                                        listViewItem.SubItems.Add(cen[0].Y.ToString());// max centroid
-                                        frag_listView.Items.Add(listViewItem);
-
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                counter++;//o counter antistoixei ston index tou fragment sto all_data
-                                Fragments2.Add(new FragForm() { Centroid = cen, Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = counter, To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
-                                initialize_fragments();
-                                if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
-                                else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-                                var listViewItem = new ListViewItem(Fragments2.Last().ListName);
-                                listViewItem.SubItems.Add("1.0");//"factor" column
-                                listViewItem.SubItems.Add(counter.ToString());// "No" (aka code) column
-                                listViewItem.SubItems.Add(cen[0].Y.ToString());// max centroid
-                                frag_listView.Items.Add(listViewItem);
-                            }
-                            //Console.WriteLine(tlPrgBr.Value);
-
-                            tlPrgBr.Value++;
-                        }
-                        else
-                        {
-                            string message = "Formula with m/z:" + chem.Mz + " and ion type:" + chem.Ion + " encountered an error";
-                            MessageBox.Show(message, "Error Detected in Input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
-                        }
-
-                    }
-                    #endregion
-                    tlPrgBr.Dispose();
-                    frag_listView.EndUpdate();
-
-                    sw1.Stop(); Debug.WriteLine("Pre allign: " + sw1.ElapsedMilliseconds.ToString());
-                    sw1.Reset(); sw1.Start();
-
-                    if (counter != Fragments2.Count)
-                    {
-                        MessageBox.Show("Error in 'Fragments2'!Restart the program!");
-                    }
-                    else
-                    {
-                        if (insert_exp) step_Fitting();
-                        if (!is_loading)
-                        {
-                            if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); }
-                            refresh_iso_plot();
-                        }
-
-                        // j = 0; to be removed
-                        saveCalc_Btn.Enabled = true;
-                        clearCalc_Btn.Enabled = true;
-                        calc_Btn.Enabled = true;
-                        fit_Btn.Enabled = true;
-                        loadFit_Btn.Enabled = false;
-
-                        sw1.Stop(); Debug.WriteLine("Post allign: " + sw1.ElapsedMilliseconds.ToString());
-
-                        MessageBox.Show("Done!");
-
-
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("There is no match to your research.Please try again!");
-                    clearCalc_Btn.Enabled = true;
-                }
-            }
-            #endregion            
-            is_calc = false;
-
-
-        }
-
-        private float ppm_calculator2(double centroid)
-        {
-            float res = 0f;
-            double ppm = 0.0;
-            double diff = 0.0;
-            int d = 1;
-            if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
-            {
-                ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
-                if (ppm < ppmError) { res = (float)peak_points[0][3]; return res; }
-                else return res;
-            }
-
-            do
-            {
-                diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                while (diff < 0)
-                {
-                    d++;
-                    diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                }
-                diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                if (diff >= 0)
-                {
-                    ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d][3]; return res; }
-                    ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d - 1][3]; return res; }
-                    else return res;
-                }
-
-            } while (d < peak_points[0].Count() - 1);
-            return res;
-        }
-
-        private void save_data()
-        {
-
-            SaveFileDialog save = new SaveFileDialog() { Title = "Save fittng data", FileName = "window" + windowList[selected_window].Code.ToString(), Filter = "Data Files (*.wnd)|*.wnd", DefaultExt = "wnd", OverwritePrompt = true, AddExtension = true };
-
-            //save.InitialDirectory = Application.StartupPath + "\\Data";
-            //DirectoryInfo di = new DirectoryInfo(save.InitialDirectory);
-            //if (di.Exists != true) di.Create();
-
-            if (save.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
-
-                file.WriteLine("Mode:\texternal data");
-                file.WriteLine("AA Sequence:\t" + Peptide);
-                file.WriteLine("Window:\t" + windowList[selected_window].Code.ToString());
-                file.WriteLine("Fitted isotopes:\t" + candidate_fragments.ToString());
-                file.WriteLine("m/z[Da]\tIntensity");
-                file.WriteLine();
-
-                for (int i = 0; i < windowList[selected_window].Fragments.Count; i++)
-                {
-                    int indexS = windowList[selected_window].Fragments[i];
-                    if (indexS == 0)
-                    {
-                        file.WriteLine("Name:\t" + "Exp");
-                        file.WriteLine("Factor:\t" + "1.0");
-                    }
-                    else
-                    {
-                        file.WriteLine("Name:\t" + Fragments2[indexS - 1].Name);
-                        file.WriteLine("Factor:\t" + Fragments2[indexS - 1].Factor);
-                        file.WriteLine("ListViewItems:\t" + Fragments2[indexS - 1].ListName[0].ToString() + "\t" + Fragments2[indexS - 1].ListName[1].ToString() + "\t" + Fragments2[indexS - 1].ListName[2].ToString() + "\t" + Fragments2[indexS - 1].ListName[3].ToString() + "\t" + Fragments2[indexS - 1].ListName[4].ToString());
-                        file.WriteLine("Selected:\t" + Fragments2[indexS - 1].To_plot.ToString());
-                        file.WriteLine("Color:\t" + Fragments2[indexS - 1].Color.ToColor().ToArgb());
-                    }
-                    foreach (double[] p in all_data[indexS]) file.WriteLine(p[0] + "\t" + p[1]);
-                }
-                file.Flush(); file.Close(); file.Dispose();
-            }
-
-
-        }
-        //private void indexForm(object sender, EventArgs e)
+        //private void Calc_Btn_Click2()
         //{
-        //    List<int> fromItems = new List<int>();
-        //    fromItems = ChemFormulas.Select(x => Int32.Parse(x.Index)).Distinct().OrderBy(p => p).ToList();
-        //    if ((sender as MenuItem).Text == "Index")
+        //    sw1.Reset(); sw1.Start();
+        //    is_calc = true;
+        //    #region check if resolution inputs are correct and then calculate
+        //    if (string.IsNullOrEmpty(resolution_Box.Text) && machine_listBox.SelectedItems.Count == 0)
         //    {
-        //        if (a_lstBox.Focused)
-        //        {
-        //            foreach (ChemiForm chem in ChemFormulas)
-        //            {
-        //                if (chem.Ion_type.Equals("a"))
-        //                {
-        //                    selectedIons.Add(chem);
-        //                }
-        //            }
-        //        }
-        //        if (b_lstBox.Focused) { MessageBox.Show("b"); }
-        //        if (c_lstBox.Focused) { MessageBox.Show("c"); }
-        //        if (x_lstBox.Focused) { MessageBox.Show("x"); }
-        //        if (y_lstBox.Focused) { MessageBox.Show("y"); }
-        //        if (z_lstBox.Focused) { MessageBox.Show("z"); }
-        //        if (dvw_lstBox.Focused) { MessageBox.Show("dvw"); }
-        //        if (addin_lstBox.Focused) { MessageBox.Show("addin"); }
+        //        MessageBox.Show("You need to set a Resolution value. " +
+        //                                "You can either select the machine used or complete the 'Resolution' text box.");
 
         //    }
+        //    else if (machine_listBox.SelectedItems.Count == 0 && float.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat) < 1)
+        //    {
+        //        MessageBox.Show("Please choose a resolution higher or equal to 1");
+        //    }
+        //    else
+        //    {
+        //        List<ChemiForm> Selected_options = new List<ChemiForm>();
+        //        Selected_options = ChemFormulas;
+        //        List<int[]> selectedIndex1 = new List<int[]>();
+        //        List<int[]> selectedIndex2 = new List<int[]>();
+        //        HashSet<int> selectedPrimaryIndex = new HashSet<int>();
+        //        #region m/z boundaries opptions
+        //        if (!string.IsNullOrEmpty(mzMax_Box.Text) && !string.IsNullOrEmpty(mzMin_Box.Text))
+        //        {
+        //            List<ChemiForm> keeplistitem = new List<ChemiForm>();
+        //            double max = Double.Parse(Selected_options.Last().Mz, CultureInfo.InvariantCulture.NumberFormat);
+        //            double min = 0.0;
+        //            if (!string.IsNullOrEmpty(mzMax_Box.Text))
+        //            {
+        //                max = Double.Parse(mzMax_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+        //            }
+        //            if (!string.IsNullOrEmpty(mzMin_Box.Text))
+        //            {
+        //                min = Double.Parse(mzMin_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+        //            }
+        //            foreach (ChemiForm chem in Selected_options)
+        //            {
+        //                double mz = Double.Parse(chem.Mz, CultureInfo.InvariantCulture.NumberFormat);
+        //                if (mz <= max && mz >= min)
+        //                {
+        //                    keeplistitem.Add(chem);
+        //                }
+        //                else if (mz > max)
+        //                {
+        //                    break;
+        //                }
+        //            }
+        //            Selected_options = keeplistitem;
+        //        }
+        //        #endregion
+
+        //        #region charge options
+        //        if (!string.IsNullOrEmpty(chargeMax_Box.Text) || !string.IsNullOrEmpty(chargeMin_Box.Text))
+        //        {
+        //            List<ChemiForm> keeplistitem = new List<ChemiForm>();
+        //            double max = 25;
+        //            double min = 0.0;
+        //            if (!string.IsNullOrEmpty(chargeMax_Box.Text))
+        //            {
+        //                max = Double.Parse(chargeMax_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+        //            }
+        //            if (!string.IsNullOrEmpty(chargeMin_Box.Text))
+        //            {
+        //                min = Double.Parse(chargeMin_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+        //            }
+        //            foreach (ChemiForm chem in Selected_options)
+        //            {
+        //                int charge = chem.Charge;
+        //                if (charge <= max && charge >= min)
+        //                {
+        //                    keeplistitem.Add(chem);
+        //                }
+        //            }
+        //            Selected_options = keeplistitem;
+        //        }
+        //        #endregion
+
+        //        #region ion mode options            
+        //        if (addin_lstBox.SelectedItems.Count > 0 || a_lstBox.SelectedItems.Count > 0 || b_lstBox.SelectedItems.Count > 0 || c_lstBox.SelectedItems.Count > 0 || x_lstBox.SelectedItems.Count > 0 || y_lstBox.SelectedItems.Count > 0 || z_lstBox.SelectedItems.Count > 0 || internal_lstBox.SelectedItems.Count > 0 || dvw_lstBox.SelectedItems.Count > 0)
+        //        {
+        //            List<ChemiForm> keeplistitem = new List<ChemiForm>();
+        //            //add-in list box
+        //            if (addin_lstBox.CheckedItems.Count > 0)
+        //            {
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    string ion_type_sub = chem.Ion_type.Substring(0, 1);
+        //                    if (chem.Ion_type.Length > 4)
+        //                    {
+        //                        foreach (string ion in addin_lstBox.CheckedItems)
+        //                        {
+        //                            string form = ion.Substring(0, 1);
+        //                            if (ion.Contains("H2O") && ion.Contains("NH3"))
+        //                            {
+        //                                if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("NH3") && chem.Ion_type.Contains("H2O"))
+        //                                {
+        //                                    keeplistitem.Add(chem.DeepCopy()); break;
+        //                                }
+        //                            }
+        //                            else if (ion.Contains("H2O"))
+        //                            {
+        //                                if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("H2O") && !chem.Ion_type.Contains("NH3"))
+        //                                {
+        //                                    keeplistitem.Add(chem.DeepCopy()); break;
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                if (ion_type_sub.Equals(form) && chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+        //                                {
+        //                                    keeplistitem.Add(chem.DeepCopy()); break;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //a list box
+        //            if (a_lstBox.CheckedItems.Count > 0)
+        //            {
+
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Equals("a"))
+        //                    {
+        //                        foreach (string ion in a_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("+"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                if (keeplistitem.Last().Charge > 1)
+        //                                {
+        //                                    int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
+        //                                    c += keeplistitem.Last().Charge - 1;
+        //                                    keeplistitem.Last().Adduct = "H" + c.ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+
+        //                                }
+        //                                else
+        //                                {
+        //                                    keeplistitem.Last().Adduct = "H" + ion[2].ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
+
+        //                                }
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("a", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("a", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else if (ion.Contains("-"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                keeplistitem.Last().Deduct += "H" + ion[2];
+        //                                int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
+        //                                keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
+
+        //                                keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("a", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("a", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //b list box
+        //            if (b_lstBox.CheckedItems.Count > 0)
+        //            {
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Equals("b"))
+        //                    {
+        //                        foreach (string ion in b_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("+"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                if (keeplistitem.Last().Charge > 1)
+        //                                {
+        //                                    int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
+
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
+        //                                    c += keeplistitem.Last().Charge - 1;
+        //                                    keeplistitem.Last().Adduct = "H" + c.ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                }
+        //                                else
+        //                                {
+        //                                    keeplistitem.Last().Adduct = "H" + ion[2].ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
+
+        //                                }
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("b", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("b", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else if (ion.Contains("-"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                keeplistitem.Last().Deduct += "H" + ion[2];
+        //                                keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
+        //                                keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("b", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("b", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //c list box
+        //            if (c_lstBox.CheckedItems.Count > 0)
+        //            {
+
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Equals("c"))
+        //                    {
+        //                        foreach (string ion in c_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("+"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                if (keeplistitem.Last().Charge > 1)
+        //                                {
+        //                                    int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
+
+        //                                    c += keeplistitem.Last().Charge - 1;
+        //                                    keeplistitem.Last().Adduct = "H" + c.ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                }
+        //                                else
+        //                                {
+        //                                    keeplistitem.Last().Adduct = "H" + ion[2].ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
+
+        //                                }
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("c", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("c", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else if (ion.Contains("-"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                keeplistitem.Last().Deduct += "H" + ion[2];
+        //                                keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
+        //                                keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("c", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("c", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //y list box
+        //            if (y_lstBox.CheckedItems.Count > 0)
+        //            {
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Equals("y"))
+        //                    {
+        //                        foreach (string ion in y_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("+"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                if (keeplistitem.Last().Charge > 1)
+        //                                {
+        //                                    int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
+
+        //                                    c += keeplistitem.Last().Charge - 1;
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                }
+        //                                else
+        //                                {
+        //                                    keeplistitem.Last().Adduct = "H" + ion[2].ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
+
+        //                                }
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("y", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("y", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else if (ion.Contains("-"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                keeplistitem.Last().Deduct += "H" + ion[2];
+        //                                keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
+        //                                keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("y", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("y", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //x list box
+        //            if (x_lstBox.CheckedItems.Count > 0)
+        //            {
+
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Equals("x"))
+        //                    {
+        //                        foreach (string ion in x_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("+"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                if (keeplistitem.Last().Charge > 1)
+        //                                {
+        //                                    int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
+
+        //                                    c += keeplistitem.Last().Charge - 1;
+        //                                    keeplistitem.Last().Adduct = "H" + c.ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                }
+        //                                else
+        //                                {
+        //                                    keeplistitem.Last().Adduct = "H" + ion[2].ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
+
+        //                                }
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("x", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("x", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else if (ion.Contains("-"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                keeplistitem.Last().Deduct += "H" + ion[2];
+        //                                keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
+        //                                keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("x", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("x", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //z list box
+        //            if (z_lstBox.CheckedItems.Count > 0)
+        //            {
+
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Equals("z"))
+        //                    {
+        //                        foreach (string ion in z_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("+"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                if (keeplistitem.Last().Charge > 1)
+        //                                {
+        //                                    int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + (c * 1.007825)).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, c);
+
+        //                                    c += keeplistitem.Last().Charge - 1;
+        //                                    keeplistitem.Last().Adduct = "H" + c.ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                }
+        //                                else
+        //                                {
+        //                                    keeplistitem.Last().Adduct = "H" + ion[2].ToString();
+        //                                    keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                    keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) + 1.007825).ToString();
+        //                                    keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, 1);
+
+        //                                }
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("z", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("z", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString1;
+
+        //                            }
+        //                            else if (ion.Contains("-"))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                                keeplistitem.Last().Deduct += "H" + ion[2];
+        //                                keeplistitem.Last().Ion_type = "(" + ion + ")";
+        //                                int c = Int32.Parse(ion[2].ToString(), NumberStyles.Integer);
+        //                                keeplistitem.Last().Mz = (double.Parse(keeplistitem.Last().Mz, NumberStyles.AllowDecimalPoint) - (c * 1.007825)).ToString();
+        //                                keeplistitem.Last().PrintFormula = fix_formula(keeplistitem.Last().PrintFormula, true, -c);
+        //                                var radioString = keeplistitem.Last().Radio_label;
+        //                                var radioBuider = new StringBuilder(radioString);
+        //                                radioBuider.Replace("z", "(" + ion + ")");
+        //                                radioString = radioBuider.ToString();
+        //                                keeplistitem.Last().Radio_label = radioString;
+        //                                var radioString1 = keeplistitem.Last().Name;
+        //                                var radioBuider1 = new StringBuilder(radioString1);
+        //                                radioBuider1.Replace("z", "(" + ion + ")");
+        //                                radioString1 = radioBuider1.ToString();
+        //                                keeplistitem.Last().Name = radioString;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //internal list box
+        //            if (internal_lstBox.CheckedItems.Count > 0)
+        //            {
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Ion_type.Length > 8 && chem.Ion_type.Contains("int"))
+        //                    {
+        //                        foreach (string ion in internal_lstBox.CheckedItems)
+        //                        {
+        //                            if (ion.Contains("b") && chem.Ion_type.Contains("b"))
+        //                            {
+        //                                if (ion.Contains("H2O"))
+        //                                {
+        //                                    if (chem.Ion_type.Contains("H2O"))
+        //                                    {
+        //                                        if (ion.Contains("NH3"))
+        //                                        {
+        //                                            if (chem.Ion_type.Contains("NH3"))
+        //                                            {
+        //                                                keeplistitem.Add(chem.DeepCopy()); break;
+        //                                            }
+        //                                        }
+        //                                        else if (!chem.Ion_type.Contains("NH3"))
+        //                                        {
+        //                                            keeplistitem.Add(chem.DeepCopy()); break;
+        //                                        }
+        //                                    }
+
+        //                                }
+        //                                else if (ion.Contains("NH3"))
+        //                                {
+        //                                    if (chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+        //                                    {
+        //                                        keeplistitem.Add(chem.DeepCopy()); break;
+        //                                    }
+        //                                }
+        //                                else if (!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+        //                                {
+        //                                    keeplistitem.Add(chem.DeepCopy()); break;
+        //                                }
+        //                            }
+        //                            else if (chem.Ion_type.Contains(" a"))
+        //                            {
+        //                                if (ion.Contains("H2O"))
+        //                                {
+        //                                    if (chem.Ion_type.Contains("H2O"))
+        //                                    {
+        //                                        if (ion.Contains("NH3"))
+        //                                        {
+        //                                            if (chem.Ion_type.Contains("NH3"))
+        //                                            {
+        //                                                keeplistitem.Add(chem.DeepCopy()); break;
+        //                                            }
+        //                                        }
+        //                                        else if (!chem.Ion_type.Contains("NH3"))
+        //                                        {
+        //                                            keeplistitem.Add(chem.DeepCopy()); break;
+        //                                        }
+        //                                    }
+        //                                }
+        //                                else if (ion.Contains("NH3"))
+        //                                {
+        //                                    if (chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+        //                                    {
+        //                                        keeplistitem.Add(chem.DeepCopy()); break;
+        //                                    }
+        //                                }
+        //                                else if (!chem.Ion_type.Contains("NH3") && !chem.Ion_type.Contains("H2O"))
+        //                                {
+        //                                    keeplistitem.Add(chem.DeepCopy()); break;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            //dvw list box               
+        //            if (dvw_lstBox.CheckedItems.Count > 0)
+        //            {
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    foreach (string ion in dvw_lstBox.CheckedItems)
+        //                    {
+        //                        if (chem.Ion_type.Equals(ion))
+        //                        {
+        //                            keeplistitem.Add(chem.DeepCopy()); break;
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //            Selected_options = keeplistitem;
+        //        }
+        //        #endregion
+
+        //        #region index options //--> prepei na rwtisw
+        //        if (!string.IsNullOrEmpty(idxPr_Box.Text) || !string.IsNullOrEmpty(idxTo_Box.Text) || !string.IsNullOrEmpty(idxFrom_Box.Text))
+        //        {
+        //            //primary index --> 1 input number that indicates the min index number that the formula must have to be calculated 
+        //            List<ChemiForm> keeplistitem = new List<ChemiForm>();
+        //            if (!string.IsNullOrEmpty(idxPr_Box.Text))
+        //            {
+        //                string[] inputs = Regex.Split(idxPr_Box.Text, ",");
+        //                string[] my_ions = new string[] { "a", "b", "c", "x", "y", "z", "d", "v", "w" };
+
+        //                if (my_ions.Any(inputs[0].Contains))
+        //                {
+        //                    foreach (string word in inputs)
+        //                    {
+        //                        string type = word[0].ToString();
+        //                        string primin = word.Substring(1);
+        //                        if (primin.Contains("-"))
+        //                        {
+        //                            string[] wordTo = Regex.Split(primin, "-");
+        //                            int pr1 = int.Parse(wordTo[0], CultureInfo.InvariantCulture.NumberFormat);
+        //                            int pr2 = int.Parse(wordTo[1], CultureInfo.InvariantCulture.NumberFormat);
+        //                            int pr_ = pr1;
+        //                            while (pr_ <= pr2)
+        //                            {
+        //                                selectedPrimaryIndex.Add(pr_);
+        //                                pr_++;
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            int to = int.Parse(primin, CultureInfo.InvariantCulture.NumberFormat);
+        //                            while (to <= Peptide.Length)
+        //                            {
+        //                                selectedPrimaryIndex.Add(to); to++;
+        //                            }
+        //                        }
+        //                        foreach (ChemiForm chem in Selected_options)
+        //                        {
+        //                            if (chem.Ion_type.Equals(type))
+        //                            {
+        //                                int index = int.Parse(chem.Index, CultureInfo.InvariantCulture.NumberFormat);
+        //                                int indexTo = int.Parse(chem.IndexTo, CultureInfo.InvariantCulture.NumberFormat);
+        //                                if (index == indexTo && selectedPrimaryIndex.Contains(index))
+        //                                {
+        //                                    keeplistitem.Add(chem.DeepCopy());
+        //                                }
+        //                            }
+        //                        }
+        //                        selectedPrimaryIndex.Clear();
+        //                        selectedPrimaryIndex.TrimExcess();
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    foreach (string word in inputs)
+        //                    {
+        //                        if (word.Contains("-"))
+        //                        {
+        //                            string[] wordTo = Regex.Split(word, "-");
+        //                            int pr1 = int.Parse(wordTo[0], CultureInfo.InvariantCulture.NumberFormat);
+        //                            int pr2 = int.Parse(wordTo[1], CultureInfo.InvariantCulture.NumberFormat);
+        //                            int pr_ = pr1;
+        //                            while (pr_ <= pr2)
+        //                            {
+        //                                selectedPrimaryIndex.Add(pr_); pr_++;
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            int to = int.Parse(word, CultureInfo.InvariantCulture.NumberFormat);
+        //                            while (to <= Peptide.Length)
+        //                            {
+        //                                selectedPrimaryIndex.Add(to); to++;
+        //                            }
+        //                        }
+        //                    }
+        //                    foreach (ChemiForm chem in Selected_options)
+        //                    {
+        //                        int index = int.Parse(chem.Index, CultureInfo.InvariantCulture.NumberFormat);
+        //                        int indexTo = int.Parse(chem.IndexTo, CultureInfo.InvariantCulture.NumberFormat);
+        //                        if (index == indexTo)
+        //                        {
+        //                            if (selectedPrimaryIndex.Contains(index))
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy());
+        //                            }
+        //                        }
+        //                    }
+        //                    selectedPrimaryIndex.Clear();
+        //                    selectedPrimaryIndex.TrimExcess();
+        //                }
+        //            }
+        //            if (!string.IsNullOrEmpty(idxTo_Box.Text) && !string.IsNullOrEmpty(idxFrom_Box.Text))
+        //            {
+        //                string[] inputsTo = Regex.Split(idxTo_Box.Text, ",");
+        //                string[] inputsFrom = Regex.Split(idxFrom_Box.Text, ",");
+        //                foreach (string word in inputsTo)
+        //                {
+        //                    List<int> indeces = new List<int>();
+        //                    if (word.Contains("-"))
+        //                    {
+        //                        string[] wordTo = Regex.Split(word, "-");
+        //                        int to1 = int.Parse(wordTo[0], CultureInfo.InvariantCulture.NumberFormat);
+        //                        int to2 = int.Parse(wordTo[1], CultureInfo.InvariantCulture.NumberFormat);
+        //                        int to_ = to1;
+        //                        while (to_ <= to2)
+        //                        {
+        //                            indeces.Add(to_);
+        //                            to_++;
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        int to = int.Parse(word, CultureInfo.InvariantCulture.NumberFormat);
+        //                        indeces.Add(to);
+        //                    }
+        //                    selectedIndex2.Add(indeces.ToArray());
+        //                }
+        //                foreach (string word in inputsFrom)
+        //                {
+        //                    List<int> indeces = new List<int>();
+        //                    if (word.Contains("-"))
+        //                    {
+        //                        string[] wordFrom = Regex.Split(word, "-");
+        //                        int from1 = int.Parse(wordFrom[0], CultureInfo.InvariantCulture.NumberFormat);
+        //                        int from2 = int.Parse(wordFrom[1], CultureInfo.InvariantCulture.NumberFormat);
+        //                        int from_ = from1;
+        //                        while (from_ <= from2) { indeces.Add(from_); from_++; }
+        //                    }
+        //                    else
+        //                    {
+        //                        int from = int.Parse(word, CultureInfo.InvariantCulture.NumberFormat); indeces.Add(from);
+        //                    }
+        //                    selectedIndex1.Add(indeces.ToArray());
+        //                }
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    int indexFrom = int.Parse(chem.Index, CultureInfo.InvariantCulture.NumberFormat);
+        //                    int indexTo = int.Parse(chem.IndexTo, CultureInfo.InvariantCulture.NumberFormat);
+        //                    if (indexFrom != indexTo)
+        //                    {
+        //                        for (int d = 0; d < selectedIndex1.Count(); d++)
+        //                        {
+        //                            int idx1 = Array.IndexOf(selectedIndex1[d], indexFrom);
+        //                            int idx2 = Array.IndexOf(selectedIndex2[d], indexTo);
+        //                            if (idx1 > -1 && idx2 > -1)
+        //                            {
+        //                                keeplistitem.Add(chem.DeepCopy()); break;
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            Selected_options = keeplistitem;
+        //        }
+
+        //        #endregion
+
+        //        #region Last check if items in Selected_options are already included in Fragments 2
+        //        if (Fragments2.Count != 0)
+        //        {
+        //            List<ChemiForm> duplicateItem = new List<ChemiForm>();
+        //            foreach (FragForm fra in Fragments2)
+        //            {
+        //                foreach (ChemiForm chem in Selected_options)
+        //                {
+        //                    if (chem.Mz.Equals(fra.Mz) && chem.Radio_label.Equals(fra.Radio_label) && chem.Adduct.Equals(fra.Adduct) && chem.Deduct.Equals(fra.Deduct))
+        //                    {
+        //                        duplicateItem.Add(chem);
+        //                    }
+        //                }
+        //            }
+        //            foreach (ChemiForm chem in duplicateItem)
+        //            {
+        //                Selected_options.Remove(chem);
+        //            }
+        //        }
+        //        #endregion
+
+        //        if (Selected_options.Count != 0)
+        //        {
+        //            calc_resolution = true;
+        //            recalc = true;
+        //            neues = Fragments2.Count();
+        //            ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = Selected_options.Count, Size = new Size(227, 23), AutoSize = false };
+        //            user_grpBox.Controls.Add(tlPrgBr);
+
+        //            calc_Btn.Enabled = false;
+        //            frag_listView.BeginUpdate();
+
+        //            #region Calculation                    
+        //            foreach (ChemiForm chem in Selected_options)
+        //            {
+        //                #region Resolution
+        //                if (machine_listBox.SelectedItems.Count > 0)
+        //                {
+        //                    chem.Machine = machine_listBox.SelectedItem.ToString();
+        //                }
+        //                else
+        //                {
+        //                    chem.Resolution = float.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+        //                }
+        //                #endregion
+
+        //                ChemiForm.CheckChem(chem);
+        //                if (chem.Resolution == 0)
+        //                {
+        //                    if (String.IsNullOrEmpty(chem.Machine.ToString()))
+        //                    {
+        //                        chem.Error = true;
+        //                    }
+        //                    else
+        //                    {
+        //                        ChemiForm.Get_R(chem, calc_resolution);
+        //                        if (chem.Resolution == 0) chem.Error = true;
+        //                        calc_resolution = false;//the resolution matrix is calculated only once for the forst fragment, and is constant for the other fragments
+        //                    }
+        //                }
+        //                if (chem.Error == false)
+        //                {
+        //                    algo = 1;
+        //                    int idx = chem.FinalFormula.IndexOf("C");
+        //                    if (Char.IsNumber(chem.FinalFormula[idx + 2]) != true) algo = 1;
+        //                    else if (Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
+
+        //                    if (algo == 1)
+        //                    {
+        //                        ChemiForm.Isopattern(chem, 1000000, 1, 0, 0.01);
+        //                    }
+        //                    else
+        //                    {
+        //                        ChemiForm.Isopattern(chem, 1000000, 2, 0, 0.01);
+        //                    }
+        //                    ChemiForm.Envelope(chem);
+        //                }
+
+        //                if (chem.Error == false)
+        //                {
+        //                    ChemiForm.Vdetect(chem);
+        //                    List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+        //                    if (insert_exp == true)
+        //                    {
+        //                        //Console.WriteLine(chem.Centroid[cen_int].X.ToString());
+        //                        chem.Resolution = ppm_calculator2(cen[0].X);
+        //                        if (chem.Resolution != 0f)
+        //                        {
+        //                            if (ppm_calculator2(cen[1].X) != 0f || (cen.Count() > 2 && ppm_calculator2(cen[2].X) != 0f))
+        //                            {
+        //                                chem.Profile.Clear();
+        //                                ChemiForm.Envelope(chem);
+        //                                counter++;//o counter antistoixei ston index tou fragment sto all_data
+        //                                Fragments2.Add(new FragForm() { Centroid = cen, Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = counter, To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
+        //                                Debug.WriteLine(Fragments2.Count.ToString());
+        //                                initialize_fragments();
+        //                                if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
+        //                                else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
+        //                                var listViewItem = new ListViewItem(Fragments2.Last().ListName);
+        //                                listViewItem.SubItems.Add("1.0");//"factor" column
+        //                                listViewItem.SubItems.Add(counter.ToString());// "No" (aka code) column
+        //                                listViewItem.SubItems.Add(cen[0].Y.ToString());// max centroid
+        //                                frag_listView.Items.Add(listViewItem);
+
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        counter++;//o counter antistoixei ston index tou fragment sto all_data
+        //                        Fragments2.Add(new FragForm() { Centroid = cen, Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = counter, To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
+        //                        initialize_fragments();
+        //                        if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
+        //                        else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
+        //                        var listViewItem = new ListViewItem(Fragments2.Last().ListName);
+        //                        listViewItem.SubItems.Add("1.0");//"factor" column
+        //                        listViewItem.SubItems.Add(counter.ToString());// "No" (aka code) column
+        //                        listViewItem.SubItems.Add(cen[0].Y.ToString());// max centroid
+        //                        frag_listView.Items.Add(listViewItem);
+        //                    }
+        //                    //Console.WriteLine(tlPrgBr.Value);
+
+        //                    tlPrgBr.Value++;
+        //                }
+        //                else
+        //                {
+        //                    string message = "Formula with m/z:" + chem.Mz + " and ion type:" + chem.Ion + " encountered an error";
+        //                    MessageBox.Show(message, "Error Detected in Input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+        //                }
+
+        //            }
+        //            #endregion
+        //            tlPrgBr.Dispose();
+        //            frag_listView.EndUpdate();
+
+        //            sw1.Stop(); Debug.WriteLine("Pre allign: " + sw1.ElapsedMilliseconds.ToString());
+        //            sw1.Reset(); sw1.Start();
+
+        //            if (counter != Fragments2.Count)
+        //            {
+        //                MessageBox.Show("Error in 'Fragments2'!Restart the program!");
+        //            }
+        //            else
+        //            {
+        //                if (insert_exp) step_Fitting();
+        //                if (!is_loading)
+        //                {
+        //                    if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); }
+        //                    refresh_iso_plot();
+        //                }
+
+        //                // j = 0; to be removed
+        //                saveCalc_Btn.Enabled = true;
+        //                clearCalc_Btn.Enabled = true;
+        //                calc_Btn.Enabled = true;
+        //                fit_Btn.Enabled = true;
+        //                loadFit_Btn.Enabled = false;
+
+        //                sw1.Stop(); Debug.WriteLine("Post allign: " + sw1.ElapsedMilliseconds.ToString());
+
+        //                MessageBox.Show("Done!");
+
+
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("There is no match to your research.Please try again!");
+        //            clearCalc_Btn.Enabled = true;
+        //        }
+        //    }
+        //    #endregion            
+        //    is_calc = false;
+
 
         //}
-        private void ChemToFrag(List<ChemiForm> initial, ref List<FragForm> final)
-        {
-            foreach (ChemiForm chem in ChemFormulas)
-            {
-                if (chem.Error == false)
-                {
-                    final.Add(new FragForm() { Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution });
-                }
-            }
-        }
-        private void fix_data_to_max_exp(double max_intensity, int candidate_fragments)
-        {
-            List<double[]> new_data = new List<double[]>();
-            double factor = 0.2 * max_exp / max_intensity;
-            foreach (double[] d in all_data[candidate_fragments])
-            {
-                new_data.Add(new double[] { d[0], d[1] * factor });
-            }
-            all_data[candidate_fragments].Clear();
-            all_data[candidate_fragments] = new_data;
-        }
-        private void fix_experimental_gaps()
-        {
-            List<double[]> new_exp = new List<double[]>();
-            double step = experimental[1][0] - experimental[0][0];
-            new_exp.Add(new double[] { experimental[0][0], experimental[0][1] });
-            for (int i = 1; i < experimental.Count; i++)
-            {
-                while (experimental[i][0] - new_exp.Last()[0] > step + 0.0001)
-                {
-                    new_exp.Add(new double[] { new_exp.Last()[0] + step, 0.0 });
-                }
-                new_exp.Add(new double[] { experimental[i][0], experimental[i][1] });
-            }
-            current_experimental.Clear();
-            current_experimental = new_exp;
-        }
-        private void fix_experimentalTo_100(double max_exp)
-        {
-            List<double[]> new_exp = new List<double[]>();
-            foreach (double[] exp in experimental)
-            {
-                new_exp.Add(new double[] { exp[0], exp[1] * 100 / max_exp });
-            }
-            experimental.Clear();
-            experimental = new_exp;
-        }
-        private void add_x(ChemiForm chem, int max_charge, int list_index)
-        {
-            double mass = double.Parse(chem.Mz, NumberStyles.AllowDecimalPoint);
-            double mass_h = 1.007825;
-            double mz = 0.0;
-            int index = Convert.ToInt32(chem.Index);
-            if (index <= 4 && max_charge > 2) max_charge = 2;
-            else if (index <= 11 && index >= 5 && max_charge > 5) max_charge = 5;
-            else if (index <= 22 && index >= 12 && max_charge > 8) max_charge = 8;
-            else if (index <= 53 && index >= 23 && max_charge > 12) max_charge = 12;
-            else if (index <= 75 && index >= 54 && max_charge > 15) max_charge = 15;
-            else if (index <= 100 && index >= 76 && max_charge > 20) max_charge = 20;
 
-            for (int c = 2; c <= max_charge; c++)
-            {
-                mz = (mass + (c - 1) * mass_h) / c;
-                ChemFormulas.Add(new ChemiForm
-                {
-                    InputFormula = chem.InputFormula,
-                    Adduct = 'H' + (c - 1).ToString(),
-                    Deduct = chem.Deduct,
-                    Multiplier = chem.Multiplier,
-                    Charge = c,
-                    Mz = mz.ToString(),
-                    Ion = chem.Ion,
-                    Ion_type = chem.Ion_type,
-                    Index = chem.Index,
-                    IndexTo = chem.IndexTo,
-                    Error = false,
-                    Elements_set = new List<Element_set>(),
-                    Iso_total_amount = 0,
-                    Monoisotopic = new CompoundMulti(),
-                    Points = new List<PointPlot>(),
-                    Machine = string.Empty,
-                    Resolution = new float(),
-                    Combinations = new List<Combination_1>(),
-                    Profile = new List<PointPlot>(),
-                    Centroid = new List<PointPlot>(),
-                    Combinations4 = new List<Combination_4>(),
-                    FinalFormula = string.Empty,
-                    PrintFormula = chem.PrintFormula,
-                    Radio_label = chem.Radio_label,
-                    Color = chem.Color,
-                    Name = string.Empty
-                });
+        //private float ppm_calculator2(double centroid)
+        //{
+        //    float res = 0f;
+        //    double ppm = 0.0;
+        //    double diff = 0.0;
+        //    int d = 1;
+        //    if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
+        //    {
+        //        ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
+        //        if (ppm < ppmError) { res = (float)peak_points[0][3]; return res; }
+        //        else return res;
+        //    }
 
-                var radioString = chem.Radio_label;
-                var radio_name = string.Empty;
-                if (ChemFormulas.Last().Charge > 0) radio_name = radioString + "_+" + ChemFormulas.Last().Charge.ToString();
-                else radio_name = radioString + "_" + ChemFormulas.Last().Charge.ToString();
-                ChemFormulas.Last().Name = radio_name;
-            }
-        }
-        private void generate_x_multiChraged_withoutAducts()
-        {
-            // max charge depends on lenght of the fragment. We will follow y-type rules
-            // will run through all frags once to find x_idxs and max_charge for each y of different length
+        //    do
+        //    {
+        //        diff = peak_points[d][1] + peak_points[d][4] - centroid;
+        //        while (diff < 0)
+        //        {
+        //            d++;
+        //            diff = peak_points[d][1] + peak_points[d][4] - centroid;
+        //        }
+        //        diff = peak_points[d][1] + peak_points[d][4] - centroid;
+        //        if (diff >= 0)
+        //        {
+        //            ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
+        //            if (ppm < ppmError) { res = (float)peak_points[d][3]; return res; }
+        //            ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
+        //            if (ppm < ppmError) { res = (float)peak_points[d - 1][3]; return res; }
+        //            else return res;
+        //        }
 
-            List<int> x_idxs = new List<int>();
-            List<int[]> max_charge_y = new List<int[]>();
-            int tempo = 0;
-            for (int i = 0; i < ChemFormulas.Count; i++)
-            {
-                if (ChemFormulas[i].Ion.StartsWith("x")) x_idxs.Add(i); //store x indexes
-                else if (ChemFormulas[i].Ion.StartsWith("y"))
-                {
-                    tempo++;
-                    int y_num = Convert.ToInt16(ChemFormulas[i].Index);
-                    int charge = ChemFormulas[i].Charge;
+        //    } while (d < peak_points[0].Count() - 1);
+        //    return res;
+        //}
 
-                    if (max_charge_y.Count == 0 || max_charge_y.Find(p => p[0] == y_num) == null)
-                    {
-                        max_charge_y.Add(new int[] { y_num, charge });
-                    }
-                    else if (max_charge_y[max_charge_y.FindIndex(p => p[0] == y_num)][1] < charge)
-                    {
-                        max_charge_y[max_charge_y.FindIndex(p => p[0] == y_num)][1] = charge;
-                    }
-                }
-            }
+        //private void save_data()
+        //{
 
-            int temp = 0;
+        //    SaveFileDialog save = new SaveFileDialog() { Title = "Save fittng data", FileName = "window" + windowList[selected_window].Code.ToString(), Filter = "Data Files (*.wnd)|*.wnd", DefaultExt = "wnd", OverwritePrompt = true, AddExtension = true };
 
-            for (int i = 0; i < x_idxs.Count; i++)
-            {
-                int x_num = Convert.ToInt16(ChemFormulas[i].Index);
-                int max_charge = max_charge_y[max_charge_y.FindIndex(p => p[0] == x_num)][1];
+        //    //save.InitialDirectory = Application.StartupPath + "\\Data";
+        //    //DirectoryInfo di = new DirectoryInfo(save.InitialDirectory);
+        //    //if (di.Exists != true) di.Create();
 
-                for (int j = 2; j < max_charge + 1; j++)
-                {
-                    //add_fragment(); temp++;
-                }
-            }
+        //    if (save.ShowDialog() == DialogResult.OK)
+        //    {
+        //        System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
-            // copy results to clipboard
-            max_charge_y = max_charge_y.OrderBy(p => p[0]).ToList();
-            string export = "";
-            for (int i = 0; i < max_charge_y.Count; i++)
-            {
-                export += max_charge_y[i][0] + " " + max_charge_y[i][1] + "\r\n";
-            }
-            Clipboard.SetText(export);
-        }
+        //        file.WriteLine("Mode:\texternal data");
+        //        file.WriteLine("AA Sequence:\t" + Peptide);
+        //        file.WriteLine("Window:\t" + windowList[selected_window].Code.ToString());
+        //        file.WriteLine("Fitted isotopes:\t" + candidate_fragments.ToString());
+        //        file.WriteLine("m/z[Da]\tIntensity");
+        //        file.WriteLine();
+
+        //        for (int i = 0; i < windowList[selected_window].Fragments.Count; i++)
+        //        {
+        //            int indexS = windowList[selected_window].Fragments[i];
+        //            if (indexS == 0)
+        //            {
+        //                file.WriteLine("Name:\t" + "Exp");
+        //                file.WriteLine("Factor:\t" + "1.0");
+        //            }
+        //            else
+        //            {
+        //                file.WriteLine("Name:\t" + Fragments2[indexS - 1].Name);
+        //                file.WriteLine("Factor:\t" + Fragments2[indexS - 1].Factor);
+        //                file.WriteLine("ListViewItems:\t" + Fragments2[indexS - 1].ListName[0].ToString() + "\t" + Fragments2[indexS - 1].ListName[1].ToString() + "\t" + Fragments2[indexS - 1].ListName[2].ToString() + "\t" + Fragments2[indexS - 1].ListName[3].ToString() + "\t" + Fragments2[indexS - 1].ListName[4].ToString());
+        //                file.WriteLine("Selected:\t" + Fragments2[indexS - 1].To_plot.ToString());
+        //                file.WriteLine("Color:\t" + Fragments2[indexS - 1].Color.ToColor().ToArgb());
+        //            }
+        //            foreach (double[] p in all_data[indexS]) file.WriteLine(p[0] + "\t" + p[1]);
+        //        }
+        //        file.Flush(); file.Close(); file.Dispose();
+        //    }
+
+
+        //}
+        ////private void indexForm(object sender, EventArgs e)
+        ////{
+        ////    List<int> fromItems = new List<int>();
+        ////    fromItems = ChemFormulas.Select(x => Int32.Parse(x.Index)).Distinct().OrderBy(p => p).ToList();
+        ////    if ((sender as MenuItem).Text == "Index")
+        ////    {
+        ////        if (a_lstBox.Focused)
+        ////        {
+        ////            foreach (ChemiForm chem in ChemFormulas)
+        ////            {
+        ////                if (chem.Ion_type.Equals("a"))
+        ////                {
+        ////                    selectedIons.Add(chem);
+        ////                }
+        ////            }
+        ////        }
+        ////        if (b_lstBox.Focused) { MessageBox.Show("b"); }
+        ////        if (c_lstBox.Focused) { MessageBox.Show("c"); }
+        ////        if (x_lstBox.Focused) { MessageBox.Show("x"); }
+        ////        if (y_lstBox.Focused) { MessageBox.Show("y"); }
+        ////        if (z_lstBox.Focused) { MessageBox.Show("z"); }
+        ////        if (dvw_lstBox.Focused) { MessageBox.Show("dvw"); }
+        ////        if (addin_lstBox.Focused) { MessageBox.Show("addin"); }
+
+        ////    }
+
+        ////}
+        //private void ChemToFrag(List<ChemiForm> initial, ref List<FragForm> final)
+        //{
+        //    foreach (ChemiForm chem in ChemFormulas)
+        //    {
+        //        if (chem.Error == false)
+        //        {
+        //            final.Add(new FragForm() { Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error, Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine, Multiplier = chem.Multiplier, Mz = chem.Mz, Profile = chem.Profile, Radio_label = chem.Radio_label, Resolution = chem.Resolution });
+        //        }
+        //    }
+        //}
+        //private void fix_data_to_max_exp(double max_intensity, int candidate_fragments)
+        //{
+        //    List<double[]> new_data = new List<double[]>();
+        //    double factor = 0.2 * max_exp / max_intensity;
+        //    foreach (double[] d in all_data[candidate_fragments])
+        //    {
+        //        new_data.Add(new double[] { d[0], d[1] * factor });
+        //    }
+        //    all_data[candidate_fragments].Clear();
+        //    all_data[candidate_fragments] = new_data;
+        //}
+        //private void fix_experimental_gaps()
+        //{
+        //    List<double[]> new_exp = new List<double[]>();
+        //    double step = experimental[1][0] - experimental[0][0];
+        //    new_exp.Add(new double[] { experimental[0][0], experimental[0][1] });
+        //    for (int i = 1; i < experimental.Count; i++)
+        //    {
+        //        while (experimental[i][0] - new_exp.Last()[0] > step + 0.0001)
+        //        {
+        //            new_exp.Add(new double[] { new_exp.Last()[0] + step, 0.0 });
+        //        }
+        //        new_exp.Add(new double[] { experimental[i][0], experimental[i][1] });
+        //    }
+        //    current_experimental.Clear();
+        //    current_experimental = new_exp;
+        //}
+        //private void fix_experimentalTo_100(double max_exp)
+        //{
+        //    List<double[]> new_exp = new List<double[]>();
+        //    foreach (double[] exp in experimental)
+        //    {
+        //        new_exp.Add(new double[] { exp[0], exp[1] * 100 / max_exp });
+        //    }
+        //    experimental.Clear();
+        //    experimental = new_exp;
+        //}
+        //private void add_x(ChemiForm chem, int max_charge, int list_index)
+        //{
+        //    double mass = double.Parse(chem.Mz, NumberStyles.AllowDecimalPoint);
+        //    double mass_h = 1.007825;
+        //    double mz = 0.0;
+        //    int index = Convert.ToInt32(chem.Index);
+        //    if (index <= 4 && max_charge > 2) max_charge = 2;
+        //    else if (index <= 11 && index >= 5 && max_charge > 5) max_charge = 5;
+        //    else if (index <= 22 && index >= 12 && max_charge > 8) max_charge = 8;
+        //    else if (index <= 53 && index >= 23 && max_charge > 12) max_charge = 12;
+        //    else if (index <= 75 && index >= 54 && max_charge > 15) max_charge = 15;
+        //    else if (index <= 100 && index >= 76 && max_charge > 20) max_charge = 20;
+
+        //    for (int c = 2; c <= max_charge; c++)
+        //    {
+        //        mz = (mass + (c - 1) * mass_h) / c;
+        //        ChemFormulas.Add(new ChemiForm
+        //        {
+        //            InputFormula = chem.InputFormula,
+        //            Adduct = 'H' + (c - 1).ToString(),
+        //            Deduct = chem.Deduct,
+        //            Multiplier = chem.Multiplier,
+        //            Charge = c,
+        //            Mz = mz.ToString(),
+        //            Ion = chem.Ion,
+        //            Ion_type = chem.Ion_type,
+        //            Index = chem.Index,
+        //            IndexTo = chem.IndexTo,
+        //            Error = false,
+        //            Elements_set = new List<Element_set>(),
+        //            Iso_total_amount = 0,
+        //            Monoisotopic = new CompoundMulti(),
+        //            Points = new List<PointPlot>(),
+        //            Machine = string.Empty,
+        //            Resolution = new float(),
+        //            Combinations = new List<Combination_1>(),
+        //            Profile = new List<PointPlot>(),
+        //            Centroid = new List<PointPlot>(),
+        //            Combinations4 = new List<Combination_4>(),
+        //            FinalFormula = string.Empty,
+        //            PrintFormula = chem.PrintFormula,
+        //            Radio_label = chem.Radio_label,
+        //            Color = chem.Color,
+        //            Name = string.Empty
+        //        });
+
+        //        var radioString = chem.Radio_label;
+        //        var radio_name = string.Empty;
+        //        if (ChemFormulas.Last().Charge > 0) radio_name = radioString + "_+" + ChemFormulas.Last().Charge.ToString();
+        //        else radio_name = radioString + "_" + ChemFormulas.Last().Charge.ToString();
+        //        ChemFormulas.Last().Name = radio_name;
+        //    }
+        //}
+        //private void generate_x_multiChraged_withoutAducts()
+        //{
+        //    // max charge depends on lenght of the fragment. We will follow y-type rules
+        //    // will run through all frags once to find x_idxs and max_charge for each y of different length
+
+        //    List<int> x_idxs = new List<int>();
+        //    List<int[]> max_charge_y = new List<int[]>();
+        //    int tempo = 0;
+        //    for (int i = 0; i < ChemFormulas.Count; i++)
+        //    {
+        //        if (ChemFormulas[i].Ion.StartsWith("x")) x_idxs.Add(i); //store x indexes
+        //        else if (ChemFormulas[i].Ion.StartsWith("y"))
+        //        {
+        //            tempo++;
+        //            int y_num = Convert.ToInt16(ChemFormulas[i].Index);
+        //            int charge = ChemFormulas[i].Charge;
+
+        //            if (max_charge_y.Count == 0 || max_charge_y.Find(p => p[0] == y_num) == null)
+        //            {
+        //                max_charge_y.Add(new int[] { y_num, charge });
+        //            }
+        //            else if (max_charge_y[max_charge_y.FindIndex(p => p[0] == y_num)][1] < charge)
+        //            {
+        //                max_charge_y[max_charge_y.FindIndex(p => p[0] == y_num)][1] = charge;
+        //            }
+        //        }
+        //    }
+
+        //    int temp = 0;
+
+        //    for (int i = 0; i < x_idxs.Count; i++)
+        //    {
+        //        int x_num = Convert.ToInt16(ChemFormulas[i].Index);
+        //        int max_charge = max_charge_y[max_charge_y.FindIndex(p => p[0] == x_num)][1];
+
+        //        for (int j = 2; j < max_charge + 1; j++)
+        //        {
+        //            //add_fragment(); temp++;
+        //        }
+        //    }
+
+        //    // copy results to clipboard
+        //    max_charge_y = max_charge_y.OrderBy(p => p[0]).ToList();
+        //    string export = "";
+        //    for (int i = 0; i < max_charge_y.Count; i++)
+        //    {
+        //        export += max_charge_y[i][0] + " " + max_charge_y[i][1] + "\r\n";
+        //    }
+        //    Clipboard.SetText(export);
+        //}
+
+        //private void plot_peak()
+        //{
+
+        //    iso_plot.Model.Series.Add(new LineSeries() { StrokeThickness = 2, Color = OxyColors.Red, LineStyle = LineStyle.Dash });
+        //    (iso_plot.Model.Series[2] as LineSeries).Title = "Peak";
+        //    for (int j = 0; j < peak_points.Count; j++)
+        //    {
+        //        (iso_plot.Model.Series[2] as LineSeries).Points.Add(new OxyPlot.DataPoint(peak_points[j][1], peak_points[j][2]));
+        //    }
+        //    iso_plot.Model.InvalidatePlot(true);
+        //}
 
         #endregion
 
