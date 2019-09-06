@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using OxyPlot;
-
 
 namespace Isotope_fitting
 {
+    [Serializable]
     public class FragForm
     {
         private int charge;

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 namespace Isotope_fitting
@@ -121,6 +122,7 @@ namespace Isotope_fitting
         public System.Diagnostics.Stopwatch sw6 = new System.Diagnostics.Stopwatch();
         public System.Diagnostics.Stopwatch sw7 = new System.Diagnostics.Stopwatch();
         ProgressBar tlPrgBr;
+        Label prg_lbl;
         int max_fragment_charge = 0;
         string precursor_carbons = "C0";
         Object _locker = new Object();
@@ -184,7 +186,7 @@ namespace Isotope_fitting
                     experimental.Clear();
 
                     //add toolstrip progress bar
-                    progress_display_start(lista.Count);
+                    progress_display_start(lista.Count, "Loading experimental data...");
                     max_exp = 0.0;
                     for (int j = 0; j != (lista.Count); j++)
                     {
@@ -286,7 +288,7 @@ namespace Isotope_fitting
 
                 lista.RemoveAt(0);
                 get_precursor_carbons(lista.Last());
-                progress_display_start(lista.Count);
+                progress_display_start(lista.Count, "Importing fragments list...");
 
                 for (int j = 0; j != (lista.Count); j++)
                 {
@@ -483,7 +485,7 @@ namespace Isotope_fitting
             // 2. calculate fragments resolution
             calculate_fragments_resolution(selected_fragments);
 
-            // 3. calculate fragment properties and keep only those within ppm error from experimental 
+            // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
             Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
             envipat_properties.Start();
         }
@@ -492,13 +494,13 @@ namespace Isotope_fitting
         {
             GC.Collect();
 
-            // 1. Pass Fragments info to all_data array
+            // 1. Pass Fragments info to all_data array (experimetal have already been added, in after loading actions)
             initialize_fragments();
 
             // 2. rebuild frag_listView in UI
             populate_frag_listView();
 
-            // 3. 
+            // 3. build the all_data_alligned structure
             recalculate_all_data_aligned();
 
             enable_UIcontrols("post calculations");
@@ -1363,7 +1365,7 @@ namespace Isotope_fitting
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
             //sw1.Reset(); sw1.Start();
             int progress = 0; 
-            progress_display_start(selected_fragments.Count);
+            progress_display_start(selected_fragments.Count, "Calculating fragment properties...");
 
             Parallel.For(0, selected_fragments.Count, (i, state) =>
             {
@@ -1556,26 +1558,47 @@ namespace Isotope_fitting
 
         private void recalculate_all_data_aligned()
         {
-            //kaleitai kathe fora pou prostithetai neo stoixeio sto all_data
-            List<int> idxs = new List<int>();//einai mia lista 0 1 2 3..osa kai ta stoixeia tou all data
+            bool add = false;
             int start = 0;
-            // will recalculate all data aligned                      
-            if (all_data_aligned.Count > 0)
+            List<int> idxs = new List<int>();//einai mia lista 0 1 2 3..osa kai ta stoixeia tou all data
+
+            if (all_data_aligned.Count > 0 && (all_data_aligned[0].Count() < Fragments2.Count + 1))
             {
-                if (all_data_aligned[0].Count() < Fragments2.Count + 1)
-                {
-                    start = all_data_aligned[0].Count();
-                    for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
-                    all_data_aligned = align_distros(idxs, true, true);
-                    recalc = false;
-                    return;
-                }
+                start = all_data_aligned[0].Count(); add = true;
             }
+
             for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
-            //(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
-            //(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
-            all_data_aligned = align_distros(idxs, true);
+            all_data_aligned = align_distros(idxs, true, add);
             recalc = false;
+
+
+            Debug.WriteLine("Memory of experimental: " + estimate_memory(experimental).ToString());
+            Debug.WriteLine("Memory of all_data: " + estimate_memory(all_data).ToString());
+            Debug.WriteLine("Memory of all_data_aligned: " + estimate_memory(all_data_aligned).ToString());
+
+
+
+            //kaleitai kathe fora pou prostithetai neo stoixeio sto all_data
+            //List<int> idxs = new List<int>();//einai mia lista 0 1 2 3..osa kai ta stoixeia tou all data
+            //int start = 0;
+            // will recalculate all data aligned                      
+            //if (all_data_aligned.Count > 0)
+            //{
+            //    if (all_data_aligned[0].Count() < Fragments2.Count + 1)
+            //    {
+            //        start = all_data_aligned[0].Count();
+            //        for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
+            //        all_data_aligned = align_distros(idxs, true, true);
+            //        recalc = false;
+            //        return;
+            //    }
+            //}
+
+            //for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
+            ////(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
+            ////(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
+            //all_data_aligned = align_distros(idxs, true);
+            //recalc = false;
 
         }
 
@@ -1584,8 +1607,8 @@ namespace Isotope_fitting
             List<double[]> aligned_intensities = new List<double[]>();//(M)praktika einai lista me pinakes kai seires osa ta peiramatika dedomena 
                                                                       //(M)kathe pinakas exei to arxiko peiramatiko dedomeno kai to interpolated tou kathe fragment, an den yphrxe exei 0
 
-            ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = all_data[0].Count, Size = new Size(227, 23), AutoSize = false };
-            //user_grpBox.Controls.Add(tlPrgBr);
+            progress_display_start(all_data[0].Count, "Preparing data for fit...");
+
             if (add && initial)
             {
                 // generate alligned (in m/z) isotope distributions at the same step as the experimental
@@ -1626,8 +1649,8 @@ namespace Isotope_fitting
                         one_aligned_point.Add(aligned_value);
                     }
                     aligned_intensities.Add(one_aligned_point.ToArray());
-                    //Console.WriteLine(tlPrgBr.Value);
-                    tlPrgBr.Value++;
+
+                    if (i % 5000 == 0 && i > 0) progress_display_update(i);
                 }
             }
             else if (window_count == 1 || initial)
@@ -1670,8 +1693,8 @@ namespace Isotope_fitting
                         one_aligned_point.Add(aligned_value);
                     }
                     aligned_intensities.Add(one_aligned_point.ToArray());
-                    //Console.WriteLine(tlPrgBr.Value);
-                    tlPrgBr.Value++;
+
+                    if (i % 5000 == 0 && i > 0) progress_display_update(i);
                 }
             }
             else
@@ -1716,7 +1739,7 @@ namespace Isotope_fitting
                 }
 
             }
-            tlPrgBr.Dispose();
+            progress_display_stop();
             return aligned_intensities;
         }
 
@@ -1755,27 +1778,44 @@ namespace Isotope_fitting
         #region Toolbar control
         private void progress_display_init()
         {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
-            user_grpBox.Controls.Add(tlPrgBr);
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 31), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
+            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(670, 14), AutoSize = true, Visible = false };
+            user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
         }
 
-        private void progress_display_start(int barMax)
+        private void progress_display_start(int barMax, string info)
         {
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Maximum = barMax));   //thread safe call
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Value = 0));   //thread safe call
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Visible = true));   //thread safe call
+            prg_lbl.Invoke(new Action(() => prg_lbl.Visible = true));   //thread safe call
+            prg_lbl.Invoke(new Action(() => prg_lbl.Text = info));   //thread safe call
+            //Blink();
+
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Maximum = barMax));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = 0));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = true));   //thread safe call
         }
 
         private void progress_display_stop()
         {
-            tlPrgBr.BeginInvoke(new Action(() => tlPrgBr.Visible = false));   //thread safe call
+            prg_lbl.Invoke(new Action(() => prg_lbl.Visible = false));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = false));   //thread safe call
         }
 
         private void progress_display_update(int idx)
         {
+            prg_lbl.Invoke(new Action(() => prg_lbl.Invalidate(true)));   //thread safe call
+
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 1));   //thread safe call
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 2));   //thread safe call
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Update()));   //thread safe call
+        }
+
+        private async void Blink()
+        {
+            while (prg_lbl.Visible)
+            {
+                await Task.Delay(250);
+                prg_lbl.BeginInvoke(new Action(() => prg_lbl.BackColor = prg_lbl.BackColor == Color.Red ? Color.Green : Color.Red));
+            }
         }
         #endregion
 
@@ -1795,7 +1835,7 @@ namespace Isotope_fitting
 
         private List<double[]> LIMPIC_parallel()
         {
-            progress_display_start(experimental.Count);
+            progress_display_start(experimental.Count, "Detecting peaks in experimental spectrum...");
 
             // ALL detection calculations are in time domain, all time is in μs, results also in time
             // will return List { [0]index of data array, [1]time_raw, [2]intensity_raw, [3]Res_fit, [4]time_diff_fit, [5]intensity_fit, [6]σ_fit,    }
@@ -1870,7 +1910,7 @@ namespace Isotope_fitting
 
         private List<double[]> LIMPIC_mod()
         {
-            progress_display_start(experimental.Count);
+            progress_display_start(experimental.Count, "Detecting peaks in experimental spectrum...");
 
             // ALL detection calculations are in time domain, all time is in μs, results also in time
             // will return List { [0]index of data array, [1]time_raw, [2]intensity_raw, [3]Res_fit, [4]time_diff_fit, [5]intensity_fit, [6]σ_fit,    }
@@ -2173,6 +2213,20 @@ namespace Isotope_fitting
                     return OrderOfSort;
                 }
             }
+        }
+
+        public long estimate_memory(object o)
+        {
+            // estimates memory size of objects. Returns size in MB
+            long size = 0;
+            using (Stream s = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(s, o);
+                size = s.Length;
+            }
+
+            return size / 1048576;
         }
 
         #endregion
