@@ -52,7 +52,7 @@ namespace Isotope_fitting
         //List<int> stepIndeces =new List<int>();            
         public static List<FragForm> Fragments2 = new List<FragForm>();
         //public List<string> checkedItems = new List<string>();
-        public static HashSet<int> selectedFragments = new HashSet<int>();
+        public List<int> selectedFragments = new List<int>();
         int counter = 0;
         int start_idx = 0;
         int end_idx = 0;
@@ -128,6 +128,7 @@ namespace Isotope_fitting
         Object _locker = new Object();
         public delegate void EnvelopeCalcCompleted();
         public event EnvelopeCalcCompleted OnEnvelopeCalcCompleted;
+        bool plot_experimental = true;
 
         Form6 frm6 = new Form6();
         #endregion
@@ -226,7 +227,6 @@ namespace Isotope_fitting
             else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
 
             // add experimental to plot
-            selectedFragments.Add(0);
             refresh_iso_plot();
 
             start_idx = 0;
@@ -1581,7 +1581,8 @@ namespace Isotope_fitting
 
             progress_display_start(all_data[0].Count, "Preparing data for fit...");
 
-            if (initial || window_count == 1)
+            //if (initial || window_count == 1)
+            if (initial)
             {
                 // generate alligned (in m/z) isotope distributions at the same step as the experimental
                 // pickup each point in experimental and find (interpolate) the intensity of each fragment
@@ -1627,6 +1628,27 @@ namespace Isotope_fitting
                     aligned_intensities.Add(one_aligned_point.ToArray());
 
                     if (i % 5000 == 0 && i > 0) progress_display_update(i);
+                }
+            }
+            else if (!initial)
+            {
+                int no_of_selected = distro_fragm_idxs.Count();
+
+                for (int i = 0; i < all_data[0].Count; i++) //(M)loop for all the experimental points count
+                {
+                    // one by one for all points
+                    List<double> one_aligned_point = new List<double>();
+                    bool zero_point = true;
+
+                    one_aligned_point.Add(all_data_aligned[i][0]);
+
+                    for (int k = 0; k < no_of_selected; k++)
+                    {
+                        one_aligned_point.Add(all_data_aligned[i][distro_fragm_idxs[k]]);
+                        if (all_data_aligned[i][distro_fragm_idxs[k]] != 0.0) zero_point = zero_point & false;
+                    }
+
+                    if (!zero_point) aligned_intensities.Add(one_aligned_point.ToArray());
                 }
             }
             else
@@ -1682,6 +1704,548 @@ namespace Isotope_fitting
         }
 
         #endregion
+
+        #region fitting
+
+        private void fit_Btn_Click(object sender, EventArgs e)
+        {
+            Fitting_chkBox.Checked = true;
+            if (window_count == 1 && !string.IsNullOrEmpty(fitStep_Box.Text)) { step_Fitting(); if (!is_loading && !is_calc) { refresh_iso_plot(); } }
+            start_fit();
+            saveFit_Btn.Enabled = true;
+        }
+
+
+        private void fit_all_Btn_Click(object sender, EventArgs e)
+        {
+
+            if (windowList.Count == 0) { MessageBox.Show("There isn't any window to perform multiple fit", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (bigPanel.Controls.Count == 0) { MessageBox.Show("Something went wrong.Please close the program.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (selectedFragments.Count() < 1) { MessageBox.Show("Select at least 1 fragment to perform fitting!"); return; }
+            Fitting_chkBox.Checked = true;
+            if (window_count == 1 && !string.IsNullOrEmpty(fitStep_Box.Text)) { step_Fitting(); if (!is_loading && !is_calc) { refresh_iso_plot(); } }
+
+            refresh_all = true;
+            for (int w = 0; w < windowList.Count; w++)
+            {
+                selected_window = w;
+                window_colors(w);
+                GetControls(bigPanel).OfType<Panel>().FirstOrDefault(l => l.TabIndex == w).BackColor = Color.LightSteelBlue;
+                window_graph(w); highlight_selected(w);
+                start_fit();
+            }
+            refresh_iso_plot();
+            refresh_all = false;
+
+            saveFit_Btn.Enabled = true;
+        }
+
+
+        
+
+
+
+
+        private void step_Fitting()
+        {
+            if (!string.IsNullOrEmpty(fitStep_Box.Text))
+            {
+                fit_step = double.Parse(fitStep_Box.Text, NumberStyles.AllowDecimalPoint);
+                max_border = double.Parse(fitMax_Box.Text, NumberStyles.AllowDecimalPoint);
+                min_border = double.Parse(fitMin_Box.Text, NumberStyles.AllowDecimalPoint);
+                if (max_border < min_border) { MessageBox.Show("'max' can't be lower than 'min'", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                else if ((max_border - min_border) < fit_step) { MessageBox.Show("Fitting step too large for the m/z section selected! ", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                //na prosthsw ki allo elegxo gia to an einai katallhlo to input tou step
+                segmented_graph = true;
+                iso_plot.Model.Annotations.Clear();
+                if (recalc) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true, true, false);
+                if (fit_step == 0) step_play(true);
+                else step_play();
+                if (Fragments2.Count > 0)
+                {
+                    find_windows_mono_fragments();
+                    create_step_panels();
+                    fix_window_to_max_exp();
+                    fit_all_Btn.Enabled = true;
+                }
+
+                recalculate_all_data_aligned();
+                refresh_iso_plot();
+            }
+        }
+
+        private void step_play(bool window_1 = false)
+        {
+            //stepIndeces.Clear();
+            if (selected_all_data.Count == 0)
+            {
+                selected_all_data.Add(new List<double[]>());
+                selected_all_data[0] = all_data[0];
+            }
+            List<FragForm> Fragments3 = Fragments2.OrderBy(o => Double.Parse(o.Mz)).ToList();
+            windowList.Clear();
+            if (window_1 == false)
+            {
+                window_count = (int)((selected_all_data[0].Last()[0] - selected_all_data[0][0][0]) / fit_step) + 1;
+                //if (window_count > 40)
+                //{
+                //    MessageBox.Show("The programm can handle till 40 windows, the inserted fit step= " + fit_step.ToString() + "ends up in" + window_count.ToString() + "windows.");
+                //    fit_step = (int)((selected_all_data[0].Last()[0] - selected_all_data[0][0][0]) / 40.0);
+                //    fitStep_Box.Text = fit_step.ToString();
+                //    window_count = (int)((selected_all_data[0].Last()[0] - selected_all_data[0][0][0]) / fit_step) + 1;
+                //}
+            }
+            else
+            {
+                window_count = 1;
+            }
+
+            double left = selected_all_data[0][0][0];
+            double right = left + fit_step;
+            if (left < 0.0) left = 0.0;
+            if (right > selected_all_data[0].Last()[0]) right = selected_all_data[0].Last()[0];
+            int dot = 1;
+            int starting = 0;
+            int ending = 0;
+            //ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = window_count, Size = new Size(227, 23), AutoSize = false };
+            //user_grpBox.Controls.Add(tlPrgBr);
+            int k = 0;
+            bool last = false;
+            do
+            {
+                for (int i = dot; i < selected_all_data[0].Count; i++) { if (left - step_range < selected_all_data[0][i][0]) { starting = i - 1; dot = i - 1; break; } }
+
+                for (int i = dot; i < selected_all_data[0].Count; i++) { if (right + step_range <= selected_all_data[0][i][0]) { ending = i; break; } }
+
+                int[] check = check_windows_borders(starting, ending, Fragments3);
+                if (check[0] == -1)
+                {
+                    if (check[1] < 2)
+                    {
+                        if (windowList.Count() > 0)
+                        {
+                            check = check_windows_borders2(windowList.Last().Starting, ending, Fragments3);
+                            if (check[0] == -1)
+                            {
+                                windowList.Last().Ending = ending;
+                                windowList.Last().All_data[0].Clear();
+                                windowList.Last().All_data[0] = all_data[0].GetRange(windowList.Last().Starting, windowList.Last().Ending - windowList.Last().Starting + 1);
+                                windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                            }
+                            else
+                            {
+                                windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
+                                windowList.Last().All_data.Add(new List<double[]>());
+                                windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
+                                windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                                k++;
+                            }
+                            left = right;
+                            right = left + fit_step;
+                        }
+                        else
+                        {
+                            right = right + fit_step / 2;
+                        }
+                    }
+                    else
+                    {
+                        windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
+                        windowList.Last().All_data.Add(new List<double[]>());
+                        windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
+                        windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                        k++;
+                        left = right;
+                        right = left + fit_step;
+                    }
+                    if (last) window_count = windowList.Count();
+
+                    if (right > selected_all_data[0].Last()[0]) { last = true; right = selected_all_data[0].Last()[0]; }
+                    //tlPrgBr.Value++;
+                }
+                else
+                {
+                    window_count++;
+                    //double ps1 = 4 * Fragments2[check[0] - 1].Centroid.Count() / 5;
+                    //int ps =(int)Math.Round(ps1,0);
+                    //right = Fragments2[check[0] - 1].Centroid.OrderBy(o=>o.X).ToList()[ps].X+1;
+                    right = Fragments2[check[0] - 1].Centroid[0].X + 1;
+                    for (int i = dot; i < selected_all_data[0].Count; i++)
+                        if (right + step_range <= selected_all_data[0][i][0]) { ending = i; break; }
+                    check = check_windows_borders2(starting, ending, Fragments3);
+                    if (check[0] == -1)
+                    {
+                        if (check[1] < 2)
+                        {
+                            if (windowList.Count() > 0)
+                            {
+                                check = check_windows_borders2(windowList.Last().Starting, ending, Fragments3);
+                                if (check[0] == -1)
+                                {
+                                    windowList.Last().Ending = ending;
+                                    windowList.Last().All_data[0].Clear();
+                                    windowList.Last().All_data[0] = all_data[0].GetRange(windowList.Last().Starting, windowList.Last().Ending - windowList.Last().Starting + 1);
+                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                                    left = right;
+                                    right = left + fit_step;
+                                }
+                                else
+                                {
+                                    windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
+                                    windowList.Last().All_data.Add(new List<double[]>());
+                                    windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
+                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                                    k++;
+                                    left = right;
+                                    right = left + fit_step;
+                                }
+                            }
+                            else { right = right + fit_step / 2; }
+                        }
+                        else
+                        {
+                            windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
+                            windowList.Last().All_data.Add(new List<double[]>());
+                            windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
+                            windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                            k++;
+                            left = right;
+                            right = left + fit_step;
+                        }
+                        if (right > selected_all_data[0].Last()[0]) { last = true; right = selected_all_data[0].Last()[0]; }
+                    }
+                    else
+                    {
+                        right = left + (right - left) / 2;
+                        for (int i = dot; i < selected_all_data[0].Count; i++)
+                            if (right + step_range <= selected_all_data[0][i][0]) { ending = i; break; }
+                        check = check_windows_borders2(starting, ending, Fragments3);
+                        if (check[1] < 2)
+                        {
+                            if (windowList.Count() > 0)
+                            {
+                                check = check_windows_borders2(windowList.Last().Starting, ending, Fragments3);
+                                if (check[0] == -1)
+                                {
+                                    windowList.Last().Ending = ending;
+                                    windowList.Last().All_data[0].Clear();
+                                    windowList.Last().All_data[0] = all_data[0].GetRange(windowList.Last().Starting, windowList.Last().Ending - windowList.Last().Starting + 1);
+                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                                }
+                                else
+                                {
+                                    windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
+                                    windowList.Last().All_data.Add(new List<double[]>());
+                                    windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
+                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                                    k++;
+                                }
+                                left = right;
+                                right = left + fit_step;
+                            }
+                            else { right = right + fit_step / 2; }
+                        }
+                        else
+                        {
+                            windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
+                            windowList.Last().All_data.Add(new List<double[]>());
+                            windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
+                            windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                            left = right;
+                            right = left + fit_step;
+                            k++;
+                        }
+                        if (right > selected_all_data[0].Last()[0]) { last = true; right = selected_all_data[0].Last()[0]; }
+                    }
+                }
+            } while (k < window_count);
+            int[] check_last = check_windows_borders2(windowList.Last().Starting, windowList.Last().Ending, Fragments3);
+            if (check_last[1] < 2)
+            {
+                windowList[windowList.Count - 2].Ending = windowList.Last().Ending;
+                windowList[windowList.Count - 2].All_data[0].Clear();
+                windowList[windowList.Count - 2].All_data[0] = all_data[0].GetRange(windowList[windowList.Count - 2].Starting, windowList[windowList.Count - 2].Ending - windowList[windowList.Count - 2].Starting + 1);
+                windowList[windowList.Count - 2].Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
+                windowList.RemoveAt(windowList.Count - 1);
+                window_count--;
+            }
+            //tlPrgBr.Dispose();
+        }
+
+
+
+
+
+
+        private void start_fit()
+        {
+            if (window_count == 1)
+            {
+                if (selectedFragments.Count > 14) { MessageBox.Show("The maximum amount of selected fragments is 14. The fitting algoritm can't operate on more than 14 selected fragments in each fitting section.", "Wrong selection", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+
+                // 0. Clear globals
+                powerSet.Clear();
+                powerSet_distroIdx.Clear();
+
+                // 1. check data integrity
+                if (!validate_data()) return;
+
+                // 3. align all data to the experimental all_data[0]
+                // [m/z point 0] {exp, frag1, frag2, frag3, ... }
+                // will be also needed later for plot
+                aligned_intensities.Clear();
+                aligned_intensities = align_distros(selectedFragments);
+
+                // 4. initiate fitting procedure
+                fitted_results.Clear();
+                fitted_results = fit_distros(aligned_intensities);
+
+                // 5. display results
+                refresh_fit_results(fitted_results);
+            }
+            else if (selected_window == 1000000) { MessageBox.Show("Select a window first and then attempt to perform fit! "); return; }
+            else
+            {
+                windowList[selected_window].PowerSet.Clear();
+                windowList[selected_window].PowerSetTodistro.Clear();
+
+                // 1. check data integrity
+                if (!validate_data()) return;
+
+                // 2. find selected distros for fitting
+                find_window_checked_fragments(selected_window);
+                if (windowList[selected_window].Checked_mono_fragments.Count > 14) { MessageBox.Show("The maximum amount of selected monoisotopic fragments for each window is 14. The fitting algoritm can't operate on more than 14 selected fragments in each fitting section.", "Wrong selection", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                // 3. align all data to the experimental all_data[0]
+                // [m/z point 0] {exp, frag1, frag2, frag3, ... }
+                // will be also needed later for plot               
+                windowList[selected_window].Aligned.Clear();
+                windowList[selected_window].Aligned = align_distros(windowList[selected_window].Checked_mono_fragments);
+
+                //4.initiate fitting procedure
+                windowList[selected_window].Fitted.Clear();
+                windowList[selected_window].Fitted = fit_distros(windowList[selected_window].Aligned);
+                //Fitted is a list of doubles[]:such as res = [frag1_int, frag2_int,...., SSE] sorted according to SSE
+
+                // 5. display results
+                refresh_fit_results(windowList[selected_window].Fitted);
+            }
+        }
+
+        private List<double[]> fit_distros(List<double[]> aligned_intensities)
+        {
+            List<double[]> res = new List<double[]>();
+
+            // this is all the logic of how many time the fitting should run
+            // we want to fit every possible combination to get the best result (minimum SSE)
+            if (window_count == 1)
+            {
+                // 1. generate the powerSet. It contains only fragment permutations
+                powerSet.Clear();
+                //powerSet = generatePowerSet(aligned_intensities[0].Length);
+
+                // build list with numbers
+                int total = aligned_intensities[0].Length - 1;
+                int[] seq = new int[total];
+                for (int i = 0; i < total; i++) seq[i] = i + 1;
+                powerSet = FastPowerSet(seq).ToList();
+                powerSet.RemoveAt(0);//remove the {0} set
+
+                // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
+                ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = powerSet.Count, Size = new Size(227, 23), AutoSize = false };
+                user_grpBox.Controls.Add(tlPrgBr);
+
+                sw1.Reset();sw1.Start();
+
+                double experimental_max = aligned_intensities.Max(element => element[0]);
+
+                foreach (int[] subSet in powerSet)
+                {
+                    tlPrgBr.Value++;
+                    // generate a new list containing only the fragments intensities of the subSet, and the experimental
+                    List<double[]> aligned_intensities_subSet = new List<double[]>();//lista tvn tmp gia kathe i
+
+                    for (int i = 0; i < aligned_intensities.Count; i++)//to i einai arithmos metrhshs
+                    {
+                        // first add experimental
+                        double[] tmp = new double[subSet.Length + 1];//tmp=[exp[i] frag1[i] frag2[i] ...]
+                        tmp[0] = aligned_intensities[i][0];
+
+                        // then all respective fragments
+                        for (int j = 0; j < subSet.Length; j++) tmp[j + 1] = aligned_intensities[i][subSet[j]];
+
+                        aligned_intensities_subSet.Add(tmp);
+                    }
+                    // get the intensities of the fragments, to pass them to the optimizer as a better starting point
+                    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true);
+
+                    // call optimizer for the specific subset of fragments
+                    res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
+                }
+
+                sw1.Stop(); Debug.WriteLine("Fitting: " + sw1.ElapsedMilliseconds.ToString());
+                tlPrgBr.Dispose();
+
+                // sort res and powerSet by least SSE
+                // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
+                double[][] tmp1 = res.ToArray();
+                int[][] tmp2 = powerSet.ToArray();
+
+                IComparer myComparer = new lastElement();
+                Array.Sort(tmp1, tmp2, myComparer);
+
+                res = tmp1.ToList();
+                powerSet = tmp2.ToList();
+            }
+            else
+            {
+                //aligned intensities are about ONLY the checked_mono_fragments
+                int w = selected_window;
+                int start = windowList[w].Starting;
+                int end = windowList[w].Ending;
+                // 1. generate the powerSet. It contains only fragment permutations
+                windowList[w].PowerSet.Clear();
+                //powerSet = generatePowerSet(aligned_intensities[0].Length);
+
+                // build list with numbers
+                int total = aligned_intensities[0].Length - 1;
+                int[] seq = new int[total];
+                for (int i = 0; i < total; i++) seq[i] = i + 1;
+                windowList[w].PowerSet = FastPowerSet(seq).ToList();
+                windowList[w].PowerSet.RemoveAt(0);//remove the {0} set
+
+                // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
+
+                ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = windowList[w].PowerSet.Count, Size = new Size(227, 23), AutoSize = false };
+                user_grpBox.Controls.Add(tlPrgBr);
+
+                double experimental_max = aligned_intensities.Max(element => element[0]);
+
+                foreach (int[] subSet in windowList[w].PowerSet)
+                {
+                    tlPrgBr.Value++;
+                    // generate a new list containing only the fragments intensities of the subSet, and the experimental
+                    List<double[]> aligned_intensities_subSet = new List<double[]>();//lista tvn tmp gia kathe i
+
+                    for (int i = 0; i < aligned_intensities.Count; i++)//to i einai arithmos metrhshs
+                    {
+                        // first add experimental
+                        double[] tmp = new double[subSet.Length + 1];//tmp=[exp[i] frag1[i] frag2[i] ...]
+                        tmp[0] = aligned_intensities[i][0];
+
+                        // then all respective fragments
+                        for (int j = 0; j < subSet.Length; j++) tmp[j + 1] = aligned_intensities[i][subSet[j]];
+
+                        aligned_intensities_subSet.Add(tmp);
+                    }
+                    // get the intensities of the fragments, to pass them to the optimizer as a better starting point
+                    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true, true, w);
+
+                    // call optimizer for the specific subset of fragments
+                    res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
+                }
+                tlPrgBr.Dispose();
+
+                // sort res and powerSet by least SSE
+                // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
+                double[][] tmp1 = res.ToArray();
+                int[][] tmp2 = windowList[w].PowerSet.ToArray();
+
+                IComparer myComparer = new lastElement();
+                Array.Sort(tmp1, tmp2, myComparer);
+
+                res = tmp1.ToList();
+                windowList[w].PowerSet = tmp2.ToList();
+            }
+
+
+            return res;
+        }
+
+
+        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities, List<double> UI_intensities)
+        {
+            // 1. initialize needed params
+            // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
+            // UI_intensities is initial values to make a starting point
+            int distros_num = aligned_intensities[0].Length - 1;//osa kai ta fragments pou einai sto subset
+
+            double[] coeficients = UI_intensities.ToArray();
+            double[] bndl = new double[distros_num];
+            double[] bndh = new double[distros_num];
+            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 0.01; bndh[i] = coeficients[i] * 1000.0; }
+
+            double epsx = 0.000001;
+            int maxits = 10000;
+            alglib.minlmstate state;
+            alglib.minlmreport rep;
+
+            alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
+            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
+            alglib.minlmsetcond(state, epsx, maxits);
+            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities);
+            alglib.minlmresults(state, out coeficients, out rep);
+
+            // 2. save result
+            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
+            double[] result = new double[distros_num + 1];
+            for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
+            result[distros_num] = state.fi[0];
+
+            return result;
+        }
+        public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
+        {
+            // SSE, objective to minimize
+            func[0] = 0;
+
+            List<double[]> exp_and_distros = aligned_intensities as List<double[]>;
+
+            for (int i = 0; i < exp_and_distros.Count; i++)
+            {
+                double distros_sum = 0.0;
+
+                // get the sum of all distros * the respective factor
+                // in params to fit x[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
+                for (int j = 0; j < x.Length; j++)
+                    distros_sum += x[j] * exp_and_distros[i][j + 1];
+
+                // SSE
+                func[0] += Math.Pow((exp_and_distros[i][0] - distros_sum), 2);
+            }
+        }
+
+
+
+
+
+
+        private bool validate_data()
+        {
+            // validity controls
+
+            // 1. empty experimental
+            if (all_data[0].Count < 10) { MessageBox.Show("Not enough experimental points! (distribution 0)", "Error!"); return false; };
+
+            // 2. none selected or selected is empty distribution to fit
+            bool any_selected = false, selected_is_empty = false;
+            if (selectedFragments.Count > 0)
+            {
+                any_selected = true;
+                foreach (int i in selectedFragments)
+                {
+                    if (all_data[i].Count < 10) selected_is_empty = true;
+                }
+            }
+
+            if (!any_selected) { MessageBox.Show("No distribution selected to perform fit!", "Error!"); return false; };
+            if (selected_is_empty) { MessageBox.Show("Selected distribution has inadequate data points to perform fit!", "Error!"); return false; };
+
+            return true;
+        }
+
+        #endregion
+
+
 
         #region UI control
         private void enable_UIcontrols(string status)
@@ -2092,6 +2656,46 @@ namespace Isotope_fitting
         public IEnumerable<Control> GetControls(Control c)
         {
             return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.S))
+            {
+                //saveToolStripButton.PerformClick();
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.O))
+            {
+                loadExp_Btn.PerformClick();
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.N))
+            {
+                //newToolStripButton.PerformClick();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public T[][] FastPowerSet<T>(T[] seq)
+        {
+            var powerSet = new T[1 << seq.Length][];
+            powerSet[0] = new T[0]; // starting only with empty set
+            for (int i = 0; i < seq.Length; i++)
+            {
+                var cur = seq[i];
+                int count = 1 << i; // doubling list each time
+                for (int j = 0; j < count; j++)
+                {
+                    var source = powerSet[j];
+                    var destination = powerSet[count + j] = new T[source.Length + 1];
+                    for (int q = 0; q < source.Length; q++)
+                        destination[q] = source[q];
+                    destination[source.Length] = cur;
+                }
+            }
+            return powerSet;
         }
 
         private double dParser(string t)
@@ -2767,304 +3371,6 @@ namespace Isotope_fitting
         #endregion
 
         #region Fitting + Windows
-
-        private void step_Fitting()
-        {
-            if (!string.IsNullOrEmpty(fitStep_Box.Text))
-            {                
-                fit_step = double.Parse(fitStep_Box.Text, NumberStyles.AllowDecimalPoint);
-                max_border = double.Parse(fitMax_Box.Text, NumberStyles.AllowDecimalPoint);
-                min_border = double.Parse(fitMin_Box.Text, NumberStyles.AllowDecimalPoint);
-                if (max_border < min_border) { MessageBox.Show("'max' can't be lower than 'min'","Error!",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);return; }
-                else if ((max_border-min_border)<fit_step) { MessageBox.Show("Fitting step too large for the m/z section selected! ", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-                //na prosthsw ki allo elegxo gia to an einai katallhlo to input tou step
-                segmented_graph = true;
-                iso_plot.Model.Annotations.Clear();
-                if (recalc) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true,true,false);               
-                if (fit_step==0) step_play(true);  
-                else step_play();                
-                if (Fragments2.Count>0)
-                {
-                    find_windows_mono_fragments();
-                    create_step_panels();
-                    fix_window_to_max_exp();
-                    fit_all_Btn.Enabled = true;
-                }
-
-                recalculate_all_data_aligned();
-                refresh_iso_plot();
-            }
-        }
-
-        private void step_play(bool window_1 = false)
-        {
-            //stepIndeces.Clear();
-            if (selected_all_data.Count == 0)
-            {
-                selected_all_data.Add(new List<double[]>());
-                selected_all_data[0] = all_data[0];
-            }
-            List<FragForm> Fragments3 = Fragments2.OrderBy(o => Double.Parse(o.Mz)).ToList();
-            windowList.Clear();
-            if (window_1 == false)
-            {
-                window_count = (int)((selected_all_data[0].Last()[0] - selected_all_data[0][0][0]) / fit_step) + 1;
-                //if (window_count > 40)
-                //{
-                //    MessageBox.Show("The programm can handle till 40 windows, the inserted fit step= " + fit_step.ToString() + "ends up in" + window_count.ToString() + "windows.");
-                //    fit_step = (int)((selected_all_data[0].Last()[0] - selected_all_data[0][0][0]) / 40.0);
-                //    fitStep_Box.Text = fit_step.ToString();
-                //    window_count = (int)((selected_all_data[0].Last()[0] - selected_all_data[0][0][0]) / fit_step) + 1;
-                //}
-            }
-            else
-            {
-                window_count = 1;
-            }
-
-            double left = selected_all_data[0][0][0];
-            double right = left + fit_step;
-            if (left < 0.0) left = 0.0;
-            if (right > selected_all_data[0].Last()[0]) right = selected_all_data[0].Last()[0];
-            int dot = 1;
-            int starting = 0;
-            int ending = 0;
-            //ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = window_count, Size = new Size(227, 23), AutoSize = false };
-            //user_grpBox.Controls.Add(tlPrgBr);
-            int k = 0;
-            bool last = false;
-            do
-            {
-                for (int i = dot; i < selected_all_data[0].Count; i++) { if (left - step_range < selected_all_data[0][i][0]) { starting = i - 1; dot = i - 1; break; } }
-
-                for (int i = dot; i < selected_all_data[0].Count; i++) { if (right + step_range <= selected_all_data[0][i][0]) { ending = i; break; } }
-
-                int[] check = check_windows_borders(starting, ending, Fragments3);
-                if (check[0] == -1)
-                {
-                    if (check[1] < 2)
-                    {
-                        if (windowList.Count() > 0)
-                        {
-                            check = check_windows_borders2(windowList.Last().Starting, ending, Fragments3);
-                            if (check[0] == -1)
-                            {
-                                windowList.Last().Ending = ending;
-                                windowList.Last().All_data[0].Clear();
-                                windowList.Last().All_data[0] = all_data[0].GetRange(windowList.Last().Starting, windowList.Last().Ending - windowList.Last().Starting + 1);
-                                windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                            }
-                            else
-                            {
-                                windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
-                                windowList.Last().All_data.Add(new List<double[]>());
-                                windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
-                                windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                                k++;
-                            }
-                            left = right;
-                            right = left + fit_step;
-                        }
-                        else
-                        {
-                            right = right + fit_step / 2;
-                        }
-                    }
-                    else
-                    {
-                        windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
-                        windowList.Last().All_data.Add(new List<double[]>());
-                        windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
-                        windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                        k++;
-                        left = right;
-                        right = left + fit_step;
-                    }
-                    if (last) window_count = windowList.Count();
-
-                    if (right > selected_all_data[0].Last()[0]) { last = true; right = selected_all_data[0].Last()[0]; }
-                    //tlPrgBr.Value++;
-                }
-                else
-                {
-                    window_count++;
-                    //double ps1 = 4 * Fragments2[check[0] - 1].Centroid.Count() / 5;
-                    //int ps =(int)Math.Round(ps1,0);
-                    //right = Fragments2[check[0] - 1].Centroid.OrderBy(o=>o.X).ToList()[ps].X+1;
-                    right = Fragments2[check[0] - 1].Centroid[0].X + 1;
-                    for (int i = dot; i < selected_all_data[0].Count; i++)
-                        if (right + step_range <= selected_all_data[0][i][0]) { ending = i; break; }
-                    check = check_windows_borders2(starting, ending, Fragments3);
-                    if (check[0] == -1)
-                    {
-                        if (check[1] < 2)
-                        {
-                            if (windowList.Count() > 0)
-                            {
-                                check = check_windows_borders2(windowList.Last().Starting, ending, Fragments3);
-                                if (check[0] == -1)
-                                {
-                                    windowList.Last().Ending = ending;
-                                    windowList.Last().All_data[0].Clear();
-                                    windowList.Last().All_data[0] = all_data[0].GetRange(windowList.Last().Starting, windowList.Last().Ending - windowList.Last().Starting + 1);
-                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                                    left = right;
-                                    right = left + fit_step;
-                                }
-                                else
-                                {
-                                    windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
-                                    windowList.Last().All_data.Add(new List<double[]>());
-                                    windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
-                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                                    k++;
-                                    left = right;
-                                    right = left + fit_step;
-                                }
-                            }
-                            else { right = right + fit_step / 2; }
-                        }
-                        else
-                        {
-                            windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
-                            windowList.Last().All_data.Add(new List<double[]>());
-                            windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
-                            windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                            k++;
-                            left = right;
-                            right = left + fit_step;
-                        }
-                        if (right > selected_all_data[0].Last()[0]) { last = true; right = selected_all_data[0].Last()[0]; }
-                    }
-                    else
-                    {
-                        right = left + (right - left) / 2;
-                        for (int i = dot; i < selected_all_data[0].Count; i++)
-                            if (right + step_range <= selected_all_data[0][i][0]) { ending = i; break; }
-                        check = check_windows_borders2(starting, ending, Fragments3);
-                        if (check[1] < 2)
-                        {
-                            if (windowList.Count() > 0)
-                            {
-                                check = check_windows_borders2(windowList.Last().Starting, ending, Fragments3);
-                                if (check[0] == -1)
-                                {
-                                    windowList.Last().Ending = ending;
-                                    windowList.Last().All_data[0].Clear();
-                                    windowList.Last().All_data[0] = all_data[0].GetRange(windowList.Last().Starting, windowList.Last().Ending - windowList.Last().Starting + 1);
-                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                                }
-                                else
-                                {
-                                    windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
-                                    windowList.Last().All_data.Add(new List<double[]>());
-                                    windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
-                                    windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                                    k++;
-                                }
-                                left = right;
-                                right = left + fit_step;
-                            }
-                            else { right = right + fit_step / 2; }
-                        }
-                        else
-                        {
-                            windowList.Add(new WindowSet() { Starting = starting, Ending = ending, All_data = new List<List<double[]>>(), Fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Aligned = new List<double[]>(), Fitted = new List<double[]>(), Checked_mono_fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), Code = k + 1 });
-                            windowList.Last().All_data.Add(new List<double[]>());
-                            windowList.Last().All_data[0] = all_data[0].GetRange(starting, ending - starting + 1);
-                            windowList.Last().Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                            left = right;
-                            right = left + fit_step;
-                            k++;
-                        }
-                        if (right > selected_all_data[0].Last()[0]) { last = true; right = selected_all_data[0].Last()[0]; }
-                    }
-                }
-            } while (k < window_count);
-            int[] check_last = check_windows_borders2(windowList.Last().Starting, windowList.Last().Ending, Fragments3);
-            if (check_last[1] < 2)
-            {
-                windowList[windowList.Count - 2].Ending = windowList.Last().Ending;
-                windowList[windowList.Count - 2].All_data[0].Clear();
-                windowList[windowList.Count - 2].All_data[0] = all_data[0].GetRange(windowList[windowList.Count - 2].Starting, windowList[windowList.Count - 2].Ending - windowList[windowList.Count - 2].Starting + 1);
-                windowList[windowList.Count - 2].Max_exp = windowList.Last().All_data[0].Max(element => element[1]);
-                windowList.RemoveAt(windowList.Count - 1);
-                window_count--;
-            }
-            //tlPrgBr.Dispose();
-        }
-
-        private void start_fit()
-        {
-            //generateAlphaNumeric();
-            //return;
-            if (window_count == 1)
-            {
-                if (selectedFragments.Count > 14) { MessageBox.Show("The maximum amount of selected fragments is 14. The fitting algoritm can't operate on more than 14 selected fragments in each fitting section.", "Wrong selection", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-
-                //generateAlphaNumeric();
-                //return;
-                // 0. Clear globals
-                powerSet.Clear();
-                powerSet_distroIdx.Clear();
-
-                // 1. check data integrity
-                if (!validate_data()) return;
-
-                // 2. find selected distros for fitting
-                List<int> distro_idxs = selectedFragments.OrderBy(p => p).ToList();
-                //distro_idxs.RemoveAt(0);
-
-                // 3. align all data to the experimental all_data[0]
-                // [m/z point 0] {exp, frag1, frag2, frag3, ... }
-                // will be also needed later for plot
-                aligned_intensities.Clear();
-                aligned_intensities = align_distros(distro_idxs);
-
-                // 4. initiate fitting procedure
-                fitted_results.Clear();
-                fitted_results = fit_distros(aligned_intensities);
-
-                // 5. display results
-                refresh_fit_results(fitted_results);
-            }
-            //if selected window==1000000 then no window is selected             
-            else if (selected_window == 1000000)
-            {
-                MessageBox.Show("Select a window first and then attempt to perform fit! ");
-                return;
-            }
-            else
-            {
-                windowList[selected_window].PowerSet.Clear();
-                windowList[selected_window].PowerSetTodistro.Clear();
-
-                // 1. check data integrity
-                if (!validate_data()) return;
-
-                // 2. find selected distros for fitting
-                List<int> distro_idxs = selectedFragments.OrderBy(p => p).ToList();
-                //distro_idxs.RemoveAt(0);
-                find_window_checked_fragments(selected_window);
-                if (windowList[selected_window].Checked_mono_fragments.Count > 14) { MessageBox.Show("The maximum amount of selected monoisotopic fragments for each window is 14. The fitting algoritm can't operate on more than 14 selected fragments in each fitting section.", "Wrong selection", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-                // 3. align all data to the experimental all_data[0]
-                // [m/z point 0] {exp, frag1, frag2, frag3, ... }
-                // will be also needed later for plot               
-                windowList[selected_window].Aligned.Clear();
-                windowList[selected_window].Aligned = align_distros(windowList[selected_window].Checked_mono_fragments);
-
-                //4.initiate fitting procedure
-                windowList[selected_window].Fitted.Clear();
-                windowList[selected_window].Fitted = fit_distros(windowList[selected_window].Aligned);
-                //Fitted is a list of doubles[]:such as res = [frag1_int, frag2_int,...., SSE] sorted according to SSE
-
-                // 5. display results
-                refresh_fit_results(windowList[selected_window].Fitted);
-            }
-        }
-
-
-
         private void fix_window_to_max_exp()
         {
             //it is called in each 'fit' call after 'find window fragments' or when clicking the window tab 
@@ -3267,11 +3573,8 @@ namespace Isotope_fitting
         }
         private void refresh_fit_results(List<double[]> fitted_results)
         {
-            if (selectedFragments.Count < 3)
-            {
-                MessageBox.Show("Select at least 2 fragments to perform fitting!");
-                return;
-            }
+            if (selectedFragments.Count < 1) { MessageBox.Show("Select at least 1 fragment to perform fitting!"); return; }
+
             if ( window_count==1)//praktika o kvdikas opvw htan prin
             {
                 // 1. clear previous results (UI ctrls and chart)            
@@ -3439,7 +3742,6 @@ namespace Isotope_fitting
             }
             else
             {
-                distro_idxs.RemoveAt(0);
                 for (int i = 0; i < powerSet.Count; i++)
                 {
                     powerSet_distroIdx.Add(new int[powerSet[i].Length]);
@@ -3458,132 +3760,6 @@ namespace Isotope_fitting
             foreach (Label lbl in tmp_lbl) lbl.ForeColor = Color.Black;
             tmp_lbl.FirstOrDefault(l => l.TabIndex == 0).ForeColor = Color.Blue;
         }
-        private List<double[]> fit_distros(List<double[]> aligned_intensities)
-        {
-            List<double[]> res = new List<double[]>();
-
-            // this is all the logic of how many time the fitting should run
-            // we want to fit every possible combination to get the best result (minimum SSE)
-            if (window_count == 1)
-            {
-                // 1. generate the powerSet. It contains only fragment permutations
-                powerSet.Clear();
-                //powerSet = generatePowerSet(aligned_intensities[0].Length);
-
-                // build list with numbers
-                int total = aligned_intensities[0].Length - 1;
-                int[] seq = new int[total];
-                for (int i = 0; i < total; i++) seq[i] = i + 1;
-                powerSet = FastPowerSet(seq).ToList();
-                powerSet.RemoveAt(0);//remove the {0} set
-
-                // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
-
-                ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = powerSet.Count, Size = new Size(227, 23), AutoSize = false };
-                user_grpBox.Controls.Add(tlPrgBr);
-
-                double experimental_max = aligned_intensities.Max(element => element[0]);
-
-                foreach (int[] subSet in powerSet)
-                {
-                    tlPrgBr.Value++;
-                    // generate a new list containing only the fragments intensities of the subSet, and the experimental
-                    List<double[]> aligned_intensities_subSet = new List<double[]>();//lista tvn tmp gia kathe i
-
-                    for (int i = 0; i < aligned_intensities.Count; i++)//to i einai arithmos metrhshs
-                    {
-                        // first add experimental
-                        double[] tmp = new double[subSet.Length + 1];//tmp=[exp[i] frag1[i] frag2[i] ...]
-                        tmp[0] = aligned_intensities[i][0];
-
-                        // then all respective fragments
-                        for (int j = 0; j < subSet.Length; j++) tmp[j + 1] = aligned_intensities[i][subSet[j]];
-
-                        aligned_intensities_subSet.Add(tmp);
-                    }
-                    // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true);
-
-                    // call optimizer for the specific subset of fragments
-                    res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
-                }
-                tlPrgBr.Dispose();
-
-                // sort res and powerSet by least SSE
-                // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
-                double[][] tmp1 = res.ToArray();
-                int[][] tmp2 = powerSet.ToArray();
-
-                IComparer myComparer = new lastElement();
-                Array.Sort(tmp1, tmp2, myComparer);
-
-                res = tmp1.ToList();
-                powerSet = tmp2.ToList();
-            }
-            else
-            {
-                //aligned intensities are about ONLY the checked_mono_fragments
-                int w = selected_window;
-                int start = windowList[w].Starting;
-                int end = windowList[w].Ending;
-                // 1. generate the powerSet. It contains only fragment permutations
-                windowList[w].PowerSet.Clear();
-                //powerSet = generatePowerSet(aligned_intensities[0].Length);
-
-                // build list with numbers
-                int total = aligned_intensities[0].Length - 1;
-                int[] seq = new int[total];
-                for (int i = 0; i < total; i++) seq[i] = i + 1;
-                windowList[w].PowerSet = FastPowerSet(seq).ToList();
-                windowList[w].PowerSet.RemoveAt(0);//remove the {0} set
-
-                // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
-
-                ProgressBar tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 21), Style = 0, Minimum = 0, Value = 0, Maximum = windowList[w].PowerSet.Count, Size = new Size(227, 23), AutoSize = false };
-                user_grpBox.Controls.Add(tlPrgBr);
-
-                double experimental_max = aligned_intensities.Max(element => element[0]);
-
-                foreach (int[] subSet in windowList[w].PowerSet)
-                {
-                    tlPrgBr.Value++;
-                    // generate a new list containing only the fragments intensities of the subSet, and the experimental
-                    List<double[]> aligned_intensities_subSet = new List<double[]>();//lista tvn tmp gia kathe i
-
-                    for (int i = 0; i < aligned_intensities.Count; i++)//to i einai arithmos metrhshs
-                    {
-                        // first add experimental
-                        double[] tmp = new double[subSet.Length + 1];//tmp=[exp[i] frag1[i] frag2[i] ...]
-                        tmp[0] = aligned_intensities[i][0];
-
-                        // then all respective fragments
-                        for (int j = 0; j < subSet.Length; j++) tmp[j + 1] = aligned_intensities[i][subSet[j]];
-
-                        aligned_intensities_subSet.Add(tmp);
-                    }
-                    // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true,true,w);
-
-                    // call optimizer for the specific subset of fragments
-                    res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
-                }
-                tlPrgBr.Dispose();
-
-                // sort res and powerSet by least SSE
-                // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
-                double[][] tmp1 = res.ToArray();
-                int[][] tmp2 = windowList[w].PowerSet.ToArray();
-
-                IComparer myComparer = new lastElement();
-                Array.Sort(tmp1, tmp2, myComparer);
-
-                res = tmp1.ToList();
-                windowList[w].PowerSet = tmp2.ToList();
-            }
-           
-
-            return res;
-        }
         public class lastElement : IComparer
         {
             // Calls CaseInsensitiveComparer.Compare with the parameters reversed.
@@ -3594,102 +3770,8 @@ namespace Isotope_fitting
 
         }
 
-        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities, List<double> UI_intensities)
-        {
-            // 1. initialize needed params
-            // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
-            // UI_intensities is initial values to make a starting point
-            int distros_num = aligned_intensities[0].Length - 1;//osa kai ta fragments pou einai sto subset
 
-            double[] coeficients = UI_intensities.ToArray();
-            double[] bndl = new double[distros_num];
-            double[] bndh = new double[distros_num];
-            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 0.01; bndh[i] = coeficients[i] * 1000.0; }
 
-            double epsx = 0.000001;
-            int maxits = 10000;
-            alglib.minlmstate state;
-            alglib.minlmreport rep;
-
-            alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
-            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
-            alglib.minlmsetcond(state, epsx, maxits);
-            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities);
-            alglib.minlmresults(state, out coeficients, out rep);
-
-            // 2. save result
-            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
-            double[] result = new double[distros_num + 1];
-            for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
-            result[distros_num] = state.fi[0];
-
-            return result;
-        }
-        public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
-        {
-            // SSE, objective to minimize
-            func[0] = 0;
-
-            List<double[]> exp_and_distros = aligned_intensities as List<double[]>;
-
-            for (int i = 0; i < exp_and_distros.Count; i++)
-            {
-                double distros_sum = 0.0;
-
-                // get the sum of all distros * the respective factor
-                // in params to fit x[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
-                for (int j = 0; j < x.Length; j++)
-                    distros_sum += x[j] * exp_and_distros[i][j + 1];
-
-                // SSE
-                func[0] += Math.Pow((exp_and_distros[i][0] - distros_sum), 2);
-            }
-        }
-
-        public T[][] FastPowerSet<T>(T[] seq)
-        {
-            var powerSet = new T[1 << seq.Length][];
-            powerSet[0] = new T[0]; // starting only with empty set
-            for (int i = 0; i < seq.Length; i++)
-            {
-                var cur = seq[i];
-                int count = 1 << i; // doubling list each time
-                for (int j = 0; j < count; j++)
-                {
-                    var source = powerSet[j];
-                    var destination = powerSet[count + j] = new T[source.Length + 1];
-                    for (int q = 0; q < source.Length; q++)
-                        destination[q] = source[q];
-                    destination[source.Length] = cur;
-                }
-            }
-            return powerSet;
-        }
-
-        private bool validate_data()
-        {
-            // validity controls
-
-            // 1. empty experimental
-            if (all_data[0].Count < 10) { MessageBox.Show("Not enough experimental points! (distribution 0)", "Error!"); return false; };
-
-            // 2. none selected or selected is empty distribution to fit
-            bool any_selected = false, selected_is_empty = false;
-            if (selectedFragments.Count>0)
-            {
-                any_selected = true;
-                foreach (int i in selectedFragments)
-                {
-                    if (all_data[i].Count < 10) selected_is_empty = true;
-                }
-            }  
-            
-
-            if (!any_selected) { MessageBox.Show("No distribution selected to perform fit!", "Error!"); return false; };
-            if (selected_is_empty) { MessageBox.Show("Selected distribution has inadequate data points to perform fit!", "Error!"); return false; };
-
-            return true;
-        }
         #endregion
 
         #region Fragments' List
@@ -3716,7 +3798,6 @@ namespace Isotope_fitting
             }
             else if ((sender as MenuItem).Text == "Copy fitted fragments")
             {
-                //List<int> sel_idx = selectedFragments.OrderBy(p => p).ToList();
                 List<int> sel_idx = new List<int>();
                 //sel_idx.RemoveAt(0);
                 int panel_count =  window_count;
@@ -3781,16 +3862,14 @@ namespace Isotope_fitting
             if (!is_calc)
             {
                 int item_code = Int32.Parse(e.Item.SubItems[5].Text, NumberStyles.Integer);
-                if (e.Item.Checked == true)
-                {
-                    selectedFragments.Add(item_code); Fragments2[item_code - 1].To_plot = true; 
-                }
-                else
-                {
-                    selectedFragments.Remove(item_code); Fragments2[item_code - 1].To_plot = false; 
-                }
 
-                if (plot_rem_Btns == false)refresh_iso_plot();
+                if (e.Item.Checked == true) selectedFragments.Add(item_code);                    
+                else selectedFragments.Remove(item_code); 
+                
+                selectedFragments = selectedFragments.OrderBy(p => p).ToList();
+                Fragments2[item_code - 1].To_plot = e.Item.Checked;
+
+                if (plot_rem_Btns == false) refresh_iso_plot();
             }
         }
         private void factor_Box_TextChanged(object sender, EventArgs e)
@@ -3990,36 +4069,6 @@ namespace Isotope_fitting
             refresh_iso_plot();
         }
         
-        private void fit_Btn_Click(object sender, EventArgs e)
-        {
-            Fitting_chkBox.Checked = true;
-            if (window_count == 1 && !string.IsNullOrEmpty(fitStep_Box.Text)) { step_Fitting(); if (!is_loading && !is_calc) { /*recalculate_all_data_aligned();*/ refresh_iso_plot(); } }
-            start_fit();
-            saveFit_Btn.Enabled = true;
-        }
-        private void fit_all_Btn_Click(object sender, EventArgs e)
-        {
-            
-            if (windowList.Count == 0) { MessageBox.Show("There isn't any window to perform multiple fit", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            if (bigPanel.Controls.Count == 0) { MessageBox.Show("Something went wrong.Please close the program.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            if (selectedFragments.Count() < 3) { MessageBox.Show("Select at least 2 fragments to perform fitting!"); return; }
-            Fitting_chkBox.Checked = true;
-            if (window_count == 1 && !string.IsNullOrEmpty(fitStep_Box.Text)) { step_Fitting(); if (!is_loading && !is_calc) { /*recalculate_all_data_aligned();*/ refresh_iso_plot(); } }
-            
-            refresh_all = true;
-            for (int w = 0; w < windowList.Count; w++)
-            {
-                selected_window = w;
-                window_colors(w);
-                GetControls(bigPanel).OfType<Panel>().FirstOrDefault(l => l.TabIndex == w).BackColor = Color.LightSteelBlue;
-                window_graph(w); highlight_selected(w);
-                start_fit();
-            }
-            refresh_iso_plot();
-            refresh_all = false;
-
-            saveFit_Btn.Enabled = true;
-        }
         private void loadFit_Btn_Click(object sender, EventArgs e)
         {
             reset_all();
@@ -4027,7 +4076,6 @@ namespace Isotope_fitting
             Fragments2.Clear();
             ChemFormulas.Clear();
             selectedFragments.Clear();
-            selectedFragments.TrimExcess();
             windowList.Clear();
             selected_all_data.Clear();
             pep_Box.Text = null;
@@ -4056,7 +4104,6 @@ namespace Isotope_fitting
         }
         private void load_data()
         {
-
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
             string fullPath = "";
@@ -4174,8 +4221,6 @@ namespace Isotope_fitting
                 //Initialize_listviewComparer();                                
 
                 is_loading = false;
-                //add experimental to plot
-                selectedFragments.Add(0);
                 // post load actions                                
                 recalculate_all_data_aligned();
                 refresh_iso_plot();
@@ -4235,7 +4280,6 @@ namespace Isotope_fitting
             Fragments2.Clear();
             ChemFormulas.Clear();
             selectedFragments.Clear();
-            selectedFragments.TrimExcess();
             pep_Box.Text = null;
             counter = 0;
             frag_listView.Items.Clear();
@@ -4430,7 +4474,6 @@ namespace Isotope_fitting
 
                 is_loading = false;
                 //add experimental to plot
-                selectedFragments.Add(0);
                 //listview
                 frag_listView.BeginUpdate();
                 frag_listView.Items.Clear();
@@ -4582,9 +4625,16 @@ namespace Isotope_fitting
         {
             //(M) to text box pou dexetai einai ekeino pou tou exoun ginei paste ta data pou tha plotaroume
 
-            // 0. gather info on which fragments are selected to plot, and their respective intensities
-            List<int> to_plot = selectedFragments.OrderBy(p => p).ToList();//(M) vriskei poia indexes tou all_data einai checked
+            // 0.a gather info on which fragments are selected to plot, and their respective intensities
+            List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
             List<double> UI_intensities = get_UI_intensities(to_plot.ToArray()); //(M)epistrefei list me tous factors
+
+            // 0.b Add the experimental to plot if selected
+            if (plot_experimental)
+            {
+                to_plot.Insert(0, 0);
+                UI_intensities.Insert(0, 1.0);
+            }
 
             // to_plot and UI_intensities contain ONLY the selected indexes and intensities
 
@@ -4656,10 +4706,7 @@ namespace Isotope_fitting
                             }
                         }
                     }
-
                 }
-
-
             }
 
             // 3. fitted plot (if more than 2 fragments(except the experimental))
@@ -4675,7 +4722,6 @@ namespace Isotope_fitting
 
             invalidate_all();
         }
-
         private void reset_iso_plot()
         {
             iso_plot.Model.Series.Clear();
