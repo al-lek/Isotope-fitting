@@ -117,10 +117,12 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
             this.plots_grpBox.SuspendLayout();
+            this.fit_grpBox.SuspendLayout();
             this.user_grpBox.SuspendLayout();
             this.options_grpBox.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -192,6 +194,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fit_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fit_grpBox.Controls.Add(this.plotExp_chkBox);
             this.fit_grpBox.Location = new System.Drawing.Point(0, 12);
             this.fit_grpBox.Name = "fit_grpBox";
             this.fit_grpBox.Size = new System.Drawing.Size(449, 396);
@@ -1153,6 +1156,16 @@ namespace Isotope_fitting
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
             // 
+            // plotExp_chkBox
+            // 
+            this.plotExp_chkBox.AutoSize = true;
+            this.plotExp_chkBox.Location = new System.Drawing.Point(6, 12);
+            this.plotExp_chkBox.Name = "plotExp_chkBox";
+            this.plotExp_chkBox.Size = new System.Drawing.Size(66, 17);
+            this.plotExp_chkBox.TabIndex = 0;
+            this.plotExp_chkBox.Text = "plot exp.";
+            this.plotExp_chkBox.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1166,6 +1179,8 @@ namespace Isotope_fitting
             this.tabControl1.ResumeLayout(false);
             this.tabFit.ResumeLayout(false);
             this.plots_grpBox.ResumeLayout(false);
+            this.fit_grpBox.ResumeLayout(false);
+            this.fit_grpBox.PerformLayout();
             this.user_grpBox.ResumeLayout(false);
             this.user_grpBox.PerformLayout();
             this.options_grpBox.ResumeLayout(false);
@@ -1263,5 +1278,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button optionBtn;
         private System.Windows.Forms.ColumnHeader intensityHeader;
         private System.Windows.Forms.Button displayPeakList_btn;
+        private System.Windows.Forms.CheckBox plotExp_chkBox;
     }
 }

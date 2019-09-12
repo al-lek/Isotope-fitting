@@ -53,7 +53,6 @@ namespace Isotope_fitting
         public static List<FragForm> Fragments2 = new List<FragForm>();
         //public List<string> checkedItems = new List<string>();
         public List<int> selectedFragments = new List<int>();
-        int counter = 0;
         int start_idx = 0;
         int end_idx = 0;
         double max_exp = 0.0;
@@ -130,7 +129,6 @@ namespace Isotope_fitting
         public delegate void FittingCalcCompleted();
         public event EnvelopeCalcCompleted OnEnvelopeCalcCompleted;
         public event FittingCalcCompleted OnFittingCalcCompleted;
-        bool plot_experimental = true;
 
         Form6 frm6 = new Form6();
         #endregion
@@ -162,10 +160,8 @@ namespace Isotope_fitting
         }
 
         private void load_experimental_sequence()
-        {
-            sw1.Reset(); sw1.Start();
-            load_experimental();
-            sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
+        {            
+            load_experimental();            
 
             sw1.Reset(); sw1.Start();
             post_load_actions();
@@ -184,6 +180,7 @@ namespace Isotope_fitting
 
                 if (expData.ShowDialog() == DialogResult.OK)
                 {
+                    sw1.Reset(); sw1.Start();
                     StreamReader objReader = new StreamReader(expData.FileName);
                     file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
                     do { lista.Add(objReader.ReadLine()); }
@@ -207,6 +204,7 @@ namespace Isotope_fitting
 
                         if (j % 10000 == 0 && j > 0) progress_display_update(j);
                     }
+                    sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
                     progress_display_stop();
                 }
             }
@@ -284,6 +282,7 @@ namespace Isotope_fitting
 
             if (fragment_import.ShowDialog() != DialogResult.Cancel)
             {
+                sw1.Reset(); sw1.Start();
                 StreamReader objReader = new StreamReader(fragment_import.FileName);
                 do { lista.Add(objReader.ReadLine()); }
                 while (objReader.Peek() != -1);
@@ -309,6 +308,7 @@ namespace Isotope_fitting
                 }
                 progress_display_stop();
                 post_import_fragments();
+                sw1.Stop(); Debug.WriteLine("Import frags and generate X: " + sw1.ElapsedMilliseconds.ToString());
             }
         }
 
@@ -484,13 +484,15 @@ namespace Isotope_fitting
         private void fragments_and_calculations_sequence_A()
         {
             // this the main sequence after loadind data
-            // 1. select fragments according to UI 
+            // 1. select fragments according to UI
+            sw1.Reset(); sw1.Start();
             List<ChemiForm> selected_fragments = select_fragments();
             if (selected_fragments == null) return;
-
+            sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution
             calculate_fragments_resolution(selected_fragments);
-
+            sw1.Stop(); Debug.WriteLine("Resolytion from fragments: " + sw1.ElapsedMilliseconds.ToString());
             // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
             Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
             envipat_properties.Start();
@@ -499,16 +501,18 @@ namespace Isotope_fitting
         public void fragments_and_calculations_sequence_B()
         {
             GC.Collect();
-
+            sw1.Reset(); sw1.Start();
             // 1. Pass Fragments info to all_data array (experimetal have already been added, in after loading actions)
             initialize_fragments();
-
+            sw1.Stop(); Debug.WriteLine("Init frags: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Reset(); sw1.Start();
             // 2. rebuild frag_listView in UI
             populate_frag_listView();
-
+            sw1.Stop(); Debug.WriteLine("Populate listView: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Reset(); sw1.Start();
             // 3. build the all_data_alligned structure
             recalculate_all_data_aligned();
-
+            sw1.Stop(); Debug.WriteLine("All data aligned: " + sw1.ElapsedMilliseconds.ToString());
             enable_UIcontrols("post calculations");
         }
 
@@ -1369,7 +1373,7 @@ namespace Isotope_fitting
         private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
-            //sw1.Reset(); sw1.Start();
+            sw1.Reset(); sw1.Start();
             int progress = 0; 
             progress_display_start(selected_fragments.Count, "Calculating fragment properties...");
 
@@ -1386,7 +1390,7 @@ namespace Isotope_fitting
             is_calc = false;
 
             MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
-            //sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
 
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
@@ -2044,6 +2048,7 @@ namespace Isotope_fitting
 
 
 
+
         private List<double[]> fit_distros_parallel(List<int> selectedFragments)
         {
             List<double[]> res = new List<double[]>();
@@ -2102,7 +2107,7 @@ namespace Isotope_fitting
             });
 
 
-            sw1.Stop(); Debug.WriteLine("Fitting: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Stop(); Debug.WriteLine("Fitting(M): " + sw1.ElapsedMilliseconds.ToString());
             progress_display_stop();
 
             // sort res and powerSet by least SSE
@@ -2119,8 +2124,6 @@ namespace Isotope_fitting
 
             return res;
         }
-
-
 
         private List<double[]> fit_distros2(List<int> selectedFragments)
         {
@@ -2174,9 +2177,7 @@ namespace Isotope_fitting
         }
 
 
-
-
-
+               
 
         private List<double[]> fit_distros(List<double[]> aligned_intensities)
         {
@@ -2309,6 +2310,7 @@ namespace Isotope_fitting
         }
 
 
+
         private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities)
         {
             // 1. initialize needed params
@@ -2319,7 +2321,7 @@ namespace Isotope_fitting
             double[] coeficients = UI_intensities.ToArray();
             double[] bndl = new double[distros_num];
             double[] bndh = new double[distros_num];
-            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 0.01; bndh[i] = coeficients[i] * 1000.0; }
+            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-4; bndh[i] = coeficients[i] * 1e3; }
 
             double epsx = 0.000001;
             int maxits = 10000;
@@ -2565,7 +2567,7 @@ namespace Isotope_fitting
             // it has to be sorted because of paralellism
             peak_points = peak_points.OrderBy(m => m[1] + m[4]).ToList();
             //peak_points = peak_points.OrderBy(m => m[1]).ToList();
-            sw1.Stop(); Debug.WriteLine("peak detect: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Stop(); Debug.WriteLine("peak detect(M): " + sw1.ElapsedMilliseconds.ToString());
         }
 
         private List<double[]> LIMPIC_parallel()
@@ -3024,6 +3026,7 @@ namespace Isotope_fitting
         #region UI
         private void Initialize_UI()
         {
+            plotExp_chkBox.CheckedChanged += (s, e) => {refresh_iso_plot(); };
             fitMax_Box.Click += (s, e) => { fitMax_Box.SelectAll(); };
             fitMin_Box.Click += (s, e) => { fitMin_Box.SelectAll(); };
             fitMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true,false,true); };
@@ -4428,7 +4431,6 @@ namespace Isotope_fitting
             ChemFormulas.Clear();
             selectedFragments.Clear();
             pep_Box.Text = null;
-            counter = 0;
             frag_listView.Items.Clear();
             UncheckAll();
             resolution_Box.Text = null;
@@ -4777,7 +4779,7 @@ namespace Isotope_fitting
             List<double> UI_intensities = get_UI_intensities(to_plot.ToArray()); //(M)epistrefei list me tous factors
 
             // 0.b Add the experimental to plot if selected
-            if (plot_experimental)
+            if (plotExp_chkBox.Checked)
             {
                 to_plot.Insert(0, 0);
                 UI_intensities.Insert(0, 1.0);

@@ -1,0 +1,29 @@
+
+6-core Home, abcxyz 859 frags, fit 10 first
+load_experimental: 214
+post_load_actions: 32
+peak detect(M): 4023
+Import frags and generate X: 866
+Select frags: 109
+Resolytion from fragments: 9
+Envipat_Calcs_and_filter_byPPM(M): 51195
+Init frags: 131
+Populate listView: 2015
+All data aligned: 23629
+Fitting: 72586
+
+
+
+load_experimental: 209
+post_load_actions: 52
+peak detect(M): 4088
+Import frags and generate X: 960
+Import frags and generate X: 841
+Select frags: 190
+Resolytion from fragments: 8
+Envipat_Calcs_and_filter_byPPM(M): 99009
+Init frags: 131
+Populate listView: 2081
+All data aligned: 23374
+Fitting: 57307
+
