@@ -127,7 +127,9 @@ namespace Isotope_fitting
         string precursor_carbons = "C0";
         Object _locker = new Object();
         public delegate void EnvelopeCalcCompleted();
+        public delegate void FittingCalcCompleted();
         public event EnvelopeCalcCompleted OnEnvelopeCalcCompleted;
+        public event FittingCalcCompleted OnFittingCalcCompleted;
         bool plot_experimental = true;
 
         Form6 frm6 = new Form6();
@@ -139,6 +141,10 @@ namespace Isotope_fitting
 
             // declare event to continue calculations after Fragments2 are complete
             OnEnvelopeCalcCompleted += () => { fragments_and_calculations_sequence_B(); };
+
+            // declare event to plot fit results after fitting calculations are complete
+            OnFittingCalcCompleted += () => { refresh_fit_results(fitted_results); };
+
             reset_all();
         }
 
@@ -1630,27 +1636,6 @@ namespace Isotope_fitting
                     if (i % 5000 == 0 && i > 0) progress_display_update(i);
                 }
             }
-            else if (!initial)
-            {
-                int no_of_selected = distro_fragm_idxs.Count();
-
-                for (int i = 0; i < all_data[0].Count; i++) //(M)loop for all the experimental points count
-                {
-                    // one by one for all points
-                    List<double> one_aligned_point = new List<double>();
-                    bool zero_point = true;
-
-                    one_aligned_point.Add(all_data_aligned[i][0]);
-
-                    for (int k = 0; k < no_of_selected; k++)
-                    {
-                        one_aligned_point.Add(all_data_aligned[i][distro_fragm_idxs[k]]);
-                        if (all_data_aligned[i][distro_fragm_idxs[k]] != 0.0) zero_point = zero_point & false;
-                    }
-
-                    if (!zero_point) aligned_intensities.Add(one_aligned_point.ToArray());
-                }
-            }
             else
             {
                 //efarmozetai MONO sta checked_mono_fragments
@@ -1697,6 +1682,35 @@ namespace Isotope_fitting
             return aligned_intensities;
         }
 
+        private List<double[]> subset_of_aligned_distros(int[] distro_fragm_idxs)
+        {
+            // will return the requested subset of aligned_intensities for the given fragments, it is called only from the fiting algorithm
+            // it is VARIABLE in length for each subset, because it SCANS and discards points where ALL given fragments are zero
+            // Improves memory demands and speed in fitting! List is much smaller, it contains only the points where fragments exist.
+            // subset_of_aligned_intensities = [m/z point] {exp, frag1, frag2, frag3, ... }
+
+            List<double[]> subset_of_aligned_intensities = new List<double[]>();
+            int no_of_selected = distro_fragm_idxs.Count();
+
+            for (int i = 0; i < all_data_aligned.Count; i++)
+            {
+                List<double> one_aligned_point = new List<double>();
+                bool zero_point = true;
+
+                // build the point with exp and all frag, but keep it only if any frag is NON zero
+                one_aligned_point.Add(all_data_aligned[i][0]);
+
+                for (int k = 0; k < no_of_selected; k++)
+                {
+                    one_aligned_point.Add(all_data_aligned[i][distro_fragm_idxs[k]]);
+                    if (all_data_aligned[i][distro_fragm_idxs[k]] != 0.0) zero_point = zero_point & false;
+                }
+
+                if (!zero_point) subset_of_aligned_intensities.Add(one_aligned_point.ToArray());
+            }
+            return subset_of_aligned_intensities;
+        }
+
         private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
         {
             // linear interpolation
@@ -1711,7 +1725,10 @@ namespace Isotope_fitting
         {
             Fitting_chkBox.Checked = true;
             if (window_count == 1 && !string.IsNullOrEmpty(fitStep_Box.Text)) { step_Fitting(); if (!is_loading && !is_calc) { refresh_iso_plot(); } }
-            start_fit();
+
+            Thread fit = new Thread(start_fit);
+            fit.Start();
+
             saveFit_Btn.Enabled = true;
         }
 
@@ -1990,18 +2007,12 @@ namespace Isotope_fitting
                 // 1. check data integrity
                 if (!validate_data()) return;
 
-                // 3. align all data to the experimental all_data[0]
-                // [m/z point 0] {exp, frag1, frag2, frag3, ... }
-                // will be also needed later for plot
-                aligned_intensities.Clear();
-                aligned_intensities = align_distros(selectedFragments);
-
-                // 4. initiate fitting procedure
+                // 2. initiate fitting procedure
                 fitted_results.Clear();
-                fitted_results = fit_distros(aligned_intensities);
+                fitted_results = fit_distros_parallel(selectedFragments);
 
                 // 5. display results
-                refresh_fit_results(fitted_results);
+                Invoke(new Action(() => OnFittingCalcCompleted()));                
             }
             else if (selected_window == 1000000) { MessageBox.Show("Select a window first and then attempt to perform fit! "); return; }
             else
@@ -2031,10 +2042,146 @@ namespace Isotope_fitting
             }
         }
 
-        private List<double[]> fit_distros(List<double[]> aligned_intensities)
+
+
+        private List<double[]> fit_distros_parallel(List<int> selectedFragments)
         {
             List<double[]> res = new List<double[]>();
 
+            // this is all the logic of how many time the fitting should run
+            // we want to fit every possible combination to get the best result (minimum SSE)
+            // 1. generate the powerSet. It contains only fragment permutations
+            powerSet.Clear();
+            powerSet = FastPowerSet(selectedFragments.ToArray()).ToList();
+            powerSet.RemoveAt(0);//remove the {0} set
+            List<int[]> powerSet_copy = new List<int[]>();
+
+            // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
+            progress_display_start(powerSet.Count + 1, "Calculating fragment fit...");
+
+            sw1.Reset(); sw1.Start();
+
+            double experimental_max = all_data_aligned[0].Max();
+
+            //int progress = 0;
+            //Parallel.ForEach (powerSet, subSet =>
+            //{
+            //    // generate a new list containing only the fragments intensities of the subSet, and the experimental
+            //    List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(subSet.ToArray());
+
+            //    // get the intensities of the fragments, to pass them to the optimizer as a better starting point
+            //    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true);
+
+            //    // call optimizer for the specific subset of fragments
+            //    double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities);
+            //    lock (_locker) { res.Add(tmp); powerSet_copy.Add(subSet); }
+
+            //    // safelly keep track of progress
+            //    Interlocked.Increment(ref progress);
+
+            //    progress_display_update(progress);
+            //});
+
+            int progress = 0;
+            Parallel.For(0, powerSet.Count - 1, (i, state) =>
+            {
+                // generate a new list containing only the fragments intensities of the subSet, and the experimental
+                List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(powerSet[i].ToArray());
+
+                // get the intensities of the fragments, to pass them to the optimizer as a better starting point
+                List<double> UI_intensities = get_UI_intensities(powerSet[i], experimental_max, true);
+
+                // call optimizer for the specific subset of fragments
+                double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities);
+                lock (_locker) { res.Add(tmp); powerSet_copy.Add(powerSet[i]); }
+
+                // safelly keep track of progress
+                Interlocked.Increment(ref progress);
+
+                progress_display_update(progress);
+            });
+
+
+            sw1.Stop(); Debug.WriteLine("Fitting: " + sw1.ElapsedMilliseconds.ToString());
+            progress_display_stop();
+
+            // sort res and powerSet by least SSE
+            // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
+            double[][] tmp1 = res.ToArray();
+            //int[][] tmp2 = powerSet.ToArray();
+            int[][] tmp2 = powerSet_copy.ToArray();
+
+            IComparer myComparer = new lastElement();
+            Array.Sort(tmp1, tmp2, myComparer);
+
+            res = tmp1.ToList();
+            powerSet = tmp2.ToList();
+
+            return res;
+        }
+
+
+
+        private List<double[]> fit_distros2(List<int> selectedFragments)
+        {
+            List<double[]> res = new List<double[]>();
+
+            // this is all the logic of how many time the fitting should run
+            // we want to fit every possible combination to get the best result (minimum SSE)
+            // 1. generate the powerSet. It contains only fragment permutations
+            powerSet.Clear();
+            powerSet = FastPowerSet(selectedFragments.ToArray()).ToList();
+            powerSet.RemoveAt(0);//remove the {0} set
+
+            // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
+            progress_display_start(powerSet.Count + 1, "Calculating fragment fit...");
+
+            sw1.Reset(); sw1.Start();
+
+            double experimental_max = all_data_aligned[0].Max();
+            
+            int count = 0;
+            foreach (int[] subSet in powerSet)
+            {
+                // generate a new list containing only the fragments intensities of the subSet, and the experimental
+                List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(subSet.ToArray());
+
+                // get the intensities of the fragments, to pass them to the optimizer as a better starting point
+                List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true);
+
+                // call optimizer for the specific subset of fragments
+                res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
+
+                count++;
+                progress_display_update(count);
+            }
+
+            sw1.Stop(); Debug.WriteLine("Fitting: " + sw1.ElapsedMilliseconds.ToString());
+            progress_display_stop();
+
+            // sort res and powerSet by least SSE
+            // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
+            double[][] tmp1 = res.ToArray();
+            int[][] tmp2 = powerSet.ToArray();
+
+            IComparer myComparer = new lastElement();
+            Array.Sort(tmp1, tmp2, myComparer);
+
+            res = tmp1.ToList();
+            powerSet = tmp2.ToList();
+
+            return res;
+        }
+
+
+
+
+
+
+        private List<double[]> fit_distros(List<double[]> aligned_intensities)
+        {
+            List<double[]> res = new List<double[]>();
+            
             // this is all the logic of how many time the fitting should run
             // we want to fit every possible combination to get the best result (minimum SSE)
             if (window_count == 1)
@@ -2162,12 +2309,12 @@ namespace Isotope_fitting
         }
 
 
-        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities, List<double> UI_intensities)
+        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities)
         {
             // 1. initialize needed params
             // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
             // UI_intensities is initial values to make a starting point
-            int distros_num = aligned_intensities[0].Length - 1;//osa kai ta fragments pou einai sto subset
+            int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
 
             double[] coeficients = UI_intensities.ToArray();
             double[] bndl = new double[distros_num];
@@ -2182,7 +2329,7 @@ namespace Isotope_fitting
             alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
             alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
             alglib.minlmsetcond(state, epsx, maxits);
-            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities);
+            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities_subSet);
             alglib.minlmresults(state, out coeficients, out rep);
 
             // 2. save result
@@ -2392,8 +2539,8 @@ namespace Isotope_fitting
         {
             prg_lbl.Invoke(new Action(() => prg_lbl.Invalidate(true)));   //thread safe call
 
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx));   //thread safe call
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 1));   //thread safe call
-            tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = idx - 2));   //thread safe call
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Update()));   //thread safe call
         }
 
@@ -3587,15 +3734,15 @@ namespace Isotope_fitting
 
                 // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
                 // we have to convert powerSet to the actual index number of each fragment!!!
-                powerSet_to_distroIdx(selectedFragments.OrderBy(p => p).ToList());
+                //powerSet_to_distroIdx(selectedFragments.OrderBy(p => p).ToList());
                 for (int i = 0; i < fitted_results.Count; i++)
                 {
                     if (i > 200) { break; }
                     //double[] fit_info in fitted_results
                     Label tmp_lbl = new Label() { TabIndex = i, Location = new Point(5, (i + 1) * 15), AutoSize = true };
                     string txt = "";
-
-                    foreach (int value in powerSet_distroIdx[i]) txt += value.ToString() + " ";
+                    
+                    foreach (int value in powerSet[i]) txt += value.ToString() + " ";
                     txt += "    " + fitted_results[i].Last().ToString("0.###e0" + "  ");
                     for (int j = 0; j < fitted_results[i].Length - 1; j++) txt += "    " + fitted_results[i][j].ToString("0.##e0" + "  ");
                     tmp_lbl.Text = txt;
@@ -3671,7 +3818,7 @@ namespace Isotope_fitting
             {
                 // 1. adjust corresponding fragment heights
                 double[] intensities = fitted_results[tmp_lbl.TabIndex];
-                int[] distroIdxs = powerSet_distroIdx[tmp_lbl.TabIndex];
+                int[] distroIdxs = powerSet[tmp_lbl.TabIndex];
                 int[] powerSetIdxs = powerSet[tmp_lbl.TabIndex];
                 ListView.CheckedListViewItemCollection checkedItems = frag_listView.CheckedItems;
                 // Performance: flag to disable refresh_plot multiple calls from factors_textChanged
