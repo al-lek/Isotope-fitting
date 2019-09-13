@@ -1390,8 +1390,10 @@ namespace Isotope_fitting
                 if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
             });
 
-            // sort the fragments list (global) beause it is mixed by multi-threading
+            // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+            // also restore indexes to match array position
+            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
 
             progress_display_stop();
             is_calc = false;
@@ -1834,6 +1836,7 @@ namespace Isotope_fitting
 
         private void generate_fit_results()
         {
+            sw1.Reset(); sw1.Start();
             // clear panel
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
 
@@ -1848,18 +1851,22 @@ namespace Isotope_fitting
             {
                 // get first and last mz of this fit, from the array that contains all the indexes (the longest)
                 int[] longest = all_fitted_sets[i].OrderBy(x => x.Length).Last();
-                fit_tree.Nodes.Add(longest.First().ToString() + " - " + longest.Last().ToString());
+                fit_tree.Nodes.Add(Fragments2[longest.First() - 1].Mz + " - " + Fragments2[longest.Last() - 1].Mz);
 
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
                     string tmp = "";
-                    for (int k = 0; k < all_fitted_results[i][j].Length; k++)
-                        tmp += all_fitted_results[i][j][k].ToString("0.###e0" + "  ");
+                    for (int k = 0; k < all_fitted_results[i][j].Length - 1; k++)
+                    {
+                        tmp += Fragments2[all_fitted_sets[i][j][k] - 1].Name + " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ");
+                    }
+                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.###e0" + "  ");
 
                     fit_tree.Nodes[i].Nodes.Add(tmp);
                 }                
             }
             fit_tree.EndUpdate();
+            sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
         }
 
         private void add_fit()
