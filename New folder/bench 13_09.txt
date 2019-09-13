@@ -12,8 +12,6 @@ Populate listView: 2015
 All data aligned: 23629
 Fitting: 72586
 
-
-
 load_experimental: 209
 post_load_actions: 52
 peak detect(M): 4088
@@ -26,4 +24,17 @@ Init frags: 131
 Populate listView: 2081
 All data aligned: 23374
 Fitting: 57307
+
+4-core RyZen3q, abcxyz 859 frags, fit 10 first
+load_experimental: 150
+post_load_actions: 34
+peak detect(M): 2695
+Import frags and generate X: 779
+Select frags: 94
+Resolytion from fragments: 5
+Envipat_Calcs_and_filter_byPPM(M): 45804
+Init frags: 76
+Populate listView: 1540
+All data aligned: 15374
+Fitting(M): 27326
 
