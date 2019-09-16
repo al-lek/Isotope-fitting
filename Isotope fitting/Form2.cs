@@ -1544,6 +1544,7 @@ namespace Isotope_fitting
             frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 100), Name = "frag_tree", Size = new Size(335, 900), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right};
             Controls.Add(frag_tree);
             frag_tree.BringToFront();
+            frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node.Name, e.Node.Checked); };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -1594,6 +1595,24 @@ namespace Isotope_fitting
 
             } while (d < peak_points[0].Count() - 1);
             return res;
+        }
+
+        private void frag_node_checkChanged(string idx_str, bool is_checked)
+        {
+            if (string.IsNullOrEmpty(idx_str)) ;
+
+            else
+            {
+                int idx = Convert.ToInt32(idx_str);
+
+                if (is_checked) selectedFragments.Add(idx + 1); // this list starts with 1, Fragments2 start with 0
+                else selectedFragments.Remove(idx + 1);
+
+                selectedFragments = selectedFragments.OrderBy(p => p).ToList();
+                Fragments2[idx].To_plot = is_checked;
+
+                refresh_iso_plot();
+            }
         }
 
         #endregion
@@ -1880,8 +1899,9 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
 
             // init tree view
-            fit_tree = new TreeView() { Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 20, bigPanel.Size.Height - 20) };
+            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 20, bigPanel.Size.Height - 20) };
             bigPanel.Controls.Add(fit_tree);
+            fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node.Name, e.Node.Checked); };
 
             // interpret fitted results
             fit_tree.BeginUpdate();
@@ -1901,18 +1921,58 @@ namespace Isotope_fitting
                     }
                     tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.###e0" + "  ");
 
-                    fit_tree.Nodes[i].Nodes.Add(tmp);
+                    fit_tree.Nodes[i].Nodes.Add(i.ToString() + " " + j.ToString(), tmp);
                 }                
             }
             fit_tree.EndUpdate();
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
         }
 
-        private void add_fit()
+        private void fit_node_checkChanged(string idx_str, bool is_checked)
         {
+            if (string.IsNullOrEmpty(idx_str)) ;
 
+            else
+            {
+                string[] idx_str_arr = idx_str.Split(' ');
+                int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+                int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
 
+                // find respective fragments in frag_tree and check or uncheck them
+                // also pass the fitted height o both Fragments2 and the node on the UI
+                List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+
+                for (int i = 0; i < all_fitted_sets[set_idx][set_pos_idx].Length; i++)
+                {
+                    int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;
+
+                    TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (curr_idx).ToString());
+                    double factor = all_fitted_results[set_idx][set_pos_idx][i];
+
+                    curr_node.Checked = is_checked;
+                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (factor * Fragments2[curr_idx].Fix * Fragments2[curr_idx].Centroid[0].Y).ToString();
+
+                    Fragments2[curr_idx].Factor = factor;
+                }                
+            }
         }
+
+        private List<TreeNode> get_all_nodes(TreeView tree)
+        {
+            // will return a list with all nodes of a tree. Works only for 2-level depth
+            List<TreeNode> res = new List<TreeNode>();
+
+            foreach (TreeNode base_node in tree.Nodes)
+                foreach (TreeNode sub_node in base_node.Nodes)
+                    res.Add(sub_node);
+
+            return res;
+        }
+
+
+
+
+
 
 
 
@@ -4397,8 +4457,7 @@ namespace Isotope_fitting
         private void Fitting_chkBox_CheckedChanged(object sender, EventArgs e)
         {
             refresh_iso_plot();
-        }
-        
+        }        
         private void loadFit_Btn_Click(object sender, EventArgs e)
         {
             reset_all();
@@ -4828,8 +4887,6 @@ namespace Isotope_fitting
                 refresh_iso_plot();
             }
         }
-
-
         #endregion
 
         #region Calculation Options

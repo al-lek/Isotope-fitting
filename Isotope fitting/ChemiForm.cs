@@ -641,7 +641,7 @@ namespace Isotope_fitting
         public double Y { get; set; }
         public PointPlot DeepCopy()
         {
-            PointPlot deepcopy = new PointPlot() { X=this.X,Y=this.Y};
+            PointPlot deepcopy = new PointPlot() { X=this.X, Y=this.Y };
             return deepcopy;
         }
     }
