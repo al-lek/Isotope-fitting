@@ -38,6 +38,7 @@ namespace Isotope_fitting
             this.plots_grpBox = new System.Windows.Forms.GroupBox();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
+            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
             this.mark_label = new System.Windows.Forms.Label();
             this.loadWd_Btn = new System.Windows.Forms.Button();
@@ -117,7 +118,6 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -200,6 +200,16 @@ namespace Isotope_fitting
             this.fit_grpBox.Size = new System.Drawing.Size(449, 396);
             this.fit_grpBox.TabIndex = 0;
             this.fit_grpBox.TabStop = false;
+            // 
+            // plotExp_chkBox
+            // 
+            this.plotExp_chkBox.AutoSize = true;
+            this.plotExp_chkBox.Location = new System.Drawing.Point(6, 12);
+            this.plotExp_chkBox.Name = "plotExp_chkBox";
+            this.plotExp_chkBox.Size = new System.Drawing.Size(66, 17);
+            this.plotExp_chkBox.TabIndex = 0;
+            this.plotExp_chkBox.Text = "plot exp.";
+            this.plotExp_chkBox.UseVisualStyleBackColor = true;
             // 
             // user_grpBox
             // 
@@ -343,7 +353,7 @@ namespace Isotope_fitting
             this.frag_listView.GridLines = true;
             this.frag_listView.HideSelection = false;
             this.frag_listView.LabelEdit = true;
-            this.frag_listView.Location = new System.Drawing.Point(557, 75);
+            this.frag_listView.Location = new System.Drawing.Point(562, 76);
             this.frag_listView.Name = "frag_listView";
             this.frag_listView.Size = new System.Drawing.Size(334, 606);
             this.frag_listView.TabIndex = 41;
@@ -1155,16 +1165,6 @@ namespace Isotope_fitting
             this.fitMin_Box.Size = new System.Drawing.Size(70, 20);
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
-            // 
-            // plotExp_chkBox
-            // 
-            this.plotExp_chkBox.AutoSize = true;
-            this.plotExp_chkBox.Location = new System.Drawing.Point(6, 12);
-            this.plotExp_chkBox.Name = "plotExp_chkBox";
-            this.plotExp_chkBox.Size = new System.Drawing.Size(66, 17);
-            this.plotExp_chkBox.TabIndex = 0;
-            this.plotExp_chkBox.Text = "plot exp.";
-            this.plotExp_chkBox.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 

@@ -131,7 +131,8 @@ namespace Isotope_fitting
         public event FittingCalcCompleted OnFittingCalcCompleted;
         public List<List<double[]>> all_fitted_results;
         public List<List<int[]>> all_fitted_sets;
-        public TreeView fit_tree;
+        public TreeView fit_tree, frag_tree;
+        public int frag_mzGroups = 40;
 
         Form6 frm6 = new Form6();
         #endregion
@@ -511,12 +512,11 @@ namespace Isotope_fitting
             sw1.Stop(); Debug.WriteLine("Init frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. rebuild frag_listView in UI
-            populate_frag_listView();
-            sw1.Stop(); Debug.WriteLine("Populate listView: " + sw1.ElapsedMilliseconds.ToString());
-            sw1.Reset(); sw1.Start();
+            //populate_frag_listView();
+            populate_frag_treeView();
+            sw1.Stop(); Debug.WriteLine("Populate frag tree: " + sw1.ElapsedMilliseconds.ToString());
             // 3. build the all_data_alligned structure
             recalculate_all_data_aligned();
-            sw1.Stop(); Debug.WriteLine("All data aligned: " + sw1.ElapsedMilliseconds.ToString());
             enable_UIcontrols("post calculations");
         }
 
@@ -1536,6 +1536,31 @@ namespace Isotope_fitting
             frag_listView.EndUpdate();
         }
 
+        private void populate_frag_treeView()
+        {
+            frag_listView.Visible = false;
+            // init tree view
+            frag_tree = null;       // for GC?
+            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 100), Name = "frag_tree", Size = new Size(335, 900), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right};
+            Controls.Add(frag_tree);
+            frag_tree.BringToFront();
+
+            // interpret fitted results
+            frag_tree.BeginUpdate();
+
+            for (int i = 0; i < Fragments2.Count; i++)
+            {
+                // group in mz windows
+                // first fragment in group, opens a new ggroup, and contributes to the group title
+                if (i % frag_mzGroups == 0) frag_tree.Nodes.Add(Fragments2[i].Mz + " - ");
+                // last fragment in group, contributes to the group title
+                if (i % frag_mzGroups == (frag_mzGroups - 1)) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
+
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + "  -  " + Fragments2[i].Centroid[0].Y.ToString());
+            }
+            frag_tree.EndUpdate();
+        }
+
         private float ppm_calculator(double centroid)
         {
             float res = 0f;
@@ -1590,12 +1615,19 @@ namespace Isotope_fitting
             }
 
             for (int i = start; i < all_data.Count; i++) { idxs.Add(i); }
-            all_data_aligned = align_distros(idxs, true, add);
+
+            Thread allign = new Thread(() => align_distros(idxs, true, add));
+            allign.Start();
+            
+            //all_data_aligned = align_distros(idxs, true, add);
             recalc = false;
         }
 
         private List<double[]> align_distros(List<int> distro_fragm_idxs, bool initial = false, bool add = false)
         {
+            sw1.Reset(); sw1.Start();
+
+            all_data_aligned.Clear();
             List<double[]> aligned_intensities = new List<double[]>();
 
             progress_display_start(all_data[0].Count, "Preparing data for fit...");
@@ -1605,23 +1637,25 @@ namespace Isotope_fitting
             {
                 // generate alligned (in m/z) isotope distributions at the same step as the experimental
                 // pickup each point in experimental and find (interpolate) the intensity of each fragment
-                for (int i = 0; i < all_data[0].Count; i++)
+                int progress = 0;
+                Parallel.For(0, all_data[0].Count, (i, state) =>
                 {
                     // one by one for all points
                     List<double> one_aligned_point = new List<double>();
 
                     // when adding new fragments, we dont need to start from the first. Just copy the already aligned frags.  
                     if (add)
-                        foreach (double o in all_data_aligned[i])
-                            one_aligned_point.Add(o);
-                    else
-                        one_aligned_point.Add(all_data[0][i][1]);
+                       foreach (double o in all_data_aligned[i])
+                           one_aligned_point.Add(o);
+                   else
+                       one_aligned_point.Add(all_data[0][i][1]);
 
-                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo  ta experimental ola ta x-->m/z
+                   double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo  ta experimental ola ta x-->m/z
 
+                    
                     for (int j = 0; j < distro_fragm_idxs.Count; j++)
-                    {
-                        int distro_idx = distro_fragm_idxs[j];
+                   {
+                       int distro_idx = distro_fragm_idxs[j];
 
                         // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
                         double aligned_value = 0.0;
@@ -1642,12 +1676,17 @@ namespace Isotope_fitting
                                 break;
                             }
                         }
-                        one_aligned_point.Add(aligned_value);
-                    }
-                    aligned_intensities.Add(one_aligned_point.ToArray());
+                       one_aligned_point.Add(aligned_value);
+                   }
+                    lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); }
 
-                    if (i % 5000 == 0 && i > 0) progress_display_update(i);
-                }
+                    Interlocked.Increment(ref progress);
+                    if (i % 5000 == 0 && i > 0) progress_display_update(progress);
+                });
+
+                // sort by mz the aligned intensities list (global) beause it is mixed by multi-threading
+                all_data_aligned = aligned_intensities.OrderBy(f => f[0]).ToList();
+                sw1.Stop(); Debug.WriteLine("All data aligned(M): " + sw1.ElapsedMilliseconds.ToString());
             }
             else
             {
@@ -1783,7 +1822,7 @@ namespace Isotope_fitting
                 if (last_bunch) break;
             }
 
-            sw1.Stop(); Debug.WriteLine("Fitting: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Stop(); Debug.WriteLine("Fitting(M): " + sw1.ElapsedMilliseconds.ToString());
             progress_display_stop();
 
             // 5. display results
