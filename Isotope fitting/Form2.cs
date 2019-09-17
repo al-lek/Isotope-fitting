@@ -183,7 +183,7 @@ namespace Isotope_fitting
                 OpenFileDialog expData = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
                 List<string> lista = new List<string>();
 
-                if (expData.ShowDialog() == DialogResult.OK)
+                if (expData.ShowDialog() != DialogResult.Cancel)
                 {
                     sw1.Reset(); sw1.Start();
                     StreamReader objReader = new StreamReader(expData.FileName);
@@ -483,7 +483,6 @@ namespace Isotope_fitting
         private void Calc_Btn_Click(object sender, EventArgs e)
         {
             fragments_and_calculations_sequence_A();
-            //Calc_Btn_Click2();
         }
 
         private void fragments_and_calculations_sequence_A()
@@ -497,7 +496,7 @@ namespace Isotope_fitting
             sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution
             calculate_fragments_resolution(selected_fragments);
-            sw1.Stop(); Debug.WriteLine("Resolytion from fragments: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
             // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
             Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
             envipat_properties.Start();
@@ -508,11 +507,10 @@ namespace Isotope_fitting
             GC.Collect();
             sw1.Reset(); sw1.Start();
             // 1. Pass Fragments info to all_data array (experimetal have already been added, in after loading actions)
-            initialize_fragments();
+            add_fragments_to_all_data();
             sw1.Stop(); Debug.WriteLine("Init frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. rebuild frag_listView in UI
-            //populate_frag_listView();
             populate_frag_treeView();
             sw1.Stop(); Debug.WriteLine("Populate frag tree: " + sw1.ElapsedMilliseconds.ToString());
             // 3. build the all_data_alligned structure
@@ -1450,7 +1448,7 @@ namespace Isotope_fitting
                     {
                         chem.Profile.Clear();
                         ChemiForm.Envelope(chem);
-                        add_fragment_toListView(chem, cen);
+                        add_fragment_to_Fragments2(chem, cen);
                     }
                 }
                 else
@@ -1462,11 +1460,11 @@ namespace Isotope_fitting
             }
             else
             {
-                add_fragment_toListView(chem, cen);
+                add_fragment_to_Fragments2(chem, cen);
             }        
         }
 
-        private void add_fragment_toListView(ChemiForm chem, List<PointPlot> cen)
+        private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen)
         {
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
@@ -1474,11 +1472,13 @@ namespace Isotope_fitting
                 Fragments2.Add(new FragForm() { Adduct = chem.Adduct, Charge = chem.Charge, FinalFormula = chem.FinalFormula, Deduct = chem.Deduct, Error = chem.Error,
                     Index = chem.Index, IndexTo = chem.IndexTo, InputFormula = chem.InputFormula, Ion = chem.Ion, Ion_type = chem.Ion_type, Machine = chem.Machine,
                     Multiplier = chem.Multiplier, Mz = chem.Mz, Radio_label = chem.Radio_label, Resolution = chem.Resolution, Factor = 1.0, Counter = new int(),
-                    To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = new double() });
+                    To_plot = false, Color = chem.Color, Name = chem.Name, ListName = new string[4], Fix = 1.0, Max_intensity = 0.0 });
 
                 Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Counter = Fragments2.Count;
+                Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
+                Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
 
                 if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
@@ -1490,12 +1490,12 @@ namespace Isotope_fitting
             }
         }
 
-        private void initialize_fragments()
+        private void add_fragments_to_all_data()
         {
-            // pass the envelope of each NEW fragment in Fragment2 to all data
+            // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
             if (all_data.Count == 0) { all_data.Add(new List<double[]>()); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
 
-            // 
+            // !!!needs rework for recalculating
             int existing_fragments = all_data.Count - 1;
             int new_fragments = Fragments2.Count - existing_fragments;
 
@@ -1507,33 +1507,9 @@ namespace Isotope_fitting
                 custom_colors.Add(Fragments2[i - 1].Color.ToColor().ToArgb());
 
                 all_data.Add(new List<double[]>());
-                all_data[i].Add(new double[] { Fragments2[i - 1].Profile[0].X, Fragments2[i - 1].Profile[0].Y });
-
                 for (int p = 0; p < Fragments2[i - 1].Profile.Count; p++)
                     all_data[i].Add(new double[] { Fragments2[i - 1].Profile[p].X, Fragments2[i - 1].Profile[p].Y });
-
-                //Fragments2[i - 1].Max_intensity = Fragments2[i - 1].Centroid[0].Y;
-                if (insert_exp) { Fragments2[i - 1].Fix = 0.2 * max_exp / 100.0; }
             }
-        }
-
-        private void populate_frag_listView()
-        {
-            // adds all matched fragments to frag_listView, rebuilds it from sctatch
-            frag_listView.BeginUpdate();
-            frag_listView.Items.Clear();
-
-            for (int i = 0; i < Fragments2.Count; i++)
-            {
-                var listViewItem = new ListViewItem(Fragments2[i].ListName);
-                listViewItem.SubItems.Add("1.0");//"factor" column
-                listViewItem.SubItems.Add(Fragments2[i].Counter.ToString());// "No" (aka code) column
-                listViewItem.SubItems.Add(Fragments2[i].Centroid[0].Y.ToString());// max centroid
-
-                frag_listView.Items.Add(listViewItem);
-            }
-
-            frag_listView.EndUpdate();
         }
 
         private void populate_frag_treeView()
@@ -1557,7 +1533,7 @@ namespace Isotope_fitting
                 // last fragment in group, contributes to the group title
                 if (i % frag_mzGroups == (frag_mzGroups - 1)) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + "  -  " + Fragments2[i].Centroid[0].Y.ToString());
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
             }
             frag_tree.EndUpdate();
         }
@@ -1611,13 +1587,14 @@ namespace Isotope_fitting
                 selectedFragments = selectedFragments.OrderBy(p => p).ToList();
                 Fragments2[idx].To_plot = is_checked;
 
-                refresh_iso_plot();
+                // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
+                if (!is_applying_fit) refresh_iso_plot();
             }
         }
 
         #endregion
 
-        #region Recalculate data aligned
+        #region 3.a Recalculate data aligned
 
         private void recalculate_all_data_aligned()
         {
@@ -1707,48 +1684,6 @@ namespace Isotope_fitting
                 all_data_aligned = aligned_intensities.OrderBy(f => f[0]).ToList();
                 sw1.Stop(); Debug.WriteLine("All data aligned(M): " + sw1.ElapsedMilliseconds.ToString());
             }
-            else
-            {
-                //efarmozetai MONO sta checked_mono_fragments
-                //start-->starting index in each window
-                //end-->ending index in each window
-                int w = selected_window;
-                int start = windowList[w].Starting;
-                int end = windowList[w].Ending;
-                // generate alligned (in m/z) isotope distributions at the same step as the experimental
-                // pickup each point in experimental and find (interpolate) the intensity of each fragment
-                for (int i = start; i < end + 1; i++) //(M)loop for all the experimental points count
-                {
-                    // one by one for all points
-                    List<double> one_aligned_point = new List<double>();
-
-                    // add experimental
-                    one_aligned_point.Add(all_data[0][i][1]);//(M)prosthetei apo ta experimental data ola ta y-->intensity
-
-                    //double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ola ta experimental ola ta x-->m/z
-
-                    for (int j = 0; j < distro_fragm_idxs.Count; j++)
-                    {
-                        int distro_idx = distro_fragm_idxs[j];
-                        double aligned_value = all_data_aligned[i][distro_idx];
-                        //// interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
-                        //double aligned_value = 0.0;
-
-                        //for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
-                        //{
-                        //    if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
-                        //    {
-                        //        aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
-                        //        break;
-                        //    }
-                        //}
-                        one_aligned_point.Add(aligned_value);
-                    }
-                    aligned_intensities.Add(one_aligned_point.ToArray());
-                    tlPrgBr.Value++;
-                }
-
-            }
             progress_display_stop();
             return aligned_intensities;
         }
@@ -1770,7 +1705,7 @@ namespace Isotope_fitting
 
                 // build the point with exp and all frag, but keep it only if any frag is NON zero
                 one_aligned_point.Add(all_data_aligned[i][0]);
-
+                
                 for (int k = 0; k < no_of_selected; k++)
                 {
                     one_aligned_point.Add(all_data_aligned[i][distro_fragm_idxs[k]]);
@@ -1794,8 +1729,6 @@ namespace Isotope_fitting
 
         private void fit_Btn_Click(object sender, EventArgs e)
         {            
-            if (window_count == 1 && !string.IsNullOrEmpty(fitStep_Box.Text)) { step_Fitting(); if (!is_loading && !is_calc) { refresh_iso_plot(); } }
-
             //Thread fit = new Thread(start_fit);
             //fit.Start();
 
@@ -1803,7 +1736,6 @@ namespace Isotope_fitting
             fit.Start();
 
             saveFit_Btn.Enabled = true;
-            //Fitting_chkBox.Checked = true;
         }
 
         private void auto_fit()
@@ -1833,6 +1765,7 @@ namespace Isotope_fitting
                 for (int j = 0; j < fit_bunch; j++)
                     idx.Add(j + i + 1);
 
+                // run the fit
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(idx);
                 all_fitted_results.Add(res);
                 all_fitted_sets.Add(set);
@@ -1840,7 +1773,6 @@ namespace Isotope_fitting
                 progress_display_update(i + 1);
                 if (last_bunch) break;
             }
-
             sw1.Stop(); Debug.WriteLine("Fitting(M): " + sw1.ElapsedMilliseconds.ToString());
             progress_display_stop();
 
@@ -1867,10 +1799,11 @@ namespace Isotope_fitting
             Parallel.For(0, set.Count, (i, state) =>
             {
                 // generate a new list containing only the fragments intensities of the subSet, and the experimental
+                // intensities are fixed in alligned_intensities for all. Fragments height is regulated by each one's Factor
                 List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(set[i].ToArray());
 
                 // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                List<double> UI_intensities = get_UI_intensities(set[i], experimental_max, true);
+                List<double> UI_intensities = get_UI_intensities(set[i]);
 
                 // call optimizer for the specific subset of fragments
                 double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities);
@@ -1878,7 +1811,7 @@ namespace Isotope_fitting
             });
 
             // sort res and powerSet by least SSE
-            // res is a list of doubles. res = [frag1_int, frag2_int,...., SSE]
+            // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE]. 
             double[][] tmp1 = res.ToArray();
             //int[][] tmp2 = powerSet.ToArray();
             int[][] tmp2 = set_copy.ToArray();
@@ -1890,6 +1823,59 @@ namespace Isotope_fitting
             set = tmp2.ToList();
 
             return (res, set);
+        }
+
+        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities)
+        {
+            // 1. initialize needed params
+            // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
+            // UI_intensities is initial values to make a starting point
+            int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
+
+            double[] coeficients = UI_intensities.ToArray();
+            double[] bndl = new double[distros_num];
+            double[] bndh = new double[distros_num];
+            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i] * 1e2; }
+
+            double epsx = 0.000001;
+            int maxits = 10000;
+            alglib.minlmstate state;
+            alglib.minlmreport rep;
+
+            alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
+            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
+            alglib.minlmsetcond(state, epsx, maxits);
+            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities_subSet);
+            alglib.minlmresults(state, out coeficients, out rep);
+
+            // 2. save result
+            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
+            double[] result = new double[distros_num + 1];
+            for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
+            result[distros_num] = state.fi[0];
+
+            return result;
+        }
+
+        public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
+        {
+            // SSE, objective to minimize
+            func[0] = 0;
+
+            List<double[]> exp_and_distros = aligned_intensities as List<double[]>;
+
+            for (int i = 0; i < exp_and_distros.Count; i++)
+            {
+                double distros_sum = 0.0;
+
+                // get the sum of all distros * the respective factor
+                // in params to fit x[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
+                for (int j = 0; j < x.Length; j++)
+                    distros_sum += x[j] * exp_and_distros[i][j + 1];
+
+                // SSE
+                func[0] += Math.Pow((exp_and_distros[i][0] - distros_sum), 2);
+            }
         }
 
         private void generate_fit_results()
@@ -1930,6 +1916,10 @@ namespace Isotope_fitting
 
         private void fit_node_checkChanged(string idx_str, bool is_checked)
         {
+            // will search in fragments tree to find and enable the corresponding fragments
+            // Performance: avoid unecessary multiple replots, if selected fit has 2 or more fragments
+            is_applying_fit = true;
+
             if (string.IsNullOrEmpty(idx_str)) ;
 
             else
@@ -1949,12 +1939,16 @@ namespace Isotope_fitting
                     TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (curr_idx).ToString());
                     double factor = all_fitted_results[set_idx][set_pos_idx][i];
 
-                    curr_node.Checked = is_checked;
-                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (factor * Fragments2[curr_idx].Fix * Fragments2[curr_idx].Centroid[0].Y).ToString();
-
                     Fragments2[curr_idx].Factor = factor;
+                    curr_node.Checked = is_checked;
+                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString();                   
                 }                
             }
+            is_applying_fit = false;
+
+            // normaly, refresh is called from fragments list, but because of multiple checked events it was disabled
+            // it will be called once, now that all coresponding fragments are checked
+            refresh_iso_plot();
         }
 
         private List<TreeNode> get_all_nodes(TreeView tree)
@@ -1968,9 +1962,18 @@ namespace Isotope_fitting
 
             return res;
         }
+        
+        private List<double> get_UI_intensities(int[] subSet)
+        {
+            // is called from fit to pass a good starting height to the optimizer
+            // is called frmo plot to get the last selected fitted height of fragments
+            List<double> UI_intensities = new List<double>();
 
+            for (int i = 0; i < subSet.Length; i++)
+                UI_intensities.Add(Fragments2[subSet[i] - 1].Factor * Fragments2[subSet[i] - 1].Max_intensity);
 
-
+            return UI_intensities;
+        }
 
 
 
@@ -2090,7 +2093,7 @@ namespace Isotope_fitting
                 List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(powerSet[i].ToArray());
 
                 // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                List<double> UI_intensities = get_UI_intensities(powerSet[i], experimental_max, true);
+                List<double> UI_intensities = get_UI_intensities(powerSet[i]);
 
                 // call optimizer for the specific subset of fragments
                 double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities);
@@ -2119,57 +2122,6 @@ namespace Isotope_fitting
             powerSet = tmp2.ToList();
 
             return res;
-        }
-        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities)
-        {
-            // 1. initialize needed params
-            // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
-            // UI_intensities is initial values to make a starting point
-            int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
-
-            double[] coeficients = UI_intensities.ToArray();
-            double[] bndl = new double[distros_num];
-            double[] bndh = new double[distros_num];
-            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-4; bndh[i] = coeficients[i] * 1e3; }
-
-            double epsx = 0.000001;
-            int maxits = 10000;
-            alglib.minlmstate state;
-            alglib.minlmreport rep;
-
-            alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
-            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
-            alglib.minlmsetcond(state, epsx, maxits);
-            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities_subSet);
-            alglib.minlmresults(state, out coeficients, out rep);
-
-            // 2. save result
-            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
-            double[] result = new double[distros_num + 1];
-            for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
-            result[distros_num] = state.fi[0];
-
-            return result;
-        }
-        public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
-        {
-            // SSE, objective to minimize
-            func[0] = 0;
-
-            List<double[]> exp_and_distros = aligned_intensities as List<double[]>;
-
-            for (int i = 0; i < exp_and_distros.Count; i++)
-            {
-                double distros_sum = 0.0;
-
-                // get the sum of all distros * the respective factor
-                // in params to fit x[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
-                for (int j = 0; j < x.Length; j++)
-                    distros_sum += x[j] * exp_and_distros[i][j + 1];
-
-                // SSE
-                func[0] += Math.Pow((exp_and_distros[i][0] - distros_sum), 2);
-            }
         }
         private bool validate_data()
         {
@@ -2494,7 +2446,7 @@ namespace Isotope_fitting
                         aligned_intensities_subSet.Add(tmp);
                     }
                     // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true);
+                    List<double> UI_intensities = get_UI_intensities(subSet);
 
                     // call optimizer for the specific subset of fragments
                     res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
@@ -2556,7 +2508,8 @@ namespace Isotope_fitting
                         aligned_intensities_subSet.Add(tmp);
                     }
                     // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                    List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true, true, w);
+                    //List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true, true, w);
+                    List<double> UI_intensities = get_UI_intensities(subSet);
 
                     // call optimizer for the specific subset of fragments
                     res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
@@ -2604,7 +2557,7 @@ namespace Isotope_fitting
                 List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(subSet.ToArray());
 
                 // get the intensities of the fragments, to pass them to the optimizer as a better starting point
-                List<double> UI_intensities = get_UI_intensities(subSet, experimental_max, true);
+                List<double> UI_intensities = get_UI_intensities(subSet);
 
                 // call optimizer for the specific subset of fragments
                 res.Add(estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities));
@@ -2659,6 +2612,177 @@ namespace Isotope_fitting
         }
 
         #endregion
+
+        #region refresh plot
+        private void refresh_iso_plot()
+        {
+            //(M) to text box pou dexetai einai ekeino pou tou exoun ginei paste ta data pou tha plotaroume
+
+            // 0.a gather info on which fragments are selected to plot, and their respective intensities
+            List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
+            List<double> UI_intensities = get_UI_intensities(to_plot.ToArray()); //(M)epistrefei list me tous factors
+
+            // to_plot and UI_intensities contain ONLY the selected indexes and intensities
+
+            // 1b. reset iso plot
+            reset_iso_plot();//(M)ftiaxnei series gia OLA ta stoixeia tou all_data(experimental kai fragments2) , to fit kai to residual
+
+            if (insert_exp == false)
+            {
+                for (int i = 0; i < to_plot.Count; i++)
+                {
+                    int curr_idx = to_plot[i];
+                    if (all_data.Count != 0)
+                    {
+                        // get name of each line to be ploted
+                        if (curr_idx == 0) { }
+                        else
+                        {
+                            string name_str = Fragments2[curr_idx - 1].Name;
+                            (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+                            for (int j = 0; j < all_data[curr_idx].Count; j++)
+                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
+                        }
+                    }
+                }
+                invalidate_all();
+                return;
+            }
+            
+
+            // 1a. rerun calculations for fit and residual
+
+            //(M)ola ta 'to_plot' thelw na tou valw,apo ola ta parathira
+            recalculate_fitted_residual(to_plot);
+
+            // 0.b Add the experimental to plot if selected
+            if (plotExp_chkBox.Checked)
+            {
+                (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
+                for (int j = 0; j < all_data_aligned.Count; j++)
+                    (iso_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]));
+            }
+
+            if (to_plot.Count == 0) return;
+
+            // 2. replot all isotopes
+            for (int i = 0; i < to_plot.Count; i++)
+            {
+                int curr_idx = to_plot[i];
+                if (all_data.Count != 0)
+                {
+                    // get name of each line to be ploted
+                    string name_str = Fragments2[curr_idx - 1].Name;
+                    (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+                    if (Fitting_chkBox.Checked)
+                    {
+                        for (int j = 0; j < all_data[0].Count; j++)
+                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
+                    }
+                    else
+                    {
+                        for (int j = 0; j < all_data[curr_idx].Count; j++)
+                        {
+                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
+                        }
+                    }                    
+                }
+            }
+
+            // 3. fitted plot (if more than 2 fragments(except the experimental))
+            if (summation.Count > 0)//(M)to summation ypologizetai mono otan to_plot.Count>=2
+                if (Fitting_chkBox.Checked)
+                    for (int j = 0; j < summation.Count; j++)
+                        (iso_plot.Model.Series[all_data.Count] as LineSeries).Points.Add(new OxyPlot.DataPoint(summation[j][0], summation[j][1]));
+
+            // 4. residual plot
+            if (residual.Count > 0)
+                for (int j = 0; j < residual.Count; j++)
+                    (res_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(residual[j][0], residual[j][1]));
+
+            invalidate_all();
+        }
+        private void reset_iso_plot()
+        {
+            iso_plot.Model.Series.Clear();
+
+            for (int i = 0; i < all_data.Count; i++)
+            {
+                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = get_fragment_color(i) };
+                if (i == 0) tmp.StrokeThickness = 1;
+                iso_plot.Model.Series.Add(tmp);
+            }
+            if (insert_exp == true)
+            {
+                LineSeries fit = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black, LineStyle = LineStyle.Dot };
+                iso_plot.Model.Series.Add(fit);
+            }
+            res_plot.Model.Series.Clear();
+            if (insert_exp == true)
+            {
+                LineSeries res = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black };
+                res_plot.Model.Series.Add(res);
+            }
+        }
+        private void recalculate_fitted_residual(List<int> to_plot)
+        {
+            // calculate addition of selected fragments, and the respective residual
+            // it is always called on every refresh of the plot 
+            // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
+            // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
+            // shallow copy to_plot and UI_intensities so as not to fuck up original Lists
+
+
+            List<int> plot_idxs = new List<int>(to_plot);
+            //List<double> intensities = new List<double>(UI_intensities);
+            summation.Clear();
+            residual.Clear();
+
+            // 1. calculate addition of fragments
+            
+            if (plot_idxs.Count >= 1)
+            {
+                for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
+                {
+                    double intensity = 0.0;
+
+                    for (int j = 0; j < plot_idxs.Count; j++)
+                        intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
+
+                    summation.Add(new double[] { all_data[0][i][0], intensity });
+
+                    residual.Add(new double[] { all_data[0][i][0], all_data[0][i][1] - intensity });
+                }
+            }
+
+            // 3. calculate residual
+            
+            //if (plot_idxs.Count >= 2)
+            //{
+            //    // this case is for many fragmants (addition)
+            //    for (int i = 0; i < summation.Count; i++)
+            //        residual.Add(new double[] { summation[i][0], all_data_aligned[i][0] - summation[i][1] });
+            //}
+            //else if (plot_idxs.Count == 1)
+            //{
+            //    // this case is for one fragment only
+            //    for (int i = 0; i < all_data_aligned.Count; i++)
+            //        residual.Add(new double[] { all_data[0][i][0], all_data_aligned[i][0] - all_data_aligned[i][plot_idxs[0]] * intensities[0] });
+            //}
+        }
+        private void invalidate_all()
+        {
+            iso_plot.InvalidatePlot(true);
+            res_plot.InvalidatePlot(true);
+        }
+        private OxyColor get_fragment_color(int idx)
+        {
+            //idx is the all_data structure index not the Fragments2 index
+            OxyColor clr = OxyColor.FromUInt32((uint)custom_colors[idx]);
+            return clr;
+        }
+        #endregion
+
 
         #region OxyPlot
         private void Initialize_Oxy()
@@ -3666,7 +3790,7 @@ namespace Isotope_fitting
             custom_colors.Clear();
             all_data.Clear();
         }
-        private List<double> get_UI_intensities(int[] subSet, double max = 1.0, bool optimizer_default = false,bool window=false,int w=1)
+        private List<double> get_UI_intensities2(int[] subSet, double max = 1.0, bool optimizer_default = false,bool window=false,int w=1)
         {
             //(Μ)to subset einai to to_plot se array to opoio perieei touw indexes tvn epilegmenvn fragments
 
@@ -5006,190 +5130,27 @@ namespace Isotope_fitting
 
         #endregion
       
-        #region refresh plot
-        private void refresh_iso_plot()
-        {
-            //(M) to text box pou dexetai einai ekeino pou tou exoun ginei paste ta data pou tha plotaroume
-
-            // 0.a gather info on which fragments are selected to plot, and their respective intensities
-            List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
-            List<double> UI_intensities = get_UI_intensities(to_plot.ToArray()); //(M)epistrefei list me tous factors
-
-            // 0.b Add the experimental to plot if selected
-            if (plotExp_chkBox.Checked)
-            {
-                to_plot.Insert(0, 0);
-                UI_intensities.Insert(0, 1.0);
-            }
-
-            // to_plot and UI_intensities contain ONLY the selected indexes and intensities
-
-            // 1b. reset iso plot
-            reset_iso_plot();//(M)ftiaxnei series gia OLA ta stoixeia tou all_data(experimental kai fragments2) , to fit kai to residual
-
-            if (insert_exp == false)
-            {
-                for (int i = 0; i < to_plot.Count; i++)
-                {
-                    int curr_idx = to_plot[i];
-                    if (all_data.Count != 0)
-                    {
-                        // get name of each line to be ploted
-                        if (curr_idx == 0) { }
-                        else
-                        {
-                            string name_str = Fragments2[curr_idx - 1].Name;
-                            (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
-                            for (int j = 0; j < all_data[curr_idx].Count; j++)
-                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
-                        }
-                    }
-                }
-                invalidate_all();
-                return;
-            }
-            if (to_plot.Count == 0) return;
-
-            // 1a. rerun calculations for fit and residual
-
-            //(M)ola ta 'to_plot' thelw na tou valw,apo ola ta parathira
-            recalculate_fitted_residual(to_plot, UI_intensities);
-
-            ////for experimental data only
-            //(iso_plot.Model.Series[0] as LineSeries).Title ="Exp" ;
-            //for (int j = 0; j < all_data_aligned.Count; j++)
-            //    (iso_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[0][j][0], UI_intensities[i] * all_data_aligned[j][0]));
-
-            // 2. replot all isotopes
-            for (int i = 0; i < to_plot.Count; i++)
-            {
-                int curr_idx = to_plot[i];
-                if (all_data.Count != 0)
-                {
-                    // get name of each line to be ploted
-                    if (curr_idx == 0)
-                    {
-                        (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
-                        for (int j = 0; j < all_data[curr_idx].Count; j++)
-                        {
-                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], UI_intensities[i] * all_data[curr_idx][j][1]));
-                        }
-                    }
-                    else
-                    {
-                        string name_str = Fragments2[curr_idx - 1].Name;
-                        (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
-                        if (Fitting_chkBox.Checked)
-                        {
-                            for (int j = 0; j < all_data[0].Count; j++)
-                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[0][j][0], UI_intensities[i] * all_data_aligned[j][curr_idx]));
-                        }
-                        else
-                        {
-                            for (int j = 0; j < all_data[curr_idx].Count; j++)
-                            {
-                                (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new OxyPlot.DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Fix * UI_intensities[i] * all_data[curr_idx][j][1]));
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 3. fitted plot (if more than 2 fragments(except the experimental))
-            if (summation.Count > 0)//(M)to summation ypologizetai mono otan to_plot.Count>=2
-                if (Fitting_chkBox.Checked)
-                    for (int j = 0; j < summation.Count; j++)
-                        (iso_plot.Model.Series[all_data.Count] as LineSeries).Points.Add(new OxyPlot.DataPoint(summation[j][0], summation[j][1]));
-
-            // 4. residual plot
-            if (residual.Count > 0)
-                for (int j = 0; j < residual.Count; j++)
-                    (res_plot.Model.Series[0] as LineSeries).Points.Add(new OxyPlot.DataPoint(residual[j][0], residual[j][1]));
-
-            invalidate_all();
-        }
-        private void reset_iso_plot()
-        {
-            iso_plot.Model.Series.Clear();
-
-            for (int i = 0; i < all_data.Count; i++)
-            {
-                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = get_fragment_color(i) };
-                if (i == 0) tmp.StrokeThickness = 1;
-                iso_plot.Model.Series.Add(tmp);
-            }
-            if (insert_exp == true)
-            {
-                LineSeries fit = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black, LineStyle = LineStyle.Dot };
-                iso_plot.Model.Series.Add(fit);
-            }
-            res_plot.Model.Series.Clear();
-            if (insert_exp == true)
-            {
-                LineSeries res = new LineSeries() { StrokeThickness = 2, Color = OxyColors.Black };
-                res_plot.Model.Series.Add(res);
-            }
-        }
-        private void recalculate_fitted_residual(List<int> to_plot, List<double> UI_intensities)
-        {
-            // calculate addition of selected fragments, and the respective residual
-            // it is always called on every refresh of the plot 
-            // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
-            // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
-            // shallow copy to_plot and UI_intensities so as not to fuck up original Lists
-
-            //
-            //(M)edw lew na tou vazw ola ta dedomena apo ola ta parathira na ta plotarei,eksallou apla me factors paizei
-            //
-
-            List<int> plot_idxs = new List<int>(to_plot);
-            List<double> intensities = new List<double>(UI_intensities);
-            if (plot_idxs[0] == 0) { plot_idxs.RemoveAt(0); intensities.RemoveAt(0); }
-            // 1. calculate addition of fragments
-            summation.Clear();
-            if (plot_idxs.Count >= 2)
-            {
-                for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
-                {
-                    double intensity = 0.0;
-
-                    for (int j = 0; j < plot_idxs.Count; j++)
-                        intensity += all_data_aligned[i][plot_idxs[j]] * intensities[j];
-
-                    summation.Add(new double[] { all_data[0][i][0], intensity });
-                }
-            }
-
-            // 3. calculate residual
-            residual.Clear();
-            if (plot_idxs.Count >= 2)
-            {
-                // this case is for many fragmants (addition)
-                for (int i = 0; i < summation.Count; i++)
-                    residual.Add(new double[] { summation[i][0], all_data_aligned[i][0] - summation[i][1] });
-            }
-            else if (plot_idxs.Count == 1)
-            {
-                // this case is for one fragment only
-                for (int i = 0; i < all_data_aligned.Count; i++)
-                    residual.Add(new double[] { all_data[0][i][0], all_data_aligned[i][0] - all_data_aligned[i][plot_idxs[0]] * intensities[0] });
-            }
-        }
-        private void invalidate_all()
-        {
-            iso_plot.InvalidatePlot(true);
-            res_plot.InvalidatePlot(true);
-        }
-        private OxyColor get_fragment_color(int idx)
-        {
-            //idx is the all_data structure index not the Fragments2 index
-            OxyColor clr = OxyColor.FromUInt32((uint)custom_colors[idx]);
-            return clr;
-        }
-        #endregion
 
 
         #region unused_code
+        //private void populate_frag_listView()
+        //{
+        //    // adds all matched fragments to frag_listView, rebuilds it from sctatch
+        //    frag_listView.BeginUpdate();
+        //    frag_listView.Items.Clear();
+
+        //    for (int i = 0; i < Fragments2.Count; i++)
+        //    {
+        //        var listViewItem = new ListViewItem(Fragments2[i].ListName);
+        //        listViewItem.SubItems.Add("1.0");//"factor" column
+        //        listViewItem.SubItems.Add(Fragments2[i].Counter.ToString());// "No" (aka code) column
+        //        listViewItem.SubItems.Add(Fragments2[i].Centroid[0].Y.ToString());// max centroid
+
+        //        frag_listView.Items.Add(listViewItem);
+        //    }
+        //    frag_listView.EndUpdate();
+        //}
+
         //private void Calc_Btn_Click2()
         //{
         //    sw1.Reset(); sw1.Start();

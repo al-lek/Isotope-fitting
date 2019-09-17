@@ -886,7 +886,6 @@ namespace Isotope_fitting
                 this.error = value;
             }
         }
-
         public CompoundMulti Monoisotopic
         {
             get
