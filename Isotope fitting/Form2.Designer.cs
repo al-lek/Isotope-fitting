@@ -1030,7 +1030,6 @@ namespace Isotope_fitting
             this.fit_all_Btn.TabIndex = 47;
             this.fit_all_Btn.Text = "Fit all";
             this.fit_all_Btn.UseVisualStyleBackColor = true;
-            this.fit_all_Btn.Click += new System.EventHandler(this.fit_all_Btn_Click);
             // 
             // stepRange_Lbl
             // 
