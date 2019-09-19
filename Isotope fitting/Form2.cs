@@ -110,6 +110,7 @@ namespace Isotope_fitting
 
 
         Stopwatch sw1 = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
         ProgressBar tlPrgBr;
         Label prg_lbl;
         int max_fragment_charge = 0;
@@ -1473,8 +1474,9 @@ namespace Isotope_fitting
             progress_display_stop();
             is_calc = false;
 
-            MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
+            Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
+            MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
 
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
@@ -1516,29 +1518,24 @@ namespace Isotope_fitting
             ChemiForm.Vdetect(chem);
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
-            if (insert_exp == true)
-            {
-                chem.Resolution = ppm_calculator(cen[0].X);
-                if (chem.Resolution != 0f)
-                {
-                    if (ppm_calculator(cen[1].X) != 0f || (cen.Count() > 2 && ppm_calculator(cen[2].X) != 0f))
-                    {
-                        chem.Profile.Clear();
-                        ChemiForm.Envelope(chem);
-                        add_fragment_to_Fragments2(chem, cen);
-                    }
-                }
-                else
-                {
-                    // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-                    chem.Profile.Clear();
-                    chem.Points.Clear();
-                }
-            }
-            else
-            {
-                add_fragment_to_Fragments2(chem, cen);
-            }
+            // case where there is no experimental data
+            if (!insert_exp) { add_fragment_to_Fragments2(chem, cen); return; }
+
+            // MAIN decesion algorithm
+            bool fragment_is_canditate = decision_algorithm(chem, cen);
+
+
+            //double tmp = ppm_calculator(cen[0].X);
+            //chem.Resolution = (float)tmp;
+            //if (tmp != 0.0)
+            //{
+            //    if (ppm_calculator(cen[1].X) != 0.0 || (cen.Count() > 2 && ppm_calculator(cen[2].X) != 0.0))
+            //    {
+            //        chem.Profile.Clear();
+            //        ChemiForm.Envelope(chem);
+            //        add_fragment_to_Fragments2(chem, cen);
+            //    }
+            //}
         }
 
         private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen)
@@ -1637,41 +1634,6 @@ namespace Isotope_fitting
             frag_tree.EndUpdate();
         }
 
-        private float ppm_calculator(double centroid)
-        {
-            float res = 0f;
-            double ppm = 0.0;
-            double diff = 0.0;
-            int d = 1;
-            if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
-            {
-                ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
-                if (ppm < ppmError) { res = (float)peak_points[0][3]; return res; }
-                else return res;
-            }
-
-            do
-            {
-                diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                while (diff < 0)
-                {
-                    d++;
-                    diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                }
-                diff = peak_points[d][1] + peak_points[d][4] - centroid;
-                if (diff >= 0)
-                {
-                    ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d][3]; return res; }
-                    ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d - 1][3]; return res; }
-                    else return res;
-                }
-
-            } while (d < peak_points[0].Count() - 1);
-            return res;
-        }
-
         private void frag_node_checkChanged(string idx_str, bool is_checked)
         {
             if (string.IsNullOrEmpty(idx_str)) ;
@@ -1690,6 +1652,77 @@ namespace Isotope_fitting
                 if (!is_applying_fit) refresh_iso_plot();
             }
         }
+
+
+
+
+
+
+        private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
+        {
+            // all the decisions if a fragment is canidate for fitting
+            bool fragment_is_canditate = false;
+
+
+            //double 
+
+            //double tmp = ppm_calculator(cen[0].X);
+            //chem.Resolution = (float)tmp;
+            //if (tmp != 0.0)
+            //{
+            //    if (ppm_calculator(cen[1].X) != 0.0 || (cen.Count() > 2 && ppm_calculator(cen[2].X) != 0.0))
+            //    {
+            //        chem.Profile.Clear();
+            //        ChemiForm.Envelope(chem);
+            //        add_fragment_to_Fragments2(chem, cen);
+            //    }
+            //}
+
+            if (!fragment_is_canditate)
+            {
+                //chem.Resolution =
+                //chem.Profile.Clear();
+                //ChemiForm.Envelope(chem);
+                //add_fragment_to_Fragments2(chem, cen);
+            }
+
+
+
+            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
+            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); }
+
+            return fragment_is_canditate;
+        }
+
+        private double ppm_calculator(double centroid)
+        {
+            double exp_cen, curr_diff, ppm;
+
+            int closest_idx = 0;
+            double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
+
+
+            for (int i = 1; i < peak_points.Count; i++)
+            {
+                exp_cen = peak_points[i][1] + peak_points[i][4];
+                curr_diff = Math.Abs(exp_cen - centroid);
+
+                if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+                else
+                    break;
+            }
+
+            exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
+            ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
+            if (ppm < ppmError)
+                return peak_points[0][3];
+            else
+                return 0.0;
+        }
+
+
+
+
 
         #endregion
 
@@ -4438,6 +4471,41 @@ namespace Isotope_fitting
                 refresh_iso_plot();
             }
         }
+        private float ppm_calculator3(double centroid)
+        {
+            float res = 0f;
+            double ppm = 0.0;
+            double diff = 0.0;
+            int d = 1;
+            if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
+            {
+                ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
+                if (ppm < ppmError) { res = (float)peak_points[0][3]; return res; }
+                else return res;
+            }
+
+            do
+            {
+                diff = peak_points[d][1] + peak_points[d][4] - centroid;
+                while (diff < 0)
+                {
+                    d++;
+                    diff = peak_points[d][1] + peak_points[d][4] - centroid;
+                }
+                diff = peak_points[d][1] + peak_points[d][4] - centroid;
+                if (diff >= 0)
+                {
+                    ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
+                    if (ppm < ppmError) { res = (float)peak_points[d][3]; return res; }
+                    ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
+                    if (ppm < ppmError) { res = (float)peak_points[d - 1][3]; return res; }
+                    else return res;
+                }
+
+            } while (d < peak_points[0].Count() - 1);
+            return res;
+        }
+
         #endregion
 
         #region Calculation Options
