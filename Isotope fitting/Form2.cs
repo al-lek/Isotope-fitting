@@ -621,6 +621,10 @@ namespace Isotope_fitting
         public void fragments_and_calculations_sequence_B()
         {
             GC.Collect();
+            all_data.RemoveRange(1, all_data.Count - 1);
+            all_data_aligned.Clear();
+            GC.Collect();
+
             sw1.Reset(); sw1.Start();
             // 1. Pass Fragments info to all_data array (experimetal have already been added, in after loading actions)
             add_fragments_to_all_data();
@@ -1663,8 +1667,8 @@ namespace Isotope_fitting
                 // last fragment in group, contributes to the group title
                 if (i % frag_mzGroups == (frag_mzGroups - 1)) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + 
-                                                    "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0") + "  -  " + Fragments2[i].PPM_Error.ToString("0.##"));
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
             }
             frag_tree.EndUpdate();
         }
@@ -2868,6 +2872,32 @@ namespace Isotope_fitting
         {
             if (str == "True") return true;
             else return false;
+        }
+
+        private int FindClosestPoint(double val, List<Double> list)
+        {
+            int max = list.Count;
+            int min = 0;
+            int index = max / 2;
+
+            while (max - min > 1)
+            {
+                if (val < list[index])
+                    max = index;
+                else if (val > list[index])
+                    min = index;
+                else
+                    return index;
+
+                index = (max - min) / 2 + min;
+            }
+
+            if (max != list.Count &&
+                    Math.Abs(list[max] - val) < Math.Abs(list[min] - val))
+            {
+                return max;
+            }
+            return min;
         }
 
         #endregion
