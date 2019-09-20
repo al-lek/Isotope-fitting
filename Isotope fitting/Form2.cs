@@ -131,6 +131,7 @@ namespace Isotope_fitting
         public int frag_mzGroups = 40;
         int fit_bunch = 6;
         int fit_cover = 2;
+        bool[] selection_rule = new bool[] { false, true, false, false, false, false };
         #endregion
 
 
@@ -186,8 +187,30 @@ namespace Isotope_fitting
             NumericUpDown fitCover_numUD = new NumericUpDown { Name = "fitCover_numUD", Minimum = 0, Value = fit_cover, Location = new Point(140, 145), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             fitCover_numUD.ValueChanged += (s, e) => { fit_cover = (int)fitCover_numUD.Value; save_preferences(); };
 
-            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, fitBunch_lbl, fitBunch_numUD, fitCover_lbl, fitCover_numUD });
+            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intence", Location = new Point(10, 185), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
+            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intence", Location = new Point(10, 210), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
+            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intence", Location = new Point(10, 235), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
+            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intence", Location = new Point(130, 185), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
+            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intence", Location = new Point(130, 210), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
+            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intence", Location = new Point(130, 235), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
+
+            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, fitBunch_lbl, fitBunch_numUD,
+                fitCover_lbl, fitCover_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });
+
+            foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
+
             params_and_pref.Show();
+        }
+
+        private void update_peakSelection_rule(Form options_form)
+        {
+            // update selection rule from all radiobuttons
+            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
+
+            foreach (RadioButton rdBtn in rdBtns)
+                selection_rule[rdBtn.TabIndex] = rdBtn.Checked;
+
+            save_preferences();
         }
 
         private void load_preferences()
@@ -207,6 +230,13 @@ namespace Isotope_fitting
                     frag_mzGroups = Convert.ToInt32(preferences[2].Split(':')[1]);
                     fit_bunch = Convert.ToInt32(preferences[3].Split(':')[1]);
                     fit_cover = Convert.ToInt32(preferences[4].Split(':')[1]);
+
+                    selection_rule[0] = string_to_bool(preferences[5].Split(':')[1]);
+                    selection_rule[1] = string_to_bool(preferences[6].Split(':')[1]);
+                    selection_rule[2] = string_to_bool(preferences[7].Split(':')[1]);
+                    selection_rule[3] = string_to_bool(preferences[8].Split(':')[1]);
+                    selection_rule[4] = string_to_bool(preferences[9].Split(':')[1]);
+                    selection_rule[5] = string_to_bool(preferences[10].Split(':')[1]);
                 }
                 catch { MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!"); }
             }
@@ -226,6 +256,13 @@ namespace Isotope_fitting
             preferences[0] += "size of fragments groups: " + frag_mzGroups.ToString() + "\r\n";
             preferences[0] += "size of fit group: " + fit_bunch.ToString() + "\r\n";
             preferences[0] += "size of fit overlap: " + fit_cover.ToString() + "\r\n";
+
+            preferences[0] += "1 most intence: " + selection_rule[0].ToString() + "\r\n";
+            preferences[0] += "2 most intence: " + selection_rule[1].ToString() + "\r\n";
+            preferences[0] += "3 most intence: " + selection_rule[2].ToString() + "\r\n";
+            preferences[0] += "half most intence: " + selection_rule[3].ToString() + "\r\n";
+            preferences[0] += "half(-) most intence: " + selection_rule[4].ToString() + "\r\n";
+            preferences[0] += "half(+) most intence: " + selection_rule[5].ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -567,6 +604,7 @@ namespace Isotope_fitting
         {
             // this the main sequence after loadind data
             // 1. select fragments according to UI
+            Fragments2.Clear();
             sw1.Reset(); sw1.Start();
             List<ChemiForm> selected_fragments = select_fragments();
             if (selected_fragments == null) return;
@@ -1507,7 +1545,7 @@ namespace Isotope_fitting
                 MessageBox.Show(message, "Error Detected in Input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
             }
 
-            // Calculate isoPattern, envelope, and cetroids
+            // Calculate isoPattern, then the envelope (heavy on cpu!!!) then centroids used for ppm_error.
             // default algorithm for isotopic patern is 1. Switch to 2 if there are more than 100C
             short algo = 1;
             int idx = chem.FinalFormula.IndexOf("C");
@@ -1524,18 +1562,13 @@ namespace Isotope_fitting
             // MAIN decesion algorithm
             bool fragment_is_canditate = decision_algorithm(chem, cen);
 
-
-            //double tmp = ppm_calculator(cen[0].X);
-            //chem.Resolution = (float)tmp;
-            //if (tmp != 0.0)
-            //{
-            //    if (ppm_calculator(cen[1].X) != 0.0 || (cen.Count() > 2 && ppm_calculator(cen[2].X) != 0.0))
-            //    {
-            //        chem.Profile.Clear();
-            //        ChemiForm.Envelope(chem);
-            //        add_fragment_to_Fragments2(chem, cen);
-            //    }
-            //}
+            // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+            if (fragment_is_canditate)
+            {
+                chem.Profile.Clear();
+                ChemiForm.Envelope(chem);
+                add_fragment_to_Fragments2(chem, cen);
+            }
         }
 
         private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen)
@@ -1550,6 +1583,7 @@ namespace Isotope_fitting
                     FinalFormula = chem.FinalFormula,
                     Deduct = chem.Deduct,
                     Error = chem.Error,
+                    PPM_Error = chem.PPM_Error,
                     Index = chem.Index,
                     IndexTo = chem.IndexTo,
                     InputFormula = chem.InputFormula,
@@ -1629,7 +1663,8 @@ namespace Isotope_fitting
                 // last fragment in group, contributes to the group title
                 if (i % frag_mzGroups == (frag_mzGroups - 1)) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + 
+                                                    "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0") + "  -  " + Fragments2[i].PPM_Error.ToString("0.##"));
             }
             frag_tree.EndUpdate();
         }
@@ -1653,54 +1688,54 @@ namespace Isotope_fitting
             }
         }
 
-
-
-
-
-
         private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
         {
             // all the decisions if a fragment is canidate for fitting
-            bool fragment_is_canditate = false;
+            bool fragment_is_canditate = true;
 
+            // deceide how many peaks will be involved in the selection process
+            // results = {[resol1, ppm1], [resol2, ppm2], ....}
+            List<double[]> results = new List<double[]>();
 
-            //double 
+            int total_peaks = cen.Count;
+            int contrib_peaks = 0;
+            int rule_idx = Array.IndexOf(selection_rule, true);
 
-            //double tmp = ppm_calculator(cen[0].X);
-            //chem.Resolution = (float)tmp;
-            //if (tmp != 0.0)
-            //{
-            //    if (ppm_calculator(cen[1].X) != 0.0 || (cen.Count() > 2 && ppm_calculator(cen[2].X) != 0.0))
-            //    {
-            //        chem.Profile.Clear();
-            //        ChemiForm.Envelope(chem);
-            //        add_fragment_to_Fragments2(chem, cen);
-            //    }
-            //}
-
-            if (!fragment_is_canditate)
+            if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
+            else
             {
-                //chem.Resolution =
-                //chem.Profile.Clear();
-                //ChemiForm.Envelope(chem);
-                //add_fragment_to_Fragments2(chem, cen);
+                if (rule_idx == 3) contrib_peaks = total_peaks / 2;                 // Total 8, use 4. Total 7, use 3
+                else if (rule_idx == 4) contrib_peaks = total_peaks / 2 - 1;        // Total 8, use 3. Total 7, use 2
+                else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
+            }            
+
+            // sanity check. No matter what, chaeck at least most intense peak!
+            if (contrib_peaks == 0) contrib_peaks = 1;
+
+            for (int i = 0; i < contrib_peaks; i ++)
+            {
+                double[] tmp = ppm_calculator(cen[i].X);
+
+                if (tmp[0] < ppmError) results.Add(tmp);
+                else { fragment_is_canditate = false; break; }
             }
 
-
-
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); }
+            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
+
+            chem.PPM_Error = results.Average(p => p[0]);
+            chem.Resolution = (float)results.Average(p => p[1]);
 
             return fragment_is_canditate;
         }
 
-        private double ppm_calculator(double centroid)
+        private double[] ppm_calculator(double centroid)
         {
+            // find the closest experimental peak, and return calculated ppm and resolution
             double exp_cen, curr_diff, ppm;
 
             int closest_idx = 0;
             double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-
 
             for (int i = 1; i < peak_points.Count; i++)
             {
@@ -1714,15 +1749,9 @@ namespace Isotope_fitting
 
             exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
             ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
-            if (ppm < ppmError)
-                return peak_points[0][3];
-            else
-                return 0.0;
+
+            return new double[] { ppm, peak_points[closest_idx][3] };
         }
-
-
-
-
 
         #endregion
 
@@ -2090,7 +2119,6 @@ namespace Isotope_fitting
         private List<double> get_UI_intensities(int[] subSet)
         {
             // is called from fit to pass a good starting height to the optimizer
-            // is called frmo plot to get the last selected fitted height of fragments
             List<double> UI_intensities = new List<double>();
 
             for (int i = 0; i < subSet.Length; i++)
@@ -2834,6 +2862,12 @@ namespace Isotope_fitting
             Debug.WriteLine("Memory of experimental: " + estimate_memory(experimental).ToString());
             Debug.WriteLine("Memory of all_data: " + estimate_memory(all_data).ToString());
             Debug.WriteLine("Memory of all_data_aligned: " + estimate_memory(all_data_aligned).ToString());
+        }
+
+        private bool string_to_bool(string str)
+        {
+            if (str == "True") return true;
+            else return false;
         }
 
         #endregion

@@ -667,6 +667,7 @@ namespace Isotope_fitting
         private string deduct;
         private string name;
         private bool error;
+        private double ppm_error;
         private OxyColor color;
         private CompoundMulti monoisotopic;
         private int iso_total_amount;
@@ -885,6 +886,11 @@ namespace Isotope_fitting
             {
                 this.error = value;
             }
+        }
+        public double PPM_Error
+        {
+            get { return this.ppm_error; }
+            set { this.ppm_error = value; }
         }
         public CompoundMulti Monoisotopic
         {
