@@ -632,6 +632,7 @@ namespace Isotope_fitting
             sw1.Reset(); sw1.Start();
             // 2. rebuild frag_listView in UI
             populate_frag_treeView();
+            populate_fragtypes_treeView();
             sw1.Stop(); Debug.WriteLine("Populate frag tree: " + sw1.ElapsedMilliseconds.ToString());
             // 3. build the all_data_alligned structure
             recalculate_all_data_aligned();
@@ -1655,6 +1656,9 @@ namespace Isotope_fitting
             Controls.Add(frag_tree);
             frag_tree.BringToFront();
             frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node.Name, e.Node.Checked); };
+            frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy") });
+            frag_tree.ContextMenu.MenuItems[0].Click += (s, e) => { copyTree_toClip(frag_tree); };
+            //frag_tree.MouseClick += (s, e) => { if (e.Button == MouseButtons.Right) ; };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -1664,14 +1668,38 @@ namespace Isotope_fitting
                 // group in mz windows
                 // first fragment in group, opens a new ggroup, and contributes to the group title
                 if (i % frag_mzGroups == 0) frag_tree.Nodes.Add(Fragments2[i].Mz + " - ");
-                // last fragment in group, contributes to the group title
-                if (i % frag_mzGroups == (frag_mzGroups - 1)) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
+                // last fragment in group, or last in general, contributes to the group title
+                if (i % frag_mzGroups == (frag_mzGroups - 1) || i == Fragments2.Count - 1) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                TreeNode tr = new TreeNode { Text = Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0")
+                , Tag = i };
+                //frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                //                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(tr);
             }
             frag_tree.EndUpdate();
+        }
 
+        private void copyTree_toClip(TreeView tree)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (TreeNode baseNode in tree.Nodes)
+            {
+                foreach (TreeNode subNode in baseNode.Nodes)
+                {
+                    int i = (int)subNode.Tag;
+                    sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                    "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                }
+            }
+
+            Clipboard.Clear();
+            Clipboard.SetText(sb.ToString());
+        }
+
+        private void populate_fragtypes_treeView()
+        {
             fragTypes_tree = null;
             fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 560), Name = "fragType_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(fragTypes_tree);
@@ -1686,11 +1714,62 @@ namespace Isotope_fitting
                 // check if base node corresponding to type already exists and add fragment. Else make a new base node 
                 foreach (TreeNode baseNode in fragTypes_tree.Nodes)
                 {
-                    if (baseNode.Text == ion_type) { baseNode.Nodes.Add(Fragments2[i].Name); added = true; break; }
+                    if (baseNode.Text == ion_type)
+                    {
+                        // insert at sorted position. Get index of already added fragment
+                        for (int j = 0; j < baseNode.Nodes.Count; j++)
+                        {
+                            int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Tag) - 1;
+                            int inTree_num = Convert.ToInt32(Fragments2[inTree_frag_idx].Index);
+                            int inTree_charge = Fragments2[inTree_frag_idx].Charge;
+                            int curr_num = Convert.ToInt32(Fragments2[i].Index);
+                            int curr_charge = Fragments2[i].Charge;
+
+                            if (curr_num < inTree_num)
+                            {
+                                baseNode.Nodes.Insert(j, Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                                baseNode.Nodes[j].Tag = Fragments2[i].Counter.ToString();
+                                added = true; break;
+                            }
+
+                            else if (curr_num == inTree_num)
+                            {
+                                for (int k = j; k < baseNode.Nodes.Count; k++)
+                                {
+                                    if (Fragments2[i].Charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Tag) - 1].Charge)
+                                    {
+                                        baseNode.Nodes.Insert(k, Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                                        baseNode.Nodes[k].Tag = Fragments2[i].Counter.ToString();
+                                        added = true; break;
+                                    }
+                                    else if (k == baseNode.Nodes.Count - 1)
+                                    {
+                                        baseNode.Nodes.Add(Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                                        baseNode.Nodes[baseNode.Nodes.Count - 1].Tag = Fragments2[i].Counter.ToString();
+                                        added = true; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        if (!added)
+                        {
+                            baseNode.Nodes.Add(Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                            baseNode.Nodes[baseNode.Nodes.Count - 1].Tag = Fragments2[i].Counter.ToString();
+                            added = true;
+                        }
+                    }
                 }
+
                 if (!added)
                 {
-                    TreeNode tr_inner = new TreeNode { Text = Fragments2[i].Name };
+                    TreeNode tr_inner = new TreeNode { Text = Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
+                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"), Tag = Fragments2[i].Counter.ToString() };
                     TreeNode tr_base = new TreeNode { Text = ion_type };
                     tr_base.Nodes.Add(tr_inner);
                     fragTypes_tree.Nodes.Add(tr_base);
