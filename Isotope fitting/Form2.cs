@@ -122,7 +122,7 @@ namespace Isotope_fitting
         event FittingCalcCompleted OnFittingCalcCompleted;
         List<List<double[]>> all_fitted_results;
         List<List<int[]>> all_fitted_sets;
-        TreeView fit_tree, frag_tree;
+        TreeView fit_tree, frag_tree, fragTypes_tree;
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
         #region parameters
@@ -1599,7 +1599,7 @@ namespace Isotope_fitting
                     Radio_label = chem.Radio_label,
                     Resolution = chem.Resolution,
                     Factor = 1.0,
-                    Counter = new int(),
+                    Counter = 0,
                     To_plot = false,
                     Color = chem.Color,
                     Name = chem.Name,
@@ -1651,7 +1651,7 @@ namespace Isotope_fitting
             frag_listView.Visible = false;
             // init tree view
             frag_tree = null;       // for GC?
-            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 100), Name = "frag_tree", Size = new Size(335, 900), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 100), Name = "frag_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(frag_tree);
             frag_tree.BringToFront();
             frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node.Name, e.Node.Checked); };
@@ -1671,6 +1671,32 @@ namespace Isotope_fitting
                                                     "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
             }
             frag_tree.EndUpdate();
+
+            fragTypes_tree = null;
+            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 560), Name = "fragType_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            Controls.Add(fragTypes_tree);
+            fragTypes_tree.BringToFront();
+
+            fragTypes_tree.BeginUpdate();
+            for (int i = 0; i < Fragments2.Count; i++)
+            {
+                string ion_type = Fragments2[i].Ion_type;
+                bool added = false;
+
+                // check if base node corresponding to type already exists and add fragment. Else make a new base node 
+                foreach (TreeNode baseNode in fragTypes_tree.Nodes)
+                {
+                    if (baseNode.Text == ion_type) { baseNode.Nodes.Add(Fragments2[i].Name); added = true; break; }
+                }
+                if (!added)
+                {
+                    TreeNode tr_inner = new TreeNode { Text = Fragments2[i].Name };
+                    TreeNode tr_base = new TreeNode { Text = ion_type };
+                    tr_base.Nodes.Add(tr_inner);
+                    fragTypes_tree.Nodes.Add(tr_base);
+                }
+            }
+            fragTypes_tree.EndUpdate();
         }
 
         private void frag_node_checkChanged(string idx_str, bool is_checked)
@@ -2011,7 +2037,26 @@ namespace Isotope_fitting
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
             result[distros_num] = state.fi[0];
 
+            //result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients);
+
             return result;
+        }
+
+        private double per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients)
+        {
+            List<double> diff = new List<double>();
+
+            for (int i = 0; i < aligned_intensities_subSet.Count; i++)
+            {
+                double tmp = 0.0;
+                for (int j = 1; j < aligned_intensities_subSet[0].Length; j++)
+                {
+                    tmp += aligned_intensities_subSet[i][j] * coeficients[j-1];
+                }
+
+                if (tmp > 1) diff.Add(Math.Abs(tmp - aligned_intensities_subSet[i][0]) / tmp);
+            }
+            return diff.Average();
         }
 
         public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
@@ -2032,6 +2077,12 @@ namespace Isotope_fitting
 
                 // SSE
                 func[0] += Math.Pow((exp_and_distros[i][0] - distros_sum), 2);
+
+                // Pearson's chi-squared test
+                //double factor = 1.0;
+                //if (exp_and_distros[i][0] != 0.0) factor = exp_and_distros[i][0];
+                //else if (distros_sum != 0.0) factor = distros_sum;
+                //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
         }
 
@@ -2062,7 +2113,7 @@ namespace Isotope_fitting
                     {
                         tmp += Fragments2[all_fitted_sets[i][j][k] - 1].Name + " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ");
                     }
-                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.###e0" + "  ");
+                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.##e0" + "  ");
 
                     fit_tree.Nodes[i].Nodes.Add(i.ToString() + " " + j.ToString(), tmp);
                 }
@@ -2098,7 +2149,7 @@ namespace Isotope_fitting
 
                     Fragments2[curr_idx].Factor = factor;
                     curr_node.Checked = is_checked;
-                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString();
+                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");
                 }
             }
             is_applying_fit = false;
