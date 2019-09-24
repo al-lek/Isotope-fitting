@@ -1187,7 +1187,6 @@ namespace Isotope_fitting
                             }
                         }
                     }
-
                 }
                 //internal list box
                 if (internal_lstBox.CheckedItems.Count > 0)
@@ -1656,8 +1655,7 @@ namespace Isotope_fitting
             Controls.Add(frag_tree);
             frag_tree.BringToFront();
             frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node.Name, e.Node.Checked); };
-            frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy") });
-            frag_tree.ContextMenu.MenuItems[0].Click += (s, e) => { copyTree_toClip(frag_tree); };
+            frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree); }) });
             //frag_tree.MouseClick += (s, e) => { if (e.Button == MouseButtons.Right) ; };
 
             // interpret fitted results
@@ -1671,39 +1669,19 @@ namespace Isotope_fitting
                 // last fragment in group, or last in general, contributes to the group title
                 if (i % frag_mzGroups == (frag_mzGroups - 1) || i == Fragments2.Count - 1) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                TreeNode tr = new TreeNode { Text = Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula + "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0")
-                , Tag = i };
-                //frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(i.ToString(), Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                //                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(tr);
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(new_fragTreeNode(i));
             }
             frag_tree.EndUpdate();
         }
 
-        private void copyTree_toClip(TreeView tree)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (TreeNode baseNode in tree.Nodes)
-            {
-                foreach (TreeNode subNode in baseNode.Nodes)
-                {
-                    int i = (int)subNode.Tag;
-                    sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
-                                                    "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-                }
-            }
-
-            Clipboard.Clear();
-            Clipboard.SetText(sb.ToString());
-        }
-
         private void populate_fragtypes_treeView()
         {
+            // create a new tree
             fragTypes_tree = null;
             fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 560), Name = "fragType_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(fragTypes_tree);
             fragTypes_tree.BringToFront();
+            fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree); }) });
 
             fragTypes_tree.BeginUpdate();
             for (int i = 0; i < Fragments2.Count; i++)
@@ -1719,17 +1697,16 @@ namespace Isotope_fitting
                         // insert at sorted position. Get index of already added fragment
                         for (int j = 0; j < baseNode.Nodes.Count; j++)
                         {
-                            int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Tag) - 1;
+                            int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Name);
                             int inTree_num = Convert.ToInt32(Fragments2[inTree_frag_idx].Index);
                             int inTree_charge = Fragments2[inTree_frag_idx].Charge;
                             int curr_num = Convert.ToInt32(Fragments2[i].Index);
                             int curr_charge = Fragments2[i].Charge;
 
+                            // case where curr_frag 
                             if (curr_num < inTree_num)
                             {
-                                baseNode.Nodes.Insert(j, Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-                                baseNode.Nodes[j].Tag = Fragments2[i].Counter.ToString();
+                                baseNode.Nodes.Insert(j, new_fragTreeNode(i));
                                 added = true; break;
                             }
 
@@ -1737,18 +1714,15 @@ namespace Isotope_fitting
                             {
                                 for (int k = j; k < baseNode.Nodes.Count; k++)
                                 {
-                                    if (Fragments2[i].Charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Tag) - 1].Charge)
+                                    if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
+                                        curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
                                     {
-                                        baseNode.Nodes.Insert(k, Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-                                        baseNode.Nodes[k].Tag = Fragments2[i].Counter.ToString();
+                                        baseNode.Nodes.Insert(k, new_fragTreeNode(i));
                                         added = true; break;
                                     }
                                     else if (k == baseNode.Nodes.Count - 1)
                                     {
-                                        baseNode.Nodes.Add(Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-                                        baseNode.Nodes[baseNode.Nodes.Count - 1].Tag = Fragments2[i].Counter.ToString();
+                                        baseNode.Nodes.Add(new_fragTreeNode(i));
                                         added = true; break;
                                     }
                                 }
@@ -1758,9 +1732,7 @@ namespace Isotope_fitting
 
                         if (!added)
                         {
-                            baseNode.Nodes.Add(Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-                            baseNode.Nodes[baseNode.Nodes.Count - 1].Tag = Fragments2[i].Counter.ToString();
+                            baseNode.Nodes.Add(new_fragTreeNode(i));
                             added = true;
                         }
                     }
@@ -1768,14 +1740,36 @@ namespace Isotope_fitting
 
                 if (!added)
                 {
-                    TreeNode tr_inner = new TreeNode { Text = Fragments2[i].Name + "  -  " + Fragments2[i].Mz + "  -  " + Fragments2[i].FinalFormula +
-                                                    "  -  " + Fragments2[i].PPM_Error.ToString("0.##") + "  -  " + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"), Tag = Fragments2[i].Counter.ToString() };
+                    TreeNode tr_inner = new_fragTreeNode(i);
                     TreeNode tr_base = new TreeNode { Text = ion_type };
                     tr_base.Nodes.Add(tr_inner);
                     fragTypes_tree.Nodes.Add(tr_base);
                 }
             }
             fragTypes_tree.EndUpdate();
+        }
+
+        private TreeNode new_fragTreeNode(int idx)
+        {
+            TreeNode tr = new TreeNode { Text = Fragments2[idx].Name + "  -  " + Fragments2[idx].Mz + "  -  " + Fragments2[idx].FinalFormula + "  -  " + Fragments2[idx].PPM_Error.ToString("0.##") + "  -  " +
+                                        (Fragments2[idx].Factor * Fragments2[idx].Max_intensity).ToString("0"), Name = idx.ToString(), Tag = Fragments2[idx].Counter.ToString() };
+            return tr;
+        }
+
+        private void copyTree_toClip(TreeView tree)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (TreeNode baseNode in tree.Nodes)
+            {
+                foreach (TreeNode subNode in baseNode.Nodes)
+                {
+                    int i = (int)subNode.Tag;
+                    sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                    "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                }
+            }
+            Clipboard.Clear();
+            Clipboard.SetText(sb.ToString());
         }
 
         private void frag_node_checkChanged(string idx_str, bool is_checked)
@@ -1818,7 +1812,7 @@ namespace Isotope_fitting
                 else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
             }            
 
-            // sanity check. No matter what, chaeck at least most intense peak!
+            // sanity check. No matter what, check at least most intense peak!
             if (contrib_peaks == 0) contrib_peaks = 1;
 
             for (int i = 0; i < contrib_peaks; i ++)
@@ -2114,9 +2108,9 @@ namespace Isotope_fitting
             // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
             double[] result = new double[distros_num + 1];
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
-            result[distros_num] = state.fi[0];
+            //result[distros_num] = state.fi[0];
 
-            //result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients);
+            result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients);
 
             return result;
         }
@@ -2133,9 +2127,13 @@ namespace Isotope_fitting
                     tmp += aligned_intensities_subSet[i][j] * coeficients[j-1];
                 }
 
-                if (tmp > 1) diff.Add(Math.Abs(tmp - aligned_intensities_subSet[i][0]) / tmp);
+                if (tmp > 1)
+                {
+                    diff.Add(aligned_intensities_subSet[i][0] / tmp);
+                    if (diff[diff.Count - 1] > 1.0) diff[diff.Count - 1] = 1.0 / diff[diff.Count - 1]; 
+                }
             }
-            return diff.Average();
+            return diff.Average() * 100.0;
         }
 
         public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
@@ -2192,7 +2190,7 @@ namespace Isotope_fitting
                     {
                         tmp += Fragments2[all_fitted_sets[i][j][k] - 1].Name + " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ");
                     }
-                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.##e0" + "  ");
+                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("00.#%" + "  ");
 
                     fit_tree.Nodes[i].Nodes.Add(i.ToString() + " " + j.ToString(), tmp);
                 }
@@ -2318,12 +2316,12 @@ namespace Isotope_fitting
                     (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
 
                     // paint frag aligned
-                    for (int j = 0; j < all_data[0].Count; j++)
-                        (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
+                    //for (int j = 0; j < all_data[0].Count; j++)
+                        //(iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
 
                     // paint frag envelope
-                    //for (int j = 0; j < all_data[curr_idx].Count; j++)
-                        //(iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
+                    for (int j = 0; j < all_data[curr_idx].Count; j++)
+                        (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
                 }
             }
 
