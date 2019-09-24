@@ -1763,7 +1763,7 @@ namespace Isotope_fitting
             {
                 foreach (TreeNode subNode in baseNode.Nodes)
                 {
-                    int i = (int)subNode.Tag;
+                    int i = Convert.ToInt32(subNode.Name);
                     sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
                                                     "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
                 }
