@@ -469,11 +469,19 @@ namespace Isotope_fitting
 
             int i = ChemFormulas.Count - 1;
 
-            ChemFormulas[i].PrintFormula = fix_formula(ChemFormulas[i].InputFormula);
+            // Note on formulas
+            // InputFormula is the text from MSProduct. It has 1 more H. We remove it, and we store at the same variable ONCE, on loading of the text file.
+            // So, we need to add Adduct H. They are exactly the same amount with the charge.
+            // PrintFormula is the same and it should be redundant. FinalFormula is all elements together and it is not used outside of enviPat code.
+            // Example: a13 +3
+            // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
+            // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
+
+            ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
             ChemFormulas[i].Charge = Int32.Parse(frag_info[3]);
 
-            if (ChemFormulas[i].Charge > max_fragment_charge) max_fragment_charge = ChemFormulas[i].Charge;
-            if (ChemFormulas[i].Charge > 1) ChemFormulas[i].Adduct = "H" + (ChemFormulas[i].Charge - 1);
+            // all ions have as many H in Adduct as their charge
+            ChemFormulas[i].Adduct = "H" + ChemFormulas[i].Charge.ToString();
 
             if (char.IsLower(frag_info[1][0]))
             {
@@ -571,7 +579,7 @@ namespace Isotope_fitting
 
                     if (adduct || (!adduct && charge > 1))
                     {
-                        // x have +CO -2H
+                        // x have +CO -2H compared to y. BUT!!!! we have to build the inputFormula as if it was from MSProduct (that has +1H) so we will remove only 1H!!!!
                         string mz = Math.Round(Convert.ToDouble(ChemFormulas[i].Mz) + (11.99945142 + 15.99436604 - 2 * 1.007276452) / Convert.ToDouble(charge), 4).ToString();
                         string ion = ChemFormulas[i].Ion.Replace('y', 'x');
                         string index = ChemFormulas[i].Index;
@@ -582,7 +590,7 @@ namespace Isotope_fitting
                         {
                             if (tmp[j].StartsWith("C")) tmp[j] = "C" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) + 1).ToString();          //+C
                             else if (tmp[j].StartsWith("O")) tmp[j] = "O" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) + 1).ToString();     //+O
-                            else if (tmp[j].StartsWith("H")) tmp[j] = "H" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) - 2).ToString();     //-2H
+                            else if (tmp[j].StartsWith("H")) tmp[j] = "H" + (Convert.ToInt16(tmp[j].Substring(1, tmp[j].Length - 1)) - 1).ToString();     //-1H
                         }
                         string inputFormula = string.Join(" ", tmp);
 
@@ -606,7 +614,7 @@ namespace Isotope_fitting
             // 1. select fragments according to UI
             Fragments2.Clear();
             sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = select_fragments();
+            List<ChemiForm> selected_fragments = select_fragments2();
             if (selected_fragments == null) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
@@ -1473,6 +1481,89 @@ namespace Isotope_fitting
             return Selected_options;
         }
 
+        private List<ChemiForm> select_fragments2()
+        {
+            List<ChemiForm> res = new List<ChemiForm>();
+            List<string> primary = new List<string> { "a", "b", "c", "x", "y", "z" };
+            List<string> side_chain = new List<string> { "da", "db", "wa", "wb", "v" };
+
+            // get mz and charge limits (if any)
+            double mzMin = txt_to_d(mzMin_Box);
+            if (double.IsNaN(mzMin)) mzMin = dParser(ChemFormulas.First().Mz);
+
+            double mzMax = txt_to_d(mzMax_Box);
+            if (double.IsNaN(mzMax)) mzMax = dParser(ChemFormulas.Last().Mz);
+
+            double qMin = txt_to_d(chargeMin_Box);
+            if (double.IsNaN(qMin)) qMin = 0.0;
+
+            double qMax = txt_to_d(chargeMax_Box);
+            if (double.IsNaN(qMax)) qMax = 25.0;
+
+            // get types
+            List<string> types = new List<string>();
+            
+            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
+                foreach (var item in lstBox.CheckedItems)
+                    types.Add(item.ToString());
+
+            // main selection routine
+            foreach (ChemiForm chem in ChemFormulas)
+            {
+                double curr_mz = dParser(chem.Mz);
+                double curr_q = chem.Charge;
+                string curr_type = chem.Ion_type;
+                string curr_type_first = curr_type.Substring(0, 1);
+
+                // drop frag by mz and charge rules
+                if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+
+                // drop frag if type is not selected
+                if (!types.Contains(curr_type)) continue;
+
+                if (side_chain.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+
+                if (primary.Contains(curr_type_first))
+                {
+                    // add the ion as is, if root primary ("a", "b", "c", "x", "y", "z") is requested
+                    if (primary.Contains(curr_type))
+                        res.Add(chem.DeepCopy());
+
+                    // check if Hydrogen adducts or losses are requested and generate respective ions
+                    List<string> types_sub = types.Where(t => t.Contains(curr_type) && t.Length > 1).ToList();
+                    if (types_sub.Count == 0) continue;
+
+                    foreach (string hyd_mod in types_sub)
+                    {
+                        // add the primary and modify it according to gain or loss of H
+                        res.Add(chem.DeepCopy());
+                        int curr_idx = res.Count - 1;
+
+                        string new_type = "(" + hyd_mod + ")";
+                        res[curr_idx].Ion_type = new_type;
+                        res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                        res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+
+                        double hyd_num = 0.0;
+                        if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
+                        else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
+
+                        res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
+                        res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                    }
+
+
+
+                }
+
+
+            }
+
+
+
+            return res;
+        }
+
         private void calculate_fragments_resolution(List<ChemiForm> selected_fragments)
         {
             calc_resolution = true;
@@ -1526,7 +1617,7 @@ namespace Isotope_fitting
 
         private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
         {
-            ChemiForm.CheckChem(chem);
+            ChemiForm.CheckChem(chem);      // will also generate chem.FinalFormula
 
             if (chem.Resolution == 0)
             {
@@ -1681,7 +1772,7 @@ namespace Isotope_fitting
             fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 560), Name = "fragType_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(fragTypes_tree);
             fragTypes_tree.BringToFront();
-            fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree); }) });
+            fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree); }) });
 
             fragTypes_tree.BeginUpdate();
             for (int i = 0; i < Fragments2.Count; i++)
@@ -1764,7 +1855,11 @@ namespace Isotope_fitting
                 foreach (TreeNode subNode in baseNode.Nodes)
                 {
                     int i = Convert.ToInt32(subNode.Name);
-                    sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                    if (Fragments2[i].Name.Contains("intern"))
+                        sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].IndexTo + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                    "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                    else
+                        sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
                                                     "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
                 }
             }
@@ -2827,6 +2922,13 @@ namespace Isotope_fitting
         private double dParser(string t)
         {
             if (double.TryParse(t, out double d)) return d;
+
+            return double.NaN;
+        }
+
+        private double txt_to_d(TextBox txtBox)
+        {
+            if (double.TryParse(txtBox.Text, out double d)) return d;
 
             return double.NaN;
         }

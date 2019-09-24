@@ -592,7 +592,7 @@ namespace Isotope_fitting
             this.addin_lstBox.Location = new System.Drawing.Point(181, 228);
             this.addin_lstBox.Name = "addin_lstBox";
             this.addin_lstBox.Size = new System.Drawing.Size(120, 109);
-            this.addin_lstBox.TabIndex = 12;
+            this.addin_lstBox.TabIndex = 10;
             // 
             // pep_Box
             // 
@@ -669,7 +669,7 @@ namespace Isotope_fitting
             this.dvw_lstBox.MultiColumn = true;
             this.dvw_lstBox.Name = "dvw_lstBox";
             this.dvw_lstBox.Size = new System.Drawing.Size(175, 60);
-            this.dvw_lstBox.TabIndex = 7;
+            this.dvw_lstBox.TabIndex = 9;
             // 
             // charge_Label
             // 
@@ -694,7 +694,7 @@ namespace Isotope_fitting
             this.z_lstBox.Location = new System.Drawing.Point(121, 187);
             this.z_lstBox.Name = "z_lstBox";
             this.z_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.z_lstBox.TabIndex = 11;
+            this.z_lstBox.TabIndex = 8;
             // 
             // chargeAll_Btn
             // 
@@ -740,7 +740,7 @@ namespace Isotope_fitting
             this.y_lstBox.Location = new System.Drawing.Point(63, 187);
             this.y_lstBox.Name = "y_lstBox";
             this.y_lstBox.Size = new System.Drawing.Size(47, 49);
-            this.y_lstBox.TabIndex = 9;
+            this.y_lstBox.TabIndex = 7;
             // 
             // mz_Label
             // 
@@ -765,7 +765,7 @@ namespace Isotope_fitting
             this.c_lstBox.Location = new System.Drawing.Point(121, 95);
             this.c_lstBox.Name = "c_lstBox";
             this.c_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.c_lstBox.TabIndex = 10;
+            this.c_lstBox.TabIndex = 4;
             // 
             // mzMax_Label
             // 
@@ -852,7 +852,7 @@ namespace Isotope_fitting
             this.b_lstBox.Location = new System.Drawing.Point(63, 95);
             this.b_lstBox.Name = "b_lstBox";
             this.b_lstBox.Size = new System.Drawing.Size(47, 49);
-            this.b_lstBox.TabIndex = 8;
+            this.b_lstBox.TabIndex = 3;
             // 
             // saveCalc_Btn
             // 
@@ -917,7 +917,7 @@ namespace Isotope_fitting
             this.a_lstBox.Location = new System.Drawing.Point(5, 95);
             this.a_lstBox.Name = "a_lstBox";
             this.a_lstBox.Size = new System.Drawing.Size(47, 49);
-            this.a_lstBox.TabIndex = 5;
+            this.a_lstBox.TabIndex = 2;
             // 
             // chargeMin_Label
             // 
