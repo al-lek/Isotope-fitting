@@ -72,7 +72,7 @@ namespace Isotope_fitting
             this.pep_Box = new System.Windows.Forms.TextBox();
             this.machine_listBox = new System.Windows.Forms.ListBox();
             this.frag_Label = new System.Windows.Forms.Label();
-            this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
+            this.Mdvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.charge_Label = new System.Windows.Forms.Label();
             this.z_lstBox = new System.Windows.Forms.CheckedListBox();
             this.chargeAll_Btn = new System.Windows.Forms.Button();
@@ -462,7 +462,7 @@ namespace Isotope_fitting
             this.panel1.Controls.Add(this.pep_Box);
             this.panel1.Controls.Add(this.machine_listBox);
             this.panel1.Controls.Add(this.frag_Label);
-            this.panel1.Controls.Add(this.dvw_lstBox);
+            this.panel1.Controls.Add(this.Mdvw_lstBox);
             this.panel1.Controls.Add(this.charge_Label);
             this.panel1.Controls.Add(this.z_lstBox);
             this.panel1.Controls.Add(this.chargeAll_Btn);
@@ -555,16 +555,20 @@ namespace Isotope_fitting
             this.internal_lstBox.FormattingEnabled = true;
             this.internal_lstBox.Items.AddRange(new object[] {
             "internal a",
-            "internal b",
             "internal a-H2O",
             "internal a-NH3",
+            "internal a-2H2O",
+            "internal a-2NH3",
             "internal a-H2O-NH3",
+            "internal b",
             "internal b-H2O",
-            "intenal b-NH3",
+            "internal b-NH3",
+            "internal b-2H2O",
+            "internal b-2NH3",
             "internal b-H2O-NH3"});
             this.internal_lstBox.Location = new System.Drawing.Point(181, 95);
             this.internal_lstBox.Name = "internal_lstBox";
-            this.internal_lstBox.Size = new System.Drawing.Size(120, 124);
+            this.internal_lstBox.Size = new System.Drawing.Size(120, 184);
             this.internal_lstBox.TabIndex = 5;
             // 
             // loadMS_Btn
@@ -585,13 +589,17 @@ namespace Isotope_fitting
             "a-NH3",
             "b-NH3",
             "b-H2O",
-            "b-H2O-NH3",
             "y-NH3",
             "y-H2O",
+            "b-2NH3",
+            "b-2H2O",
+            "y-2NH3",
+            "y-2H2O",
+            "b-H2O-NH3",
             "y-H2O-NH3"});
-            this.addin_lstBox.Location = new System.Drawing.Point(181, 228);
+            this.addin_lstBox.Location = new System.Drawing.Point(181, 285);
             this.addin_lstBox.Name = "addin_lstBox";
-            this.addin_lstBox.Size = new System.Drawing.Size(120, 109);
+            this.addin_lstBox.Size = new System.Drawing.Size(120, 169);
             this.addin_lstBox.TabIndex = 10;
             // 
             // pep_Box
@@ -650,13 +658,13 @@ namespace Isotope_fitting
             this.frag_Label.TabIndex = 5;
             this.frag_Label.Text = "Fragments";
             // 
-            // dvw_lstBox
+            // Mdvw_lstBox
             // 
-            this.dvw_lstBox.CheckOnClick = true;
-            this.dvw_lstBox.ColumnWidth = 57;
-            this.dvw_lstBox.FormattingEnabled = true;
-            this.dvw_lstBox.IntegralHeight = false;
-            this.dvw_lstBox.Items.AddRange(new object[] {
+            this.Mdvw_lstBox.CheckOnClick = true;
+            this.Mdvw_lstBox.ColumnWidth = 57;
+            this.Mdvw_lstBox.FormattingEnabled = true;
+            this.Mdvw_lstBox.IntegralHeight = false;
+            this.Mdvw_lstBox.Items.AddRange(new object[] {
             "M",
             "M-H2O",
             "M-NH3",
@@ -665,11 +673,11 @@ namespace Isotope_fitting
             "db",
             "wb",
             "v"});
-            this.dvw_lstBox.Location = new System.Drawing.Point(3, 276);
-            this.dvw_lstBox.MultiColumn = true;
-            this.dvw_lstBox.Name = "dvw_lstBox";
-            this.dvw_lstBox.Size = new System.Drawing.Size(175, 60);
-            this.dvw_lstBox.TabIndex = 9;
+            this.Mdvw_lstBox.Location = new System.Drawing.Point(3, 276);
+            this.Mdvw_lstBox.MultiColumn = true;
+            this.Mdvw_lstBox.Name = "Mdvw_lstBox";
+            this.Mdvw_lstBox.Size = new System.Drawing.Size(175, 60);
+            this.Mdvw_lstBox.TabIndex = 9;
             // 
             // charge_Label
             // 
@@ -1240,7 +1248,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.TextBox resolution_Box;
         private System.Windows.Forms.Label resolution_Label;
         private System.Windows.Forms.CheckedListBox addin_lstBox;
-        private System.Windows.Forms.CheckedListBox dvw_lstBox;
+        private System.Windows.Forms.CheckedListBox Mdvw_lstBox;
         private System.Windows.Forms.CheckedListBox z_lstBox;
         private System.Windows.Forms.CheckedListBox y_lstBox;
         private System.Windows.Forms.CheckedListBox c_lstBox;

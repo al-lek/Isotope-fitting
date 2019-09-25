@@ -473,7 +473,7 @@ namespace Isotope_fitting
             // InputFormula is the text from MSProduct. It has 1 more H. We remove it, and we store at the same variable ONCE, on loading of the text file.
             // So, we need to add Adduct H. They are exactly the same amount with the charge.
             // PrintFormula is the same and it should be redundant. FinalFormula is all elements together and it is not used outside of enviPat code.
-            // Example: a13 +3
+            // Example: a13 +3 Ubiquitin
             // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
@@ -502,7 +502,7 @@ namespace Isotope_fitting
             }
             else
             {
-                // internal fragment or precursor
+                // internal fragment or precursor (KIQDKEGIP-H2O-NH3, MH-H2O)
                 // split string in two parts, [0] main [1]adduct (if any)
                 string[] substring = new string[2] { "", "" };
                 int dash_idx = ChemFormulas[i].Ion.IndexOf('-');
@@ -727,7 +727,7 @@ namespace Isotope_fitting
             #endregion
 
             #region ion mode options            
-            if (addin_lstBox.SelectedItems.Count > 0 || a_lstBox.SelectedItems.Count > 0 || b_lstBox.SelectedItems.Count > 0 || c_lstBox.SelectedItems.Count > 0 || x_lstBox.SelectedItems.Count > 0 || y_lstBox.SelectedItems.Count > 0 || z_lstBox.SelectedItems.Count > 0 || internal_lstBox.SelectedItems.Count > 0 || dvw_lstBox.SelectedItems.Count > 0)
+            if (addin_lstBox.SelectedItems.Count > 0 || a_lstBox.SelectedItems.Count > 0 || b_lstBox.SelectedItems.Count > 0 || c_lstBox.SelectedItems.Count > 0 || x_lstBox.SelectedItems.Count > 0 || y_lstBox.SelectedItems.Count > 0 || z_lstBox.SelectedItems.Count > 0 || internal_lstBox.SelectedItems.Count > 0 || Mdvw_lstBox.SelectedItems.Count > 0)
             {
                 List<ChemiForm> keeplistitem = new List<ChemiForm>();
                 //add-in list box
@@ -1274,11 +1274,11 @@ namespace Isotope_fitting
 
                 }
                 //dvw list box               
-                if (dvw_lstBox.CheckedItems.Count > 0)
+                if (Mdvw_lstBox.CheckedItems.Count > 0)
                 {
                     foreach (ChemiForm chem in Selected_options)
                     {
-                        foreach (string ion in dvw_lstBox.CheckedItems)
+                        foreach (string ion in Mdvw_lstBox.CheckedItems)
                         {
                             if (chem.Ion_type.Equals(ion))
                             {
@@ -1486,6 +1486,7 @@ namespace Isotope_fitting
             List<ChemiForm> res = new List<ChemiForm>();
             List<string> primary = new List<string> { "a", "b", "c", "x", "y", "z" };
             List<string> side_chain = new List<string> { "da", "db", "wa", "wb", "v" };
+            List<string> precursor = new List<string> { "M", "M-H2O", "M-NH3" };
 
             // get mz and charge limits (if any)
             double mzMin = txt_to_d(mzMin_Box);
@@ -1500,9 +1501,8 @@ namespace Isotope_fitting
             double qMax = txt_to_d(chargeMax_Box);
             if (double.IsNaN(qMax)) qMax = 25.0;
 
-            // get types
-            List<string> types = new List<string>();
-            
+            // get checked types
+            List<string> types = new List<string>();            
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
                 foreach (var item in lstBox.CheckedItems)
                     types.Add(item.ToString());
@@ -1518,18 +1518,31 @@ namespace Isotope_fitting
                 // drop frag by mz and charge rules
                 if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
 
-                // drop frag if type is not selected
-                if (!types.Contains(curr_type)) continue;
+                // drop frag if type is not selected, 
+                if (!types.Contains(curr_type) && !types.Contains(curr_type_first)) continue;
 
+                // precursor frags are simply added
+                if (precursor.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+
+                // side chain frags are simply added
                 if (side_chain.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
 
+                // internal frags are simply added
+                List<string> types_intern = types.Where(t => t.StartsWith("intern")).ToList();
+                if (types_intern.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+
+                // it can be (1) a primary, or (2) primary with neutral loss (-H2O, -NH3), or (3) a primary with H gain/loss
                 if (primary.Contains(curr_type_first))
                 {
-                    // add the ion as is, if root primary ("a", "b", "c", "x", "y", "z") is requested
-                    if (primary.Contains(curr_type))
-                        res.Add(chem.DeepCopy());
+                    // (1) root primary ("a", "b", "c", "x", "y", "z") are simply added
+                    if (primary.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
 
-                    // check if Hydrogen adducts or losses are requested and generate respective ions
+                    // (2) primary with neutral loss (a-H2O, b-NH3, ...) are simply added.
+                    List<string> types_loss = types.Where(t => t.StartsWith(curr_type_first) && t.Length > 1).ToList();
+                    if (types_loss.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+
+                    // (3) primary with H gain/loss have to be GENERATED from respective primary. They are not in MSProduct text, so they are not an item in ChemFormulas
+                    // check if Hydrogen adducts or losses are requested and GENERATE respective ions
                     List<string> types_sub = types.Where(t => t.Contains(curr_type) && t.Length > 1).ToList();
                     if (types_sub.Count == 0) continue;
 
@@ -1551,16 +1564,9 @@ namespace Isotope_fitting
                         res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
                         res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
                     }
-
-
-
+                    continue;
                 }
-
-
             }
-
-
-
             return res;
         }
 
@@ -3251,9 +3257,9 @@ namespace Isotope_fitting
             {
                 z_lstBox.SetItemCheckState(i, CheckState.Unchecked);
             }
-            foreach (int i in dvw_lstBox.CheckedIndices)
+            foreach (int i in Mdvw_lstBox.CheckedIndices)
             {
-                dvw_lstBox.SetItemCheckState(i, CheckState.Unchecked);
+                Mdvw_lstBox.SetItemCheckState(i, CheckState.Unchecked);
             }
             foreach (int i in addin_lstBox.CheckedIndices)
             {
@@ -3269,7 +3275,7 @@ namespace Isotope_fitting
             x_lstBox.ClearSelected();
             y_lstBox.ClearSelected();
             z_lstBox.ClearSelected();
-            dvw_lstBox.ClearSelected();
+            Mdvw_lstBox.ClearSelected();
             internal_lstBox.ClearSelected();
             addin_lstBox.ClearSelected();
             mzMax_Box.Text = null;
