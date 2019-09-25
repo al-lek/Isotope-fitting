@@ -1507,6 +1507,14 @@ namespace Isotope_fitting
                 foreach (var item in lstBox.CheckedItems)
                     types.Add(item.ToString());
 
+
+            List<string> types_precursor = types.Where(t => t.StartsWith("M")).ToList();
+            List<string> types_side_chain = types.Where(t => t.StartsWith("d") | t.StartsWith("v") | t.StartsWith("w")).ToList();
+            List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();
+            List<string> types_neutral_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("H")).ToList();
+            List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();
+            List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && t.Length > 1 && !t.Contains("H") ).ToList();
+
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
             {
@@ -1518,35 +1526,30 @@ namespace Isotope_fitting
                 // drop frag by mz and charge rules
                 if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
 
-                // drop frag if type is not selected, 
-                if (!types.Contains(curr_type) && !types.Contains(curr_type_first)) continue;
+                //// drop frag if type is not selected, 
+                //if (!types.Contains(curr_type) && !types.Any(t => t.StartsWith(curr_type_first))) continue;
 
                 // precursor frags are simply added
-                if (precursor.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                if (types_precursor.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
 
                 // side chain frags are simply added
-                if (side_chain.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                if (types_side_chain.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
 
-                // internal frags are simply added
-                List<string> types_intern = types.Where(t => t.StartsWith("intern")).ToList();
-                if (types_intern.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                // internal frags are simply added                
+                if (types_internal.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
 
-                // it can be (1) a primary, or (2) primary with neutral loss (-H2O, -NH3), or (3) a primary with H gain/loss
-                if (primary.Contains(curr_type_first))
+                // primary with neutral loss (a-H2O, b-NH3, ...) are simply added and skip to nex frag
+                if (types_neutral_loss.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+
+                // (1) root primary ("a", "b", "c", "x", "y", "z") are simply added
+                if (types_primary.Contains(curr_type)) { res.Add(chem.DeepCopy()); }   //Do NOT BREAK! Continue to check H gain/loss request
+
+                // it can be (1) a primary, or (2) a primary with H gain/loss
+                if (types_primary_Hyd.Any(t => t.StartsWith(curr_type_first)))
                 {
-                    // (1) root primary ("a", "b", "c", "x", "y", "z") are simply added
-                    if (primary.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
-
-                    // (2) primary with neutral loss (a-H2O, b-NH3, ...) are simply added.
-                    List<string> types_loss = types.Where(t => t.StartsWith(curr_type_first) && t.Length > 1).ToList();
-                    if (types_loss.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
-
-                    // (3) primary with H gain/loss have to be GENERATED from respective primary. They are not in MSProduct text, so they are not an item in ChemFormulas
+                    // (2) primary with H gain/loss have to be GENERATED from respective primary. They are not in MSProduct text, so they are not an item in ChemFormulas
                     // check if Hydrogen adducts or losses are requested and GENERATE respective ions
-                    List<string> types_sub = types.Where(t => t.Contains(curr_type) && t.Length > 1).ToList();
-                    if (types_sub.Count == 0) continue;
-
-                    foreach (string hyd_mod in types_sub)
+                    foreach (string hyd_mod in types_primary_Hyd.Where( t=> t.StartsWith(curr_type_first)))
                     {
                         // add the primary and modify it according to gain or loss of H
                         res.Add(chem.DeepCopy());
@@ -1563,8 +1566,7 @@ namespace Isotope_fitting
 
                         res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
                         res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
-                    }
-                    continue;
+                    }                    
                 }
             }
             return res;
