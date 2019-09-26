@@ -614,7 +614,7 @@ namespace Isotope_fitting
             // 1. select fragments according to UI
             Fragments2.Clear();
             sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = select_fragments2();
+            List<ChemiForm> selected_fragments = select_fragments();
             if (selected_fragments == null) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
@@ -1485,10 +1485,9 @@ namespace Isotope_fitting
         {
             List<ChemiForm> res = new List<ChemiForm>();
             List<string> primary = new List<string> { "a", "b", "c", "x", "y", "z" };
-            List<string> side_chain = new List<string> { "da", "db", "wa", "wb", "v" };
-            List<string> precursor = new List<string> { "M", "M-H2O", "M-NH3" };
+            List<string> side_chain = new List<string> { "d", "w", "v" };
 
-            // get mz and charge limits (if any)
+            // 1. get mz and charge limits (if any)
             double mzMin = txt_to_d(mzMin_Box);
             if (double.IsNaN(mzMin)) mzMin = dParser(ChemFormulas.First().Mz);
 
@@ -1501,19 +1500,19 @@ namespace Isotope_fitting
             double qMax = txt_to_d(chargeMax_Box);
             if (double.IsNaN(qMax)) qMax = 25.0;
 
-            // get checked types
+            // 2. get checked types
             List<string> types = new List<string>();            
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
                 foreach (var item in lstBox.CheckedItems)
                     types.Add(item.ToString());
 
-
-            List<string> types_precursor = types.Where(t => t.StartsWith("M")).ToList();
-            List<string> types_side_chain = types.Where(t => t.StartsWith("d") | t.StartsWith("v") | t.StartsWith("w")).ToList();
-            List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();
-            List<string> types_neutral_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("H")).ToList();
-            List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();
-            List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && t.Length > 1 && !t.Contains("H") ).ToList();
+            // 3. seperate checked types by type
+            List<string> types_precursor = types.Where(t => t.StartsWith("M")).ToList();                                                        // M, M-H2O...
+            List<string> types_side_chain = types.Where(t => t.StartsWith("d") | t.StartsWith("v") | t.StartsWith("w")).ToList();               // da, wb, v....
+            List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();                                                  // internal a, internal b-2H2O...
+            List<string> types_neutral_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("H")).ToList();                  // primary with neutral loss a-H2O, b-NH3, ...
+            List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();                         // a, b, y.....
+            List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && !t.Contains("H") && t.Length > 1).ToList();  // a+1, y-2....
 
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
@@ -1523,32 +1522,64 @@ namespace Isotope_fitting
                 string curr_type = chem.Ion_type;
                 string curr_type_first = curr_type.Substring(0, 1);
 
+                bool is_precursor = curr_type.StartsWith("M");
+                bool is_side_chain = side_chain.Any(curr_type.StartsWith);
+                bool is_internal = curr_type.StartsWith("internal");
+                bool is_neutral_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("H");
+                bool is_primary = primary.Contains(curr_type);
+                bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("H") && curr_type.Length > 1;
+
                 // drop frag by mz and charge rules
                 if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
 
                 //// drop frag if type is not selected, 
                 //if (!types.Contains(curr_type) && !types.Any(t => t.StartsWith(curr_type_first))) continue;
 
-                // precursor frags are simply added
-                if (types_precursor.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                if (is_precursor)
+                {
+                    if (types_precursor.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
 
-                // side chain frags are simply added
-                if (types_side_chain.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                if (is_side_chain)
+                {
+                    if (types_side_chain.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
 
-                // internal frags are simply added                
-                if (types_internal.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                if (is_internal)
+                {
+                    if (types_internal.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
 
-                // primary with neutral loss (a-H2O, b-NH3, ...) are simply added and skip to nex frag
-                if (types_neutral_loss.Contains(curr_type)) { res.Add(chem.DeepCopy()); continue; }
+                if (is_neutral_loss)
+                {
+                    if (types_neutral_loss.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
 
-                // (1) root primary ("a", "b", "c", "x", "y", "z") are simply added
-                if (types_primary.Contains(curr_type)) { res.Add(chem.DeepCopy()); }   //Do NOT BREAK! Continue to check H gain/loss request
+                if (is_primary_Hyd) // this should hit, we do not request this type from msProduct
+                {
+                    if (types_primary_Hyd.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+
+                if (is_primary)
+                {
+                    if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
+
+                    // this code is only for MSProduct that does not provide primary with H gain/loss by default.
+                    // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
+
+                }
+
 
                 // it can be (1) a primary, or (2) a primary with H gain/loss
                 if (types_primary_Hyd.Any(t => t.StartsWith(curr_type_first)))
                 {
-                    // (2) primary with H gain/loss have to be GENERATED from respective primary. They are not in MSProduct text, so they are not an item in ChemFormulas
-                    // check if Hydrogen adducts or losses are requested and GENERATE respective ions
+                    // (2) . They are not in MSProduct text, so they are not an item in ChemFormulas
+                    // check if 
                     foreach (string hyd_mod in types_primary_Hyd.Where( t=> t.StartsWith(curr_type_first)))
                     {
                         // add the primary and modify it according to gain or loss of H
@@ -2211,9 +2242,9 @@ namespace Isotope_fitting
             // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
             double[] result = new double[distros_num + 1];
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
-            //result[distros_num] = state.fi[0];
+            result[distros_num] = state.fi[0];
 
-            result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients);
+            //result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients);
 
             return result;
         }
