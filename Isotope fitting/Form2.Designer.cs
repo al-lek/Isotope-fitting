@@ -118,6 +118,7 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -194,6 +195,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fit_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fit_grpBox.Controls.Add(this.plotCentr_chkBox);
             this.fit_grpBox.Controls.Add(this.plotExp_chkBox);
             this.fit_grpBox.Location = new System.Drawing.Point(0, 12);
             this.fit_grpBox.Name = "fit_grpBox";
@@ -204,7 +206,7 @@ namespace Isotope_fitting
             // plotExp_chkBox
             // 
             this.plotExp_chkBox.AutoSize = true;
-            this.plotExp_chkBox.Location = new System.Drawing.Point(6, 12);
+            this.plotExp_chkBox.Location = new System.Drawing.Point(6, 43);
             this.plotExp_chkBox.Name = "plotExp_chkBox";
             this.plotExp_chkBox.Size = new System.Drawing.Size(66, 17);
             this.plotExp_chkBox.TabIndex = 0;
@@ -1173,6 +1175,16 @@ namespace Isotope_fitting
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
             // 
+            // plotCentr_chkBox
+            // 
+            this.plotCentr_chkBox.AutoSize = true;
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 66);
+            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
+            this.plotCentr_chkBox.Size = new System.Drawing.Size(73, 17);
+            this.plotCentr_chkBox.TabIndex = 0;
+            this.plotCentr_chkBox.Text = "plot centr.";
+            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1286,5 +1298,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ColumnHeader intensityHeader;
         private System.Windows.Forms.Button displayPeakList_btn;
         private System.Windows.Forms.CheckBox plotExp_chkBox;
+        private System.Windows.Forms.CheckBox plotCentr_chkBox;
     }
 }
