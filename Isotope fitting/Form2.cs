@@ -2324,7 +2324,7 @@ namespace Isotope_fitting
                     {
                         tmp += Fragments2[all_fitted_sets[i][j][k] - 1].Name + " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ");
                     }
-                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("00.#%" + "  ");
+                    tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.###e0" + "  ");
 
                     fit_tree.Nodes[i].Nodes.Add(i.ToString() + " " + j.ToString(), tmp);
                 }
