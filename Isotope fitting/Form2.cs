@@ -125,11 +125,29 @@ namespace Isotope_fitting
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
         #region parameters
+        /// <summary>
+        /// max ppm error
+        /// </summary>
         public double ppmError = 8.0;
+        /// <summary>
+        /// peak detect min intensity
+        /// </summary>
         public double min_intes = 50.0;
+        /// <summary>
+        /// size of fragments groups
+        /// </summary>
         public int frag_mzGroups = 40;
+        /// <summary>
+        /// size of fit group
+        /// </summary>
         int fit_bunch = 6;
+        /// <summary>
+        /// size of fit overlap
+        /// </summary>
         int fit_cover = 2;
+        /// <summary>
+        /// [1 most intence,2 most intence,3 most intence,half most intence,half(-) most intence,half(+) most intence]
+        /// </summary>
         bool[] selection_rule = new bool[] { false, true, false, false, false, false };
         #endregion
 
@@ -2678,6 +2696,9 @@ namespace Isotope_fitting
         #endregion
 
         #region Toolbar control
+        /// <summary>
+        /// Initialize Progress Bar (as invisible).
+        /// </summary>
         private void progress_display_init()
         {
             tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 31), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
@@ -2685,6 +2706,9 @@ namespace Isotope_fitting
             user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
         }
 
+        /// <summary>
+        /// Display Progress Bar.
+        /// </summary>
         private void progress_display_start(int barMax, string info)
         {
             prg_lbl.Invoke(new Action(() => prg_lbl.Visible = true));   //thread safe call
