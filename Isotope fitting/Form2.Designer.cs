@@ -38,6 +38,7 @@ namespace Isotope_fitting
             this.plots_grpBox = new System.Windows.Forms.GroupBox();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
+            this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
             this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
             this.mark_label = new System.Windows.Forms.Label();
@@ -104,7 +105,7 @@ namespace Isotope_fitting
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
             this.fitOptions_grpBox = new System.Windows.Forms.GroupBox();
-            this.fit_all_Btn = new System.Windows.Forms.Button();
+            this.fit_sel_Btn = new System.Windows.Forms.Button();
             this.stepRange_Lbl = new System.Windows.Forms.Label();
             this.step_rangeBox = new System.Windows.Forms.TextBox();
             this.Fitting_chkBox = new System.Windows.Forms.CheckBox();
@@ -118,7 +119,6 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -202,6 +202,16 @@ namespace Isotope_fitting
             this.fit_grpBox.Size = new System.Drawing.Size(449, 396);
             this.fit_grpBox.TabIndex = 0;
             this.fit_grpBox.TabStop = false;
+            // 
+            // plotCentr_chkBox
+            // 
+            this.plotCentr_chkBox.AutoSize = true;
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 66);
+            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
+            this.plotCentr_chkBox.Size = new System.Drawing.Size(73, 17);
+            this.plotCentr_chkBox.TabIndex = 0;
+            this.plotCentr_chkBox.Text = "plot centr.";
+            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
             // 
             // plotExp_chkBox
             // 
@@ -1007,7 +1017,7 @@ namespace Isotope_fitting
             // 
             // fitOptions_grpBox
             // 
-            this.fitOptions_grpBox.Controls.Add(this.fit_all_Btn);
+            this.fitOptions_grpBox.Controls.Add(this.fit_sel_Btn);
             this.fitOptions_grpBox.Controls.Add(this.stepRange_Lbl);
             this.fitOptions_grpBox.Controls.Add(this.step_rangeBox);
             this.fitOptions_grpBox.Controls.Add(this.Fitting_chkBox);
@@ -1029,17 +1039,18 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.TabStop = false;
             this.fitOptions_grpBox.Text = "Fitting Options";
             // 
-            // fit_all_Btn
+            // fit_sel_Btn
             // 
-            this.fit_all_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.fit_sel_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fit_all_Btn.Enabled = false;
-            this.fit_all_Btn.Location = new System.Drawing.Point(159, 86);
-            this.fit_all_Btn.Name = "fit_all_Btn";
-            this.fit_all_Btn.Size = new System.Drawing.Size(72, 27);
-            this.fit_all_Btn.TabIndex = 47;
-            this.fit_all_Btn.Text = "Fit all";
-            this.fit_all_Btn.UseVisualStyleBackColor = true;
+            this.fit_sel_Btn.Enabled = false;
+            this.fit_sel_Btn.Location = new System.Drawing.Point(159, 86);
+            this.fit_sel_Btn.Name = "fit_sel_Btn";
+            this.fit_sel_Btn.Size = new System.Drawing.Size(72, 27);
+            this.fit_sel_Btn.TabIndex = 47;
+            this.fit_sel_Btn.Text = "Fit select";
+            this.fit_sel_Btn.UseVisualStyleBackColor = true;
+            this.fit_sel_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
             // 
             // stepRange_Lbl
             // 
@@ -1114,7 +1125,7 @@ namespace Isotope_fitting
             this.fit_Btn.Name = "fit_Btn";
             this.fit_Btn.Size = new System.Drawing.Size(72, 27);
             this.fit_Btn.TabIndex = 39;
-            this.fit_Btn.Text = "Fit";
+            this.fit_Btn.Text = "Auto fit";
             this.fit_Btn.UseVisualStyleBackColor = true;
             this.fit_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
             // 
@@ -1174,16 +1185,6 @@ namespace Isotope_fitting
             this.fitMin_Box.Size = new System.Drawing.Size(70, 20);
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
-            // 
-            // plotCentr_chkBox
-            // 
-            this.plotCentr_chkBox.AutoSize = true;
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 66);
-            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
-            this.plotCentr_chkBox.Size = new System.Drawing.Size(73, 17);
-            this.plotCentr_chkBox.TabIndex = 0;
-            this.plotCentr_chkBox.Text = "plot centr.";
-            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -1291,7 +1292,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ColumnHeader factorHeader;
         private System.Windows.Forms.Button loadWd_Btn;
         private System.Windows.Forms.Button saveWd_Btn;
-        private System.Windows.Forms.Button fit_all_Btn;
+        private System.Windows.Forms.Button fit_sel_Btn;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label mark_label;
         private System.Windows.Forms.Button optionBtn;
