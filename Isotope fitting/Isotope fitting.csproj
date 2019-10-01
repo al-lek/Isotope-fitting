@@ -163,7 +163,9 @@
     <EmbeddedResource Include="Libs\OxyPlot.WindowsForms.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Libs\check5.png" />
     <Content Include="Libs\enviPat.dll" />
+    <Content Include="Resources\check5.png" />
     <None Include="Resources\clipboardcheck_IgA_icon.ico" />
     <None Include="Resources\Icon1.ico" />
   </ItemGroup>

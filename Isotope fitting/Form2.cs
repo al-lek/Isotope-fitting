@@ -490,9 +490,9 @@ namespace Isotope_fitting
                 if (ChemFormulas[i].Ion.StartsWith("d") || ChemFormulas[i].Ion.StartsWith("w") || ChemFormulas[i].Ion.StartsWith("v")) ChemFormulas[i].Color = OxyColors.Turquoise;
                 else if (ChemFormulas[i].Ion.StartsWith("a")) ChemFormulas[i].Color = OxyColors.Green;
                 else if (ChemFormulas[i].Ion.StartsWith("b")) ChemFormulas[i].Color = OxyColors.Blue;
-                else if (ChemFormulas[i].Ion.StartsWith("x")) { ChemFormulas[i].Color = OxyColors.LimeGreen; }// x_index.Add(i); }
+                else if (ChemFormulas[i].Ion.StartsWith("x")) ChemFormulas[i].Color = OxyColors.LimeGreen;
                 else if (ChemFormulas[i].Ion.StartsWith("y")) ChemFormulas[i].Color = OxyColors.DodgerBlue;
-                else if (ChemFormulas[i].Ion.StartsWith("y")) ChemFormulas[i].Color = OxyColors.Tomato;
+                else if (ChemFormulas[i].Ion.StartsWith("z")) ChemFormulas[i].Color = OxyColors.Tomato;
                 else if (ChemFormulas[i].Ion.StartsWith("c")) ChemFormulas[i].Color = OxyColors.Firebrick;
                 else ChemFormulas[i].Color = OxyColors.PaleGoldenrod;
 
@@ -950,7 +950,8 @@ namespace Isotope_fitting
             frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
-            //frag_tree.MouseClick += (s, e) => { if (e.Button == MouseButtons.Right) ; };
+
+            frag_tree.NodeMouseDoubleClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) singleFrag_manipulation(e.Node); };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -965,7 +966,46 @@ namespace Isotope_fitting
 
                 frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(new_fragTreeNode(i));
             }
+
             frag_tree.EndUpdate();
+        }
+
+        private void singleFrag_manipulation(TreeNode node)
+        {
+            // will handle the height of frag. Automaticaly by solo fit, or manualy
+            int frag_idx = Convert.ToInt32(node.Name);
+            double frag_intensity = Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity;
+
+            Form frm = new Form { Size = new Size(200, 35), AutoSizeMode = AutoSizeMode.GrowAndShrink, TopMost = true, ControlBox = false, StartPosition = FormStartPosition.Manual,
+                FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(Cursor.Position.X - 200, Cursor.Position.Y) };
+
+            Label lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
+            Button btn_solo = new Button { Text = "solo fit", Location = new Point(50, 5), Size = new Size(40, 23) };
+            Button btn_ok = new Button { Location = new Point(165, 5), Size = new Size(29, 23), Text = "ok" };
+            NumericUpDown numUD = new NumericUpDown { Minimum = 1, Maximum = 1e8M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
+                                                        Location = new Point(100, 7), Size = new Size(60, 20) };
+
+            btn_solo.Click += (s, e) => 
+            {
+                // run solo fit. Fit calls refresh plot.
+                (List<double[]> res, List<int[]> set) = fit_distros_parallel2(new List<int> { frag_idx + 1 }); // selected fragments have +1 index comparing to Fragments2
+
+                Fragments2[frag_idx].Factor = res[0][0];
+                node.Checked = true;
+                node.Text = node.Text.Remove(node.Text.LastIndexOf(' ')) + " " + (Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity).ToString("#######");
+                numUD.Value = (decimal)Math.Round(Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity, 1);
+            };
+            numUD.ValueChanged += (s, e) => 
+            {
+                // manualy adjust height. We have also to maualy call refresh plot
+                Fragments2[frag_idx].Factor = Convert.ToDouble(numUD.Value) / Fragments2[frag_idx].Max_intensity;
+                node.Text = node.Text.Remove(node.Text.LastIndexOf(' ')) + " " + (Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity).ToString("#######");
+                refresh_iso_plot();
+            };
+            btn_ok.Click += (s, e) => { frm.Close(); };
+
+            frm.Controls.AddRange(new Control[] { lbl, btn_solo, btn_ok, numUD });
+            frm.Show();
         }
 
         private void populate_fragtypes_treeView()
