@@ -1954,7 +1954,6 @@ namespace Isotope_fitting
             else
             {
                 iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 2, Text = "int:" + Math.Round(h_a, 4).ToString() + " , " + "m/z:" + Math.Round(mz_a, 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextVerticalAlignment = VerticalAlignment.Top });
-                //iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a-2, Size = 4, Text = "m/z:" + Math.Round(mz_a, 4).ToString(),Fill=OxyColors.Transparent, Shape = MarkerType.Plus, TextVerticalAlignment = VerticalAlignment.Top });
                 iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                 iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
 
