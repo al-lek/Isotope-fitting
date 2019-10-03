@@ -1951,6 +1951,7 @@ namespace Isotope_fitting
 
                     //iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border+ point_distance, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
                     iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border + point_distance, Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { X = min_border + point_distance, Type = LineAnnotationType.Vertical });
 
                 }
                 else
