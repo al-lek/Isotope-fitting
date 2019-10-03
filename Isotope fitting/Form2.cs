@@ -1113,9 +1113,10 @@ namespace Isotope_fitting
             // if it is a base node, (un)check all subNodes
             if (string.IsNullOrEmpty(node.Name))
             {
+                block_plot_refresh = true;
                 foreach (TreeNode subNode in node.Nodes)
                     subNode.Checked = node.Checked;
-
+                block_plot_refresh = false;
                 refresh_iso_plot();
             }
             else
