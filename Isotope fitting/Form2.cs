@@ -27,7 +27,6 @@ namespace Isotope_fitting
     public partial class Form2 : Form
     {
         #region parameter set
-
         bool plot_rem_Btns = false;
         bool refresh_all = false;
         int exp_res = 0;
@@ -106,8 +105,16 @@ namespace Isotope_fitting
         private bool is_calc = false;
 
         public static List<double[]> peak_points = new List<double[]>();
-
-
+        /// <summary>
+        /// previous clicked point on iso plot
+        /// </summary>
+        OxyPlot.ScreenPoint previous_point;
+        /// <summary>
+        /// distance between two points on screen
+        /// </summary>
+        double point_distance;
+        bool count_distance = false;
+        
         Stopwatch sw1 = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
         ProgressBar tlPrgBr;
@@ -125,11 +132,29 @@ namespace Isotope_fitting
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
         #region parameters
+        /// <summary>
+        /// max ppm error
+        /// </summary>
         public double ppmError = 8.0;
+        /// <summary>
+        /// peak detect min intensity
+        /// </summary>
         public double min_intes = 50.0;
+        /// <summary>
+        /// size of fragments groups
+        /// </summary>
         public int frag_mzGroups = 40;
+        /// <summary>
+        /// size of fit group
+        /// </summary>
         int fit_bunch = 6;
+        /// <summary>
+        /// size of fit overlap
+        /// </summary>
         int fit_cover = 2;
+        /// <summary>
+        /// [1 most intence,2 most intence,3 most intence,half most intence,half(-) most intence,half(+) most intence]
+        /// </summary>
         bool[] selection_rule = new bool[] { false, true, false, false, false, false };
         bool block_plot_refresh = false;
         #endregion
@@ -846,7 +871,7 @@ namespace Isotope_fitting
             // default algorithm for isotopic patern is 1. Switch to 2 if there are more than 100C
             short algo = 1;
             int idx = chem.FinalFormula.IndexOf("C");
-            if (Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
+            if (Char.IsNumber(chem.FinalFormula[idx + 2]) == true && Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
 
             ChemiForm.Envelope(chem);
@@ -1128,9 +1153,10 @@ namespace Isotope_fitting
             // if it is a base node, (un)check all subNodes
             if (string.IsNullOrEmpty(node.Name))
             {
+                block_plot_refresh = true;
                 foreach (TreeNode subNode in node.Nodes)
                     subNode.Checked = node.Checked;
-
+                block_plot_refresh = false;
                 refresh_iso_plot();
             }
             else
@@ -1896,14 +1922,19 @@ namespace Isotope_fitting
             //////};
 
             iso_plot.Controller = new CustomPlotController();
-
             ContextMenu ctxMn = new ContextMenu() { };
             MenuItem showPoints = new MenuItem("Show charge ruler", manage_charge_points);
             MenuItem clearPoints = new MenuItem("Clear charge ruler", manage_charge_points);
             MenuItem copyImage = new MenuItem("Copy image", export_chartImage);
             MenuItem exportImage = new MenuItem("Export image to file", export_chartImage);
             ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
+            
             iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
+            iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
+            iso_model.MouseMove += (s, e) => { if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
+            iso_model.MouseUp += (s, e) => { count_distance = false;};            
+          
+
 
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
@@ -1942,7 +1973,39 @@ namespace Isotope_fitting
             //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
             //res_plot.MouseHover += (s, e) => { res_plot.Focus(); };
         }
+        private void cersor_distance(ScreenPoint a, ScreenPoint b)
+        {
+            if (insert_exp)
+            {
+                iso_plot.Model.Annotations.Clear();
+                double mz_a = iso_plot.Model.DefaultXAxis.InverseTransform(a.X);
+                double h_a = iso_plot.Model.DefaultYAxis.InverseTransform(a.Y);
+                double min_border = mz_a;
+                double max_border = mz_a;
+                if (count_distance)
+                {
+                    double mz_b = iso_plot.Model.DefaultXAxis.InverseTransform(b.X);
+                    point_distance = Math.Abs(mz_a - mz_b);
+                    iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 4, Text = "distance: " + Math.Round(Math.Abs(point_distance), 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextVerticalAlignment = VerticalAlignment.Top });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
 
+                    //iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border+ point_distance, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
+                    iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border + point_distance, Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { X = min_border + point_distance, Type = LineAnnotationType.Vertical });
+
+                }
+                else
+                {
+                    iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 2, Text = "int:" + Math.Round(h_a, 4).ToString() + " , " + "m/z:" + Math.Round(mz_a, 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextVerticalAlignment = VerticalAlignment.Top });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
+
+                }
+
+                invalidate_all();
+            }            
+        }
         public class CustomPlotController : PlotController
         {
             public CustomPlotController()
@@ -1961,6 +2024,9 @@ namespace Isotope_fitting
         #endregion
 
         #region Toolbar control
+        /// <summary>
+        /// Initialize Progress Bar (as invisible).
+        /// </summary>
         private void progress_display_init()
         {
             tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 31), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
@@ -1968,6 +2034,9 @@ namespace Isotope_fitting
             user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
         }
 
+        /// <summary>
+        /// Display Progress Bar.
+        /// </summary>
         private void progress_display_start(int barMax, string info)
         {
             prg_lbl.Invoke(new Action(() => prg_lbl.Visible = true));   //thread safe call
