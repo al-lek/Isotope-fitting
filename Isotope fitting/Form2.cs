@@ -1934,32 +1934,35 @@ namespace Isotope_fitting
         }
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
         {
-            iso_plot.Model.Annotations.Clear();            
-            double mz_a = iso_plot.Model.DefaultXAxis.InverseTransform(a.X);
-            double h_a = iso_plot.Model.DefaultYAxis.InverseTransform(a.Y);
-            double min_border = mz_a;
-            double max_border = mz_a;            
-            if (count_distance)
+            if (insert_exp)
             {
-                double mz_b = iso_plot.Model.DefaultXAxis.InverseTransform(b.X);
-                point_distance = Math.Abs(mz_a - mz_b);
-                iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a , Y = h_a, Size = 4, Text = "distance: " + Math.Round(Math.Abs(point_distance), 4).ToString(), Fill = OxyColors.Black, Shape=MarkerType.None,TextVerticalAlignment = VerticalAlignment.Top });
-                iso_plot.Model.Annotations.Add( new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical} );
-                iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
+                iso_plot.Model.Annotations.Clear();
+                double mz_a = iso_plot.Model.DefaultXAxis.InverseTransform(a.X);
+                double h_a = iso_plot.Model.DefaultYAxis.InverseTransform(a.Y);
+                double min_border = mz_a;
+                double max_border = mz_a;
+                if (count_distance)
+                {
+                    double mz_b = iso_plot.Model.DefaultXAxis.InverseTransform(b.X);
+                    point_distance = Math.Abs(mz_a - mz_b);
+                    iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 4, Text = "distance: " + Math.Round(Math.Abs(point_distance), 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextVerticalAlignment = VerticalAlignment.Top });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
 
-                //iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border+ point_distance, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
-                iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border + point_distance, Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
+                    //iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border+ point_distance, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
+                    iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border + point_distance, Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
 
-            }
-            else
-            {
-                iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 2, Text = "int:" + Math.Round(h_a, 4).ToString() + " , " + "m/z:" + Math.Round(mz_a, 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextVerticalAlignment = VerticalAlignment.Top });
-                iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
-                iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
+                }
+                else
+                {
+                    iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 2, Text = "int:" + Math.Round(h_a, 4).ToString() + " , " + "m/z:" + Math.Round(mz_a, 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextVerticalAlignment = VerticalAlignment.Top });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
+                    iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
 
-            }
+                }
 
-            invalidate_all();
+                invalidate_all();
+            }            
         }
         public class CustomPlotController : PlotController
         {
