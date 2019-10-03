@@ -871,7 +871,7 @@ namespace Isotope_fitting
             // default algorithm for isotopic patern is 1. Switch to 2 if there are more than 100C
             short algo = 1;
             int idx = chem.FinalFormula.IndexOf("C");
-            if (Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
+            if (Char.IsNumber(chem.FinalFormula[idx + 2]) == true && Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
 
             ChemiForm.Envelope(chem);
