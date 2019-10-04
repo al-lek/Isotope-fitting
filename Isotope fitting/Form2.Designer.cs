@@ -258,6 +258,7 @@ namespace Isotope_fitting
             this.mark_label.TabIndex = 47;
             this.mark_label.Text = "mark new entries";
             this.toolTip1.SetToolTip(this.mark_label, "Marks the new entries of the list");
+            this.mark_label.Visible = false;
             this.mark_label.Click += new System.EventHandler(this.mark_label_Click);
             // 
             // loadWd_Btn
@@ -318,6 +319,7 @@ namespace Isotope_fitting
             this.remPlot_Btn.TabIndex = 43;
             this.remPlot_Btn.Text = "Remove";
             this.remPlot_Btn.UseVisualStyleBackColor = true;
+            this.remPlot_Btn.Visible = false;
             this.remPlot_Btn.Click += new System.EventHandler(this.remPlot_Btn_Click);
             // 
             // saveFit_Btn
@@ -344,6 +346,7 @@ namespace Isotope_fitting
             this.plot_Btn.TabIndex = 42;
             this.plot_Btn.Text = "Plot";
             this.plot_Btn.UseVisualStyleBackColor = true;
+            this.plot_Btn.Visible = false;
             this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
             // 
             // frag_listView
@@ -432,6 +435,7 @@ namespace Isotope_fitting
             this.factor_label.TabIndex = 36;
             this.factor_label.Text = "Factor";
             this.toolTip1.SetToolTip(this.factor_label, "Change or view the factor of the selected fragment.");
+            this.factor_label.Visible = false;
             // 
             // factor_Box
             // 
@@ -441,6 +445,7 @@ namespace Isotope_fitting
             this.factor_Box.Name = "factor_Box";
             this.factor_Box.Size = new System.Drawing.Size(59, 20);
             this.factor_Box.TabIndex = 35;
+            this.factor_Box.Visible = false;
             this.factor_Box.TextChanged += new System.EventHandler(this.factor_Box_TextChanged);
             this.factor_Box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.factor_Box_KeyDown);
             this.factor_Box.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.factor_Box_KeyPress);

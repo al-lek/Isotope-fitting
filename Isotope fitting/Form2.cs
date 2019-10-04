@@ -1984,10 +1984,20 @@ namespace Isotope_fitting
                 {
                     double mz_b = iso_plot.Model.DefaultXAxis.InverseTransform(b.X);
                     point_distance =mz_a - mz_b;
-                    iso_plot.Model.Annotations.Add(new PointAnnotation() { X = mz_a, Y = h_a, Size = 4, Text = "distance: " + Math.Round(Math.Abs(point_distance), 4).ToString(), Fill = OxyColors.Black, Shape = MarkerType.None, TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right, TextVerticalAlignment = VerticalAlignment.Bottom });
+                    iso_plot.Model.Annotations.Add(new PointAnnotation()
+                    {
+                        X = mz_a,
+                        Y = h_a,
+                        Size = 4,
+                        Text = "distance: " + Math.Round(Math.Abs(point_distance), 4).ToString(),
+                        Fill = OxyColors.Black,
+                        Shape = MarkerType.None,
+                        TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
+                        TextVerticalAlignment = VerticalAlignment.Bottom
+                    });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
-
+                    
                     //iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border+ point_distance, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
                     if (point_distance<0)iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = mz_a, MaximumX = mz_a + Math.Abs(point_distance), Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });                    
                     else iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = mz_a - point_distance, MaximumX = mz_a , Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
@@ -1996,12 +2006,17 @@ namespace Isotope_fitting
                 }
                 else
                 {
-                    iso_plot.Model.Annotations.Add(new TextAnnotation() { TextPosition = new DataPoint(mz_a, h_a),TextHorizontalAlignment= OxyPlot.HorizontalAlignment.Right ,
-                        Background =OxyColors.Gainsboro, Text = "I:" + Math.Round(h_a, 0).ToString()  + " , " + "m/z:" + Math.Round(mz_a, 4).ToString()});
+                    //TrackerManipulator kkk = new TrackerManipulator(iso_plot) { PointsOnly=false,Snap=true,LockToInitialSeries};
+                    iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    {
+                        TextPosition = new DataPoint(mz_a, h_a),
+                        TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
+                        Background = OxyColors.Gainsboro,
+                        Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString()
+                    });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
                 }
-
                 invalidate_all();
             }            
         }
@@ -4022,6 +4037,9 @@ namespace Isotope_fitting
             neues = 0;
             mark_neues = false;
             Form4.active = false;
+            if(frag_tree!=null) frag_tree.Dispose();
+            if (fragTypes_tree != null) fragTypes_tree.Dispose();
+            if (fit_tree != null) fit_tree.Dispose();
         }
         private void saveFit_Btn_Click(object sender, EventArgs e)
         {
