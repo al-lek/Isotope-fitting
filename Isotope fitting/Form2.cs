@@ -98,6 +98,8 @@ namespace Isotope_fitting
         List<double[]> residual = new List<double[]>();
         List<int> custom_colors = new List<int>();
 
+        public double exp_coverage = 0.0;
+
         const double H_mass = 1.008;
         OxyPlot.ScreenPoint charge_center;
         bool is_loading = false; //indicates if loading is active
@@ -371,6 +373,9 @@ namespace Isotope_fitting
             // copy experimental to all_data
             experimental_to_all_data();
 
+            //calculate experimental coverage
+            exp_cover_calc();
+
             // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
             else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
@@ -412,6 +417,17 @@ namespace Isotope_fitting
                 }
             }
         }
+
+        private void exp_cover_calc()
+        {
+            double exp_sum = 0.0;
+            for (int i = 0; i < all_data[0].Count; i++)
+            {
+                exp_sum += all_data[0][i][0];
+            }
+            exp_coverage = exp_sum;
+        }
+
         #endregion
 
         #region 1.b Import fragment list
@@ -983,13 +999,15 @@ namespace Isotope_fitting
 
             for (int i = 0; i < Fragments2.Count; i++)
             {
+                bool newfrag = false;
+                //if (Fragments2[i].Factor != 1.0) { newfrag = true; }
                 // group in mz windows
                 // first fragment in group, opens a new ggroup, and contributes to the group title
                 if (i % frag_mzGroups == 0) frag_tree.Nodes.Add(Fragments2[i].Mz + " - ");
                 // last fragment in group, or last in general, contributes to the group title
                 if (i % frag_mzGroups == (frag_mzGroups - 1) || i == Fragments2.Count - 1) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(new_fragTreeNode(i));
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(new_fragTreeNode(i,newfrag));
             }
 
             frag_tree.EndUpdate();
@@ -1049,7 +1067,8 @@ namespace Isotope_fitting
             {
                 string ion_type = Fragments2[i].Ion_type;
                 bool added = false;
-
+                bool newfrag = false;
+                //if (Fragments2[i].Factor != 1.0) { newfrag = true; }
                 // check if base node corresponding to type already exists and add fragment. Else make a new base node 
                 foreach (TreeNode baseNode in fragTypes_tree.Nodes)
                 {
@@ -1067,7 +1086,7 @@ namespace Isotope_fitting
                             // case where curr_frag 
                             if (curr_num < inTree_num)
                             {
-                                baseNode.Nodes.Insert(j, new_fragTreeNode(i));
+                                baseNode.Nodes.Insert(j, new_fragTreeNode(i, newfrag));
                                 added = true; break;
                             }
 
@@ -1078,12 +1097,12 @@ namespace Isotope_fitting
                                     if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
                                         curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
                                     {
-                                        baseNode.Nodes.Insert(k, new_fragTreeNode(i));
+                                        baseNode.Nodes.Insert(k, new_fragTreeNode(i, newfrag));
                                         added = true; break;
                                     }
                                     else if (k == baseNode.Nodes.Count - 1)
                                     {
-                                        baseNode.Nodes.Add(new_fragTreeNode(i));
+                                        baseNode.Nodes.Add(new_fragTreeNode(i, newfrag));
                                         added = true; break;
                                     }
                                 }
@@ -1093,7 +1112,7 @@ namespace Isotope_fitting
 
                         if (!added)
                         {
-                            baseNode.Nodes.Add(new_fragTreeNode(i));
+                            baseNode.Nodes.Add(new_fragTreeNode(i, newfrag));
                             added = true;
                         }
                     }
@@ -1101,7 +1120,7 @@ namespace Isotope_fitting
 
                 if (!added)
                 {
-                    TreeNode tr_inner = new_fragTreeNode(i);
+                    TreeNode tr_inner = new_fragTreeNode(i, newfrag);
                     TreeNode tr_base = new TreeNode { Text = ion_type };
                     tr_base.Nodes.Add(tr_inner);
                     fragTypes_tree.Nodes.Add(tr_base);
@@ -1110,10 +1129,19 @@ namespace Isotope_fitting
             fragTypes_tree.EndUpdate();
         }
 
-        private TreeNode new_fragTreeNode(int idx)
+        private TreeNode new_fragTreeNode(int idx,bool newfrag=false)
         {
-            TreeNode tr = new TreeNode { Text = Fragments2[idx].Name + "  -  " + Fragments2[idx].Mz + "  -  " + Fragments2[idx].FinalFormula + "  -  " + Fragments2[idx].PPM_Error.ToString("0.##") + "  -  " +
-                                        (Fragments2[idx].Factor * Fragments2[idx].Max_intensity).ToString("0"), Name = idx.ToString(), Tag = Fragments2[idx].Counter.ToString() };
+            TreeNode tr = new TreeNode
+            {
+                Text = Fragments2[idx].Name + "  -  " + Fragments2[idx].Mz + "  -  " + Fragments2[idx].FinalFormula + "  -  " + Fragments2[idx].PPM_Error.ToString("0.##") + "  -  " +
+                                       (Fragments2[idx].Factor * Fragments2[idx].Max_intensity).ToString("0"),
+                Name = idx.ToString(),
+                Tag = Fragments2[idx].Counter.ToString()
+            };
+            if (newfrag)
+            {
+                tr.ForeColor = Color.LawnGreen;
+            }                      
             return tr;
         }
 
@@ -1510,6 +1538,7 @@ namespace Isotope_fitting
             //int[][] tmp2 = powerSet.ToArray();
             int[][] tmp2 = set_copy.ToArray();
 
+            //array is sorted in descending fit coverage !!!
             IComparer myComparer = new lastElement();
             Array.Sort(tmp1, tmp2, myComparer);
 
@@ -1575,6 +1604,8 @@ namespace Isotope_fitting
             if (res < 100) return res;
             else return (frag_sum / exp_sum) * 100.0;
         }
+
+       
 
         public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
         {
@@ -2591,14 +2622,160 @@ namespace Isotope_fitting
 
         #endregion
 
+        #region SAVE-LOAD list fragments
+        private void saveListBtn_Click(object sender, EventArgs e)
+        {
+            saveList(selectedFragments);
+        }
+        private void saveList(List<int> fragToSave)
+        {
+            SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fitted_fragments", Filter = "Data Files (*.fit)|*.fit", DefaultExt = "fit", OverwritePrompt = true, AddExtension = true };
 
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
+                file.WriteLine("Mode:\tFitted List");
+                file.WriteLine("AA Sequence:\t" + Form2.Peptide);
+                file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
+                file.WriteLine("[m/z[Da]\tIntensity]");
+                file.WriteLine();
+                //file.WriteLine("Name:\tExp");
+                //foreach (double[] p in Form2.selected_all_data[0]) file.WriteLine(p[0] + "\t" + p[1]);
+                //file.WriteLine();
+                foreach (int indexS in fragToSave)
+                {
+                    file.WriteLine("Name:\t" + Form2.Fragments2[indexS - 1].Name);
+                    file.WriteLine("Factor:\t" + Form2.Fragments2[indexS - 1].Factor);
+                    file.WriteLine("m/z:\t" + Form2.Fragments2[indexS - 1].Mz);
+                    file.WriteLine("Final Formula:\t" + Form2.Fragments2[indexS - 1].FinalFormula);
+                    file.WriteLine("PPM Error:\t" + Form2.Fragments2[indexS - 1].PPM_Error);
+                    file.WriteLine("Max Intensity:\t" + Form2.Fragments2[indexS - 1].Max_intensity);
+                    file.WriteLine("Ion Type:\t" + Form2.Fragments2[indexS - 1].Ion_type);
+                    file.WriteLine("Index:\t" + Form2.Fragments2[indexS - 1].Index);
+                    file.WriteLine("Charge:\t" + Form2.Fragments2[indexS - 1].Charge);
+                    //file.WriteLine("Centroid:\t" + Form2.Fragments2[indexS - 1].Centroid[0].X + "\t" + Form2.Fragments2[indexS - 1].Centroid[0].Y);
+                    //file.WriteLine("Selected:\t" + Form2.Fragments2[indexS - 1].To_plot.ToString());
+                    file.WriteLine("Color:\t" + Form2.Fragments2[indexS - 1].Color.ToColor().ToArgb());
+                    foreach (double[] p in Form2.all_data[indexS]) file.WriteLine(p[0] + "\t" + p[1]);
+                    file.WriteLine();
+                }
+                file.Flush(); file.Close(); file.Dispose();
+            }
+        }
+        private void loadListBtn_Click(object sender, EventArgs e)
+        {
+            loadList();
+        }
+        private void loadList()
+        {
+            OpenFileDialog loadData = new OpenFileDialog();
+            List<string> lista = new List<string>();
+            string fullPath = "";
 
+            // Open dialogue properties
+            //loadData.InitialDirectory = Application.StartupPath + "\\Data";
+            loadData.Title = "Load fitting data"; loadData.FileName = "";
+            loadData.Filter = "data file|*.fit|All files|*.*";
 
+            if (loadData.ShowDialog() != DialogResult.Cancel)
+            {
+                is_loading = true;  // performance
+                fullPath = loadData.FileName;
 
+                #region UI & data                 
+                fit_Btn.Enabled = true;
+                saveFit_Btn.Enabled = true;
+                loadExp_Btn.Enabled = true;
+                loadFit_Btn.Enabled = false;
+                //selected_all_data.Clear();
+                //selected_all_data.Add(new List<double[]>());                
+                #endregion
+               
+                System.IO.StreamReader objReader = new System.IO.StreamReader(fullPath);
+                do { lista.Add(objReader.ReadLine()); }
+                while (objReader.Peek() != -1);
+                objReader.Close();
 
+                int arrayPositionIndex = 0;
+                int isotope_count = -1;
+                int f = Fragments2.Count();
 
+                for (int j = 0; j != (lista.Count); j++)
+                {
+                    string[] str = new string[5];
+                    try
+                    {
+                        str = lista[j].Split('\t');
 
+                        if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
+                        else if (lista[j].StartsWith("Mode")) continue; // to be implemented
+                        else if (lista[j].StartsWith("AA")) { Peptide = str[1]; pep_Box.Text = Peptide; }                        
+                        else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
+                        else if (lista[j].StartsWith("Name"))
+                        {
+                            // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
+                            isotope_count++;
+                            if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
+                            {
+                                all_data.Add(new List<double[]>());
+                                if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
+                                else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                f++;
+                                Fragments2.Add(new FragForm() { Name = str[1], Centroid = new List<PointPlot>(), Factor = 1.0, Fix = 1.0, FinalFormula = "", Max_intensity = 0.0, Ion_type = "", PPM_Error = 0.0, Mz = "", Radio_label = "", Color = new OxyColor(), To_plot = false, Counter = f });
+                                all_data.Add(new List<double[]>());                                
+                            }                           
+                            else//fragments
+                            {
+                                f++;
+                                Fragments2.Add(new FragForm() { Name = str[1], Centroid = new List<PointPlot>(), Factor = 1.0, Fix = 1.0, FinalFormula = "", Max_intensity = 0.0,Ion_type="", PPM_Error = 0.0, Mz = "", Radio_label = "", Color = new OxyColor(), To_plot = false, Counter = f });
+                                all_data.Add(new List<double[]>());                                
+                            }
+                        }
+                        else if (lista[j].StartsWith("Factor")) { Fragments2.Last().Factor = dParser(str[1]); }
+                        else if (lista[j].StartsWith("m/z")) { Fragments2.Last().Mz = str[1]; }
+                        else if (lista[j].StartsWith("Final")) { Fragments2.Last().FinalFormula = str[1]; }
+                        else if (lista[j].StartsWith("PPM")) { Fragments2.Last().PPM_Error = dParser(str[1]); }
+                        else if (lista[j].StartsWith("Max")) { Fragments2.Last().Max_intensity = dParser(str[1]); }
+                        else if (lista[j].StartsWith("Ion")) { Fragments2.Last().Ion_type = str[1]; }
+                        else if (lista[j].StartsWith("Index")) { Fragments2.Last().Index = str[1]; }
+                        else if (lista[j].StartsWith("Charge")) { Fragments2.Last().Charge = Int32.Parse(str[1]); }
+                        //else if (lista[j].StartsWith("Cen")) { Fragments2.Last().Centroid.Add(new PointPlot { Y = dParser(str[2]), X = dParser(str[1]) }); } 
+                        else if (lista[j].StartsWith("Color")) { custom_colors.Add(Convert.ToInt32(str[1])); Fragments2.Last().Color = OxyColor.FromUInt32((uint)custom_colors.Last()); }
+                        else { all_data[f].Add(new double[] { dParser(str[0]), dParser(str[1]) }); }
+                    }
+                    catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
+                    arrayPositionIndex++;
+                }         
+                is_loading = false;
+                populate_frag_treeView();
+                populate_fragtypes_treeView();
+                // post load actions                                
+                recalculate_all_data_aligned();
+                refresh_iso_plot();
+                fit_sel_Btn.Enabled = false;
+                fit_Btn.Enabled = false;
+                Fitting_chkBox.Enabled = true;              
+            }
+        }
+        private void clearListBtn_Click(object sender, EventArgs e)
+        {
+            clearList();
+        }
+        private void clearList()
+        {
+            selectedFragments.Clear();
+            Fragments2.Clear();
+            Initialize_data_struct();
+            post_load_actions();                      
+            if (frag_tree != null) frag_tree.Dispose();
+            if (fragTypes_tree != null) fragTypes_tree.Dispose();
+            if (fit_tree != null) fit_tree.Dispose();            
+            fit_sel_Btn.Enabled = false;
+            fit_Btn.Enabled = false;
+            
+        }
+        #endregion
 
         #region UI
         private void Initialize_UI()
@@ -3493,7 +3670,7 @@ namespace Isotope_fitting
             // Calls CaseInsensitiveComparer.Compare with the parameters reversed.
             int IComparer.Compare(object x, object y)
             {
-                return ((new CaseInsensitiveComparer()).Compare((x as double[]).Last(), (y as double[]).Last()));
+                return ((new CaseInsensitiveComparer()).Compare((y as double[]).Last(), (x as double[]).Last()));
             }
 
         }
@@ -4355,6 +4532,7 @@ namespace Isotope_fitting
             frm4.FormClosing += (s, f) => { add_machine(false); };
         }
 
+        
 
         private void add_machine(bool exp_resolution = false)
         {
