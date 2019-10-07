@@ -675,6 +675,7 @@ namespace Isotope_fitting
         {
             GC.Collect();
             all_data.RemoveRange(1, all_data.Count - 1);
+            custom_colors.RemoveRange(1, custom_colors.Count - 1);
             all_data_aligned.Clear();
             GC.Collect();
             sw1.Reset(); sw1.Start();
@@ -2741,7 +2742,7 @@ namespace Isotope_fitting
                                     Centroid = new List<PointPlot>(),
                                     Combinations4 = new List<Combination_4>(),
                                     FinalFormula = string.Empty,
-                                    Color= OxyColor.FromUInt32((uint)custom_colors.Last()),
+                                    Color= OxyColor.FromUInt32((uint)Convert.ToInt32(str[4])),
                                     Charge = Int32.Parse(str[4]),
                                     Ion_type = str[1],
                                     PPM_Error=dParser(str[8]),
@@ -2760,7 +2761,7 @@ namespace Isotope_fitting
 
                 Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem,true));
                 envipat_fitted.Start();
-
+                refresh_iso_plot();
                 is_loading = false;                            
             }
         }

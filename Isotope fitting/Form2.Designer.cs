@@ -41,6 +41,7 @@ namespace Isotope_fitting
             this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
             this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
+            this.clearListBtn = new System.Windows.Forms.Label();
             this.saveListBtn = new System.Windows.Forms.Label();
             this.loadListBtn = new System.Windows.Forms.Label();
             this.mark_label = new System.Windows.Forms.Label();
@@ -121,7 +122,6 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.clearListBtn = new System.Windows.Forms.Label();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -253,12 +253,24 @@ namespace Isotope_fitting
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
             // 
+            // clearListBtn
+            // 
+            this.clearListBtn.AutoSize = true;
+            this.clearListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clearListBtn.ForeColor = System.Drawing.Color.Crimson;
+            this.clearListBtn.Location = new System.Drawing.Point(843, 58);
+            this.clearListBtn.Name = "clearListBtn";
+            this.clearListBtn.Size = new System.Drawing.Size(50, 13);
+            this.clearListBtn.TabIndex = 10000003;
+            this.clearListBtn.Text = "Clear List";
+            this.clearListBtn.Click += new System.EventHandler(this.clearListBtn_Click);
+            // 
             // saveListBtn
             // 
             this.saveListBtn.AutoSize = true;
             this.saveListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveListBtn.ForeColor = System.Drawing.Color.Teal;
-            this.saveListBtn.Location = new System.Drawing.Point(845, 58);
+            this.saveListBtn.Location = new System.Drawing.Point(742, 58);
             this.saveListBtn.Name = "saveListBtn";
             this.saveListBtn.Size = new System.Drawing.Size(51, 13);
             this.saveListBtn.TabIndex = 10000002;
@@ -270,7 +282,7 @@ namespace Isotope_fitting
             this.loadListBtn.AutoSize = true;
             this.loadListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadListBtn.ForeColor = System.Drawing.Color.Blue;
-            this.loadListBtn.Location = new System.Drawing.Point(789, 58);
+            this.loadListBtn.Location = new System.Drawing.Point(793, 58);
             this.loadListBtn.Name = "loadListBtn";
             this.loadListBtn.Size = new System.Drawing.Size(50, 13);
             this.loadListBtn.TabIndex = 10000001;
@@ -1223,18 +1235,6 @@ namespace Isotope_fitting
             this.fitMin_Box.Size = new System.Drawing.Size(70, 20);
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
-            // 
-            // clearListBtn
-            // 
-            this.clearListBtn.AutoSize = true;
-            this.clearListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearListBtn.ForeColor = System.Drawing.Color.Crimson;
-            this.clearListBtn.Location = new System.Drawing.Point(733, 58);
-            this.clearListBtn.Name = "clearListBtn";
-            this.clearListBtn.Size = new System.Drawing.Size(50, 13);
-            this.clearListBtn.TabIndex = 10000003;
-            this.clearListBtn.Text = "Clear List";
-            this.clearListBtn.Click += new System.EventHandler(this.clearListBtn_Click);
             // 
             // Form2
             // 
