@@ -505,7 +505,8 @@ namespace Isotope_fitting
                 Profile = new List<PointPlot>(),
                 Centroid = new List<PointPlot>(),
                 Combinations4 = new List<Combination_4>(),
-                FinalFormula = string.Empty,
+                FinalFormula = string.Empty, 
+                Factor=1.0,
             });
 
             int i = ChemFormulas.Count - 1;
@@ -825,7 +826,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
+        private void calculate_fragment_properties(List<ChemiForm> selected_fragments,bool newfrag=false)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
             sw1.Reset(); sw1.Start();
@@ -834,7 +835,7 @@ namespace Isotope_fitting
 
             Parallel.For(0, selected_fragments.Count, (i, state) =>
             {
-                Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
+                Envipat_Calcs_and_filter_byPPM(selected_fragments[i],newfrag);
 
                 // safelly keep track of progress
                 Interlocked.Increment(ref progress);
@@ -850,17 +851,21 @@ namespace Isotope_fitting
             is_calc = false;
 
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
-            Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-            MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
+            if (!newfrag)
+            {
+                Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
+                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
+            }
+            else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");
 
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
         }
 
-        private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
+        private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem,bool newfrag=false)
         {
             ChemiForm.CheckChem(chem);      // will also generate chem.FinalFormula
-
+            
             if (chem.Resolution == 0)
             {
                 if (String.IsNullOrEmpty(chem.Machine.ToString()))
@@ -889,12 +894,12 @@ namespace Isotope_fitting
             if (Char.IsNumber(chem.FinalFormula[idx + 2]) == true && Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
 
-            ChemiForm.Envelope(chem);
+            ChemiForm.Envelope(chem);            
             ChemiForm.Vdetect(chem);
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
-            // case where there is no experimental data
-            if (!insert_exp) { add_fragment_to_Fragments2(chem, cen); return; }
+            // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
+            if (!insert_exp||newfrag) { add_fragment_to_Fragments2(chem, cen,newfrag); return; }
 
             // MAIN decesion algorithm
             bool fragment_is_canditate = decision_algorithm(chem, cen);
@@ -908,7 +913,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen)
+        private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen,bool newfrag=false)
         {
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
@@ -931,7 +936,7 @@ namespace Isotope_fitting
                     Mz = chem.Mz,
                     Radio_label = chem.Radio_label,
                     Resolution = chem.Resolution,
-                    Factor = 1.0,
+                    Factor = chem.Factor,
                     Counter = 0,
                     To_plot = false,
                     Color = chem.Color,
@@ -939,14 +944,14 @@ namespace Isotope_fitting
                     ListName = new string[4],
                     Fix = 1.0,
                     Max_intensity = 0.0,
-                    Fixed=false
+                    Fixed=newfrag,                   
                 });
 
                 Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Counter = Fragments2.Count;
                 Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
-                Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
+                if(!newfrag)Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
 
                 if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
@@ -1007,7 +1012,7 @@ namespace Isotope_fitting
                 // last fragment in group, or last in general, contributes to the group title
                 if (i % frag_mzGroups == (frag_mzGroups - 1) || i == Fragments2.Count - 1) frag_tree.Nodes[i / frag_mzGroups].Text += Fragments2[i].Mz;
 
-                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(new_fragTreeNode(i, newfrag));
+                frag_tree.Nodes[i / frag_mzGroups].Nodes.Add(new_fragTreeNode(i));
             }
 
             frag_tree.EndUpdate();
@@ -1088,7 +1093,7 @@ namespace Isotope_fitting
                             // case where curr_frag 
                             if (curr_num < inTree_num)
                             {
-                                baseNode.Nodes.Insert(j, new_fragTreeNode(i,newfrag));
+                                baseNode.Nodes.Insert(j, new_fragTreeNode(i));
                                 added = true; break;
                             }
 
@@ -1099,12 +1104,12 @@ namespace Isotope_fitting
                                     if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
                                         curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
                                     {
-                                        baseNode.Nodes.Insert(k, new_fragTreeNode(i, newfrag));
+                                        baseNode.Nodes.Insert(k, new_fragTreeNode(i));
                                         added = true; break;
                                     }
                                     else if (k == baseNode.Nodes.Count - 1)
                                     {
-                                        baseNode.Nodes.Add(new_fragTreeNode(i, newfrag));
+                                        baseNode.Nodes.Add(new_fragTreeNode(i));
                                         added = true; break;
                                     }
                                 }
@@ -1114,7 +1119,7 @@ namespace Isotope_fitting
 
                         if (!added)
                         {
-                            baseNode.Nodes.Add(new_fragTreeNode(i, newfrag));
+                            baseNode.Nodes.Add(new_fragTreeNode(i));
                             added = true;
                         }
                     }
@@ -1122,7 +1127,7 @@ namespace Isotope_fitting
 
                 if (!added)
                 {
-                    TreeNode tr_inner = new_fragTreeNode(i, newfrag);
+                    TreeNode tr_inner = new_fragTreeNode(i);
                     TreeNode tr_base = new TreeNode { Text = ion_type };
                     tr_base.Nodes.Add(tr_inner);
                     fragTypes_tree.Nodes.Add(tr_base);
@@ -1131,7 +1136,7 @@ namespace Isotope_fitting
             fragTypes_tree.EndUpdate();
         }
 
-        private TreeNode new_fragTreeNode(int idx,bool newfrag)
+        private TreeNode new_fragTreeNode(int idx)
         {
             TreeNode tr = new TreeNode
             {
@@ -1140,7 +1145,7 @@ namespace Isotope_fitting
                 Name = idx.ToString(),
                 Tag = Fragments2[idx].Counter.ToString()
             };
-            if (newfrag)
+            if (Fragments2[idx].Fixed)
             {
                 tr.ForeColor = Color.DarkGreen;
             }                      
@@ -2642,25 +2647,13 @@ namespace Isotope_fitting
                 file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
                 file.WriteLine("[m/z[Da]\tIntensity]");
                 file.WriteLine();
+                file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution");
                 //file.WriteLine("Name:\tExp");
                 //foreach (double[] p in Form2.selected_all_data[0]) file.WriteLine(p[0] + "\t" + p[1]);
                 //file.WriteLine();
                 foreach (int indexS in fragToSave)
                 {
-                    file.WriteLine("Name:\t" + Form2.Fragments2[indexS - 1].Name);
-                    file.WriteLine("Factor:\t" + Form2.Fragments2[indexS - 1].Factor);
-                    file.WriteLine("m/z:\t" + Form2.Fragments2[indexS - 1].Mz);
-                    file.WriteLine("Final Formula:\t" + Form2.Fragments2[indexS - 1].FinalFormula);
-                    file.WriteLine("PPM Error:\t" + Form2.Fragments2[indexS - 1].PPM_Error);
-                    file.WriteLine("Max Intensity:\t" + Form2.Fragments2[indexS - 1].Max_intensity);
-                    file.WriteLine("Ion Type:\t" + Form2.Fragments2[indexS - 1].Ion_type);
-                    file.WriteLine("Index:\t" + Form2.Fragments2[indexS - 1].Index);
-                    file.WriteLine("Charge:\t" + Form2.Fragments2[indexS - 1].Charge);
-                    //file.WriteLine("Centroid:\t" + Form2.Fragments2[indexS - 1].Centroid[0].X + "\t" + Form2.Fragments2[indexS - 1].Centroid[0].Y);
-                    //file.WriteLine("Selected:\t" + Form2.Fragments2[indexS - 1].To_plot.ToString());
-                    file.WriteLine("Color:\t" + Form2.Fragments2[indexS - 1].Color.ToColor().ToArgb());
-                    foreach (double[] p in Form2.all_data[indexS]) file.WriteLine(p[0] + "\t" + p[1]);
-                    file.WriteLine();
+                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToColor().ToArgb() + "\t" + Form2.Fragments2[indexS - 1].Resolution);                    
                 }
                 file.Flush(); file.Close(); file.Dispose();
             }
@@ -2679,7 +2672,7 @@ namespace Isotope_fitting
             //loadData.InitialDirectory = Application.StartupPath + "\\Data";
             loadData.Title = "Load fitting data"; loadData.FileName = "";
             loadData.Filter = "data file|*.fit|All files|*.*";
-
+            List<ChemiForm> fitted_chem = new List<ChemiForm>();
             if (loadData.ShowDialog() != DialogResult.Cancel)
             {
                 is_loading = true;  // performance
@@ -2689,9 +2682,7 @@ namespace Isotope_fitting
                 fit_Btn.Enabled = true;
                 saveFit_Btn.Enabled = true;
                 loadExp_Btn.Enabled = true;
-                loadFit_Btn.Enabled = false;
-                //selected_all_data.Clear();
-                //selected_all_data.Add(new List<double[]>());                
+                loadFit_Btn.Enabled = false;                         
                 #endregion
                
                 System.IO.StreamReader objReader = new System.IO.StreamReader(fullPath);
@@ -2702,10 +2693,10 @@ namespace Isotope_fitting
                 int arrayPositionIndex = 0;
                 int isotope_count = -1;
                 int f = Fragments2.Count();
-
+                
                 for (int j = 0; j != (lista.Count); j++)
                 {
-                    string[] str = new string[5];
+                    string[] str = new string[15];
                     try
                     {
                         str = lista[j].Split('\t');
@@ -2714,68 +2705,74 @@ namespace Isotope_fitting
                         else if (lista[j].StartsWith("Mode")) continue; // to be implemented
                         else if (lista[j].StartsWith("AA")) { Peptide = str[1]; pep_Box.Text = Peptide; }                        
                         else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
-                        else if (lista[j].StartsWith("Name"))
-                        {
-                            if (check_for_duplicates()) f--;isotope_count--;
-                            // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
-                            isotope_count++;
-                            if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
+                        else if (lista[j].StartsWith("Name")) continue;
+                        else
+                        {  
+                            if (check_for_duplicates(str[0], dParser(str[7])))
                             {
-                                all_data.Add(new List<double[]>());
-                                if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                                else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
+                                isotope_count++;
+                                if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
+                                {
+                                    all_data.Add(new List<double[]>());
+                                    if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
+                                    else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                }
                                 f++;
-                                Fragments2.Add(new FragForm() { Name = str[1], Centroid = new List<PointPlot>(), Factor = 1.0, Fix = 1.0, FinalFormula = "", Max_intensity = 0.0, Ion_type = "", PPM_Error = 0.0, Mz = "", Radio_label = "", Color = new OxyColor(), To_plot = false, Counter = f, Fixed = true });
-                                all_data.Add(new List<double[]>());                                
-                            }                           
-                            else//fragments
-                            {
-                                f++;
-                                Fragments2.Add(new FragForm() { Name = str[1], Centroid = new List<PointPlot>(), Factor = 1.0, Fix = 1.0, FinalFormula = "", Max_intensity = 0.0,Ion_type="", PPM_Error = 0.0, Mz = "", Radio_label = "", Color = new OxyColor(), To_plot = false, Counter = f, Fixed = true });
-                                all_data.Add(new List<double[]>());                                
+                                fitted_chem.Add(new ChemiForm
+                                {
+                                    InputFormula =str[9],
+                                    Adduct = str[10],
+                                    Deduct = str[11],
+                                    Multiplier = 1,
+                                    Mz = str[5],
+                                    Ion = string.Empty,
+                                    Index = str[2],
+                                    IndexTo = str[3],
+                                    Error = false,
+                                    Elements_set = new List<Element_set>(),
+                                    Iso_total_amount = 0,
+                                    Monoisotopic = new CompoundMulti(),
+                                    Points = new List<PointPlot>(),
+                                    Machine = string.Empty,
+                                    Resolution = float.Parse(str[13]),
+                                    Combinations = new List<Combination_1>(),
+                                    Profile = new List<PointPlot>(),
+                                    Centroid = new List<PointPlot>(),
+                                    Combinations4 = new List<Combination_4>(),
+                                    FinalFormula = string.Empty,
+                                    Color= OxyColor.FromUInt32((uint)custom_colors.Last()),
+                                    Charge = Int32.Parse(str[4]),
+                                    Ion_type = str[1],
+                                    PPM_Error=dParser(str[8]),
+                                    PrintFormula= str[9],
+                                    Name= str[0],
+                                    Radio_label= string.Empty,         
+                                    Factor= dParser(str[7])
+                                });
+                                                        
                             }
-                        }
-                        else if (lista[j].StartsWith("Factor")) { Fragments2.Last().Factor = dParser(str[1]); }
-                        else if (lista[j].StartsWith("m/z")) { Fragments2.Last().Mz = str[1]; }
-                        else if (lista[j].StartsWith("Final")) { Fragments2.Last().FinalFormula = str[1]; }
-                        else if (lista[j].StartsWith("PPM")) { Fragments2.Last().PPM_Error = dParser(str[1]); }
-                        else if (lista[j].StartsWith("Max")) { Fragments2.Last().Max_intensity = dParser(str[1]); }
-                        else if (lista[j].StartsWith("Ion")) { Fragments2.Last().Ion_type = str[1]; }
-                        else if (lista[j].StartsWith("Index")) { Fragments2.Last().Index = str[1]; }
-                        else if (lista[j].StartsWith("Charge")) { Fragments2.Last().Charge = Int32.Parse(str[1]); }
-                        //else if (lista[j].StartsWith("Cen")) { Fragments2.Last().Centroid.Add(new PointPlot { Y = dParser(str[2]), X = dParser(str[1]) }); } 
-                        else if (lista[j].StartsWith("Color")) { custom_colors.Add(Convert.ToInt32(str[1])); Fragments2.Last().Color = OxyColor.FromUInt32((uint)custom_colors.Last()); }
-                        else { all_data[f].Add(new double[] { dParser(str[0]), dParser(str[1]) }); }
+                        }                       
                     }
                     catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
                     arrayPositionIndex++;
                 }
-                //one last call for the last element of the list Fragments2
-                check_for_duplicates();
-                is_loading = false;
-                populate_frag_treeView();
-                populate_fragtypes_treeView();
-                // post load actions                                
-                recalculate_all_data_aligned();
-                refresh_iso_plot();
-                fit_sel_Btn.Enabled = false;
-                fit_Btn.Enabled = false;
-                Fitting_chkBox.Enabled = true;              
+
+                Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem,true));
+                envipat_fitted.Start();
+
+                is_loading = false;                            
             }
         }
 
-        private bool check_for_duplicates()
+        private bool check_for_duplicates(string name,double factor)
         {
-            if(Fragments2.Count<2) return false;
-            int last_added = Fragments2.Count-1;
-            for (int cc= last_added - 1;cc>-1 ;cc--)
+            if(Fragments2.Count<2) return true;            
+            foreach(FragForm fra in Fragments2)
             {
-                if (Fragments2[cc].Name== Fragments2[cc].Name && Fragments2[cc].Factor== Fragments2[last_added].Factor)
-                {
-                    Fragments2.RemoveAt(last_added); all_data.RemoveAt(last_added-1); return true;
-                }
+                if (fra.Name==name && fra.Factor==factor) return false;                
             }    
-            return false;
+            return true;
         }
         private void clearListBtn_Click(object sender, EventArgs e)
         {

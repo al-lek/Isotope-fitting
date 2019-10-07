@@ -668,6 +668,7 @@ namespace Isotope_fitting
         private string name;
         private bool error;
         private double ppm_error;
+        private double fragfactor;
         private OxyColor color;
         private CompoundMulti monoisotopic;
         private int iso_total_amount;
@@ -892,6 +893,11 @@ namespace Isotope_fitting
             get { return this.ppm_error; }
             set { this.ppm_error = value; }
         }
+        public double Factor
+        {
+            get { return this.fragfactor; }
+            set { this.fragfactor = value; }
+        }
         public CompoundMulti Monoisotopic
         {
             get
@@ -976,7 +982,7 @@ namespace Isotope_fitting
         {
             ChemiForm deepcopyChemiform = new ChemiForm() { Adduct = this.Adduct, Centroid = this.Centroid.ConvertAll(item => item.DeepCopy()), Charge = this.Charge, Color= this.Color, Combinations= (List<Combination_1>)this.Combinations.ConvertAll(item => item.DeepCopy()), Combinations4 = (List<Combination_4>)this.Combinations4.ConvertAll(item => item.DeepCopy()), Deduct=this.Deduct, Elements_set= (List<Element_set>)this.Elements_set.ConvertAll(item => item.DeepCopy()),
                 Error =this.Error, FinalFormula=this.FinalFormula, Index=this.Index, IndexTo=this.IndexTo, InputFormula=this.InputFormula, Ion=this.Ion, Ion_type=this.Ion_type, Iso_total_amount=this.Iso_total_amount, Machine= this.Machine, Monoisotopic=this.Monoisotopic, Multiplier=this.Multiplier, Mz=this.Mz, Name=this.Name, Points=this.Points.ConvertAll(item => item.DeepCopy()), PrintFormula=this.PrintFormula, Profile=this.Profile.ConvertAll(item => item.DeepCopy()),
-                Radio_label=this.Radio_label, Resolution=this.Resolution };
+                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,Factor=this.Factor};
 
             return deepcopyChemiform;
         }
@@ -2658,6 +2664,7 @@ namespace Isotope_fitting
         public static void CheckChem(ChemiForm chem)
         {
             string f ="";
+            string FORMULA=chem.InputFormula;
             for (int g=0;g<chem.InputFormula.Length ;g++)
             {
                 if (Char.IsWhiteSpace(chem.InputFormula,g) && Char.IsNumber(chem.InputFormula,g+1))
@@ -2686,7 +2693,7 @@ namespace Isotope_fitting
                     f+= chem.InputFormula[g];
                 }
             }
-            chem.InputFormula = f.Replace(" ", "");
+            FORMULA= chem.InputFormula = f.Replace(" ", "");
             string[] elem = new string[ChemForm.isoTable.Length];
             Regex rgx = new Regex("[A-Z]");
             chem.FinalFormula = "";
@@ -2695,9 +2702,9 @@ namespace Isotope_fitting
                 //multiply each number with the multiplier
                 if (String.IsNullOrEmpty(chem.Multiplier.ToString()) == false && chem.Multiplier != 0)
                 {
-                    chem.InputFormula = Multif(chem.InputFormula, chem.Multiplier);
+                    FORMULA = Multif(FORMULA, chem.Multiplier);
                 }
-                chem.InputFormula = chem.InputFormula + chem.Adduct;
+                FORMULA = FORMULA + chem.Adduct;
 
             }
 
@@ -2730,22 +2737,22 @@ namespace Isotope_fitting
             chem.Monoisotopic.Mass = 0.0;
             chem.Iso_total_amount = 0;
 
-            if (chem.InputFormula != null)
+            if (FORMULA != null)
             {
                 chem.Error = false;
                 //all characters possible?
-                if (chem.InputFormula.IndexOfAny("*{}&#$@!`-_,.+^".ToCharArray()) != -1)
+                if (FORMULA.IndexOfAny("*{}&#$@!`-_,.+^".ToCharArray()) != -1)
                 {
                     chem.Error = true;
                 }
 
 
                 //do all bracket types close and [] only contain numbers?
-                if (chem.Error == false && chem.InputFormula.IndexOfAny("()[]".ToCharArray()) != -1)
+                if (chem.Error == false && FORMULA.IndexOfAny("()[]".ToCharArray()) != -1)
                 {
                     int getit1 = 0;
                     int getit2 = 0;
-                    foreach (char c in chem.InputFormula)
+                    foreach (char c in FORMULA)
                     {
                         if (c == '[') { getit1++; }
                         if (c == ']') { getit1--; }
@@ -2761,21 +2768,21 @@ namespace Isotope_fitting
                 }
 
                 //start correct?
-                if (chem.Error == false && char.IsUpper(chem.InputFormula[0]) != true && chem.InputFormula[0] != '(' && chem.InputFormula[0] != '[')
+                if (chem.Error == false && char.IsUpper(FORMULA[0]) != true && FORMULA[0] != '(' && FORMULA[0] != '[')
                 {
                     chem.Error = true;
                 }
-                if (chem.InputFormula.Length == 1)
+                if (FORMULA.Length == 1)
                 {
-                    chem.InputFormula = chem.InputFormula + "1";
+                    FORMULA = FORMULA + "1";
                 }
 
                 //empty brackets?
                 if (chem.Error == false)
                 {
-                    for (int a = 1; a < chem.InputFormula.Length; a++)
+                    for (int a = 1; a < FORMULA.Length; a++)
                     {
-                        if (chem.InputFormula[a - 1] == '(' && chem.InputFormula[a] == ')')
+                        if (FORMULA[a - 1] == '(' && FORMULA[a] == ')')
                         {
                             chem.Error = true;
                         }
@@ -2785,44 +2792,44 @@ namespace Isotope_fitting
                 //insert 1 where missing
                 if (chem.Error == false)
                 {
-                    if (chem.InputFormula.Any(item => item == '('))
+                    if (FORMULA.Any(item => item == '('))
                     {
-                        for (int a = 0; a < chem.InputFormula.Length - 1; a++)
+                        for (int a = 0; a < FORMULA.Length - 1; a++)
                         {
-                            if (chem.InputFormula[a] == ')' && Char.IsNumber(chem.InputFormula[a + 1]) == false)
+                            if (FORMULA[a] == ')' && Char.IsNumber(FORMULA[a + 1]) == false)
                             {
-                                var aStringBuilder = new StringBuilder(chem.InputFormula);
+                                var aStringBuilder = new StringBuilder(FORMULA);
                                 aStringBuilder.Insert(a + 1, "1");
-                                chem.InputFormula = aStringBuilder.ToString();
+                                FORMULA = aStringBuilder.ToString();
                             }
                         }
-                        if (chem.InputFormula[chem.InputFormula.Length - 1] == ')')
+                        if (FORMULA[FORMULA.Length - 1] == ')')
                         {
-                            chem.InputFormula = chem.InputFormula + "1";
+                            FORMULA = FORMULA + "1";
                         }
                     }
                     //for all other cases
-                    for (int a = 1; a < chem.InputFormula.Length; a++)
+                    for (int a = 1; a < FORMULA.Length; a++)
                     {
-                        if ((char.IsUpper(chem.InputFormula[a]) || chem.InputFormula[a] == ')' || chem.InputFormula[a] == '(')
-                            && char.IsNumber(chem.InputFormula[a - 1]) == false && chem.InputFormula[a - 1] != '(' && chem.InputFormula[a - 1] != ']')
+                        if ((char.IsUpper(FORMULA[a]) || FORMULA[a] == ')' || FORMULA[a] == '(')
+                            && char.IsNumber(FORMULA[a - 1]) == false && FORMULA[a - 1] != '(' && FORMULA[a - 1] != ']')
                         {
-                            var aStringBuilder = new StringBuilder(chem.InputFormula);
+                            var aStringBuilder = new StringBuilder(FORMULA);
                             aStringBuilder.Insert(a, "1");
-                            chem.InputFormula = aStringBuilder.ToString();
+                            FORMULA = aStringBuilder.ToString();
                             a++;
                         }
 
                     }
-                    if (char.IsNumber(chem.InputFormula[chem.InputFormula.Length - 1]) == false)
+                    if (char.IsNumber(FORMULA[FORMULA.Length - 1]) == false)
                     {
-                        chem.InputFormula = chem.InputFormula + "1";
+                        FORMULA = FORMULA + "1";
                     }
                 }
                 //multiply for square brackets, with nesting
                 if (chem.Error == false)
                 {
-                    if (chem.InputFormula.Any(item => item == '('))
+                    if (FORMULA.Any(item => item == '('))
                     {
                         int getit1 = 1;
                         int getit2 = 1;
@@ -2835,14 +2842,14 @@ namespace Isotope_fitting
                         int a = 0;
                         int i = -1;
 
-                        while (a < chem.InputFormula.Length && getit1 != 0 && getit2 != 0)
+                        while (a < FORMULA.Length && getit1 != 0 && getit2 != 0)
                         {
-                            if (chem.InputFormula[a] == '(')
+                            if (FORMULA[a] == '(')
                             {
                                 getit1 = 2;
                                 from.Add(a);
                             }
-                            if (chem.InputFormula[a] == ')')
+                            if (FORMULA[a] == ')')
                             {
                                 getit2 = 2;
                                 to = a;
@@ -2852,7 +2859,7 @@ namespace Isotope_fitting
                                 i++;
                                 int b1 = a + 1;
                                 int b2 = a + 1;
-                                while (b2 < chem.InputFormula.Length && char.IsNumber(chem.InputFormula[b2]))
+                                while (b2 < FORMULA.Length && char.IsNumber(FORMULA[b2]))
                                 {
                                     b2++;
                                 }
@@ -2862,7 +2869,7 @@ namespace Isotope_fitting
                                 {
                                     try
                                     {
-                                        factor.Add(Int32.Parse(chem.InputFormula.Substring(b1, b2 - b1)));
+                                        factor.Add(Int32.Parse(FORMULA.Substring(b1, b2 - b1)));
 
                                     }
                                     catch (Exception ex)
@@ -2875,7 +2882,7 @@ namespace Isotope_fitting
                                     MessageBox.Show(e.Message);
                                 }
                                 //call Multif  
-                                formula.Add(chem.InputFormula.Substring(from[i] + 1, to - 1));
+                                formula.Add(FORMULA.Substring(from[i] + 1, to - 1));
                                 final.Add(Multif(formula[i], factor[i]));
                                 //ston allo kvdika exei getit1=0,getit2=0,alla etsi elegxei gia mia parenthesi mono                                                  
                                 getit1 = 1;
@@ -2884,14 +2891,14 @@ namespace Isotope_fitting
                             a++;
                         }
 
-                        var aStringBuilder = new StringBuilder(chem.InputFormula);
+                        var aStringBuilder = new StringBuilder(FORMULA);
                         for (int k = 0; k < formula.Count; k++)
                         {
                             //InputFormula = InputFormula.Replace(formula[i], final[i]);
 
                             aStringBuilder.Remove(from[i], length_r[i]);
                             aStringBuilder.Insert(from[i], final[i]);
-                            chem.InputFormula = aStringBuilder.ToString();
+                            FORMULA = aStringBuilder.ToString();
                         }
 
                     }
@@ -2907,52 +2914,52 @@ namespace Isotope_fitting
                         int endIndex = 0;
                         int length = 0;
                         //check for elements with their atomic number in [] an add them to the elements' character list
-                        if (chem.InputFormula[i] == '[')
+                        if (FORMULA[i] == '[')
                         {
                             startIndex = i;
                             do
                             {
                                 i++;
-                            } while ((i < chem.InputFormula.Length) && (chem.InputFormula[i] != ']'));
+                            } while ((i < FORMULA.Length) && (FORMULA[i] != ']'));
 
                             do
                             {
                                 i++;
-                            } while ((i < chem.InputFormula.Length) && (Char.IsNumber(chem.InputFormula[i]) != true));
+                            } while ((i < FORMULA.Length) && (Char.IsNumber(FORMULA[i]) != true));
                             endIndex = i - 1;
                             length = endIndex - startIndex + 1;
-                            Element.Add(chem.InputFormula.Substring(startIndex, length));
+                            Element.Add(FORMULA.Substring(startIndex, length));
                         }
                         //Create elements' character list for deduct chemical formula
-                        if (Char.IsNumber(chem.InputFormula[i]) != true)
+                        if (Char.IsNumber(FORMULA[i]) != true)
                         {
                             startIndex = i;
                             do
                             {
                                 i++;
-                            } while ((i < chem.InputFormula.Length) && (Char.IsNumber(chem.InputFormula[i]) != true));
+                            } while ((i < FORMULA.Length) && (Char.IsNumber(FORMULA[i]) != true));
                             i = i - 1;
                             endIndex = i;
                             length = endIndex - startIndex + 1;
-                            Element.Add(chem.InputFormula.Substring(startIndex, length));
+                            Element.Add(FORMULA.Substring(startIndex, length));
 
                         }
                         //Create elements' number list for deduct chemical formula
-                        if (Char.IsNumber(chem.InputFormula[i]))
+                        if (Char.IsNumber(FORMULA[i]))
                         {
                             startIndex = i;
                             do
                             {
                                 i++;
-                            } while ((i < chem.InputFormula.Length) && (Char.IsNumber(chem.InputFormula[i]) == true));
+                            } while ((i < FORMULA.Length) && (Char.IsNumber(FORMULA[i]) == true));
                             i = i - 1;
                             endIndex = i;
                             length = endIndex - startIndex + 1;
-                            Number.Add(Int32.Parse(chem.InputFormula.Substring(startIndex, length)));
+                            Number.Add(Int32.Parse(FORMULA.Substring(startIndex, length)));
 
                         }
                         i++;
-                    } while (i < chem.InputFormula.Length);
+                    } while (i < FORMULA.Length);
 
                 }
 
