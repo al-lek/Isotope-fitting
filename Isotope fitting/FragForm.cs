@@ -33,8 +33,9 @@ namespace Isotope_fitting
         private string[] listName;
         private double fix;
         private double max_intensity;
+        private bool fxd;
 
-        
+
         public OxyColor Color
         {
             get { return this.color; }
@@ -69,6 +70,11 @@ namespace Isotope_fitting
         {
             get { return this.to_plot; }
             set { this.to_plot = value; }
+        }
+        public bool Fixed
+        {
+            get { return this.fxd; }
+            set { this.to_plot = fxd; }
         }
         public double Factor
         {
