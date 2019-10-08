@@ -2046,13 +2046,24 @@ namespace Isotope_fitting
                 else
                 {
                     //TrackerManipulator kkk = new TrackerManipulator(iso_plot) { PointsOnly=false,Snap=true,LockToInitialSeries};
-                    iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    iso_plot.Model.Annotations.Add(new PointAnnotation()
                     {
-                        TextPosition = new DataPoint(mz_a, h_a),
+                        X = mz_a,
+                        Y = h_a,
+                        Size = 4,
+                        Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString(),
+                        Fill = OxyColors.Black,
+                        Shape = MarkerType.None,
                         TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
-                        Background = OxyColors.Gainsboro,
-                        Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString()
+                        TextVerticalAlignment = VerticalAlignment.Bottom
                     });
+                    //iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    //{
+                    //    TextPosition = new DataPoint(mz_a, h_a),
+                    //    TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
+                    //    Background = OxyColors.Gainsboro,
+                    //    Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString()
+                    //});
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
                 }
