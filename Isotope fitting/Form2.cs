@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using static alglib;
 
 namespace Isotope_fitting
 {
@@ -492,6 +492,7 @@ namespace Isotope_fitting
                 Combinations4 = new List<Combination_4>(),
                 FinalFormula = string.Empty, 
                 Factor=1.0,
+                Fixed=false
             });
 
             int i = ChemFormulas.Count - 1;
@@ -812,7 +813,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void calculate_fragment_properties(List<ChemiForm> selected_fragments,bool newfrag=false)
+        private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
             sw1.Reset(); sw1.Start();
@@ -821,7 +822,7 @@ namespace Isotope_fitting
 
             Parallel.For(0, selected_fragments.Count, (i, state) =>
             {
-                Envipat_Calcs_and_filter_byPPM(selected_fragments[i],newfrag);
+                Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
 
                 // safelly keep track of progress
                 Interlocked.Increment(ref progress);
@@ -837,7 +838,7 @@ namespace Isotope_fitting
             is_calc = false;
 
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
-            if (!newfrag)
+            if (!selected_fragments[0].Fixed)
             {
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
                 MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
@@ -848,7 +849,7 @@ namespace Isotope_fitting
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
         }
 
-        private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem,bool newfrag=false)
+        private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
         {
             ChemiForm.CheckChem(chem);      // will also generate chem.FinalFormula
             
@@ -885,7 +886,7 @@ namespace Isotope_fitting
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
-            if (!insert_exp||newfrag) { add_fragment_to_Fragments2(chem, cen,newfrag); return; }
+            if (!insert_exp|| chem.Fixed) { add_fragment_to_Fragments2(chem, cen); return; }
 
             // MAIN decesion algorithm
             bool fragment_is_canditate = decision_algorithm(chem, cen);
@@ -899,7 +900,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen,bool newfrag=false)
+        private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen)
         {
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
@@ -930,14 +931,14 @@ namespace Isotope_fitting
                     ListName = new string[4],
                     Fix = 1.0,
                     Max_intensity = 0.0,
-                    Fixed=newfrag,                   
+                    Fixed=chem.Fixed,                   
                 });
 
                 Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Counter = Fragments2.Count;
                 Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
-                if(!newfrag)Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
+                if(!Fragments2.Last().Fixed) Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
 
                 if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
@@ -1060,64 +1061,65 @@ namespace Isotope_fitting
             {
                 string ion_type = Fragments2[i].Ion_type;
                 bool added = false;
-                bool newfrag = Fragments2[i].Fixed;
-                //if (Fragments2[i].Factor != 1.0) { newfrag = true; }
-                // check if base node corresponding to type already exists and add fragment. Else make a new base node 
-                foreach (TreeNode baseNode in fragTypes_tree.Nodes)
+                if (Fragments2[i].Fixed)
                 {
-                    if (baseNode.Text == ion_type)
+                    // check if base node corresponding to type already exists and add fragment. Else make a new base node 
+                    foreach (TreeNode baseNode in fragTypes_tree.Nodes)
                     {
-                        // insert at sorted position. Get index of already added fragment
-                        for (int j = 0; j < baseNode.Nodes.Count; j++)
+                        if (baseNode.Text == ion_type)
                         {
-                            int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Name);
-                            int inTree_num = Convert.ToInt32(Fragments2[inTree_frag_idx].Index);
-                            int inTree_charge = Fragments2[inTree_frag_idx].Charge;
-                            int curr_num = Convert.ToInt32(Fragments2[i].Index);
-                            int curr_charge = Fragments2[i].Charge;
-
-                            // case where curr_frag 
-                            if (curr_num < inTree_num)
+                            // insert at sorted position. Get index of already added fragment
+                            for (int j = 0; j < baseNode.Nodes.Count; j++)
                             {
-                                baseNode.Nodes.Insert(j, new_fragTreeNode(i));
-                                added = true; break;
-                            }
+                                int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Name);
+                                int inTree_num = Convert.ToInt32(Fragments2[inTree_frag_idx].Index);
+                                int inTree_charge = Fragments2[inTree_frag_idx].Charge;
+                                int curr_num = Convert.ToInt32(Fragments2[i].Index);
+                                int curr_charge = Fragments2[i].Charge;
 
-                            else if (curr_num == inTree_num)
-                            {
-                                for (int k = j; k < baseNode.Nodes.Count; k++)
+                                // case where curr_frag 
+                                if (curr_num < inTree_num)
                                 {
-                                    if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
-                                        curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
-                                    {
-                                        baseNode.Nodes.Insert(k, new_fragTreeNode(i));
-                                        added = true; break;
-                                    }
-                                    else if (k == baseNode.Nodes.Count - 1)
-                                    {
-                                        baseNode.Nodes.Add(new_fragTreeNode(i));
-                                        added = true; break;
-                                    }
+                                    baseNode.Nodes.Insert(j, new_fragTreeNode(i));
+                                    added = true; break;
                                 }
-                                break;
-                            }
-                        }
 
-                        if (!added)
-                        {
-                            baseNode.Nodes.Add(new_fragTreeNode(i));
-                            added = true;
+                                else if (curr_num == inTree_num)
+                                {
+                                    for (int k = j; k < baseNode.Nodes.Count; k++)
+                                    {
+                                        if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
+                                            curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
+                                        {
+                                            baseNode.Nodes.Insert(k, new_fragTreeNode(i));
+                                            added = true; break;
+                                        }
+                                        else if (k == baseNode.Nodes.Count - 1)
+                                        {
+                                            baseNode.Nodes.Add(new_fragTreeNode(i));
+                                            added = true; break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!added)
+                            {
+                                baseNode.Nodes.Add(new_fragTreeNode(i));
+                                added = true;
+                            }
                         }
                     }
-                }
 
-                if (!added)
-                {
-                    TreeNode tr_inner = new_fragTreeNode(i);
-                    TreeNode tr_base = new TreeNode { Text = ion_type };
-                    tr_base.Nodes.Add(tr_inner);
-                    fragTypes_tree.Nodes.Add(tr_base);
-                }
+                    if (!added)
+                    {
+                        TreeNode tr_inner = new_fragTreeNode(i);
+                        TreeNode tr_base = new TreeNode { Text = ion_type };
+                        tr_base.Nodes.Add(tr_inner);
+                        fragTypes_tree.Nodes.Add(tr_base);
+                    }
+                }   
             }
             fragTypes_tree.EndUpdate();
         }
@@ -1516,20 +1518,8 @@ namespace Isotope_fitting
             {
                 if (set[ss].Count()==selectedFragments.Count())
                 {
-                    List<double[]> aligned_intensities_total = subset_of_aligned_distros(set[ss].ToArray());
-                    for (int i = 0; i < aligned_intensities_total.Count; i++)
-                    {
-                        double tmp = 0.0;
-                        for (int j = 1; j < aligned_intensities_total[0].Length; j++)
-                        {
-                            tmp += aligned_intensities_total[i][j];
-                        }
-
-                        if (tmp > 1)  // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
-                        {
-                            experimental_sum += aligned_intensities_total[i][0];
-                        }
-                    }
+                    int[] exp_boundaries = find_set_boundaries(set[ss].ToArray());                   
+                    for (int i = exp_boundaries[0]; i < exp_boundaries[1]+1; i++){experimental_sum += experimental[i][1];}
                 }
             }
 
@@ -1563,6 +1553,51 @@ namespace Isotope_fitting
             return (res, set);
         }
 
+        private int[] find_set_boundaries(int[] set)
+        {
+            int[] set_index = new int[2];
+            int start = all_data_aligned.Count()-1;
+            int end = all_data_aligned.Count() - 1;
+            for (int i = 0; i <start; i++)
+            {               
+                for (int k = 0; k < set.Count(); k++)
+                {
+                    if (all_data_aligned[i][set[k]] != 0.0) { start = i; break; }
+                }               
+            }
+            for (int i = start; i < all_data_aligned.Count; i++)
+            {               
+                bool zero_point = true;
+                for (int k = 0; k < set.Count(); k++)
+                {                    
+                    if (all_data_aligned[i][set[k]] != 0.0) zero_point = zero_point & false;
+                }
+                if (!zero_point) end=i;
+            }
+            set_index[0]=start;set_index[1]=end;
+            return set_index;
+        }
+        private double calc_surface_area(int[] boundaries)
+        {
+            double temp = 0;
+            for (int i = boundaries[0]; i < boundaries[1]+1; i++)
+            {
+                if (i != boundaries[1])
+                {
+                    double mulA = experimental[i][0] * experimental[i + 1][1];
+                    double mulB = experimental[i + 1][0] * experimental[i][1];
+                    temp = temp + (mulA - mulB);
+                }
+                else
+                {
+                    double mulA = experimental[i][0] * experimental[0][1];
+                    double mulB = experimental[0][0] * experimental[i][1];
+                    temp = temp + (mulA - mulB);
+                }
+            }
+            temp *= 0.5f;
+            return Math.Abs(temp);
+        }
         private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities,double experimental_sum)
         {
             // 1. initialize needed params
@@ -1656,7 +1691,7 @@ namespace Isotope_fitting
             // init tree view
             fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 20, bigPanel.Size.Height - 20) };
             bigPanel.Controls.Add(fit_tree);
-            fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node.Name, e.Node.Checked); };
+            fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
 
             // interpret fitted results
@@ -1724,13 +1759,14 @@ namespace Isotope_fitting
 
         }
 
-        private void fit_node_checkChanged(string idx_str, bool is_checked)
+        private void fit_node_checkChanged(TreeNode fitnode)
         {
             // will search in fragments tree to find and enable the corresponding fragments
             // Performance: avoid unecessary multiple replots, if selected fit has 2 or more fragments
             block_plot_refresh = true;
-
-            if (string.IsNullOrEmpty(idx_str)) ;
+            string idx_str = fitnode.Name;
+            bool is_checked = fitnode.Checked;
+            if (string.IsNullOrEmpty(idx_str))fitnode.FirstNode.Checked= fitnode.Checked;
 
             else
             {
@@ -1784,15 +1820,6 @@ namespace Isotope_fitting
             return UI_intensities;
         }
         
-        private void region_cover_calc()
-        {
-            double exp_sum = 0.0;
-            for (int i = 0; i < all_data[0].Count; i++)
-            {
-                exp_sum += all_data[0][i][0];
-            }
-            
-        }
         #endregion
 
         #region UI control
@@ -2779,7 +2806,8 @@ namespace Isotope_fitting
                                     PrintFormula= str[9],
                                     Name= str[0],
                                     Radio_label= string.Empty,         
-                                    Factor= dParser(str[7])
+                                    Factor= dParser(str[7]),
+                                    Fixed=true
                                 });
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                             }
@@ -2789,7 +2817,7 @@ namespace Isotope_fitting
                     arrayPositionIndex++;
                 }
 
-                Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem,true));
+                Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
                 envipat_fitted.Start();
                 refresh_iso_plot();
                 is_loading = false;                            

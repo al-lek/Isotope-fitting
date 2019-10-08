@@ -667,6 +667,7 @@ namespace Isotope_fitting
         private string deduct;
         private string name;
         private bool error;
+        private bool fixed_;
         private double ppm_error;
         private double fragfactor;
         private OxyColor color;
@@ -888,6 +889,17 @@ namespace Isotope_fitting
                 this.error = value;
             }
         }
+        public bool Fixed
+        {
+            get
+            {
+                return this.fixed_;
+            }
+            set
+            {
+                this.fixed_ = value;
+            }
+        }
         public double PPM_Error
         {
             get { return this.ppm_error; }
@@ -982,7 +994,7 @@ namespace Isotope_fitting
         {
             ChemiForm deepcopyChemiform = new ChemiForm() { Adduct = this.Adduct, Centroid = this.Centroid.ConvertAll(item => item.DeepCopy()), Charge = this.Charge, Color= this.Color, Combinations= (List<Combination_1>)this.Combinations.ConvertAll(item => item.DeepCopy()), Combinations4 = (List<Combination_4>)this.Combinations4.ConvertAll(item => item.DeepCopy()), Deduct=this.Deduct, Elements_set= (List<Element_set>)this.Elements_set.ConvertAll(item => item.DeepCopy()),
                 Error =this.Error, FinalFormula=this.FinalFormula, Index=this.Index, IndexTo=this.IndexTo, InputFormula=this.InputFormula, Ion=this.Ion, Ion_type=this.Ion_type, Iso_total_amount=this.Iso_total_amount, Machine= this.Machine, Monoisotopic=this.Monoisotopic, Multiplier=this.Multiplier, Mz=this.Mz, Name=this.Name, Points=this.Points.ConvertAll(item => item.DeepCopy()), PrintFormula=this.PrintFormula, Profile=this.Profile.ConvertAll(item => item.DeepCopy()),
-                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,Factor=this.Factor};
+                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,Factor=this.Factor,Fixed=this.Fixed};
 
             return deepcopyChemiform;
         }
