@@ -97,9 +97,7 @@ namespace Isotope_fitting
         List<double[]> summation = new List<double[]>();
         List<double[]> residual = new List<double[]>();
         List<int> custom_colors = new List<int>();
-
-        public double exp_coverage = 0.0;
-
+      
         const double H_mass = 1.008;
         OxyPlot.ScreenPoint charge_center;
         bool is_loading = false; //indicates if loading is active
@@ -371,10 +369,7 @@ namespace Isotope_fitting
             fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
 
             // copy experimental to all_data
-            experimental_to_all_data();
-
-            //calculate experimental coverage
-            exp_cover_calc();
+            experimental_to_all_data();                       
 
             // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
@@ -416,17 +411,7 @@ namespace Isotope_fitting
                     }
                 }
             }
-        }
-
-        private void exp_cover_calc()
-        {
-            double exp_sum = 0.0;
-            for (int i = 0; i < all_data[0].Count; i++)
-            {
-                exp_sum += all_data[0][i][0];
-            }
-            exp_coverage = exp_sum;
-        }
+        }              
 
         #endregion
 
@@ -1525,6 +1510,28 @@ namespace Isotope_fitting
             // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
             //progress_display_start(powerSet.Count + 1, "Calculating fragment fit...");
             double experimental_max = all_data_aligned[0].Max();
+            double experimental_sum = 0.0;
+            //find set with all the selected fragments
+            for (int ss=set.Count-1;ss>-1 ;ss--)
+            {
+                if (set[ss].Count()==selectedFragments.Count())
+                {
+                    List<double[]> aligned_intensities_total = subset_of_aligned_distros(set[ss].ToArray());
+                    for (int i = 0; i < aligned_intensities_total.Count; i++)
+                    {
+                        double tmp = 0.0;
+                        for (int j = 1; j < aligned_intensities_total[0].Length; j++)
+                        {
+                            tmp += aligned_intensities_total[i][j];
+                        }
+
+                        if (tmp > 1)  // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
+                        {
+                            experimental_sum += aligned_intensities_total[i][0];
+                        }
+                    }
+                }
+            }
 
             Parallel.For(0, set.Count, (i, state) =>
             {
@@ -1536,7 +1543,7 @@ namespace Isotope_fitting
                 List<double> UI_intensities = get_UI_intensities(set[i]);
 
                 // call optimizer for the specific subset of fragments
-                double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities);
+                double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities,experimental_sum);
                 lock (_locker) { res.Add(tmp); set_copy.Add(set[i]); }
             });
 
@@ -1556,7 +1563,7 @@ namespace Isotope_fitting
             return (res, set);
         }
 
-        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities)
+        private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities,double experimental_sum)
         {
             // 1. initialize needed params
             // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
@@ -1585,14 +1592,14 @@ namespace Isotope_fitting
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
             //result[distros_num] = state.fi[0];
 
-            result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients);
+            result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);
 
             return result;
         }
 
-        private double per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients)
+        private double per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients,double exp_sum)
         {
-            double exp_sum = 0.0, frag_sum = 0.0;
+            double /*exp_sum = 0.0,*/ frag_sum = 0.0;
 
             for (int i = 0; i < aligned_intensities_subSet.Count; i++)
             {
@@ -1605,15 +1612,13 @@ namespace Isotope_fitting
                 if (tmp > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
                 {
                     frag_sum += tmp;
-                    exp_sum += aligned_intensities_subSet[i][0];
+                    //exp_sum += aligned_intensities_subSet[i][0];
                 }
             }
             double res = exp_sum / frag_sum * 100.0;
             if (res < 100) return res;
             else return (frag_sum / exp_sum) * 100.0;
         }
-
-       
 
         public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
         {
@@ -1778,7 +1783,16 @@ namespace Isotope_fitting
 
             return UI_intensities;
         }
-
+        
+        private void region_cover_calc()
+        {
+            double exp_sum = 0.0;
+            for (int i = 0; i < all_data[0].Count; i++)
+            {
+                exp_sum += all_data[0][i][0];
+            }
+            
+        }
         #endregion
 
         #region UI control
@@ -2045,25 +2059,30 @@ namespace Isotope_fitting
                 }
                 else
                 {
-                    //TrackerManipulator kkk = new TrackerManipulator(iso_plot) { PointsOnly=false,Snap=true,LockToInitialSeries};
-                    iso_plot.Model.Annotations.Add(new PointAnnotation()
-                    {
-                        X = mz_a,
-                        Y = h_a,
-                        Size = 4,
-                        Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString(),
-                        Fill = OxyColors.Black,
-                        Shape = MarkerType.None,
-                        TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
-                        TextVerticalAlignment = VerticalAlignment.Bottom
-                    });
-                    //iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    ////TrackerManipulator kkk = new TrackerManipulator(iso_plot) { PointsOnly=false,Snap=true,LockToInitialSeries};
+                    //iso_plot.Model.Annotations.Add(new PointAnnotation()
                     //{
-                    //    TextPosition = new DataPoint(mz_a, h_a),
+                    //    X = mz_a,
+                    //    Y = h_a,
+                    //    Size = 4,
+                    //    Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString(),
+                    //    Fill = OxyColors.Black,
+                    //    Shape = MarkerType.None,
                     //    TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
-                    //    Background = OxyColors.Gainsboro,
-                    //    Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString()
+                    //    TextColor=OxyColors.Crimson,
+                    //    TextVerticalAlignment = VerticalAlignment.Bottom
                     //});
+                    iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    {
+                        TextPosition = new DataPoint(mz_a, h_a),
+                        TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
+                        Background = OxyColors.Transparent,
+                        Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString(),
+                        Layer= AnnotationLayer.AboveSeries,    
+                        Stroke=OxyColors.Black,
+                        TextColor = OxyColors.Black,
+                        FontWeight=100
+                    });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
                 }
