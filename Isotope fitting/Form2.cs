@@ -967,7 +967,7 @@ namespace Isotope_fitting
         private void add_fragments_to_all_data()
         {
             // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
-            if (all_data.Count == 0) { all_data.Add(new List<double[]>()); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
+            if (all_data.Count == 0) { all_data.Add(new List<double[]>()); custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
 
             // !!!needs rework for recalculating
             int existing_fragments = all_data.Count - 1;
@@ -2654,7 +2654,7 @@ namespace Isotope_fitting
                 //file.WriteLine();
                 foreach (int indexS in fragToSave)
                 {
-                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToColor().ToArgb() + "\t" + Form2.Fragments2[indexS - 1].Resolution);                    
+                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);                    
                 }
                 file.Flush(); file.Close(); file.Dispose();
             }
@@ -2742,7 +2742,7 @@ namespace Isotope_fitting
                                     Centroid = new List<PointPlot>(),
                                     Combinations4 = new List<Combination_4>(),
                                     FinalFormula = string.Empty,
-                                    Color= OxyColor.FromUInt32((uint)Convert.ToInt32(str[4])),
+                                    Color=new OxyColor(),
                                     Charge = Int32.Parse(str[4]),
                                     Ion_type = str[1],
                                     PPM_Error=dParser(str[8]),
@@ -2751,7 +2751,7 @@ namespace Isotope_fitting
                                     Radio_label= string.Empty,         
                                     Factor= dParser(str[7])
                                 });
-                                                        
+                                if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                             }
                         }                       
                     }
