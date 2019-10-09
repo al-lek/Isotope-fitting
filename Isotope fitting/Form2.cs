@@ -526,7 +526,8 @@ namespace Isotope_fitting
 
                 string lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index;
                 ChemFormulas[i].Radio_label = lbl;
-                ChemFormulas[i].Name = lbl + "_+" + ChemFormulas[i].Charge.ToString();
+                if(ChemFormulas[i].Charge>0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
+                else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
             }
             else
             {
@@ -550,7 +551,8 @@ namespace Isotope_fitting
 
                     string lbl = ChemFormulas[i].Ion_type;
                     ChemFormulas[i].Radio_label = lbl;
-                    ChemFormulas[i].Name = lbl + "_+" + ChemFormulas[i].Charge.ToString();
+                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
+                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
                 }
                 else if (substring[1].Contains("-CO"))
                 {
@@ -563,7 +565,8 @@ namespace Isotope_fitting
 
                     string lbl = "internal_a" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
                     ChemFormulas[i].Radio_label = lbl;
-                    ChemFormulas[i].Name = lbl + "_+" + ChemFormulas[i].Charge.ToString();
+                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
+                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
                 }
                 else
                 {
@@ -574,7 +577,8 @@ namespace Isotope_fitting
 
                     string lbl = "internal_b" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
                     ChemFormulas[i].Radio_label = lbl;
-                    ChemFormulas[i].Name = lbl + "_+" + ChemFormulas[i].Charge.ToString();
+                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
+                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
                 }
             }
         }
@@ -838,7 +842,7 @@ namespace Isotope_fitting
             is_calc = false;
 
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
-            if (!selected_fragments[0].Fixed)
+            if (selected_fragments.Count>0 && !selected_fragments[0].Fixed)
             {
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
                 MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
@@ -1015,7 +1019,7 @@ namespace Isotope_fitting
                 FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(Cursor.Position.X - 200, Cursor.Position.Y) };
 
             Label lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
-            Button btn_solo = new Button { Text = "solo fit", Location = new Point(50, 5), Size = new Size(40, 23) };
+            Button btn_solo = new Button { Text = "fit", Location = new Point(50, 5), Size = new Size(40, 23) };
             Button btn_ok = new Button { Location = new Point(165, 5), Size = new Size(29, 23), Text = "ok" };
             NumericUpDown numUD = new NumericUpDown { Minimum = 1, Maximum = 1e8M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
                                                         Location = new Point(100, 7), Size = new Size(60, 20) };
@@ -1552,7 +1556,6 @@ namespace Isotope_fitting
 
             return (res, set);
         }
-
         private int[] find_set_boundaries(int[] set)
         {
             int[] set_index = new int[2];
@@ -1623,11 +1626,11 @@ namespace Isotope_fitting
 
             // 2. save result
             // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
-            double[] result = new double[distros_num + 1];
+            double[] result = new double[distros_num + 2];
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
-            //result[distros_num] = state.fi[0];
+            result[distros_num] = state.fi[0];
 
-            result[distros_num] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);
+            result[distros_num+1] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);            
 
             return result;
         }
@@ -1689,11 +1692,14 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             // init tree view
-            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 20, bigPanel.Size.Height - 20) };
+            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 20, bigPanel.Size.Height - 20), ShowNodeToolTips = false };
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
-
+            fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
+            fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
+            fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; };           
+            fit_tree.NodeMouseHover += (s, e) => { fit_tree_NodeMouseHover(s, e); };
             // interpret fitted results
             fit_tree.BeginUpdate();
 
@@ -1703,23 +1709,86 @@ namespace Isotope_fitting
                 int[] longest = all_fitted_sets[i].OrderBy(x => x.Length).Last();
                 fit_tree.Nodes.Add(Fragments2[longest.First() - 1].Mz + " - " + Fragments2[longest.Last() - 1].Mz);
 
+                double[] tree_index = new double[all_fitted_results[i].Count];
+                double[] tree_sse = new double[all_fitted_results[i].Count];
+
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
+                    tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_results[i][j].Length - 2];
                     string tmp = "";
-                    for (int k = 0; k < all_fitted_results[i][j].Length - 1; k++)
+                    tmp += " SSE: " + all_fitted_results[i][j][all_fitted_results[i][j].Length - 2].ToString("0.###e0" + "  ");
+                    tmp += " %Area: " + Math.Round(all_fitted_results[i][j].Last(), 1).ToString() + "%" + "  ";
+                    for (int k = 0; k < all_fitted_results[i][j].Length - 2; k++)
                     {
-                        tmp += Fragments2[all_fitted_sets[i][j][k] - 1].Name + " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ");
-                    }
-                    //tmp += " SSE: " + all_fitted_results[i][j].Last().ToString("0.0%" + "  ");
-                    tmp += " SSE: " + Math.Round(all_fitted_results[i][j].Last(), 1).ToString() + "%";
+                        tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;                    }
+                    
 
                     fit_tree.Nodes[i].Nodes.Add(i.ToString() + " " + j.ToString(), tmp);
                 }
-            }
+                fit_tree.Nodes[i]= find_min_SSE(fit_tree.Nodes[i], tree_index,tree_sse);
+            }          
             fit_tree.EndUpdate();
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
         }
 
+        ToolTip tip = new ToolTip();
+        private void fit_tree_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            string idx_str = e.Node.Name;
+            if (string.IsNullOrEmpty(idx_str)) return;
+            else
+            {
+                string[] idx_str_arr = idx_str.Split(' ');
+                int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+                int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
+                // find respective fragments in frag_tree and check or uncheck them
+                // also pass the fitted height o both Fragments2 and the node on the UI
+                List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+                for (int i = 0; i < all_fitted_sets[set_idx][set_pos_idx].Length; i++)
+                {
+                    int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;
+                    TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (curr_idx).ToString());
+                    double factor = all_fitted_results[set_idx][set_pos_idx][i];
+                    Fragments2[curr_idx].Factor = factor;
+                    sb.AppendLine(Fragments2[curr_idx].Name + " " + Fragments2[curr_idx].Factor.ToString() + "/n");                    
+                }
+                
+                tip.Show(sb.ToString(), this, PointToClient(MousePosition));
+            }
+        }
+       
+        private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
+        {
+            // The code only executes if the user caused the checked state to change.
+            if (e.Action== TreeViewAction.ByMouse )
+            {
+                if (!string.IsNullOrEmpty(e.Node.Name) && !e.Node.Checked)
+                {
+                    // for all the nodes in the tree...
+                    foreach (TreeNode cur_node in e.Node.Parent.Nodes)
+                    {
+                        // ... which are not the freshly checked one...
+                        if (cur_node.Checked)
+                        {
+                            // ... uncheck them
+                            cur_node.Checked = false;
+                        }
+                    }
+                }
+            }
+        }
+        private TreeNode find_min_SSE(TreeNode node, double[] tree_index, double[] tree_sse)
+        {
+            Array.Sort( tree_sse, tree_index);
+            int best_count =(int)(0.3* tree_index.Length);
+            while (best_count<tree_sse.Length - 2) { if (tree_sse[best_count] == tree_sse[best_count + 1]) { best_count++; } else { break; } }
+            for (int n=0;n<best_count; n++)
+            {
+                node.Nodes[(int)tree_index[n]].ForeColor = Color.SteelBlue;
+            }
+            return node;
+        }
         private void copy_fitTree_toClipBoard()
         {
             StringBuilder sb = new StringBuilder();

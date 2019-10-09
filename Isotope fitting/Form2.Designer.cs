@@ -246,7 +246,7 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.factor_Box);
             this.user_grpBox.Controls.Add(this.options_grpBox);
             this.user_grpBox.Dock = System.Windows.Forms.DockStyle.Right;
-            this.user_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.user_grpBox.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.user_grpBox.Location = new System.Drawing.Point(460, 3);
             this.user_grpBox.Name = "user_grpBox";
             this.user_grpBox.Size = new System.Drawing.Size(899, 717);
@@ -256,11 +256,14 @@ namespace Isotope_fitting
             // clearListBtn
             // 
             this.clearListBtn.AutoSize = true;
-            this.clearListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearListBtn.ForeColor = System.Drawing.Color.Crimson;
-            this.clearListBtn.Location = new System.Drawing.Point(843, 58);
+            this.clearListBtn.BackColor = System.Drawing.Color.LightCoral;
+            this.clearListBtn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.clearListBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.clearListBtn.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clearListBtn.ForeColor = System.Drawing.Color.White;
+            this.clearListBtn.Location = new System.Drawing.Point(832, 53);
             this.clearListBtn.Name = "clearListBtn";
-            this.clearListBtn.Size = new System.Drawing.Size(50, 13);
+            this.clearListBtn.Size = new System.Drawing.Size(60, 16);
             this.clearListBtn.TabIndex = 10000003;
             this.clearListBtn.Text = "Clear List";
             this.clearListBtn.Click += new System.EventHandler(this.clearListBtn_Click);
@@ -268,11 +271,14 @@ namespace Isotope_fitting
             // saveListBtn
             // 
             this.saveListBtn.AutoSize = true;
-            this.saveListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveListBtn.ForeColor = System.Drawing.Color.Teal;
-            this.saveListBtn.Location = new System.Drawing.Point(742, 58);
+            this.saveListBtn.BackColor = System.Drawing.Color.ForestGreen;
+            this.saveListBtn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.saveListBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.saveListBtn.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveListBtn.ForeColor = System.Drawing.Color.White;
+            this.saveListBtn.Location = new System.Drawing.Point(699, 53);
             this.saveListBtn.Name = "saveListBtn";
-            this.saveListBtn.Size = new System.Drawing.Size(51, 13);
+            this.saveListBtn.Size = new System.Drawing.Size(58, 16);
             this.saveListBtn.TabIndex = 10000002;
             this.saveListBtn.Text = "Save List";
             this.saveListBtn.Click += new System.EventHandler(this.saveListBtn_Click);
@@ -280,11 +286,14 @@ namespace Isotope_fitting
             // loadListBtn
             // 
             this.loadListBtn.AutoSize = true;
-            this.loadListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadListBtn.ForeColor = System.Drawing.Color.Blue;
-            this.loadListBtn.Location = new System.Drawing.Point(793, 58);
+            this.loadListBtn.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.loadListBtn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.loadListBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.loadListBtn.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadListBtn.ForeColor = System.Drawing.Color.White;
+            this.loadListBtn.Location = new System.Drawing.Point(766, 53);
             this.loadListBtn.Name = "loadListBtn";
-            this.loadListBtn.Size = new System.Drawing.Size(50, 13);
+            this.loadListBtn.Size = new System.Drawing.Size(58, 16);
             this.loadListBtn.TabIndex = 10000001;
             this.loadListBtn.Text = "Load List";
             this.loadListBtn.Click += new System.EventHandler(this.loadListBtn_Click);
@@ -335,7 +344,7 @@ namespace Isotope_fitting
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(4, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(187, 13);
+            this.label1.Size = new System.Drawing.Size(196, 14);
             this.label1.TabIndex = 0;
             this.label1.Text = "Fragment          adj.height             SSE";
             // 
@@ -463,9 +472,9 @@ namespace Isotope_fitting
             this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selFrag_Label.Location = new System.Drawing.Point(554, 52);
             this.selFrag_Label.Name = "selFrag_Label";
-            this.selFrag_Label.Size = new System.Drawing.Size(152, 17);
+            this.selFrag_Label.Size = new System.Drawing.Size(114, 17);
             this.selFrag_Label.TabIndex = 38;
-            this.selFrag_Label.Text = "Selected Fragments";
+            this.selFrag_Label.Text = "Fragments\' list";
             this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
             this.selFrag_Label.Click += new System.EventHandler(this.selFrag_Label_Click);
             // 
@@ -488,7 +497,7 @@ namespace Isotope_fitting
             this.factor_Box.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.factor_Box.Location = new System.Drawing.Point(596, 21);
             this.factor_Box.Name = "factor_Box";
-            this.factor_Box.Size = new System.Drawing.Size(59, 20);
+            this.factor_Box.Size = new System.Drawing.Size(59, 21);
             this.factor_Box.TabIndex = 35;
             this.factor_Box.Visible = false;
             this.factor_Box.TextChanged += new System.EventHandler(this.factor_Box_TextChanged);
@@ -556,9 +565,10 @@ namespace Isotope_fitting
             this.panel1.Controls.Add(this.primary_Label);
             this.panel1.Controls.Add(this.internal_Label);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 16);
+            this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(3, 17);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(318, 568);
+            this.panel1.Size = new System.Drawing.Size(318, 567);
             this.panel1.TabIndex = 0;
             // 
             // displayPeakList_btn
