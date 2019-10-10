@@ -2094,9 +2094,10 @@ namespace Isotope_fitting
             var linearAxis2r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             res_model.Axes.Add(linearAxis2r);
 
+
             // bind the 2 x-axes :D
             linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); res_plot.InvalidatePlot(true); };
-            iso_model.Updated += (s, e) => { res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum, iso_plot.Model.Axes[1].ActualMaximum); };
+            iso_model.Updated += (s, e) => { res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum, iso_plot.Model.Axes[1].ActualMaximum); res_plot.Model.Axes[0].Zoom(iso_plot.Model.Axes[0].ActualMinimum, iso_plot.Model.Axes[0].ActualMaximum); };
             iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
             //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
             //res_plot.MouseHover += (s, e) => { res_plot.Focus(); };
