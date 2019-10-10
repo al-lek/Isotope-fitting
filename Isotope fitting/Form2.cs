@@ -988,7 +988,7 @@ namespace Isotope_fitting
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
 
-            frag_tree.NodeMouseDoubleClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) singleFrag_manipulation(e.Node); };
+            frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) singleFrag_manipulation(e.Node); };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -1016,7 +1016,7 @@ namespace Isotope_fitting
             double frag_intensity = Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity;
 
             Form frm = new Form { Size = new Size(200, 35), AutoSizeMode = AutoSizeMode.GrowAndShrink, TopMost = true, ControlBox = false, StartPosition = FormStartPosition.Manual,
-                FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(Cursor.Position.X - 200, Cursor.Position.Y) };
+                FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(1570, 580) };
 
             Label lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
             Button btn_solo = new Button { Text = "fit", Location = new Point(50, 5), Size = new Size(40, 23) };
@@ -1053,7 +1053,7 @@ namespace Isotope_fitting
             //fragTypes_tree = null;
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Dispose(); }        // for GC?
 
-            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 560), Name = "fragType_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 600), Name = "fragType_tree", Size = new Size(335, 400), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(fragTypes_tree);
             fragTypes_tree.BringToFront();
             fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
