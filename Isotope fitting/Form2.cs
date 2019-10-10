@@ -1692,14 +1692,14 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             // init tree view
-            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 20, bigPanel.Size.Height - 20), ShowNodeToolTips = false };
+            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = true };
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
             fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; };           
-            fit_tree.NodeMouseHover += (s, e) => { fit_tree_NodeMouseHover(s, e); };
+            //fit_tree.NodeMouseHover += (s, e) => { fit_tree_NodeMouseHover(s, e); };
             // interpret fitted results
             fit_tree.BeginUpdate();
 
@@ -1714,50 +1714,29 @@ namespace Isotope_fitting
 
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
+                    StringBuilder sb = new StringBuilder();
                     tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_results[i][j].Length - 2];
                     string tmp = "";
-                    tmp += " SSE: " + all_fitted_results[i][j][all_fitted_results[i][j].Length - 2].ToString("0.###e0" + "  ");
-                    tmp += " %Area: " + Math.Round(all_fitted_results[i][j].Last(), 1).ToString() + "%" + "  ";
+                    tmp += "SSE:" + all_fitted_results[i][j][all_fitted_results[i][j].Length - 2].ToString("0.###e0" + "  ");
+                    tmp += "A:" + Math.Round(all_fitted_results[i][j].Last(), 2).ToString() + "%";
                     for (int k = 0; k < all_fitted_results[i][j].Length - 2; k++)
                     {
-                        tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;                    }
+                        //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
+                        sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0"));
+                    }
+                    TreeNode tr = new TreeNode
+                    {
+                        Text =tmp,Name= i.ToString() + " " + j.ToString(),ToolTipText=sb.ToString()
+                        
+                    };
+                    fit_tree.Nodes[i].Nodes.Add(tr);  
                     
-
-                    fit_tree.Nodes[i].Nodes.Add(i.ToString() + " " + j.ToString(), tmp);
                 }
                 fit_tree.Nodes[i]= find_min_SSE(fit_tree.Nodes[i], tree_index,tree_sse);
             }          
             fit_tree.EndUpdate();
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
         }
-
-        ToolTip tip = new ToolTip();
-        private void fit_tree_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();
-            string idx_str = e.Node.Name;
-            if (string.IsNullOrEmpty(idx_str)) return;
-            else
-            {
-                string[] idx_str_arr = idx_str.Split(' ');
-                int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
-                int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
-                // find respective fragments in frag_tree and check or uncheck them
-                // also pass the fitted height o both Fragments2 and the node on the UI
-                List<TreeNode> all_nodes = get_all_nodes(frag_tree);
-                for (int i = 0; i < all_fitted_sets[set_idx][set_pos_idx].Length; i++)
-                {
-                    int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;
-                    TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (curr_idx).ToString());
-                    double factor = all_fitted_results[set_idx][set_pos_idx][i];
-                    Fragments2[curr_idx].Factor = factor;
-                    sb.AppendLine(Fragments2[curr_idx].Name + " " + Fragments2[curr_idx].Factor.ToString() + "/n");                    
-                }
-                
-                tip.Show(sb.ToString(), this, PointToClient(MousePosition));
-            }
-        }
-       
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
         {
             // The code only executes if the user caused the checked state to change.
