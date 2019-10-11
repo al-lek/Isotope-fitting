@@ -38,12 +38,13 @@ namespace Isotope_fitting
             this.plots_grpBox = new System.Windows.Forms.GroupBox();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
+            this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
             this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
             this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
-            this.clearListBtn = new System.Windows.Forms.Label();
-            this.saveListBtn = new System.Windows.Forms.Label();
-            this.loadListBtn = new System.Windows.Forms.Label();
+            this.clearListBtn1 = new System.Windows.Forms.Button();
+            this.loadListBtn1 = new System.Windows.Forms.Button();
+            this.saveListBtn1 = new System.Windows.Forms.Button();
             this.mark_label = new System.Windows.Forms.Label();
             this.loadWd_Btn = new System.Windows.Forms.Button();
             this.saveWd_Btn = new System.Windows.Forms.Button();
@@ -122,6 +123,7 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -198,6 +200,8 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fit_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fit_grpBox.Controls.Add(this.plotFragProf_chkBox);
+            this.fit_grpBox.Controls.Add(this.plotFragCent_chkBox);
             this.fit_grpBox.Controls.Add(this.plotCentr_chkBox);
             this.fit_grpBox.Controls.Add(this.plotExp_chkBox);
             this.fit_grpBox.Location = new System.Drawing.Point(0, 12);
@@ -206,12 +210,26 @@ namespace Isotope_fitting
             this.fit_grpBox.TabIndex = 0;
             this.fit_grpBox.TabStop = false;
             // 
+            // plotFragCent_chkBox
+            // 
+            this.plotFragCent_chkBox.AutoSize = true;
+            this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotFragCent_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(6, 89);
+            this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
+            this.plotFragCent_chkBox.Size = new System.Drawing.Size(75, 17);
+            this.plotFragCent_chkBox.TabIndex = 1;
+            this.plotFragCent_chkBox.Text = "frag. centr.";
+            this.plotFragCent_chkBox.UseVisualStyleBackColor = true;
+            // 
             // plotCentr_chkBox
             // 
             this.plotCentr_chkBox.AutoSize = true;
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 66);
+            this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotCentr_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(6, 66);
             this.plotCentr_chkBox.Name = "plotCentr_chkBox";
-            this.plotCentr_chkBox.Size = new System.Drawing.Size(73, 17);
+            this.plotCentr_chkBox.Size = new System.Drawing.Size(71, 17);
             this.plotCentr_chkBox.TabIndex = 0;
             this.plotCentr_chkBox.Text = "plot centr.";
             this.plotCentr_chkBox.UseVisualStyleBackColor = true;
@@ -219,9 +237,11 @@ namespace Isotope_fitting
             // plotExp_chkBox
             // 
             this.plotExp_chkBox.AutoSize = true;
+            this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotExp_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotExp_chkBox.Location = new System.Drawing.Point(6, 43);
             this.plotExp_chkBox.Name = "plotExp_chkBox";
-            this.plotExp_chkBox.Size = new System.Drawing.Size(66, 17);
+            this.plotExp_chkBox.Size = new System.Drawing.Size(64, 17);
             this.plotExp_chkBox.TabIndex = 0;
             this.plotExp_chkBox.Text = "plot exp.";
             this.plotExp_chkBox.UseVisualStyleBackColor = true;
@@ -229,9 +249,9 @@ namespace Isotope_fitting
             // user_grpBox
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.user_grpBox.Controls.Add(this.clearListBtn);
-            this.user_grpBox.Controls.Add(this.saveListBtn);
-            this.user_grpBox.Controls.Add(this.loadListBtn);
+            this.user_grpBox.Controls.Add(this.clearListBtn1);
+            this.user_grpBox.Controls.Add(this.loadListBtn1);
+            this.user_grpBox.Controls.Add(this.saveListBtn1);
             this.user_grpBox.Controls.Add(this.mark_label);
             this.user_grpBox.Controls.Add(this.loadWd_Btn);
             this.user_grpBox.Controls.Add(this.saveWd_Btn);
@@ -253,50 +273,50 @@ namespace Isotope_fitting
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
             // 
-            // clearListBtn
+            // clearListBtn1
             // 
-            this.clearListBtn.AutoSize = true;
-            this.clearListBtn.BackColor = System.Drawing.Color.LightCoral;
-            this.clearListBtn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.clearListBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.clearListBtn.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearListBtn.ForeColor = System.Drawing.Color.White;
-            this.clearListBtn.Location = new System.Drawing.Point(832, 53);
-            this.clearListBtn.Name = "clearListBtn";
-            this.clearListBtn.Size = new System.Drawing.Size(60, 16);
-            this.clearListBtn.TabIndex = 10000003;
-            this.clearListBtn.Text = "Clear List";
-            this.clearListBtn.Click += new System.EventHandler(this.clearListBtn_Click);
+            this.clearListBtn1.BackColor = System.Drawing.Color.DarkSalmon;
+            this.clearListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Crimson;
+            this.clearListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.clearListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clearListBtn1.ForeColor = System.Drawing.Color.White;
+            this.clearListBtn1.Location = new System.Drawing.Point(831, 51);
+            this.clearListBtn1.Name = "clearListBtn1";
+            this.clearListBtn1.Size = new System.Drawing.Size(60, 22);
+            this.clearListBtn1.TabIndex = 10000006;
+            this.clearListBtn1.Text = "Clear";
+            this.clearListBtn1.UseVisualStyleBackColor = false;
+            this.clearListBtn1.Click += new System.EventHandler(this.clearListBtn1_Click);
             // 
-            // saveListBtn
+            // loadListBtn1
             // 
-            this.saveListBtn.AutoSize = true;
-            this.saveListBtn.BackColor = System.Drawing.Color.ForestGreen;
-            this.saveListBtn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.saveListBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.saveListBtn.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveListBtn.ForeColor = System.Drawing.Color.White;
-            this.saveListBtn.Location = new System.Drawing.Point(699, 53);
-            this.saveListBtn.Name = "saveListBtn";
-            this.saveListBtn.Size = new System.Drawing.Size(58, 16);
-            this.saveListBtn.TabIndex = 10000002;
-            this.saveListBtn.Text = "Save List";
-            this.saveListBtn.Click += new System.EventHandler(this.saveListBtn_Click);
+            this.loadListBtn1.BackColor = System.Drawing.Color.MediumAquamarine;
+            this.loadListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkCyan;
+            this.loadListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.loadListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadListBtn1.ForeColor = System.Drawing.Color.White;
+            this.loadListBtn1.Location = new System.Drawing.Point(765, 51);
+            this.loadListBtn1.Name = "loadListBtn1";
+            this.loadListBtn1.Size = new System.Drawing.Size(60, 22);
+            this.loadListBtn1.TabIndex = 10000005;
+            this.loadListBtn1.Text = "Load";
+            this.loadListBtn1.UseVisualStyleBackColor = false;
+            this.loadListBtn1.Click += new System.EventHandler(this.loadListBtn1_Click);
             // 
-            // loadListBtn
+            // saveListBtn1
             // 
-            this.loadListBtn.AutoSize = true;
-            this.loadListBtn.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.loadListBtn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.loadListBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.loadListBtn.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadListBtn.ForeColor = System.Drawing.Color.White;
-            this.loadListBtn.Location = new System.Drawing.Point(766, 53);
-            this.loadListBtn.Name = "loadListBtn";
-            this.loadListBtn.Size = new System.Drawing.Size(58, 16);
-            this.loadListBtn.TabIndex = 10000001;
-            this.loadListBtn.Text = "Load List";
-            this.loadListBtn.Click += new System.EventHandler(this.loadListBtn_Click);
+            this.saveListBtn1.BackColor = System.Drawing.Color.YellowGreen;
+            this.saveListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGreen;
+            this.saveListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.saveListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveListBtn1.ForeColor = System.Drawing.Color.White;
+            this.saveListBtn1.Location = new System.Drawing.Point(699, 51);
+            this.saveListBtn1.Name = "saveListBtn1";
+            this.saveListBtn1.Size = new System.Drawing.Size(60, 22);
+            this.saveListBtn1.TabIndex = 10000004;
+            this.saveListBtn1.Text = "Save";
+            this.saveListBtn1.UseVisualStyleBackColor = false;
+            this.saveListBtn1.Click += new System.EventHandler(this.saveListBtn1_Click);
             // 
             // mark_label
             // 
@@ -469,10 +489,10 @@ namespace Isotope_fitting
             // 
             this.selFrag_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selFrag_Label.AutoSize = true;
-            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selFrag_Label.Location = new System.Drawing.Point(554, 52);
+            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.selFrag_Label.Location = new System.Drawing.Point(558, 53);
             this.selFrag_Label.Name = "selFrag_Label";
-            this.selFrag_Label.Size = new System.Drawing.Size(114, 17);
+            this.selFrag_Label.Size = new System.Drawing.Size(127, 20);
             this.selFrag_Label.TabIndex = 38;
             this.selFrag_Label.Text = "Fragments\' list";
             this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
@@ -521,6 +541,7 @@ namespace Isotope_fitting
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.displayPeakList_btn);
             this.panel1.Controls.Add(this.optionBtn);
             this.panel1.Controls.Add(customRes_Btn);
@@ -573,13 +594,16 @@ namespace Isotope_fitting
             // 
             // displayPeakList_btn
             // 
+            this.displayPeakList_btn.BackColor = System.Drawing.Color.LightBlue;
             this.displayPeakList_btn.Enabled = false;
+            this.displayPeakList_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.displayPeakList_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayPeakList_btn.Location = new System.Drawing.Point(237, 6);
             this.displayPeakList_btn.Name = "displayPeakList_btn";
             this.displayPeakList_btn.Size = new System.Drawing.Size(63, 23);
             this.displayPeakList_btn.TabIndex = 40;
             this.displayPeakList_btn.Text = "peak list";
-            this.displayPeakList_btn.UseVisualStyleBackColor = true;
+            this.displayPeakList_btn.UseVisualStyleBackColor = false;
             // 
             // optionBtn
             // 
@@ -593,13 +617,16 @@ namespace Isotope_fitting
             // 
             // loadExp_Btn
             // 
+            this.loadExp_Btn.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.loadExp_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadExp_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadExp_Btn.ForeColor = System.Drawing.Color.White;
             this.loadExp_Btn.Location = new System.Drawing.Point(3, 3);
             this.loadExp_Btn.Name = "loadExp_Btn";
             this.loadExp_Btn.Size = new System.Drawing.Size(228, 29);
             this.loadExp_Btn.TabIndex = 37;
             this.loadExp_Btn.Text = "Load Experimental";
-            this.loadExp_Btn.UseVisualStyleBackColor = true;
+            this.loadExp_Btn.UseVisualStyleBackColor = false;
             this.loadExp_Btn.Click += new System.EventHandler(this.loadExp_Btn_Click);
             // 
             // chargeMax_Box
@@ -645,12 +672,16 @@ namespace Isotope_fitting
             // 
             // loadMS_Btn
             // 
+            this.loadMS_Btn.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.loadMS_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.loadMS_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadMS_Btn.ForeColor = System.Drawing.Color.White;
             this.loadMS_Btn.Location = new System.Drawing.Point(238, 49);
             this.loadMS_Btn.Name = "loadMS_Btn";
             this.loadMS_Btn.Size = new System.Drawing.Size(63, 23);
             this.loadMS_Btn.TabIndex = 1;
             this.loadMS_Btn.Text = "Load MS";
-            this.loadMS_Btn.UseVisualStyleBackColor = true;
+            this.loadMS_Btn.UseVisualStyleBackColor = false;
             this.loadMS_Btn.Click += new System.EventHandler(this.LoadMS_Btn_Click);
             // 
             // addin_lstBox
@@ -799,14 +830,17 @@ namespace Isotope_fitting
             // 
             // calc_Btn
             // 
+            this.calc_Btn.BackColor = System.Drawing.Color.SteelBlue;
             this.calc_Btn.Enabled = false;
+            this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
             this.calc_Btn.Location = new System.Drawing.Point(203, 704);
             this.calc_Btn.Name = "calc_Btn";
             this.calc_Btn.Size = new System.Drawing.Size(98, 23);
             this.calc_Btn.TabIndex = 10;
             this.calc_Btn.Text = "Calculate";
-            this.calc_Btn.UseVisualStyleBackColor = true;
+            this.calc_Btn.UseVisualStyleBackColor = false;
             this.calc_Btn.Click += new System.EventHandler(this.Calc_Btn_Click);
             // 
             // y_lstBox
@@ -1246,6 +1280,18 @@ namespace Isotope_fitting
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
             // 
+            // plotFragProf_chkBox
+            // 
+            this.plotFragProf_chkBox.AutoSize = true;
+            this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotFragProf_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotFragProf_chkBox.Location = new System.Drawing.Point(6, 112);
+            this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
+            this.plotFragProf_chkBox.Size = new System.Drawing.Size(69, 17);
+            this.plotFragProf_chkBox.TabIndex = 2;
+            this.plotFragProf_chkBox.Text = "frag. prof.";
+            this.plotFragProf_chkBox.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1360,8 +1406,10 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button displayPeakList_btn;
         private System.Windows.Forms.CheckBox plotExp_chkBox;
         private System.Windows.Forms.CheckBox plotCentr_chkBox;
-        private System.Windows.Forms.Label saveListBtn;
-        private System.Windows.Forms.Label loadListBtn;
-        private System.Windows.Forms.Label clearListBtn;
+        private System.Windows.Forms.Button clearListBtn1;
+        private System.Windows.Forms.Button loadListBtn1;
+        private System.Windows.Forms.Button saveListBtn1;
+        private System.Windows.Forms.CheckBox plotFragCent_chkBox;
+        private System.Windows.Forms.CheckBox plotFragProf_chkBox;
     }
 }

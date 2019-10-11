@@ -1630,10 +1630,60 @@ namespace Isotope_fitting
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
             result[distros_num] = state.fi[0];
 
-            result[distros_num+1] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);            
+            result[distros_num+1] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);
+
+            //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
+            //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coeficients);
+            //result[distros_num + 3] = (result[distros_num])+ result[distros_num + 2] +(10/result[distros_num + 1]);
 
             return result;
         }
+
+        #region unused code, extra test attempt--> not useful, delete it if you like
+        private double KolmogorovSmirnovTest(List<double[]>aligned_subData,double[]sub_coeficients)
+        {
+            int cand_frag = sub_coeficients.Length;
+            double[] error = new double[cand_frag];
+            for (int j = 1; j < aligned_subData[0].Length; j++)
+            {
+                List<double[]> dissimilarity = new List<double[]>();
+                double max = 0.0;double min = aligned_subData[1][0];
+                for (int i = 0; i < aligned_subData.Count; i++)
+                {
+                    if (aligned_subData[i][j] * sub_coeficients[j - 1] > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
+                    {
+                        if (aligned_subData[i][j] * sub_coeficients[j - 1]> max) max= aligned_subData[i][j] * sub_coeficients[j - 1];
+                        if (aligned_subData[i][j] * sub_coeficients[j - 1]< min) min=aligned_subData[i][j] * sub_coeficients[j - 1];
+                        if (aligned_subData[i][0]> max) max= aligned_subData[i][0];
+                        if (aligned_subData[i][0]< min) min= aligned_subData[i][0];
+                        dissimilarity.Add(new double[2] { aligned_subData[i][0], aligned_subData[i][j] * sub_coeficients[j - 1] });
+                    }
+                }
+                error[j-1]=GetScalingError(dissimilarity, max, min);
+            }
+            return error.Sum() / cand_frag;
+        }
+        private double GetScalingError(List<double[]> dis,double dis_max,double dis_min)
+        {
+            double min =0.1;
+            double max =1;
+            double m = (max - min) / (dis_max - dis_min);
+            double c = min - dis_min * m;
+            var newarr = new double[dis.Count];
+            int k = 0;
+            double frag_sub = 0.0;
+            double exp_sub = 0.0;
+            foreach (double[] ss in dis)
+            {
+                ss[0] = m * ss[0] + c; ss[1] = m * ss[1] + c;
+                frag_sub += ss[1];
+                exp_sub += ss[0];
+                newarr[k] = Math.Abs(exp_sub- frag_sub);
+                k++;
+            }
+            return newarr.Max();
+        }
+        #endregion
 
         private double per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients,double exp_sum)
         {
@@ -1657,7 +1707,6 @@ namespace Isotope_fitting
             if (res < 100) return res;
             else return (frag_sum / exp_sum) * 100.0;
         }
-
         public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
         {
             // SSE, objective to minimize
@@ -1684,7 +1733,6 @@ namespace Isotope_fitting
                 //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
         }
-
         private void generate_fit_results()
         {
             sw1.Reset(); sw1.Start();
@@ -1698,7 +1746,7 @@ namespace Isotope_fitting
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
-            fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; };           
+            fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; fit_set_graph_zoomed(e.Node); };           
             //fit_tree.NodeMouseHover += (s, e) => { fit_tree_NodeMouseHover(s, e); };
             // interpret fitted results
             fit_tree.BeginUpdate();
@@ -1715,11 +1763,12 @@ namespace Isotope_fitting
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
                     StringBuilder sb = new StringBuilder();
-                    tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_results[i][j].Length - 2];
+                    tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_results[i][j].Length - 3];
                     string tmp = "";
                     tmp += "SSE:" + all_fitted_results[i][j][all_fitted_results[i][j].Length - 2].ToString("0.###e0" + "  ");
-                    tmp += "A:" + Math.Round(all_fitted_results[i][j].Last(), 2).ToString() + "%";
-                    for (int k = 0; k < all_fitted_results[i][j].Length - 2; k++)
+                    tmp += "A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "% ";
+                    //tmp += "K:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString();
+                    for (int k = 0; k < all_fitted_sets[i][j].Length ; k++)
                     {
                         //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
                         sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0"));
@@ -1729,8 +1778,7 @@ namespace Isotope_fitting
                         Text =tmp,Name= i.ToString() + " " + j.ToString(),ToolTipText=sb.ToString()
                         
                     };
-                    fit_tree.Nodes[i].Nodes.Add(tr);  
-                    
+                    fit_tree.Nodes[i].Nodes.Add(tr);                      
                 }
                 fit_tree.Nodes[i]= find_min_SSE(fit_tree.Nodes[i], tree_index,tree_sse);
             }          
@@ -1740,20 +1788,12 @@ namespace Isotope_fitting
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
         {
             // The code only executes if the user caused the checked state to change.
-            if (e.Action== TreeViewAction.ByMouse )
+            if (e.Action== TreeViewAction.ByMouse && !string.IsNullOrEmpty(e.Node.Name) && !e.Node.Checked)
             {
-                if (!string.IsNullOrEmpty(e.Node.Name) && !e.Node.Checked)
+                // for all the nodes in the tree which are not the freshly checked one uncheck them
+                foreach (TreeNode cur_node in e.Node.Parent.Nodes)
                 {
-                    // for all the nodes in the tree...
-                    foreach (TreeNode cur_node in e.Node.Parent.Nodes)
-                    {
-                        // ... which are not the freshly checked one...
-                        if (cur_node.Checked)
-                        {
-                            // ... uncheck them
-                            cur_node.Checked = false;
-                        }
-                    }
+                    if (cur_node.Checked) cur_node.Checked = false;
                 }
             }
         }
@@ -1806,7 +1846,6 @@ namespace Isotope_fitting
             Clipboard.SetText(sb.ToString());
 
         }
-
         private void fit_node_checkChanged(TreeNode fitnode)
         {
             // will search in fragments tree to find and enable the corresponding fragments
@@ -1814,7 +1853,7 @@ namespace Isotope_fitting
             block_plot_refresh = true;
             string idx_str = fitnode.Name;
             bool is_checked = fitnode.Checked;
-            if (string.IsNullOrEmpty(idx_str))fitnode.FirstNode.Checked= fitnode.Checked;
+            if (string.IsNullOrEmpty(idx_str)) return;
 
             else
             {
@@ -1835,7 +1874,7 @@ namespace Isotope_fitting
 
                     Fragments2[curr_idx].Factor = factor;
                     curr_node.Checked = is_checked;
-                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");
+                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");                  
                 }
             }
             block_plot_refresh = false;
@@ -1844,7 +1883,6 @@ namespace Isotope_fitting
             // it will be called once, now that all coresponding fragments are checked
             refresh_iso_plot();
         }
-
         private List<TreeNode> get_all_nodes(TreeView tree)
         {
             // will return a list with all nodes of a tree. Works only for 2-level depth
@@ -1856,7 +1894,6 @@ namespace Isotope_fitting
 
             return res;
         }
-
         private List<double> get_UI_intensities(int[] subSet)
         {
             // is called from fit to pass a good starting height to the optimizer
@@ -1867,7 +1904,27 @@ namespace Isotope_fitting
 
             return UI_intensities;
         }
-        
+
+        /// <summary>
+        /// zoom at the graph region the selected fit tree node is about
+        /// </summary>
+        private void fit_set_graph_zoomed(TreeNode node)
+        {
+            //if (plotExp_chkBox.Checked)
+            //{
+                //iso_plot.Model.Annotations.Clear();
+                string[] idx_str_arr = new string[2];
+                string idx_str = node.Name;
+                if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
+                else idx_str_arr = node.Parent.Text.Split('-');
+                double min_border = dParser(idx_str_arr[0]);
+                double max_border = dParser(idx_str_arr[1]);
+                iso_plot.Model.Axes[1].Zoom(min_border, max_border);
+                iso_plot.Refresh();
+                //iso_plot.Model.Annotations.Add(new RectangleAnnotation {MinimumX = min_border, MaximumX = max_border, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
+                invalidate_all();
+            //}
+        }
         #endregion
 
         #region UI control
@@ -1915,30 +1972,53 @@ namespace Isotope_fitting
             }
 
             // 2. replot all isotopes
-            for (int i = 0; i < to_plot.Count; i++)
+            if (plotFragProf_chkBox.Checked)
             {
-                int curr_idx = to_plot[i];
-                if (all_data.Count != 0)
+                for (int i = 0; i < to_plot.Count; i++)
                 {
-                    // get name of each line to be ploted
-                    string name_str = Fragments2[curr_idx - 1].Name;
-                    (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+                    int curr_idx = to_plot[i];
+                    if (all_data.Count != 0)
+                    {
+                        // get name of each line to be ploted
+                        string name_str = Fragments2[curr_idx - 1].Name;
+                        (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
 
-                    // paint frag aligned
-                    //for (int j = 0; j < all_data[0].Count; j++)
+                        // paint frag aligned
+                        //for (int j = 0; j < all_data[0].Count; j++)
                         //(iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
 
-                    // paint frag envelope
-                    for (int j = 0; j < all_data[curr_idx].Count; j++)
-                        (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
+                        // paint frag envelope
+                        for (int j = 0; j < all_data[curr_idx].Count; j++)
+                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
+                    }
                 }
             }
+            if (plotFragCent_chkBox.Checked)
+            {
+                for (int i = 0; i < to_plot.Count; i++)
+                {
+                    int curr_idx = to_plot[i];
+                    if (all_data.Count != 0)
+                    {
+                        // get name of each line to be ploted
+                        string name_str = Fragments2[curr_idx - 1].Name;
+                        (iso_plot.Model.Series[curr_idx + Fragments2.Count] as LinearBarSeries).Title = name_str;
 
+                        // paint frag envelope
+                        for (int j = 0; j < Fragments2[curr_idx - 1].Centroid.Count; j++)
+                        {
+                            List<PointPlot> cenn = Fragments2[curr_idx - 1].Centroid.OrderBy(p => p.X).ToList();
+                            (iso_plot.Model.Series[curr_idx + Fragments2.Count] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Fragments2[curr_idx - 1].Factor * cenn[j].Y));
+
+                        }
+                    }
+                }
+            }          
             // 3. fitted plot
             if (summation.Count > 0)
                 if (Fitting_chkBox.Checked)
                     for (int j = 0; j < summation.Count; j++)
-                        (iso_plot.Model.Series[all_data.Count] as LineSeries).Points.Add(new DataPoint(summation[j][0], summation[j][1]));
+                        (iso_plot.Model.Series[(all_data.Count*2)-1] as LineSeries).Points.Add(new DataPoint(summation[j][0], summation[j][1]));
 
             // 4. residual plot
             if (residual.Count > 0)
@@ -1952,21 +2032,26 @@ namespace Isotope_fitting
                 {
                     double mz = peak[1] + peak[4];
                     double inten = peak[5];
-                    (iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
+                    //(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
+                    (iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));
                 }
             }
-
             invalidate_all();
         }
         private void reset_iso_plot()
         {
             iso_plot.Model.Series.Clear();
-
             for (int i = 0; i < all_data.Count; i++)
             {
                 LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = get_fragment_color(i) };
                 if (i == 0) tmp.StrokeThickness = 1;
                 iso_plot.Model.Series.Add(tmp);
+            }
+            for (int i = 1; i < all_data.Count; i++)
+            {
+                OxyColor cc = get_fragment_color(i);
+                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor =cc, FillColor = cc, BarWidth = 3, };
+                iso_plot.Model.Series.Add(bar);
             }
             if (insert_exp == true)
             {
@@ -1981,9 +2066,12 @@ namespace Isotope_fitting
             }
             if(plotCentr_chkBox.Checked)
             {
-                RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Red, FillColor = OxyColors.Red };
+                //RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson };
+                //iso_plot.Model.Series.Add(bar);
+                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1,StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson,BarWidth=1 };
                 iso_plot.Model.Series.Add(bar);
             }
+            
         }
         private void recalculate_fitted_residual(List<int> to_plot)
         {
@@ -2100,6 +2188,7 @@ namespace Isotope_fitting
             iso_model.Updated += (s, e) => { res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum, iso_plot.Model.Axes[1].ActualMaximum); res_plot.Model.Axes[0].Zoom(iso_plot.Model.Axes[0].ActualMinimum, iso_plot.Model.Axes[0].ActualMaximum); };
             iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
             //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
+            iso_plot.MouseLeave += (s, e) => { iso_plot.Model.Annotations.Clear(); };
             //res_plot.MouseHover += (s, e) => { res_plot.Focus(); };
         }
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
@@ -2737,10 +2826,7 @@ namespace Isotope_fitting
         #endregion
 
         #region SAVE-LOAD list fragments
-        private void saveListBtn_Click(object sender, EventArgs e)
-        {
-            saveList(selectedFragments);
-        }
+        
         private void saveList(List<int> fragToSave)
         {
             SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fitted_fragments", Filter = "Data Files (*.fit)|*.fit", DefaultExt = "fit", OverwritePrompt = true, AddExtension = true };
@@ -2764,10 +2850,6 @@ namespace Isotope_fitting
                 }
                 file.Flush(); file.Close(); file.Dispose();
             }
-        }
-        private void loadListBtn_Click(object sender, EventArgs e)
-        {
-            loadList();
         }
         private void loadList()
         {
@@ -2872,7 +2954,6 @@ namespace Isotope_fitting
                 is_loading = false;                            
             }
         }
-
         private bool check_for_duplicates(string name,double factor)
         {
             if(Fragments2.Count<2) return true;            
@@ -2881,10 +2962,6 @@ namespace Isotope_fitting
                 if (fra.Name==name && fra.Factor==factor) return false;                
             }    
             return true;
-        }
-        private void clearListBtn_Click(object sender, EventArgs e)
-        {
-            clearList();
         }
         private void clearList()
         {
@@ -2909,6 +2986,18 @@ namespace Isotope_fitting
             fit_Btn.Enabled = false;
             Initialize_Oxy();
         }
+        private void saveListBtn1_Click(object sender, EventArgs e)
+        {
+            saveList(selectedFragments);
+        }
+        private void loadListBtn1_Click(object sender, EventArgs e)
+        {
+            loadList();
+        }
+        private void clearListBtn1_Click(object sender, EventArgs e)
+        {
+            clearList();
+        }
         #endregion
 
         #region UI
@@ -2916,6 +3005,8 @@ namespace Isotope_fitting
         {
             plotExp_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
             plotCentr_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            plotFragCent_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            plotFragProf_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
             fitMax_Box.Click += (s, e) => { fitMax_Box.SelectAll(); };
             fitMin_Box.Click += (s, e) => { fitMin_Box.SelectAll(); };
             fitMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true, false, true); };
@@ -4665,9 +4756,6 @@ namespace Isotope_fitting
             frm4.Show();
             frm4.FormClosing += (s, f) => { add_machine(false); };
         }
-
-        
-
         private void add_machine(bool exp_resolution = false)
         {
             string name = "";
@@ -4690,10 +4778,7 @@ namespace Isotope_fitting
             machine_listBox.Invoke(new Action(() => machine_listBox.Items.Add(name)));   //thread safe call
             machine_listBox.Invoke(new Action(() => machine_listBox.SelectedItem = name));   //thread safe call
         }
-
-
-
-
+        
         #endregion
 
 
