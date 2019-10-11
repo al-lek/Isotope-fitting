@@ -1011,16 +1011,24 @@ namespace Isotope_fitting
 
         private void singleFrag_manipulation(TreeNode node)
         {
+            try
+            {
+               Panel pnl = GetControls(bigPanel).OfType<Panel>().FirstOrDefault(l => l.Name == "Fragment intensity adjustment");
+               this.Controls.Remove(pnl);pnl.Dispose();
+            }
+            catch { }           
+            
             // will handle the height of frag. Automaticaly by solo fit, or manualy
             int frag_idx = Convert.ToInt32(node.Name);
             double frag_intensity = Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity;
 
-            Form frm = new Form { Size = new Size(200, 35), AutoSizeMode = AutoSizeMode.GrowAndShrink, TopMost = true, ControlBox = false, StartPosition = FormStartPosition.Manual,
-                FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(1570, 580) };
+            //Form frm = new Form { Size = new Size(200, 35), AutoSizeMode = AutoSizeMode.GrowAndShrink, TopMost = true, ControlBox = false, StartPosition = FormStartPosition.Manual,
+            //    FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(1570, 580) };
 
+            Panel factor_panel = new Panel { Location = new Point(1570, 555), Size = new Size(180, 35),BorderStyle=BorderStyle.Fixed3D,Name="Fragment intensity adjustment",Visible= true ,Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Label lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
             Button btn_solo = new Button { Text = "fit", Location = new Point(50, 5), Size = new Size(40, 23) };
-            Button btn_ok = new Button { Location = new Point(165, 5), Size = new Size(29, 23), Text = "ok" };
+            //Button btn_ok = new Button { Location = new Point(165, 5), Size = new Size(29, 23), Text = "ok" };
             NumericUpDown numUD = new NumericUpDown { Minimum = 1, Maximum = 1e8M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
                                                         Location = new Point(100, 7), Size = new Size(60, 20) };
 
@@ -1041,10 +1049,11 @@ namespace Isotope_fitting
                 node.Text = node.Text.Remove(node.Text.LastIndexOf(' ')) + " " + (Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity).ToString("#######");
                 refresh_iso_plot();
             };
-            btn_ok.Click += (s, e) => { frm.Close(); };
+            //btn_ok.Click += (s, e) => { frm.Close(); };
 
-            frm.Controls.AddRange(new Control[] { lbl, btn_solo, btn_ok, numUD });
-            frm.Show();
+            factor_panel.Controls.AddRange(new Control[] { lbl, btn_solo, /*btn_ok,*/ numUD });
+            Controls.Add(factor_panel);
+            factor_panel.BringToFront();
         }
 
         private void populate_fragtypes_treeView()
