@@ -2059,7 +2059,7 @@ namespace Isotope_fitting
             for (int i = 1; i < all_data.Count; i++)
             {
                 OxyColor cc = get_fragment_color(i);
-                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor =cc, FillColor = cc, BarWidth = 3, };
+                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor =cc, FillColor = cc, BarWidth = 1 };
                 iso_plot.Model.Series.Add(bar);
             }
             if (insert_exp == true)
@@ -2159,8 +2159,6 @@ namespace Isotope_fitting
             iso_model.MouseMove += (s, e) => { if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
             iso_model.MouseUp += (s, e) => { count_distance = false;};            
           
-
-
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
             //////var m = new ZoomStepManipulator(this, e.Delta * 0.001, isControlDown);
@@ -2193,11 +2191,10 @@ namespace Isotope_fitting
 
 
             // bind the 2 x-axes :D
-            linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); res_plot.InvalidatePlot(true); };
-            iso_model.Updated += (s, e) => { res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum, iso_plot.Model.Axes[1].ActualMaximum); res_plot.Model.Axes[0].Zoom(iso_plot.Model.Axes[0].ActualMinimum, iso_plot.Model.Axes[0].ActualMaximum); };
+            linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); /*linearAxis1r.Zoom(linearAxis1r.ActualMinimum, linearAxis1r.ActualMaximum)*/; res_plot.InvalidatePlot(true); };            
+            iso_model.Updated += (s, e) => { res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum, iso_plot.Model.Axes[1].ActualMaximum);};
             iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
             //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
-            iso_plot.MouseLeave += (s, e) => { iso_plot.Model.Annotations.Clear(); };
             //res_plot.MouseHover += (s, e) => { res_plot.Focus(); };
         }
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
@@ -2286,8 +2283,8 @@ namespace Isotope_fitting
         /// </summary>
         private void progress_display_init()
         {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(660, 31), Style = 0, Minimum = 0, Value = 0, Size = new Size(227, 21), AutoSize = false, Visible = false };
-            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(670, 14), AutoSize = true, Visible = false };
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(565, 28), Style = 0, Minimum = 0, Value = 0, Size = new Size(325, 21), AutoSize = false, Visible = false };
+            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(575, 11), AutoSize = true, Visible = false };
             user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
         }
 
@@ -4765,6 +4762,17 @@ namespace Isotope_fitting
             frm4.Show();
             frm4.FormClosing += (s, f) => { add_machine(false); };
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void options_grpBox_Enter(object sender, EventArgs e)
+        {
+
+        }
+
         private void add_machine(bool exp_resolution = false)
         {
             string name = "";
