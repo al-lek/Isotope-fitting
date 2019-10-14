@@ -1768,7 +1768,7 @@ namespace Isotope_fitting
 
                 double[] tree_index = new double[all_fitted_results[i].Count];
                 double[] tree_sse = new double[all_fitted_results[i].Count];
-
+                            
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -1785,11 +1785,10 @@ namespace Isotope_fitting
                     TreeNode tr = new TreeNode
                     {
                         Text =tmp,Name= i.ToString() + " " + j.ToString(),ToolTipText=sb.ToString()
-                        
                     };
-                    fit_tree.Nodes[i].Nodes.Add(tr);                      
+                    fit_tree.Nodes[i].Nodes.Add(tr);
                 }
-                fit_tree.Nodes[i]= find_min_SSE(fit_tree.Nodes[i], tree_index,tree_sse);
+               find_min_SSE(fit_tree.Nodes[i], tree_index, tree_sse);
             }          
             fit_tree.EndUpdate();
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
@@ -1806,7 +1805,7 @@ namespace Isotope_fitting
                 }
             }
         }
-        private TreeNode find_min_SSE(TreeNode node, double[] tree_index, double[] tree_sse)
+        private void find_min_SSE(TreeNode node, double[] tree_index, double[] tree_sse)
         {
             Array.Sort( tree_sse, tree_index);
             int best_count =(int)(0.3* tree_index.Length);
@@ -1814,8 +1813,7 @@ namespace Isotope_fitting
             for (int n=0;n<best_count; n++)
             {
                 node.Nodes[(int)tree_index[n]].ForeColor = Color.SteelBlue;
-            }
-            return node;
+            }            
         }
         private void copy_fitTree_toClipBoard()
         {
