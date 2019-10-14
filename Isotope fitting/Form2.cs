@@ -502,7 +502,7 @@ namespace Isotope_fitting
             // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
-            ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
+            ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula2(ChemFormulas[i].InputFormula, ChemFormulas[i].Ion);
             ChemFormulas[i].Charge = Int32.Parse(frag_info[3]);
 
             // all ions have as many H in Adduct as their charge
@@ -783,7 +783,8 @@ namespace Isotope_fitting
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
 
                             res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = mod_element(res[curr_idx].InputFormula, "H", (int)hyd_num);
+                            //res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
                         }
                     }
                 }
@@ -1242,6 +1243,44 @@ namespace Isotope_fitting
             ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
 
             return new double[] { ppm, peak_points[closest_idx][3] };
+        }
+
+        private string fix_formula2(string formula, string ionType)
+        {
+            // will remove one hydrogen from all fragments (error from MS-product)
+            formula = mod_element(formula, "H", -1);
+
+            // MS-product bug: when -2H2O, or -2NH3, or -H20-NH3, they are not removed from the formula. 
+            // we have to remove them manualy
+            if (ionType.Contains("-2H2O"))
+            {
+                formula = mod_element(formula, "H", -4);
+                formula = mod_element(formula, "O", -2);
+            }
+            else if (ionType.Contains("-2NH3"))
+            {
+                formula = mod_element(formula, "N", -2);
+                formula = mod_element(formula, "H", -6);
+            }
+            else if (ionType.Contains("-H2O-NH3"))
+            {
+                formula = mod_element(formula, "H", -5);
+                formula = mod_element(formula, "O", -1);
+                formula = mod_element(formula, "N", -1);
+            }
+            return formula;
+        }
+
+        private string mod_element(string formula, string element, int number)
+        {
+            // will remove desired quantity of given elements from formula
+            string[] elements = formula.Split(' ');
+
+            for (int i = 0; i < elements.Length; i++)
+                if (elements[i].StartsWith(element))
+                    elements[i] = element + (Convert.ToInt32(elements[i].Remove(0, 1)) + number).ToString();
+
+            return string.Join(" ", elements);
         }
 
         #endregion
