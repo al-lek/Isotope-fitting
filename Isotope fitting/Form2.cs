@@ -1524,17 +1524,12 @@ namespace Isotope_fitting
 
             // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
             //progress_display_start(powerSet.Count + 1, "Calculating fragment fit...");
+
+            //cxalculate experimental surface area in the current fit region
             double experimental_max = all_data_aligned[0].Max();
             double experimental_sum = 0.0;
-            //find set with all the selected fragments
-            for (int ss=set.Count-1;ss>-1 ;ss--)
-            {
-                if (set[ss].Count()==selectedFragments.Count())
-                {
-                    int[] exp_boundaries = find_set_boundaries(set[ss].ToArray());                   
-                    for (int i = exp_boundaries[0]; i < exp_boundaries[1]+1; i++){experimental_sum += experimental[i][1];}
-                }
-            }
+            int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());
+            for (int i = exp_boundaries[0]; i < exp_boundaries[1] + 1; i++) { experimental_sum += experimental[i][1]; }
 
             Parallel.For(0, set.Count, (i, state) =>
             {
@@ -1547,11 +1542,19 @@ namespace Isotope_fitting
 
                 // call optimizer for the specific subset of fragments
                 double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities,experimental_sum);
-                lock (_locker) { res.Add(tmp); set_copy.Add(set[i]); }
+                double er = centroid_LSE(set[i].ToArray(), tmp);
+                lock (_locker)
+                {
+                    tmp[set[i].Length + 1] = er;
+                    res.Add(tmp);
+                    set_copy.Add(set[i]);
+                }
+                
+                //lock (_locker) {  }
             });
 
             // sort res and powerSet by least SSE
-            // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE]. 
+            // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE,centroid LSE,%of total area,%of fragment's area]. 
             double[][] tmp1 = res.ToArray();
             //int[][] tmp2 = powerSet.ToArray();
             int[][] tmp2 = set_copy.ToArray();
@@ -1564,6 +1567,47 @@ namespace Isotope_fitting
             set = tmp2.ToList();
 
             return (res, set);
+        }
+        private double centroid_LSE(int[] set_array, double[] tmp)
+        {
+            double lse = 0.0;
+            List<double[]> lse_fragments = new List<double[]>();
+            for (int ss=0;ss< set_array.Length; ss++)
+            {            
+                int frag_index = set_array[ss]-1;
+                double frag_factor = tmp[ss];
+                int absent_isotope = 0;
+                List<PointPlot> sorted_cen = new List<PointPlot>();
+                sorted_cen = Fragments2[frag_index].Centroid.OrderBy(p => p.X).ToList();
+                lse_fragments.Add(new double[3]);
+                double iso_lse_sum=0.0;
+                int start_idx = 1;
+                for (int c = 0; c < sorted_cen.Count(); c++)
+                {
+                    double exp_cen, curr_diff, ppm,exp_intensity;
+                    int closest_idx = 0;
+                    double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - sorted_cen[c].X);
+                    for (int i = start_idx; i < peak_points.Count; i++)
+                    {
+                        exp_cen = peak_points[i][1] + peak_points[i][4];
+                        curr_diff = Math.Abs(exp_cen - sorted_cen[c].X);
+
+                        if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+                        else { start_idx = i; break; }
+                    }
+                    exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];                   
+                    ppm = Math.Abs(exp_cen - sorted_cen[c].X) * 1e6 / (exp_cen);
+                    exp_intensity = peak_points[closest_idx][3];
+                    if (ppm < ppmError){ iso_lse_sum+= Math.Abs( exp_intensity - sorted_cen[c].Y* frag_factor) / exp_intensity;}
+                    else { iso_lse_sum+= 1.0; absent_isotope++; }
+                }
+                lse_fragments.Last()[0] = 100*absent_isotope/ sorted_cen.Count();
+                lse_fragments.Last()[1] = iso_lse_sum/ sorted_cen.Count();
+                lse_fragments.Last()[2] = (iso_lse_sum-absent_isotope) / (sorted_cen.Count()- absent_isotope);
+                lse+= iso_lse_sum / sorted_cen.Count();
+            }
+            lse = lse / set_array.Length;
+            return lse;
         }
         private int[] find_set_boundaries(int[] set)
         {
@@ -1635,11 +1679,12 @@ namespace Isotope_fitting
 
             // 2. save result
             // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
-            double[] result = new double[distros_num + 2];
+            double[] result = new double[distros_num +4];
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
             result[distros_num] = state.fi[0];
+            (result[distros_num+2] , result[distros_num + 3]) = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);
+           
 
-            result[distros_num+1] = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);
 
             //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
             //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coeficients);
@@ -1694,10 +1739,10 @@ namespace Isotope_fitting
         }
         #endregion
 
-        private double per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients,double exp_sum)
+        private (double,double) per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients,double exp_sum)
         {
-            double /*exp_sum = 0.0,*/ frag_sum = 0.0;
-
+            double exp_frag_sum = 0.0, frag_sum = 0.0;
+            
             for (int i = 0; i < aligned_intensities_subSet.Count; i++)
             {
                 double tmp = 0.0;
@@ -1709,12 +1754,14 @@ namespace Isotope_fitting
                 if (tmp > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
                 {
                     frag_sum += tmp;
-                    //exp_sum += aligned_intensities_subSet[i][0];
+                    exp_frag_sum += aligned_intensities_subSet[i][0];
                 }
             }
             double res = exp_sum / frag_sum * 100.0;
-            if (res < 100) return res;
-            else return (frag_sum / exp_sum) * 100.0;
+            double res_frag= exp_frag_sum / frag_sum * 100.0;
+            if (res >= 100) res = (frag_sum / exp_sum) * 100.0;
+            if (res_frag >= 100) res_frag = (frag_sum / exp_frag_sum) * 100.0;
+            return (res_frag,res);
         }
         public void sse_multiFactor(double[] x, double[] func, object aligned_intensities)
         {
@@ -1772,15 +1819,18 @@ namespace Isotope_fitting
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
                     StringBuilder sb = new StringBuilder();
-                    tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_results[i][j].Length - 3];
+                    tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_sets[i][j].Length];
                     string tmp = "";
-                    tmp += "SSE:" + all_fitted_results[i][j][all_fitted_results[i][j].Length - 2].ToString("0.###e0" + "  ");
-                    tmp += "A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "% ";
+                    tmp += "SSE:" + all_fitted_results[i][j][all_fitted_sets[i][j].Length].ToString("0.###e0" + "  ");
+                    tmp += "LSEi:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 3], 2).ToString("0.###e0" + "  ");
+                    tmp += "A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "% ";    
+                    tmp += "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%";
+
                     //tmp += "K:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString();
                     for (int k = 0; k < all_fitted_sets[i][j].Length ; k++)
                     {
                         //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
-                        sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0"));
+                        sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0") /*+ "    "+ all_fitted_results[i][j][k+1+ all_fitted_sets[i][j].Length].ToString("0.###e0")*/);
                     }
                     TreeNode tr = new TreeNode
                     {
