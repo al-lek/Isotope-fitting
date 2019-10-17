@@ -38,12 +38,15 @@ namespace Isotope_fitting
             this.plots_grpBox = new System.Windows.Forms.GroupBox();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
+            this.user_grpBox = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
+            this.clearListBtn1 = new System.Windows.Forms.Button();
             this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
             this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
-            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
-            this.user_grpBox = new System.Windows.Forms.GroupBox();
-            this.clearListBtn1 = new System.Windows.Forms.Button();
             this.loadListBtn1 = new System.Windows.Forms.Button();
+            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             this.saveListBtn1 = new System.Windows.Forms.Button();
             this.mark_label = new System.Windows.Forms.Label();
             this.loadWd_Btn = new System.Windows.Forms.Button();
@@ -123,9 +126,6 @@ namespace Isotope_fitting
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -207,46 +207,6 @@ namespace Isotope_fitting
             this.fit_grpBox.TabIndex = 0;
             this.fit_grpBox.TabStop = false;
             // 
-            // plotFragCent_chkBox
-            // 
-            this.plotFragCent_chkBox.AutoSize = true;
-            this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotFragCent_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 51);
-            this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
-            this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotFragCent_chkBox.TabIndex = 1;
-            this.plotFragCent_chkBox.Text = "Centroids";
-            this.plotFragCent_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // plotCentr_chkBox
-            // 
-            this.plotCentr_chkBox.AutoSize = true;
-            this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotCentr_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 32);
-            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
-            this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotCentr_chkBox.TabIndex = 0;
-            this.plotCentr_chkBox.Text = "Centroids";
-            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // plotExp_chkBox
-            // 
-            this.plotExp_chkBox.AutoSize = true;
-            this.plotExp_chkBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotExp_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotExp_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotExp_chkBox.Location = new System.Drawing.Point(63, 32);
-            this.plotExp_chkBox.Name = "plotExp_chkBox";
-            this.plotExp_chkBox.Size = new System.Drawing.Size(50, 18);
-            this.plotExp_chkBox.TabIndex = 0;
-            this.plotExp_chkBox.Text = "Data";
-            this.plotExp_chkBox.UseVisualStyleBackColor = true;
-            // 
             // user_grpBox
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -280,6 +240,39 @@ namespace Isotope_fitting
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(4, 51);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 16);
+            this.label3.TabIndex = 10000008;
+            this.label3.Text = "Theor.";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(4, 32);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 16);
+            this.label2.TabIndex = 10000007;
+            this.label2.Text = "Exp. ";
+            // 
+            // plotFragProf_chkBox
+            // 
+            this.plotFragProf_chkBox.AutoSize = true;
+            this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotFragProf_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotFragProf_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotFragProf_chkBox.Location = new System.Drawing.Point(63, 51);
+            this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
+            this.plotFragProf_chkBox.Size = new System.Drawing.Size(66, 18);
+            this.plotFragProf_chkBox.TabIndex = 2;
+            this.plotFragProf_chkBox.Text = "Profiles";
+            this.plotFragProf_chkBox.UseVisualStyleBackColor = true;
+            // 
             // clearListBtn1
             // 
             this.clearListBtn1.BackColor = System.Drawing.Color.LightSteelBlue;
@@ -295,6 +288,32 @@ namespace Isotope_fitting
             this.clearListBtn1.UseVisualStyleBackColor = false;
             this.clearListBtn1.Click += new System.EventHandler(this.clearListBtn1_Click);
             // 
+            // plotFragCent_chkBox
+            // 
+            this.plotFragCent_chkBox.AutoSize = true;
+            this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotFragCent_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 51);
+            this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
+            this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
+            this.plotFragCent_chkBox.TabIndex = 1;
+            this.plotFragCent_chkBox.Text = "Centroids";
+            this.plotFragCent_chkBox.UseVisualStyleBackColor = true;
+            // 
+            // plotCentr_chkBox
+            // 
+            this.plotCentr_chkBox.AutoSize = true;
+            this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotCentr_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 32);
+            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
+            this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
+            this.plotCentr_chkBox.TabIndex = 0;
+            this.plotCentr_chkBox.Text = "Centroids";
+            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
+            // 
             // loadListBtn1
             // 
             this.loadListBtn1.BackColor = System.Drawing.Color.SteelBlue;
@@ -309,6 +328,20 @@ namespace Isotope_fitting
             this.loadListBtn1.Text = "Load";
             this.loadListBtn1.UseVisualStyleBackColor = false;
             this.loadListBtn1.Click += new System.EventHandler(this.loadListBtn1_Click);
+            // 
+            // plotExp_chkBox
+            // 
+            this.plotExp_chkBox.AutoSize = true;
+            this.plotExp_chkBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotExp_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotExp_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotExp_chkBox.Location = new System.Drawing.Point(63, 32);
+            this.plotExp_chkBox.Name = "plotExp_chkBox";
+            this.plotExp_chkBox.Size = new System.Drawing.Size(50, 18);
+            this.plotExp_chkBox.TabIndex = 0;
+            this.plotExp_chkBox.Text = "Data";
+            this.plotExp_chkBox.UseVisualStyleBackColor = true;
             // 
             // saveListBtn1
             // 
@@ -502,9 +535,9 @@ namespace Isotope_fitting
             this.selFrag_Label.ForeColor = System.Drawing.Color.SteelBlue;
             this.selFrag_Label.Location = new System.Drawing.Point(558, 53);
             this.selFrag_Label.Name = "selFrag_Label";
-            this.selFrag_Label.Size = new System.Drawing.Size(127, 20);
+            this.selFrag_Label.Size = new System.Drawing.Size(114, 20);
             this.selFrag_Label.TabIndex = 38;
-            this.selFrag_Label.Text = "Fragments\' list";
+            this.selFrag_Label.Text = "Fragment list";
             this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
             this.selFrag_Label.Click += new System.EventHandler(this.selFrag_Label_Click);
             // 
@@ -1354,39 +1387,6 @@ namespace Isotope_fitting
             this.fitMin_Box.Size = new System.Drawing.Size(70, 20);
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
-            // 
-            // plotFragProf_chkBox
-            // 
-            this.plotFragProf_chkBox.AutoSize = true;
-            this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotFragProf_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotFragProf_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotFragProf_chkBox.Location = new System.Drawing.Point(63, 51);
-            this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
-            this.plotFragProf_chkBox.Size = new System.Drawing.Size(66, 18);
-            this.plotFragProf_chkBox.TabIndex = 2;
-            this.plotFragProf_chkBox.Text = "Profiles";
-            this.plotFragProf_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(4, 32);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 16);
-            this.label2.TabIndex = 10000007;
-            this.label2.Text = "Exp. ";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(4, 51);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 16);
-            this.label3.TabIndex = 10000008;
-            this.label3.Text = "Frag.";
             // 
             // Form2
             // 
