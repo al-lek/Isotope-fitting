@@ -51,7 +51,7 @@ namespace Isotope_fitting
             this.mark_label = new System.Windows.Forms.Label();
             this.loadWd_Btn = new System.Windows.Forms.Button();
             this.saveWd_Btn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.fitResults_lbl = new System.Windows.Forms.Label();
             this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.remPlot_Btn = new System.Windows.Forms.Button();
             this.saveFit_Btn = new System.Windows.Forms.Button();
@@ -222,7 +222,7 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.mark_label);
             this.user_grpBox.Controls.Add(this.loadWd_Btn);
             this.user_grpBox.Controls.Add(this.saveWd_Btn);
-            this.user_grpBox.Controls.Add(this.label1);
+            this.user_grpBox.Controls.Add(this.fitResults_lbl);
             this.user_grpBox.Controls.Add(this.bigPanel);
             this.user_grpBox.Controls.Add(this.remPlot_Btn);
             this.user_grpBox.Controls.Add(this.saveFit_Btn);
@@ -399,16 +399,17 @@ namespace Isotope_fitting
             this.saveWd_Btn.Visible = false;
             this.saveWd_Btn.Click += new System.EventHandler(this.saveWd_Btn_Click);
             // 
-            // label1
+            // fitResults_lbl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Teal;
-            this.label1.Location = new System.Drawing.Point(6, 80);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 14);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Fit results";
+            this.fitResults_lbl.AutoSize = true;
+            this.fitResults_lbl.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitResults_lbl.ForeColor = System.Drawing.Color.Teal;
+            this.fitResults_lbl.Location = new System.Drawing.Point(6, 80);
+            this.fitResults_lbl.Name = "fitResults_lbl";
+            this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
+            this.fitResults_lbl.TabIndex = 0;
+            this.fitResults_lbl.Text = "Fit results";
+            this.fitResults_lbl.DoubleClick += new System.EventHandler(this.fitResults_lbl_DoubleClick);
             // 
             // bigPanel
             // 
@@ -1486,7 +1487,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Label stepRange_Lbl;
         private System.Windows.Forms.TextBox step_rangeBox;
         private System.Windows.Forms.FlowLayoutPanel bigPanel;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label fitResults_lbl;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ColumnHeader codeNoHeader;
         private System.Windows.Forms.ColumnHeader factorHeader;

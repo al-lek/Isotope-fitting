@@ -126,7 +126,7 @@ namespace Isotope_fitting
         delegate void FittingCalcCompleted();
         event EnvelopeCalcCompleted OnEnvelopeCalcCompleted;
         event FittingCalcCompleted OnFittingCalcCompleted;
-        List<List<double[]>> all_fitted_results;
+        public static List<List<double[]>> all_fitted_results;
         List<List<int[]>> all_fitted_sets;
         TreeView fit_tree, frag_tree, fragTypes_tree;
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
@@ -158,9 +158,18 @@ namespace Isotope_fitting
         bool[] selection_rule = new bool[] { false, true, false, false, false, false };
         bool block_plot_refresh = false;
         #endregion
-
+        #region fit results sorting parameteres
+        /// <summary>
+        /// [Area sort,di sort,Area + di sort]
+        /// </summary>
+        public static bool[] fit_sort = new bool[] { true,false,false };        
+        public static double a_coef = 1.0;
+        public int visible_results =100;
+        #endregion
 
         #endregion
+
+
         public Form2()
         {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -174,7 +183,7 @@ namespace Isotope_fitting
 
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
-            load_preferences();
+            load_preferences();           
         }
 
         // UI UncheckAll()
@@ -184,14 +193,13 @@ namespace Isotope_fitting
 
         #region 0. Preferences and params
         private void optionBtn_Click(object sender, EventArgs e)
-        {
+        {    
             params_form();
         }
 
         private void params_form()
         {
             Form params_and_pref = new Form { Text = "Parameters and preferences" };
-
             Label ppm_lbl = new Label { Name = "ppm_lbl", Text = "max ppm error: ", Location = new Point(10, 8), AutoSize = true };
             NumericUpDown ppm_numUD = new NumericUpDown { Name = "ppm_numUD", Minimum = 1, Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)ppmError, Location = new Point(140, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             ppm_numUD.ValueChanged += (s, e) => { ppmError = (double)ppm_numUD.Value; save_preferences(); };
@@ -220,8 +228,7 @@ namespace Isotope_fitting
             RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intence", Location = new Point(130, 235), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
 
             params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, fitBunch_lbl, fitBunch_numUD,
-                fitCover_lbl, fitCover_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });
-
+                fitCover_lbl, fitCover_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
             foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
 
             params_and_pref.Show();
@@ -262,6 +269,13 @@ namespace Isotope_fitting
                     selection_rule[3] = string_to_bool(preferences[8].Split(':')[1]);
                     selection_rule[4] = string_to_bool(preferences[9].Split(':')[1]);
                     selection_rule[5] = string_to_bool(preferences[10].Split(':')[1]);
+
+                    fit_sort[0] = string_to_bool(preferences[11].Split(':')[1]);
+                    fit_sort[1] = string_to_bool(preferences[12].Split(':')[1]);
+                    fit_sort[2] = string_to_bool(preferences[13].Split(':')[1]);
+                    a_coef= Convert.ToDouble(preferences[14].Split(':')[1]);
+                    visible_results= Convert.ToInt32(preferences[15].Split(':')[1]);
+
                 }
                 catch { MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!"); }
             }
@@ -288,6 +302,12 @@ namespace Isotope_fitting
             preferences[0] += "half most intence: " + selection_rule[3].ToString() + "\r\n";
             preferences[0] += "half(-) most intence: " + selection_rule[4].ToString() + "\r\n";
             preferences[0] += "half(+) most intence: " + selection_rule[5].ToString() + "\r\n";
+
+            preferences[0] += "fit results sorting by Area: " + fit_sort[0].ToString() + "\r\n";
+            preferences[0] += "fit results sorting by di: " + fit_sort[1].ToString() + "\r\n";
+            preferences[0] += "fit results sorting by Area + di: " + fit_sort[2].ToString() + "\r\n";
+            preferences[0] += "Area coeficient: " + a_coef.ToString() + "\r\n";
+            preferences[0] += "Amount of best solutions presented: " + visible_results.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -1853,7 +1873,7 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             // init tree view
-            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = true };
+            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = true ,TreeViewNodeSorter=new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
@@ -1887,7 +1907,7 @@ namespace Isotope_fitting
                     for (int k = 0; k < all_fitted_sets[i][j].Length ; k++)
                     {
                         //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
-                        sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0") + "    " + Math.Round(all_fitted_results[i][j][k+ all_fitted_sets[i][j].Length],3).ToString() + "%" + "    " + all_fitted_results[i][j][k+ all_fitted_sets[i][j].Length*2].ToString("0.###e0"));
+                        sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0") + "    " + Math.Round(all_fitted_results[i][j][k+ all_fitted_sets[i][j].Length],3).ToString() + "%" + "    ±" + Math.Round(all_fitted_results[i][j][k+ all_fitted_sets[i][j].Length*2],2).ToString());
                     }
                     TreeNode tr = new TreeNode
                     {
@@ -1898,7 +1918,43 @@ namespace Isotope_fitting
                find_min_SSE(fit_tree.Nodes[i], tree_index, tree_sse);
             }          
             fit_tree.EndUpdate();
+            remove_child_nodes();
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
+        }
+        public class NodeSorter : IComparer
+        {
+            // Compare the length of the strings, or the strings
+            // themselves, if they are the same length.
+            public int Compare(object x, object y)
+            {
+                TreeNode tx = x as TreeNode;
+                TreeNode ty = y as TreeNode;
+                if(string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(tx.Name)) return 0;
+                string[] tx_idx_str_arr = tx.Name.Split(' ');
+                int tx_set_idx = Convert.ToInt32(tx_idx_str_arr[0]);      // identifies the set or group of ions
+                int tx_set_pos_idx = Convert.ToInt32(tx_idx_str_arr[1]);
+                int tx_compare_item_idx = all_fitted_results[tx_set_idx][tx_set_pos_idx].Length;                
+                string[] ty_idx_str_arr = ty.Name.Split(' ');
+                int ty_set_idx = Convert.ToInt32(ty_idx_str_arr[0]);      // identifies the set or group of ions
+                int ty_set_pos_idx = Convert.ToInt32(ty_idx_str_arr[1]);
+                int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
+                int compare_result = 0;
+                if (fit_sort[0])
+                {
+                    compare_result=- Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx-1], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx-1]);
+                }
+                else if(fit_sort[1])
+                {
+                    compare_result= Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx-4], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx-4]);
+                }
+                else
+                {
+                    double value1 =a_coef*(all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1])+(1-a_coef)* all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
+                    double value2 = a_coef * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (a_coef-1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
+                    compare_result =- Decimal.Compare((decimal)value1, (decimal)value2);
+                }
+                return compare_result;
+            }
         }
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
         {
@@ -2017,6 +2073,61 @@ namespace Isotope_fitting
                 UI_intensities.Add(Fragments2[subSet[i] - 1].Factor * Fragments2[subSet[i] - 1].Max_intensity);
 
             return UI_intensities;
+        }
+
+        private void fitResults_lbl_DoubleClick(object sender, EventArgs e)
+        {
+            sort_fit_results_form();
+        }
+
+        private void sort_fit_results_form()
+        {
+
+            Form sort_fit_results = new Form { Text = "Sort fitting results" };
+            sort_fit_results.AutoSize = true;
+            Label visResults_lbl = new Label { Name = "visResults_lbl", Text = "Amount of visible results in each fit group: ", Location = new Point(10, 8), AutoSize = true };
+            NumericUpDown visResults_numUD = new NumericUpDown { Name = "visResults_numUD", Minimum = 1, Increment = 1, DecimalPlaces = 0, Value = (int)visible_results, Location = new Point(225, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            visResults_numUD.ValueChanged += (s, e) => { visible_results = (int)visResults_numUD.Value; save_preferences(); };
+
+            Label aCoef_lbl = new Label { Name = "aCoef_lbl", Text = "Area coefficient: ", Location = new Point(10, 38), AutoSize = true };
+            NumericUpDown aCoef_numUD = new NumericUpDown { Name = "aCoef_numUD", Minimum = 0.1M, /*Maximum = 1.0M,*/ Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)a_coef, Location = new Point(120, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            aCoef_numUD.ValueChanged += (s, e) => { a_coef = (double)aCoef_numUD.Value; save_preferences(); };
+
+            RadioButton a_rdBtn = new RadioButton { Name = "a_rdBtn", Text = "Area", Location = new Point(10, 68), AutoSize = true, Checked = fit_sort[0], TabIndex = 0 };
+            RadioButton di_rdBtn = new RadioButton { Name = "d_rdBtn", Text = "di error", Location = new Point(10, 88), AutoSize = true, Checked = fit_sort[1], TabIndex = 1 };
+            RadioButton a_di_rdBtn = new RadioButton { Name = "a_di_rdBtn", Text = "Both", Location = new Point(10, 108), AutoSize = true, Checked = fit_sort[2], TabIndex = 2 };
+
+            sort_fit_results.Controls.AddRange(new Control[] { visResults_lbl, visResults_numUD, aCoef_lbl, aCoef_numUD, a_rdBtn, di_rdBtn, a_di_rdBtn });
+            foreach (RadioButton rdBtn in sort_fit_results.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_fit_sort(sort_fit_results); };
+            sort_fit_results.FormClosing += (s, e) => {if(all_fitted_results!=null) generate_fit_results(); };
+            sort_fit_results.Show();
+        }
+        private void remove_child_nodes()
+        {
+            if (fit_tree != null)
+            {
+                foreach (TreeNode node in fit_tree.Nodes)
+                {
+                    if (node.Nodes.Count <= visible_results) continue;
+                    else
+                    {
+                        while (visible_results < node.Nodes.Count)
+                        {
+                            node.Nodes[visible_results].Remove();
+                        }
+                    }
+                }
+            }                
+        }
+        private void update_fit_sort(Form options_form)
+        {
+            // sort fitted results rule for all radiobuttons
+            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
+
+            foreach (RadioButton rdBtn in rdBtns)
+                fit_sort[rdBtn.TabIndex] = rdBtn.Checked;
+
+            save_preferences();
         }
 
         /// <summary>
@@ -4877,6 +4988,8 @@ namespace Isotope_fitting
         {
 
         }
+
+        
 
         private void add_machine(bool exp_resolution = false)
         {
