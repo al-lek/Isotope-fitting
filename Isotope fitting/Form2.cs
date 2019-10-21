@@ -2082,8 +2082,7 @@ namespace Isotope_fitting
 
         private void sort_fit_results_form()
         {
-
-            Form sort_fit_results = new Form { Text = "Sort fitting results" };
+            Form sort_fit_results = new Form { Text = "Sort fitting results",Size=new Size(290,170) };
             sort_fit_results.AutoSize = true;
             Label visResults_lbl = new Label { Name = "visResults_lbl", Text = "Amount of visible results in each fit group: ", Location = new Point(10, 8), AutoSize = true };
             NumericUpDown visResults_numUD = new NumericUpDown { Name = "visResults_numUD", Minimum = 1, Increment = 1, DecimalPlaces = 0, Value = (int)visible_results, Location = new Point(225, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
