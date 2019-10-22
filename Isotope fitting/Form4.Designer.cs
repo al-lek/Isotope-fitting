@@ -55,6 +55,7 @@
             this.resHeader});
             this.resListView.FullRowSelect = true;
             this.resListView.GridLines = true;
+            this.resListView.HideSelection = false;
             this.resListView.Name = "resListView";
             this.resListView.UseCompatibleStateImageBehavior = false;
             this.resListView.View = System.Windows.Forms.View.Details;

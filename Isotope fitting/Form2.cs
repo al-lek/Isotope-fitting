@@ -202,7 +202,7 @@ namespace Isotope_fitting
 
         private void params_form()
         {
-            Form params_and_pref = new Form { Text = "Parameters and preferences" };
+            Form params_and_pref = new Form { Text = "Parameters and preferences", FormBorderStyle = FormBorderStyle.FixedDialog,  AutoSize = false, MaximizeBox = false, MinimizeBox = false };
             Label ppm_lbl = new Label { Name = "ppm_lbl", Text = "max ppm error: ", Location = new Point(10, 8), AutoSize = true };
             NumericUpDown ppm_numUD = new NumericUpDown { Name = "ppm_numUD", Minimum = 1, Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)ppmError, Location = new Point(140, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             ppm_numUD.ValueChanged += (s, e) => { ppmError = (double)ppm_numUD.Value; save_preferences(); };
@@ -234,7 +234,7 @@ namespace Isotope_fitting
                 fitCover_lbl, fitCover_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
             foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
 
-            params_and_pref.Show();
+            params_and_pref.ShowDialog();
         }
 
         private void update_peakSelection_rule(Form options_form)
@@ -1003,15 +1003,15 @@ namespace Isotope_fitting
         {
             frag_listView.Visible = false;
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Dispose(); }        // for GC?
-            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 100), Name = "frag_tree", Size = new Size(335, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1568, 100), Name = "frag_tree", Size = new Size(340, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(frag_tree);
             frag_tree.BringToFront();
             frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node, e.Node.Checked); };
             frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
-
-            frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) singleFrag_manipulation(e.Node); };
+            
+            frag_tree.NodeMouseClick += (s, e) => { select_check(e.Node); if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -1085,7 +1085,7 @@ namespace Isotope_fitting
             //fragTypes_tree = null;
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Dispose(); }        // for GC?
 
-            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1570, 600), Name = "fragType_tree", Size = new Size(335, 400), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1568, 600), Name = "fragType_tree", Size = new Size(340, 400), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
             Controls.Add(fragTypes_tree);
             fragTypes_tree.BringToFront();
             fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
@@ -1555,7 +1555,7 @@ namespace Isotope_fitting
             double experimental_sum = 0.0;
             int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());
             for (int i = exp_boundaries[0]; i < exp_boundaries[1] + 1; i++) { experimental_sum += experimental[i][1]; }
-
+            
             Parallel.For(0, set.Count, (i, state) =>
             {
                 // generate a new list containing only the fragments intensities of the subSet, and the experimental
@@ -1625,15 +1625,16 @@ namespace Isotope_fitting
             double lse = 0.0;
             double[] results = new double[2* set_array.Length + 1];
             List<double[]> lse_fragments = new List<double[]>();
+            
             for (int ss=0;ss< set_array.Length; ss++)
-            {            
+            {
                 int frag_index = set_array[ss]-1;
                 double frag_factor = tmp[ss];
                 int absent_isotope = 0;
                 List<PointPlot> sorted_cen = new List<PointPlot>();
                 double max_cen = Fragments2[frag_index].Centroid[0].Y;
                 sorted_cen = Fragments2[frag_index].Centroid.OrderBy(p => p.X).ToList();
-                double summ = 0.0;
+                double summ = 0.0;                
                 foreach (PointPlot p in sorted_cen)
                 {
                     summ += p.Y/max_cen;
@@ -1877,18 +1878,18 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             // init tree view
-            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = true ,TreeViewNodeSorter=new NodeSorter()};
+            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = true,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
-            fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
+            //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
-            fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
-            fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; fit_set_graph_zoomed(e.Node); };     
+            fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
+            fit_tree.AfterSelect += (s, e) => { select_check(e.Node); fit_set_graph_zoomed(e.Node); };     
             fit_tree.NodeMouseDoubleClick += (s, e) => { nodeReArrange(e.Node); };
-            //fit_tree.NodeMouseHover += (s, e) => { fit_tree_NodeMouseHover(s, e); };
+            fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
+
             // interpret fitted results
             fit_tree.BeginUpdate();
-
             for (int i = 0; i < all_fitted_results.Count; i++)
             {
                 // get first and last mz of this fit, from the array that contains all the indexes (the longest)
@@ -1926,76 +1927,92 @@ namespace Isotope_fitting
             remove_child_nodes();            
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
         }
-        private void nodeReArrange(TreeNode node)
-        {            
-            if (string.IsNullOrEmpty(node.Name))
-            {
-                sort_node_fit_results_form(node.Index);
-            }            
-        }
-        private void update_sorting_parameters_lists()
-        {
-            if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); }
-            for (int n = 0; n < all_fitted_results.Count; n++) { tab_node.Add(new bool[] { fit_sort[0],fit_sort[1], fit_sort[2] }); tab_coef.Add(a_coef); }
-        }
-        private void sort_node_fit_results_form(int index)
-        {
-            Form sort_node = new Form { Text = "Sort fit group results", Size = new Size(290, 150) };
-            sort_node.AutoSize = true;
-            Label aCoef_lbl1 = new Label { Name = "aCoef_lbl1", Text = "Area coefficient: ", Location = new Point(10, 8), AutoSize = true };
-            NumericUpDown aCoef_numUD1 = new NumericUpDown { Name = "aCoef_numUD1", Minimum = 0.1M, /*Maximum = 1.0M,*/ Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)tab_coef[index], Location = new Point(120, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            aCoef_numUD1.ValueChanged += (s, e) => { tab_coef[index]=(double)aCoef_numUD1.Value; tab_coef[index]= a_coef; };
 
-            RadioButton a_rdBtn1 = new RadioButton { Name = "a_rdBtn1", Text = "Area", Location = new Point(10, 38), AutoSize = true, Checked = tab_node[index][0], TabIndex = 0 };
-            RadioButton di_rdBtn1= new RadioButton { Name = "d_rdBtn1", Text = "di error", Location = new Point(10, 58), AutoSize = true, Checked = tab_node[index][1], TabIndex = 1 };
-            RadioButton a_di_rdBtn1 = new RadioButton { Name = "a_di_rdBtn1", Text = "Both", Location = new Point(10, 78), AutoSize = true, Checked = tab_node[index][2], TabIndex = 2 };
+        private void show_error(TreeNode node)
+        {
+            
+            StringBuilder sb = new StringBuilder();
+            double lse = 0.0;           
+            List<double[]> lse_fragments = new List<double[]>();
+            if (string.IsNullOrEmpty(node.Name)) return;
 
-            sort_node.Controls.AddRange(new Control[] { aCoef_lbl1, aCoef_numUD1, a_rdBtn1, di_rdBtn1, a_di_rdBtn1 });
-            foreach (RadioButton rdBtn in sort_node.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_node_sort(sort_node,index); };
-            sort_node.FormClosing += (s, e) => { if (all_fitted_results != null) { generate_fit_results(); } };
-            sort_node.Show();
-        }
-        private void update_node_sort(Form options_form,int index)
-        {
-            // sort fitted results rule for all radiobuttons
-            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
-            foreach (RadioButton rdBtn in rdBtns)
-                tab_node[index][rdBtn.TabIndex] = rdBtn.Checked;            
-        }
-        public class NodeSorter : IComparer
-        {
-            // Compare the length of the strings, or the strings
-            // themselves, if they are the same length.
-            public int Compare(object x, object y)
+            else
             {
-                TreeNode tx = x as TreeNode;
-                TreeNode ty = y as TreeNode;
-                if(string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(ty.Name)) return 0;
-                string[] tx_idx_str_arr = tx.Name.Split(' ');
-                int tx_set_idx = Convert.ToInt32(tx_idx_str_arr[0]);      // identifies the set or group of ions
-                int tx_set_pos_idx = Convert.ToInt32(tx_idx_str_arr[1]);
-                int tx_compare_item_idx = all_fitted_results[tx_set_idx][tx_set_pos_idx].Length;                
-                string[] ty_idx_str_arr = ty.Name.Split(' ');
-                int ty_set_idx = Convert.ToInt32(ty_idx_str_arr[0]);      // identifies the set or group of ions
-                int ty_set_pos_idx = Convert.ToInt32(ty_idx_str_arr[1]);
-                int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
-                int compare_result = 0;
-                if (tab_node[tx_set_idx][0])
+                string idx_str = node.Name;
+                string[] idx_str_arr = idx_str.Split(' ');
+                int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+                int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
+                List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
                 {
-                    compare_result=- Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx-1], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx-1]);
+                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f] - 1;                    
+                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
+                    int absent_isotope = 0;
+                    List<PointPlot> sorted_cen = new List<PointPlot>();
+                    double max_cen = Fragments2[frag_index].Centroid[0].Y;
+                    sorted_cen = Fragments2[frag_index].Centroid.OrderBy(p => p.X).ToList();
+                    double summ = 0.0;
+                    foreach (PointPlot p in sorted_cen)
+                    {
+                        summ += p.Y / max_cen;
+                    }
+                    lse_fragments.Add(new double[3]);
+                    double iso_lse_sum = 0.0;
+                    int start_idx = 1;
+                    double[] tmp_error = new double[sorted_cen.Count()];
+                    sb.AppendLine("Fragment: " + Fragments2[frag_index].Name.ToString());
+                    for (int c = 0; c < sorted_cen.Count(); c++)
+                    {
+                        double exp_cen, curr_diff, ppm, exp_intensity;
+                        int closest_idx = 0;
+                        double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - sorted_cen[c].X);
+                        for (int i = start_idx; i < peak_points.Count; i++)
+                        {
+                            exp_cen = peak_points[i][1] + peak_points[i][4];
+                            curr_diff = Math.Abs(exp_cen - sorted_cen[c].X);
+
+                            if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+                            else { start_idx = i; break; }
+                        }
+                        exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
+                        ppm = Math.Abs(exp_cen - sorted_cen[c].X) * 1e6 / (exp_cen);
+                        exp_intensity = peak_points[closest_idx][5];
+                        if (ppm < ppmError)
+                        {
+                            double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
+                            //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
+                            double ee = ee1 * sorted_cen[c].Y / max_cen;
+                            iso_lse_sum += ee; tmp_error[c] = ee;
+                            //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
+                            //double eee = ee * max_cen / sorted_cen[c].Y;
+                            //if (eee > 1) { eee = 1 / eee; }
+                            //iso_lse_sum +=eee;       
+                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error:" + Math.Round(ee1, 10).ToString()+" , adjusted to:"+ Math.Round(ee, 10).ToString());
+                        }
+                        else
+                        {
+                            tmp_error[c] = 1.0 * sorted_cen[c].Y / max_cen;
+                            iso_lse_sum += tmp_error[c]; absent_isotope++;
+                            sb.AppendLine("Centroid " + (c+1).ToString() + " error: 1.0" +  " , adjusted to:" +Math.Round(tmp_error[c],10).ToString() + " (absent isotope)");
+                        }                        
+                    }
+                    
+                    lse_fragments.Last()[0] = 100 * absent_isotope / sorted_cen.Count();
+                    lse_fragments.Last()[1] = iso_lse_sum / sorted_cen.Count();
+                    lse_fragments.Last()[2] = (iso_lse_sum - absent_isotope) / (sorted_cen.Count() - absent_isotope);
+                    lse += lse_fragments.Last()[1];
+                    double sd = 0.0;
+                    foreach (double d in tmp_error)
+                    {
+                        sd += Math.Pow((d - lse_fragments.Last()[1]), 2);
+                    }
+                    sd =Math.Sqrt(sd / sorted_cen.Count());
+                    sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString()+"% of the centroids were absent and the average error is "+ Math.Round(lse_fragments.Last()[1], 5).ToString()+" sd: "+sd.ToString());
+                    sb.AppendLine();
                 }
-                else if(tab_node[tx_set_idx][1])
-                {
-                    compare_result= Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx-4], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx-4]);
-                }
-                else
-                {
-                    double value1 = tab_coef[tx_set_idx] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1])+(1- tab_coef[tx_set_idx]) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
-                    double value2 = tab_coef[tx_set_idx] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
-                    compare_result =- Decimal.Compare((decimal)value1, (decimal)value2);
-                }
-                return compare_result;
+                MessageBox.Show(sb.ToString());
             }
+           
         }
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
         {
@@ -2123,14 +2140,14 @@ namespace Isotope_fitting
 
         private void sort_fit_results_form()
         {
-            Form sort_fit_results = new Form { Text = "Sort fitting results",Size=new Size(290,170) };
+            Form sort_fit_results = new Form { Text = "Sort fitting results",Size=new Size(290,170), FormBorderStyle = FormBorderStyle.FixedDialog,  AutoSize = false, MaximizeBox = false, MinimizeBox = false };
             sort_fit_results.AutoSize = true;
-            Label visResults_lbl = new Label { Name = "visResults_lbl", Text = "Amount of visible results in each fit group: ", Location = new Point(10, 8), AutoSize = true };
+            Label visResults_lbl = new Label { Name = "visResults_lbl", Text = "Amount of visible results in each fit group: ", Location = new Point(5, 8), AutoSize = true };
             NumericUpDown visResults_numUD = new NumericUpDown { Name = "visResults_numUD", Minimum = 1, Increment = 1, DecimalPlaces = 0, Value = (int)visible_results, Location = new Point(225, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             visResults_numUD.ValueChanged += (s, e) => { visible_results = (int)visResults_numUD.Value; save_preferences(); };
 
-            Label aCoef_lbl = new Label { Name = "aCoef_lbl", Text = "Area coefficient: ", Location = new Point(10, 38), AutoSize = true };
-            NumericUpDown aCoef_numUD = new NumericUpDown { Name = "aCoef_numUD", Minimum = 0.1M, /*Maximum = 1.0M,*/ Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)a_coef, Location = new Point(120, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            Label aCoef_lbl = new Label { Name = "aCoef_lbl", Text = "Area coefficient: ", Location = new Point(5, 38), AutoSize = true };
+            NumericUpDown aCoef_numUD = new NumericUpDown { Name = "aCoef_numUD", Minimum = 0.1M, Maximum = 1.0M, Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)a_coef, Location = new Point(120, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             aCoef_numUD.ValueChanged += (s, e) => { a_coef = (double)aCoef_numUD.Value; save_preferences(); };
 
             RadioButton a_rdBtn = new RadioButton { Name = "a_rdBtn", Text = "Area", Location = new Point(10, 68), AutoSize = true, Checked = fit_sort[0], TabIndex = 0 };
@@ -2140,7 +2157,7 @@ namespace Isotope_fitting
             sort_fit_results.Controls.AddRange(new Control[] { visResults_lbl, visResults_numUD, aCoef_lbl, aCoef_numUD, a_rdBtn, di_rdBtn, a_di_rdBtn });
             foreach (RadioButton rdBtn in sort_fit_results.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_fit_sort(sort_fit_results); };
             sort_fit_results.FormClosing += (s, e) => { if (all_fitted_results != null) { update_sorting_parameters_lists(); generate_fit_results(); }};
-            sort_fit_results.Show();
+            sort_fit_results.ShowDialog();
         }
         private void remove_child_nodes()
         {
@@ -2168,7 +2185,84 @@ namespace Isotope_fitting
                 fit_sort[rdBtn.TabIndex] = rdBtn.Checked; 
             save_preferences();
         }
+        private void nodeReArrange(TreeNode node)
+        {
+            if (string.IsNullOrEmpty(node.Name))
+            {
+                sort_node_fit_results_form(node.Index);
+            }
+        }
+        private void update_sorting_parameters_lists()
+        {
+            if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); }
+            for (int n = 0; n < all_fitted_results.Count; n++) { tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2] }); tab_coef.Add(a_coef); }
+        }
+        private void sort_node_fit_results_form(int index)
+        {
+            Form sort_node = new Form { Text = "Sort results", Size = new Size(190, 150), FormBorderStyle = FormBorderStyle.FixedDialog, AutoSize = false, MaximizeBox = false, MinimizeBox = false };
+            Label aCoef_lbl1 = new Label { Name = "aCoef_lbl1", Text = "Area coefficient: ", Location = new Point(5, 8), AutoSize = true };
+            NumericUpDown aCoef_numUD1 = new NumericUpDown { Name = "aCoef_numUD1", Minimum = 0.1M, /*Maximum = 1.0M,*/ Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)tab_coef[index], Location = new Point(120, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            aCoef_numUD1.ValueChanged += (s, e) => { tab_coef[index] = (double)aCoef_numUD1.Value; tab_coef[index] = a_coef; };
 
+            RadioButton a_rdBtn1 = new RadioButton { Name = "a_rdBtn1", Text = "Area", Location = new Point(10, 38), AutoSize = true, Checked = tab_node[index][0], TabIndex = 0 };
+            RadioButton di_rdBtn1 = new RadioButton { Name = "d_rdBtn1", Text = "di error", Location = new Point(10, 58), AutoSize = true, Checked = tab_node[index][1], TabIndex = 1 };
+            RadioButton a_di_rdBtn1 = new RadioButton { Name = "a_di_rdBtn1", Text = "Both", Location = new Point(10, 78), AutoSize = true, Checked = tab_node[index][2], TabIndex = 2 };
+
+            sort_node.Controls.AddRange(new Control[] { aCoef_lbl1, aCoef_numUD1, a_rdBtn1, di_rdBtn1, a_di_rdBtn1 });
+            foreach (RadioButton rdBtn in sort_node.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_node_sort(sort_node, index); };
+            sort_node.FormClosing += (s, e) => { if (all_fitted_results != null) { generate_fit_results(); fit_tree.Nodes[index].Expand(); } };
+            sort_node.ShowDialog();
+        }
+        private void update_node_sort(Form options_form, int index)
+        {
+            // sort fitted results rule for all radiobuttons
+            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
+            foreach (RadioButton rdBtn in rdBtns)
+                tab_node[index][rdBtn.TabIndex] = rdBtn.Checked;
+        }
+        public class NodeSorter : IComparer
+        {
+            // Compare the length of the strings, or the strings
+            // themselves, if they are the same length.
+            public int Compare(object x, object y)
+            {
+                TreeNode tx = x as TreeNode;
+                TreeNode ty = y as TreeNode;
+                if (string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(ty.Name)) return 0;
+                string[] tx_idx_str_arr = tx.Name.Split(' ');
+                int tx_set_idx = Convert.ToInt32(tx_idx_str_arr[0]);      // identifies the set or group of ions
+                int tx_set_pos_idx = Convert.ToInt32(tx_idx_str_arr[1]);
+                int tx_compare_item_idx = all_fitted_results[tx_set_idx][tx_set_pos_idx].Length;
+                string[] ty_idx_str_arr = ty.Name.Split(' ');
+                int ty_set_idx = Convert.ToInt32(ty_idx_str_arr[0]);      // identifies the set or group of ions
+                int ty_set_pos_idx = Convert.ToInt32(ty_idx_str_arr[1]);
+                int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
+                int compare_result = 0;
+                if (tab_node[tx_set_idx][0])
+                {
+                    compare_result = -Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]);
+                }
+                else if (tab_node[tx_set_idx][1])
+                {
+                    compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4]);
+                }
+                else
+                {
+                    double value1 = tab_coef[tx_set_idx] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1]) + (1 - tab_coef[tx_set_idx]) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
+                    double value2 = tab_coef[tx_set_idx] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
+                    compare_result = -Decimal.Compare((decimal)value1, (decimal)value2);
+                }
+                return compare_result;
+            }
+        }
+
+        private void select_check(TreeNode node)
+        {
+            if (string.IsNullOrEmpty(node.Name) && node.IsExpanded) /*node.Collapse()*/;
+            else if(string.IsNullOrEmpty(node.Name)) /*node.Expand()*/;
+            else if(node.Checked) node.Checked = false;
+            else node.Checked = true;
+        }
         /// <summary>
         /// zoom at the graph region the selected fit tree node is about
         /// </summary>
