@@ -1662,7 +1662,7 @@ namespace Isotope_fitting
                     {
                         double ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) /Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
                         //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
-                        //ee = ee * sorted_cen[c].Y / max_cen; 
+                        ee = ee * sorted_cen[c].Y / max_cen;
                         iso_lse_sum += ee; tmp_error[c]= ee;
                         //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
                         //double eee = ee * max_cen / sorted_cen[c].Y;
@@ -1671,7 +1671,7 @@ namespace Isotope_fitting
                     }
                     else
                     {
-                        tmp_error[c] = 1.0 /** sorted_cen[c].Y / max_cen*/;
+                        tmp_error[c] = 1.0 * sorted_cen[c].Y / max_cen;
                         iso_lse_sum += tmp_error[c];   absent_isotope++;     
                     }
                 }               
