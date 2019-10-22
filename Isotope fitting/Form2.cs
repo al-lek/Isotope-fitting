@@ -158,6 +158,7 @@ namespace Isotope_fitting
         bool[] selection_rule = new bool[] { false, true, false, false, false, false };
         bool block_plot_refresh = false;
         #endregion
+
         #region fit results sorting parameteres
         /// <summary>
         /// [Area sort,di sort,Area + di sort]
@@ -165,6 +166,8 @@ namespace Isotope_fitting
         public static bool[] fit_sort = new bool[] { true,false,false };        
         public static double a_coef = 1.0;
         public int visible_results =100;
+        public static List<bool[]> tab_node=new List<bool[]>();
+        public static List<double> tab_coef = new List<double>();
         #endregion
 
         #endregion
@@ -179,7 +182,7 @@ namespace Isotope_fitting
             OnEnvelopeCalcCompleted += () => { fragments_and_calculations_sequence_B(); };
 
             // declare event to plot fit results after fitting calculations are complete
-            OnFittingCalcCompleted += () => { generate_fit_results(); };
+            OnFittingCalcCompleted += () => { update_sorting_parameters_lists(); generate_fit_results(); };
 
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
@@ -278,7 +281,7 @@ namespace Isotope_fitting
 
                 }
                 catch { MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!"); }
-            }
+            }           
         }
 
         public void save_preferences()
@@ -1218,7 +1221,8 @@ namespace Isotope_fitting
             else
             {
                 int idx = Convert.ToInt32(node.Name);
-
+                if (is_checked) { node.BackColor = Color.Gainsboro; node.EnsureVisible(); }
+                else { node.BackColor = Color.Transparent; }
                 // selectedFragments list starts with 1, Fragments2 start with 0. Also first check if it is already checked (avoid entering the same frag multiple times)
                 if (is_checked)
                 {
@@ -1629,11 +1633,11 @@ namespace Isotope_fitting
                 List<PointPlot> sorted_cen = new List<PointPlot>();
                 double max_cen = Fragments2[frag_index].Centroid[0].Y;
                 sorted_cen = Fragments2[frag_index].Centroid.OrderBy(p => p.X).ToList();
-                //double summ = 0.0;
-                //foreach (PointPlot p in sorted_cen)
-                //{
-                //    summ +=max_cen/p.Y;
-                //}
+                double summ = 0.0;
+                foreach (PointPlot p in sorted_cen)
+                {
+                    summ += p.Y/max_cen;
+                }
                 lse_fragments.Add(new double[3]);
                 double iso_lse_sum=0.0;
                 int start_idx = 1;
@@ -1658,7 +1662,7 @@ namespace Isotope_fitting
                     {
                         double ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) /Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
                         //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
-                        ee = ee * sorted_cen[c].Y / max_cen; 
+                        //ee = ee * sorted_cen[c].Y / max_cen; 
                         iso_lse_sum += ee; tmp_error[c]= ee;
                         //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
                         //double eee = ee * max_cen / sorted_cen[c].Y;
@@ -1667,7 +1671,7 @@ namespace Isotope_fitting
                     }
                     else
                     {
-                        tmp_error[c] = 1.0 * sorted_cen[c].Y / max_cen;
+                        tmp_error[c] = 1.0 /** sorted_cen[c].Y / max_cen*/;
                         iso_lse_sum += tmp_error[c];   absent_isotope++;     
                     }
                 }               
@@ -1879,7 +1883,8 @@ namespace Isotope_fitting
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
-            fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; fit_set_graph_zoomed(e.Node); };           
+            fit_tree.AfterSelect += (s, e) => { e.Node.Checked = true; fit_set_graph_zoomed(e.Node); };     
+            fit_tree.NodeMouseDoubleClick += (s, e) => { nodeReArrange(e.Node); };
             //fit_tree.NodeMouseHover += (s, e) => { fit_tree_NodeMouseHover(s, e); };
             // interpret fitted results
             fit_tree.BeginUpdate();
@@ -1918,8 +1923,44 @@ namespace Isotope_fitting
                find_min_SSE(fit_tree.Nodes[i], tree_index, tree_sse);
             }          
             fit_tree.EndUpdate();
-            remove_child_nodes();
+            remove_child_nodes();            
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
+        }
+        private void nodeReArrange(TreeNode node)
+        {            
+            if (string.IsNullOrEmpty(node.Name))
+            {
+                sort_node_fit_results_form(node.Index);
+            }            
+        }
+        private void update_sorting_parameters_lists()
+        {
+            if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); }
+            for (int n = 0; n < all_fitted_results.Count; n++) { tab_node.Add(new bool[] { fit_sort[0],fit_sort[1], fit_sort[2] }); tab_coef.Add(a_coef); }
+        }
+        private void sort_node_fit_results_form(int index)
+        {
+            Form sort_node = new Form { Text = "Sort fit group results", Size = new Size(290, 150) };
+            sort_node.AutoSize = true;
+            Label aCoef_lbl1 = new Label { Name = "aCoef_lbl1", Text = "Area coefficient: ", Location = new Point(10, 8), AutoSize = true };
+            NumericUpDown aCoef_numUD1 = new NumericUpDown { Name = "aCoef_numUD1", Minimum = 0.1M, /*Maximum = 1.0M,*/ Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)tab_coef[index], Location = new Point(120, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            aCoef_numUD1.ValueChanged += (s, e) => { tab_coef[index]=(double)aCoef_numUD1.Value; tab_coef[index]= a_coef; };
+
+            RadioButton a_rdBtn1 = new RadioButton { Name = "a_rdBtn1", Text = "Area", Location = new Point(10, 38), AutoSize = true, Checked = tab_node[index][0], TabIndex = 0 };
+            RadioButton di_rdBtn1= new RadioButton { Name = "d_rdBtn1", Text = "di error", Location = new Point(10, 58), AutoSize = true, Checked = tab_node[index][1], TabIndex = 1 };
+            RadioButton a_di_rdBtn1 = new RadioButton { Name = "a_di_rdBtn1", Text = "Both", Location = new Point(10, 78), AutoSize = true, Checked = tab_node[index][2], TabIndex = 2 };
+
+            sort_node.Controls.AddRange(new Control[] { aCoef_lbl1, aCoef_numUD1, a_rdBtn1, di_rdBtn1, a_di_rdBtn1 });
+            foreach (RadioButton rdBtn in sort_node.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_node_sort(sort_node,index); };
+            sort_node.FormClosing += (s, e) => { if (all_fitted_results != null) { generate_fit_results(); } };
+            sort_node.Show();
+        }
+        private void update_node_sort(Form options_form,int index)
+        {
+            // sort fitted results rule for all radiobuttons
+            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
+            foreach (RadioButton rdBtn in rdBtns)
+                tab_node[index][rdBtn.TabIndex] = rdBtn.Checked;            
         }
         public class NodeSorter : IComparer
         {
@@ -1929,7 +1970,7 @@ namespace Isotope_fitting
             {
                 TreeNode tx = x as TreeNode;
                 TreeNode ty = y as TreeNode;
-                if(string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(tx.Name)) return 0;
+                if(string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(ty.Name)) return 0;
                 string[] tx_idx_str_arr = tx.Name.Split(' ');
                 int tx_set_idx = Convert.ToInt32(tx_idx_str_arr[0]);      // identifies the set or group of ions
                 int tx_set_pos_idx = Convert.ToInt32(tx_idx_str_arr[1]);
@@ -1939,18 +1980,18 @@ namespace Isotope_fitting
                 int ty_set_pos_idx = Convert.ToInt32(ty_idx_str_arr[1]);
                 int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
                 int compare_result = 0;
-                if (fit_sort[0])
+                if (tab_node[tx_set_idx][0])
                 {
                     compare_result=- Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx-1], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx-1]);
                 }
-                else if(fit_sort[1])
+                else if(tab_node[tx_set_idx][1])
                 {
                     compare_result= Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx-4], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx-4]);
                 }
                 else
                 {
-                    double value1 =a_coef*(all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1])+(1-a_coef)* all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
-                    double value2 = a_coef * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (a_coef-1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
+                    double value1 = tab_coef[tx_set_idx] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1])+(1- tab_coef[tx_set_idx]) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
+                    double value2 = tab_coef[tx_set_idx] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
                     compare_result =- Decimal.Compare((decimal)value1, (decimal)value2);
                 }
                 return compare_result;
@@ -2044,7 +2085,7 @@ namespace Isotope_fitting
 
                     Fragments2[curr_idx].Factor = factor;
                     curr_node.Checked = is_checked;
-                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");                  
+                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");                    
                 }
             }
             block_plot_refresh = false;
@@ -2098,7 +2139,7 @@ namespace Isotope_fitting
 
             sort_fit_results.Controls.AddRange(new Control[] { visResults_lbl, visResults_numUD, aCoef_lbl, aCoef_numUD, a_rdBtn, di_rdBtn, a_di_rdBtn });
             foreach (RadioButton rdBtn in sort_fit_results.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_fit_sort(sort_fit_results); };
-            sort_fit_results.FormClosing += (s, e) => {if(all_fitted_results!=null) generate_fit_results(); };
+            sort_fit_results.FormClosing += (s, e) => { if (all_fitted_results != null) { update_sorting_parameters_lists(); generate_fit_results(); }};
             sort_fit_results.Show();
         }
         private void remove_child_nodes()
@@ -2124,8 +2165,7 @@ namespace Isotope_fitting
             List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
 
             foreach (RadioButton rdBtn in rdBtns)
-                fit_sort[rdBtn.TabIndex] = rdBtn.Checked;
-
+                fit_sort[rdBtn.TabIndex] = rdBtn.Checked; 
             save_preferences();
         }
 
