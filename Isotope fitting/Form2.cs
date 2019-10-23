@@ -2007,7 +2007,9 @@ namespace Isotope_fitting
                         sd += Math.Pow((d - lse_fragments.Last()[1]), 2);
                     }
                     sd =Math.Sqrt(sd / sorted_cen.Count());
-                    sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString()+"% of the centroids were absent and the average error is "+ Math.Round(lse_fragments.Last()[1], 5).ToString()+" sd: "+sd.ToString());
+                    sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString()+"% of the centroids were absent ");
+                    sb.AppendLine(" the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString() );
+                    sb.AppendLine(" sd: " + sd.ToString());
                     sb.AppendLine();
                 }
                 MessageBox.Show(sb.ToString());
