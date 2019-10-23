@@ -1637,7 +1637,7 @@ namespace Isotope_fitting
                 double summ = 0.0;                
                 foreach (PointPlot p in sorted_cen)
                 {
-                    summ += p.Y/max_cen;
+                    summ += p.Y;
                 }
                 lse_fragments.Add(new double[3]);
                 double iso_lse_sum=0.0;
@@ -1661,10 +1661,10 @@ namespace Isotope_fitting
                     exp_intensity = peak_points[closest_idx][5];
                     if (ppm < ppmError)
                     {
-                        double ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) /Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
+                        double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) /Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
                         //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
-                        ee = ee * sorted_cen[c].Y / max_cen;
-                        iso_lse_sum += ee; tmp_error[c]= ee;
+                        double ee = ee1 * sorted_cen[c].Y;
+                        iso_lse_sum += ee; tmp_error[c]= ee1;
                         //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
                         //double eee = ee * max_cen / sorted_cen[c].Y;
                         //if (eee > 1) { eee = 1 / eee; }
@@ -1672,20 +1672,20 @@ namespace Isotope_fitting
                     }
                     else
                     {
-                        tmp_error[c] = 1.0 * sorted_cen[c].Y / max_cen;
-                        iso_lse_sum += tmp_error[c];   absent_isotope++;     
+                        tmp_error[c] = 1.0 ;
+                        iso_lse_sum += tmp_error[c] * sorted_cen[c].Y;   absent_isotope++;     
                     }
                 }               
                 lse_fragments.Last()[0] = 100 * absent_isotope / sorted_cen.Count();
-                lse_fragments.Last()[1] = iso_lse_sum / sorted_cen.Count();
+                lse_fragments.Last()[1] = iso_lse_sum / summ;
                 lse_fragments.Last()[2] = (iso_lse_sum-absent_isotope) / (sorted_cen.Count()- absent_isotope);
                 lse += lse_fragments.Last()[1];
                 double sd = 0.0;
-                foreach (double d in tmp_error)
+                for(int d=0; d< tmp_error.Length; d++)
                 {
-                    sd +=Math.Pow((d- lse_fragments.Last()[1]),2);
+                    sd += sorted_cen[d].Y*Math.Pow((tmp_error [d]- lse_fragments.Last()[1]),2);
                 }
-                tmp[ss+ 2*set_array.Length] = 100.00* Math.Sqrt(sd / sorted_cen.Count());
+                tmp[ss+ 2*set_array.Length] = 100.00* Math.Sqrt(sd /(summ));
                 tmp[ss +  set_array.Length] = 100.00 *lse_fragments.Last()[1];
             }
             lse = 100.00 * lse / set_array.Length;            
@@ -1954,7 +1954,7 @@ namespace Isotope_fitting
                     double summ = 0.0;
                     foreach (PointPlot p in sorted_cen)
                     {
-                        summ += p.Y / max_cen;
+                        summ += p.Y ;
                     }
                     lse_fragments.Add(new double[3]);
                     double iso_lse_sum = 0.0;
@@ -1981,8 +1981,8 @@ namespace Isotope_fitting
                         {
                             double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
                             //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
-                            double ee = ee1 * sorted_cen[c].Y / max_cen;
-                            iso_lse_sum += ee; tmp_error[c] = ee;
+                            double ee = ee1 * sorted_cen[c].Y;
+                            iso_lse_sum += ee; tmp_error[c] = ee1;
                             //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
                             //double eee = ee * max_cen / sorted_cen[c].Y;
                             //if (eee > 1) { eee = 1 / eee; }
@@ -1991,22 +1991,22 @@ namespace Isotope_fitting
                         }
                         else
                         {
-                            tmp_error[c] = 1.0 * sorted_cen[c].Y / max_cen;
-                            iso_lse_sum += tmp_error[c]; absent_isotope++;
+                            tmp_error[c] = 1.0 ;
+                            iso_lse_sum += tmp_error[c] * sorted_cen[c].Y; absent_isotope++;
                             sb.AppendLine("Centroid " + (c+1).ToString() + " error: 1.0" +  " , adjusted to:" +Math.Round(tmp_error[c],10).ToString() + " (absent isotope)");
                         }                        
                     }
                     
                     lse_fragments.Last()[0] = 100 * absent_isotope / sorted_cen.Count();
-                    lse_fragments.Last()[1] = iso_lse_sum / sorted_cen.Count();
+                    lse_fragments.Last()[1] = iso_lse_sum / summ;
                     lse_fragments.Last()[2] = (iso_lse_sum - absent_isotope) / (sorted_cen.Count() - absent_isotope);
                     lse += lse_fragments.Last()[1];
-                    double sd = 0.0;
-                    foreach (double d in tmp_error)
+                    double sd = 0.0;                    
+                    for (int d = 0; d < tmp_error.Length; d++)
                     {
-                        sd += Math.Pow((d - lse_fragments.Last()[1]), 2);
+                        sd += sorted_cen[d].Y * Math.Pow((tmp_error[d] - lse_fragments.Last()[1]), 2);
                     }
-                    sd =Math.Sqrt(sd / sorted_cen.Count());
+                    sd = Math.Sqrt(sd / (summ));
                     sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString()+"% of the centroids were absent ");
                     sb.AppendLine(" the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString() );
                     sb.AppendLine(" sd: " + sd.ToString());
