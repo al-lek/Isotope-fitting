@@ -39,6 +39,7 @@ namespace Isotope_fitting
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
+            this.sortSettings_Btn = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
@@ -210,6 +211,7 @@ namespace Isotope_fitting
             // user_grpBox
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.user_grpBox.Controls.Add(this.sortSettings_Btn);
             this.user_grpBox.Controls.Add(this.label3);
             this.user_grpBox.Controls.Add(this.label2);
             this.user_grpBox.Controls.Add(this.plotFragProf_chkBox);
@@ -239,6 +241,20 @@ namespace Isotope_fitting
             this.user_grpBox.Size = new System.Drawing.Size(899, 938);
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
+            // 
+            // sortSettings_Btn
+            // 
+            this.sortSettings_Btn.BackColor = System.Drawing.Color.CadetBlue;
+            this.sortSettings_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.sortSettings_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sortSettings_Btn.ForeColor = System.Drawing.Color.Transparent;
+            this.sortSettings_Btn.Location = new System.Drawing.Point(162, 75);
+            this.sortSettings_Btn.Name = "sortSettings_Btn";
+            this.sortSettings_Btn.Size = new System.Drawing.Size(59, 21);
+            this.sortSettings_Btn.TabIndex = 10000009;
+            this.sortSettings_Btn.Text = "Settings";
+            this.sortSettings_Btn.UseVisualStyleBackColor = false;
+            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
             // 
             // label3
             // 
@@ -1508,5 +1524,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.CheckBox plotFragProf_chkBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button sortSettings_Btn;
     }
 }
