@@ -5160,22 +5160,6 @@ namespace Isotope_fitting
             frm4.Show();
             frm4.FormClosing += (s, f) => { add_machine(false); };
         }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void options_grpBox_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fitMax_Label_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void add_machine(bool exp_resolution = false)
         {
             string name = "";
@@ -7073,11 +7057,6 @@ namespace Isotope_fitting
 
         #endregion
 
-
-        private void bigPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
 

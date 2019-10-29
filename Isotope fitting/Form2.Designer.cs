@@ -251,9 +251,9 @@ namespace Isotope_fitting
             this.sortSettings_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.sortSettings_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sortSettings_Btn.ForeColor = System.Drawing.Color.Transparent;
-            this.sortSettings_Btn.Location = new System.Drawing.Point(162, 75);
+            this.sortSettings_Btn.Location = new System.Drawing.Point(161, 65);
             this.sortSettings_Btn.Name = "sortSettings_Btn";
-            this.sortSettings_Btn.Size = new System.Drawing.Size(59, 19);
+            this.sortSettings_Btn.Size = new System.Drawing.Size(57, 22);
             this.sortSettings_Btn.TabIndex = 10000009;
             this.sortSettings_Btn.Text = "Settings";
             this.sortSettings_Btn.UseVisualStyleBackColor = false;
@@ -263,7 +263,7 @@ namespace Isotope_fitting
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(4, 51);
+            this.label3.Location = new System.Drawing.Point(4, 36);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 16);
             this.label3.TabIndex = 10000008;
@@ -273,7 +273,7 @@ namespace Isotope_fitting
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(4, 32);
+            this.label2.Location = new System.Drawing.Point(4, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 16);
             this.label2.TabIndex = 10000007;
@@ -285,7 +285,7 @@ namespace Isotope_fitting
             this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragProf_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragProf_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotFragProf_chkBox.Location = new System.Drawing.Point(63, 51);
+            this.plotFragProf_chkBox.Location = new System.Drawing.Point(63, 36);
             this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
             this.plotFragProf_chkBox.Size = new System.Drawing.Size(66, 18);
             this.plotFragProf_chkBox.TabIndex = 2;
@@ -314,7 +314,7 @@ namespace Isotope_fitting
             this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragCent_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 51);
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 36);
             this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
             this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotFragCent_chkBox.TabIndex = 1;
@@ -327,7 +327,7 @@ namespace Isotope_fitting
             this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotCentr_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 32);
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 17);
             this.plotCentr_chkBox.Name = "plotCentr_chkBox";
             this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotCentr_chkBox.TabIndex = 0;
@@ -357,7 +357,7 @@ namespace Isotope_fitting
             this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotExp_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotExp_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotExp_chkBox.Location = new System.Drawing.Point(63, 32);
+            this.plotExp_chkBox.Location = new System.Drawing.Point(63, 17);
             this.plotExp_chkBox.Name = "plotExp_chkBox";
             this.plotExp_chkBox.Size = new System.Drawing.Size(50, 18);
             this.plotExp_chkBox.TabIndex = 0;
@@ -426,7 +426,7 @@ namespace Isotope_fitting
             this.fitResults_lbl.AutoSize = true;
             this.fitResults_lbl.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitResults_lbl.ForeColor = System.Drawing.Color.Teal;
-            this.fitResults_lbl.Location = new System.Drawing.Point(6, 80);
+            this.fitResults_lbl.Location = new System.Drawing.Point(6, 73);
             this.fitResults_lbl.Name = "fitResults_lbl";
             this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
             this.fitResults_lbl.TabIndex = 0;
@@ -440,12 +440,11 @@ namespace Isotope_fitting
             this.bigPanel.AutoScroll = true;
             this.bigPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.bigPanel.Location = new System.Drawing.Point(6, 97);
+            this.bigPanel.Location = new System.Drawing.Point(6, 90);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(214, 771);
+            this.bigPanel.Size = new System.Drawing.Size(214, 792);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
-            this.bigPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.bigPanel_Paint);
             // 
             // remPlot_Btn
             // 
@@ -597,11 +596,10 @@ namespace Isotope_fitting
             this.options_grpBox.Controls.Add(this.panel1);
             this.options_grpBox.Location = new System.Drawing.Point(224, 9);
             this.options_grpBox.Name = "options_grpBox";
-            this.options_grpBox.Size = new System.Drawing.Size(324, 1017);
+            this.options_grpBox.Size = new System.Drawing.Size(324, 758);
             this.options_grpBox.TabIndex = 2;
             this.options_grpBox.TabStop = false;
             this.options_grpBox.Text = " ";
-            this.options_grpBox.Enter += new System.EventHandler(this.options_grpBox_Enter);
             // 
             // panel1
             // 
@@ -655,9 +653,8 @@ namespace Isotope_fitting
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(3, 17);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(318, 997);
+            this.panel1.Size = new System.Drawing.Size(318, 738);
             this.panel1.TabIndex = 0;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // displayPeakList_btn
             // 
@@ -1365,7 +1362,6 @@ namespace Isotope_fitting
             this.fitMax_Label.Size = new System.Drawing.Size(26, 13);
             this.fitMax_Label.TabIndex = 33;
             this.fitMax_Label.Text = "max";
-            this.fitMax_Label.Click += new System.EventHandler(this.fitMax_Label_Click);
             // 
             // fitMin_Label
             // 
