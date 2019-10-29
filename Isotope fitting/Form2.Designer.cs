@@ -142,7 +142,7 @@ namespace Isotope_fitting
             customRes_Btn.AutoSize = true;
             customRes_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             customRes_Btn.ForeColor = System.Drawing.Color.SlateGray;
-            customRes_Btn.Location = new System.Drawing.Point(206, 574);
+            customRes_Btn.Location = new System.Drawing.Point(207, 523);
             customRes_Btn.Name = "customRes_Btn";
             customRes_Btn.Size = new System.Drawing.Size(94, 13);
             customRes_Btn.TabIndex = 38;
@@ -153,10 +153,11 @@ namespace Isotope_fitting
             // 
             this.tabControl1.Controls.Add(this.tabFit);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1470, 1039);
+            this.tabControl1.Size = new System.Drawing.Size(1515, 769);
             this.tabControl1.TabIndex = 0;
             // 
             // tabFit
@@ -166,7 +167,7 @@ namespace Isotope_fitting
             this.tabFit.Location = new System.Drawing.Point(4, 22);
             this.tabFit.Name = "tabFit";
             this.tabFit.Padding = new System.Windows.Forms.Padding(3);
-            this.tabFit.Size = new System.Drawing.Size(1462, 1013);
+            this.tabFit.Size = new System.Drawing.Size(1507, 743);
             this.tabFit.TabIndex = 1;
             this.tabFit.Text = "Fit";
             this.tabFit.UseVisualStyleBackColor = true;
@@ -181,7 +182,7 @@ namespace Isotope_fitting
             this.plots_grpBox.Controls.Add(this.fit_grpBox);
             this.plots_grpBox.Location = new System.Drawing.Point(3, 0);
             this.plots_grpBox.Name = "plots_grpBox";
-            this.plots_grpBox.Size = new System.Drawing.Size(555, 1034);
+            this.plots_grpBox.Size = new System.Drawing.Size(600, 764);
             this.plots_grpBox.TabIndex = 2;
             this.plots_grpBox.TabStop = false;
             // 
@@ -190,9 +191,9 @@ namespace Isotope_fitting
             this.res_grpBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.res_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.res_grpBox.Location = new System.Drawing.Point(0, 728);
+            this.res_grpBox.Location = new System.Drawing.Point(0, 458);
             this.res_grpBox.Name = "res_grpBox";
-            this.res_grpBox.Size = new System.Drawing.Size(549, 302);
+            this.res_grpBox.Size = new System.Drawing.Size(594, 302);
             this.res_grpBox.TabIndex = 1;
             this.res_grpBox.TabStop = false;
             // 
@@ -204,7 +205,7 @@ namespace Isotope_fitting
             this.fit_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fit_grpBox.Location = new System.Drawing.Point(0, 12);
             this.fit_grpBox.Name = "fit_grpBox";
-            this.fit_grpBox.Size = new System.Drawing.Size(549, 710);
+            this.fit_grpBox.Size = new System.Drawing.Size(594, 440);
             this.fit_grpBox.TabIndex = 0;
             this.fit_grpBox.TabStop = false;
             // 
@@ -239,9 +240,9 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.factor_Box);
             this.user_grpBox.Controls.Add(this.options_grpBox);
             this.user_grpBox.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.user_grpBox.Location = new System.Drawing.Point(563, 3);
+            this.user_grpBox.Location = new System.Drawing.Point(608, 3);
             this.user_grpBox.Name = "user_grpBox";
-            this.user_grpBox.Size = new System.Drawing.Size(896, 1007);
+            this.user_grpBox.Size = new System.Drawing.Size(896, 737);
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
             // 
@@ -398,7 +399,7 @@ namespace Isotope_fitting
             // 
             this.loadWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadWd_Btn.Location = new System.Drawing.Point(115, 986);
+            this.loadWd_Btn.Location = new System.Drawing.Point(115, 716);
             this.loadWd_Btn.Name = "loadWd_Btn";
             this.loadWd_Btn.Size = new System.Drawing.Size(103, 23);
             this.loadWd_Btn.TabIndex = 46;
@@ -412,7 +413,7 @@ namespace Isotope_fitting
             this.saveWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.saveWd_Btn.Enabled = false;
-            this.saveWd_Btn.Location = new System.Drawing.Point(6, 986);
+            this.saveWd_Btn.Location = new System.Drawing.Point(6, 716);
             this.saveWd_Btn.Name = "saveWd_Btn";
             this.saveWd_Btn.Size = new System.Drawing.Size(103, 23);
             this.saveWd_Btn.TabIndex = 45;
@@ -442,14 +443,14 @@ namespace Isotope_fitting
             this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.bigPanel.Location = new System.Drawing.Point(6, 90);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(214, 792);
+            this.bigPanel.Size = new System.Drawing.Size(214, 522);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
             // 
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(730, 1001);
+            this.remPlot_Btn.Location = new System.Drawing.Point(730, 731);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -465,7 +466,7 @@ namespace Isotope_fitting
             this.saveFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.saveFit_Btn.Enabled = false;
             this.saveFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveFit_Btn.Location = new System.Drawing.Point(7, 959);
+            this.saveFit_Btn.Location = new System.Drawing.Point(7, 689);
             this.saveFit_Btn.Name = "saveFit_Btn";
             this.saveFit_Btn.Size = new System.Drawing.Size(211, 23);
             this.saveFit_Btn.TabIndex = 20;
@@ -477,7 +478,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(810, 1001);
+            this.plot_Btn.Location = new System.Drawing.Point(810, 731);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -507,7 +508,7 @@ namespace Isotope_fitting
             this.frag_listView.LabelEdit = true;
             this.frag_listView.Location = new System.Drawing.Point(559, 76);
             this.frag_listView.Name = "frag_listView";
-            this.frag_listView.Size = new System.Drawing.Size(334, 920);
+            this.frag_listView.Size = new System.Drawing.Size(334, 650);
             this.frag_listView.TabIndex = 41;
             this.frag_listView.UseCompatibleStateImageBehavior = false;
             this.frag_listView.View = System.Windows.Forms.View.Details;
@@ -596,7 +597,7 @@ namespace Isotope_fitting
             this.options_grpBox.Controls.Add(this.panel1);
             this.options_grpBox.Location = new System.Drawing.Point(224, 9);
             this.options_grpBox.Name = "options_grpBox";
-            this.options_grpBox.Size = new System.Drawing.Size(324, 758);
+            this.options_grpBox.Size = new System.Drawing.Size(324, 722);
             this.options_grpBox.TabIndex = 2;
             this.options_grpBox.TabStop = false;
             this.options_grpBox.Text = " ";
@@ -653,7 +654,7 @@ namespace Isotope_fitting
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(3, 17);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(318, 738);
+            this.panel1.Size = new System.Drawing.Size(318, 702);
             this.panel1.TabIndex = 0;
             // 
             // displayPeakList_btn
@@ -666,9 +667,9 @@ namespace Isotope_fitting
             this.displayPeakList_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.displayPeakList_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayPeakList_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.displayPeakList_btn.Location = new System.Drawing.Point(190, 11);
+            this.displayPeakList_btn.Location = new System.Drawing.Point(186, 2);
             this.displayPeakList_btn.Name = "displayPeakList_btn";
-            this.displayPeakList_btn.Size = new System.Drawing.Size(53, 38);
+            this.displayPeakList_btn.Size = new System.Drawing.Size(54, 38);
             this.displayPeakList_btn.TabIndex = 40;
             this.displayPeakList_btn.Text = "peak list";
             this.displayPeakList_btn.UseVisualStyleBackColor = false;
@@ -679,7 +680,7 @@ namespace Isotope_fitting
             this.optionBtn.FlatAppearance.BorderColor = System.Drawing.Color.Thistle;
             this.optionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.optionBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.optionBtn.Location = new System.Drawing.Point(103, 674);
+            this.optionBtn.Location = new System.Drawing.Point(104, 623);
             this.optionBtn.Name = "optionBtn";
             this.optionBtn.Size = new System.Drawing.Size(89, 23);
             this.optionBtn.TabIndex = 39;
@@ -696,9 +697,9 @@ namespace Isotope_fitting
             this.loadExp_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadExp_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadExp_Btn.ForeColor = System.Drawing.Color.White;
-            this.loadExp_Btn.Location = new System.Drawing.Point(5, 11);
+            this.loadExp_Btn.Location = new System.Drawing.Point(5, 2);
             this.loadExp_Btn.Name = "loadExp_Btn";
-            this.loadExp_Btn.Size = new System.Drawing.Size(104, 38);
+            this.loadExp_Btn.Size = new System.Drawing.Size(97, 38);
             this.loadExp_Btn.TabIndex = 37;
             this.loadExp_Btn.Text = "Load Experimental";
             this.loadExp_Btn.UseVisualStyleBackColor = false;
@@ -708,7 +709,7 @@ namespace Isotope_fitting
             // 
             this.chargeMax_Box.Enabled = false;
             this.chargeMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.chargeMax_Box.Location = new System.Drawing.Point(54, 419);
+            this.chargeMax_Box.Location = new System.Drawing.Point(54, 417);
             this.chargeMax_Box.Name = "chargeMax_Box";
             this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMax_Box.TabIndex = 23;
@@ -744,7 +745,7 @@ namespace Isotope_fitting
             "internal b-2H2O",
             "internal b-2NH3",
             "internal b-H2O-NH3"});
-            this.internal_lstBox.Location = new System.Drawing.Point(181, 71);
+            this.internal_lstBox.Location = new System.Drawing.Point(181, 67);
             this.internal_lstBox.Name = "internal_lstBox";
             this.internal_lstBox.Size = new System.Drawing.Size(120, 184);
             this.internal_lstBox.TabIndex = 5;
@@ -758,7 +759,7 @@ namespace Isotope_fitting
             this.loadMS_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadMS_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadMS_Btn.ForeColor = System.Drawing.Color.White;
-            this.loadMS_Btn.Location = new System.Drawing.Point(113, 11);
+            this.loadMS_Btn.Location = new System.Drawing.Point(108, 2);
             this.loadMS_Btn.Name = "loadMS_Btn";
             this.loadMS_Btn.Size = new System.Drawing.Size(72, 38);
             this.loadMS_Btn.TabIndex = 1;
@@ -783,7 +784,7 @@ namespace Isotope_fitting
             "y-2H2O",
             "b-H2O-NH3",
             "y-H2O-NH3"});
-            this.addin_lstBox.Location = new System.Drawing.Point(181, 261);
+            this.addin_lstBox.Location = new System.Drawing.Point(181, 257);
             this.addin_lstBox.Name = "addin_lstBox";
             this.addin_lstBox.Size = new System.Drawing.Size(120, 169);
             this.addin_lstBox.TabIndex = 10;
@@ -830,7 +831,7 @@ namespace Isotope_fitting
             "TripleTOF5600_R28000@200",
             "QTOF_XevoG2-S_R25000@200",
             "TripleTOF6600_R30000@400             "});
-            this.machine_listBox.Location = new System.Drawing.Point(95, 593);
+            this.machine_listBox.Location = new System.Drawing.Point(96, 542);
             this.machine_listBox.Name = "machine_listBox";
             this.machine_listBox.Size = new System.Drawing.Size(206, 56);
             this.machine_listBox.TabIndex = 36;
@@ -841,7 +842,7 @@ namespace Isotope_fitting
             this.frag_Label.AutoSize = true;
             this.frag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.frag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.frag_Label.Location = new System.Drawing.Point(5, 55);
+            this.frag_Label.Location = new System.Drawing.Point(5, 46);
             this.frag_Label.Name = "frag_Label";
             this.frag_Label.Size = new System.Drawing.Size(56, 13);
             this.frag_Label.TabIndex = 5;
@@ -863,7 +864,7 @@ namespace Isotope_fitting
             "db",
             "wb",
             "v"});
-            this.Mdvw_lstBox.Location = new System.Drawing.Point(3, 252);
+            this.Mdvw_lstBox.Location = new System.Drawing.Point(3, 248);
             this.Mdvw_lstBox.MultiColumn = true;
             this.Mdvw_lstBox.Name = "Mdvw_lstBox";
             this.Mdvw_lstBox.Size = new System.Drawing.Size(175, 60);
@@ -874,7 +875,7 @@ namespace Isotope_fitting
             this.charge_Label.AutoSize = true;
             this.charge_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.charge_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.charge_Label.Location = new System.Drawing.Point(5, 381);
+            this.charge_Label.Location = new System.Drawing.Point(5, 379);
             this.charge_Label.Name = "charge_Label";
             this.charge_Label.Size = new System.Drawing.Size(41, 13);
             this.charge_Label.TabIndex = 6;
@@ -891,7 +892,7 @@ namespace Isotope_fitting
             "z-2",
             "z+1",
             "z+2"});
-            this.z_lstBox.Location = new System.Drawing.Point(121, 163);
+            this.z_lstBox.Location = new System.Drawing.Point(121, 159);
             this.z_lstBox.Name = "z_lstBox";
             this.z_lstBox.Size = new System.Drawing.Size(47, 79);
             this.z_lstBox.TabIndex = 8;
@@ -901,7 +902,7 @@ namespace Isotope_fitting
             this.chargeAll_Btn.BackColor = System.Drawing.Color.Gainsboro;
             this.chargeAll_Btn.Enabled = false;
             this.chargeAll_Btn.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.chargeAll_Btn.Location = new System.Drawing.Point(103, 417);
+            this.chargeAll_Btn.Location = new System.Drawing.Point(103, 415);
             this.chargeAll_Btn.Name = "chargeAll_Btn";
             this.chargeAll_Btn.Size = new System.Drawing.Size(37, 23);
             this.chargeAll_Btn.TabIndex = 8;
@@ -914,7 +915,7 @@ namespace Isotope_fitting
             this.machine_Label.AutoSize = true;
             this.machine_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.machine_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.machine_Label.Location = new System.Drawing.Point(95, 574);
+            this.machine_Label.Location = new System.Drawing.Point(96, 523);
             this.machine_Label.Name = "machine_Label";
             this.machine_Label.Size = new System.Drawing.Size(48, 13);
             this.machine_Label.TabIndex = 35;
@@ -928,7 +929,7 @@ namespace Isotope_fitting
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(201, 674);
+            this.calc_Btn.Location = new System.Drawing.Point(202, 623);
             this.calc_Btn.Name = "calc_Btn";
             this.calc_Btn.Size = new System.Drawing.Size(100, 23);
             this.calc_Btn.TabIndex = 10;
@@ -945,7 +946,7 @@ namespace Isotope_fitting
             "y",
             "y-1",
             "y+1"});
-            this.y_lstBox.Location = new System.Drawing.Point(63, 163);
+            this.y_lstBox.Location = new System.Drawing.Point(63, 159);
             this.y_lstBox.Name = "y_lstBox";
             this.y_lstBox.Size = new System.Drawing.Size(47, 49);
             this.y_lstBox.TabIndex = 7;
@@ -955,7 +956,7 @@ namespace Isotope_fitting
             this.mz_Label.AutoSize = true;
             this.mz_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mz_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.mz_Label.Location = new System.Drawing.Point(5, 317);
+            this.mz_Label.Location = new System.Drawing.Point(5, 314);
             this.mz_Label.Name = "mz_Label";
             this.mz_Label.Size = new System.Drawing.Size(81, 13);
             this.mz_Label.TabIndex = 11;
@@ -972,7 +973,7 @@ namespace Isotope_fitting
             "c-2",
             "c+1",
             "c+2"});
-            this.c_lstBox.Location = new System.Drawing.Point(121, 71);
+            this.c_lstBox.Location = new System.Drawing.Point(121, 67);
             this.c_lstBox.Name = "c_lstBox";
             this.c_lstBox.Size = new System.Drawing.Size(47, 79);
             this.c_lstBox.TabIndex = 4;
@@ -982,7 +983,7 @@ namespace Isotope_fitting
             this.mzMax_Label.AutoSize = true;
             this.mzMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mzMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.mzMax_Label.Location = new System.Drawing.Point(69, 335);
+            this.mzMax_Label.Location = new System.Drawing.Point(69, 332);
             this.mzMax_Label.Name = "mzMax_Label";
             this.mzMax_Label.Size = new System.Drawing.Size(26, 13);
             this.mzMax_Label.TabIndex = 12;
@@ -993,7 +994,7 @@ namespace Isotope_fitting
             // 
             this.resolution_Box.Enabled = false;
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(5, 593);
+            this.resolution_Box.Location = new System.Drawing.Point(6, 542);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(81, 20);
             this.resolution_Box.TabIndex = 34;
@@ -1004,7 +1005,7 @@ namespace Isotope_fitting
             this.mzMin_Label.AutoSize = true;
             this.mzMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mzMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.mzMin_Label.Location = new System.Drawing.Point(5, 335);
+            this.mzMin_Label.Location = new System.Drawing.Point(5, 332);
             this.mzMin_Label.Name = "mzMin_Label";
             this.mzMin_Label.Size = new System.Drawing.Size(23, 13);
             this.mzMin_Label.TabIndex = 13;
@@ -1020,7 +1021,7 @@ namespace Isotope_fitting
             "x",
             "x-1",
             "x+1"});
-            this.x_lstBox.Location = new System.Drawing.Point(5, 163);
+            this.x_lstBox.Location = new System.Drawing.Point(5, 159);
             this.x_lstBox.Name = "x_lstBox";
             this.x_lstBox.Size = new System.Drawing.Size(47, 49);
             this.x_lstBox.TabIndex = 6;
@@ -1029,7 +1030,7 @@ namespace Isotope_fitting
             // 
             this.mzMax_Box.Enabled = false;
             this.mzMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.mzMax_Box.Location = new System.Drawing.Point(69, 351);
+            this.mzMax_Box.Location = new System.Drawing.Point(69, 348);
             this.mzMax_Box.Name = "mzMax_Box";
             this.mzMax_Box.Size = new System.Drawing.Size(56, 20);
             this.mzMax_Box.TabIndex = 14;
@@ -1041,7 +1042,7 @@ namespace Isotope_fitting
             this.resolution_Label.AutoSize = true;
             this.resolution_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resolution_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.resolution_Label.Location = new System.Drawing.Point(5, 574);
+            this.resolution_Label.Location = new System.Drawing.Point(6, 523);
             this.resolution_Label.Name = "resolution_Label";
             this.resolution_Label.Size = new System.Drawing.Size(57, 13);
             this.resolution_Label.TabIndex = 33;
@@ -1051,7 +1052,7 @@ namespace Isotope_fitting
             // 
             this.mzMin_Box.Enabled = false;
             this.mzMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.mzMin_Box.Location = new System.Drawing.Point(5, 351);
+            this.mzMin_Box.Location = new System.Drawing.Point(5, 348);
             this.mzMin_Box.Name = "mzMin_Box";
             this.mzMin_Box.Size = new System.Drawing.Size(56, 20);
             this.mzMin_Box.TabIndex = 15;
@@ -1067,7 +1068,7 @@ namespace Isotope_fitting
             "b",
             "b-1",
             "b-2"});
-            this.b_lstBox.Location = new System.Drawing.Point(63, 71);
+            this.b_lstBox.Location = new System.Drawing.Point(63, 67);
             this.b_lstBox.Name = "b_lstBox";
             this.b_lstBox.Size = new System.Drawing.Size(47, 49);
             this.b_lstBox.TabIndex = 3;
@@ -1075,7 +1076,7 @@ namespace Isotope_fitting
             // saveCalc_Btn
             // 
             this.saveCalc_Btn.Enabled = false;
-            this.saveCalc_Btn.Location = new System.Drawing.Point(3, 626);
+            this.saveCalc_Btn.Location = new System.Drawing.Point(4, 575);
             this.saveCalc_Btn.Name = "saveCalc_Btn";
             this.saveCalc_Btn.Size = new System.Drawing.Size(43, 23);
             this.saveCalc_Btn.TabIndex = 18;
@@ -1089,7 +1090,7 @@ namespace Isotope_fitting
             this.idxTo_Label.AutoSize = true;
             this.idxTo_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxTo_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.idxTo_Label.Location = new System.Drawing.Point(160, 516);
+            this.idxTo_Label.Location = new System.Drawing.Point(251, 469);
             this.idxTo_Label.Name = "idxTo_Label";
             this.idxTo_Label.Size = new System.Drawing.Size(16, 13);
             this.idxTo_Label.TabIndex = 32;
@@ -1101,7 +1102,7 @@ namespace Isotope_fitting
             this.clearCalc_Btn.Enabled = false;
             this.clearCalc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.clearCalc_Btn.ForeColor = System.Drawing.Color.White;
-            this.clearCalc_Btn.Location = new System.Drawing.Point(5, 674);
+            this.clearCalc_Btn.Location = new System.Drawing.Point(6, 623);
             this.clearCalc_Btn.Name = "clearCalc_Btn";
             this.clearCalc_Btn.Size = new System.Drawing.Size(89, 23);
             this.clearCalc_Btn.TabIndex = 19;
@@ -1114,7 +1115,7 @@ namespace Isotope_fitting
             this.idxFrom_Label.AutoSize = true;
             this.idxFrom_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxFrom_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.idxFrom_Label.Location = new System.Drawing.Point(59, 516);
+            this.idxFrom_Label.Location = new System.Drawing.Point(150, 469);
             this.idxFrom_Label.Name = "idxFrom_Label";
             this.idxFrom_Label.Size = new System.Drawing.Size(27, 13);
             this.idxFrom_Label.TabIndex = 31;
@@ -1125,7 +1126,7 @@ namespace Isotope_fitting
             this.chargeMax_Label.AutoSize = true;
             this.chargeMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chargeMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.chargeMax_Label.Location = new System.Drawing.Point(54, 402);
+            this.chargeMax_Label.Location = new System.Drawing.Point(54, 400);
             this.chargeMax_Label.Name = "chargeMax_Label";
             this.chargeMax_Label.Size = new System.Drawing.Size(26, 13);
             this.chargeMax_Label.TabIndex = 21;
@@ -1140,7 +1141,7 @@ namespace Isotope_fitting
             "a",
             "a-1",
             "a+1"});
-            this.a_lstBox.Location = new System.Drawing.Point(5, 71);
+            this.a_lstBox.Location = new System.Drawing.Point(5, 67);
             this.a_lstBox.Name = "a_lstBox";
             this.a_lstBox.Size = new System.Drawing.Size(47, 49);
             this.a_lstBox.TabIndex = 2;
@@ -1150,7 +1151,7 @@ namespace Isotope_fitting
             this.chargeMin_Label.AutoSize = true;
             this.chargeMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chargeMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.chargeMin_Label.Location = new System.Drawing.Point(5, 402);
+            this.chargeMin_Label.Location = new System.Drawing.Point(5, 400);
             this.chargeMin_Label.Name = "chargeMin_Label";
             this.chargeMin_Label.Size = new System.Drawing.Size(23, 13);
             this.chargeMin_Label.TabIndex = 22;
@@ -1160,7 +1161,7 @@ namespace Isotope_fitting
             // 
             this.idxTo_Box.Enabled = false;
             this.idxTo_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxTo_Box.Location = new System.Drawing.Point(95, 532);
+            this.idxTo_Box.Location = new System.Drawing.Point(186, 485);
             this.idxTo_Box.Name = "idxTo_Box";
             this.idxTo_Box.Size = new System.Drawing.Size(81, 20);
             this.idxTo_Box.TabIndex = 30;
@@ -1170,7 +1171,7 @@ namespace Isotope_fitting
             // 
             this.chargeMin_Box.Enabled = false;
             this.chargeMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.chargeMin_Box.Location = new System.Drawing.Point(5, 419);
+            this.chargeMin_Box.Location = new System.Drawing.Point(5, 417);
             this.chargeMin_Box.Name = "chargeMin_Box";
             this.chargeMin_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMin_Box.TabIndex = 24;
@@ -1180,7 +1181,7 @@ namespace Isotope_fitting
             // 
             this.idxFrom_Box.Enabled = false;
             this.idxFrom_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxFrom_Box.Location = new System.Drawing.Point(5, 532);
+            this.idxFrom_Box.Location = new System.Drawing.Point(96, 485);
             this.idxFrom_Box.Name = "idxFrom_Box";
             this.idxFrom_Box.Size = new System.Drawing.Size(81, 20);
             this.idxFrom_Box.TabIndex = 29;
@@ -1191,7 +1192,7 @@ namespace Isotope_fitting
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label7.Location = new System.Drawing.Point(5, 453);
+            this.label7.Location = new System.Drawing.Point(5, 450);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(33, 13);
             this.label7.TabIndex = 25;
@@ -1201,7 +1202,7 @@ namespace Isotope_fitting
             // 
             this.idxPr_Box.Enabled = false;
             this.idxPr_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxPr_Box.Location = new System.Drawing.Point(5, 488);
+            this.idxPr_Box.Location = new System.Drawing.Point(5, 485);
             this.idxPr_Box.Name = "idxPr_Box";
             this.idxPr_Box.Size = new System.Drawing.Size(81, 20);
             this.idxPr_Box.TabIndex = 28;
@@ -1212,7 +1213,7 @@ namespace Isotope_fitting
             this.primary_Label.AutoSize = true;
             this.primary_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.primary_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.primary_Label.Location = new System.Drawing.Point(5, 472);
+            this.primary_Label.Location = new System.Drawing.Point(5, 469);
             this.primary_Label.Name = "primary_Label";
             this.primary_Label.Size = new System.Drawing.Size(43, 13);
             this.primary_Label.TabIndex = 26;
@@ -1223,7 +1224,7 @@ namespace Isotope_fitting
             this.internal_Label.AutoSize = true;
             this.internal_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.internal_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.internal_Label.Location = new System.Drawing.Point(5, 516);
+            this.internal_Label.Location = new System.Drawing.Point(96, 469);
             this.internal_Label.Name = "internal_Label";
             this.internal_Label.Size = new System.Drawing.Size(41, 13);
             this.internal_Label.TabIndex = 27;
@@ -1245,7 +1246,7 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.Controls.Add(this.fitMin_Box);
             this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitOptions_grpBox.ForeColor = System.Drawing.Color.Teal;
-            this.fitOptions_grpBox.Location = new System.Drawing.Point(4, 888);
+            this.fitOptions_grpBox.Location = new System.Drawing.Point(4, 618);
             this.fitOptions_grpBox.Name = "fitOptions_grpBox";
             this.fitOptions_grpBox.Size = new System.Drawing.Size(217, 116);
             this.fitOptions_grpBox.TabIndex = 3;
@@ -1312,9 +1313,9 @@ namespace Isotope_fitting
             this.new_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.new_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.new_Btn.ForeColor = System.Drawing.Color.SteelBlue;
-            this.new_Btn.Location = new System.Drawing.Point(248, 11);
+            this.new_Btn.Location = new System.Drawing.Point(246, 2);
             this.new_Btn.Name = "new_Btn";
-            this.new_Btn.Size = new System.Drawing.Size(53, 38);
+            this.new_Btn.Size = new System.Drawing.Size(54, 38);
             this.new_Btn.TabIndex = 41;
             this.new_Btn.Text = "New";
             this.new_Btn.UseVisualStyleBackColor = false;
@@ -1327,7 +1328,7 @@ namespace Isotope_fitting
             this.loadFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.loadFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadFit_Btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.loadFit_Btn.Location = new System.Drawing.Point(9, 934);
+            this.loadFit_Btn.Location = new System.Drawing.Point(9, 664);
             this.loadFit_Btn.Name = "loadFit_Btn";
             this.loadFit_Btn.Size = new System.Drawing.Size(69, 27);
             this.loadFit_Btn.TabIndex = 40;
@@ -1419,9 +1420,11 @@ namespace Isotope_fitting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1470, 1039);
+            this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ClientSize = new System.Drawing.Size(1515, 769);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1531, 808);
             this.Name = "Form2";
             this.Text = "Fragment fitting v11";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
