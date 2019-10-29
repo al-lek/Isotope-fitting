@@ -443,7 +443,7 @@ namespace Isotope_fitting
             this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.bigPanel.Location = new System.Drawing.Point(6, 90);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(214, 522);
+            this.bigPanel.Size = new System.Drawing.Size(214, 520);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
             // 
@@ -1234,21 +1234,21 @@ namespace Isotope_fitting
             // 
             this.fitOptions_grpBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.fitOptions_grpBox.Controls.Add(this.fit_sel_Btn);
-            this.fitOptions_grpBox.Controls.Add(this.stepRange_Lbl);
-            this.fitOptions_grpBox.Controls.Add(this.step_rangeBox);
             this.fitOptions_grpBox.Controls.Add(this.Fitting_chkBox);
             this.fitOptions_grpBox.Controls.Add(this.fit_Btn);
             this.fitOptions_grpBox.Controls.Add(this.fitMax_Label);
             this.fitOptions_grpBox.Controls.Add(this.fitMin_Label);
-            this.fitOptions_grpBox.Controls.Add(this.fitStep_Box);
             this.fitOptions_grpBox.Controls.Add(this.fitMax_Box);
-            this.fitOptions_grpBox.Controls.Add(this.fitStep_Label);
             this.fitOptions_grpBox.Controls.Add(this.fitMin_Box);
+            this.fitOptions_grpBox.Controls.Add(this.stepRange_Lbl);
+            this.fitOptions_grpBox.Controls.Add(this.step_rangeBox);
+            this.fitOptions_grpBox.Controls.Add(this.fitStep_Box);
+            this.fitOptions_grpBox.Controls.Add(this.fitStep_Label);
             this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitOptions_grpBox.ForeColor = System.Drawing.Color.Teal;
-            this.fitOptions_grpBox.Location = new System.Drawing.Point(4, 618);
+            this.fitOptions_grpBox.Location = new System.Drawing.Point(7, 616);
             this.fitOptions_grpBox.Name = "fitOptions_grpBox";
-            this.fitOptions_grpBox.Size = new System.Drawing.Size(217, 116);
+            this.fitOptions_grpBox.Size = new System.Drawing.Size(217, 115);
             this.fitOptions_grpBox.TabIndex = 3;
             this.fitOptions_grpBox.TabStop = false;
             this.fitOptions_grpBox.Text = "Fitting Options";
@@ -1259,7 +1259,7 @@ namespace Isotope_fitting
             this.fit_sel_Btn.Enabled = false;
             this.fit_sel_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.fit_sel_Btn.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.fit_sel_Btn.Location = new System.Drawing.Point(3, 77);
+            this.fit_sel_Btn.Location = new System.Drawing.Point(6, 68);
             this.fit_sel_Btn.Name = "fit_sel_Btn";
             this.fit_sel_Btn.Size = new System.Drawing.Size(99, 27);
             this.fit_sel_Btn.TabIndex = 47;
@@ -1272,7 +1272,7 @@ namespace Isotope_fitting
             this.stepRange_Lbl.AutoSize = true;
             this.stepRange_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stepRange_Lbl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.stepRange_Lbl.Location = new System.Drawing.Point(157, 34);
+            this.stepRange_Lbl.Location = new System.Drawing.Point(159, 52);
             this.stepRange_Lbl.Name = "stepRange_Lbl";
             this.stepRange_Lbl.Size = new System.Drawing.Size(50, 13);
             this.stepRange_Lbl.TabIndex = 44;
@@ -1283,9 +1283,9 @@ namespace Isotope_fitting
             // 
             this.step_rangeBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.step_rangeBox.ForeColor = System.Drawing.Color.Black;
-            this.step_rangeBox.Location = new System.Drawing.Point(157, 49);
+            this.step_rangeBox.Location = new System.Drawing.Point(189, 68);
             this.step_rangeBox.Name = "step_rangeBox";
-            this.step_rangeBox.Size = new System.Drawing.Size(50, 20);
+            this.step_rangeBox.Size = new System.Drawing.Size(13, 20);
             this.step_rangeBox.TabIndex = 43;
             this.step_rangeBox.Visible = false;
             this.step_rangeBox.TextChanged += new System.EventHandler(this.step_rangeBox_TextChanged);
@@ -1296,7 +1296,7 @@ namespace Isotope_fitting
             this.Fitting_chkBox.Enabled = false;
             this.Fitting_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Fitting_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.Fitting_chkBox.Location = new System.Drawing.Point(152, 10);
+            this.Fitting_chkBox.Location = new System.Drawing.Point(159, 20);
             this.Fitting_chkBox.Name = "Fitting_chkBox";
             this.Fitting_chkBox.Size = new System.Drawing.Size(55, 17);
             this.Fitting_chkBox.TabIndex = 42;
@@ -1345,7 +1345,7 @@ namespace Isotope_fitting
             this.fit_Btn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
             this.fit_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.fit_Btn.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.fit_Btn.Location = new System.Drawing.Point(108, 77);
+            this.fit_Btn.Location = new System.Drawing.Point(108, 68);
             this.fit_Btn.Name = "fit_Btn";
             this.fit_Btn.Size = new System.Drawing.Size(99, 27);
             this.fit_Btn.TabIndex = 39;
@@ -1358,7 +1358,7 @@ namespace Isotope_fitting
             this.fitMax_Label.AutoSize = true;
             this.fitMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitMax_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.fitMax_Label.Location = new System.Drawing.Point(54, 33);
+            this.fitMax_Label.Location = new System.Drawing.Point(73, 20);
             this.fitMax_Label.Name = "fitMax_Label";
             this.fitMax_Label.Size = new System.Drawing.Size(26, 13);
             this.fitMax_Label.TabIndex = 33;
@@ -1369,7 +1369,7 @@ namespace Isotope_fitting
             this.fitMin_Label.AutoSize = true;
             this.fitMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitMin_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.fitMin_Label.Location = new System.Drawing.Point(3, 33);
+            this.fitMin_Label.Location = new System.Drawing.Point(6, 20);
             this.fitMin_Label.Name = "fitMin_Label";
             this.fitMin_Label.Size = new System.Drawing.Size(23, 13);
             this.fitMin_Label.TabIndex = 34;
@@ -1379,19 +1379,20 @@ namespace Isotope_fitting
             // 
             this.fitStep_Box.Enabled = false;
             this.fitStep_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitStep_Box.Location = new System.Drawing.Point(105, 49);
+            this.fitStep_Box.Location = new System.Drawing.Point(147, 67);
             this.fitStep_Box.Name = "fitStep_Box";
-            this.fitStep_Box.Size = new System.Drawing.Size(50, 20);
+            this.fitStep_Box.Size = new System.Drawing.Size(13, 20);
             this.fitStep_Box.TabIndex = 38;
+            this.fitStep_Box.Visible = false;
             this.fitStep_Box.TextChanged += new System.EventHandler(this.FitStep_Box_TextChanged);
             // 
             // fitMax_Box
             // 
             this.fitMax_Box.Enabled = false;
             this.fitMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitMax_Box.Location = new System.Drawing.Point(54, 49);
+            this.fitMax_Box.Location = new System.Drawing.Point(73, 36);
             this.fitMax_Box.Name = "fitMax_Box";
-            this.fitMax_Box.Size = new System.Drawing.Size(50, 20);
+            this.fitMax_Box.Size = new System.Drawing.Size(62, 20);
             this.fitMax_Box.TabIndex = 35;
             this.fitMax_Box.TextChanged += new System.EventHandler(this.FitMax_Box_TextChanged);
             // 
@@ -1400,19 +1401,20 @@ namespace Isotope_fitting
             this.fitStep_Label.AutoSize = true;
             this.fitStep_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitStep_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.fitStep_Label.Location = new System.Drawing.Point(105, 32);
+            this.fitStep_Label.Location = new System.Drawing.Point(136, 51);
             this.fitStep_Label.Name = "fitStep_Label";
             this.fitStep_Label.Size = new System.Drawing.Size(27, 13);
             this.fitStep_Label.TabIndex = 37;
             this.fitStep_Label.Text = "step";
+            this.fitStep_Label.Visible = false;
             // 
             // fitMin_Box
             // 
             this.fitMin_Box.Enabled = false;
             this.fitMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitMin_Box.Location = new System.Drawing.Point(3, 49);
+            this.fitMin_Box.Location = new System.Drawing.Point(6, 36);
             this.fitMin_Box.Name = "fitMin_Box";
-            this.fitMin_Box.Size = new System.Drawing.Size(50, 20);
+            this.fitMin_Box.Size = new System.Drawing.Size(62, 20);
             this.fitMin_Box.TabIndex = 36;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
             // 
@@ -1428,6 +1430,7 @@ namespace Isotope_fitting
             this.Name = "Form2";
             this.Text = "Fragment fitting v11";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Resize += new System.EventHandler(this.Form2_Resize);
             this.tabControl1.ResumeLayout(false);
             this.tabFit.ResumeLayout(false);
             this.plots_grpBox.ResumeLayout(false);

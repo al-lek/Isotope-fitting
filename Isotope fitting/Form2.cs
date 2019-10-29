@@ -5154,6 +5154,12 @@ namespace Isotope_fitting
 
             return input;
         }
+
+        private void Form2_Resize(object sender, EventArgs e)
+        {
+            Invalidate();
+        }
+
         private void customRes_Btn_Click(object sender, EventArgs e)
         {
             Form4 frm4 = new Form4();
