@@ -5171,9 +5171,10 @@ namespace Isotope_fitting
 
         }
 
-       
+        private void fitMax_Label_Click(object sender, EventArgs e)
+        {
 
-       
+        }
 
         private void add_machine(bool exp_resolution = false)
         {
