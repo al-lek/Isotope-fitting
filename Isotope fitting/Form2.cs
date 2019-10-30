@@ -2681,8 +2681,8 @@ namespace Isotope_fitting
         /// </summary>
         private void progress_display_init()
         {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(565, 28), Style = 0, Minimum = 0, Value = 0, Size = new Size(325, 21), AutoSize = false, Visible = false };
-            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(575, 11), AutoSize = true, Visible = false };
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(599, 28), Style = 0, Minimum = 0, Value = 0, Size = new Size(325, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
+            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(609, 11), AutoSize = true, Visible = false, Anchor = AnchorStyles.Right | AnchorStyles.Top };
             user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
         }
 
@@ -5158,6 +5158,31 @@ namespace Isotope_fitting
         private void Form2_Resize(object sender, EventArgs e)
         {
             Invalidate();
+        }
+
+        private void hide_Btn_Click(object sender, EventArgs e)
+        {
+            options_grpBox.Hide();
+            Size initial_ug_size = user_grpBox.Size;
+            user_grpBox.Size = new Size(initial_ug_size.Width - options_grpBox.Size.Width, initial_ug_size.Height);
+            Point initial_ug_loc = user_grpBox.Location;
+            user_grpBox.Location = new Point(initial_ug_loc.X + options_grpBox.Size.Width, initial_ug_loc.Y);
+            Size initial_plot_size = plots_grpBox.Size;
+            plots_grpBox.Size = new Size(initial_plot_size.Width + options_grpBox.Size.Width, initial_plot_size.Height);
+            show_Btn.Visible = true;            
+        }
+
+        private void show_Btn_Click(object sender, EventArgs e)
+        {
+            options_grpBox.Show();
+            Size initial_ug_size = user_grpBox.Size;
+            user_grpBox.Size = new Size(initial_ug_size.Width + options_grpBox.Size.Width, initial_ug_size.Height);
+            Point initial_ug_loc = user_grpBox.Location;
+            user_grpBox.Location = new Point(initial_ug_loc.X - options_grpBox.Size.Width, initial_ug_loc.Y);
+            Size initial_plot_size = plots_grpBox.Size;
+            plots_grpBox.Size = new Size(initial_plot_size.Width - options_grpBox.Size.Width, initial_plot_size.Height);
+            hide_Btn.Visible = true;
+            show_Btn.Visible = false;
         }
 
         private void customRes_Btn_Click(object sender, EventArgs e)

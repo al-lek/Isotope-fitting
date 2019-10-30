@@ -39,40 +39,14 @@ namespace Isotope_fitting
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
-            this.sortSettings_Btn = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
-            this.clearListBtn1 = new System.Windows.Forms.Button();
-            this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
-            this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
-            this.loadListBtn1 = new System.Windows.Forms.Button();
-            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
-            this.saveListBtn1 = new System.Windows.Forms.Button();
-            this.mark_label = new System.Windows.Forms.Label();
-            this.loadWd_Btn = new System.Windows.Forms.Button();
-            this.saveWd_Btn = new System.Windows.Forms.Button();
-            this.fitResults_lbl = new System.Windows.Forms.Label();
-            this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.remPlot_Btn = new System.Windows.Forms.Button();
-            this.saveFit_Btn = new System.Windows.Forms.Button();
-            this.plot_Btn = new System.Windows.Forms.Button();
-            this.frag_listView = new System.Windows.Forms.ListView();
-            this.ionTypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.mzHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.zHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.formulaHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.factorHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.codeNoHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.intensityHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.selFrag_Label = new System.Windows.Forms.Label();
-            this.factor_label = new System.Windows.Forms.Label();
-            this.factor_Box = new System.Windows.Forms.TextBox();
+            this.show_Btn = new System.Windows.Forms.Button();
             this.options_grpBox = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.hide_Btn = new System.Windows.Forms.Button();
             this.displayPeakList_btn = new System.Windows.Forms.Button();
             this.optionBtn = new System.Windows.Forms.Button();
             this.loadExp_Btn = new System.Windows.Forms.Button();
+            this.new_Btn = new System.Windows.Forms.Button();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
             this.pep_Label = new System.Windows.Forms.Label();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -112,20 +86,49 @@ namespace Isotope_fitting
             this.idxPr_Box = new System.Windows.Forms.TextBox();
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
+            this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
+            this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
+            this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
             this.fitOptions_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_sel_Btn = new System.Windows.Forms.Button();
-            this.stepRange_Lbl = new System.Windows.Forms.Label();
-            this.step_rangeBox = new System.Windows.Forms.TextBox();
             this.Fitting_chkBox = new System.Windows.Forms.CheckBox();
-            this.new_Btn = new System.Windows.Forms.Button();
-            this.loadFit_Btn = new System.Windows.Forms.Button();
             this.fit_Btn = new System.Windows.Forms.Button();
             this.fitMax_Label = new System.Windows.Forms.Label();
             this.fitMin_Label = new System.Windows.Forms.Label();
-            this.fitStep_Box = new System.Windows.Forms.TextBox();
             this.fitMax_Box = new System.Windows.Forms.TextBox();
-            this.fitStep_Label = new System.Windows.Forms.Label();
             this.fitMin_Box = new System.Windows.Forms.TextBox();
+            this.stepRange_Lbl = new System.Windows.Forms.Label();
+            this.step_rangeBox = new System.Windows.Forms.TextBox();
+            this.fitStep_Box = new System.Windows.Forms.TextBox();
+            this.fitStep_Label = new System.Windows.Forms.Label();
+            this.sortSettings_Btn = new System.Windows.Forms.Button();
+            this.clearListBtn1 = new System.Windows.Forms.Button();
+            this.loadFit_Btn = new System.Windows.Forms.Button();
+            this.loadListBtn1 = new System.Windows.Forms.Button();
+            this.saveListBtn1 = new System.Windows.Forms.Button();
+            this.mark_label = new System.Windows.Forms.Label();
+            this.loadWd_Btn = new System.Windows.Forms.Button();
+            this.saveWd_Btn = new System.Windows.Forms.Button();
+            this.fitResults_lbl = new System.Windows.Forms.Label();
+            this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.remPlot_Btn = new System.Windows.Forms.Button();
+            this.saveFit_Btn = new System.Windows.Forms.Button();
+            this.plot_Btn = new System.Windows.Forms.Button();
+            this.frag_listView = new System.Windows.Forms.ListView();
+            this.ionTypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mzHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.zHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.formulaHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.factorHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.codeNoHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.intensityHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.selFrag_Label = new System.Windows.Forms.Label();
+            this.factor_label = new System.Windows.Forms.Label();
+            this.factor_Box = new System.Windows.Forms.TextBox();
+            this.tabDiagram = new System.Windows.Forms.TabPage();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
@@ -152,6 +155,7 @@ namespace Isotope_fitting
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabFit);
+            this.tabControl1.Controls.Add(this.tabDiagram);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -162,8 +166,8 @@ namespace Isotope_fitting
             // 
             // tabFit
             // 
-            this.tabFit.Controls.Add(this.user_grpBox);
             this.tabFit.Controls.Add(this.plots_grpBox);
+            this.tabFit.Controls.Add(this.user_grpBox);
             this.tabFit.Location = new System.Drawing.Point(4, 22);
             this.tabFit.Name = "tabFit";
             this.tabFit.Padding = new System.Windows.Forms.Padding(3);
@@ -193,7 +197,7 @@ namespace Isotope_fitting
             this.res_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.res_grpBox.Location = new System.Drawing.Point(0, 458);
             this.res_grpBox.Name = "res_grpBox";
-            this.res_grpBox.Size = new System.Drawing.Size(594, 302);
+            this.res_grpBox.Size = new System.Drawing.Size(594, 279);
             this.res_grpBox.TabIndex = 1;
             this.res_grpBox.TabStop = false;
             // 
@@ -214,6 +218,8 @@ namespace Isotope_fitting
             this.user_grpBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.user_grpBox.Controls.Add(this.show_Btn);
+            this.user_grpBox.Controls.Add(this.options_grpBox);
             this.user_grpBox.Controls.Add(this.label3);
             this.user_grpBox.Controls.Add(this.label2);
             this.user_grpBox.Controls.Add(this.plotFragProf_chkBox);
@@ -238,7 +244,6 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.selFrag_Label);
             this.user_grpBox.Controls.Add(this.factor_label);
             this.user_grpBox.Controls.Add(this.factor_Box);
-            this.user_grpBox.Controls.Add(this.options_grpBox);
             this.user_grpBox.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.user_grpBox.Location = new System.Drawing.Point(608, 3);
             this.user_grpBox.Name = "user_grpBox";
@@ -246,348 +251,21 @@ namespace Isotope_fitting
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
             // 
-            // sortSettings_Btn
+            // show_Btn
             // 
-            this.sortSettings_Btn.BackColor = System.Drawing.Color.CadetBlue;
-            this.sortSettings_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.sortSettings_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sortSettings_Btn.ForeColor = System.Drawing.Color.Transparent;
-            this.sortSettings_Btn.Location = new System.Drawing.Point(161, 65);
-            this.sortSettings_Btn.Name = "sortSettings_Btn";
-            this.sortSettings_Btn.Size = new System.Drawing.Size(57, 22);
-            this.sortSettings_Btn.TabIndex = 10000009;
-            this.sortSettings_Btn.Text = "Settings";
-            this.sortSettings_Btn.UseVisualStyleBackColor = false;
-            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(4, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 16);
-            this.label3.TabIndex = 10000008;
-            this.label3.Text = "Theor.";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(4, 17);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 16);
-            this.label2.TabIndex = 10000007;
-            this.label2.Text = "Exp. ";
-            // 
-            // plotFragProf_chkBox
-            // 
-            this.plotFragProf_chkBox.AutoSize = true;
-            this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotFragProf_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotFragProf_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotFragProf_chkBox.Location = new System.Drawing.Point(63, 36);
-            this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
-            this.plotFragProf_chkBox.Size = new System.Drawing.Size(66, 18);
-            this.plotFragProf_chkBox.TabIndex = 2;
-            this.plotFragProf_chkBox.Text = "Profiles";
-            this.plotFragProf_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // clearListBtn1
-            // 
-            this.clearListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.clearListBtn1.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.clearListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Crimson;
-            this.clearListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.clearListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearListBtn1.ForeColor = System.Drawing.Color.White;
-            this.clearListBtn1.Location = new System.Drawing.Point(831, 50);
-            this.clearListBtn1.Name = "clearListBtn1";
-            this.clearListBtn1.Size = new System.Drawing.Size(60, 22);
-            this.clearListBtn1.TabIndex = 10000006;
-            this.clearListBtn1.Text = "Clear";
-            this.clearListBtn1.UseVisualStyleBackColor = false;
-            this.clearListBtn1.Click += new System.EventHandler(this.clearListBtn1_Click);
-            // 
-            // plotFragCent_chkBox
-            // 
-            this.plotFragCent_chkBox.AutoSize = true;
-            this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotFragCent_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 36);
-            this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
-            this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotFragCent_chkBox.TabIndex = 1;
-            this.plotFragCent_chkBox.Text = "Centroids";
-            this.plotFragCent_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // plotCentr_chkBox
-            // 
-            this.plotCentr_chkBox.AutoSize = true;
-            this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotCentr_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 17);
-            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
-            this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotCentr_chkBox.TabIndex = 0;
-            this.plotCentr_chkBox.Text = "Centroids";
-            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // loadListBtn1
-            // 
-            this.loadListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadListBtn1.BackColor = System.Drawing.Color.SteelBlue;
-            this.loadListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkCyan;
-            this.loadListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.loadListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadListBtn1.ForeColor = System.Drawing.Color.White;
-            this.loadListBtn1.Location = new System.Drawing.Point(765, 50);
-            this.loadListBtn1.Name = "loadListBtn1";
-            this.loadListBtn1.Size = new System.Drawing.Size(60, 22);
-            this.loadListBtn1.TabIndex = 10000005;
-            this.loadListBtn1.Text = "Load";
-            this.loadListBtn1.UseVisualStyleBackColor = false;
-            this.loadListBtn1.Click += new System.EventHandler(this.loadListBtn1_Click);
-            // 
-            // plotExp_chkBox
-            // 
-            this.plotExp_chkBox.AutoSize = true;
-            this.plotExp_chkBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plotExp_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plotExp_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.plotExp_chkBox.Location = new System.Drawing.Point(63, 17);
-            this.plotExp_chkBox.Name = "plotExp_chkBox";
-            this.plotExp_chkBox.Size = new System.Drawing.Size(50, 18);
-            this.plotExp_chkBox.TabIndex = 0;
-            this.plotExp_chkBox.Text = "Data";
-            this.plotExp_chkBox.UseVisualStyleBackColor = true;
-            // 
-            // saveListBtn1
-            // 
-            this.saveListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveListBtn1.BackColor = System.Drawing.Color.CadetBlue;
-            this.saveListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGreen;
-            this.saveListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.saveListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveListBtn1.ForeColor = System.Drawing.Color.White;
-            this.saveListBtn1.Location = new System.Drawing.Point(699, 50);
-            this.saveListBtn1.Name = "saveListBtn1";
-            this.saveListBtn1.Size = new System.Drawing.Size(60, 22);
-            this.saveListBtn1.TabIndex = 10000004;
-            this.saveListBtn1.Text = "Save";
-            this.saveListBtn1.UseVisualStyleBackColor = false;
-            this.saveListBtn1.Click += new System.EventHandler(this.saveListBtn1_Click);
-            // 
-            // mark_label
-            // 
-            this.mark_label.AutoSize = true;
-            this.mark_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mark_label.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.mark_label.Location = new System.Drawing.Point(807, 16);
-            this.mark_label.Name = "mark_label";
-            this.mark_label.Size = new System.Drawing.Size(86, 13);
-            this.mark_label.TabIndex = 47;
-            this.mark_label.Text = "mark new entries";
-            this.toolTip1.SetToolTip(this.mark_label, "Marks the new entries of the list");
-            this.mark_label.Visible = false;
-            this.mark_label.Click += new System.EventHandler(this.mark_label_Click);
-            // 
-            // loadWd_Btn
-            // 
-            this.loadWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadWd_Btn.Location = new System.Drawing.Point(115, 716);
-            this.loadWd_Btn.Name = "loadWd_Btn";
-            this.loadWd_Btn.Size = new System.Drawing.Size(103, 23);
-            this.loadWd_Btn.TabIndex = 46;
-            this.loadWd_Btn.Text = "Load window";
-            this.loadWd_Btn.UseVisualStyleBackColor = true;
-            this.loadWd_Btn.Visible = false;
-            this.loadWd_Btn.Click += new System.EventHandler(this.loadWd_Btn_Click);
-            // 
-            // saveWd_Btn
-            // 
-            this.saveWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveWd_Btn.Enabled = false;
-            this.saveWd_Btn.Location = new System.Drawing.Point(6, 716);
-            this.saveWd_Btn.Name = "saveWd_Btn";
-            this.saveWd_Btn.Size = new System.Drawing.Size(103, 23);
-            this.saveWd_Btn.TabIndex = 45;
-            this.saveWd_Btn.Text = "Save window";
-            this.saveWd_Btn.UseVisualStyleBackColor = true;
-            this.saveWd_Btn.Visible = false;
-            this.saveWd_Btn.Click += new System.EventHandler(this.saveWd_Btn_Click);
-            // 
-            // fitResults_lbl
-            // 
-            this.fitResults_lbl.AutoSize = true;
-            this.fitResults_lbl.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitResults_lbl.ForeColor = System.Drawing.Color.Teal;
-            this.fitResults_lbl.Location = new System.Drawing.Point(6, 73);
-            this.fitResults_lbl.Name = "fitResults_lbl";
-            this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
-            this.fitResults_lbl.TabIndex = 0;
-            this.fitResults_lbl.Text = "Fit results";
-            this.fitResults_lbl.DoubleClick += new System.EventHandler(this.fitResults_lbl_DoubleClick);
-            // 
-            // bigPanel
-            // 
-            this.bigPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.bigPanel.AutoScroll = true;
-            this.bigPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.bigPanel.Location = new System.Drawing.Point(6, 90);
-            this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(214, 520);
-            this.bigPanel.TabIndex = 10000000;
-            this.bigPanel.WrapContents = false;
-            // 
-            // remPlot_Btn
-            // 
-            this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(730, 731);
-            this.remPlot_Btn.Name = "remPlot_Btn";
-            this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
-            this.remPlot_Btn.TabIndex = 43;
-            this.remPlot_Btn.Text = "Remove";
-            this.remPlot_Btn.UseVisualStyleBackColor = true;
-            this.remPlot_Btn.Visible = false;
-            this.remPlot_Btn.Click += new System.EventHandler(this.remPlot_Btn_Click);
-            // 
-            // saveFit_Btn
-            // 
-            this.saveFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveFit_Btn.Enabled = false;
-            this.saveFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveFit_Btn.Location = new System.Drawing.Point(7, 689);
-            this.saveFit_Btn.Name = "saveFit_Btn";
-            this.saveFit_Btn.Size = new System.Drawing.Size(211, 23);
-            this.saveFit_Btn.TabIndex = 20;
-            this.saveFit_Btn.Text = "Save Fit";
-            this.saveFit_Btn.UseVisualStyleBackColor = true;
-            this.saveFit_Btn.Visible = false;
-            this.saveFit_Btn.Click += new System.EventHandler(this.saveFit_Btn_Click);
-            // 
-            // plot_Btn
-            // 
-            this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(810, 731);
-            this.plot_Btn.Name = "plot_Btn";
-            this.plot_Btn.Size = new System.Drawing.Size(75, 23);
-            this.plot_Btn.TabIndex = 42;
-            this.plot_Btn.Text = "Plot";
-            this.plot_Btn.UseVisualStyleBackColor = true;
-            this.plot_Btn.Visible = false;
-            this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
-            // 
-            // frag_listView
-            // 
-            this.frag_listView.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.frag_listView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.frag_listView.CheckBoxes = true;
-            this.frag_listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.ionTypeHeader,
-            this.mzHeader,
-            this.zHeader,
-            this.formulaHeader,
-            this.factorHeader,
-            this.codeNoHeader,
-            this.intensityHeader});
-            this.frag_listView.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.frag_listView.FullRowSelect = true;
-            this.frag_listView.GridLines = true;
-            this.frag_listView.HideSelection = false;
-            this.frag_listView.LabelEdit = true;
-            this.frag_listView.Location = new System.Drawing.Point(559, 76);
-            this.frag_listView.Name = "frag_listView";
-            this.frag_listView.Size = new System.Drawing.Size(334, 650);
-            this.frag_listView.TabIndex = 41;
-            this.frag_listView.UseCompatibleStateImageBehavior = false;
-            this.frag_listView.View = System.Windows.Forms.View.Details;
-            this.frag_listView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.frag_listView_ColumnClick);
-            this.frag_listView.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.frag_listView_ItemChecked);
-            this.frag_listView.SelectedIndexChanged += new System.EventHandler(this.frag_listView_SelectedIndexChanged);
-            // 
-            // ionTypeHeader
-            // 
-            this.ionTypeHeader.Text = "Ion Type";
-            this.ionTypeHeader.Width = 58;
-            // 
-            // mzHeader
-            // 
-            this.mzHeader.Text = "m/z";
-            // 
-            // zHeader
-            // 
-            this.zHeader.Text = "z";
-            this.zHeader.Width = 28;
-            // 
-            // formulaHeader
-            // 
-            this.formulaHeader.Text = "Elem. Formula";
-            this.formulaHeader.Width = 109;
-            // 
-            // factorHeader
-            // 
-            this.factorHeader.Text = "Factor";
-            this.factorHeader.Width = 42;
-            // 
-            // codeNoHeader
-            // 
-            this.codeNoHeader.Text = "No";
-            this.codeNoHeader.Width = 30;
-            // 
-            // intensityHeader
-            // 
-            this.intensityHeader.Text = "Intensity";
-            // 
-            // selFrag_Label
-            // 
-            this.selFrag_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.selFrag_Label.AutoSize = true;
-            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selFrag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.selFrag_Label.Location = new System.Drawing.Point(555, 53);
-            this.selFrag_Label.Name = "selFrag_Label";
-            this.selFrag_Label.Size = new System.Drawing.Size(114, 20);
-            this.selFrag_Label.TabIndex = 38;
-            this.selFrag_Label.Text = "Fragment list";
-            this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
-            this.selFrag_Label.Click += new System.EventHandler(this.selFrag_Label_Click);
-            // 
-            // factor_label
-            // 
-            this.factor_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.factor_label.AutoSize = true;
-            this.factor_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.factor_label.Location = new System.Drawing.Point(551, 25);
-            this.factor_label.Name = "factor_label";
-            this.factor_label.Size = new System.Drawing.Size(37, 13);
-            this.factor_label.TabIndex = 36;
-            this.factor_label.Text = "Factor";
-            this.toolTip1.SetToolTip(this.factor_label, "Change or view the factor of the selected fragment.");
-            this.factor_label.Visible = false;
-            // 
-            // factor_Box
-            // 
-            this.factor_Box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.factor_Box.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.factor_Box.Location = new System.Drawing.Point(593, 21);
-            this.factor_Box.Name = "factor_Box";
-            this.factor_Box.Size = new System.Drawing.Size(59, 21);
-            this.factor_Box.TabIndex = 35;
-            this.factor_Box.Visible = false;
-            this.factor_Box.TextChanged += new System.EventHandler(this.factor_Box_TextChanged);
-            this.factor_Box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.factor_Box_KeyDown);
-            this.factor_Box.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.factor_Box_KeyPress);
+            this.show_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.show_Btn.BackColor = System.Drawing.Color.White;
+            this.show_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("show_Btn.BackgroundImage")));
+            this.show_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.show_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.show_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.show_Btn.Location = new System.Drawing.Point(554, 15);
+            this.show_Btn.Name = "show_Btn";
+            this.show_Btn.Size = new System.Drawing.Size(49, 39);
+            this.show_Btn.TabIndex = 10000010;
+            this.show_Btn.UseVisualStyleBackColor = false;
+            this.show_Btn.Visible = false;
+            this.show_Btn.Click += new System.EventHandler(this.show_Btn_Click);
             // 
             // options_grpBox
             // 
@@ -606,6 +284,7 @@ namespace Isotope_fitting
             // 
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.hide_Btn);
             this.panel1.Controls.Add(this.displayPeakList_btn);
             this.panel1.Controls.Add(this.optionBtn);
             this.panel1.Controls.Add(customRes_Btn);
@@ -657,6 +336,25 @@ namespace Isotope_fitting
             this.panel1.Size = new System.Drawing.Size(318, 702);
             this.panel1.TabIndex = 0;
             // 
+            // hide_Btn
+            // 
+            this.hide_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.hide_Btn.BackColor = System.Drawing.Color.White;
+            this.hide_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("hide_Btn.BackgroundImage")));
+            this.hide_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.hide_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.hide_Btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lavender;
+            this.hide_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.hide_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hide_Btn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.hide_Btn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.hide_Btn.Location = new System.Drawing.Point(265, 2);
+            this.hide_Btn.Name = "hide_Btn";
+            this.hide_Btn.Size = new System.Drawing.Size(40, 38);
+            this.hide_Btn.TabIndex = 10000010;
+            this.hide_Btn.UseVisualStyleBackColor = false;
+            this.hide_Btn.Click += new System.EventHandler(this.hide_Btn_Click);
+            // 
             // displayPeakList_btn
             // 
             this.displayPeakList_btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -667,9 +365,9 @@ namespace Isotope_fitting
             this.displayPeakList_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.displayPeakList_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayPeakList_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.displayPeakList_btn.Location = new System.Drawing.Point(186, 2);
+            this.displayPeakList_btn.Location = new System.Drawing.Point(167, 2);
             this.displayPeakList_btn.Name = "displayPeakList_btn";
-            this.displayPeakList_btn.Size = new System.Drawing.Size(54, 38);
+            this.displayPeakList_btn.Size = new System.Drawing.Size(43, 38);
             this.displayPeakList_btn.TabIndex = 40;
             this.displayPeakList_btn.Text = "peak list";
             this.displayPeakList_btn.UseVisualStyleBackColor = false;
@@ -699,11 +397,28 @@ namespace Isotope_fitting
             this.loadExp_Btn.ForeColor = System.Drawing.Color.White;
             this.loadExp_Btn.Location = new System.Drawing.Point(5, 2);
             this.loadExp_Btn.Name = "loadExp_Btn";
-            this.loadExp_Btn.Size = new System.Drawing.Size(97, 38);
+            this.loadExp_Btn.Size = new System.Drawing.Size(90, 38);
             this.loadExp_Btn.TabIndex = 37;
             this.loadExp_Btn.Text = "Load Experimental";
             this.loadExp_Btn.UseVisualStyleBackColor = false;
             this.loadExp_Btn.Click += new System.EventHandler(this.loadExp_Btn_Click);
+            // 
+            // new_Btn
+            // 
+            this.new_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.new_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.new_Btn.BackColor = System.Drawing.Color.White;
+            this.new_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.new_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.new_Btn.ForeColor = System.Drawing.Color.SteelBlue;
+            this.new_Btn.Location = new System.Drawing.Point(216, 2);
+            this.new_Btn.Name = "new_Btn";
+            this.new_Btn.Size = new System.Drawing.Size(43, 38);
+            this.new_Btn.TabIndex = 41;
+            this.new_Btn.Text = "New";
+            this.new_Btn.UseVisualStyleBackColor = false;
+            this.new_Btn.Click += new System.EventHandler(this.new_Btn_Click);
             // 
             // chargeMax_Box
             // 
@@ -759,9 +474,9 @@ namespace Isotope_fitting
             this.loadMS_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadMS_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadMS_Btn.ForeColor = System.Drawing.Color.White;
-            this.loadMS_Btn.Location = new System.Drawing.Point(108, 2);
+            this.loadMS_Btn.Location = new System.Drawing.Point(101, 2);
             this.loadMS_Btn.Name = "loadMS_Btn";
-            this.loadMS_Btn.Size = new System.Drawing.Size(72, 38);
+            this.loadMS_Btn.Size = new System.Drawing.Size(60, 38);
             this.loadMS_Btn.TabIndex = 1;
             this.loadMS_Btn.Text = "Load MS";
             this.loadMS_Btn.UseVisualStyleBackColor = false;
@@ -1230,6 +945,79 @@ namespace Isotope_fitting
             this.internal_Label.TabIndex = 27;
             this.internal_Label.Text = "internal";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(4, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 16);
+            this.label3.TabIndex = 10000008;
+            this.label3.Text = "Theor.";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(4, 17);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 16);
+            this.label2.TabIndex = 10000007;
+            this.label2.Text = "Exp. ";
+            // 
+            // plotFragProf_chkBox
+            // 
+            this.plotFragProf_chkBox.AutoSize = true;
+            this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotFragProf_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotFragProf_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotFragProf_chkBox.Location = new System.Drawing.Point(63, 36);
+            this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
+            this.plotFragProf_chkBox.Size = new System.Drawing.Size(66, 18);
+            this.plotFragProf_chkBox.TabIndex = 2;
+            this.plotFragProf_chkBox.Text = "Profiles";
+            this.plotFragProf_chkBox.UseVisualStyleBackColor = true;
+            // 
+            // plotFragCent_chkBox
+            // 
+            this.plotFragCent_chkBox.AutoSize = true;
+            this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotFragCent_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 36);
+            this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
+            this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
+            this.plotFragCent_chkBox.TabIndex = 1;
+            this.plotFragCent_chkBox.Text = "Centroids";
+            this.plotFragCent_chkBox.UseVisualStyleBackColor = true;
+            // 
+            // plotCentr_chkBox
+            // 
+            this.plotCentr_chkBox.AutoSize = true;
+            this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotCentr_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 17);
+            this.plotCentr_chkBox.Name = "plotCentr_chkBox";
+            this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
+            this.plotCentr_chkBox.TabIndex = 0;
+            this.plotCentr_chkBox.Text = "Centroids";
+            this.plotCentr_chkBox.UseVisualStyleBackColor = true;
+            // 
+            // plotExp_chkBox
+            // 
+            this.plotExp_chkBox.AutoSize = true;
+            this.plotExp_chkBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.plotExp_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plotExp_chkBox.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.plotExp_chkBox.Location = new System.Drawing.Point(63, 17);
+            this.plotExp_chkBox.Name = "plotExp_chkBox";
+            this.plotExp_chkBox.Size = new System.Drawing.Size(50, 18);
+            this.plotExp_chkBox.TabIndex = 0;
+            this.plotExp_chkBox.Text = "Data";
+            this.plotExp_chkBox.UseVisualStyleBackColor = true;
+            // 
             // fitOptions_grpBox
             // 
             this.fitOptions_grpBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1267,29 +1055,6 @@ namespace Isotope_fitting
             this.fit_sel_Btn.UseVisualStyleBackColor = false;
             this.fit_sel_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
             // 
-            // stepRange_Lbl
-            // 
-            this.stepRange_Lbl.AutoSize = true;
-            this.stepRange_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stepRange_Lbl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.stepRange_Lbl.Location = new System.Drawing.Point(159, 52);
-            this.stepRange_Lbl.Name = "stepRange_Lbl";
-            this.stepRange_Lbl.Size = new System.Drawing.Size(50, 13);
-            this.stepRange_Lbl.TabIndex = 44;
-            this.stepRange_Lbl.Text = "tolerance";
-            this.stepRange_Lbl.Visible = false;
-            // 
-            // step_rangeBox
-            // 
-            this.step_rangeBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.step_rangeBox.ForeColor = System.Drawing.Color.Black;
-            this.step_rangeBox.Location = new System.Drawing.Point(189, 68);
-            this.step_rangeBox.Name = "step_rangeBox";
-            this.step_rangeBox.Size = new System.Drawing.Size(13, 20);
-            this.step_rangeBox.TabIndex = 43;
-            this.step_rangeBox.Visible = false;
-            this.step_rangeBox.TextChanged += new System.EventHandler(this.step_rangeBox_TextChanged);
-            // 
             // Fitting_chkBox
             // 
             this.Fitting_chkBox.AutoSize = true;
@@ -1303,39 +1068,6 @@ namespace Isotope_fitting
             this.Fitting_chkBox.Text = "Plot fit";
             this.Fitting_chkBox.UseVisualStyleBackColor = true;
             this.Fitting_chkBox.CheckedChanged += new System.EventHandler(this.Fitting_chkBox_CheckedChanged);
-            // 
-            // new_Btn
-            // 
-            this.new_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.new_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.new_Btn.BackColor = System.Drawing.Color.White;
-            this.new_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.new_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.new_Btn.ForeColor = System.Drawing.Color.SteelBlue;
-            this.new_Btn.Location = new System.Drawing.Point(246, 2);
-            this.new_Btn.Name = "new_Btn";
-            this.new_Btn.Size = new System.Drawing.Size(54, 38);
-            this.new_Btn.TabIndex = 41;
-            this.new_Btn.Text = "New";
-            this.new_Btn.UseVisualStyleBackColor = false;
-            this.new_Btn.Click += new System.EventHandler(this.new_Btn_Click);
-            // 
-            // loadFit_Btn
-            // 
-            this.loadFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.loadFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadFit_Btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.loadFit_Btn.Location = new System.Drawing.Point(9, 664);
-            this.loadFit_Btn.Name = "loadFit_Btn";
-            this.loadFit_Btn.Size = new System.Drawing.Size(69, 27);
-            this.loadFit_Btn.TabIndex = 40;
-            this.loadFit_Btn.Text = "Load Fit";
-            this.loadFit_Btn.UseVisualStyleBackColor = true;
-            this.loadFit_Btn.Visible = false;
-            this.loadFit_Btn.Click += new System.EventHandler(this.loadFit_Btn_Click);
             // 
             // fit_Btn
             // 
@@ -1375,6 +1107,49 @@ namespace Isotope_fitting
             this.fitMin_Label.TabIndex = 34;
             this.fitMin_Label.Text = "min";
             // 
+            // fitMax_Box
+            // 
+            this.fitMax_Box.Enabled = false;
+            this.fitMax_Box.ForeColor = System.Drawing.Color.Black;
+            this.fitMax_Box.Location = new System.Drawing.Point(73, 36);
+            this.fitMax_Box.Name = "fitMax_Box";
+            this.fitMax_Box.Size = new System.Drawing.Size(62, 20);
+            this.fitMax_Box.TabIndex = 35;
+            this.fitMax_Box.TextChanged += new System.EventHandler(this.FitMax_Box_TextChanged);
+            // 
+            // fitMin_Box
+            // 
+            this.fitMin_Box.Enabled = false;
+            this.fitMin_Box.ForeColor = System.Drawing.Color.Black;
+            this.fitMin_Box.Location = new System.Drawing.Point(6, 36);
+            this.fitMin_Box.Name = "fitMin_Box";
+            this.fitMin_Box.Size = new System.Drawing.Size(62, 20);
+            this.fitMin_Box.TabIndex = 36;
+            this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
+            // 
+            // stepRange_Lbl
+            // 
+            this.stepRange_Lbl.AutoSize = true;
+            this.stepRange_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stepRange_Lbl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.stepRange_Lbl.Location = new System.Drawing.Point(159, 52);
+            this.stepRange_Lbl.Name = "stepRange_Lbl";
+            this.stepRange_Lbl.Size = new System.Drawing.Size(50, 13);
+            this.stepRange_Lbl.TabIndex = 44;
+            this.stepRange_Lbl.Text = "tolerance";
+            this.stepRange_Lbl.Visible = false;
+            // 
+            // step_rangeBox
+            // 
+            this.step_rangeBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.step_rangeBox.ForeColor = System.Drawing.Color.Black;
+            this.step_rangeBox.Location = new System.Drawing.Point(189, 68);
+            this.step_rangeBox.Name = "step_rangeBox";
+            this.step_rangeBox.Size = new System.Drawing.Size(13, 20);
+            this.step_rangeBox.TabIndex = 43;
+            this.step_rangeBox.Visible = false;
+            this.step_rangeBox.TextChanged += new System.EventHandler(this.step_rangeBox_TextChanged);
+            // 
             // fitStep_Box
             // 
             this.fitStep_Box.Enabled = false;
@@ -1385,16 +1160,6 @@ namespace Isotope_fitting
             this.fitStep_Box.TabIndex = 38;
             this.fitStep_Box.Visible = false;
             this.fitStep_Box.TextChanged += new System.EventHandler(this.FitStep_Box_TextChanged);
-            // 
-            // fitMax_Box
-            // 
-            this.fitMax_Box.Enabled = false;
-            this.fitMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitMax_Box.Location = new System.Drawing.Point(73, 36);
-            this.fitMax_Box.Name = "fitMax_Box";
-            this.fitMax_Box.Size = new System.Drawing.Size(62, 20);
-            this.fitMax_Box.TabIndex = 35;
-            this.fitMax_Box.TextChanged += new System.EventHandler(this.FitMax_Box_TextChanged);
             // 
             // fitStep_Label
             // 
@@ -1408,15 +1173,301 @@ namespace Isotope_fitting
             this.fitStep_Label.Text = "step";
             this.fitStep_Label.Visible = false;
             // 
-            // fitMin_Box
+            // sortSettings_Btn
             // 
-            this.fitMin_Box.Enabled = false;
-            this.fitMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitMin_Box.Location = new System.Drawing.Point(6, 36);
-            this.fitMin_Box.Name = "fitMin_Box";
-            this.fitMin_Box.Size = new System.Drawing.Size(62, 20);
-            this.fitMin_Box.TabIndex = 36;
-            this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
+            this.sortSettings_Btn.BackColor = System.Drawing.Color.CadetBlue;
+            this.sortSettings_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.sortSettings_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sortSettings_Btn.ForeColor = System.Drawing.Color.Transparent;
+            this.sortSettings_Btn.Location = new System.Drawing.Point(161, 65);
+            this.sortSettings_Btn.Name = "sortSettings_Btn";
+            this.sortSettings_Btn.Size = new System.Drawing.Size(57, 22);
+            this.sortSettings_Btn.TabIndex = 10000009;
+            this.sortSettings_Btn.Text = "Settings";
+            this.sortSettings_Btn.UseVisualStyleBackColor = false;
+            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
+            // 
+            // clearListBtn1
+            // 
+            this.clearListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.clearListBtn1.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.clearListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Crimson;
+            this.clearListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.clearListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clearListBtn1.ForeColor = System.Drawing.Color.White;
+            this.clearListBtn1.Location = new System.Drawing.Point(831, 50);
+            this.clearListBtn1.Name = "clearListBtn1";
+            this.clearListBtn1.Size = new System.Drawing.Size(60, 22);
+            this.clearListBtn1.TabIndex = 10000006;
+            this.clearListBtn1.Text = "Clear";
+            this.clearListBtn1.UseVisualStyleBackColor = false;
+            this.clearListBtn1.Click += new System.EventHandler(this.clearListBtn1_Click);
+            // 
+            // loadFit_Btn
+            // 
+            this.loadFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.loadFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadFit_Btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.loadFit_Btn.Location = new System.Drawing.Point(9, 664);
+            this.loadFit_Btn.Name = "loadFit_Btn";
+            this.loadFit_Btn.Size = new System.Drawing.Size(69, 27);
+            this.loadFit_Btn.TabIndex = 40;
+            this.loadFit_Btn.Text = "Load Fit";
+            this.loadFit_Btn.UseVisualStyleBackColor = true;
+            this.loadFit_Btn.Visible = false;
+            this.loadFit_Btn.Click += new System.EventHandler(this.loadFit_Btn_Click);
+            // 
+            // loadListBtn1
+            // 
+            this.loadListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadListBtn1.BackColor = System.Drawing.Color.SteelBlue;
+            this.loadListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkCyan;
+            this.loadListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.loadListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadListBtn1.ForeColor = System.Drawing.Color.White;
+            this.loadListBtn1.Location = new System.Drawing.Point(765, 50);
+            this.loadListBtn1.Name = "loadListBtn1";
+            this.loadListBtn1.Size = new System.Drawing.Size(60, 22);
+            this.loadListBtn1.TabIndex = 10000005;
+            this.loadListBtn1.Text = "Load";
+            this.loadListBtn1.UseVisualStyleBackColor = false;
+            this.loadListBtn1.Click += new System.EventHandler(this.loadListBtn1_Click);
+            // 
+            // saveListBtn1
+            // 
+            this.saveListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveListBtn1.BackColor = System.Drawing.Color.CadetBlue;
+            this.saveListBtn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGreen;
+            this.saveListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.saveListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveListBtn1.ForeColor = System.Drawing.Color.White;
+            this.saveListBtn1.Location = new System.Drawing.Point(699, 50);
+            this.saveListBtn1.Name = "saveListBtn1";
+            this.saveListBtn1.Size = new System.Drawing.Size(60, 22);
+            this.saveListBtn1.TabIndex = 10000004;
+            this.saveListBtn1.Text = "Save";
+            this.saveListBtn1.UseVisualStyleBackColor = false;
+            this.saveListBtn1.Click += new System.EventHandler(this.saveListBtn1_Click);
+            // 
+            // mark_label
+            // 
+            this.mark_label.AutoSize = true;
+            this.mark_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mark_label.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.mark_label.Location = new System.Drawing.Point(807, 16);
+            this.mark_label.Name = "mark_label";
+            this.mark_label.Size = new System.Drawing.Size(86, 13);
+            this.mark_label.TabIndex = 47;
+            this.mark_label.Text = "mark new entries";
+            this.toolTip1.SetToolTip(this.mark_label, "Marks the new entries of the list");
+            this.mark_label.Visible = false;
+            this.mark_label.Click += new System.EventHandler(this.mark_label_Click);
+            // 
+            // loadWd_Btn
+            // 
+            this.loadWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadWd_Btn.Location = new System.Drawing.Point(115, 716);
+            this.loadWd_Btn.Name = "loadWd_Btn";
+            this.loadWd_Btn.Size = new System.Drawing.Size(103, 23);
+            this.loadWd_Btn.TabIndex = 46;
+            this.loadWd_Btn.Text = "Load window";
+            this.loadWd_Btn.UseVisualStyleBackColor = true;
+            this.loadWd_Btn.Visible = false;
+            this.loadWd_Btn.Click += new System.EventHandler(this.loadWd_Btn_Click);
+            // 
+            // saveWd_Btn
+            // 
+            this.saveWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveWd_Btn.Enabled = false;
+            this.saveWd_Btn.Location = new System.Drawing.Point(6, 716);
+            this.saveWd_Btn.Name = "saveWd_Btn";
+            this.saveWd_Btn.Size = new System.Drawing.Size(103, 23);
+            this.saveWd_Btn.TabIndex = 45;
+            this.saveWd_Btn.Text = "Save window";
+            this.saveWd_Btn.UseVisualStyleBackColor = true;
+            this.saveWd_Btn.Visible = false;
+            this.saveWd_Btn.Click += new System.EventHandler(this.saveWd_Btn_Click);
+            // 
+            // fitResults_lbl
+            // 
+            this.fitResults_lbl.AutoSize = true;
+            this.fitResults_lbl.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitResults_lbl.ForeColor = System.Drawing.Color.Teal;
+            this.fitResults_lbl.Location = new System.Drawing.Point(6, 73);
+            this.fitResults_lbl.Name = "fitResults_lbl";
+            this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
+            this.fitResults_lbl.TabIndex = 0;
+            this.fitResults_lbl.Text = "Fit results";
+            this.fitResults_lbl.DoubleClick += new System.EventHandler(this.fitResults_lbl_DoubleClick);
+            // 
+            // bigPanel
+            // 
+            this.bigPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.bigPanel.AutoScroll = true;
+            this.bigPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.bigPanel.Location = new System.Drawing.Point(6, 90);
+            this.bigPanel.Name = "bigPanel";
+            this.bigPanel.Size = new System.Drawing.Size(214, 520);
+            this.bigPanel.TabIndex = 10000000;
+            this.bigPanel.WrapContents = false;
+            // 
+            // remPlot_Btn
+            // 
+            this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.remPlot_Btn.Location = new System.Drawing.Point(730, 731);
+            this.remPlot_Btn.Name = "remPlot_Btn";
+            this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
+            this.remPlot_Btn.TabIndex = 43;
+            this.remPlot_Btn.Text = "Remove";
+            this.remPlot_Btn.UseVisualStyleBackColor = true;
+            this.remPlot_Btn.Visible = false;
+            this.remPlot_Btn.Click += new System.EventHandler(this.remPlot_Btn_Click);
+            // 
+            // saveFit_Btn
+            // 
+            this.saveFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.saveFit_Btn.Enabled = false;
+            this.saveFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveFit_Btn.Location = new System.Drawing.Point(7, 689);
+            this.saveFit_Btn.Name = "saveFit_Btn";
+            this.saveFit_Btn.Size = new System.Drawing.Size(211, 23);
+            this.saveFit_Btn.TabIndex = 20;
+            this.saveFit_Btn.Text = "Save Fit";
+            this.saveFit_Btn.UseVisualStyleBackColor = true;
+            this.saveFit_Btn.Visible = false;
+            this.saveFit_Btn.Click += new System.EventHandler(this.saveFit_Btn_Click);
+            // 
+            // plot_Btn
+            // 
+            this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.plot_Btn.Location = new System.Drawing.Point(810, 731);
+            this.plot_Btn.Name = "plot_Btn";
+            this.plot_Btn.Size = new System.Drawing.Size(75, 23);
+            this.plot_Btn.TabIndex = 42;
+            this.plot_Btn.Text = "Plot";
+            this.plot_Btn.UseVisualStyleBackColor = true;
+            this.plot_Btn.Visible = false;
+            this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
+            // 
+            // frag_listView
+            // 
+            this.frag_listView.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.frag_listView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.frag_listView.CheckBoxes = true;
+            this.frag_listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ionTypeHeader,
+            this.mzHeader,
+            this.zHeader,
+            this.formulaHeader,
+            this.factorHeader,
+            this.codeNoHeader,
+            this.intensityHeader});
+            this.frag_listView.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.frag_listView.FullRowSelect = true;
+            this.frag_listView.GridLines = true;
+            this.frag_listView.HideSelection = false;
+            this.frag_listView.LabelEdit = true;
+            this.frag_listView.Location = new System.Drawing.Point(559, 76);
+            this.frag_listView.Name = "frag_listView";
+            this.frag_listView.Size = new System.Drawing.Size(334, 650);
+            this.frag_listView.TabIndex = 41;
+            this.frag_listView.UseCompatibleStateImageBehavior = false;
+            this.frag_listView.View = System.Windows.Forms.View.Details;
+            this.frag_listView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.frag_listView_ColumnClick);
+            this.frag_listView.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.frag_listView_ItemChecked);
+            this.frag_listView.SelectedIndexChanged += new System.EventHandler(this.frag_listView_SelectedIndexChanged);
+            // 
+            // ionTypeHeader
+            // 
+            this.ionTypeHeader.Text = "Ion Type";
+            this.ionTypeHeader.Width = 58;
+            // 
+            // mzHeader
+            // 
+            this.mzHeader.Text = "m/z";
+            // 
+            // zHeader
+            // 
+            this.zHeader.Text = "z";
+            this.zHeader.Width = 28;
+            // 
+            // formulaHeader
+            // 
+            this.formulaHeader.Text = "Elem. Formula";
+            this.formulaHeader.Width = 109;
+            // 
+            // factorHeader
+            // 
+            this.factorHeader.Text = "Factor";
+            this.factorHeader.Width = 42;
+            // 
+            // codeNoHeader
+            // 
+            this.codeNoHeader.Text = "No";
+            this.codeNoHeader.Width = 30;
+            // 
+            // intensityHeader
+            // 
+            this.intensityHeader.Text = "Intensity";
+            // 
+            // selFrag_Label
+            // 
+            this.selFrag_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.selFrag_Label.AutoSize = true;
+            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.selFrag_Label.ForeColor = System.Drawing.Color.SteelBlue;
+            this.selFrag_Label.Location = new System.Drawing.Point(555, 53);
+            this.selFrag_Label.Name = "selFrag_Label";
+            this.selFrag_Label.Size = new System.Drawing.Size(114, 20);
+            this.selFrag_Label.TabIndex = 38;
+            this.selFrag_Label.Text = "Fragment list";
+            this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
+            this.selFrag_Label.Click += new System.EventHandler(this.selFrag_Label_Click);
+            // 
+            // factor_label
+            // 
+            this.factor_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.factor_label.AutoSize = true;
+            this.factor_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.factor_label.Location = new System.Drawing.Point(551, 25);
+            this.factor_label.Name = "factor_label";
+            this.factor_label.Size = new System.Drawing.Size(37, 13);
+            this.factor_label.TabIndex = 36;
+            this.factor_label.Text = "Factor";
+            this.toolTip1.SetToolTip(this.factor_label, "Change or view the factor of the selected fragment.");
+            this.factor_label.Visible = false;
+            // 
+            // factor_Box
+            // 
+            this.factor_Box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.factor_Box.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.factor_Box.Location = new System.Drawing.Point(609, 20);
+            this.factor_Box.Name = "factor_Box";
+            this.factor_Box.Size = new System.Drawing.Size(59, 21);
+            this.factor_Box.TabIndex = 35;
+            this.factor_Box.Visible = false;
+            this.factor_Box.TextChanged += new System.EventHandler(this.factor_Box_TextChanged);
+            this.factor_Box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.factor_Box_KeyDown);
+            this.factor_Box.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.factor_Box_KeyPress);
+            // 
+            // tabDiagram
+            // 
+            this.tabDiagram.Location = new System.Drawing.Point(4, 22);
+            this.tabDiagram.Name = "tabDiagram";
+            this.tabDiagram.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDiagram.Size = new System.Drawing.Size(1507, 743);
+            this.tabDiagram.TabIndex = 2;
+            this.tabDiagram.Text = "Diagrams";
+            this.tabDiagram.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -1541,5 +1592,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button sortSettings_Btn;
+        private System.Windows.Forms.Button hide_Btn;
+        private System.Windows.Forms.TabPage tabDiagram;
+        private System.Windows.Forms.Button show_Btn;
     }
 }
