@@ -7162,7 +7162,7 @@ namespace Isotope_fitting
         {                       
             Pen p = new Pen(Color.Black);           
             int point_x, point_y;
-            point_y = sequence_Pnl.Height / 2;
+            point_y = 10;
             point_x = 3;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
@@ -7209,7 +7209,7 @@ namespace Isotope_fitting
                     }                    
                 }
                 pp.X = pp.X + 12;
-                if (pp.X + 8 >= sequence_Pnl.Width) { pp.X = 3; pp.Y =pp.Y+30; }
+                if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y =pp.Y+30; }
             }           
 
             return;
@@ -7217,16 +7217,15 @@ namespace Isotope_fitting
         
         private void draw_line(Point pf, bool up, int step, Color color_draw, bool inter = false)
         {
-            int x1, x2, x3, y1, y2, y3;
-            x1 = pf.X+9; x2 = x1;
+            int x1, x2, x3, y1, y2, y3;            
             Pen mypen = new Pen(color_draw);
             if (inter)
             {
-                y1 = pf.Y; y2 = y1 - 8; x3 = x2; y3 = y2;
+                x1 = pf.X +11; x2 = x1; y1 = pf.Y-1; y2 = y1 + 12; x3 = x2; y3 = y2;
             }
             else if (up)
             {
-                y1 = pf.Y+4; y2 =y1 - 5 - step; y3 = y2; x3 = x2 - 8; 
+                x1 = pf.X + 9; x2 = x1; y1 = pf.Y+4; y2 =y1 - 5 - step; y3 = y2; x3 = x2 - 8; 
             }
             else
             {
@@ -7247,14 +7246,16 @@ namespace Isotope_fitting
         }
         private void initialize_plot_tab2()
         {
-            if (ax_plot.Model.Series!=null) {ax_plot.Model.Series.Clear();by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear();/*index_plot.Model.Series.Clear();indexto_plot.Model.Series.Clear();*/}            
+            if (ax_plot.Model.Series!=null) {ax_plot.Model.Series.Clear();by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); }            
             LinearBarSeries a_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
             LinearBarSeries x_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 0.5 };
             LinearBarSeries b_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
             LinearBarSeries y_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
             LinearBarSeries c_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
             LinearBarSeries z_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };
+            
             ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar);by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
+           
             foreach (ion nn in IonDraw)
             {
                 if (nn.Ion_type.StartsWith("a"))
@@ -7281,9 +7282,32 @@ namespace Isotope_fitting
                 {
                     (cz_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
                 }
-            }
-            
+                if (nn.Ion_type.StartsWith("inter"))
+                {
+                    IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo,Color=nn.Color});
+                }
+            }            
             ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
+            CI_indexTo com1 = new CI_indexTo();
+            IonDrawIndexTo.Sort(com1);
+            int k = 1;
+            foreach (ion nn in IonDrawIndexTo)
+            {
+                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                tmp.Points.Add(new DataPoint(nn.Index, k));
+                tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                indexto_plot.Model.Series.Add(tmp); k++;
+            }
+            CI_index com2 = new CI_index();
+            IonDrawIndexTo.Sort(com2);
+            k = 1;
+            foreach (ion nn in IonDrawIndexTo)
+            {
+                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                tmp.Points.Add(new DataPoint(nn.Index, k));
+                tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                index_plot.Model.Series.Add(tmp); k++;
+            }
         }
         private void check_duplicate_ions()
         {
@@ -7309,18 +7333,32 @@ namespace Isotope_fitting
                 }
             }
         }
+        class CI_indexTo : IComparer<ion>
+        {
+            public int Compare(ion x, ion y)
+            {
+                return -Decimal.Compare(x.IndexTo, y.IndexTo);
+            }
+        }
+        class CI_index : IComparer<ion>
+        {
+            public int Compare(ion x, ion y)
+            {
+                return -Decimal.Compare(x.Index, y.Index);
+            }
+        }
         private void sortIdx_xyz()
         {
             foreach (ion nn in IonDraw)
             {
-                if (nn.Ion_type.StartsWith("a")|| nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("c"))
-                {
-                    nn.SortIdx =nn.Index;
-                }
-                else if((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z")))
-                {
+               if((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z")))
+               {
                     nn.SortIdx = Peptide.Length -nn.Index + 1;
-                }
+               }
+               else
+               {
+                    nn.SortIdx = nn.Index;
+               }
             }
         }
         private void initialize_tab2()
@@ -7360,7 +7398,34 @@ namespace Isotope_fitting
             var linearAxis6 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
             cz_model.Axes.Add(linearAxis6);
             cz_model.Updated += (s, e) => { if (Math.Abs(linearAxis5.ActualMaximum) > Math.Abs(linearAxis5.ActualMinimum)) { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMaximum), Math.Abs(linearAxis5.ActualMaximum)); } else { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMinimum), Math.Abs(linearAxis5.ActualMinimum)); } cz_plot.InvalidatePlot(true); };
+
+            //internal fragments plots
+            // index plot
+            if (index_plot != null) cz_plot.Dispose();
+            index_plot = new PlotView() { Name = "index_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            idxPnl1.Controls.Add(index_plot);
+            PlotModel index_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments", TitleColor = OxyColors.Teal };
+            index_plot.Model = index_model;
+            var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = " #fragments" };
+            index_model.Axes.Add(linearAxis7);
+            var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            index_model.Axes.Add(linearAxis8);
+            // indexTo plot
+            if (indexto_plot != null) cz_plot.Dispose();
+            indexto_plot = new PlotView() { Name = "indexto_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            idxPnl2.Controls.Add(indexto_plot);
+            PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments", TitleColor = OxyColors.Teal };
+            indexto_plot.Model = indexto_model;
+            var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "#fragments" };
+            indexto_model.Axes.Add(linearAxis9);
+            var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            indexto_model.Axes.Add(linearAxis10);
+
+
+
+
         }
+
         #endregion
 
 
