@@ -26,7 +26,8 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
-        #region parameter set
+        #region parameter set tab FIT
+
         bool plot_rem_Btns = false;
         bool refresh_all = false;
         int exp_res = 0;
@@ -177,6 +178,19 @@ namespace Isotope_fitting
 
         #endregion
 
+        #region parameter set tab DIAGRAMS
+        List<ion> IonDraw = new List<ion>();
+        List<ion> IonDrawIndex = new List<ion>();
+        List<ion> IonDrawIndexTo = new List<ion>();
+        Graphics g = null;
+        Pen p = new Pen(Color.Black);
+
+        PlotView ax_plot;
+        PlotView by_plot;
+        PlotView cz_plot;
+        PlotView index_plot;
+        PlotView indexto_plot;
+        #endregion
 
         public Form2()
         {
@@ -194,6 +208,7 @@ namespace Isotope_fitting
             load_preferences();           
         }
 
+        #region TAB FIT
         // UI UncheckAll()
         // UI Initialize_fit_UI()
         // UI merge textBox input control
@@ -1014,9 +1029,9 @@ namespace Isotope_fitting
         {
             frag_listView.Visible = false;
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Dispose(); }        // for GC?
-            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(1568, 100), Name = "frag_tree", Size = new Size(340, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
-            Controls.Add(frag_tree);
-            frag_tree.BringToFront();
+            frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(559, 100), Name = "frag_tree", Size = new Size(340, 450), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            user_grpBox.Controls.Add(frag_tree);
+            //frag_tree.BringToFront();
             frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node, e.Node.Checked); };
             frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
@@ -1047,7 +1062,7 @@ namespace Isotope_fitting
         {
             try
             {
-               Panel pnl = GetControls(bigPanel).OfType<Panel>().FirstOrDefault(l => l.Name == "Fragment intensity adjustment");
+               Panel pnl = GetControls(user_grpBox).OfType<Panel>().FirstOrDefault(l => l.Name == "Fragment intensity adjustment");
                this.Controls.Remove(pnl);pnl.Dispose();
             }
             catch { }           
@@ -1059,12 +1074,13 @@ namespace Isotope_fitting
             //Form frm = new Form { Size = new Size(200, 35), AutoSizeMode = AutoSizeMode.GrowAndShrink, TopMost = true, ControlBox = false, StartPosition = FormStartPosition.Manual,
             //    FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(1570, 580) };
 
-            Panel factor_panel = new Panel { Location = new Point(1570, 555), Size = new Size(180, 35),BorderStyle=BorderStyle.Fixed3D,Name="Fragment intensity adjustment",Visible= true ,Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
-            Label lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
-            Button btn_solo = new Button { Text = "fit", Location = new Point(50, 5), Size = new Size(40, 23) };
+            Panel factor_panel = new Panel { Location = new Point(559, 555), Size = new Size(190, 35),BorderStyle=BorderStyle.Fixed3D,Name="Fragment intensity adjustment",Visible= true ,Anchor = AnchorStyles.Top  | AnchorStyles.Right };
+            if (show_Btn.Visible) factor_panel.Location = new Point(559-panel1.Size.Width, 555);
+            Label factor_lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
+            Button btn_solo = new Button { Text = "fit", Location = new Point(70, 5), Size = new Size(40, 23) };
             //Button btn_ok = new Button { Location = new Point(165, 5), Size = new Size(29, 23), Text = "ok" };
             NumericUpDown numUD = new NumericUpDown { Minimum = 1, Maximum = 1e8M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
-                                                        Location = new Point(100, 7), Size = new Size(60, 20) };
+                                                        Location = new Point(120, 7), Size = new Size(60, 20) };
 
             btn_solo.Click += (s, e) => 
             {
@@ -1085,20 +1101,19 @@ namespace Isotope_fitting
             };
             //btn_ok.Click += (s, e) => { frm.Close(); };
 
-            factor_panel.Controls.AddRange(new Control[] { lbl, btn_solo, /*btn_ok,*/ numUD });
-            Controls.Add(factor_panel);
-            factor_panel.BringToFront();
-        }
-
+            factor_panel.Controls.AddRange(new Control[] { factor_lbl, btn_solo, /*btn_ok,*/ numUD });
+            user_grpBox.Controls.Add(factor_panel);
+            //factor_panel.BringToFront();
+        }      
         private void populate_fragtypes_treeView()
         {
             // create a new tree
             //fragTypes_tree = null;
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Dispose(); }        // for GC?
 
-            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(1568, 600), Name = "fragType_tree", Size = new Size(340, 400), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
-            Controls.Add(fragTypes_tree);
-            fragTypes_tree.BringToFront();
+            fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(559, 600), Name = "fragType_tree", Size = new Size(340, 400), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            user_grpBox.Controls.Add(fragTypes_tree);
+            //fragTypes_tree.BringToFront();
             fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
                                                                            new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); }),
                                                                            new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) });
@@ -2681,7 +2696,7 @@ namespace Isotope_fitting
         /// </summary>
         private void progress_display_init()
         {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(599, 28), Style = 0, Minimum = 0, Value = 0, Size = new Size(325, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(599, 28), Style = 0, Minimum = 0, Value = 0, Size = new Size(315, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
             prg_lbl = new Label { Name = "prg_lbl", Location = new Point(609, 11), AutoSize = true, Visible = false, Anchor = AnchorStyles.Right | AnchorStyles.Top };
             user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
         }
@@ -3250,7 +3265,8 @@ namespace Isotope_fitting
                 //file.WriteLine();
                 foreach (int indexS in fragToSave)
                 {
-                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);                    
+                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);
+                    IonDraw.Add(new ion() {Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
                 }
                 file.Flush(); file.Close(); file.Dispose();
             }
@@ -3345,6 +3361,8 @@ namespace Isotope_fitting
                                     Fixed=true
                                 });
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
+                                IonDraw.Add(new ion() { Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
+                                
                             }
                         }                       
                     }
@@ -3370,7 +3388,7 @@ namespace Isotope_fitting
         private void clearList()
         {
             if (Fragments2.Count == 0 || all_data.Count<2) return;
-            
+            if (IonDraw.Count > 0) IonDraw.Clear();
             selectedFragments.Clear();
             Fragments2.Clear();
             custom_colors.Clear();
@@ -3389,6 +3407,7 @@ namespace Isotope_fitting
             fit_sel_Btn.Enabled = false;
             fit_Btn.Enabled = false;
             Initialize_Oxy();
+            initialize_tab2();
         }
         private void saveListBtn1_Click(object sender, EventArgs e)
         {
@@ -3794,6 +3813,7 @@ namespace Isotope_fitting
             Initialize_data_struct();
             Initialize_UI();
             Initialize_Oxy();
+            initialize_tab2();
 
             //this.WindowState = curr_state;
             //this.Size = curr_size;
@@ -5162,25 +5182,25 @@ namespace Isotope_fitting
 
         private void hide_Btn_Click(object sender, EventArgs e)
         {
-            options_grpBox.Hide();
+            panel1.Hide();
             Size initial_ug_size = user_grpBox.Size;
-            user_grpBox.Size = new Size(initial_ug_size.Width - options_grpBox.Size.Width, initial_ug_size.Height);
+            user_grpBox.Size = new Size(initial_ug_size.Width - panel1.Size.Width, initial_ug_size.Height);
             Point initial_ug_loc = user_grpBox.Location;
-            user_grpBox.Location = new Point(initial_ug_loc.X + options_grpBox.Size.Width, initial_ug_loc.Y);
+            user_grpBox.Location = new Point(initial_ug_loc.X + panel1.Size.Width, initial_ug_loc.Y);
             Size initial_plot_size = plots_grpBox.Size;
-            plots_grpBox.Size = new Size(initial_plot_size.Width + options_grpBox.Size.Width, initial_plot_size.Height);
+            plots_grpBox.Size = new Size(initial_plot_size.Width + panel1.Size.Width, initial_plot_size.Height);
             show_Btn.Visible = true;            
         }
 
         private void show_Btn_Click(object sender, EventArgs e)
         {
-            options_grpBox.Show();
+            panel1.Show();
             Size initial_ug_size = user_grpBox.Size;
-            user_grpBox.Size = new Size(initial_ug_size.Width + options_grpBox.Size.Width, initial_ug_size.Height);
+            user_grpBox.Size = new Size(initial_ug_size.Width + panel1.Size.Width, initial_ug_size.Height);
             Point initial_ug_loc = user_grpBox.Location;
-            user_grpBox.Location = new Point(initial_ug_loc.X - options_grpBox.Size.Width, initial_ug_loc.Y);
+            user_grpBox.Location = new Point(initial_ug_loc.X - panel1.Size.Width, initial_ug_loc.Y);
             Size initial_plot_size = plots_grpBox.Size;
-            plots_grpBox.Size = new Size(initial_plot_size.Width - options_grpBox.Size.Width, initial_plot_size.Height);
+            plots_grpBox.Size = new Size(initial_plot_size.Width - panel1.Size.Width, initial_plot_size.Height);
             hide_Btn.Visible = true;
             show_Btn.Visible = false;
         }
@@ -5213,10 +5233,8 @@ namespace Isotope_fitting
             machine_listBox.Invoke(new Action(() => machine_listBox.Items.Add(name)));   //thread safe call
             machine_listBox.Invoke(new Action(() => machine_listBox.SelectedItem = name));   //thread safe call
         }
-        
+
         #endregion
-
-
 
         #region unused_code
         //private void auto_fit_single()
@@ -7087,6 +7105,268 @@ namespace Isotope_fitting
         //}
 
         #endregion
+        #endregion
+
+
+        #region TAB DIAGRAMS
+        
+        #region sequence
+        private void ax_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ax_chBx.Checked)
+            {
+                ax_chBx.ForeColor = Color.ForestGreen;
+            }
+            else
+            {
+                ax_chBx.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void by_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (by_chBx.Checked)
+            {
+                by_chBx.ForeColor = Color.Blue;
+            }
+            else
+            {
+                by_chBx.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh();
+        }
+
+        private void cz_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cz_chBx.Checked)
+            {
+                cz_chBx.ForeColor = Color.Crimson;
+            }
+            else
+            {
+                cz_chBx.ForeColor = Control.DefaultForeColor;
+            }
+        }
+        private void initialize_ions_todraw()
+        {
+            CI ion_comp = new CI();
+            sortIdx_xyz();
+            IonDraw.Sort(ion_comp);
+            check_duplicate_ions();
+        }
+        private void sequence_draw()
+        {                       
+            Pen p = new Pen(Color.Black);           
+            int point_x, point_y;
+            point_y = sequence_Pnl.Height / 2;
+            point_x = 3;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            string s = Peptide;
+            Point pp = new Point(point_x, point_y);
+            for (int idx = 0; idx < Peptide.Length; idx++)
+            {
+                g.DrawString(Peptide[idx].ToString(), DefaultFont, sb, pp);                
+                foreach (ion nn in IonDraw)
+                {
+                    if (ax_chBx.Checked && nn.Ion_type.StartsWith("a") && nn.Index== idx + 1 )
+                    {
+                        draw_line(pp,true,0,nn.Color);
+                    }
+                    else if (by_chBx.Checked && nn.Ion_type.StartsWith("b") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 3,nn.Color);
+                    }
+                    else if (cz_chBx.Checked && nn.Ion_type.StartsWith("c") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true,6, nn.Color);
+                    }
+                    else if (ax_chBx.Checked && nn.Ion_type.StartsWith("x")&&  (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp,false,0, nn.Color);
+                    }
+                    else if (by_chBx.Checked && nn.Ion_type.StartsWith("y") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 3, nn.Color);
+                    }
+                    else if (cz_chBx.Checked && nn.Ion_type.StartsWith("z") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 6, nn.Color);
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    {
+                        if (intA_chBx.Checked && !nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false,0, nn.Color,true);
+                        }
+                        else if (intB_chBx.Checked && nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false,0, nn.Color,true);
+                        }
+                    }                    
+                }
+                pp.X = pp.X + 12;
+                if (pp.X + 8 >= sequence_Pnl.Width) { pp.X = 3; pp.Y =pp.Y+30; }
+            }           
+
+            return;
+        }
+        
+        private void draw_line(Point pf, bool up, int step, Color color_draw, bool inter = false)
+        {
+            int x1, x2, x3, y1, y2, y3;
+            x1 = pf.X+9; x2 = x1;
+            Pen mypen = new Pen(color_draw);
+            if (inter)
+            {
+                y1 = pf.Y; y2 = y1 - 8; x3 = x2; y3 = y2;
+            }
+            else if (up)
+            {
+                y1 = pf.Y+4; y2 =y1 - 5 - step; y3 = y2; x3 = x2 - 8; 
+            }
+            else
+            {
+                x1 = pf.X + 12; x2 = x1; y1 = pf.Y+6; y2 =y1 + 7 + step; y3 = y2; x3 = x2 + 8;
+            }
+            Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
+            g.DrawLines(mypen,points);
+        }
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 1) { initialize_ions_todraw(); initialize_plot_tab2(); }
+        }
+
+        private void sequence_Pnl_Paint(object sender, PaintEventArgs e)
+        {
+            g = sequence_Pnl.CreateGraphics();
+            if (IonDraw.Count > 0) { sequence_draw(); }
+        }
+        private void initialize_plot_tab2()
+        {
+            if (ax_plot.Model.Series!=null) {ax_plot.Model.Series.Clear();by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear();/*index_plot.Model.Series.Clear();indexto_plot.Model.Series.Clear();*/}            
+            LinearBarSeries a_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
+            LinearBarSeries x_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 0.5 };
+            LinearBarSeries b_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
+            LinearBarSeries y_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
+            LinearBarSeries c_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
+            LinearBarSeries z_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };
+            ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar);by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
+            foreach (ion nn in IonDraw)
+            {
+                if (nn.Ion_type.StartsWith("a"))
+                {
+                    (ax_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
+                }
+                else if (nn.Ion_type.StartsWith("b"))
+                {
+                    (by_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
+                }
+                else if (nn.Ion_type.StartsWith("c"))
+                {
+                    (cz_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
+                }
+                else if (nn.Ion_type.StartsWith("x"))
+                {
+                    (ax_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx , -nn.Max_intensity));
+                }
+                else if (nn.Ion_type.StartsWith("y"))
+                {
+                    (by_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
+                }
+                else if (nn.Ion_type.StartsWith("z"))
+                {
+                    (cz_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
+                }
+            }
+            
+            ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
+        }
+        private void check_duplicate_ions()
+        {
+            int i = 0;
+            while (i<IonDraw.Count-1) 
+            {
+                if (IonDraw[i].Ion_type==IonDraw[i+1].Ion_type && IonDraw[i].Index == IonDraw[i + 1].Index && IonDraw[i].IndexTo == IonDraw[i + 1].IndexTo) IonDraw.RemoveAt(i + 1);               
+                else i++;
+            }
+        }
+        class CI : IComparer<ion>
+        {
+            public int Compare(ion x, ion y)
+            {
+
+                if (x.Ion_type==y.Ion_type)
+                {
+                    return Decimal.Compare(x.SortIdx, y.SortIdx);
+                }
+                else
+                {
+                    return String.Compare(x.Ion_type, y.Ion_type);                       
+                }
+            }
+        }
+        private void sortIdx_xyz()
+        {
+            foreach (ion nn in IonDraw)
+            {
+                if (nn.Ion_type.StartsWith("a")|| nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("c"))
+                {
+                    nn.SortIdx =nn.Index;
+                }
+                else if((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z")))
+                {
+                    nn.SortIdx = Peptide.Length -nn.Index + 1;
+                }
+            }
+        }
+        private void initialize_tab2()
+        {
+            // ax plot
+            if (ax_plot != null) ax_plot.Dispose();
+            ax_plot = new PlotView() { Name = "ax_plot",  BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            ax_Pnl.Controls.Add(ax_plot);
+            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14 ,Title="a - x  fragments",TitleColor=OxyColors.Teal}; 
+            ax_plot.Model = ax_model;
+            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
+            ax_model.Axes.Add(linearAxis1);
+            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            ax_model.Axes.Add(linearAxis2);
+            ax_model.Updated += (s, e) => { if (Math.Abs(linearAxis1.ActualMaximum) > Math.Abs(linearAxis1.ActualMinimum)) { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMaximum), Math.Abs(linearAxis1.ActualMaximum)); } else { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMinimum), Math.Abs(linearAxis1.ActualMinimum)); }ax_plot.InvalidatePlot(true); };
+                
+            // by plot
+            if (by_plot != null) by_plot.Dispose();
+            by_plot = new PlotView() { Name = "by_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            by_Pnl.Controls.Add(by_plot);
+            PlotModel by_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false,  TitleFontSize = 14 ,Title="b - y  fragments",TitleColor = OxyColors.Teal };
+            by_plot.Model = by_model;
+            var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
+            by_model.Axes.Add(linearAxis3);
+            var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            by_model.Axes.Add(linearAxis4);
+            by_model.Updated += (s, e) => { if (Math.Abs(linearAxis3.ActualMaximum) > Math.Abs(linearAxis3.ActualMinimum)) { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMaximum), Math.Abs(linearAxis3.ActualMaximum)); } else { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMinimum), Math.Abs(linearAxis3.ActualMinimum)); } by_plot.InvalidatePlot(true); };
+
+            // cz plot
+            if (cz_plot != null) cz_plot.Dispose();
+            cz_plot = new PlotView() { Name = "cz_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            cz_Pnl.Controls.Add(cz_plot);
+            PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false,  LegendFontSize = 13, TitleFontSize = 14,Title="c - z  fragments", TitleColor = OxyColors.Teal };
+            cz_plot.Model = cz_model;
+            var linearAxis5 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
+            cz_model.Axes.Add(linearAxis5);
+            var linearAxis6 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            cz_model.Axes.Add(linearAxis6);
+            cz_model.Updated += (s, e) => { if (Math.Abs(linearAxis5.ActualMaximum) > Math.Abs(linearAxis5.ActualMinimum)) { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMaximum), Math.Abs(linearAxis5.ActualMaximum)); } else { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMinimum), Math.Abs(linearAxis5.ActualMinimum)); } cz_plot.InvalidatePlot(true); };
+        }
+        #endregion
+
+
+        #endregion
+
+
 
     }
 }
