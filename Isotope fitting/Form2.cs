@@ -190,6 +190,9 @@ namespace Isotope_fitting
         PlotView cz_plot;
         PlotView index_plot;
         PlotView indexto_plot;
+        PlotView indexIntensity_plot;
+        PlotView indextoIntensity_plot;
+
         #endregion
 
         public Form2()
@@ -7122,7 +7125,6 @@ namespace Isotope_fitting
                 ax_chBx.ForeColor = Control.DefaultForeColor;
             }
         }
-
         private void by_chBx_CheckedChanged(object sender, EventArgs e)
         {
             if (by_chBx.Checked)
@@ -7134,12 +7136,6 @@ namespace Isotope_fitting
                 by_chBx.ForeColor = Control.DefaultForeColor;
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            sequence_Pnl.Refresh();
-        }
-
         private void cz_chBx_CheckedChanged(object sender, EventArgs e)
         {
             if (cz_chBx.Checked)
@@ -7151,13 +7147,11 @@ namespace Isotope_fitting
                 cz_chBx.ForeColor = Control.DefaultForeColor;
             }
         }
-        private void initialize_ions_todraw()
+        private void button1_Click(object sender, EventArgs e)
         {
-            CI ion_comp = new CI();
-            sortIdx_xyz();
-            IonDraw.Sort(ion_comp);
-            check_duplicate_ions();
+            sequence_Pnl.Refresh();
         }
+       
         private void sequence_draw()
         {                       
             Pen p = new Pen(Color.Black);           
@@ -7210,11 +7204,11 @@ namespace Isotope_fitting
                 }
                 pp.X = pp.X + 12;
                 if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y =pp.Y+30; }
+                if (idx%25==0) { pp.X = 3; pp.Y = pp.Y + 30; }
             }           
 
             return;
-        }
-        
+        }        
         private void draw_line(Point pf, bool up, int step, Color color_draw, bool inter = false)
         {
             int x1, x2, x3, y1, y2, y3;            
@@ -7244,77 +7238,132 @@ namespace Isotope_fitting
             g = sequence_Pnl.CreateGraphics();
             if (IonDraw.Count > 0) { sequence_draw(); }
         }
+
+        #endregion
+
+        #region fragments' diagrams
+        private void initialize_ions_todraw()
+        {
+            CI ion_comp = new CI();
+            sortIdx_xyz();
+            IonDraw.Sort(ion_comp);
+            check_duplicate_ions();
+        }
+
         private void initialize_plot_tab2()
         {
-            if (ax_plot.Model.Series!=null) {ax_plot.Model.Series.Clear();by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); }            
-            LinearBarSeries a_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
-            LinearBarSeries x_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 0.5 };
-            LinearBarSeries b_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
-            LinearBarSeries y_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
-            LinearBarSeries c_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
-            LinearBarSeries z_bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };
-            
-            ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar);by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
-           
+            if (ax_plot.Model.Series != null) { ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); }
+            if (index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
+            LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
+            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 0.5 };
+            LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
+            LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
+            LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
+            LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };
+
+            ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
+            if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
+            double max_a = 5000, max_b = 5000, max_c = 5000;
             foreach (ion nn in IonDraw)
             {
                 if (nn.Ion_type.StartsWith("a"))
                 {
                     (ax_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
+                    if (max_a < nn.Max_intensity) { max_a = nn.Max_intensity; }
                 }
                 else if (nn.Ion_type.StartsWith("b"))
                 {
                     (by_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
+                    if (max_b < nn.Max_intensity) { max_b = nn.Max_intensity; }
+
                 }
                 else if (nn.Ion_type.StartsWith("c"))
                 {
                     (cz_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
+                    if (max_c < nn.Max_intensity) { max_c = nn.Max_intensity; }
                 }
                 else if (nn.Ion_type.StartsWith("x"))
                 {
-                    (ax_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx , -nn.Max_intensity));
+                    (ax_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
+                    if (max_a < nn.Max_intensity) { max_a = nn.Max_intensity; }
                 }
                 else if (nn.Ion_type.StartsWith("y"))
                 {
                     (by_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
+                    if (max_b < nn.Max_intensity) { max_b = nn.Max_intensity; }
                 }
                 else if (nn.Ion_type.StartsWith("z"))
                 {
                     (cz_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
+                    if (max_c < nn.Max_intensity) { max_c = nn.Max_intensity; }
                 }
                 if (nn.Ion_type.StartsWith("inter"))
                 {
-                    IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo,Color=nn.Color});
+                    IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = nn.Color, Max_intensity = nn.Max_intensity });
                 }
-            }            
+            }
+            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Red, };
+            var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Blue };
+            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Red };
+            var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Blue };
+            var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Red };
+            var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Blue };
+
+            for (int cc = 0; cc < Peptide.Length; cc++)
+            {
+                if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                {
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a - 10)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b - 10)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c - 10));
+                }
+                else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                {
+                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a + 10)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b + 10)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c + 10));
+                }
+            }
+            ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
+
             ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
-            CI_indexTo com1 = new CI_indexTo();
-            IonDrawIndexTo.Sort(com1);
-            int k = 1;
-            foreach (ion nn in IonDrawIndexTo)
+            if (IonDrawIndexTo.Count() > 0)
             {
-                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                tmp.Points.Add(new DataPoint(nn.Index, k));
-                tmp.Points.Add(new DataPoint(nn.IndexTo, k));
-                indexto_plot.Model.Series.Add(tmp); k++;
+                CI_indexTo com1 = new CI_indexTo();
+                IonDrawIndexTo.Sort(com1);
+                int k = 1;
+                foreach (ion nn in IonDrawIndexTo)
+                {
+                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    tmp.Points.Add(new DataPoint(nn.Index, k));
+                    tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    indexto_plot.Model.Series.Add(tmp);
+                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    bar.Points.Add(new DataPoint(0, k));
+                    bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    indextoIntensity_plot.Model.Series.Add(bar);
+
+                    k++;
+                }
+                CI_index com2 = new CI_index();
+                IonDrawIndexTo.Sort(com2);
+                k = 1;
+                foreach (ion nn in IonDrawIndexTo)
+                {
+                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    tmp.Points.Add(new DataPoint(nn.Index, k));
+                    tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    index_plot.Model.Series.Add(tmp);
+                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    bar.Points.Add(new DataPoint(0, k));
+                    bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    indexIntensity_plot.Model.Series.Add(bar); k++;
+                }
             }
-            CI_index com2 = new CI_index();
-            IonDrawIndexTo.Sort(com2);
-            k = 1;
-            foreach (ion nn in IonDrawIndexTo)
-            {
-                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                tmp.Points.Add(new DataPoint(nn.Index, k));
-                tmp.Points.Add(new DataPoint(nn.IndexTo, k));
-                index_plot.Model.Series.Add(tmp); k++;
-            }
+            indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
         }
         private void check_duplicate_ions()
         {
             int i = 0;
-            while (i<IonDraw.Count-1) 
+            while (i < IonDraw.Count - 1)
             {
-                if (IonDraw[i].Ion_type==IonDraw[i+1].Ion_type && IonDraw[i].Index == IonDraw[i + 1].Index && IonDraw[i].IndexTo == IonDraw[i + 1].IndexTo) IonDraw.RemoveAt(i + 1);               
+                if (IonDraw[i].Ion_type == IonDraw[i + 1].Ion_type && IonDraw[i].Index == IonDraw[i + 1].Index && IonDraw[i].IndexTo == IonDraw[i + 1].IndexTo) IonDraw.RemoveAt(i + 1);
                 else i++;
             }
         }
@@ -7323,13 +7372,13 @@ namespace Isotope_fitting
             public int Compare(ion x, ion y)
             {
 
-                if (x.Ion_type==y.Ion_type)
+                if (x.Ion_type == y.Ion_type)
                 {
                     return Decimal.Compare(x.SortIdx, y.SortIdx);
                 }
                 else
                 {
-                    return String.Compare(x.Ion_type, y.Ion_type);                       
+                    return String.Compare(x.Ion_type, y.Ion_type);
                 }
             }
         }
@@ -7347,84 +7396,115 @@ namespace Isotope_fitting
                 return -Decimal.Compare(x.Index, y.Index);
             }
         }
+
         private void sortIdx_xyz()
         {
             foreach (ion nn in IonDraw)
             {
-               if((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z")))
-               {
-                    nn.SortIdx = Peptide.Length -nn.Index + 1;
-               }
-               else
-               {
+                if ((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z")))
+                {
+                    nn.SortIdx = Peptide.Length - nn.Index + 1;
+                }
+                else
+                {
                     nn.SortIdx = nn.Index;
-               }
+                }
             }
         }
         private void initialize_tab2()
         {
             // ax plot
             if (ax_plot != null) ax_plot.Dispose();
-            ax_plot = new PlotView() { Name = "ax_plot",  BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            ax_plot = new PlotView() { Name = "ax_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             ax_Pnl.Controls.Add(ax_plot);
-            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14 ,Title="a - x  fragments",TitleColor=OxyColors.Teal}; 
+            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "a - x  fragments", TitleColor = OxyColors.Teal };
             ax_plot.Model = ax_model;
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
             ax_model.Axes.Add(linearAxis1);
             var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
             ax_model.Axes.Add(linearAxis2);
-            ax_model.Updated += (s, e) => { if (Math.Abs(linearAxis1.ActualMaximum) > Math.Abs(linearAxis1.ActualMinimum)) { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMaximum), Math.Abs(linearAxis1.ActualMaximum)); } else { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMinimum), Math.Abs(linearAxis1.ActualMinimum)); }ax_plot.InvalidatePlot(true); };
-                
+            //ax_model.Updated += (s, e) => { if (Math.Abs(linearAxis1.ActualMaximum) > Math.Abs(linearAxis1.ActualMinimum)) { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMaximum), Math.Abs(linearAxis1.ActualMaximum)); } else { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMinimum), Math.Abs(linearAxis1.ActualMinimum)); } ax_plot.InvalidatePlot(true); };
+            ax_plot.MouseDoubleClick += (s, e) => { ax_model.ResetAllAxes(); ax_plot.InvalidatePlot(true); };
+
             // by plot
             if (by_plot != null) by_plot.Dispose();
             by_plot = new PlotView() { Name = "by_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             by_Pnl.Controls.Add(by_plot);
-            PlotModel by_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false,  TitleFontSize = 14 ,Title="b - y  fragments",TitleColor = OxyColors.Teal };
+            PlotModel by_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, TitleFontSize = 14, Title = "b - y  fragments", TitleColor = OxyColors.Teal };
             by_plot.Model = by_model;
             var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
             by_model.Axes.Add(linearAxis3);
             var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
             by_model.Axes.Add(linearAxis4);
-            by_model.Updated += (s, e) => { if (Math.Abs(linearAxis3.ActualMaximum) > Math.Abs(linearAxis3.ActualMinimum)) { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMaximum), Math.Abs(linearAxis3.ActualMaximum)); } else { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMinimum), Math.Abs(linearAxis3.ActualMinimum)); } by_plot.InvalidatePlot(true); };
+            //by_model.Updated += (s, e) => { if (Math.Abs(linearAxis3.ActualMaximum) > Math.Abs(linearAxis3.ActualMinimum)) { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMaximum), Math.Abs(linearAxis3.ActualMaximum)); } else { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMinimum), Math.Abs(linearAxis3.ActualMinimum)); } by_plot.InvalidatePlot(true); };
+            by_plot.MouseDoubleClick += (s, e) => { by_model.ResetAllAxes(); by_plot.InvalidatePlot(true); };
 
             // cz plot
             if (cz_plot != null) cz_plot.Dispose();
             cz_plot = new PlotView() { Name = "cz_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             cz_Pnl.Controls.Add(cz_plot);
-            PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false,  LegendFontSize = 13, TitleFontSize = 14,Title="c - z  fragments", TitleColor = OxyColors.Teal };
+            PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "c - z  fragments", TitleColor = OxyColors.Teal };
             cz_plot.Model = cz_model;
             var linearAxis5 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
             cz_model.Axes.Add(linearAxis5);
             var linearAxis6 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
             cz_model.Axes.Add(linearAxis6);
-            cz_model.Updated += (s, e) => { if (Math.Abs(linearAxis5.ActualMaximum) > Math.Abs(linearAxis5.ActualMinimum)) { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMaximum), Math.Abs(linearAxis5.ActualMaximum)); } else { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMinimum), Math.Abs(linearAxis5.ActualMinimum)); } cz_plot.InvalidatePlot(true); };
+            //cz_model.Updated += (s, e) => { if (Math.Abs(linearAxis5.ActualMaximum) > Math.Abs(linearAxis5.ActualMinimum)) { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMaximum), Math.Abs(linearAxis5.ActualMaximum)); } else { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMinimum), Math.Abs(linearAxis5.ActualMinimum)); } cz_plot.InvalidatePlot(true); };
+            cz_plot.MouseDoubleClick += (s, e) => { cz_model.ResetAllAxes(); cz_plot.InvalidatePlot(true); };
 
             //internal fragments plots
             // index plot
-            if (index_plot != null) cz_plot.Dispose();
+            if (index_plot != null) index_plot.Dispose();
             index_plot = new PlotView() { Name = "index_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxPnl1.Controls.Add(index_plot);
-            PlotModel index_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments", TitleColor = OxyColors.Teal };
+            PlotModel index_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' index plot sorted by 1st index", TitleColor = OxyColors.Teal };
             index_plot.Model = index_model;
             var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = " #fragments" };
             index_model.Axes.Add(linearAxis7);
             var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
             index_model.Axes.Add(linearAxis8);
+            index_plot.MouseDoubleClick += (s, e) => { index_model.ResetAllAxes(); index_plot.InvalidatePlot(true); };
+
             // indexTo plot
-            if (indexto_plot != null) cz_plot.Dispose();
+            if (indexto_plot != null) indexto_plot.Dispose();
             indexto_plot = new PlotView() { Name = "indexto_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxPnl2.Controls.Add(indexto_plot);
-            PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments", TitleColor = OxyColors.Teal };
+            PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' index plot sorted by 2nd index", TitleColor = OxyColors.Teal };
             indexto_plot.Model = indexto_model;
             var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "#fragments" };
             indexto_model.Axes.Add(linearAxis9);
             var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexto_model.Axes.Add(linearAxis10);
+            indexto_plot.MouseDoubleClick += (s, e) => { indexto_model.ResetAllAxes(); indexto_plot.InvalidatePlot(true); };
 
+            // index intensity plot
+            if (indexIntensity_plot != null) indexIntensity_plot.Dispose();
+            indexIntensity_plot = new PlotView() { Name = "indexIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            idxInt_Pnl1.Controls.Add(indexIntensity_plot);
+            PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
+            indexIntensity_plot.Model = indexIntensity_model;
+            var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left };
+            var linearAxis12 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            indexIntensity_model.Axes.Add(linearAxis12);
+            indexIntensity_model.Axes.Add(linearAxis11);
+            indexIntensity_plot.MouseDoubleClick += (s, e) => { indexIntensity_model.ResetAllAxes(); indexIntensity_plot.InvalidatePlot(true); };
 
-
+            // indexTo intensity plot
+            if (indextoIntensity_plot != null) indextoIntensity_plot.Dispose();
+            indextoIntensity_plot = new PlotView() { Name = "indextoIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            idxInt_Pnl2.Controls.Add(indextoIntensity_plot);
+            PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
+            indextoIntensity_plot.Model = indextoIntensity_model;
+            var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid };
+            var linearAxis14 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            indextoIntensity_model.Axes.Add(linearAxis14);
+            indextoIntensity_model.Axes.Add(linearAxis13);
+            indextoIntensity_plot.MouseDoubleClick += (s, e) => { indextoIntensity_model.ResetAllAxes(); indextoIntensity_plot.InvalidatePlot(true); };
 
         }
+
+
+
 
         #endregion
 
