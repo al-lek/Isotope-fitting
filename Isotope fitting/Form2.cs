@@ -7156,14 +7156,14 @@ namespace Isotope_fitting
         {                       
             Pen p = new Pen(Color.Black);           
             int point_x, point_y;
-            point_y = 10;
+            point_y =20;
             point_x = 3;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             Point pp = new Point(point_x, point_y);
             for (int idx = 0; idx < Peptide.Length; idx++)
             {
-                g.DrawString(Peptide[idx].ToString(), DefaultFont, sb, pp);                
+                g.DrawString(Peptide[idx].ToString(), sequence_Pnl.Font, sb, pp);                
                 foreach (ion nn in IonDraw)
                 {
                     if (ax_chBx.Checked && nn.Ion_type.StartsWith("a") && nn.Index== idx + 1 )
@@ -7202,9 +7202,9 @@ namespace Isotope_fitting
                         }
                     }                    
                 }
-                pp.X = pp.X + 12;
+                pp.X = pp.X + 20;
                 if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y =pp.Y+30; }
-                if (idx%25==0) { pp.X = 3; pp.Y = pp.Y + 30; }
+                if ((idx+1)%25==0) { pp.X = 3; pp.Y = pp.Y + 30; }
             }           
 
             return;
@@ -7215,15 +7215,15 @@ namespace Isotope_fitting
             Pen mypen = new Pen(color_draw);
             if (inter)
             {
-                x1 = pf.X +11; x2 = x1; y1 = pf.Y-1; y2 = y1 + 12; x3 = x2; y3 = y2;
+                x1 = pf.X +18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2;
             }
             else if (up)
             {
-                x1 = pf.X + 9; x2 = x1; y1 = pf.Y+4; y2 =y1 - 5 - step; y3 = y2; x3 = x2 - 8; 
+                x1 = pf.X +18; x2 = x1; y1 = pf.Y - step-2; y2 =y1 - 5 ; y3 = y2; x3 = x2 - 10; 
             }
             else
             {
-                x1 = pf.X + 12; x2 = x1; y1 = pf.Y+6; y2 =y1 + 7 + step; y3 = y2; x3 = x2 + 8;
+                x1 = pf.X + 18; x2 = x1; y1 = pf.Y+14 + step; y2 =y1 +5; y3 = y2; x3 = x2 + 10;
             }
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen,points);
@@ -7254,13 +7254,13 @@ namespace Isotope_fitting
         {
             if (ax_plot.Model.Series != null) { ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); }
             if (index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
-            LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
-            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 0.5 };
-            LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
-            LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
-            LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
-            LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 1, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };
-
+            LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
+            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 0.5 };
+            LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
+            LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
+            LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
+            LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };
+            
             ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
             if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
             double max_a = 5000, max_b = 5000, max_c = 5000;
@@ -7302,22 +7302,22 @@ namespace Isotope_fitting
                     IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = nn.Color, Max_intensity = nn.Max_intensity });
                 }
             }
-            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Red, };
-            var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Blue };
-            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Red };
-            var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Blue };
-            var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Red };
-            var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 4, MarkerFill = OxyColors.Blue };
+            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, };
+            var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };
+            var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };
+            var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
 
             for (int cc = 0; cc < Peptide.Length; cc++)
             {
                 if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
                 {
-                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a - 10)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b - 10)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c - 10));
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a - 100)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b - 100)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c - 100));
                 }
                 else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
                 {
-                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a + 10)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b + 10)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c + 10));
+                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a + 100)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b + 100)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c + 100));
                 }
             }
             ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
@@ -7417,7 +7417,7 @@ namespace Isotope_fitting
             if (ax_plot != null) ax_plot.Dispose();
             ax_plot = new PlotView() { Name = "ax_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             ax_Pnl.Controls.Add(ax_plot);
-            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "a - x  fragments", TitleColor = OxyColors.Teal };
+            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont ="Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
             ax_plot.Model = ax_model;
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
             ax_model.Axes.Add(linearAxis1);
@@ -7430,7 +7430,7 @@ namespace Isotope_fitting
             if (by_plot != null) by_plot.Dispose();
             by_plot = new PlotView() { Name = "by_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             by_Pnl.Controls.Add(by_plot);
-            PlotModel by_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, TitleFontSize = 14, Title = "b - y  fragments", TitleColor = OxyColors.Teal };
+            PlotModel by_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             by_plot.Model = by_model;
             var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
             by_model.Axes.Add(linearAxis3);
@@ -7443,7 +7443,7 @@ namespace Isotope_fitting
             if (cz_plot != null) cz_plot.Dispose();
             cz_plot = new PlotView() { Name = "cz_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             cz_Pnl.Controls.Add(cz_plot);
-            PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "c - z  fragments", TitleColor = OxyColors.Teal };
+            PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "c - z  fragments", TitleColor = OxyColors.Red };
             cz_plot.Model = cz_model;
             var linearAxis5 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity" };
             cz_model.Axes.Add(linearAxis5);
@@ -7457,11 +7457,11 @@ namespace Isotope_fitting
             if (index_plot != null) index_plot.Dispose();
             index_plot = new PlotView() { Name = "index_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxPnl1.Controls.Add(index_plot);
-            PlotModel index_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' index plot sorted by 1st index", TitleColor = OxyColors.Teal };
+            PlotModel index_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA initial", TitleColor = OxyColors.Teal };
             index_plot.Model = index_model;
             var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = " #fragments" };
             index_model.Axes.Add(linearAxis7);
-            var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             index_model.Axes.Add(linearAxis8);
             index_plot.MouseDoubleClick += (s, e) => { index_model.ResetAllAxes(); index_plot.InvalidatePlot(true); };
 
@@ -7469,11 +7469,11 @@ namespace Isotope_fitting
             if (indexto_plot != null) indexto_plot.Dispose();
             indexto_plot = new PlotView() { Name = "indexto_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxPnl2.Controls.Add(indexto_plot);
-            PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' index plot sorted by 2nd index", TitleColor = OxyColors.Teal };
+            PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA terminal", TitleColor = OxyColors.Teal };
             indexto_plot.Model = indexto_model;
             var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "#fragments" };
             indexto_model.Axes.Add(linearAxis9);
-            var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "index", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexto_model.Axes.Add(linearAxis10);
             indexto_plot.MouseDoubleClick += (s, e) => { indexto_model.ResetAllAxes(); indexto_plot.InvalidatePlot(true); };
 
@@ -7481,7 +7481,7 @@ namespace Isotope_fitting
             if (indexIntensity_plot != null) indexIntensity_plot.Dispose();
             indexIntensity_plot = new PlotView() { Name = "indexIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxInt_Pnl1.Controls.Add(indexIntensity_plot);
-            PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
+            PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indexIntensity_plot.Model = indexIntensity_model;
             var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left };
             var linearAxis12 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
@@ -7493,7 +7493,7 @@ namespace Isotope_fitting
             if (indextoIntensity_plot != null) indextoIntensity_plot.Dispose();
             indextoIntensity_plot = new PlotView() { Name = "indextoIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxInt_Pnl2.Controls.Add(indextoIntensity_plot);
-            PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
+            PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indextoIntensity_plot.Model = indextoIntensity_model;
             var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid };
             var linearAxis14 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };

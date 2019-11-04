@@ -1497,6 +1497,7 @@ namespace Isotope_fitting
             this.ax_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ax_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ax_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ax_Pnl.Location = new System.Drawing.Point(26, 13);
             this.ax_Pnl.Name = "ax_Pnl";
             this.ax_Pnl.Size = new System.Drawing.Size(621, 248);
@@ -1507,6 +1508,7 @@ namespace Isotope_fitting
             this.by_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.by_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.by_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.by_Pnl.Location = new System.Drawing.Point(26, 288);
             this.by_Pnl.Name = "by_Pnl";
             this.by_Pnl.Size = new System.Drawing.Size(621, 248);
@@ -1517,6 +1519,7 @@ namespace Isotope_fitting
             this.cz_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cz_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cz_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cz_Pnl.Location = new System.Drawing.Point(26, 562);
             this.cz_Pnl.Name = "cz_Pnl";
             this.cz_Pnl.Size = new System.Drawing.Size(621, 248);
@@ -1536,6 +1539,7 @@ namespace Isotope_fitting
             // 
             // panel3
             // 
+            this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel3.Controls.Add(this.seq_Lbl);
             this.panel3.Controls.Add(this.ax_chBx);
             this.panel3.Controls.Add(this.idxInt_Pnl2);
@@ -1579,9 +1583,10 @@ namespace Isotope_fitting
             // 
             // idxInt_Pnl2
             // 
-            this.idxInt_Pnl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.idxInt_Pnl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.idxInt_Pnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxInt_Pnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxInt_Pnl2.Location = new System.Drawing.Point(684, 530);
             this.idxInt_Pnl2.Name = "idxInt_Pnl2";
             this.idxInt_Pnl2.Size = new System.Drawing.Size(128, 251);
@@ -1600,9 +1605,10 @@ namespace Isotope_fitting
             // 
             // idxInt_Pnl1
             // 
-            this.idxInt_Pnl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.idxInt_Pnl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.idxInt_Pnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxInt_Pnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxInt_Pnl1.Location = new System.Drawing.Point(684, 234);
             this.idxInt_Pnl1.Name = "idxInt_Pnl1";
             this.idxInt_Pnl1.Size = new System.Drawing.Size(128, 251);
@@ -1621,7 +1627,9 @@ namespace Isotope_fitting
             // 
             // idxPnl2
             // 
+            this.idxPnl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.idxPnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPnl2.Location = new System.Drawing.Point(10, 530);
             this.idxPnl2.Name = "idxPnl2";
             this.idxPnl2.Size = new System.Drawing.Size(668, 251);
@@ -1639,7 +1647,9 @@ namespace Isotope_fitting
             // 
             // idxPnl1
             // 
+            this.idxPnl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.idxPnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPnl1.Location = new System.Drawing.Point(10, 234);
             this.idxPnl1.Name = "idxPnl1";
             this.idxPnl1.Size = new System.Drawing.Size(668, 251);
@@ -1657,17 +1667,23 @@ namespace Isotope_fitting
             // 
             // idxPlotLbl
             // 
+            this.idxPlotLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.idxPlotLbl.AutoSize = true;
             this.idxPlotLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPlotLbl.ForeColor = System.Drawing.Color.DarkCyan;
             this.idxPlotLbl.Location = new System.Drawing.Point(6, 201);
             this.idxPlotLbl.Name = "idxPlotLbl";
-            this.idxPlotLbl.Size = new System.Drawing.Size(86, 20);
+            this.idxPlotLbl.Size = new System.Drawing.Size(172, 20);
             this.idxPlotLbl.TabIndex = 15;
-            this.idxPlotLbl.Text = "Index plots";
+            this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
             // sequence_Pnl
             // 
+            this.sequence_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sequence_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sequence_Pnl.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequence_Pnl.Location = new System.Drawing.Point(109, 37);
             this.sequence_Pnl.Name = "sequence_Pnl";
             this.sequence_Pnl.Size = new System.Drawing.Size(703, 130);
