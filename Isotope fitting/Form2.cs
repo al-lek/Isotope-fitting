@@ -1870,8 +1870,15 @@ namespace Isotope_fitting
             }
             double res = exp_sum / frag_sum ;
             double res_frag= exp_frag_sum / frag_sum ;
-            if (res >= 1) res = (frag_sum / exp_sum) ;
-            if (res_frag >= 1) res_frag = (frag_sum / exp_frag_sum) ;
+            if (res >= 1)
+            {
+                res = (frag_sum / exp_sum);
+            }
+            if (res_frag >= 1)
+            {
+                res_frag = (frag_sum / exp_frag_sum);
+            }
+
             res =( 1 - res)*100; res_frag =(1-res_frag)*100;
             return (res_frag,res);
         }
