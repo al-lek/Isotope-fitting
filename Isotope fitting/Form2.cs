@@ -7172,11 +7172,11 @@ namespace Isotope_fitting
                     }
                     else if (by_chBx.Checked && nn.Ion_type.StartsWith("b") && nn.Index == idx + 1)
                     {
-                        draw_line(pp, true, 3,nn.Color);
+                        draw_line(pp, true, 4,nn.Color);
                     }
                     else if (cz_chBx.Checked && nn.Ion_type.StartsWith("c") && nn.Index == idx + 1)
                     {
-                        draw_line(pp, true,6, nn.Color);
+                        draw_line(pp, true,8, nn.Color);
                     }
                     else if (ax_chBx.Checked && nn.Ion_type.StartsWith("x")&&  (Peptide.Length - nn.Index == idx + 1))
                     {
@@ -7184,11 +7184,11 @@ namespace Isotope_fitting
                     }
                     else if (by_chBx.Checked && nn.Ion_type.StartsWith("y") && (Peptide.Length - nn.Index == idx + 1))
                     {
-                        draw_line(pp, false, 3, nn.Color);
+                        draw_line(pp, false, 4, nn.Color);
                     }
                     else if (cz_chBx.Checked && nn.Ion_type.StartsWith("z") && (Peptide.Length - nn.Index == idx + 1))
                     {
-                        draw_line(pp, false, 6, nn.Color);
+                        draw_line(pp, false, 8, nn.Color);
                     }
                     else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                     {
@@ -7212,19 +7212,10 @@ namespace Isotope_fitting
         private void draw_line(Point pf, bool up, int step, Color color_draw, bool inter = false)
         {
             int x1, x2, x3, y1, y2, y3;            
-            Pen mypen = new Pen(color_draw);
-            if (inter)
-            {
-                x1 = pf.X +18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2;
-            }
-            else if (up)
-            {
-                x1 = pf.X +18; x2 = x1; y1 = pf.Y - step-2; y2 =y1 - 5 ; y3 = y2; x3 = x2 - 10; 
-            }
-            else
-            {
-                x1 = pf.X + 18; x2 = x1; y1 = pf.Y+14 + step; y2 =y1 +5; y3 = y2; x3 = x2 + 10;
-            }
+            Pen mypen = new Pen(color_draw,2F);
+            if (inter){ x1 = pf.X +18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2;}
+            else if (up) { x1 = pf.X +18; x2 = x1; y1 = pf.Y - step-2; y2 =y1 - 5 ; y3 = y2; x3 = x2 - 10;  }
+            else { x1 = pf.X + 18; x2 = x1; y1 = pf.Y+14 + step+2; y2 =y1 +5; y3 = y2; x3 = x2 + 10;}
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen,points);
         }
@@ -7232,7 +7223,6 @@ namespace Isotope_fitting
         {
             if (tabControl1.SelectedIndex == 1) { initialize_ions_todraw(); initialize_plot_tab2(); }
         }
-
         private void sequence_Pnl_Paint(object sender, PaintEventArgs e)
         {
             g = sequence_Pnl.CreateGraphics();
@@ -7299,61 +7289,54 @@ namespace Isotope_fitting
                 }
                 if (nn.Ion_type.StartsWith("inter"))
                 {
-                    IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = nn.Color, Max_intensity = nn.Max_intensity });
+                    if (nn.Ion_type.Contains("b")) { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Blue, Max_intensity = nn.Max_intensity }); }
+                    else { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Red, Max_intensity = nn.Max_intensity }); }
                 }
             }
-            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, };
-            var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };
-            var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };
-            var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+
+            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, };var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red }; var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
 
             for (int cc = 0; cc < Peptide.Length; cc++)
             {
                 if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
                 {
-                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a - 100)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b - 100)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c - 100));
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a - 3000)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b - 3000)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c - 3000));
                 }
                 else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
                 {
-                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a + 100)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b + 100)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c + 100));
+                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a + 3000)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b + 3000)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c + 3000));
                 }
             }
             ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
-
             ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
+
             if (IonDrawIndexTo.Count() > 0)
             {
-                CI_indexTo com1 = new CI_indexTo();
-                IonDrawIndexTo.Sort(com1);
+                CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
                 int k = 1;
                 foreach (ion nn in IonDrawIndexTo)
                 {
                     LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    tmp.Points.Add(new DataPoint(nn.Index, k));
-                    tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    tmp.Points.Add(new DataPoint(nn.Index, k));tmp.Points.Add(new DataPoint(nn.IndexTo, k));
                     indexto_plot.Model.Series.Add(tmp);
                     LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    bar.Points.Add(new DataPoint(0, k));
-                    bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    bar.Points.Add(new DataPoint(0, k));bar.Points.Add(new DataPoint(nn.Max_intensity, k));
                     indextoIntensity_plot.Model.Series.Add(bar);
-
                     k++;
                 }
-                CI_index com2 = new CI_index();
-                IonDrawIndexTo.Sort(com2);
+                CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
                 k = 1;
                 foreach (ion nn in IonDrawIndexTo)
                 {
                     LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    tmp.Points.Add(new DataPoint(nn.Index, k));
-                    tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    tmp.Points.Add(new DataPoint(nn.Index, k)); tmp.Points.Add(new DataPoint(nn.IndexTo, k));
                     index_plot.Model.Series.Add(tmp);
                     LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    bar.Points.Add(new DataPoint(0, k));
-                    bar.Points.Add(new DataPoint(nn.Max_intensity, k));
-                    indexIntensity_plot.Model.Series.Add(bar); k++;
+                    bar.Points.Add(new DataPoint(0, k)); bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    indexIntensity_plot.Model.Series.Add(bar);
+                    k++;
                 }
             }
             indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
@@ -7401,14 +7384,8 @@ namespace Isotope_fitting
         {
             foreach (ion nn in IonDraw)
             {
-                if ((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z")))
-                {
-                    nn.SortIdx = Peptide.Length - nn.Index + 1;
-                }
-                else
-                {
-                    nn.SortIdx = nn.Index;
-                }
+                if ((nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("z"))) nn.SortIdx = Peptide.Length - nn.Index ;
+                else nn.SortIdx = nn.Index;
             }
         }
         private void initialize_tab2()
@@ -7500,7 +7477,6 @@ namespace Isotope_fitting
             indextoIntensity_model.Axes.Add(linearAxis14);
             indextoIntensity_model.Axes.Add(linearAxis13);
             indextoIntensity_plot.MouseDoubleClick += (s, e) => { indextoIntensity_model.ResetAllAxes(); indextoIntensity_plot.InvalidatePlot(true); };
-
         }
 
 
