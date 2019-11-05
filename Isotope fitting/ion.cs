@@ -14,6 +14,7 @@ namespace Isotope_fitting
         private int indexTo;
         private string ion_type;
         private int sort_idx;
+        private int charge;
 
         private double max_intensity;
 
@@ -46,6 +47,11 @@ namespace Isotope_fitting
         {
             get { return this.sort_idx; }
             set { this.sort_idx = value; }
+        }
+        public int Charge
+        {
+            get { return this.charge; }
+            set { this.charge = value; }
         }
     }
 }

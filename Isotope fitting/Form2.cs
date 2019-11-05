@@ -1956,7 +1956,7 @@ namespace Isotope_fitting
                         fit_tree.Nodes[i].Nodes.Add(tr);
                     }                   
                 }
-               find_min_SSE(fit_tree.Nodes[i], tree_index, tree_sse);
+               //find_min_SSE(fit_tree.Nodes[i], tree_index, tree_sse);
             }          
             fit_tree.EndUpdate();
             remove_child_nodes();            
@@ -3269,7 +3269,7 @@ namespace Isotope_fitting
                 foreach (int indexS in fragToSave)
                 {
                     file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);
-                    IonDraw.Add(new ion() {Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
+                    IonDraw.Add(new ion() {Charge=Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
                 }
                 file.Flush(); file.Close(); file.Dispose();
             }
@@ -3364,7 +3364,7 @@ namespace Isotope_fitting
                                     Fixed=true
                                 });
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                IonDraw.Add(new ion() { Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
+                                IonDraw.Add(new ion() {Charge= Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
                                 
                             }
                         }                       
@@ -7254,8 +7254,10 @@ namespace Isotope_fitting
             ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
             if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
             double max_a = 5000, max_b = 5000, max_c = 5000;
-            foreach (ion nn in IonDraw)
+                     
+            for (int i=1;i<IonDraw.Count() ; i++)
             {
+                ion nn = IonDraw[i];
                 if (nn.Ion_type.StartsWith("a"))
                 {
                     (ax_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
@@ -7265,7 +7267,6 @@ namespace Isotope_fitting
                 {
                     (by_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.Index, nn.Max_intensity));
                     if (max_b < nn.Max_intensity) { max_b = nn.Max_intensity; }
-
                 }
                 else if (nn.Ion_type.StartsWith("c"))
                 {
@@ -7287,17 +7288,18 @@ namespace Isotope_fitting
                     (cz_plot.Model.Series.First() as LinearBarSeries).Points.Add(new DataPoint(nn.SortIdx, -nn.Max_intensity));
                     if (max_c < nn.Max_intensity) { max_c = nn.Max_intensity; }
                 }
-                if (nn.Ion_type.StartsWith("inter"))
+                else if (nn.Ion_type.StartsWith("inter"))
                 {
                     if (nn.Ion_type.Contains("b")) { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Blue, Max_intensity = nn.Max_intensity }); }
                     else { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Red, Max_intensity = nn.Max_intensity }); }
                 }
+
             }
 
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, };var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red }; var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-
+            double max_i = 0.0;
             for (int cc = 0; cc < Peptide.Length; cc++)
             {
                 if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
@@ -7314,6 +7316,7 @@ namespace Isotope_fitting
 
             if (IonDrawIndexTo.Count() > 0)
             {
+               
                 CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
                 int k = 1;
                 foreach (ion nn in IonDrawIndexTo)
@@ -7325,6 +7328,7 @@ namespace Isotope_fitting
                     bar.Points.Add(new DataPoint(0, k));bar.Points.Add(new DataPoint(nn.Max_intensity, k));
                     indextoIntensity_plot.Model.Series.Add(bar);
                     k++;
+                    if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
                 }
                 CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
                 k = 1;
@@ -7338,6 +7342,11 @@ namespace Isotope_fitting
                     indexIntensity_plot.Model.Series.Add(bar);
                     k++;
                 }
+                indexIntensity_plot.Model.Axes[1].Maximum =indextoIntensity_plot.Model.Axes[1].Maximum =max_i*1.2;
+                indexIntensity_plot.Model.Axes[0].Minimum =indextoIntensity_plot.Model.Axes[0].Minimum =0;
+                indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count+1;
+                indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
+                indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + 1;
             }
             indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
         }
@@ -7357,7 +7366,14 @@ namespace Isotope_fitting
 
                 if (x.Ion_type == y.Ion_type)
                 {
-                    return Decimal.Compare(x.SortIdx, y.SortIdx);
+                    if (x.SortIdx== y.SortIdx)
+                    {
+                        return Decimal.Compare(x.Charge, y.Charge);
+                    }
+                    else
+                    {
+                        return Decimal.Compare(x.SortIdx, y.SortIdx);
+                    }
                 }
                 else
                 {
@@ -7379,7 +7395,6 @@ namespace Isotope_fitting
                 return -Decimal.Compare(x.Index, y.Index);
             }
         }
-
         private void sortIdx_xyz()
         {
             foreach (ion nn in IonDraw)
@@ -7461,9 +7476,9 @@ namespace Isotope_fitting
             PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indexIntensity_plot.Model = indexIntensity_model;
             var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left };
+            indexIntensity_model.Axes.Add(linearAxis11);
             var linearAxis12 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexIntensity_model.Axes.Add(linearAxis12);
-            indexIntensity_model.Axes.Add(linearAxis11);
             indexIntensity_plot.MouseDoubleClick += (s, e) => { indexIntensity_model.ResetAllAxes(); indexIntensity_plot.InvalidatePlot(true); };
 
             // indexTo intensity plot
@@ -7473,17 +7488,13 @@ namespace Isotope_fitting
             PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indextoIntensity_plot.Model = indextoIntensity_model;
             var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid };
+            indextoIntensity_model.Axes.Add(linearAxis13);
             var linearAxis14 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indextoIntensity_model.Axes.Add(linearAxis14);
-            indextoIntensity_model.Axes.Add(linearAxis13);
             indextoIntensity_plot.MouseDoubleClick += (s, e) => { indextoIntensity_model.ResetAllAxes(); indextoIntensity_plot.InvalidatePlot(true); };
         }
 
-
-
-
         #endregion
-
 
         #endregion
 
