@@ -1242,10 +1242,10 @@ namespace Isotope_fitting
                         float[] y = data.R;
                         List<float> xss = new List<float>();
                         float step = new float();
-                        for (int i = 0; i < n; i++)
-                        {
-                            xs.Add( x[0] + i * stepSize);
-                        }
+                        //for (int i = 0; i < n; i++)
+                        //{
+                        //    xs.Add( x[0] + i * stepSize);
+                        //}
                         xss.Add( x.Last());
                         double[] x_ = Array.ConvertAll(data.m_z, k => (double)k);
                         double[] y_ = Array.ConvertAll(data.R, k => (double)k);

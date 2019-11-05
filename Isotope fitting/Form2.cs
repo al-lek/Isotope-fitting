@@ -876,14 +876,21 @@ namespace Isotope_fitting
             int progress = 0;
             progress_display_start(selected_fragments.Count, "Calculating fragment properties...");
 
-            Parallel.For(0, selected_fragments.Count, (i, state) =>
+            try
             {
-                Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
+                Parallel.For(0, selected_fragments.Count, (i, state) =>
+                {
+                    Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
 
-                // safelly keep track of progress
-                Interlocked.Increment(ref progress);
-                if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
-            });
+                    // safelly keep track of progress
+                    Interlocked.Increment(ref progress);
+                    if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
+                });
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+            };
 
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
