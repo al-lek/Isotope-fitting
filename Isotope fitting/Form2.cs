@@ -234,7 +234,7 @@ namespace Isotope_fitting
             NumericUpDown minIntensity_numUD = new NumericUpDown { Name = "minIntensity_numUD", Minimum = 10, Value = (decimal)min_intes, Location = new Point(140, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             minIntensity_numUD.ValueChanged += (s, e) => { min_intes =  (double)minIntensity_numUD.Value; save_preferences(); };
 
-            Label fragGrps_lbl = new Label { Name = "fragGrps_lbl", Text = "size of fragments groups: ", Location = new Point(10, 68), AutoSize = true };
+            Label fragGrps_lbl = new Label { Name = "fragGrps_lbl", Text = "size of fragment group: ", Location = new Point(10, 68), AutoSize = true };
             NumericUpDown fragGrps_numUD = new NumericUpDown { Name = "fragGrps_numUD", Minimum = 10, Value = frag_mzGroups, Location = new Point(140, 65), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             fragGrps_numUD.ValueChanged += (s, e) => { frag_mzGroups = (int)fragGrps_numUD.Value; save_preferences(); };
 
@@ -876,7 +876,7 @@ namespace Isotope_fitting
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
             sw1.Reset(); sw1.Start();
             int progress = 0;
-            progress_display_start(selected_fragments.Count, "Calculating fragment properties...");
+            progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");
 
             try
             {
@@ -1527,7 +1527,7 @@ namespace Isotope_fitting
         private void main_fit(bool all_fragments)
         {
             bool last_bunch = false;
-
+            int fit_bunch_temp = fit_bunch;
             int total_fragments = 0;
             if (all_fragments) total_fragments = Fragments2.Count;
             else total_fragments = selectedFragments.Count;
@@ -1540,22 +1540,22 @@ namespace Isotope_fitting
             all_fitted_sets = new List<List<int[]>>();
 
             // auto all fragments
-            for (int i = 0; i < total_fragments; i += fit_bunch - fit_cover)
+            for (int i = 0; i < total_fragments; i += fit_bunch_temp - fit_cover)
             {
                 // this is only for the last run, where the last remaining frags can be less than the bunch
-                if (i + fit_bunch > total_fragments)
+                if (i + fit_bunch_temp > total_fragments)
                 {
-                    fit_bunch = total_fragments - i;
+                    fit_bunch_temp = total_fragments - i;
                     last_bunch = true;
                 }
 
                 // select the fragments indexs. Total fragments are in order, indexes are consequtive and in order. Selected fragments will have non consequtive indexes [12, 23, 29,...]
                 List<int> idx = new List<int>();
                 if (all_fragments)
-                    for (int j = 0; j < fit_bunch; j++)
+                    for (int j = 0; j < fit_bunch_temp; j++)
                         idx.Add(j + i + 1);
                 else
-                    for (int j = 0; j < fit_bunch; j++)
+                    for (int j = 0; j < fit_bunch_temp; j++)
                         idx.Add(selectedFragments[j + i]);
 
                 // run the fit
