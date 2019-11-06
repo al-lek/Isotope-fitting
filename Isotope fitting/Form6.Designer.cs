@@ -221,7 +221,7 @@
             this.numericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown1.ForeColor = System.Drawing.Color.Transparent;
-            this.numericUpDown1.Location = new System.Drawing.Point(219, 44);
+            this.numericUpDown1.Location = new System.Drawing.Point(219, 46);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(39, 16);
             this.numericUpDown1.TabIndex = 11;
@@ -243,7 +243,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label4.Location = new System.Drawing.Point(108, 80);
+            this.label4.Location = new System.Drawing.Point(74, 79);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(96, 15);
             this.label4.TabIndex = 12;
@@ -254,33 +254,33 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label5.Location = new System.Drawing.Point(263, 80);
+            this.label5.Location = new System.Drawing.Point(176, 80);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 15);
+            this.label5.Size = new System.Drawing.Size(31, 15);
             this.label5.TabIndex = 13;
-            this.label5.Text = ">  Ai";
+            this.label5.Text = "Ai >";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label6.Location = new System.Drawing.Point(263, 107);
+            this.label6.Location = new System.Drawing.Point(176, 107);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(31, 15);
             this.label6.TabIndex = 14;
-            this.label6.Text = ">  A";
+            this.label6.Text = "A  >";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label7.Location = new System.Drawing.Point(263, 134);
+            this.label7.Location = new System.Drawing.Point(176, 134);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(35, 15);
+            this.label7.Size = new System.Drawing.Size(31, 15);
             this.label7.TabIndex = 15;
-            this.label7.Text = ">  di";
+            this.label7.Text = "di >";
             // 
             // Ai_numUD
             // 
@@ -293,7 +293,7 @@
             0,
             0,
             0});
-            this.Ai_numUD.Location = new System.Drawing.Point(219, 81);
+            this.Ai_numUD.Location = new System.Drawing.Point(219, 79);
             this.Ai_numUD.Name = "Ai_numUD";
             this.Ai_numUD.Size = new System.Drawing.Size(39, 16);
             this.Ai_numUD.TabIndex = 16;
@@ -315,7 +315,7 @@
             0,
             0,
             0});
-            this.di_numUD.Location = new System.Drawing.Point(219, 135);
+            this.di_numUD.Location = new System.Drawing.Point(219, 133);
             this.di_numUD.Name = "di_numUD";
             this.di_numUD.Size = new System.Drawing.Size(39, 16);
             this.di_numUD.TabIndex = 17;
@@ -337,7 +337,7 @@
             0,
             0,
             0});
-            this.A_numUD.Location = new System.Drawing.Point(219, 108);
+            this.A_numUD.Location = new System.Drawing.Point(219, 106);
             this.A_numUD.Name = "A_numUD";
             this.A_numUD.Size = new System.Drawing.Size(39, 16);
             this.A_numUD.TabIndex = 18;
@@ -353,7 +353,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(311, 301);
+            this.ClientSize = new System.Drawing.Size(284, 289);
             this.Controls.Add(this.A_numUD);
             this.Controls.Add(this.di_numUD);
             this.Controls.Add(this.Ai_numUD);

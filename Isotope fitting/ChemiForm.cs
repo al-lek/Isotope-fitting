@@ -677,7 +677,7 @@ namespace Isotope_fitting
         private List<Combination_1> combinations = new List<Combination_1>();
         private List<Combination_4> combinations4 = new List<Combination_4>();
         private string machine;
-        private float resolution;
+        private double resolution;
         private List<PointPlot> profile = new List<PointPlot>();
         private List<PointPlot> centroid = new List<PointPlot>();
         public string Name
@@ -977,7 +977,7 @@ namespace Isotope_fitting
                 this.machine = value;
             }
         }
-        public float Resolution
+        public double Resolution
         {
             get
             {
@@ -1114,7 +1114,7 @@ namespace Isotope_fitting
                 //reminder X stands for mass and Y for abundance
                 var array = chem.Points.Select(x => x.X).ToArray();
                 double average = array.Average();
-                double dmz2 = average / (double)chem.Resolution;
+                double dmz2 = average / chem.Resolution;
                 double a_max = chem.Points.Max(x => x.Y);
 
                 IEnumerable<double> traceit = ChemiForm.Range(chem.Points.Min(x => x.X) - 1, chem.Points.Max(x => x.X) + extend, x => x + (dmz2 * frac));
@@ -1203,15 +1203,15 @@ namespace Isotope_fitting
                 if (Resolution_List.L.TryGetValue(l.Machine, out Resolution_List.MachineR data))
                 {
                     int n = 50;
-                    float stepSize = (data.m_z[data.m_z.Length - 1] - data.m_z[0]) / (n - 1);
-                    float[] x1 = new float[1];
+                    double stepSize = (data.m_z[data.m_z.Length - 1] - data.m_z[0]) / (n - 1);
+                    double[] x1 = new double[1];
                     if (l.Charge == 0 || l.Charge == 1)
                     {
-                        x1 = new float[] { (float)l.Monoisotopic.Mass };
+                        x1 = new double[] { l.Monoisotopic.Mass };
                     }
                     else
                     {
-                        x1 = new float[] { (float)l.Monoisotopic.Mass / Math.Abs(l.Charge) };
+                        x1 = new double[] { l.Monoisotopic.Mass / Math.Abs(l.Charge) };
                     }
                     if (data.m_z[data.m_z.Length - 1] <= x1[0])
                     {
@@ -1237,11 +1237,11 @@ namespace Isotope_fitting
                     // Create the upsampled X values to interpolate
                     //if (calculate_matrix == true)
                     //{
-                    
-                        float[] x = data.m_z;
-                        float[] y = data.R;
-                        List<float> xss = new List<float>();
-                        float step = new float();
+
+                    double[] x = data.m_z;
+                    double[] y = data.R;
+                        List<double> xss = new List<double>();
+                    double step = new double();
                         //for (int i = 0; i < n; i++)
                         //{
                         //    xs.Add( x[0] + i * stepSize);

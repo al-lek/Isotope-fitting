@@ -23,7 +23,7 @@ namespace Isotope_fitting
         private bool error;
         private double ppm_error;
         private string machine;
-        private float resolution;
+        private double resolution;
         private List<PointPlot> profile = new List<PointPlot>();
         private List<PointPlot> centroid = new List<PointPlot>();
         private double factor;
@@ -141,7 +141,7 @@ namespace Isotope_fitting
             get { return this.machine; }
             set { this.machine = value; }
         }
-        public float Resolution
+        public double Resolution
         {
             get { return this.resolution; }
             set { this.resolution = value; }

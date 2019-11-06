@@ -196,15 +196,15 @@ namespace Isotope_fitting
       
         private void Complete_Btn_Click(object sender, EventArgs e)
         {
-            float[] tmp1 =new float[resListView.Items.Count];
-            float[] tmp2 = new float[resListView.Items.Count];           
+            double[] tmp1 =new double[resListView.Items.Count];
+            double[] tmp2 = new double[resListView.Items.Count];           
 
             try
             {
                 for (int c = 0; c < resListView.Items.Count; c++)
                 {
-                    tmp1[c] = float.Parse(resListView.Items[c].SubItems[0].Text, CultureInfo.InvariantCulture.NumberFormat);
-                    tmp2[c] = float.Parse(resListView.Items[c].SubItems[1].Text, CultureInfo.InvariantCulture.NumberFormat);
+                    tmp1[c] = double.Parse(resListView.Items[c].SubItems[0].Text, CultureInfo.InvariantCulture.NumberFormat);
+                    tmp2[c] = double.Parse(resListView.Items[c].SubItems[1].Text, CultureInfo.InvariantCulture.NumberFormat);
                 }
                 Array.Sort(tmp1, tmp2);
             }

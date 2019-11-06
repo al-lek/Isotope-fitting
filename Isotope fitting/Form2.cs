@@ -246,12 +246,12 @@ namespace Isotope_fitting
             NumericUpDown fitCover_numUD = new NumericUpDown { Name = "fitCover_numUD", Minimum = 0, Value = fit_cover, Location = new Point(140, 145), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             fitCover_numUD.ValueChanged += (s, e) => { fit_cover = (int)fitCover_numUD.Value; save_preferences(); };
 
-            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intence", Location = new Point(10, 185), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
-            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intence", Location = new Point(10, 210), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
-            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intence", Location = new Point(10, 235), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
-            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intence", Location = new Point(130, 185), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
-            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intence", Location = new Point(130, 210), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
-            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intence", Location = new Point(130, 235), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
+            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 185), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
+            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 210), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
+            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10, 235), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
+            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 185), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
+            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 210), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
+            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 235), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
 
             params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, fitBunch_lbl, fitBunch_numUD,
                 fitCover_lbl, fitCover_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
@@ -364,6 +364,7 @@ namespace Isotope_fitting
 
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
             peak_detection.Start();
+            plotCentr_chkBox.Enabled = true;
         }
 
         private bool load_experimental()
@@ -401,6 +402,7 @@ namespace Isotope_fitting
                     }
                     sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
                     progress_display_stop();
+                    plotExp_chkBox.Enabled = true;
                     return true;
                 }
                 else return false;
@@ -446,8 +448,8 @@ namespace Isotope_fitting
                     displayPeakList_btn.Invoke(new Action(() => displayPeakList_btn.Enabled = true));   //thread safe call
                     exp_res++;
                     //plot_peak(); 
-                    List<float> tmp1 = new List<float>();
-                    List<float> tmp2 = new List<float>();
+                    List<double> tmp1 = new List<double>();
+                    List<double> tmp2 = new List<double>();
                     foreach (double[] peak in peak_points)
                     {
                         if (peak[5] > 200000)
@@ -2406,7 +2408,7 @@ namespace Isotope_fitting
             if (plotExp_chkBox.Checked)
             {
                 (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
-                for (int j = 0; j < all_data_aligned.Count; j++)
+                for (int j = 0; j < all_data[0].Count; j++)
                     (iso_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]));
             }
 
@@ -4833,6 +4835,8 @@ namespace Isotope_fitting
         {
             reset_all();
             insert_exp = false;
+            plotExp_chkBox.Enabled = false;
+            plotCentr_chkBox.Enabled = false;
             saveFit_Btn.Enabled = false;
             loadMS_Btn.Enabled = true;
             loadFit_Btn.Enabled = true;
@@ -7409,6 +7413,7 @@ namespace Isotope_fitting
                 return -Decimal.Compare(x.Index, y.Index);
             }
         }
+
         private void sortIdx_xyz()
         {
             foreach (ion nn in IonDraw)
