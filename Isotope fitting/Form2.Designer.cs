@@ -1167,7 +1167,7 @@ namespace Isotope_fitting
             this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragCent_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotFragCent_chkBox.Location = new System.Drawing.Point(135, 36);
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(143, 36);
             this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
             this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotFragCent_chkBox.TabIndex = 1;
@@ -1181,7 +1181,7 @@ namespace Isotope_fitting
             this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotCentr_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(135, 17);
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(143, 17);
             this.plotCentr_chkBox.Name = "plotCentr_chkBox";
             this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotCentr_chkBox.TabIndex = 0;
@@ -1198,9 +1198,9 @@ namespace Isotope_fitting
             this.plotExp_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.plotExp_chkBox.Location = new System.Drawing.Point(63, 17);
             this.plotExp_chkBox.Name = "plotExp_chkBox";
-            this.plotExp_chkBox.Size = new System.Drawing.Size(50, 18);
+            this.plotExp_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotExp_chkBox.TabIndex = 0;
-            this.plotExp_chkBox.Text = "Data";
+            this.plotExp_chkBox.Text = "Spectrum";
             this.plotExp_chkBox.UseVisualStyleBackColor = true;
             // 
             // sortSettings_Btn

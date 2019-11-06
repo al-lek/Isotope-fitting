@@ -713,6 +713,7 @@ namespace Isotope_fitting
             // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
             Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
             envipat_properties.Start();
+            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; 
         }
 
         public void fragments_and_calculations_sequence_B()
@@ -3410,6 +3411,7 @@ namespace Isotope_fitting
             if (IonDraw.Count > 0) IonDraw.Clear();
             selectedFragments.Clear();
             Fragments2.Clear();
+            plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             custom_colors.Clear();
             custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
             aligned_intensities.Clear();
@@ -4835,8 +4837,7 @@ namespace Isotope_fitting
         {
             reset_all();
             insert_exp = false;
-            plotExp_chkBox.Enabled = false;
-            plotCentr_chkBox.Enabled = false;
+            plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             saveFit_Btn.Enabled = false;
             loadMS_Btn.Enabled = true;
             loadFit_Btn.Enabled = true;
