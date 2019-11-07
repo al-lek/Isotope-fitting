@@ -39,6 +39,9 @@ namespace Isotope_fitting
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.GroupBox();
+            this.factor_panel = new System.Windows.Forms.Panel();
+            this.fragTypes_tree = new System.Windows.Forms.TreeView();
+            this.frag_tree = new System.Windows.Forms.TreeView();
             this.fitOptions_grpBox = new System.Windows.Forms.GroupBox();
             this.fit_sel_Btn = new System.Windows.Forms.Button();
             this.Fitting_chkBox = new System.Windows.Forms.CheckBox();
@@ -235,6 +238,9 @@ namespace Isotope_fitting
             // user_grpBox
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.user_grpBox.Controls.Add(this.factor_panel);
+            this.user_grpBox.Controls.Add(this.fragTypes_tree);
+            this.user_grpBox.Controls.Add(this.frag_tree);
             this.user_grpBox.Controls.Add(this.fitOptions_grpBox);
             this.user_grpBox.Controls.Add(this.bigPanel);
             this.user_grpBox.Controls.Add(this.panel1);
@@ -268,6 +274,37 @@ namespace Isotope_fitting
             this.user_grpBox.Size = new System.Drawing.Size(896, 856);
             this.user_grpBox.TabIndex = 1;
             this.user_grpBox.TabStop = false;
+            // 
+            // factor_panel
+            // 
+            this.factor_panel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.factor_panel.Location = new System.Drawing.Point(559, 459);
+            this.factor_panel.Name = "factor_panel";
+            this.factor_panel.Size = new System.Drawing.Size(331, 39);
+            this.factor_panel.TabIndex = 10000013;
+            // 
+            // fragTypes_tree
+            // 
+            this.fragTypes_tree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.fragTypes_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fragTypes_tree.CheckBoxes = true;
+            this.fragTypes_tree.Location = new System.Drawing.Point(559, 501);
+            this.fragTypes_tree.Name = "fragTypes_tree";
+            this.fragTypes_tree.Size = new System.Drawing.Size(334, 355);
+            this.fragTypes_tree.TabIndex = 10000012;
+            this.fragTypes_tree.Visible = false;
+            // 
+            // frag_tree
+            // 
+            this.frag_tree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.frag_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.frag_tree.CheckBoxes = true;
+            this.frag_tree.Location = new System.Drawing.Point(559, 76);
+            this.frag_tree.Name = "frag_tree";
+            this.frag_tree.Size = new System.Drawing.Size(334, 381);
+            this.frag_tree.TabIndex = 10000011;
+            this.frag_tree.Visible = false;
             // 
             // fitOptions_grpBox
             // 
@@ -494,14 +531,13 @@ namespace Isotope_fitting
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(231, 14);
             this.panel1.MaximumSize = new System.Drawing.Size(318, 665);
+            this.panel1.MinimumSize = new System.Drawing.Size(318, 656);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(318, 665);
+            this.panel1.Size = new System.Drawing.Size(318, 656);
             this.panel1.TabIndex = 0;
             // 
             // new_Btn
             // 
-            this.new_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.new_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.new_Btn.BackColor = System.Drawing.Color.White;
             this.new_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -517,7 +553,6 @@ namespace Isotope_fitting
             // 
             // hide_Btn
             // 
-            this.hide_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.hide_Btn.BackColor = System.Drawing.Color.White;
             this.hide_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("hide_Btn.BackgroundImage")));
             this.hide_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -535,8 +570,6 @@ namespace Isotope_fitting
             // 
             // displayPeakList_btn
             // 
-            this.displayPeakList_btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.displayPeakList_btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.displayPeakList_btn.BackColor = System.Drawing.Color.LightSteelBlue;
             this.displayPeakList_btn.Enabled = false;
@@ -567,8 +600,6 @@ namespace Isotope_fitting
             // 
             // loadExp_Btn
             // 
-            this.loadExp_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.loadExp_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.loadExp_Btn.BackColor = System.Drawing.Color.SteelBlue;
             this.loadExp_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -629,8 +660,6 @@ namespace Isotope_fitting
             // 
             // loadMS_Btn
             // 
-            this.loadMS_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.loadMS_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.loadMS_Btn.BackColor = System.Drawing.Color.SteelBlue;
             this.loadMS_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -1332,7 +1361,6 @@ namespace Isotope_fitting
             this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
             this.fitResults_lbl.TabIndex = 0;
             this.fitResults_lbl.Text = "Fit results";
-            this.fitResults_lbl.DoubleClick += new System.EventHandler(this.fitResults_lbl_DoubleClick);
             // 
             // remPlot_Btn
             // 
@@ -1860,5 +1888,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel cz_Pnl;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel factor_panel;
+        private System.Windows.Forms.TreeView fragTypes_tree;
+        private System.Windows.Forms.TreeView frag_tree;
     }
 }
