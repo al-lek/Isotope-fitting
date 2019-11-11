@@ -2407,8 +2407,10 @@ namespace Isotope_fitting
                 else idx_str_arr = node.Parent.Text.Split('-');
                 double min_border = dParser(idx_str_arr[0]);
                 double max_border = dParser(idx_str_arr[1]);
-                iso_plot.Model.Axes[1].Zoom(min_border, max_border);
-                iso_plot.Refresh();
+                iso_plot.Model.Axes[1].Zoom(min_border, max_border+10);
+            double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.Select(x => x).Where(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
+            iso_plot.Model.Axes[0].Zoom(0, pt0+100);
+            iso_plot.Refresh();
                 //iso_plot.Model.Annotations.Add(new RectangleAnnotation {MinimumX = min_border, MaximumX = max_border, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
                 invalidate_all();
             //}
@@ -2633,7 +2635,7 @@ namespace Isotope_fitting
             MenuItem exportImage = new MenuItem("Export image to file", export_chartImage);
             ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
             
-            iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
+            //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
             iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
             iso_model.MouseMove += (s, e) => { if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
             iso_model.MouseUp += (s, e) => { count_distance = false;};            
@@ -2667,15 +2669,30 @@ namespace Isotope_fitting
 
             var linearAxis2r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             res_model.Axes.Add(linearAxis2r);
-
+           
 
             // bind the 2 x-axes :D
             linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); /*linearAxis1r.Zoom(linearAxis1r.ActualMinimum, linearAxis1r.ActualMaximum)*/; res_plot.InvalidatePlot(true); };            
-            iso_model.Updated += (s, e) => { res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum, iso_plot.Model.Axes[1].ActualMaximum);};
+            iso_model.Updated += (s, e) => 
+            {
+                res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum,  iso_plot.Model.Axes[1].ActualMaximum);
+                if (residual.Count > 0)
+                {
+                    double pt0 = (res_plot.Model.Series[0] as LineSeries).Points.Select(x => x)
+                    .Where(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+                    double pt1 = (res_plot.Model.Series[0] as LineSeries).Points.Select(x => x)
+                       .Where(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Min(k => k.Y);
+                    linearAxis1r.Zoom(pt1, pt0);
+                }
+                
+            };
             iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
             //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
             //res_plot.MouseHover += (s, e) => { res_plot.Focus(); };
+           
+
         }
+        
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
         {
             if (cursor_chkBx.Checked && insert_exp && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked|| plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
@@ -3341,9 +3358,11 @@ namespace Isotope_fitting
                 //file.WriteLine();
                 foreach (int indexS in fragToSave)
                 {
+                    Form2.Fragments2[indexS - 1].Fixed = true;
                     file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);
                     IonDraw.Add(new ion() {Charge=Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
                 }
+                populate_fragtypes_treeView();
                 file.Flush(); file.Close(); file.Dispose();
             }
         }
@@ -7587,12 +7606,27 @@ namespace Isotope_fitting
 
 
 
-        #endregion
+
 
         #endregion
 
+        #endregion
 
        
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
+            SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
+            if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(iso_plot.Model, save.FileName); }
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
+            var bitmap = pngExporter.ExportToBitmap(iso_plot.Model);
+            Clipboard.SetImage(bitmap);
+        }
     }
 }
 
