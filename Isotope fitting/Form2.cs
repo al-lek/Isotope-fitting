@@ -925,10 +925,9 @@ namespace Isotope_fitting
             if (selected_fragments.Count>0 && !selected_fragments[0].Fixed)
             {
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
+                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");               
             }
-            else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");
-
+            else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");    
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
         }
@@ -1091,7 +1090,7 @@ namespace Isotope_fitting
             frag_tree.Visible = true;
         }
 
-        private void singleFrag_manipulation(TreeNode node)
+         private void singleFrag_manipulation(TreeNode node)
         {
             //try
             //{
@@ -3383,8 +3382,9 @@ namespace Isotope_fitting
                         else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
                         else if (lista[j].StartsWith("Name")) continue;
                         else
-                        {  
-                            if (check_for_duplicates(str[0], dParser(str[7])))
+                        {
+                            int[] check_mate= check_for_duplicates(str[0], dParser(str[7]));                            
+                            if (check_mate[0]!=3)
                             {
                                 // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                 isotope_count++;
@@ -3438,19 +3438,21 @@ namespace Isotope_fitting
                 }
 
                 Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
-                envipat_fitted.Start();
+                envipat_fitted.Start();               
                 refresh_iso_plot();
                 is_loading = false;                            
             }
         }
-        private bool check_for_duplicates(string name,double factor)
+        private int[] check_for_duplicates(string name,double factor)
         {
-            if(Fragments2.Count<2) return true;            
-            foreach(FragForm fra in Fragments2)
+            int[] a = new int[] {1,1};
+            if(Fragments2.Count<1) return new int[] { 1, 1 };
+            foreach (FragForm fra in Fragments2)
             {
-                if (fra.Name==name && fra.Factor==factor) return false;                
+                if (fra.Name==name && fra.Factor==factor) return new int[] { 3, 1 }; 
+                if (fra.Name==name) return new int[] { 2, Fragments2.IndexOf(fra) }; 
             }    
-            return true;
+            return new int[] { 1, 1 };
         }
         private void clearList()
         {
@@ -3485,7 +3487,7 @@ namespace Isotope_fitting
         }
         private void loadListBtn1_Click(object sender, EventArgs e)
         {
-            loadList();
+            loadList();            
         }
         private void clearListBtn1_Click(object sender, EventArgs e)
         {
@@ -7222,7 +7224,10 @@ namespace Isotope_fitting
         {
             sequence_Pnl.Refresh();
         }
-       
+        private void sequence_Pnl_Resize(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh();
+        }
         private void sequence_draw()
         {                       
             Pen p = new Pen(Color.Black);           
@@ -7292,7 +7297,7 @@ namespace Isotope_fitting
         }
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedIndex == 1) { initialize_ions_todraw(); initialize_plot_tab2(); }
+            if (tabControl1.SelectedIndex == 1 || tabControl1.SelectedIndex == 2) { initialize_ions_todraw(); initialize_plot_tab2(); }
         }
         private void sequence_Pnl_Paint(object sender, PaintEventArgs e)
         {
@@ -7568,12 +7573,12 @@ namespace Isotope_fitting
             indextoIntensity_plot.MouseDoubleClick += (s, e) => { indextoIntensity_model.ResetAllAxes(); indextoIntensity_plot.InvalidatePlot(true); };
         }
 
+
+
+
         #endregion
 
         #endregion
-
-
-
     }
 }
 

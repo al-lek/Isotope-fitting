@@ -132,9 +132,6 @@ namespace Isotope_fitting
             this.factor_Box = new System.Windows.Forms.TextBox();
             this.tabDiagram = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.ax_Pnl = new System.Windows.Forms.Panel();
-            this.by_Pnl = new System.Windows.Forms.Panel();
-            this.cz_Pnl = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel3 = new System.Windows.Forms.Panel();
             this.seq_Lbl = new System.Windows.Forms.Label();
@@ -151,6 +148,10 @@ namespace Isotope_fitting
             this.sequence_Pnl = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.ax_Pnl = new System.Windows.Forms.Panel();
+            this.by_Pnl = new System.Windows.Forms.Panel();
+            this.cz_Pnl = new System.Windows.Forms.Panel();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -159,8 +160,8 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabDiagram.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // customRes_Btn
@@ -179,6 +180,7 @@ namespace Isotope_fitting
             // 
             this.tabControl1.Controls.Add(this.tabFit);
             this.tabControl1.Controls.Add(this.tabDiagram);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -1521,47 +1523,11 @@ namespace Isotope_fitting
             // 
             this.panel2.AutoScroll = true;
             this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Controls.Add(this.ax_Pnl);
-            this.panel2.Controls.Add(this.by_Pnl);
-            this.panel2.Controls.Add(this.cz_Pnl);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(842, 3);
+            this.panel2.Location = new System.Drawing.Point(847, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(662, 856);
+            this.panel2.Size = new System.Drawing.Size(657, 856);
             this.panel2.TabIndex = 24;
-            // 
-            // ax_Pnl
-            // 
-            this.ax_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ax_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ax_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ax_Pnl.Location = new System.Drawing.Point(26, 13);
-            this.ax_Pnl.Name = "ax_Pnl";
-            this.ax_Pnl.Size = new System.Drawing.Size(621, 248);
-            this.ax_Pnl.TabIndex = 12;
-            // 
-            // by_Pnl
-            // 
-            this.by_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.by_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.by_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.by_Pnl.Location = new System.Drawing.Point(26, 288);
-            this.by_Pnl.Name = "by_Pnl";
-            this.by_Pnl.Size = new System.Drawing.Size(621, 248);
-            this.by_Pnl.TabIndex = 13;
-            // 
-            // cz_Pnl
-            // 
-            this.cz_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cz_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.cz_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cz_Pnl.Location = new System.Drawing.Point(26, 562);
-            this.cz_Pnl.Name = "cz_Pnl";
-            this.cz_Pnl.Size = new System.Drawing.Size(621, 248);
-            this.cz_Pnl.TabIndex = 14;
             // 
             // splitter1
             // 
@@ -1571,7 +1537,7 @@ namespace Isotope_fitting
             this.splitter1.MinSize = 1;
             this.splitter1.Name = "splitter1";
             this.splitter1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.splitter1.Size = new System.Drawing.Size(5, 856);
+            this.splitter1.Size = new System.Drawing.Size(10, 856);
             this.splitter1.TabIndex = 22;
             this.splitter1.TabStop = false;
             // 
@@ -1625,7 +1591,8 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.idxInt_Pnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.idxInt_Pnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxInt_Pnl2.Location = new System.Drawing.Point(684, 530);
+            this.idxInt_Pnl2.Location = new System.Drawing.Point(684, 562);
+            this.idxInt_Pnl2.MinimumSize = new System.Drawing.Size(100, 251);
             this.idxInt_Pnl2.Name = "idxInt_Pnl2";
             this.idxInt_Pnl2.Size = new System.Drawing.Size(128, 251);
             this.idxInt_Pnl2.TabIndex = 19;
@@ -1647,7 +1614,8 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.idxInt_Pnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.idxInt_Pnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxInt_Pnl1.Location = new System.Drawing.Point(684, 234);
+            this.idxInt_Pnl1.Location = new System.Drawing.Point(684, 288);
+            this.idxInt_Pnl1.MinimumSize = new System.Drawing.Size(100, 251);
             this.idxInt_Pnl1.Name = "idxInt_Pnl1";
             this.idxInt_Pnl1.Size = new System.Drawing.Size(128, 251);
             this.idxInt_Pnl1.TabIndex = 18;
@@ -1668,7 +1636,7 @@ namespace Isotope_fitting
             this.idxPnl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.idxPnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPnl2.Location = new System.Drawing.Point(10, 530);
+            this.idxPnl2.Location = new System.Drawing.Point(10, 562);
             this.idxPnl2.Name = "idxPnl2";
             this.idxPnl2.Size = new System.Drawing.Size(668, 251);
             this.idxPnl2.TabIndex = 17;
@@ -1688,7 +1656,7 @@ namespace Isotope_fitting
             this.idxPnl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.idxPnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPnl1.Location = new System.Drawing.Point(10, 234);
+            this.idxPnl1.Location = new System.Drawing.Point(10, 288);
             this.idxPnl1.Name = "idxPnl1";
             this.idxPnl1.Size = new System.Drawing.Size(668, 251);
             this.idxPnl1.TabIndex = 16;
@@ -1709,7 +1677,7 @@ namespace Isotope_fitting
             this.idxPlotLbl.AutoSize = true;
             this.idxPlotLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPlotLbl.ForeColor = System.Drawing.Color.DarkCyan;
-            this.idxPlotLbl.Location = new System.Drawing.Point(6, 201);
+            this.idxPlotLbl.Location = new System.Drawing.Point(10, 255);
             this.idxPlotLbl.Name = "idxPlotLbl";
             this.idxPlotLbl.Size = new System.Drawing.Size(172, 20);
             this.idxPlotLbl.TabIndex = 15;
@@ -1720,13 +1688,15 @@ namespace Isotope_fitting
             this.sequence_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.sequence_Pnl.AutoScroll = true;
             this.sequence_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sequence_Pnl.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequence_Pnl.Location = new System.Drawing.Point(109, 37);
             this.sequence_Pnl.Name = "sequence_Pnl";
-            this.sequence_Pnl.Size = new System.Drawing.Size(703, 130);
+            this.sequence_Pnl.Size = new System.Drawing.Size(703, 199);
             this.sequence_Pnl.TabIndex = 7;
             this.sequence_Pnl.Paint += new System.Windows.Forms.PaintEventHandler(this.sequence_Pnl_Paint);
+            this.sequence_Pnl.Resize += new System.EventHandler(this.sequence_Pnl_Resize);
             // 
             // button1
             // 
@@ -1741,6 +1711,52 @@ namespace Isotope_fitting
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.ax_Pnl);
+            this.tabPage1.Controls.Add(this.by_Pnl);
+            this.tabPage1.Controls.Add(this.cz_Pnl);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1507, 862);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Primary Fragments";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // ax_Pnl
+            // 
+            this.ax_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ax_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ax_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ax_Pnl.Location = new System.Drawing.Point(19, 19);
+            this.ax_Pnl.Name = "ax_Pnl";
+            this.ax_Pnl.Size = new System.Drawing.Size(616, 248);
+            this.ax_Pnl.TabIndex = 15;
+            // 
+            // by_Pnl
+            // 
+            this.by_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.by_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.by_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.by_Pnl.Location = new System.Drawing.Point(19, 294);
+            this.by_Pnl.Name = "by_Pnl";
+            this.by_Pnl.Size = new System.Drawing.Size(616, 248);
+            this.by_Pnl.TabIndex = 16;
+            // 
+            // cz_Pnl
+            // 
+            this.cz_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cz_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cz_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cz_Pnl.Location = new System.Drawing.Point(19, 568);
+            this.cz_Pnl.Name = "cz_Pnl";
+            this.cz_Pnl.Size = new System.Drawing.Size(616, 248);
+            this.cz_Pnl.TabIndex = 17;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1749,7 +1765,7 @@ namespace Isotope_fitting
             this.ClientSize = new System.Drawing.Size(1515, 888);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1531, 808);
+            this.MinimumSize = new System.Drawing.Size(1531, 880);
             this.Name = "Form2";
             this.Text = "Fragment fitting v11";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -1764,9 +1780,9 @@ namespace Isotope_fitting
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabDiagram.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1883,13 +1899,14 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel idxPnl1;
         private System.Windows.Forms.Label idxPlotLbl;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel ax_Pnl;
-        private System.Windows.Forms.Panel by_Pnl;
-        private System.Windows.Forms.Panel cz_Pnl;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel factor_panel;
         private System.Windows.Forms.TreeView fragTypes_tree;
         private System.Windows.Forms.TreeView frag_tree;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Panel ax_Pnl;
+        private System.Windows.Forms.Panel by_Pnl;
+        private System.Windows.Forms.Panel cz_Pnl;
     }
 }
