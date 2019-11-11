@@ -2607,8 +2607,8 @@ namespace Isotope_fitting
 
             iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             fit_grpBox.Controls.Add(iso_plot);
-
-            PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
+            iso_plot.MouseLeave += (s, e) => { iso_plot.Model.Annotations.Clear(); invalidate_all(); };
+             PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
             iso_plot.Model = iso_model;
 
             iso_model.Updating += (s, e) =>
@@ -2678,7 +2678,7 @@ namespace Isotope_fitting
         }
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
         {
-            if (insert_exp)
+            if (cursor_chkBx.Checked && insert_exp && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked|| plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
             {
                 iso_plot.Model.Annotations.Clear();
                 double mz_a = iso_plot.Model.DefaultXAxis.InverseTransform(a.X);
@@ -2738,6 +2738,16 @@ namespace Isotope_fitting
                 }
                 invalidate_all();
             }            
+        }
+        private void legend_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            iso_plot.Model.IsLegendVisible = legend_chkBx.Checked;
+            invalidate_all();
+        }
+
+        private void cursor_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cursor_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
         }
         public class CustomPlotController : PlotController
         {
@@ -7576,9 +7586,13 @@ namespace Isotope_fitting
 
 
 
+
         #endregion
 
         #endregion
+
+
+       
     }
 }
 
