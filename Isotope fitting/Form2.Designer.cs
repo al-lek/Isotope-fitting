@@ -238,6 +238,7 @@ namespace Isotope_fitting
             // 
             // toolStrip1
             // 
+            this.toolStrip1.BackColor = System.Drawing.Color.Lavender;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -250,7 +251,6 @@ namespace Isotope_fitting
             this.toolStrip1.Size = new System.Drawing.Size(605, 27);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "Graph Tools";
-            this.toolTip1.SetToolTip(this.toolStrip1, "Graph Tools");
             // 
             // exportImage_Btn
             // 
@@ -307,6 +307,7 @@ namespace Isotope_fitting
             // user_grpBox
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.user_grpBox.BackColor = System.Drawing.Color.WhiteSmoke;
             this.user_grpBox.Controls.Add(this.toolStrip2);
             this.user_grpBox.Controls.Add(this.factor_panel);
             this.user_grpBox.Controls.Add(this.fragTypes_tree);
@@ -1827,6 +1828,7 @@ namespace Isotope_fitting
             // 
             // toolStrip2
             // 
+            this.toolStrip2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -1836,10 +1838,11 @@ namespace Isotope_fitting
             this.toolStripButton2,
             this.toolStripButton3});
             this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip2.Location = new System.Drawing.Point(699, 10);
+            this.toolStrip2.Location = new System.Drawing.Point(730, 10);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(105, 37);
             this.toolStrip2.TabIndex = 10000014;
+            this.toolStrip2.Visible = false;
             // 
             // toolStripButton1
             // 
