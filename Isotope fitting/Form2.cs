@@ -2762,10 +2762,12 @@ namespace Isotope_fitting
             invalidate_all();
         }
 
-        private void cursor_chkBx_CheckedChanged(object sender, EventArgs e)
+        private void cursor_chkBx_Click(object sender, EventArgs e)
         {
-            if (!cursor_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
+            if (!cursor_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all();fit_grpBox.Cursor = DefaultCursor; }
+            else { fit_grpBox.Cursor= Cursors.Hand; }
         }
+
         public class CustomPlotController : PlotController
         {
             public CustomPlotController()
@@ -3899,6 +3901,19 @@ namespace Isotope_fitting
             //    MessageBox.Show("Please enter only numbers.");
             //    fitMin_Box.Text = fitMin_Box.Text.Remove(fitMin_Box.Text.Length - 1);
             //}  
+        }
+        private void exportImage_Btn_Click(object sender, EventArgs e)
+        {
+            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
+            SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
+            if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(iso_plot.Model, save.FileName); }
+        }
+
+        private void copyImage_Btn_Click(object sender, EventArgs e)
+        {
+            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
+            var bitmap = pngExporter.ExportToBitmap(iso_plot.Model);
+            Clipboard.SetImage(bitmap);
         }
         #endregion
 
@@ -7608,25 +7623,14 @@ namespace Isotope_fitting
 
 
 
-        #endregion
+
 
         #endregion
 
-       
+        #endregion
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
-            SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
-            if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(iso_plot.Model, save.FileName); }
-        }
+        
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
-            var bitmap = pngExporter.ExportToBitmap(iso_plot.Model);
-            Clipboard.SetImage(bitmap);
-        }
     }
 }
 
