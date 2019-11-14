@@ -44,10 +44,14 @@ namespace Isotope_fitting
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.Panel();
+            this.toolStrip_fitting = new System.Windows.Forms.ToolStrip();
+            this.check_bestBtn = new System.Windows.Forms.ToolStripButton();
+            this.uncheckFit_Btn = new System.Windows.Forms.ToolStripButton();
+            this.sortSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
+            this.loadListBtn11 = new System.Windows.Forms.ToolStripButton();
+            this.clearListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.factor_panel = new System.Windows.Forms.Panel();
             this.fragTypes_tree = new System.Windows.Forms.TreeView();
             this.frag_tree = new System.Windows.Forms.TreeView();
@@ -64,10 +68,6 @@ namespace Isotope_fitting
             this.fitStep_Box = new System.Windows.Forms.TextBox();
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.check_bestBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
-            this.sortSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.panel_calc = new System.Windows.Forms.Panel();
             this.new_Btn = new System.Windows.Forms.Button();
             this.hide_Btn = new System.Windows.Forms.Button();
@@ -156,15 +156,15 @@ namespace Isotope_fitting
             this.draw_Btn = new System.Windows.Forms.Button();
             this.tabPrimary = new System.Windows.Forms.TabPage();
             this.panel2_tab3 = new System.Windows.Forms.Panel();
-            this.toolStrip5 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.czCharge_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.czChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.czChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.byCharge_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.byChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.byChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.axCharge_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.axChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.axChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.czCharge_Pnl = new System.Windows.Forms.Panel();
             this.byCharge_Pnl = new System.Windows.Forms.Panel();
             this.axCharge_Pnl = new System.Windows.Forms.Panel();
@@ -197,23 +197,30 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.fragStorage_Lbl = new System.Windows.Forms.Label();
+            this.a_Btn = new System.Windows.Forms.ToolStripButton();
+            this.x_Btn = new System.Windows.Forms.ToolStripButton();
+            this.b_Btn = new System.Windows.Forms.ToolStripButton();
+            this.y_Btn = new System.Windows.Forms.ToolStripButton();
+            this.c_Btn = new System.Windows.Forms.ToolStripButton();
+            this.z_Btn = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
             this.plots_grpBox.SuspendLayout();
             this.toolStrip_plot.SuspendLayout();
             this.user_grpBox.SuspendLayout();
+            this.toolStrip_fitting.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.fitOptions_grpBox.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.panel_calc.SuspendLayout();
             this.tabDiagram.SuspendLayout();
             this.panel1_tab2.SuspendLayout();
             this.tabPrimary.SuspendLayout();
             this.panel2_tab3.SuspendLayout();
-            this.toolStrip5.SuspendLayout();
-            this.toolStrip4.SuspendLayout();
-            this.toolStrip3.SuspendLayout();
+            this.czCharge_toolStrip.SuspendLayout();
+            this.byCharge_toolStrip.SuspendLayout();
+            this.axCharge_toolStrip.SuspendLayout();
             this.panel1_tab3.SuspendLayout();
             this.by_toolStrip.SuspendLayout();
             this.cz_toolStrip.SuspendLayout();
@@ -359,8 +366,9 @@ namespace Isotope_fitting
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.user_grpBox.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.user_grpBox.Controls.Add(this.toolStrip1);
+            this.user_grpBox.Controls.Add(this.fragStorage_Lbl);
             this.user_grpBox.Controls.Add(this.toolStrip_fragList);
+            this.user_grpBox.Controls.Add(this.toolStrip_fitting);
             this.user_grpBox.Controls.Add(this.factor_panel);
             this.user_grpBox.Controls.Add(this.fragTypes_tree);
             this.user_grpBox.Controls.Add(this.frag_tree);
@@ -396,57 +404,103 @@ namespace Isotope_fitting
             this.user_grpBox.Size = new System.Drawing.Size(896, 856);
             this.user_grpBox.TabIndex = 1;
             // 
+            // toolStrip_fitting
+            // 
+            this.toolStrip_fitting.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip_fitting.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip_fitting.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip_fitting.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.check_bestBtn,
+            this.uncheckFit_Btn,
+            this.sortSettings_Btn});
+            this.toolStrip_fitting.Location = new System.Drawing.Point(97, 170);
+            this.toolStrip_fitting.Name = "toolStrip_fitting";
+            this.toolStrip_fitting.Size = new System.Drawing.Size(124, 27);
+            this.toolStrip_fitting.TabIndex = 10000016;
+            this.toolStrip_fitting.Text = "toolStrip1";
+            // 
+            // check_bestBtn
+            // 
+            this.check_bestBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.check_bestBtn.Image = ((System.Drawing.Image)(resources.GetObject("check_bestBtn.Image")));
+            this.check_bestBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_bestBtn.Name = "check_bestBtn";
+            this.check_bestBtn.Size = new System.Drawing.Size(24, 24);
+            this.check_bestBtn.Text = "Select best fit";
+            this.check_bestBtn.Click += new System.EventHandler(this.check_bestBtn_Click);
+            // 
+            // uncheckFit_Btn
+            // 
+            this.uncheckFit_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheckFit_Btn.Image = ((System.Drawing.Image)(resources.GetObject("uncheckFit_Btn.Image")));
+            this.uncheckFit_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheckFit_Btn.Name = "uncheckFit_Btn";
+            this.uncheckFit_Btn.Size = new System.Drawing.Size(24, 24);
+            this.uncheckFit_Btn.Text = "Uncheck all";
+            this.uncheckFit_Btn.Click += new System.EventHandler(this.uncheckFit_Btn_Click);
+            // 
+            // sortSettings_Btn
+            // 
+            this.sortSettings_Btn.Image = ((System.Drawing.Image)(resources.GetObject("sortSettings_Btn.Image")));
+            this.sortSettings_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sortSettings_Btn.Name = "sortSettings_Btn";
+            this.sortSettings_Btn.Size = new System.Drawing.Size(73, 24);
+            this.sortSettings_Btn.Text = "Settings";
+            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
+            // 
             // toolStrip_fragList
             // 
             this.toolStrip_fragList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStrip_fragList.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip_fragList.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip_fragList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip_fragList.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip_fragList.ImageScalingSize = new System.Drawing.Size(27, 27);
             this.toolStrip_fragList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3});
+            this.saveListBtn11,
+            this.loadListBtn11,
+            this.clearListBtn11});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(730, 10);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(797, 42);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
-            this.toolStrip_fragList.Size = new System.Drawing.Size(105, 37);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(96, 34);
             this.toolStrip_fragList.TabIndex = 10000014;
-            this.toolStrip_fragList.Visible = false;
             // 
-            // toolStripButton1
+            // saveListBtn11
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(34, 34);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.saveListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("saveListBtn11.Image")));
+            this.saveListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveListBtn11.Name = "saveListBtn11";
+            this.saveListBtn11.Size = new System.Drawing.Size(31, 31);
+            this.saveListBtn11.Text = "Save checked fragments";
+            this.saveListBtn11.Click += new System.EventHandler(this.saveListBtn11_Click);
             // 
-            // toolStripButton2
+            // loadListBtn11
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(34, 34);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.loadListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.loadListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("loadListBtn11.Image")));
+            this.loadListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.loadListBtn11.Name = "loadListBtn11";
+            this.loadListBtn11.Size = new System.Drawing.Size(31, 31);
+            this.loadListBtn11.Text = "Load fragments from a \' .fit \' file";
+            this.loadListBtn11.Click += new System.EventHandler(this.loadListBtn11_Click);
             // 
-            // toolStripButton3
+            // clearListBtn11
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(34, 34);
-            this.toolStripButton3.Text = "toolStripButton3";
+            this.clearListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.clearListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("clearListBtn11.Image")));
+            this.clearListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clearListBtn11.Name = "clearListBtn11";
+            this.clearListBtn11.Size = new System.Drawing.Size(31, 31);
+            this.clearListBtn11.Text = "Clear Fragment List , keep experimental data";
+            this.clearListBtn11.Click += new System.EventHandler(this.clearListBtn11_Click);
             // 
             // factor_panel
             // 
             this.factor_panel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.factor_panel.Location = new System.Drawing.Point(559, 459);
+            this.factor_panel.Location = new System.Drawing.Point(555, 459);
             this.factor_panel.Name = "factor_panel";
-            this.factor_panel.Size = new System.Drawing.Size(331, 39);
+            this.factor_panel.Size = new System.Drawing.Size(337, 39);
             this.factor_panel.TabIndex = 10000013;
             // 
             // fragTypes_tree
@@ -454,9 +508,9 @@ namespace Isotope_fitting
             this.fragTypes_tree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.fragTypes_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fragTypes_tree.CheckBoxes = true;
-            this.fragTypes_tree.Location = new System.Drawing.Point(559, 501);
+            this.fragTypes_tree.Location = new System.Drawing.Point(555, 528);
             this.fragTypes_tree.Name = "fragTypes_tree";
-            this.fragTypes_tree.Size = new System.Drawing.Size(334, 350);
+            this.fragTypes_tree.Size = new System.Drawing.Size(337, 323);
             this.fragTypes_tree.TabIndex = 10000012;
             this.fragTypes_tree.Visible = false;
             // 
@@ -466,9 +520,9 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.frag_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.frag_tree.CheckBoxes = true;
-            this.frag_tree.Location = new System.Drawing.Point(559, 76);
+            this.frag_tree.Location = new System.Drawing.Point(555, 76);
             this.frag_tree.Name = "frag_tree";
-            this.frag_tree.Size = new System.Drawing.Size(334, 381);
+            this.frag_tree.Size = new System.Drawing.Size(337, 381);
             this.frag_tree.TabIndex = 10000011;
             this.frag_tree.Visible = false;
             // 
@@ -640,49 +694,6 @@ namespace Isotope_fitting
             this.bigPanel.Size = new System.Drawing.Size(217, 654);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.check_bestBtn,
-            this.toolStripButton11,
-            this.sortSettings_Btn});
-            this.toolStrip1.Location = new System.Drawing.Point(97, 167);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(124, 27);
-            this.toolStrip1.TabIndex = 10000016;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // check_bestBtn
-            // 
-            this.check_bestBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.check_bestBtn.Image = ((System.Drawing.Image)(resources.GetObject("check_bestBtn.Image")));
-            this.check_bestBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.check_bestBtn.Name = "check_bestBtn";
-            this.check_bestBtn.Size = new System.Drawing.Size(24, 24);
-            this.check_bestBtn.Text = "toolStripButton10";
-            this.check_bestBtn.Click += new System.EventHandler(this.check_bestBtn_Click);
-            // 
-            // toolStripButton11
-            // 
-            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
-            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton11.Text = "toolStripButton11";
-            // 
-            // sortSettings_Btn
-            // 
-            this.sortSettings_Btn.Image = ((System.Drawing.Image)(resources.GetObject("sortSettings_Btn.Image")));
-            this.sortSettings_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.sortSettings_Btn.Name = "sortSettings_Btn";
-            this.sortSettings_Btn.Size = new System.Drawing.Size(73, 24);
-            this.sortSettings_Btn.Text = "Settings";
-            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
             // 
             // panel_calc
             // 
@@ -1454,13 +1465,14 @@ namespace Isotope_fitting
             this.clearListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.clearListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clearListBtn1.ForeColor = System.Drawing.Color.White;
-            this.clearListBtn1.Location = new System.Drawing.Point(831, 50);
+            this.clearListBtn1.Location = new System.Drawing.Point(833, 3);
             this.clearListBtn1.Name = "clearListBtn1";
             this.clearListBtn1.Size = new System.Drawing.Size(60, 22);
             this.clearListBtn1.TabIndex = 10000006;
             this.clearListBtn1.Text = "Clear";
             this.toolTip1.SetToolTip(this.clearListBtn1, "Clear Fragment List , keep experimental data");
             this.clearListBtn1.UseVisualStyleBackColor = false;
+            this.clearListBtn1.Visible = false;
             this.clearListBtn1.Click += new System.EventHandler(this.clearListBtn1_Click);
             // 
             // loadFit_Btn
@@ -1487,13 +1499,14 @@ namespace Isotope_fitting
             this.loadListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadListBtn1.ForeColor = System.Drawing.Color.White;
-            this.loadListBtn1.Location = new System.Drawing.Point(765, 50);
+            this.loadListBtn1.Location = new System.Drawing.Point(767, 3);
             this.loadListBtn1.Name = "loadListBtn1";
             this.loadListBtn1.Size = new System.Drawing.Size(60, 22);
             this.loadListBtn1.TabIndex = 10000005;
             this.loadListBtn1.Text = "Load";
             this.toolTip1.SetToolTip(this.loadListBtn1, "Load fragments from a \' .fit \' file");
             this.loadListBtn1.UseVisualStyleBackColor = false;
+            this.loadListBtn1.Visible = false;
             this.loadListBtn1.Click += new System.EventHandler(this.loadListBtn1_Click);
             // 
             // saveListBtn1
@@ -1504,13 +1517,14 @@ namespace Isotope_fitting
             this.saveListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.saveListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveListBtn1.ForeColor = System.Drawing.Color.White;
-            this.saveListBtn1.Location = new System.Drawing.Point(699, 50);
+            this.saveListBtn1.Location = new System.Drawing.Point(701, 3);
             this.saveListBtn1.Name = "saveListBtn1";
             this.saveListBtn1.Size = new System.Drawing.Size(60, 22);
             this.saveListBtn1.TabIndex = 10000004;
             this.saveListBtn1.Text = "Save";
             this.toolTip1.SetToolTip(this.saveListBtn1, "Save checked fragments");
             this.saveListBtn1.UseVisualStyleBackColor = false;
+            this.saveListBtn1.Visible = false;
             this.saveListBtn1.Click += new System.EventHandler(this.saveListBtn1_Click);
             // 
             // mark_label
@@ -1626,7 +1640,7 @@ namespace Isotope_fitting
             this.frag_listView.LabelEdit = true;
             this.frag_listView.Location = new System.Drawing.Point(559, 76);
             this.frag_listView.Name = "frag_listView";
-            this.frag_listView.Size = new System.Drawing.Size(334, 716);
+            this.frag_listView.Size = new System.Drawing.Size(334, 381);
             this.frag_listView.TabIndex = 41;
             this.frag_listView.UseCompatibleStateImageBehavior = false;
             this.frag_listView.View = System.Windows.Forms.View.Details;
@@ -1866,9 +1880,9 @@ namespace Isotope_fitting
             // 
             // panel2_tab3
             // 
-            this.panel2_tab3.Controls.Add(this.toolStrip5);
-            this.panel2_tab3.Controls.Add(this.toolStrip4);
-            this.panel2_tab3.Controls.Add(this.toolStrip3);
+            this.panel2_tab3.Controls.Add(this.czCharge_toolStrip);
+            this.panel2_tab3.Controls.Add(this.byCharge_toolStrip);
+            this.panel2_tab3.Controls.Add(this.axCharge_toolStrip);
             this.panel2_tab3.Controls.Add(this.czCharge_Pnl);
             this.panel2_tab3.Controls.Add(this.byCharge_Pnl);
             this.panel2_tab3.Controls.Add(this.axCharge_Pnl);
@@ -1878,104 +1892,110 @@ namespace Isotope_fitting
             this.panel2_tab3.Size = new System.Drawing.Size(748, 856);
             this.panel2_tab3.TabIndex = 26;
             // 
-            // toolStrip5
+            // czCharge_toolStrip
             // 
-            this.toolStrip5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip5.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip5.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip5.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton8,
-            this.toolStripButton9});
-            this.toolStrip5.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip5.Location = new System.Drawing.Point(722, 530);
-            this.toolStrip5.Name = "toolStrip5";
-            this.toolStrip5.Size = new System.Drawing.Size(24, 52);
-            this.toolStrip5.TabIndex = 24;
+            this.czCharge_toolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.czCharge_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.czCharge_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.czCharge_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.czCharge_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.czChargeSave_Btn,
+            this.czChargeCopy_Btn,
+            this.c_Btn,
+            this.z_Btn});
+            this.czCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.czCharge_toolStrip.Location = new System.Drawing.Point(722, 530);
+            this.czCharge_toolStrip.Name = "czCharge_toolStrip";
+            this.czCharge_toolStrip.Size = new System.Drawing.Size(24, 106);
+            this.czCharge_toolStrip.TabIndex = 24;
             // 
-            // toolStripButton8
+            // czChargeSave_Btn
             // 
-            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
-            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton8.Text = "Save";
+            this.czChargeSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.czChargeSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("czChargeSave_Btn.Image")));
+            this.czChargeSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.czChargeSave_Btn.Name = "czChargeSave_Btn";
+            this.czChargeSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.czChargeSave_Btn.Text = "Save";
             // 
-            // toolStripButton9
+            // czChargeCopy_Btn
             // 
-            this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
-            this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton9.Text = "Copy";
+            this.czChargeCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.czChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("czChargeCopy_Btn.Image")));
+            this.czChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.czChargeCopy_Btn.Name = "czChargeCopy_Btn";
+            this.czChargeCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.czChargeCopy_Btn.Text = "Copy";
             // 
-            // toolStrip4
+            // byCharge_toolStrip
             // 
-            this.toolStrip4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton6,
-            this.toolStripButton7});
-            this.toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip4.Location = new System.Drawing.Point(722, 267);
-            this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.Size = new System.Drawing.Size(24, 52);
-            this.toolStrip4.TabIndex = 25;
+            this.byCharge_toolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.byCharge_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.byCharge_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.byCharge_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.byCharge_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.byChargeSave_Btn,
+            this.byChargeCopy_Btn,
+            this.b_Btn,
+            this.y_Btn});
+            this.byCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.byCharge_toolStrip.Location = new System.Drawing.Point(722, 267);
+            this.byCharge_toolStrip.Name = "byCharge_toolStrip";
+            this.byCharge_toolStrip.Size = new System.Drawing.Size(24, 106);
+            this.byCharge_toolStrip.TabIndex = 25;
             // 
-            // toolStripButton6
+            // byChargeSave_Btn
             // 
-            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
-            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton6.Text = "Save";
+            this.byChargeSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.byChargeSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("byChargeSave_Btn.Image")));
+            this.byChargeSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.byChargeSave_Btn.Name = "byChargeSave_Btn";
+            this.byChargeSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.byChargeSave_Btn.Text = "Save";
             // 
-            // toolStripButton7
+            // byChargeCopy_Btn
             // 
-            this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
-            this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton7.Text = "Copy";
+            this.byChargeCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.byChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("byChargeCopy_Btn.Image")));
+            this.byChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.byChargeCopy_Btn.Name = "byChargeCopy_Btn";
+            this.byChargeCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.byChargeCopy_Btn.Text = "Copy";
             // 
-            // toolStrip3
+            // axCharge_toolStrip
             // 
-            this.toolStrip3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton4,
-            this.toolStripButton5});
-            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip3.Location = new System.Drawing.Point(722, 4);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(24, 52);
-            this.toolStrip3.TabIndex = 26;
+            this.axCharge_toolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.axCharge_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.axCharge_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.axCharge_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.axCharge_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.axChargeSave_Btn,
+            this.axChargeCopy_Btn,
+            this.a_Btn,
+            this.x_Btn});
+            this.axCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.axCharge_toolStrip.Location = new System.Drawing.Point(722, 4);
+            this.axCharge_toolStrip.Name = "axCharge_toolStrip";
+            this.axCharge_toolStrip.Size = new System.Drawing.Size(24, 106);
+            this.axCharge_toolStrip.TabIndex = 26;
             // 
-            // toolStripButton4
+            // axChargeSave_Btn
             // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton4.Text = "Save";
+            this.axChargeSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.axChargeSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axChargeSave_Btn.Image")));
+            this.axChargeSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.axChargeSave_Btn.Name = "axChargeSave_Btn";
+            this.axChargeSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.axChargeSave_Btn.Text = "Save";
             // 
-            // toolStripButton5
+            // axChargeCopy_Btn
             // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton5.Text = "Copy";
+            this.axChargeCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.axChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axChargeCopy_Btn.Image")));
+            this.axChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.axChargeCopy_Btn.Name = "axChargeCopy_Btn";
+            this.axChargeCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.axChargeCopy_Btn.Text = "Copy";
             // 
             // czCharge_Pnl
             // 
@@ -2309,6 +2329,104 @@ namespace Isotope_fitting
             this.idxPlotLbl.TabIndex = 20;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
+            // fragStorage_Lbl
+            // 
+            this.fragStorage_Lbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.fragStorage_Lbl.AutoSize = true;
+            this.fragStorage_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fragStorage_Lbl.ForeColor = System.Drawing.Color.SteelBlue;
+            this.fragStorage_Lbl.Location = new System.Drawing.Point(555, 505);
+            this.fragStorage_Lbl.Name = "fragStorage_Lbl";
+            this.fragStorage_Lbl.Size = new System.Drawing.Size(155, 20);
+            this.fragStorage_Lbl.TabIndex = 10000017;
+            this.fragStorage_Lbl.Text = "Fragment Storage";
+            this.toolTip1.SetToolTip(this.fragStorage_Lbl, "Select all fragments presented in the list");
+            this.fragStorage_Lbl.Visible = false;
+            // 
+            // a_Btn
+            // 
+            this.a_Btn.Checked = true;
+            this.a_Btn.CheckOnClick = true;
+            this.a_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.a_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.a_Btn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.a_Btn.ForeColor = System.Drawing.Color.Green;
+            this.a_Btn.Image = ((System.Drawing.Image)(resources.GetObject("a_Btn.Image")));
+            this.a_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.a_Btn.Name = "a_Btn";
+            this.a_Btn.Size = new System.Drawing.Size(22, 24);
+            this.a_Btn.Text = "a";
+            // 
+            // x_Btn
+            // 
+            this.x_Btn.Checked = true;
+            this.x_Btn.CheckOnClick = true;
+            this.x_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.x_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.x_Btn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.x_Btn.ForeColor = System.Drawing.Color.Lime;
+            this.x_Btn.Image = ((System.Drawing.Image)(resources.GetObject("x_Btn.Image")));
+            this.x_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.x_Btn.Name = "x_Btn";
+            this.x_Btn.Size = new System.Drawing.Size(22, 24);
+            this.x_Btn.Text = "x";
+            // 
+            // b_Btn
+            // 
+            this.b_Btn.Checked = true;
+            this.b_Btn.CheckOnClick = true;
+            this.b_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.b_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.b_Btn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.b_Btn.ForeColor = System.Drawing.Color.Blue;
+            this.b_Btn.Image = ((System.Drawing.Image)(resources.GetObject("b_Btn.Image")));
+            this.b_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.b_Btn.Name = "b_Btn";
+            this.b_Btn.Size = new System.Drawing.Size(22, 24);
+            this.b_Btn.Text = "b";
+            // 
+            // y_Btn
+            // 
+            this.y_Btn.Checked = true;
+            this.y_Btn.CheckOnClick = true;
+            this.y_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.y_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.y_Btn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.y_Btn.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.y_Btn.Image = ((System.Drawing.Image)(resources.GetObject("y_Btn.Image")));
+            this.y_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.y_Btn.Name = "y_Btn";
+            this.y_Btn.Size = new System.Drawing.Size(22, 24);
+            this.y_Btn.Text = "y";
+            // 
+            // c_Btn
+            // 
+            this.c_Btn.Checked = true;
+            this.c_Btn.CheckOnClick = true;
+            this.c_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.c_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.c_Btn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.c_Btn.ForeColor = System.Drawing.Color.Firebrick;
+            this.c_Btn.Image = ((System.Drawing.Image)(resources.GetObject("c_Btn.Image")));
+            this.c_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.c_Btn.Name = "c_Btn";
+            this.c_Btn.Size = new System.Drawing.Size(22, 24);
+            this.c_Btn.Text = "c";
+            // 
+            // z_Btn
+            // 
+            this.z_Btn.Checked = true;
+            this.z_Btn.CheckOnClick = true;
+            this.z_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.z_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.z_Btn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.z_Btn.ForeColor = System.Drawing.Color.Tomato;
+            this.z_Btn.Image = ((System.Drawing.Image)(resources.GetObject("z_Btn.Image")));
+            this.z_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.z_Btn.Name = "z_Btn";
+            this.z_Btn.Size = new System.Drawing.Size(22, 24);
+            this.z_Btn.Text = "z";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2330,12 +2448,12 @@ namespace Isotope_fitting
             this.toolStrip_plot.PerformLayout();
             this.user_grpBox.ResumeLayout(false);
             this.user_grpBox.PerformLayout();
+            this.toolStrip_fitting.ResumeLayout(false);
+            this.toolStrip_fitting.PerformLayout();
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.fitOptions_grpBox.ResumeLayout(false);
             this.fitOptions_grpBox.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.tabDiagram.ResumeLayout(false);
@@ -2344,12 +2462,12 @@ namespace Isotope_fitting
             this.tabPrimary.ResumeLayout(false);
             this.panel2_tab3.ResumeLayout(false);
             this.panel2_tab3.PerformLayout();
-            this.toolStrip5.ResumeLayout(false);
-            this.toolStrip5.PerformLayout();
-            this.toolStrip4.ResumeLayout(false);
-            this.toolStrip4.PerformLayout();
-            this.toolStrip3.ResumeLayout(false);
-            this.toolStrip3.PerformLayout();
+            this.czCharge_toolStrip.ResumeLayout(false);
+            this.czCharge_toolStrip.PerformLayout();
+            this.byCharge_toolStrip.ResumeLayout(false);
+            this.byCharge_toolStrip.PerformLayout();
+            this.axCharge_toolStrip.ResumeLayout(false);
+            this.axCharge_toolStrip.PerformLayout();
             this.panel1_tab3.ResumeLayout(false);
             this.panel1_tab3.PerformLayout();
             this.by_toolStrip.ResumeLayout(false);
@@ -2488,9 +2606,9 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton legend_chkBx;
         private System.Windows.Forms.ToolStripButton cursor_chkBx;
         private System.Windows.Forms.ToolStrip toolStrip_fragList;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton saveListBtn11;
+        private System.Windows.Forms.ToolStripButton loadListBtn11;
+        private System.Windows.Forms.ToolStripButton clearListBtn11;
         private System.Windows.Forms.TabPage tabInternal;
         private System.Windows.Forms.Label idxPlotLbl;
         private System.Windows.Forms.ToolStrip int_Idx_toolStrip;
@@ -2506,15 +2624,15 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel idxPnl2;
         private System.Windows.Forms.Panel idxPnl1;
         private System.Windows.Forms.Panel panel2_tab3;
-        private System.Windows.Forms.ToolStrip toolStrip5;
-        private System.Windows.Forms.ToolStripButton toolStripButton8;
-        private System.Windows.Forms.ToolStripButton toolStripButton9;
-        private System.Windows.Forms.ToolStrip toolStrip4;
-        private System.Windows.Forms.ToolStripButton toolStripButton6;
-        private System.Windows.Forms.ToolStripButton toolStripButton7;
-        private System.Windows.Forms.ToolStrip toolStrip3;
-        private System.Windows.Forms.ToolStripButton toolStripButton4;
-        private System.Windows.Forms.ToolStripButton toolStripButton5;
+        private System.Windows.Forms.ToolStrip czCharge_toolStrip;
+        private System.Windows.Forms.ToolStripButton czChargeSave_Btn;
+        private System.Windows.Forms.ToolStripButton czChargeCopy_Btn;
+        private System.Windows.Forms.ToolStrip byCharge_toolStrip;
+        private System.Windows.Forms.ToolStripButton byChargeSave_Btn;
+        private System.Windows.Forms.ToolStripButton byChargeCopy_Btn;
+        private System.Windows.Forms.ToolStrip axCharge_toolStrip;
+        private System.Windows.Forms.ToolStripButton axChargeSave_Btn;
+        private System.Windows.Forms.ToolStripButton axChargeCopy_Btn;
         private System.Windows.Forms.Panel czCharge_Pnl;
         private System.Windows.Forms.Panel byCharge_Pnl;
         private System.Windows.Forms.Panel axCharge_Pnl;
@@ -2532,9 +2650,16 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel ax_Pnl;
         private System.Windows.Forms.Panel by_Pnl;
         private System.Windows.Forms.Panel cz_Pnl;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip_fitting;
         private System.Windows.Forms.ToolStripButton check_bestBtn;
-        private System.Windows.Forms.ToolStripButton toolStripButton11;
+        private System.Windows.Forms.ToolStripButton uncheckFit_Btn;
         private System.Windows.Forms.ToolStripButton sortSettings_Btn;
+        private System.Windows.Forms.Label fragStorage_Lbl;
+        private System.Windows.Forms.ToolStripButton c_Btn;
+        private System.Windows.Forms.ToolStripButton z_Btn;
+        private System.Windows.Forms.ToolStripButton b_Btn;
+        private System.Windows.Forms.ToolStripButton y_Btn;
+        private System.Windows.Forms.ToolStripButton a_Btn;
+        private System.Windows.Forms.ToolStripButton x_Btn;
     }
 }
