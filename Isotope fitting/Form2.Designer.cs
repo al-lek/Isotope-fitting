@@ -64,6 +64,10 @@ namespace Isotope_fitting
             this.fitStep_Box = new System.Windows.Forms.TextBox();
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.check_bestBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
+            this.sortSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.panel_calc = new System.Windows.Forms.Panel();
             this.new_Btn = new System.Windows.Forms.Button();
             this.hide_Btn = new System.Windows.Forms.Button();
@@ -116,7 +120,6 @@ namespace Isotope_fitting
             this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
             this.plotCentr_chkBox = new System.Windows.Forms.CheckBox();
             this.plotExp_chkBox = new System.Windows.Forms.CheckBox();
-            this.sortSettings_Btn = new System.Windows.Forms.Button();
             this.clearListBtn1 = new System.Windows.Forms.Button();
             this.loadFit_Btn = new System.Windows.Forms.Button();
             this.loadListBtn1 = new System.Windows.Forms.Button();
@@ -152,35 +155,6 @@ namespace Isotope_fitting
             this.sequence_Pnl = new System.Windows.Forms.Panel();
             this.draw_Btn = new System.Windows.Forms.Button();
             this.tabPrimary = new System.Windows.Forms.TabPage();
-            this.tabInternal = new System.Windows.Forms.TabPage();
-            this.int_IdxTo_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.int_IdxToSave_Btn = new System.Windows.Forms.ToolStripButton();
-            this.int_IdxToCopy_Btn = new System.Windows.Forms.ToolStripButton();
-            this.int_Idx_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.int_IdxSave_Btn = new System.Windows.Forms.ToolStripButton();
-            this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
-            this.idxPlotLbl = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel1_intIdx = new System.Windows.Forms.Panel();
-            this.panel2_intIdxTo = new System.Windows.Forms.Panel();
-            this.idxInt_Pnl1 = new System.Windows.Forms.Panel();
-            this.idxInt_Pnl2 = new System.Windows.Forms.Panel();
-            this.idxPnl1 = new System.Windows.Forms.Panel();
-            this.idxPnl2 = new System.Windows.Forms.Panel();
-            this.panel1_tab3 = new System.Windows.Forms.Panel();
-            this.by_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.bySave_Btn = new System.Windows.Forms.ToolStripButton();
-            this.byCopy_Btn = new System.Windows.Forms.ToolStripButton();
-            this.cz_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.czSave_Btn = new System.Windows.Forms.ToolStripButton();
-            this.czCopy_Btn = new System.Windows.Forms.ToolStripButton();
-            this.ax_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.axSave_Btn = new System.Windows.Forms.ToolStripButton();
-            this.axCopy_Btn = new System.Windows.Forms.ToolStripButton();
-            this.ax_Pnl = new System.Windows.Forms.Panel();
-            this.by_Pnl = new System.Windows.Forms.Panel();
-            this.cz_Pnl = new System.Windows.Forms.Panel();
-            this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel2_tab3 = new System.Windows.Forms.Panel();
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
@@ -194,6 +168,35 @@ namespace Isotope_fitting
             this.czCharge_Pnl = new System.Windows.Forms.Panel();
             this.byCharge_Pnl = new System.Windows.Forms.Panel();
             this.axCharge_Pnl = new System.Windows.Forms.Panel();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.panel1_tab3 = new System.Windows.Forms.Panel();
+            this.by_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.bySave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.byCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.cz_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.czSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.czCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.ax_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.axSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.axCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.ax_Pnl = new System.Windows.Forms.Panel();
+            this.by_Pnl = new System.Windows.Forms.Panel();
+            this.cz_Pnl = new System.Windows.Forms.Panel();
+            this.tabInternal = new System.Windows.Forms.TabPage();
+            this.panel2_intIdxTo = new System.Windows.Forms.Panel();
+            this.idxPnl2 = new System.Windows.Forms.Panel();
+            this.idxInt_Pnl2 = new System.Windows.Forms.Panel();
+            this.panel1_intIdx = new System.Windows.Forms.Panel();
+            this.idxPnl1 = new System.Windows.Forms.Panel();
+            this.idxInt_Pnl1 = new System.Windows.Forms.Panel();
+            this.int_IdxTo_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.int_IdxToSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.int_IdxToCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.int_Idx_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.int_IdxSave_Btn = new System.Windows.Forms.ToolStripButton();
+            this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.idxPlotLbl = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -202,23 +205,24 @@ namespace Isotope_fitting
             this.user_grpBox.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.fitOptions_grpBox.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.panel_calc.SuspendLayout();
             this.tabDiagram.SuspendLayout();
             this.panel1_tab2.SuspendLayout();
             this.tabPrimary.SuspendLayout();
-            this.tabInternal.SuspendLayout();
-            this.int_IdxTo_toolStrip.SuspendLayout();
-            this.int_Idx_toolStrip.SuspendLayout();
-            this.panel1_intIdx.SuspendLayout();
-            this.panel2_intIdxTo.SuspendLayout();
-            this.panel1_tab3.SuspendLayout();
-            this.by_toolStrip.SuspendLayout();
-            this.cz_toolStrip.SuspendLayout();
-            this.ax_toolStrip.SuspendLayout();
             this.panel2_tab3.SuspendLayout();
             this.toolStrip5.SuspendLayout();
             this.toolStrip4.SuspendLayout();
             this.toolStrip3.SuspendLayout();
+            this.panel1_tab3.SuspendLayout();
+            this.by_toolStrip.SuspendLayout();
+            this.cz_toolStrip.SuspendLayout();
+            this.ax_toolStrip.SuspendLayout();
+            this.tabInternal.SuspendLayout();
+            this.panel2_intIdxTo.SuspendLayout();
+            this.panel1_intIdx.SuspendLayout();
+            this.int_IdxTo_toolStrip.SuspendLayout();
+            this.int_Idx_toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // customRes_Btn
@@ -355,6 +359,7 @@ namespace Isotope_fitting
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.user_grpBox.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.user_grpBox.Controls.Add(this.toolStrip1);
             this.user_grpBox.Controls.Add(this.toolStrip_fragList);
             this.user_grpBox.Controls.Add(this.factor_panel);
             this.user_grpBox.Controls.Add(this.fragTypes_tree);
@@ -369,7 +374,6 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.plotFragCent_chkBox);
             this.user_grpBox.Controls.Add(this.plotCentr_chkBox);
             this.user_grpBox.Controls.Add(this.plotExp_chkBox);
-            this.user_grpBox.Controls.Add(this.sortSettings_Btn);
             this.user_grpBox.Controls.Add(this.clearListBtn1);
             this.user_grpBox.Controls.Add(this.loadFit_Btn);
             this.user_grpBox.Controls.Add(this.loadListBtn1);
@@ -636,6 +640,49 @@ namespace Isotope_fitting
             this.bigPanel.Size = new System.Drawing.Size(217, 654);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.check_bestBtn,
+            this.toolStripButton11,
+            this.sortSettings_Btn});
+            this.toolStrip1.Location = new System.Drawing.Point(97, 167);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(124, 27);
+            this.toolStrip1.TabIndex = 10000016;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // check_bestBtn
+            // 
+            this.check_bestBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.check_bestBtn.Image = ((System.Drawing.Image)(resources.GetObject("check_bestBtn.Image")));
+            this.check_bestBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_bestBtn.Name = "check_bestBtn";
+            this.check_bestBtn.Size = new System.Drawing.Size(24, 24);
+            this.check_bestBtn.Text = "toolStripButton10";
+            this.check_bestBtn.Click += new System.EventHandler(this.check_bestBtn_Click);
+            // 
+            // toolStripButton11
+            // 
+            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
+            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton11.Name = "toolStripButton11";
+            this.toolStripButton11.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton11.Text = "toolStripButton11";
+            // 
+            // sortSettings_Btn
+            // 
+            this.sortSettings_Btn.Image = ((System.Drawing.Image)(resources.GetObject("sortSettings_Btn.Image")));
+            this.sortSettings_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sortSettings_Btn.Name = "sortSettings_Btn";
+            this.sortSettings_Btn.Size = new System.Drawing.Size(73, 24);
+            this.sortSettings_Btn.Text = "Settings";
+            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
             // 
             // panel_calc
             // 
@@ -1399,20 +1446,6 @@ namespace Isotope_fitting
             this.plotExp_chkBox.Text = "Spectrum";
             this.plotExp_chkBox.UseVisualStyleBackColor = true;
             // 
-            // sortSettings_Btn
-            // 
-            this.sortSettings_Btn.BackColor = System.Drawing.Color.Teal;
-            this.sortSettings_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.sortSettings_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sortSettings_Btn.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.sortSettings_Btn.Location = new System.Drawing.Point(166, 172);
-            this.sortSettings_Btn.Name = "sortSettings_Btn";
-            this.sortSettings_Btn.Size = new System.Drawing.Size(57, 22);
-            this.sortSettings_Btn.TabIndex = 10000009;
-            this.sortSettings_Btn.Text = "Settings";
-            this.sortSettings_Btn.UseVisualStyleBackColor = false;
-            this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
-            // 
             // clearListBtn1
             // 
             this.clearListBtn1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1800,7 +1833,7 @@ namespace Isotope_fitting
             this.sequence_Pnl.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequence_Pnl.Location = new System.Drawing.Point(109, 37);
             this.sequence_Pnl.Name = "sequence_Pnl";
-            this.sequence_Pnl.Size = new System.Drawing.Size(703, 199);
+            this.sequence_Pnl.Size = new System.Drawing.Size(703, 298);
             this.sequence_Pnl.TabIndex = 7;
             this.sequence_Pnl.Paint += new System.Windows.Forms.PaintEventHandler(this.sequence_Pnl_Paint);
             this.sequence_Pnl.Resize += new System.EventHandler(this.sequence_Pnl_Resize);
@@ -1831,159 +1864,153 @@ namespace Isotope_fitting
             this.tabPrimary.Text = "Primary Fragments";
             this.tabPrimary.UseVisualStyleBackColor = true;
             // 
-            // tabInternal
+            // panel2_tab3
             // 
-            this.tabInternal.Controls.Add(this.panel2_intIdxTo);
-            this.tabInternal.Controls.Add(this.panel1_intIdx);
-            this.tabInternal.Controls.Add(this.int_IdxTo_toolStrip);
-            this.tabInternal.Controls.Add(this.int_Idx_toolStrip);
-            this.tabInternal.Controls.Add(this.idxPlotLbl);
-            this.tabInternal.Location = new System.Drawing.Point(4, 22);
-            this.tabInternal.Name = "tabInternal";
-            this.tabInternal.Padding = new System.Windows.Forms.Padding(3);
-            this.tabInternal.Size = new System.Drawing.Size(1507, 862);
-            this.tabInternal.TabIndex = 4;
-            this.tabInternal.Text = "Internal Fragments";
-            this.tabInternal.UseVisualStyleBackColor = true;
+            this.panel2_tab3.Controls.Add(this.toolStrip5);
+            this.panel2_tab3.Controls.Add(this.toolStrip4);
+            this.panel2_tab3.Controls.Add(this.toolStrip3);
+            this.panel2_tab3.Controls.Add(this.czCharge_Pnl);
+            this.panel2_tab3.Controls.Add(this.byCharge_Pnl);
+            this.panel2_tab3.Controls.Add(this.axCharge_Pnl);
+            this.panel2_tab3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2_tab3.Location = new System.Drawing.Point(756, 3);
+            this.panel2_tab3.Name = "panel2_tab3";
+            this.panel2_tab3.Size = new System.Drawing.Size(748, 856);
+            this.panel2_tab3.TabIndex = 26;
             // 
-            // int_IdxTo_toolStrip
+            // toolStrip5
             // 
-            this.int_IdxTo_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.int_IdxTo_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.int_IdxTo_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.int_IdxTo_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.int_IdxToSave_Btn,
-            this.int_IdxToCopy_Btn});
-            this.int_IdxTo_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.int_IdxTo_toolStrip.Location = new System.Drawing.Point(3, 412);
-            this.int_IdxTo_toolStrip.Name = "int_IdxTo_toolStrip";
-            this.int_IdxTo_toolStrip.Size = new System.Drawing.Size(24, 52);
-            this.int_IdxTo_toolStrip.TabIndex = 26;
+            this.toolStrip5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStrip5.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip5.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip5.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton8,
+            this.toolStripButton9});
+            this.toolStrip5.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.toolStrip5.Location = new System.Drawing.Point(722, 530);
+            this.toolStrip5.Name = "toolStrip5";
+            this.toolStrip5.Size = new System.Drawing.Size(24, 52);
+            this.toolStrip5.TabIndex = 24;
             // 
-            // int_IdxToSave_Btn
+            // toolStripButton8
             // 
-            this.int_IdxToSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.int_IdxToSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxToSave_Btn.Image")));
-            this.int_IdxToSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.int_IdxToSave_Btn.Name = "int_IdxToSave_Btn";
-            this.int_IdxToSave_Btn.Size = new System.Drawing.Size(22, 22);
-            this.int_IdxToSave_Btn.Text = "Save";
+            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton8.Name = "toolStripButton8";
+            this.toolStripButton8.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton8.Text = "Save";
             // 
-            // int_IdxToCopy_Btn
+            // toolStripButton9
             // 
-            this.int_IdxToCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.int_IdxToCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxToCopy_Btn.Image")));
-            this.int_IdxToCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.int_IdxToCopy_Btn.Name = "int_IdxToCopy_Btn";
-            this.int_IdxToCopy_Btn.Size = new System.Drawing.Size(22, 22);
-            this.int_IdxToCopy_Btn.Text = "Copy";
+            this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
+            this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton9.Name = "toolStripButton9";
+            this.toolStripButton9.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton9.Text = "Copy";
             // 
-            // int_Idx_toolStrip
+            // toolStrip4
             // 
-            this.int_Idx_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.int_Idx_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.int_Idx_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.int_Idx_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.int_IdxSave_Btn,
-            this.int_IdxCopy_Btn});
-            this.int_Idx_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.int_Idx_toolStrip.Location = new System.Drawing.Point(3, 56);
-            this.int_Idx_toolStrip.Name = "int_Idx_toolStrip";
-            this.int_Idx_toolStrip.Size = new System.Drawing.Size(24, 52);
-            this.int_Idx_toolStrip.TabIndex = 25;
+            this.toolStrip4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton6,
+            this.toolStripButton7});
+            this.toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.toolStrip4.Location = new System.Drawing.Point(722, 267);
+            this.toolStrip4.Name = "toolStrip4";
+            this.toolStrip4.Size = new System.Drawing.Size(24, 52);
+            this.toolStrip4.TabIndex = 25;
             // 
-            // int_IdxSave_Btn
+            // toolStripButton6
             // 
-            this.int_IdxSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.int_IdxSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxSave_Btn.Image")));
-            this.int_IdxSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.int_IdxSave_Btn.Name = "int_IdxSave_Btn";
-            this.int_IdxSave_Btn.Size = new System.Drawing.Size(22, 22);
-            this.int_IdxSave_Btn.Text = "Save";
+            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
+            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Name = "toolStripButton6";
+            this.toolStripButton6.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton6.Text = "Save";
             // 
-            // int_IdxCopy_Btn
+            // toolStripButton7
             // 
-            this.int_IdxCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.int_IdxCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxCopy_Btn.Image")));
-            this.int_IdxCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.int_IdxCopy_Btn.Name = "int_IdxCopy_Btn";
-            this.int_IdxCopy_Btn.Size = new System.Drawing.Size(22, 22);
-            this.int_IdxCopy_Btn.Text = "Copy";
+            this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
+            this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton7.Name = "toolStripButton7";
+            this.toolStripButton7.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton7.Text = "Copy";
             // 
-            // idxPlotLbl
+            // toolStrip3
             // 
-            this.idxPlotLbl.AutoSize = true;
-            this.idxPlotLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPlotLbl.ForeColor = System.Drawing.Color.DarkCyan;
-            this.idxPlotLbl.Location = new System.Drawing.Point(19, 23);
-            this.idxPlotLbl.Name = "idxPlotLbl";
-            this.idxPlotLbl.Size = new System.Drawing.Size(172, 20);
-            this.idxPlotLbl.TabIndex = 20;
-            this.idxPlotLbl.Text = "Internal fragments\' plot";
+            this.toolStrip3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton4,
+            this.toolStripButton5});
+            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.toolStrip3.Location = new System.Drawing.Point(722, 4);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Size = new System.Drawing.Size(24, 52);
+            this.toolStrip3.TabIndex = 26;
             // 
-            // panel1_intIdx
+            // toolStripButton4
             // 
-            this.panel1_intIdx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton4.Text = "Save";
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton5.Text = "Copy";
+            // 
+            // czCharge_Pnl
+            // 
+            this.czCharge_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1_intIdx.Controls.Add(this.idxPnl1);
-            this.panel1_intIdx.Controls.Add(this.idxInt_Pnl1);
-            this.panel1_intIdx.Location = new System.Drawing.Point(30, 56);
-            this.panel1_intIdx.Name = "panel1_intIdx";
-            this.panel1_intIdx.Size = new System.Drawing.Size(930, 350);
-            this.panel1_intIdx.TabIndex = 27;
+            this.czCharge_Pnl.Location = new System.Drawing.Point(6, 530);
+            this.czCharge_Pnl.Name = "czCharge_Pnl";
+            this.czCharge_Pnl.Size = new System.Drawing.Size(713, 251);
+            this.czCharge_Pnl.TabIndex = 29;
             // 
-            // panel2_intIdxTo
+            // byCharge_Pnl
             // 
-            this.panel2_intIdxTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.byCharge_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2_intIdxTo.Controls.Add(this.idxPnl2);
-            this.panel2_intIdxTo.Controls.Add(this.idxInt_Pnl2);
-            this.panel2_intIdxTo.Location = new System.Drawing.Point(30, 412);
-            this.panel2_intIdxTo.Name = "panel2_intIdxTo";
-            this.panel2_intIdxTo.Size = new System.Drawing.Size(930, 350);
-            this.panel2_intIdxTo.TabIndex = 28;
+            this.byCharge_Pnl.Location = new System.Drawing.Point(6, 267);
+            this.byCharge_Pnl.Name = "byCharge_Pnl";
+            this.byCharge_Pnl.Size = new System.Drawing.Size(713, 251);
+            this.byCharge_Pnl.TabIndex = 28;
             // 
-            // idxInt_Pnl1
+            // axCharge_Pnl
             // 
-            this.idxInt_Pnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.idxInt_Pnl1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.idxInt_Pnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxInt_Pnl1.Location = new System.Drawing.Point(753, 0);
-            this.idxInt_Pnl1.MinimumSize = new System.Drawing.Size(100, 251);
-            this.idxInt_Pnl1.Name = "idxInt_Pnl1";
-            this.idxInt_Pnl1.Size = new System.Drawing.Size(177, 350);
-            this.idxInt_Pnl1.TabIndex = 25;
+            this.axCharge_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.axCharge_Pnl.Location = new System.Drawing.Point(6, 4);
+            this.axCharge_Pnl.Name = "axCharge_Pnl";
+            this.axCharge_Pnl.Size = new System.Drawing.Size(713, 251);
+            this.axCharge_Pnl.TabIndex = 27;
             // 
-            // idxInt_Pnl2
+            // splitter1
             // 
-            this.idxInt_Pnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.idxInt_Pnl2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.idxInt_Pnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxInt_Pnl2.Location = new System.Drawing.Point(753, 0);
-            this.idxInt_Pnl2.MinimumSize = new System.Drawing.Size(100, 251);
-            this.idxInt_Pnl2.Name = "idxInt_Pnl2";
-            this.idxInt_Pnl2.Size = new System.Drawing.Size(177, 350);
-            this.idxInt_Pnl2.TabIndex = 26;
-            // 
-            // idxPnl1
-            // 
-            this.idxPnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.idxPnl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPnl1.Location = new System.Drawing.Point(0, 0);
-            this.idxPnl1.Name = "idxPnl1";
-            this.idxPnl1.Size = new System.Drawing.Size(753, 350);
-            this.idxPnl1.TabIndex = 26;
-            // 
-            // idxPnl2
-            // 
-            this.idxPnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.idxPnl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPnl2.Location = new System.Drawing.Point(0, 0);
-            this.idxPnl2.Name = "idxPnl2";
-            this.idxPnl2.Size = new System.Drawing.Size(753, 350);
-            this.idxPnl2.TabIndex = 27;
+            this.splitter1.Location = new System.Drawing.Point(746, 3);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(10, 856);
+            this.splitter1.TabIndex = 25;
+            this.splitter1.TabStop = false;
             // 
             // panel1_tab3
             // 
@@ -2128,153 +2155,159 @@ namespace Isotope_fitting
             this.cz_Pnl.Size = new System.Drawing.Size(708, 251);
             this.cz_Pnl.TabIndex = 23;
             // 
-            // splitter1
+            // tabInternal
             // 
-            this.splitter1.Location = new System.Drawing.Point(746, 3);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(10, 856);
-            this.splitter1.TabIndex = 25;
-            this.splitter1.TabStop = false;
+            this.tabInternal.Controls.Add(this.panel2_intIdxTo);
+            this.tabInternal.Controls.Add(this.panel1_intIdx);
+            this.tabInternal.Controls.Add(this.int_IdxTo_toolStrip);
+            this.tabInternal.Controls.Add(this.int_Idx_toolStrip);
+            this.tabInternal.Controls.Add(this.idxPlotLbl);
+            this.tabInternal.Location = new System.Drawing.Point(4, 22);
+            this.tabInternal.Name = "tabInternal";
+            this.tabInternal.Padding = new System.Windows.Forms.Padding(3);
+            this.tabInternal.Size = new System.Drawing.Size(1507, 862);
+            this.tabInternal.TabIndex = 4;
+            this.tabInternal.Text = "Internal Fragments";
+            this.tabInternal.UseVisualStyleBackColor = true;
             // 
-            // panel2_tab3
+            // panel2_intIdxTo
             // 
-            this.panel2_tab3.Controls.Add(this.toolStrip5);
-            this.panel2_tab3.Controls.Add(this.toolStrip4);
-            this.panel2_tab3.Controls.Add(this.toolStrip3);
-            this.panel2_tab3.Controls.Add(this.czCharge_Pnl);
-            this.panel2_tab3.Controls.Add(this.byCharge_Pnl);
-            this.panel2_tab3.Controls.Add(this.axCharge_Pnl);
-            this.panel2_tab3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2_tab3.Location = new System.Drawing.Point(756, 3);
-            this.panel2_tab3.Name = "panel2_tab3";
-            this.panel2_tab3.Size = new System.Drawing.Size(748, 856);
-            this.panel2_tab3.TabIndex = 26;
-            // 
-            // toolStrip5
-            // 
-            this.toolStrip5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip5.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip5.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip5.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton8,
-            this.toolStripButton9});
-            this.toolStrip5.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip5.Location = new System.Drawing.Point(722, 530);
-            this.toolStrip5.Name = "toolStrip5";
-            this.toolStrip5.Size = new System.Drawing.Size(24, 52);
-            this.toolStrip5.TabIndex = 24;
-            // 
-            // toolStripButton8
-            // 
-            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
-            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton8.Text = "Save";
-            // 
-            // toolStripButton9
-            // 
-            this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
-            this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton9.Text = "Copy";
-            // 
-            // toolStrip4
-            // 
-            this.toolStrip4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton6,
-            this.toolStripButton7});
-            this.toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip4.Location = new System.Drawing.Point(722, 267);
-            this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.Size = new System.Drawing.Size(24, 52);
-            this.toolStrip4.TabIndex = 25;
-            // 
-            // toolStripButton6
-            // 
-            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
-            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton6.Text = "Save";
-            // 
-            // toolStripButton7
-            // 
-            this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
-            this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton7.Text = "Copy";
-            // 
-            // toolStrip3
-            // 
-            this.toolStrip3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(18, 18);
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton4,
-            this.toolStripButton5});
-            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip3.Location = new System.Drawing.Point(722, 4);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(24, 52);
-            this.toolStrip3.TabIndex = 26;
-            // 
-            // toolStripButton4
-            // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton4.Text = "Save";
-            // 
-            // toolStripButton5
-            // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(22, 22);
-            this.toolStripButton5.Text = "Copy";
-            // 
-            // czCharge_Pnl
-            // 
-            this.czCharge_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel2_intIdxTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.czCharge_Pnl.Location = new System.Drawing.Point(6, 530);
-            this.czCharge_Pnl.Name = "czCharge_Pnl";
-            this.czCharge_Pnl.Size = new System.Drawing.Size(713, 251);
-            this.czCharge_Pnl.TabIndex = 29;
+            this.panel2_intIdxTo.Controls.Add(this.idxPnl2);
+            this.panel2_intIdxTo.Controls.Add(this.idxInt_Pnl2);
+            this.panel2_intIdxTo.Location = new System.Drawing.Point(30, 412);
+            this.panel2_intIdxTo.Name = "panel2_intIdxTo";
+            this.panel2_intIdxTo.Size = new System.Drawing.Size(930, 350);
+            this.panel2_intIdxTo.TabIndex = 28;
             // 
-            // byCharge_Pnl
+            // idxPnl2
             // 
-            this.byCharge_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.idxPnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxPnl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxPnl2.Location = new System.Drawing.Point(0, 0);
+            this.idxPnl2.Name = "idxPnl2";
+            this.idxPnl2.Size = new System.Drawing.Size(753, 350);
+            this.idxPnl2.TabIndex = 27;
+            // 
+            // idxInt_Pnl2
+            // 
+            this.idxInt_Pnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxInt_Pnl2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.idxInt_Pnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxInt_Pnl2.Location = new System.Drawing.Point(753, 0);
+            this.idxInt_Pnl2.MinimumSize = new System.Drawing.Size(100, 251);
+            this.idxInt_Pnl2.Name = "idxInt_Pnl2";
+            this.idxInt_Pnl2.Size = new System.Drawing.Size(177, 350);
+            this.idxInt_Pnl2.TabIndex = 26;
+            // 
+            // panel1_intIdx
+            // 
+            this.panel1_intIdx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.byCharge_Pnl.Location = new System.Drawing.Point(6, 267);
-            this.byCharge_Pnl.Name = "byCharge_Pnl";
-            this.byCharge_Pnl.Size = new System.Drawing.Size(713, 251);
-            this.byCharge_Pnl.TabIndex = 28;
+            this.panel1_intIdx.Controls.Add(this.idxPnl1);
+            this.panel1_intIdx.Controls.Add(this.idxInt_Pnl1);
+            this.panel1_intIdx.Location = new System.Drawing.Point(30, 56);
+            this.panel1_intIdx.Name = "panel1_intIdx";
+            this.panel1_intIdx.Size = new System.Drawing.Size(930, 350);
+            this.panel1_intIdx.TabIndex = 27;
             // 
-            // axCharge_Pnl
+            // idxPnl1
             // 
-            this.axCharge_Pnl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.axCharge_Pnl.Location = new System.Drawing.Point(6, 4);
-            this.axCharge_Pnl.Name = "axCharge_Pnl";
-            this.axCharge_Pnl.Size = new System.Drawing.Size(713, 251);
-            this.axCharge_Pnl.TabIndex = 27;
+            this.idxPnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxPnl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxPnl1.Location = new System.Drawing.Point(0, 0);
+            this.idxPnl1.Name = "idxPnl1";
+            this.idxPnl1.Size = new System.Drawing.Size(753, 350);
+            this.idxPnl1.TabIndex = 26;
+            // 
+            // idxInt_Pnl1
+            // 
+            this.idxInt_Pnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxInt_Pnl1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.idxInt_Pnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxInt_Pnl1.Location = new System.Drawing.Point(753, 0);
+            this.idxInt_Pnl1.MinimumSize = new System.Drawing.Size(100, 251);
+            this.idxInt_Pnl1.Name = "idxInt_Pnl1";
+            this.idxInt_Pnl1.Size = new System.Drawing.Size(177, 350);
+            this.idxInt_Pnl1.TabIndex = 25;
+            // 
+            // int_IdxTo_toolStrip
+            // 
+            this.int_IdxTo_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.int_IdxTo_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.int_IdxTo_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.int_IdxTo_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.int_IdxToSave_Btn,
+            this.int_IdxToCopy_Btn});
+            this.int_IdxTo_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.int_IdxTo_toolStrip.Location = new System.Drawing.Point(3, 412);
+            this.int_IdxTo_toolStrip.Name = "int_IdxTo_toolStrip";
+            this.int_IdxTo_toolStrip.Size = new System.Drawing.Size(24, 52);
+            this.int_IdxTo_toolStrip.TabIndex = 26;
+            // 
+            // int_IdxToSave_Btn
+            // 
+            this.int_IdxToSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.int_IdxToSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxToSave_Btn.Image")));
+            this.int_IdxToSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.int_IdxToSave_Btn.Name = "int_IdxToSave_Btn";
+            this.int_IdxToSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.int_IdxToSave_Btn.Text = "Save";
+            // 
+            // int_IdxToCopy_Btn
+            // 
+            this.int_IdxToCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.int_IdxToCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxToCopy_Btn.Image")));
+            this.int_IdxToCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.int_IdxToCopy_Btn.Name = "int_IdxToCopy_Btn";
+            this.int_IdxToCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.int_IdxToCopy_Btn.Text = "Copy";
+            // 
+            // int_Idx_toolStrip
+            // 
+            this.int_Idx_toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.int_Idx_toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.int_Idx_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.int_Idx_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.int_IdxSave_Btn,
+            this.int_IdxCopy_Btn});
+            this.int_Idx_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.int_Idx_toolStrip.Location = new System.Drawing.Point(3, 56);
+            this.int_Idx_toolStrip.Name = "int_Idx_toolStrip";
+            this.int_Idx_toolStrip.Size = new System.Drawing.Size(24, 52);
+            this.int_Idx_toolStrip.TabIndex = 25;
+            // 
+            // int_IdxSave_Btn
+            // 
+            this.int_IdxSave_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.int_IdxSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxSave_Btn.Image")));
+            this.int_IdxSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.int_IdxSave_Btn.Name = "int_IdxSave_Btn";
+            this.int_IdxSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.int_IdxSave_Btn.Text = "Save";
+            // 
+            // int_IdxCopy_Btn
+            // 
+            this.int_IdxCopy_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.int_IdxCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxCopy_Btn.Image")));
+            this.int_IdxCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.int_IdxCopy_Btn.Name = "int_IdxCopy_Btn";
+            this.int_IdxCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.int_IdxCopy_Btn.Text = "Copy";
+            // 
+            // idxPlotLbl
+            // 
+            this.idxPlotLbl.AutoSize = true;
+            this.idxPlotLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxPlotLbl.ForeColor = System.Drawing.Color.DarkCyan;
+            this.idxPlotLbl.Location = new System.Drawing.Point(19, 23);
+            this.idxPlotLbl.Name = "idxPlotLbl";
+            this.idxPlotLbl.Size = new System.Drawing.Size(172, 20);
+            this.idxPlotLbl.TabIndex = 20;
+            this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
             // Form2
             // 
@@ -2301,28 +2334,14 @@ namespace Isotope_fitting
             this.toolStrip_fragList.PerformLayout();
             this.fitOptions_grpBox.ResumeLayout(false);
             this.fitOptions_grpBox.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.tabDiagram.ResumeLayout(false);
             this.panel1_tab2.ResumeLayout(false);
             this.panel1_tab2.PerformLayout();
             this.tabPrimary.ResumeLayout(false);
-            this.tabInternal.ResumeLayout(false);
-            this.tabInternal.PerformLayout();
-            this.int_IdxTo_toolStrip.ResumeLayout(false);
-            this.int_IdxTo_toolStrip.PerformLayout();
-            this.int_Idx_toolStrip.ResumeLayout(false);
-            this.int_Idx_toolStrip.PerformLayout();
-            this.panel1_intIdx.ResumeLayout(false);
-            this.panel2_intIdxTo.ResumeLayout(false);
-            this.panel1_tab3.ResumeLayout(false);
-            this.panel1_tab3.PerformLayout();
-            this.by_toolStrip.ResumeLayout(false);
-            this.by_toolStrip.PerformLayout();
-            this.cz_toolStrip.ResumeLayout(false);
-            this.cz_toolStrip.PerformLayout();
-            this.ax_toolStrip.ResumeLayout(false);
-            this.ax_toolStrip.PerformLayout();
             this.panel2_tab3.ResumeLayout(false);
             this.panel2_tab3.PerformLayout();
             this.toolStrip5.ResumeLayout(false);
@@ -2331,6 +2350,22 @@ namespace Isotope_fitting
             this.toolStrip4.PerformLayout();
             this.toolStrip3.ResumeLayout(false);
             this.toolStrip3.PerformLayout();
+            this.panel1_tab3.ResumeLayout(false);
+            this.panel1_tab3.PerformLayout();
+            this.by_toolStrip.ResumeLayout(false);
+            this.by_toolStrip.PerformLayout();
+            this.cz_toolStrip.ResumeLayout(false);
+            this.cz_toolStrip.PerformLayout();
+            this.ax_toolStrip.ResumeLayout(false);
+            this.ax_toolStrip.PerformLayout();
+            this.tabInternal.ResumeLayout(false);
+            this.tabInternal.PerformLayout();
+            this.panel2_intIdxTo.ResumeLayout(false);
+            this.panel1_intIdx.ResumeLayout(false);
+            this.int_IdxTo_toolStrip.ResumeLayout(false);
+            this.int_IdxTo_toolStrip.PerformLayout();
+            this.int_Idx_toolStrip.ResumeLayout(false);
+            this.int_Idx_toolStrip.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2426,7 +2461,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.CheckBox plotFragProf_chkBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button sortSettings_Btn;
         private System.Windows.Forms.Button hide_Btn;
         private System.Windows.Forms.TabPage tabDiagram;
         private System.Windows.Forms.Button show_Btn;
@@ -2498,5 +2532,9 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel ax_Pnl;
         private System.Windows.Forms.Panel by_Pnl;
         private System.Windows.Forms.Panel cz_Pnl;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton check_bestBtn;
+        private System.Windows.Forms.ToolStripButton toolStripButton11;
+        private System.Windows.Forms.ToolStripButton sortSettings_Btn;
     }
 }
