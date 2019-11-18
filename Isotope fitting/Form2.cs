@@ -150,11 +150,11 @@ namespace Isotope_fitting
         /// <summary>
         /// size of fit group
         /// </summary>
-        int fit_bunch = 6;
+        static public int fit_bunch = 6;
         /// <summary>
         /// size of fit overlap
         /// </summary>
-        int fit_cover = 2;
+        static public int fit_cover = 2;
         /// <summary>
         /// [1 most intence,2 most intence,3 most intence,half most intence,half(-) most intence,half(+) most intence]
         /// </summary>
@@ -261,23 +261,23 @@ namespace Isotope_fitting
             NumericUpDown fragGrps_numUD = new NumericUpDown { Name = "fragGrps_numUD", Minimum = 10, Value = frag_mzGroups, Location = new Point(140, 65), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             fragGrps_numUD.ValueChanged += (s, e) => { frag_mzGroups = (int)fragGrps_numUD.Value; save_preferences(); };
 
-            Label fitBunch_lbl = new Label { Name = "fitBunch_lbl", Text = "size of fit group: ", Location = new Point(10, 118), AutoSize = true };
-            NumericUpDown fitBunch_numUD = new NumericUpDown { Name = "fitBunch_numUD", Minimum = 1, Value = fit_bunch, Location = new Point(140, 115), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            fitBunch_numUD.ValueChanged += (s, e) => { fit_bunch = (int)fitBunch_numUD.Value; save_preferences(); };
+            //Label fitBunch_lbl = new Label { Name = "fitBunch_lbl", Text = "size of fit group: ", Location = new Point(10, 118), AutoSize = true };
+            //NumericUpDown fitBunch_numUD = new NumericUpDown { Name = "fitBunch_numUD", Minimum = 1, Value = fit_bunch, Location = new Point(140, 115), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            //fitBunch_numUD.ValueChanged += (s, e) => { fit_bunch = (int)fitBunch_numUD.Value; save_preferences(); };
 
-            Label fitCover_lbl = new Label { Name = "fitCover_lbl", Text = "size of fit overlap: ", Location = new Point(10, 148), AutoSize = true };
-            NumericUpDown fitCover_numUD = new NumericUpDown { Name = "fitCover_numUD", Minimum = 0, Value = fit_cover, Location = new Point(140, 145), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            fitCover_numUD.ValueChanged += (s, e) => { fit_cover = (int)fitCover_numUD.Value; save_preferences(); };
+            //Label fitCover_lbl = new Label { Name = "fitCover_lbl", Text = "size of fit overlap: ", Location = new Point(10, 148), AutoSize = true };
+            //NumericUpDown fitCover_numUD = new NumericUpDown { Name = "fitCover_numUD", Minimum = 0, Value = fit_cover, Location = new Point(140, 145), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            //fitCover_numUD.ValueChanged += (s, e) => { fit_cover = (int)fitCover_numUD.Value; save_preferences(); };
 
-            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 185), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
-            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 210), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
-            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10, 235), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
-            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 185), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
-            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 210), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
-            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 235), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
+            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 118), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
+            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 143), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
+            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10,168), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
+            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 118), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
+            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 143), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
+            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 168), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
 
-            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, fitBunch_lbl, fitBunch_numUD,
-                fitCover_lbl, fitCover_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
+            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD,/* fitBunch_lbl, fitBunch_numUD,*/
+                /*fitCover_lbl, fitCover_numUD,*/ one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
             foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
 
             params_and_pref.ShowDialog();
@@ -2433,7 +2433,7 @@ namespace Isotope_fitting
             else idx_str_arr = node.Parent.Text.Split('-');
             double min_border = dParser(idx_str_arr[0]);
             double max_border = dParser(idx_str_arr[1]);
-            iso_plot.Model.Axes[1].Zoom(min_border, max_border+10);
+            iso_plot.Model.Axes[1].Zoom(min_border-10, max_border+10);
             if ((iso_plot.Model.Series[0] as LineSeries).Points.Count>0 && (plotFragProf_chkBox .Checked || plotFragCent_chkBox.Checked))
             {
                 double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
@@ -4816,7 +4816,7 @@ namespace Isotope_fitting
         #endregion
 
         #region Fitting Options
-        private void Fitting_chkBox_CheckedChanged(object sender, EventArgs e)
+        private void Fitting_chkBox_CheckedChanged_1(object sender, EventArgs e)
         {
             refresh_iso_plot();
         }
@@ -7924,6 +7924,13 @@ namespace Isotope_fitting
         private void clearListBtn11_Click(object sender, EventArgs e)
         {
             clearList();
+        }
+
+        private void fitSettings_Btn_Click(object sender, EventArgs e)
+        {
+            Form7 fit_settings = new Form7();
+            fit_settings.FormClosed += (s, f) => { save_preferences(); };
+            fit_settings.ShowDialog();
         }
     }
 }

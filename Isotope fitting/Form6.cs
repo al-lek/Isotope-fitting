@@ -147,5 +147,7 @@ namespace Isotope_fitting
                 Form2.visible_results = vis_res;
             }
         }
+
+       
     }
 }
