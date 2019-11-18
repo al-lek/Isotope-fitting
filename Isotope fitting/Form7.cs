@@ -15,8 +15,8 @@ namespace Isotope_fitting
         public Form7()
         {
             InitializeComponent();
-            fitBunch_numUD.Value = (decimal)Form2.fit_bunch;
-            fitCover_numUD.Value = (decimal)Form2.fit_cover;
+            fitBunch_numUD.Value = Form2.fit_bunch;
+            fitCover_numUD.Value = Form2.fit_cover;
         }
 
         private void fitBunch_numUD_ValueChanged(object sender, EventArgs e)

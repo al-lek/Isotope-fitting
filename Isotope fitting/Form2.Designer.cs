@@ -205,7 +205,10 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.fitSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.Fitting_chkBox = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.fiToolStrip = new System.Windows.Forms.ToolStrip();
+            this.toggle_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.checkall_Frag_Btn = new System.Windows.Forms.ToolStripButton();
+            this.uncheckall_Frag_Btn = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -232,7 +235,7 @@ namespace Isotope_fitting
             this.panel1_intIdx.SuspendLayout();
             this.int_IdxTo_toolStrip.SuspendLayout();
             this.int_Idx_toolStrip.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.fiToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // customRes_Btn
@@ -387,13 +390,16 @@ namespace Isotope_fitting
             this.toolStrip_fragList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_fragList.ImageScalingSize = new System.Drawing.Size(27, 27);
             this.toolStrip_fragList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkall_Frag_Btn,
+            this.uncheckall_Frag_Btn,
+            this.toggle_toolStripButton,
             this.saveListBtn11,
             this.loadListBtn11,
             this.clearListBtn11});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(797, 42);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(673, 42);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
-            this.toolStrip_fragList.Size = new System.Drawing.Size(96, 34);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(220, 34);
             this.toolStrip_fragList.TabIndex = 10000014;
             // 
             // toolStrip_fit_sort
@@ -444,7 +450,7 @@ namespace Isotope_fitting
             // 
             // fitOptions_grpBox
             // 
-            this.fitOptions_grpBox.Controls.Add(this.toolStrip1);
+            this.fitOptions_grpBox.Controls.Add(this.fiToolStrip);
             this.fitOptions_grpBox.Controls.Add(this.fit_Btn);
             this.fitOptions_grpBox.Controls.Add(this.fit_sel_Btn);
             this.fitOptions_grpBox.Controls.Add(this.fitMax_Label);
@@ -2435,21 +2441,51 @@ namespace Isotope_fitting
             this.Fitting_chkBox.Text = "Plot fit";
             this.Fitting_chkBox.CheckedChanged += new System.EventHandler(this.Fitting_chkBox_CheckedChanged_1);
             // 
-            // toolStrip1
+            // fiToolStrip
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fiToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.fiToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.fiToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.fiToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Fitting_chkBox,
             this.fitSettings_Btn});
-            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
-            this.toolStrip1.Location = new System.Drawing.Point(141, 12);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(74, 73);
-            this.toolStrip1.TabIndex = 48;
-            this.toolStrip1.Text = "toolStrip1";
+            this.fiToolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
+            this.fiToolStrip.Location = new System.Drawing.Point(142, 7);
+            this.fiToolStrip.Name = "fiToolStrip";
+            this.fiToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.fiToolStrip.Size = new System.Drawing.Size(74, 54);
+            this.fiToolStrip.TabIndex = 48;
+            // 
+            // toggle_toolStripButton
+            // 
+            this.toggle_toolStripButton.CheckOnClick = true;
+            this.toggle_toolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toggle_toolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("toggle_toolStripButton.Image")));
+            this.toggle_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toggle_toolStripButton.Name = "toggle_toolStripButton";
+            this.toggle_toolStripButton.Size = new System.Drawing.Size(31, 31);
+            this.toggle_toolStripButton.Text = "Toggle All Outlining";
+            this.toggle_toolStripButton.CheckedChanged += new System.EventHandler(this.toggle_toolStripButton_CheckedChanged);
+            // 
+            // checkall_Frag_Btn
+            // 
+            this.checkall_Frag_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.checkall_Frag_Btn.Image = ((System.Drawing.Image)(resources.GetObject("checkall_Frag_Btn.Image")));
+            this.checkall_Frag_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.checkall_Frag_Btn.Name = "checkall_Frag_Btn";
+            this.checkall_Frag_Btn.Size = new System.Drawing.Size(31, 31);
+            this.checkall_Frag_Btn.Text = "toolStripButton1";
+            this.checkall_Frag_Btn.Click += new System.EventHandler(this.checkall_Frag_Btn_Click);
+            // 
+            // uncheckall_Frag_Btn
+            // 
+            this.uncheckall_Frag_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheckall_Frag_Btn.Image = ((System.Drawing.Image)(resources.GetObject("uncheckall_Frag_Btn.Image")));
+            this.uncheckall_Frag_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheckall_Frag_Btn.Name = "uncheckall_Frag_Btn";
+            this.uncheckall_Frag_Btn.Size = new System.Drawing.Size(31, 31);
+            this.uncheckall_Frag_Btn.Text = "toolStripButton2";
+            this.uncheckall_Frag_Btn.Click += new System.EventHandler(this.uncheckall_Frag_Btn_Click);
             // 
             // Form2
             // 
@@ -2508,8 +2544,8 @@ namespace Isotope_fitting
             this.int_IdxTo_toolStrip.PerformLayout();
             this.int_Idx_toolStrip.ResumeLayout(false);
             this.int_Idx_toolStrip.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.fiToolStrip.ResumeLayout(false);
+            this.fiToolStrip.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2686,8 +2722,11 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton y_Btn;
         private System.Windows.Forms.ToolStripButton a_Btn;
         private System.Windows.Forms.ToolStripButton x_Btn;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip fiToolStrip;
         private System.Windows.Forms.ToolStripButton fitSettings_Btn;
         private System.Windows.Forms.ToolStripButton Fitting_chkBox;
+        private System.Windows.Forms.ToolStripButton toggle_toolStripButton;
+        private System.Windows.Forms.ToolStripButton checkall_Frag_Btn;
+        private System.Windows.Forms.ToolStripButton uncheckall_Frag_Btn;
     }
 }

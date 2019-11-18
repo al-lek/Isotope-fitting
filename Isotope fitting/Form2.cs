@@ -7932,6 +7932,43 @@ namespace Isotope_fitting
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
         }
+
+        private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (frag_tree != null)
+            {
+                if (toggle_toolStripButton.Checked)
+                {
+                    frag_tree.ExpandAll();
+                }
+                else
+                {
+                    frag_tree.CollapseAll();
+                }
+            }
+        }
+
+        private void checkall_Frag_Btn_Click(object sender, EventArgs e)
+        {
+            if (frag_tree != null)
+            {
+                foreach (TreeNode node in frag_tree.Nodes)
+                {
+                    node.Checked = true;
+                }
+            }
+        }
+
+        private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
+        {
+            if (frag_tree != null)
+            {
+                foreach (TreeNode node in frag_tree.Nodes)
+                {
+                    node.Checked = false;
+                }
+            }
+        }
     }
 }
 
