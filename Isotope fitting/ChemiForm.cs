@@ -568,6 +568,16 @@ namespace Isotope_fitting
             }
         }
     }
+    public class PointPlot
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public PointPlot DeepCopy()
+        {
+            PointPlot deepcopy = new PointPlot() { X = this.X, Y = this.Y };
+            return deepcopy;
+        }
+    }
     #endregion
 
     #region old code
@@ -635,16 +645,7 @@ namespace Isotope_fitting
     //}
     #endregion
 
-    public class PointPlot
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public PointPlot DeepCopy()
-        {
-            PointPlot deepcopy = new PointPlot() { X=this.X, Y=this.Y };
-            return deepcopy;
-        }
-    }
+
     public class ChemiForm
     {
         public static List<double> xs = new List<double>();
@@ -1163,8 +1164,8 @@ namespace Isotope_fitting
                         }
                         value += v;
                     }
-                    if (filter == 0)
-                    {
+                    //if (filter == 0)
+                    //{
                         if (c > 0)
                         {
                             if (value > 0.0 || (value == 0.0 && chem.Profile[c - 1].Y > 0.0))
@@ -1181,16 +1182,14 @@ namespace Isotope_fitting
                                 c++;
                             }
                         }
-                    }
-                    else
-                    {
-                        chem.Profile.Add(new PointPlot { X = tr, Y = value });
-                        c++;
-                    }
-                }
-
+                    //}
+                    //else
+                    //{
+                    //    chem.Profile.Add(new PointPlot { X = tr, Y = value });
+                    //    c++;
+                    //}
+                }               
             }
-
 
         }
         #endregion

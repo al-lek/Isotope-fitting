@@ -1068,12 +1068,12 @@ namespace Isotope_fitting
             //user_grpBox.Controls.Add(frag_tree);
             //frag_tree.BringToFront();           
             if (frag_tree.Nodes.Count>0) { frag_tree.Nodes.Clear(); }
-            frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node, e.Node.Checked); };
+            frag_tree.AfterCheck += (s, e) => {frag_node_checkChanged(e.Node, e.Node.Checked); };
             frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
-            
-            frag_tree.NodeMouseClick += (s, e) => {  if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
+
+            frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -2460,7 +2460,7 @@ namespace Isotope_fitting
                     node.Checked = check;
                     foreach (TreeNode nn in node.Nodes)
                     {
-                        nn.Checked = check;
+                        if(nn.Checked!= check) nn.Checked = check;
                     }
                 }
                 block_plot_refresh = false; block_fit_refresh = false;
