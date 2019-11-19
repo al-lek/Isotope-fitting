@@ -398,6 +398,7 @@
             this.Name = "Form6";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "\'Filter & Sort\' fitting results";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form6_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.Ai_coef_numUD)).EndInit();

@@ -142,7 +142,7 @@ namespace Isotope_fitting
         /// <summary>
         /// peak detect min intensity
         /// </summary>
-        public double min_intes = 50.0;
+        public static double min_intes = 50.0;
         /// <summary>
         /// size of fragments groups
         /// </summary>
@@ -251,7 +251,7 @@ namespace Isotope_fitting
 
         private void params_form()
         {
-            Form params_and_pref = new Form { Text = "Parameters and preferences", FormBorderStyle = FormBorderStyle.FixedDialog,  AutoSize = false, MaximizeBox = false, MinimizeBox = false };
+            Form params_and_pref = new Form { Text = "Fragment selection filters", FormBorderStyle = FormBorderStyle.FixedDialog,  AutoSize = true, MaximizeBox = false, MinimizeBox = false };
             Label ppm_lbl = new Label { Name = "ppm_lbl", Text = "max ppm error: ", Location = new Point(10, 8), AutoSize = true };
             NumericUpDown ppm_numUD = new NumericUpDown { Name = "ppm_numUD", Minimum = 1, Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)ppmError, Location = new Point(140, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             ppm_numUD.ValueChanged += (s, e) => { ppmError = (double)ppm_numUD.Value; save_preferences(); };
@@ -264,14 +264,6 @@ namespace Isotope_fitting
             NumericUpDown fragGrps_numUD = new NumericUpDown { Name = "fragGrps_numUD", Minimum = 10, Value = frag_mzGroups, Location = new Point(140, 65), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             fragGrps_numUD.ValueChanged += (s, e) => { frag_mzGroups = (int)fragGrps_numUD.Value; save_preferences(); };
 
-            //Label fitBunch_lbl = new Label { Name = "fitBunch_lbl", Text = "size of fit group: ", Location = new Point(10, 118), AutoSize = true };
-            //NumericUpDown fitBunch_numUD = new NumericUpDown { Name = "fitBunch_numUD", Minimum = 1, Value = fit_bunch, Location = new Point(140, 115), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            //fitBunch_numUD.ValueChanged += (s, e) => { fit_bunch = (int)fitBunch_numUD.Value; save_preferences(); };
-
-            //Label fitCover_lbl = new Label { Name = "fitCover_lbl", Text = "size of fit overlap: ", Location = new Point(10, 148), AutoSize = true };
-            //NumericUpDown fitCover_numUD = new NumericUpDown { Name = "fitCover_numUD", Minimum = 0, Value = fit_cover, Location = new Point(140, 145), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            //fitCover_numUD.ValueChanged += (s, e) => { fit_cover = (int)fitCover_numUD.Value; save_preferences(); };
-
             RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 118), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
             RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 143), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
             RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10,168), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
@@ -279,8 +271,7 @@ namespace Isotope_fitting
             RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 143), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
             RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 168), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
 
-            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD,/* fitBunch_lbl, fitBunch_numUD,*/
-                /*fitCover_lbl, fitCover_numUD,*/ one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
+            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
             foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
 
             params_and_pref.ShowDialog();
@@ -2522,7 +2513,10 @@ namespace Isotope_fitting
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
         }
-
+        private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
+        {
+            refresh_fit_tree_sorting();
+        }
         #endregion
 
         #region UI control
@@ -3158,9 +3152,9 @@ namespace Isotope_fitting
         }
 
         private void display_peakList()
-        {
+        {            
             Form5 frm5 = new Form5();
-            frm5.Show();
+            frm5.ShowDialog();
         }
 
         #endregion
@@ -4030,6 +4024,126 @@ namespace Isotope_fitting
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
                 if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(plot.Model, save.FileName); }
             }
+        }
+        private void saveListBtn11_Click(object sender, EventArgs e)
+        {
+            saveList(selectedFragments);
+        }
+
+        private void loadListBtn11_Click(object sender, EventArgs e)
+        {
+            loadList();
+        }
+
+        private void clearListBtn11_Click(object sender, EventArgs e)
+        {
+            clearList();
+        }
+
+        private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (frag_tree != null)
+            {
+                if (toggle_toolStripButton.Checked)
+                {
+                    frag_tree.ExpandAll();
+                }
+                else
+                {
+                    frag_tree.CollapseAll();
+                }
+            }
+        }
+
+        private void checkall_Frag_Btn_Click(object sender, EventArgs e)
+        {
+            if (frag_tree != null)
+            {
+                frag_tree.BeginUpdate();
+                block_plot_refresh = true; block_fit_refresh = true;
+                foreach (TreeNode node in frag_tree.Nodes)
+                {
+                    node.Checked = true;
+                }
+                block_plot_refresh = false; block_fit_refresh = false;
+                frag_tree.EndUpdate();
+                refresh_iso_plot();
+            }
+        }
+
+        private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
+        {
+            if (frag_tree != null)
+            {
+                frag_tree.BeginUpdate();
+                block_plot_refresh = true; block_fit_refresh = true;
+                foreach (TreeNode node in frag_tree.Nodes)
+                {
+                    node.Checked = false;
+                }
+                block_plot_refresh = false; block_fit_refresh = false;
+                frag_tree.EndUpdate();
+                refresh_iso_plot();
+            }
+        }
+        private void clear_toolStripButton_Click(object sender, EventArgs e)
+        {
+            reset_all();
+            displayPeakList_btn.Enabled = false;
+            Peptide = "";
+            insert_exp = false;
+            plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
+            saveFit_Btn.Enabled = false;
+            loadMS_Btn.Enabled = true;
+            loadFit_Btn.Enabled = true;
+            clearCalc_Btn.Enabled = false;
+            calc_Btn.Enabled = false;
+            fitMin_Box.Enabled = false;
+            fitMin_Box.Text = null;
+            fitMax_Box.Enabled = false;
+            fitMax_Box.Text = null;
+            fitStep_Box.Enabled = false;
+            fitStep_Box.Text = null;
+            step_rangeBox.Text = null;
+            Fitting_chkBox.Checked = false;
+            Fitting_chkBox.Enabled = false;
+            Fragments2.Clear();
+            ChemFormulas.Clear();
+            selectedFragments.Clear();
+            pep_Box.Text = null;
+            frag_listView.Items.Clear();
+            UncheckAll_calculationPanel();
+            resolution_Box.Text = null;
+            machine_listBox.ClearSelected();
+            machine_listBox.SelectedIndex = 2;
+            loadExp_Btn.Enabled = true;
+            selected_window = 1000000;
+            bigPanel.Controls.Clear();
+            factor_Box.Text = null;
+            candidate_fragments = 1;
+            mzMax_Box.Enabled = false;
+            mzMin_Box.Enabled = false;
+            mzMax_Label.Enabled = false;
+            mzMin_Label.Enabled = false;
+            chargeMax_Box.Enabled = false;
+            chargeMin_Box.Enabled = false;
+            chargeAll_Btn.Enabled = false;
+            idxPr_Box.Enabled = false;
+            idxTo_Box.Enabled = false;
+            idxFrom_Box.Enabled = false;
+            resolution_Box.Enabled = false;
+            machine_listBox.Enabled = false;
+            saveWd_Btn.Enabled = false;
+            windowList.Clear();
+            loaded_window = false;
+            fit_sel_Btn.Enabled = false;
+            neues = 0;
+            mark_neues = false;
+            Form4.active = false;
+            if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
+            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+            factor_panel.Controls.Clear();
         }
 
         #endregion
@@ -7947,140 +8061,21 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void saveListBtn11_Click(object sender, EventArgs e)
-        {
-            saveList(selectedFragments);
-        }
-
-        private void loadListBtn11_Click(object sender, EventArgs e)
-        {
-            loadList();
-        }
-
-        private void clearListBtn11_Click(object sender, EventArgs e)
-        {
-            clearList();
-        }
-        
-        private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (frag_tree != null)
-            {
-                if (toggle_toolStripButton.Checked)
-                {
-                    frag_tree.ExpandAll();
-                }
-                else
-                {
-                    frag_tree.CollapseAll();
-                }
-            }
-        }
-
-        private void checkall_Frag_Btn_Click(object sender, EventArgs e)
-        {
-            if (frag_tree != null)
-            {
-                frag_tree.BeginUpdate();
-                block_plot_refresh = true; block_fit_refresh = true;
-                foreach (TreeNode node in frag_tree.Nodes)
-                {
-                    node.Checked = true;
-                }
-                block_plot_refresh = false; block_fit_refresh = false;
-                frag_tree.EndUpdate();
-                refresh_iso_plot();
-            }
-        }
-
-        private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
-        {
-            if (frag_tree != null)
-            {
-                frag_tree.BeginUpdate();
-                block_plot_refresh = true; block_fit_refresh = true;
-                foreach (TreeNode node in frag_tree.Nodes)
-                {
-                    node.Checked = false;
-                }
-                block_plot_refresh = false; block_fit_refresh = false;
-                frag_tree.EndUpdate();
-                refresh_iso_plot();
-            }
-        }
-
-        private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
-        {
-            refresh_fit_tree_sorting();
-        }
-
-        private void clear_toolStripButton_Click(object sender, EventArgs e)
-        {
-            reset_all();
-            Peptide = "";
-            insert_exp = false;
-            plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
-            saveFit_Btn.Enabled = false;
-            loadMS_Btn.Enabled = true;
-            loadFit_Btn.Enabled = true;
-            clearCalc_Btn.Enabled = false;
-            calc_Btn.Enabled = false;
-            fitMin_Box.Enabled = false;
-            fitMin_Box.Text = null;
-            fitMax_Box.Enabled = false;
-            fitMax_Box.Text = null;
-            fitStep_Box.Enabled = false;
-            fitStep_Box.Text = null;
-            step_rangeBox.Text = null;
-            Fitting_chkBox.Checked = false;
-            Fitting_chkBox.Enabled = false;
-            Fragments2.Clear();
-            ChemFormulas.Clear();
-            selectedFragments.Clear();
-            pep_Box.Text = null;
-            frag_listView.Items.Clear();
-            UncheckAll_calculationPanel();
-            resolution_Box.Text = null;
-            machine_listBox.ClearSelected();
-            machine_listBox.SelectedIndex = 2;
-            loadExp_Btn.Enabled = true;
-            selected_window = 1000000;
-            bigPanel.Controls.Clear();
-            factor_Box.Text = null;
-            candidate_fragments = 1;
-            mzMax_Box.Enabled = false;
-            mzMin_Box.Enabled = false;
-            mzMax_Label.Enabled = false;
-            mzMin_Label.Enabled = false;
-            chargeMax_Box.Enabled = false;
-            chargeMin_Box.Enabled = false;
-            chargeAll_Btn.Enabled = false;
-            idxPr_Box.Enabled = false;
-            idxTo_Box.Enabled = false;
-            idxFrom_Box.Enabled = false;
-            resolution_Box.Enabled = false;
-            machine_listBox.Enabled = false;
-            saveWd_Btn.Enabled = false;
-            windowList.Clear();
-            loaded_window = false;
-            fit_sel_Btn.Enabled = false;
-            neues = 0;
-            mark_neues = false;
-            Form4.active = false;
-            if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
-            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
-            factor_panel.Controls.Clear();
-        }
-
         private void frag_sort_Btn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("not ready yet");
+            params_form();
         }
 
         private void refresh_frag_Btn_Click(object sender, EventArgs e)
         {
             MessageBox.Show("not ready yet");
+        }
+
+        private void settingsPeak_Btn_Click(object sender, EventArgs e)
+        {
+            Form8 frm8 = new Form8();
+            frm8.FormClosed += (s, f) => { save_preferences(); };
+            frm8.ShowDialog();
         }
     }
 }

@@ -134,6 +134,7 @@
             this.Name = "Form7";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fitting calculations";
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).EndInit();
