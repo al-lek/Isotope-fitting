@@ -97,7 +97,7 @@ namespace Isotope_fitting
         }
         private void sse_checkBox_CheckedChanged(object sender, EventArgs e)
         {
-            sort[3] = di_checkBox.Checked;
+            sort[3] = sse_checkBox.Checked;
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
