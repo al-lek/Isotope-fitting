@@ -227,11 +227,14 @@ namespace Isotope_fitting
         }
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
-            // we do the standard call.. 
-            node.EnsureVisible();
+            if (!block_fit_refresh)
+            {
+                // we do the standard call.. 
+                node.EnsureVisible();
 
-            // ..and afterwards we scroll to the left again!
-            SendMessage(frag_tree.Handle, WM_HSCROLL, SB_LEFT, 0);
+                // ..and afterwards we scroll to the left again!
+                SendMessage(frag_tree.Handle, WM_HSCROLL, SB_LEFT, 0);
+            }           
         }
 
         #region TAB FIT
@@ -1281,9 +1284,14 @@ namespace Isotope_fitting
             {
                 block_plot_refresh = true;
                 foreach (TreeNode subNode in node.Nodes)
-                    subNode.Checked = node.Checked;
+                {
+                    if (subNode.Checked != node.Checked)
+                    {
+                        subNode.Checked = node.Checked;
+                    }                   
+                }                   
                 block_plot_refresh = false;
-                refresh_iso_plot();
+                if (!block_fit_refresh) { refresh_iso_plot(); }
             }
             else
             {
@@ -1303,7 +1311,7 @@ namespace Isotope_fitting
                 Fragments2[idx].To_plot = is_checked;
 
                 // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
-                if (!block_plot_refresh) refresh_iso_plot();
+                if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
             }
         }
 
@@ -1969,8 +1977,8 @@ namespace Isotope_fitting
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node); fit_set_graph_zoomed(e.Node); };     
-            fit_tree.NodeMouseDoubleClick += (s, e) => { fitnode_Re_Sort(e.Node); };
-            fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
+            //fit_tree.NodeMouseDoubleClick += (s, e) => { fitnode_Re_Sort(e.Node); };
+            fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => { refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
 
             // interpret fitted results
             fit_tree.BeginUpdate();
@@ -2027,11 +2035,11 @@ namespace Isotope_fitting
         
         private void show_error(TreeNode node)
         {
-            
+            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
             StringBuilder sb = new StringBuilder();
             double lse = 0.0;           
             List<double[]> lse_fragments = new List<double[]>();
-            if (string.IsNullOrEmpty(node.Name)) return;
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
 
             else
             {
@@ -2042,7 +2050,7 @@ namespace Isotope_fitting
                 List<TreeNode> all_nodes = get_all_nodes(frag_tree);
                 for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
                 {
-                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f] - 1;                    
+                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f] - 1;
                     double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
                     int absent_isotope = 0;
                     List<PointPlot> sorted_cen = new List<PointPlot>();
@@ -2051,7 +2059,7 @@ namespace Isotope_fitting
                     double summ = 0.0;
                     foreach (PointPlot p in sorted_cen)
                     {
-                        summ += p.Y ;
+                        summ += p.Y;
                     }
                     lse_fragments.Add(new double[3]);
                     double iso_lse_sum = 0.0;
@@ -2078,34 +2086,34 @@ namespace Isotope_fitting
                         {
                             double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
                             //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
-                            double ee = ee1 * sorted_cen[c].Y/summ;
+                            double ee = ee1 * sorted_cen[c].Y / summ;
                             iso_lse_sum += ee; tmp_error[c] = ee1;
                             //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
                             //double eee = ee * max_cen / sorted_cen[c].Y;
                             //if (eee > 1) { eee = 1 / eee; }
                             //iso_lse_sum +=eee;       
-                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error:" + Math.Round(ee1, 10).ToString()+" , adjusted to:"+ Math.Round(ee, 10).ToString());
+                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error:" + Math.Round(ee1, 10).ToString() + " , adjusted to:" + Math.Round(ee, 10).ToString());
                         }
                         else
                         {
-                            tmp_error[c] = 1.0 ;
-                            iso_lse_sum += tmp_error[c] * sorted_cen[c].Y/summ; absent_isotope++;
-                            sb.AppendLine("Centroid " + (c+1).ToString() + " error: 1.0" +  " , adjusted to:" +Math.Round(tmp_error[c] * sorted_cen[c].Y / summ, 10).ToString() + " (absent isotope)");
-                        }                        
+                            tmp_error[c] = 1.0;
+                            iso_lse_sum += tmp_error[c] * sorted_cen[c].Y / summ; absent_isotope++;
+                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error: 1.0" + " , adjusted to:" + Math.Round(tmp_error[c] * sorted_cen[c].Y / summ, 10).ToString() + " (absent isotope)");
+                        }
                     }
-                    
+
                     lse_fragments.Last()[0] = 100 * absent_isotope / sorted_cen.Count();
-                    lse_fragments.Last()[1] = iso_lse_sum ;
+                    lse_fragments.Last()[1] = iso_lse_sum;
                     lse_fragments.Last()[2] = (iso_lse_sum - absent_isotope) / (sorted_cen.Count() - absent_isotope);
                     lse += lse_fragments.Last()[1];
-                    double sd = 0.0;                    
+                    double sd = 0.0;
                     for (int d = 0; d < tmp_error.Length; d++)
                     {
                         sd += sorted_cen[d].Y * Math.Pow((tmp_error[d] - lse_fragments.Last()[1]), 2);
                     }
                     sd = Math.Sqrt(sd / (summ));
-                    sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString()+"% of the centroids were absent ");
-                    sb.AppendLine(" the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString() );
+                    sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString() + "% of the centroids were absent ");
+                    sb.AppendLine(" the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString());
                     sb.AppendLine(" sd: " + sd.ToString());
                     sb.AppendLine();
                 }
@@ -2187,6 +2195,7 @@ namespace Isotope_fitting
 
             else
             {
+                if (!block_fit_refresh) frag_tree.BeginUpdate();
                 string[] idx_str_arr = idx_str.Split(' ');
                 int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
                 int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
@@ -2205,6 +2214,7 @@ namespace Isotope_fitting
                     curr_node.Checked = is_checked;
                     curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");                    
                 }
+                if (!block_fit_refresh) frag_tree.EndUpdate();
             }
             block_plot_refresh = false;
 
@@ -2254,7 +2264,7 @@ namespace Isotope_fitting
         private void sort_fit_results_form(bool btn=false)
         {
             Form6 sort_fit_results = new Form6 (false,1);
-            sort_fit_results.FormClosed += (s, f) => { form_sort_all_closing(); };
+            sort_fit_results.FormClosed += (s, f) => { save_preferences();};
             sort_fit_results.ShowDialog();
             #region old code
             ////Form sort_fit_results = new Form { Text = "Sort fitting results",Size=new Size(345,340),ShowIcon=false,ShowInTaskbar=false, FormBorderStyle = FormBorderStyle.FixedToolWindow,  AutoSize = false, MaximizeBox = false, MinimizeBox = false };
@@ -2275,9 +2285,8 @@ namespace Isotope_fitting
             //foreach (RadioButton rdBtn in sort_fit_results.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_fit_sort(sort_fit_results); };
             #endregion
         }
-        private void form_sort_all_closing()
-        {
-            save_preferences();
+        private void refresh_fit_tree_sorting()
+        {           
             if (all_fitted_results != null)
             {
                 frag_tree.BeginUpdate();
@@ -2316,9 +2325,14 @@ namespace Isotope_fitting
         }
         private void fitnode_Re_Sort(TreeNode node)
         {
+            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
             if (string.IsNullOrEmpty(node.Name))
             {
                 form_sort_fitnode(node.Index);
+            }
+            else
+            {
+                MessageBox.Show("'Sort & Filter node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.");
             }
         }
         private void update_sorting_parameters_lists()
@@ -2333,20 +2347,7 @@ namespace Isotope_fitting
         }
         private void form_sort_fitnode(int index)
         {
-            Form6 sort_node = new Form6(true,index);
-            sort_node.FormClosed += (s, e) => 
-            {
-                if (all_fitted_results != null)
-                {
-                    frag_tree.BeginUpdate();
-                    generate_fit_results();
-                    best_checked(true,index);
-                    checked_labels();
-                    fit_tree.Nodes[index].Expand();
-                    refresh_iso_plot();
-                    frag_tree.EndUpdate();
-                }
-            };
+            Form6 sort_node = new Form6(true,index);            
             sort_node.ShowDialog();
             #region old code
             ////Form sort_node = new Form { Text = "Sort results", Size = new Size(190, 150), FormBorderStyle = FormBorderStyle.FixedDialog, AutoSize = false, MaximizeBox = false, MinimizeBox = false };
@@ -2361,6 +2362,24 @@ namespace Isotope_fitting
             //sort_node.Controls.AddRange(new Control[] { aCoef_lbl1, aCoef_numUD1, a_rdBtn1, di_rdBtn1, a_di_rdBtn1 });
             //foreach (RadioButton rdBtn in sort_node.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_node_sort(sort_node, index); };
             #endregion
+        }
+        private void refresh_fitnode_sorting(TreeNode node)
+        {
+            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            if (all_fitted_results != null && string.IsNullOrEmpty(node.Name))
+            {
+                frag_tree.BeginUpdate();
+                generate_fit_results();
+                best_checked(true, node.Index);
+                checked_labels();
+                node.Expand();
+                refresh_iso_plot();
+                frag_tree.EndUpdate();
+            }
+            else
+            {
+                MessageBox.Show("'Refresh node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.");
+            }
         }
         private void update_node_sort(Form options_form, int index)
         {
@@ -2454,6 +2473,7 @@ namespace Isotope_fitting
         {
             if (tree != null)
             {
+                fit_tree.BeginUpdate();frag_tree.BeginUpdate();
                 block_plot_refresh = true; block_fit_refresh = true;
                 foreach (TreeNode node in tree.Nodes)
                 {
@@ -2463,6 +2483,7 @@ namespace Isotope_fitting
                         if(nn.Checked!= check) nn.Checked = check;
                     }
                 }
+                fit_tree.EndUpdate(); frag_tree.EndUpdate();
                 block_plot_refresh = false; block_fit_refresh = false;
             }
         }
@@ -2471,7 +2492,7 @@ namespace Isotope_fitting
             if (fit_tree != null)
             {
                 block_plot_refresh = true; block_fit_refresh = true;
-
+                fit_tree.BeginUpdate();frag_tree.BeginUpdate();
                 if (individual && fit_tree.Nodes.Count > node_index && fit_tree.Nodes[node_index].Nodes.Count > 0)
                 {
                     fit_tree.Nodes[node_index].Nodes[0].Checked = true;
@@ -2484,8 +2505,16 @@ namespace Isotope_fitting
                     }
                 }
                 block_plot_refresh = false; block_fit_refresh = false;
+                fit_tree.EndUpdate(); frag_tree.EndUpdate();
             }
         }
+        private void fitSettings_Btn_Click(object sender, EventArgs e)
+        {
+            Form7 fit_settings = new Form7();
+            fit_settings.FormClosed += (s, f) => { save_preferences(); };
+            fit_settings.ShowDialog();
+        }
+
         #endregion
 
         #region UI control
@@ -3683,7 +3712,7 @@ namespace Isotope_fitting
                 if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(iso_plot.Model, save.FileName); }
             }
         }
-        private void UncheckAll()
+        private void UncheckAll_calculationPanel()
         {
             foreach (int i in a_lstBox.CheckedIndices)
             {
@@ -3976,7 +4005,6 @@ namespace Isotope_fitting
         {
             export_copy_plot(false, iso_plot);
         }
-
         private void copyImage_Btn_Click(object sender, EventArgs e)
         {
             export_copy_plot(true,iso_plot);
@@ -4830,7 +4858,7 @@ namespace Isotope_fitting
             windowList.Clear();
             selected_all_data.Clear();
             pep_Box.Text = null;
-            UncheckAll();
+            UncheckAll_calculationPanel();
             clearCalc_Btn.Enabled = false;
             calc_Btn.Enabled = false;
             fitMin_Box.Enabled = false;
@@ -4874,7 +4902,7 @@ namespace Isotope_fitting
                 experimental.Clear();
                 ChemFormulas.Clear();
                 pep_Box.Text = null;
-                UncheckAll();
+                UncheckAll_calculationPanel();
                 clearCalc_Btn.Enabled = false;
                 calc_Btn.Enabled = false;
                 resolution_Box.Text = null;
@@ -5035,7 +5063,7 @@ namespace Isotope_fitting
             selectedFragments.Clear();
             pep_Box.Text = null;
             frag_listView.Items.Clear();
-            UncheckAll();
+            UncheckAll_calculationPanel();
             resolution_Box.Text = null;
             machine_listBox.ClearSelected();
             machine_listBox.SelectedIndex = 2;
@@ -5131,7 +5159,7 @@ namespace Isotope_fitting
                 experimental.Clear();
                 ChemFormulas.Clear();
                 pep_Box.Text = null;
-                UncheckAll();
+                UncheckAll_calculationPanel();
                 clearCalc_Btn.Enabled = false;
                 calc_Btn.Enabled = false;
                 resolution_Box.Text = null;
@@ -5295,7 +5323,7 @@ namespace Isotope_fitting
         #region Calculation Options
         private void ClearCalc_Btn_Click(object sender, EventArgs e)
         {
-            UncheckAll();
+            UncheckAll_calculationPanel();
         }
 
         private void SaveCalc_Btn_Click(object sender, EventArgs e)
@@ -7925,14 +7953,7 @@ namespace Isotope_fitting
         {
             clearList();
         }
-
-        private void fitSettings_Btn_Click(object sender, EventArgs e)
-        {
-            Form7 fit_settings = new Form7();
-            fit_settings.FormClosed += (s, f) => { save_preferences(); };
-            fit_settings.ShowDialog();
-        }
-
+        
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
         {
             if (frag_tree != null)
@@ -7952,10 +7973,15 @@ namespace Isotope_fitting
         {
             if (frag_tree != null)
             {
+                frag_tree.BeginUpdate();
+                block_plot_refresh = true; block_fit_refresh = true;
                 foreach (TreeNode node in frag_tree.Nodes)
                 {
                     node.Checked = true;
                 }
+                block_plot_refresh = false; block_fit_refresh = false;
+                frag_tree.EndUpdate();
+                refresh_iso_plot();
             }
         }
 
@@ -7963,11 +7989,21 @@ namespace Isotope_fitting
         {
             if (frag_tree != null)
             {
+                frag_tree.BeginUpdate();
+                block_plot_refresh = true; block_fit_refresh = true;
                 foreach (TreeNode node in frag_tree.Nodes)
                 {
                     node.Checked = false;
                 }
+                block_plot_refresh = false; block_fit_refresh = false;
+                frag_tree.EndUpdate();
+                refresh_iso_plot();
             }
+        }
+
+        private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
+        {
+            refresh_fit_tree_sorting();
         }
     }
 }
