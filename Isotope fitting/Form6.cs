@@ -15,9 +15,9 @@ namespace Isotope_fitting
         bool is_node = false;
         int idx ;
         /// <summary>
-        /// [Ai sort,A sort,di sort]
+        /// [Ai sort,A sort,di sort,sse sort]
         /// </summary>
-        public static bool[] sort = new bool[3];
+        public static bool[] sort = new bool[4];
         /// <summary>
         /// [Ai thres,A thres,di thres]
         /// </summary>
@@ -38,6 +38,7 @@ namespace Isotope_fitting
                 Ai_checkBox.Checked = Form2.tab_node[idx][0];
                 A_checkBox.Checked = Form2.tab_node[idx][1] ;
                 di_checkBox.Checked = Form2.tab_node[idx][2];
+                sse_checkBox.Checked = Form2.tab_node[idx][3];
                 Ai_numUD.Value = (decimal)Form2.tab_thres[idx][0];
                 A_numUD.Value = (decimal)Form2.tab_thres[idx][1];
                 di_numUD.Value = (decimal)Form2.tab_thres[idx][2];
@@ -45,6 +46,7 @@ namespace Isotope_fitting
                 sort[0] = Form2.tab_node[idx][0];
                 sort[1] = Form2.tab_node[idx][1];
                 sort[2] = Form2.tab_node[idx][2];
+                sort[3] = Form2.tab_node[idx][3];
                 thres[0] = Form2.tab_thres[idx][0];
                 thres[1] = Form2.tab_thres[idx][1];
                 thres[2] = Form2.tab_thres[idx][2];
@@ -55,6 +57,7 @@ namespace Isotope_fitting
                 Ai_checkBox.Checked = Form2.fit_sort[0];
                 A_checkBox.Checked= Form2.fit_sort[1];
                 di_checkBox.Checked= Form2.fit_sort[2];
+                sse_checkBox.Checked = Form2.fit_sort[3];
                 Ai_numUD.Value= (decimal)Form2.fit_thres[0];
                 A_numUD.Value =  (decimal)Form2.fit_thres[1];
                 di_numUD.Value =  (decimal)Form2.fit_thres[2];
@@ -62,6 +65,7 @@ namespace Isotope_fitting
                 sort[0] = Form2.fit_sort[0];
                 sort[1] = Form2.fit_sort[1];
                 sort[2] = Form2.fit_sort[2];
+                sort[3] = Form2.fit_sort[3];
                 thres[0] = Form2.fit_thres[0];
                 thres[1] = Form2.fit_thres[1];
                 thres[2] = Form2.fit_thres[2];
@@ -91,7 +95,10 @@ namespace Isotope_fitting
             else { labelA.Enabled = false; A_coef_numUD.Enabled = false; A_coef_numUD.BackColor = DefaultBackColor; labelAi.Enabled = false; Ai_coef_numUD.Enabled = false; Ai_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; }
             sort[2] = di_checkBox.Checked;
         }
-
+        private void sse_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            sort[3] = di_checkBox.Checked;
+        }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -131,6 +138,8 @@ namespace Isotope_fitting
                 Form2.tab_node[idx][0] = sort[0];
                 Form2.tab_node[idx][1] = sort[1];
                 Form2.tab_node[idx][2] = sort[2];
+                Form2.tab_node[idx][3] = sort[3];
+
                 Form2.tab_thres[idx][0] = thres[0];
                 Form2.tab_thres[idx][1] = thres[1];
                 Form2.tab_thres[idx][2] = thres[2];                
@@ -141,6 +150,8 @@ namespace Isotope_fitting
                 Form2.fit_sort[0]=sort[0];
                 Form2.fit_sort[1]= sort[1];
                 Form2.fit_sort[2]= sort[2];
+                Form2.fit_sort[3] = sort[3];
+
                 Form2.fit_thres[0]=thres[0];
                 Form2.fit_thres[1]= thres[1];
                 Form2.fit_thres[2]= thres[2];
@@ -148,6 +159,6 @@ namespace Isotope_fitting
             }
         }
 
-       
+        
     }
 }

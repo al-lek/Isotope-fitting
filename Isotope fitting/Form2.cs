@@ -165,9 +165,9 @@ namespace Isotope_fitting
 
         #region fit results sorting parameteres
         /// <summary>
-        /// [Ai sort,A sort,di sort]
+        /// [Ai sort,A sort,di sort,sse sort]
         /// </summary>
-        public static bool[] fit_sort = new bool[] { true,false,false };
+        public static bool[] fit_sort = new bool[] { true,false,false ,false};
         /// <summary>
         /// [Ai thres,A thres,di thres]
         /// </summary>
@@ -325,11 +325,13 @@ namespace Isotope_fitting
                     fit_sort[0] = string_to_bool(preferences[11].Split(':')[1]);
                     fit_sort[1] = string_to_bool(preferences[12].Split(':')[1]);
                     fit_sort[2] = string_to_bool(preferences[13].Split(':')[1]);
-                    a_coef= Convert.ToDouble(preferences[14].Split(':')[1]);
-                    visible_results= Convert.ToInt32(preferences[15].Split(':')[1]);
-                    fit_thres[0]= Convert.ToDouble(preferences[16].Split(':')[1]); ;
-                    fit_thres[1] = Convert.ToDouble(preferences[17].Split(':')[1]); ;
-                    fit_thres[2] = Convert.ToDouble(preferences[18].Split(':')[1]); ;
+                    fit_sort[3] = string_to_bool(preferences[14].Split(':')[1]);
+
+                    a_coef = Convert.ToDouble(preferences[15].Split(':')[1]);
+                    visible_results= Convert.ToInt32(preferences[16].Split(':')[1]);
+                    fit_thres[0]= Convert.ToDouble(preferences[17].Split(':')[1]); ;
+                    fit_thres[1] = Convert.ToDouble(preferences[18].Split(':')[1]); ;
+                    fit_thres[2] = Convert.ToDouble(preferences[19].Split(':')[1]); ;
 
                 }
                 catch { MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!"); }
@@ -361,6 +363,8 @@ namespace Isotope_fitting
             preferences[0] += "fit results sorting by Ai: " + fit_sort[0].ToString() + "\r\n";
             preferences[0] += "fit results sorting by A: " + fit_sort[1].ToString() + "\r\n";
             preferences[0] += "fit results sorting by di: " + fit_sort[2].ToString() + "\r\n";
+            preferences[0] += "fit results sorting by sse: " + fit_sort[3].ToString() + "\r\n";
+
             preferences[0] += "Area coeficient: " + a_coef.ToString() + "\r\n";
             preferences[0] += "Amount of best solutions presented: " + visible_results.ToString() + "\r\n";
             preferences[0] += "Ai score threshold: " + fit_thres[0].ToString() + "\r\n";
@@ -1846,7 +1850,7 @@ namespace Isotope_fitting
             alglib.minlmresults(state, out coeficients, out rep);
 
             // 2. save result
-            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,...., SSE]
+            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di, SSE,Ai,A]
             double[] result = new double[3*distros_num +4];
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
             result[3*distros_num+1] = state.fi[0];
@@ -2340,7 +2344,7 @@ namespace Isotope_fitting
             if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); tab_thres.Clear(); labels_checked.Clear(); }
             for (int n = 0; n < all_fitted_results.Count; n++)
             {
-                tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2] }); tab_coef.Add(a_coef);
+                tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3] }); tab_coef.Add(a_coef);
                 tab_thres.Add(new double[] { fit_thres[0], fit_thres[1], fit_thres[2] });labels_checked.Add("");
             }
             return;
@@ -2426,10 +2430,13 @@ namespace Isotope_fitting
                 {
                     compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4]);
                 }
-                else//sort by Ai
+                else if(tab_node[tx_set_idx][0])//sort by Ai
                 {
                     compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]);
-
+                }
+                else //sort by sse
+                {
+                    compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3]);
                 }
                 return compare_result;
             }
@@ -2506,6 +2513,7 @@ namespace Isotope_fitting
                 }
                 block_plot_refresh = false; block_fit_refresh = false;
                 fit_tree.EndUpdate(); frag_tree.EndUpdate();
+                refresh_iso_plot();
             }
         }
         private void fitSettings_Btn_Click(object sender, EventArgs e)
@@ -8004,6 +8012,75 @@ namespace Isotope_fitting
         private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
         {
             refresh_fit_tree_sorting();
+        }
+
+        private void clear_toolStripButton_Click(object sender, EventArgs e)
+        {
+            reset_all();
+            Peptide = "";
+            insert_exp = false;
+            plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
+            saveFit_Btn.Enabled = false;
+            loadMS_Btn.Enabled = true;
+            loadFit_Btn.Enabled = true;
+            clearCalc_Btn.Enabled = false;
+            calc_Btn.Enabled = false;
+            fitMin_Box.Enabled = false;
+            fitMin_Box.Text = null;
+            fitMax_Box.Enabled = false;
+            fitMax_Box.Text = null;
+            fitStep_Box.Enabled = false;
+            fitStep_Box.Text = null;
+            step_rangeBox.Text = null;
+            Fitting_chkBox.Checked = false;
+            Fitting_chkBox.Enabled = false;
+            Fragments2.Clear();
+            ChemFormulas.Clear();
+            selectedFragments.Clear();
+            pep_Box.Text = null;
+            frag_listView.Items.Clear();
+            UncheckAll_calculationPanel();
+            resolution_Box.Text = null;
+            machine_listBox.ClearSelected();
+            machine_listBox.SelectedIndex = 2;
+            loadExp_Btn.Enabled = true;
+            selected_window = 1000000;
+            bigPanel.Controls.Clear();
+            factor_Box.Text = null;
+            candidate_fragments = 1;
+            mzMax_Box.Enabled = false;
+            mzMin_Box.Enabled = false;
+            mzMax_Label.Enabled = false;
+            mzMin_Label.Enabled = false;
+            chargeMax_Box.Enabled = false;
+            chargeMin_Box.Enabled = false;
+            chargeAll_Btn.Enabled = false;
+            idxPr_Box.Enabled = false;
+            idxTo_Box.Enabled = false;
+            idxFrom_Box.Enabled = false;
+            resolution_Box.Enabled = false;
+            machine_listBox.Enabled = false;
+            saveWd_Btn.Enabled = false;
+            windowList.Clear();
+            loaded_window = false;
+            fit_sel_Btn.Enabled = false;
+            neues = 0;
+            mark_neues = false;
+            Form4.active = false;
+            if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
+            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+            factor_panel.Controls.Clear();
+        }
+
+        private void frag_sort_Btn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("not ready yet");
+        }
+
+        private void refresh_frag_Btn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("not ready yet");
         }
     }
 }

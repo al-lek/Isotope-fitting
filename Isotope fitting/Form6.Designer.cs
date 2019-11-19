@@ -365,6 +365,7 @@
             this.sse_checkBox.TabIndex = 19;
             this.sse_checkBox.Text = "SSE";
             this.sse_checkBox.UseVisualStyleBackColor = true;
+            this.sse_checkBox.CheckedChanged += new System.EventHandler(this.sse_checkBox_CheckedChanged);
             // 
             // Form6
             // 
