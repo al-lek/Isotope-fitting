@@ -257,7 +257,7 @@ namespace Isotope_fitting
             customRes_Btn.Location = new System.Drawing.Point(205, 485);
             customRes_Btn.Name = "customRes_Btn";
             customRes_Btn.Size = new System.Drawing.Size(94, 13);
-            customRes_Btn.TabIndex = 38;
+            customRes_Btn.TabIndex = 24;
             customRes_Btn.Text = "Custom Resolution";
             customRes_Btn.Click += new System.EventHandler(this.customRes_Btn_Click);
             // 
@@ -463,7 +463,7 @@ namespace Isotope_fitting
             this.theorData_grpBx.Location = new System.Drawing.Point(6, 139);
             this.theorData_grpBx.Name = "theorData_grpBx";
             this.theorData_grpBx.Size = new System.Drawing.Size(219, 86);
-            this.theorData_grpBx.TabIndex = 10000019;
+            this.theorData_grpBx.TabIndex = 2;
             this.theorData_grpBx.TabStop = false;
             this.theorData_grpBx.Text = "Theoretical Data";
             // 
@@ -491,7 +491,7 @@ namespace Isotope_fitting
             this.plotFragCent_chkBox.Location = new System.Drawing.Point(7, 59);
             this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
             this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotFragCent_chkBox.TabIndex = 1;
+            this.plotFragCent_chkBox.TabIndex = 3;
             this.plotFragCent_chkBox.Text = "Centroids";
             this.plotFragCent_chkBox.UseVisualStyleBackColor = true;
             // 
@@ -529,7 +529,7 @@ namespace Isotope_fitting
             this.expData_grpBx.Location = new System.Drawing.Point(6, 6);
             this.expData_grpBx.Name = "expData_grpBx";
             this.expData_grpBx.Size = new System.Drawing.Size(219, 127);
-            this.expData_grpBx.TabIndex = 10000018;
+            this.expData_grpBx.TabIndex = 0;
             this.expData_grpBx.TabStop = false;
             this.expData_grpBx.Text = "Experimental Data";
             // 
@@ -544,7 +544,7 @@ namespace Isotope_fitting
             this.displayPeakList_btn.Location = new System.Drawing.Point(3, 40);
             this.displayPeakList_btn.Name = "displayPeakList_btn";
             this.displayPeakList_btn.Size = new System.Drawing.Size(103, 21);
-            this.displayPeakList_btn.TabIndex = 40;
+            this.displayPeakList_btn.TabIndex = 2;
             this.displayPeakList_btn.Text = "peak list";
             this.displayPeakList_btn.UseVisualStyleBackColor = false;
             // 
@@ -594,7 +594,7 @@ namespace Isotope_fitting
             this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 103);
             this.plotCentr_chkBox.Name = "plotCentr_chkBox";
             this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotCentr_chkBox.TabIndex = 0;
+            this.plotCentr_chkBox.TabIndex = 4;
             this.plotCentr_chkBox.Text = "Centroids";
             this.plotCentr_chkBox.UseVisualStyleBackColor = true;
             // 
@@ -636,7 +636,7 @@ namespace Isotope_fitting
             this.plotExp_chkBox.Location = new System.Drawing.Point(5, 85);
             this.plotExp_chkBox.Name = "plotExp_chkBox";
             this.plotExp_chkBox.Size = new System.Drawing.Size(78, 18);
-            this.plotExp_chkBox.TabIndex = 0;
+            this.plotExp_chkBox.TabIndex = 3;
             this.plotExp_chkBox.Text = "Spectrum";
             this.plotExp_chkBox.UseVisualStyleBackColor = true;
             // 
@@ -652,7 +652,7 @@ namespace Isotope_fitting
             this.loadExp_Btn.Location = new System.Drawing.Point(3, 16);
             this.loadExp_Btn.Name = "loadExp_Btn";
             this.loadExp_Btn.Size = new System.Drawing.Size(213, 21);
-            this.loadExp_Btn.TabIndex = 37;
+            this.loadExp_Btn.TabIndex = 1;
             this.loadExp_Btn.Text = "Load Experiment";
             this.loadExp_Btn.UseVisualStyleBackColor = false;
             this.loadExp_Btn.Click += new System.EventHandler(this.loadExp_Btn_Click);
@@ -889,7 +889,7 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 231);
             this.fitOptions_grpBox.Name = "fitOptions_grpBox";
             this.fitOptions_grpBox.Size = new System.Drawing.Size(219, 72);
-            this.fitOptions_grpBox.TabIndex = 3;
+            this.fitOptions_grpBox.TabIndex = 4;
             this.fitOptions_grpBox.TabStop = false;
             this.fitOptions_grpBox.Text = "Fitting Options";
             // 
@@ -908,7 +908,7 @@ namespace Isotope_fitting
             this.fiToolStrip.Name = "fiToolStrip";
             this.fiToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.fiToolStrip.Size = new System.Drawing.Size(140, 27);
-            this.fiToolStrip.TabIndex = 48;
+            this.fiToolStrip.TabIndex = 0;
             // 
             // Fitting_chkBox
             // 
@@ -942,7 +942,7 @@ namespace Isotope_fitting
             this.fit_Btn.Location = new System.Drawing.Point(5, 16);
             this.fit_Btn.Name = "fit_Btn";
             this.fit_Btn.Size = new System.Drawing.Size(101, 21);
-            this.fit_Btn.TabIndex = 39;
+            this.fit_Btn.TabIndex = 1;
             this.fit_Btn.Text = "Auto fit";
             this.fit_Btn.UseVisualStyleBackColor = false;
             this.fit_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
@@ -958,7 +958,7 @@ namespace Isotope_fitting
             this.fit_sel_Btn.Location = new System.Drawing.Point(113, 16);
             this.fit_sel_Btn.Name = "fit_sel_Btn";
             this.fit_sel_Btn.Size = new System.Drawing.Size(101, 21);
-            this.fit_sel_Btn.TabIndex = 47;
+            this.fit_sel_Btn.TabIndex = 5;
             this.fit_sel_Btn.Text = "Fit select";
             this.fit_sel_Btn.UseVisualStyleBackColor = false;
             this.fit_sel_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
@@ -1083,7 +1083,7 @@ namespace Isotope_fitting
             this.panel_calc.MinimumSize = new System.Drawing.Size(318, 620);
             this.panel_calc.Name = "panel_calc";
             this.panel_calc.Size = new System.Drawing.Size(318, 620);
-            this.panel_calc.TabIndex = 0;
+            this.panel_calc.TabIndex = 3;
             // 
             // hide_Btn
             // 
@@ -1113,7 +1113,7 @@ namespace Isotope_fitting
             this.optionBtn.Location = new System.Drawing.Point(70, 582);
             this.optionBtn.Name = "optionBtn";
             this.optionBtn.Size = new System.Drawing.Size(119, 23);
-            this.optionBtn.TabIndex = 39;
+            this.optionBtn.TabIndex = 40;
             this.optionBtn.Text = "Calculation Settings";
             this.optionBtn.UseVisualStyleBackColor = false;
             this.optionBtn.Click += new System.EventHandler(this.optionBtn_Click);
@@ -1125,7 +1125,7 @@ namespace Isotope_fitting
             this.chargeMax_Box.Location = new System.Drawing.Point(52, 379);
             this.chargeMax_Box.Name = "chargeMax_Box";
             this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
-            this.chargeMax_Box.TabIndex = 23;
+            this.chargeMax_Box.TabIndex = 33;
             this.chargeMax_Box.TextChanged += new System.EventHandler(this.ChargeMax_Box_TextChanged);
             // 
             // internal_lstBox
@@ -1204,7 +1204,7 @@ namespace Isotope_fitting
             this.machine_listBox.Location = new System.Drawing.Point(94, 504);
             this.machine_listBox.Name = "machine_listBox";
             this.machine_listBox.Size = new System.Drawing.Size(206, 56);
-            this.machine_listBox.TabIndex = 36;
+            this.machine_listBox.TabIndex = 39;
             this.machine_listBox.SelectedIndexChanged += new System.EventHandler(this.Machine_listBox_SelectedIndexChanged);
             // 
             // frag_Label
@@ -1215,7 +1215,7 @@ namespace Isotope_fitting
             this.frag_Label.Location = new System.Drawing.Point(3, 8);
             this.frag_Label.Name = "frag_Label";
             this.frag_Label.Size = new System.Drawing.Size(56, 13);
-            this.frag_Label.TabIndex = 5;
+            this.frag_Label.TabIndex = 1;
             this.frag_Label.Text = "Fragments";
             // 
             // Mdvw_lstBox
@@ -1248,7 +1248,7 @@ namespace Isotope_fitting
             this.charge_Label.Location = new System.Drawing.Point(3, 341);
             this.charge_Label.Name = "charge_Label";
             this.charge_Label.Size = new System.Drawing.Size(41, 13);
-            this.charge_Label.TabIndex = 6;
+            this.charge_Label.TabIndex = 14;
             this.charge_Label.Text = "Charge";
             // 
             // z_lstBox
@@ -1275,7 +1275,7 @@ namespace Isotope_fitting
             this.chargeAll_Btn.Location = new System.Drawing.Point(101, 377);
             this.chargeAll_Btn.Name = "chargeAll_Btn";
             this.chargeAll_Btn.Size = new System.Drawing.Size(37, 23);
-            this.chargeAll_Btn.TabIndex = 8;
+            this.chargeAll_Btn.TabIndex = 34;
             this.chargeAll_Btn.Text = "All";
             this.chargeAll_Btn.UseVisualStyleBackColor = false;
             this.chargeAll_Btn.Click += new System.EventHandler(this.chargeAll_Btn_Click);
@@ -1288,7 +1288,7 @@ namespace Isotope_fitting
             this.machine_Label.Location = new System.Drawing.Point(94, 485);
             this.machine_Label.Name = "machine_Label";
             this.machine_Label.Size = new System.Drawing.Size(48, 13);
-            this.machine_Label.TabIndex = 35;
+            this.machine_Label.TabIndex = 23;
             this.machine_Label.Text = "Machine";
             // 
             // calc_Btn
@@ -1302,7 +1302,7 @@ namespace Isotope_fitting
             this.calc_Btn.Location = new System.Drawing.Point(195, 582);
             this.calc_Btn.Name = "calc_Btn";
             this.calc_Btn.Size = new System.Drawing.Size(105, 23);
-            this.calc_Btn.TabIndex = 10;
+            this.calc_Btn.TabIndex = 41;
             this.calc_Btn.Text = "Calculate";
             this.calc_Btn.UseVisualStyleBackColor = false;
             this.calc_Btn.Click += new System.EventHandler(this.Calc_Btn_Click);
@@ -1369,7 +1369,7 @@ namespace Isotope_fitting
             this.resolution_Box.Location = new System.Drawing.Point(4, 504);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(81, 20);
-            this.resolution_Box.TabIndex = 34;
+            this.resolution_Box.TabIndex = 38;
             this.resolution_Box.TextChanged += new System.EventHandler(this.Resolution_Box_TextChanged);
             // 
             // mzMin_Label
@@ -1407,7 +1407,7 @@ namespace Isotope_fitting
             this.mzMax_Box.Location = new System.Drawing.Point(67, 310);
             this.mzMax_Box.Name = "mzMax_Box";
             this.mzMax_Box.Size = new System.Drawing.Size(56, 20);
-            this.mzMax_Box.TabIndex = 14;
+            this.mzMax_Box.TabIndex = 31;
             this.mzMax_Box.Click += new System.EventHandler(this.mzMax_Box_Click);
             this.mzMax_Box.TextChanged += new System.EventHandler(this.MzMax_Box_TextChanged);
             // 
@@ -1419,7 +1419,7 @@ namespace Isotope_fitting
             this.resolution_Label.Location = new System.Drawing.Point(4, 485);
             this.resolution_Label.Name = "resolution_Label";
             this.resolution_Label.Size = new System.Drawing.Size(57, 13);
-            this.resolution_Label.TabIndex = 33;
+            this.resolution_Label.TabIndex = 22;
             this.resolution_Label.Text = "Resolution";
             // 
             // mzMin_Box
@@ -1429,7 +1429,7 @@ namespace Isotope_fitting
             this.mzMin_Box.Location = new System.Drawing.Point(3, 310);
             this.mzMin_Box.Name = "mzMin_Box";
             this.mzMin_Box.Size = new System.Drawing.Size(56, 20);
-            this.mzMin_Box.TabIndex = 15;
+            this.mzMin_Box.TabIndex = 30;
             this.mzMin_Box.Click += new System.EventHandler(this.mzMin_Box_Click);
             this.mzMin_Box.TextChanged += new System.EventHandler(this.MzMin_Box_TextChanged);
             // 
@@ -1469,7 +1469,7 @@ namespace Isotope_fitting
             this.idxTo_Label.Location = new System.Drawing.Point(249, 431);
             this.idxTo_Label.Name = "idxTo_Label";
             this.idxTo_Label.Size = new System.Drawing.Size(16, 13);
-            this.idxTo_Label.TabIndex = 32;
+            this.idxTo_Label.TabIndex = 21;
             this.idxTo_Label.Text = "to";
             // 
             // clearCalc_Btn
@@ -1495,7 +1495,7 @@ namespace Isotope_fitting
             this.idxFrom_Label.Location = new System.Drawing.Point(148, 431);
             this.idxFrom_Label.Name = "idxFrom_Label";
             this.idxFrom_Label.Size = new System.Drawing.Size(27, 13);
-            this.idxFrom_Label.TabIndex = 31;
+            this.idxFrom_Label.TabIndex = 20;
             this.idxFrom_Label.Text = "from";
             // 
             // chargeMax_Label
@@ -1506,7 +1506,7 @@ namespace Isotope_fitting
             this.chargeMax_Label.Location = new System.Drawing.Point(52, 362);
             this.chargeMax_Label.Name = "chargeMax_Label";
             this.chargeMax_Label.Size = new System.Drawing.Size(26, 13);
-            this.chargeMax_Label.TabIndex = 21;
+            this.chargeMax_Label.TabIndex = 16;
             this.chargeMax_Label.Text = "max";
             // 
             // a_lstBox
@@ -1533,7 +1533,7 @@ namespace Isotope_fitting
             this.chargeMin_Label.Location = new System.Drawing.Point(3, 362);
             this.chargeMin_Label.Name = "chargeMin_Label";
             this.chargeMin_Label.Size = new System.Drawing.Size(23, 13);
-            this.chargeMin_Label.TabIndex = 22;
+            this.chargeMin_Label.TabIndex = 15;
             this.chargeMin_Label.Text = "min";
             // 
             // idxTo_Box
@@ -1543,7 +1543,7 @@ namespace Isotope_fitting
             this.idxTo_Box.Location = new System.Drawing.Point(184, 447);
             this.idxTo_Box.Name = "idxTo_Box";
             this.idxTo_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxTo_Box.TabIndex = 30;
+            this.idxTo_Box.TabIndex = 37;
             this.idxTo_Box.TextChanged += new System.EventHandler(this.IdxTo_Box_TextChanged);
             // 
             // chargeMin_Box
@@ -1553,7 +1553,7 @@ namespace Isotope_fitting
             this.chargeMin_Box.Location = new System.Drawing.Point(3, 379);
             this.chargeMin_Box.Name = "chargeMin_Box";
             this.chargeMin_Box.Size = new System.Drawing.Size(38, 20);
-            this.chargeMin_Box.TabIndex = 24;
+            this.chargeMin_Box.TabIndex = 32;
             this.chargeMin_Box.TextChanged += new System.EventHandler(this.ChargeMin_Box_TextChanged);
             // 
             // idxFrom_Box
@@ -1563,7 +1563,7 @@ namespace Isotope_fitting
             this.idxFrom_Box.Location = new System.Drawing.Point(94, 447);
             this.idxFrom_Box.Name = "idxFrom_Box";
             this.idxFrom_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxFrom_Box.TabIndex = 29;
+            this.idxFrom_Box.TabIndex = 36;
             this.idxFrom_Box.TextChanged += new System.EventHandler(this.IdxFrom_Box_TextChanged);
             // 
             // label7
@@ -1574,7 +1574,7 @@ namespace Isotope_fitting
             this.label7.Location = new System.Drawing.Point(3, 412);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(33, 13);
-            this.label7.TabIndex = 25;
+            this.label7.TabIndex = 17;
             this.label7.Text = "Index";
             // 
             // idxPr_Box
@@ -1584,7 +1584,7 @@ namespace Isotope_fitting
             this.idxPr_Box.Location = new System.Drawing.Point(3, 447);
             this.idxPr_Box.Name = "idxPr_Box";
             this.idxPr_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxPr_Box.TabIndex = 28;
+            this.idxPr_Box.TabIndex = 35;
             this.idxPr_Box.TextChanged += new System.EventHandler(this.IdxPr_Box_TextChanged);
             // 
             // primary_Label
@@ -1595,7 +1595,7 @@ namespace Isotope_fitting
             this.primary_Label.Location = new System.Drawing.Point(3, 431);
             this.primary_Label.Name = "primary_Label";
             this.primary_Label.Size = new System.Drawing.Size(43, 13);
-            this.primary_Label.TabIndex = 26;
+            this.primary_Label.TabIndex = 18;
             this.primary_Label.Text = "primary ";
             // 
             // internal_Label
@@ -1606,7 +1606,7 @@ namespace Isotope_fitting
             this.internal_Label.Location = new System.Drawing.Point(94, 431);
             this.internal_Label.Name = "internal_Label";
             this.internal_Label.Size = new System.Drawing.Size(41, 13);
-            this.internal_Label.TabIndex = 27;
+            this.internal_Label.TabIndex = 19;
             this.internal_Label.Text = "internal";
             // 
             // pep_Box
@@ -2220,9 +2220,9 @@ namespace Isotope_fitting
             this.a_Btn,
             this.x_Btn});
             this.axCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.axCharge_toolStrip.Location = new System.Drawing.Point(722, 4);
+            this.axCharge_toolStrip.Location = new System.Drawing.Point(714, 4);
             this.axCharge_toolStrip.Name = "axCharge_toolStrip";
-            this.axCharge_toolStrip.Size = new System.Drawing.Size(24, 106);
+            this.axCharge_toolStrip.Size = new System.Drawing.Size(32, 125);
             this.axCharge_toolStrip.TabIndex = 26;
             // 
             // axChargeSave_Btn
@@ -2231,7 +2231,7 @@ namespace Isotope_fitting
             this.axChargeSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axChargeSave_Btn.Image")));
             this.axChargeSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.axChargeSave_Btn.Name = "axChargeSave_Btn";
-            this.axChargeSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.axChargeSave_Btn.Size = new System.Drawing.Size(30, 22);
             this.axChargeSave_Btn.Text = "Save";
             // 
             // axChargeCopy_Btn
@@ -2240,7 +2240,7 @@ namespace Isotope_fitting
             this.axChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axChargeCopy_Btn.Image")));
             this.axChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.axChargeCopy_Btn.Name = "axChargeCopy_Btn";
-            this.axChargeCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.axChargeCopy_Btn.Size = new System.Drawing.Size(30, 22);
             this.axChargeCopy_Btn.Text = "Copy";
             // 
             // a_Btn
@@ -2254,7 +2254,7 @@ namespace Isotope_fitting
             this.a_Btn.Image = ((System.Drawing.Image)(resources.GetObject("a_Btn.Image")));
             this.a_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.a_Btn.Name = "a_Btn";
-            this.a_Btn.Size = new System.Drawing.Size(22, 24);
+            this.a_Btn.Size = new System.Drawing.Size(30, 24);
             this.a_Btn.Text = "a";
             // 
             // x_Btn
@@ -2268,7 +2268,7 @@ namespace Isotope_fitting
             this.x_Btn.Image = ((System.Drawing.Image)(resources.GetObject("x_Btn.Image")));
             this.x_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.x_Btn.Name = "x_Btn";
-            this.x_Btn.Size = new System.Drawing.Size(22, 24);
+            this.x_Btn.Size = new System.Drawing.Size(30, 24);
             this.x_Btn.Text = "x";
             // 
             // czCharge_Pnl

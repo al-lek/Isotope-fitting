@@ -709,6 +709,7 @@ namespace Isotope_fitting
         #region 2.a Select fragments and calculate their envelopes
         private void Calc_Btn_Click(object sender, EventArgs e)
         {
+            clearList();
             fragments_and_calculations_sequence_A();
         }
 
@@ -1968,8 +1969,8 @@ namespace Isotope_fitting
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
-            fit_tree.AfterSelect += (s, e) => { select_check(e.Node); fit_set_graph_zoomed(e.Node); };     
-            //fit_tree.NodeMouseDoubleClick += (s, e) => { fitnode_Re_Sort(e.Node); };
+            fit_tree.AfterSelect += (s, e) => { select_check(e.Node);  };     
+            fit_tree.NodeMouseClick += (s, e) => { fit_set_graph_zoomed(e.Node); };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
 
             // interpret fitted results
@@ -7727,7 +7728,7 @@ namespace Isotope_fitting
             idxPnl1.Controls.Add(index_plot);
             PlotModel index_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA initial", TitleColor = OxyColors.Teal };
             index_plot.Model = index_model;
-            var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = " # fragments" };
+            var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, MinimumMinorStep = 1.0, TitleFontSize = 11, Title = " # fragments" };
             index_model.Axes.Add(linearAxis7);
             var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             index_model.Axes.Add(linearAxis8);
@@ -7736,9 +7737,9 @@ namespace Isotope_fitting
             if (indexIntensity_plot != null) indexIntensity_plot.Dispose();
             indexIntensity_plot = new PlotView() { Name = "indexIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             idxInt_Pnl1.Controls.Add(indexIntensity_plot);
-            PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
+            PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial",  IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indexIntensity_plot.Model = indexIntensity_model;
-            var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left };
+            var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, MinimumMinorStep = 1.0, Position = OxyPlot.Axes.AxisPosition.Left };
             indexIntensity_model.Axes.Add(linearAxis11);
             var linearAxis12 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexIntensity_model.Axes.Add(linearAxis12);
@@ -7753,7 +7754,7 @@ namespace Isotope_fitting
             idxPnl2.Controls.Add(indexto_plot);
             PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA terminal", TitleColor = OxyColors.Teal };
             indexto_plot.Model = indexto_model;
-            var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments" };
+            var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments" };
             indexto_model.Axes.Add(linearAxis9);
             var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexto_model.Axes.Add(linearAxis10);
@@ -7764,7 +7765,7 @@ namespace Isotope_fitting
             idxInt_Pnl2.Controls.Add(indextoIntensity_plot);
             PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indextoIntensity_plot.Model = indextoIntensity_model;
-            var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid };
+            var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid , FontSize = 8, MinimumMinorStep = 1.0};
             indextoIntensity_model.Axes.Add(linearAxis13);
             var linearAxis14 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indextoIntensity_model.Axes.Add(linearAxis14);
@@ -7986,23 +7987,53 @@ namespace Isotope_fitting
                     else { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Red, Max_intensity = nn.Max_intensity }); }
                 }
             }
-            if(a_Btn.Checked && x_Btn.Checked){axCharge_plot.Model.Series.Add(a_1000000); axCharge_plot.Model.Series.Add(x_1000000); axCharge_plot.Model.Series.Add(a_100000); axCharge_plot.Model.Series.Add(x_100000); axCharge_plot.Model.Series.Add(a_10000); axCharge_plot.Model.Series.Add(x_10000); axCharge_plot.Model.Series.Add(a_1000); axCharge_plot.Model.Series.Add(x_1000); axCharge_plot.Model.Series.Add(a_100); axCharge_plot.Model.Series.Add(x_100); axCharge_plot.Model.Series.Add(a_10); axCharge_plot.Model.Series.Add(x_10);}
-            else if (a_Btn.Checked){axCharge_plot.Model.Series.Add(a_1000000); axCharge_plot.Model.Series.Add(a_100000); axCharge_plot.Model.Series.Add(a_10000);  axCharge_plot.Model.Series.Add(a_1000);  axCharge_plot.Model.Series.Add(a_100); axCharge_plot.Model.Series.Add(a_10);}
-            else if (x_Btn.Checked) { axCharge_plot.Model.Series.Add(x_1000000); axCharge_plot.Model.Series.Add(x_100000);  axCharge_plot.Model.Series.Add(x_10000);  axCharge_plot.Model.Series.Add(x_1000);  axCharge_plot.Model.Series.Add(x_100);  axCharge_plot.Model.Series.Add(x_10); }
-            if (b_Btn.Checked && y_Btn.Checked){byCharge_plot.Model.Series.Add(b_1000000); byCharge_plot.Model.Series.Add(y_1000000); byCharge_plot.Model.Series.Add(b_100000); byCharge_plot.Model.Series.Add(y_100000); byCharge_plot.Model.Series.Add(b_10000); byCharge_plot.Model.Series.Add(y_10000); byCharge_plot.Model.Series.Add(b_1000); byCharge_plot.Model.Series.Add(y_1000); byCharge_plot.Model.Series.Add(b_100); byCharge_plot.Model.Series.Add(y_100); byCharge_plot.Model.Series.Add(b_10); byCharge_plot.Model.Series.Add(y_10);}
-            else if (b_Btn.Checked){byCharge_plot.Model.Series.Add(b_1000000);  byCharge_plot.Model.Series.Add(b_100000); byCharge_plot.Model.Series.Add(b_10000); byCharge_plot.Model.Series.Add(b_1000);  byCharge_plot.Model.Series.Add(b_100); byCharge_plot.Model.Series.Add(b_10);}
-            else if (y_Btn.Checked){byCharge_plot.Model.Series.Add(y_1000000);  byCharge_plot.Model.Series.Add(y_100000);  byCharge_plot.Model.Series.Add(y_10000);  byCharge_plot.Model.Series.Add(y_1000);   byCharge_plot.Model.Series.Add(y_100); byCharge_plot.Model.Series.Add(y_10);}
+            if(a_Btn.Checked && x_Btn.Checked)
+            {
+                axCharge_plot.Model.Title ="a - x  fragments"; axCharge_plot.Model.Series.Add(a_1000000); axCharge_plot.Model.Series.Add(x_1000000); axCharge_plot.Model.Series.Add(a_100000); axCharge_plot.Model.Series.Add(x_100000); axCharge_plot.Model.Series.Add(a_10000); axCharge_plot.Model.Series.Add(x_10000); axCharge_plot.Model.Series.Add(a_1000); axCharge_plot.Model.Series.Add(x_1000); axCharge_plot.Model.Series.Add(a_100); axCharge_plot.Model.Series.Add(x_100); axCharge_plot.Model.Series.Add(a_10); axCharge_plot.Model.Series.Add(x_10);
+            }
+            else if (a_Btn.Checked)
+            {
+                axCharge_plot.Model.Title = "a fragments"; axCharge_plot.Model.Series.Add(a_1000000); axCharge_plot.Model.Series.Add(a_100000); axCharge_plot.Model.Series.Add(a_10000);  axCharge_plot.Model.Series.Add(a_1000);  axCharge_plot.Model.Series.Add(a_100); axCharge_plot.Model.Series.Add(a_10);
+            }
+            else if (x_Btn.Checked)
+            {
+                axCharge_plot.Model.Title = "x fragments"; axCharge_plot.Model.Series.Add(x_1000000); axCharge_plot.Model.Series.Add(x_100000);  axCharge_plot.Model.Series.Add(x_10000);  axCharge_plot.Model.Series.Add(x_1000);  axCharge_plot.Model.Series.Add(x_100);  axCharge_plot.Model.Series.Add(x_10);
+            }
+            else
+            {
+                axCharge_plot.Model.Title = "a - x  fragments";
+            }
+            if (b_Btn.Checked && y_Btn.Checked)
+            {
+                byCharge_plot.Model.Title = "b - y  fragments"; byCharge_plot.Model.Series.Add(b_1000000); byCharge_plot.Model.Series.Add(y_1000000); byCharge_plot.Model.Series.Add(b_100000); byCharge_plot.Model.Series.Add(y_100000); byCharge_plot.Model.Series.Add(b_10000); byCharge_plot.Model.Series.Add(y_10000); byCharge_plot.Model.Series.Add(b_1000); byCharge_plot.Model.Series.Add(y_1000); byCharge_plot.Model.Series.Add(b_100); byCharge_plot.Model.Series.Add(y_100); byCharge_plot.Model.Series.Add(b_10); byCharge_plot.Model.Series.Add(y_10);
+            }
+            else if (b_Btn.Checked)
+            {
+                byCharge_plot.Model.Title = "b  fragments"; byCharge_plot.Model.Series.Add(b_1000000);  byCharge_plot.Model.Series.Add(b_100000); byCharge_plot.Model.Series.Add(b_10000); byCharge_plot.Model.Series.Add(b_1000);  byCharge_plot.Model.Series.Add(b_100); byCharge_plot.Model.Series.Add(b_10);
+            }
+            else if (y_Btn.Checked)
+            {
+                byCharge_plot.Model.Title = "y  fragments"; byCharge_plot.Model.Series.Add(y_1000000);  byCharge_plot.Model.Series.Add(y_100000);  byCharge_plot.Model.Series.Add(y_10000);  byCharge_plot.Model.Series.Add(y_1000);   byCharge_plot.Model.Series.Add(y_100); byCharge_plot.Model.Series.Add(y_10);
+            }
+            else
+            {
+                byCharge_plot.Model.Title = "b - y  fragments";
+            }
             if (c_Btn.Checked && z_Btn.Checked)
             {
-                czCharge_plot.Model.Series.Add(c_1000000); czCharge_plot.Model.Series.Add(z_1000000); czCharge_plot.Model.Series.Add(c_100000); czCharge_plot.Model.Series.Add(z_100000); czCharge_plot.Model.Series.Add(c_10000); czCharge_plot.Model.Series.Add(z_10000); czCharge_plot.Model.Series.Add(c_1000); czCharge_plot.Model.Series.Add(z_1000); czCharge_plot.Model.Series.Add(c_100); czCharge_plot.Model.Series.Add(z_100); czCharge_plot.Model.Series.Add(c_10); czCharge_plot.Model.Series.Add(z_10);
+                czCharge_plot.Model.Title = "c - z  fragments"; czCharge_plot.Model.Series.Add(c_1000000); czCharge_plot.Model.Series.Add(z_1000000); czCharge_plot.Model.Series.Add(c_100000); czCharge_plot.Model.Series.Add(z_100000); czCharge_plot.Model.Series.Add(c_10000); czCharge_plot.Model.Series.Add(z_10000); czCharge_plot.Model.Series.Add(c_1000); czCharge_plot.Model.Series.Add(z_1000); czCharge_plot.Model.Series.Add(c_100); czCharge_plot.Model.Series.Add(z_100); czCharge_plot.Model.Series.Add(c_10); czCharge_plot.Model.Series.Add(z_10);
             }
             else if (c_Btn.Checked)
             {
-                czCharge_plot.Model.Series.Add(c_1000000);  czCharge_plot.Model.Series.Add(c_100000);  czCharge_plot.Model.Series.Add(c_10000); czCharge_plot.Model.Series.Add(c_1000);  czCharge_plot.Model.Series.Add(c_100); czCharge_plot.Model.Series.Add(c_10);
+                czCharge_plot.Model.Title = "c fragments"; czCharge_plot.Model.Series.Add(c_1000000);  czCharge_plot.Model.Series.Add(c_100000);  czCharge_plot.Model.Series.Add(c_10000); czCharge_plot.Model.Series.Add(c_1000);  czCharge_plot.Model.Series.Add(c_100); czCharge_plot.Model.Series.Add(c_10);
             }
             else if (z_Btn.Checked)
             {
-                 czCharge_plot.Model.Series.Add(z_1000000); czCharge_plot.Model.Series.Add(z_100000);czCharge_plot.Model.Series.Add(z_10000);czCharge_plot.Model.Series.Add(z_1000);  czCharge_plot.Model.Series.Add(z_100);  czCharge_plot.Model.Series.Add(z_10);
+                czCharge_plot.Model.Title = "z fragments"; czCharge_plot.Model.Series.Add(z_1000000); czCharge_plot.Model.Series.Add(z_100000);czCharge_plot.Model.Series.Add(z_10000);czCharge_plot.Model.Series.Add(z_1000);  czCharge_plot.Model.Series.Add(z_100);  czCharge_plot.Model.Series.Add(z_10);
+            }
+            else
+            {
+                czCharge_plot.Model.Title = "c - z  fragments";
             }
 
             foreach (double[] pp in merged_a) { (ax_plot.Model.Series[0] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
