@@ -594,7 +594,9 @@ namespace Isotope_fitting
                 else if (ChemFormulas[i].Ion.StartsWith("c")) ChemFormulas[i].Color = OxyColors.Firebrick;
                 else ChemFormulas[i].Color = OxyColors.PaleGoldenrod;
 
-                string lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index;
+                string lbl = "";
+                if (ChemFormulas[i].Ion_type.Length==1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
+                else { lbl ="(" +ChemFormulas[i].Ion_type +")"+ChemFormulas[i].Index; }
                 ChemFormulas[i].Radio_label = lbl;
                 if(ChemFormulas[i].Charge>0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
                 else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
@@ -3632,14 +3634,8 @@ namespace Isotope_fitting
             int rr = 0;
             while (rr < Fragments2.Count)
             {
-                if (decision_algorithm2(Fragments2[rr]))
-                {
-                    Fragments2.RemoveAt(rr);
-                }
-                else
-                {
-                    rr++;
-                }
+                if (!decision_algorithm2(Fragments2[rr])){Fragments2.RemoveAt(rr);}
+                else{rr++;}
             }
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));

@@ -1135,20 +1135,14 @@ namespace Isotope_fitting
             this.internal_lstBox.FormattingEnabled = true;
             this.internal_lstBox.Items.AddRange(new object[] {
             "internal a",
-            "internal a-H2O",
-            "internal a-NH3",
-            "internal a-2H2O",
-            "internal a-2NH3",
-            "internal a-H2O-NH3",
             "internal b",
             "internal b-H2O",
             "internal b-NH3",
             "internal b-2H2O",
-            "internal b-2NH3",
-            "internal b-H2O-NH3"});
+            "internal b-2NH3"});
             this.internal_lstBox.Location = new System.Drawing.Point(179, 29);
             this.internal_lstBox.Name = "internal_lstBox";
-            this.internal_lstBox.Size = new System.Drawing.Size(120, 184);
+            this.internal_lstBox.Size = new System.Drawing.Size(120, 94);
             this.internal_lstBox.TabIndex = 5;
             // 
             // addin_lstBox
@@ -1169,7 +1163,7 @@ namespace Isotope_fitting
             "y-2H2O",
             "b-H2O-NH3",
             "y-H2O-NH3"});
-            this.addin_lstBox.Location = new System.Drawing.Point(179, 219);
+            this.addin_lstBox.Location = new System.Drawing.Point(179, 137);
             this.addin_lstBox.Name = "addin_lstBox";
             this.addin_lstBox.Size = new System.Drawing.Size(120, 184);
             this.addin_lstBox.TabIndex = 10;
@@ -1321,10 +1315,12 @@ namespace Isotope_fitting
             this.y_lstBox.Items.AddRange(new object[] {
             "y",
             "y-1",
-            "y+1"});
+            "y-2",
+            "y+1",
+            "y+2"});
             this.y_lstBox.Location = new System.Drawing.Point(61, 121);
             this.y_lstBox.Name = "y_lstBox";
-            this.y_lstBox.Size = new System.Drawing.Size(47, 49);
+            this.y_lstBox.Size = new System.Drawing.Size(47, 79);
             this.y_lstBox.TabIndex = 7;
             // 
             // mz_Label
@@ -1396,10 +1392,12 @@ namespace Isotope_fitting
             this.x_lstBox.Items.AddRange(new object[] {
             "x",
             "x-1",
-            "x+1"});
+            "x-2",
+            "x+1",
+            "x+2"});
             this.x_lstBox.Location = new System.Drawing.Point(3, 121);
             this.x_lstBox.Name = "x_lstBox";
-            this.x_lstBox.Size = new System.Drawing.Size(47, 49);
+            this.x_lstBox.Size = new System.Drawing.Size(47, 79);
             this.x_lstBox.TabIndex = 6;
             // 
             // mzMax_Box
@@ -1443,10 +1441,12 @@ namespace Isotope_fitting
             this.b_lstBox.Items.AddRange(new object[] {
             "b",
             "b-1",
-            "b+1"});
+            "b-2",
+            "b+1",
+            "b+2"});
             this.b_lstBox.Location = new System.Drawing.Point(61, 29);
             this.b_lstBox.Name = "b_lstBox";
-            this.b_lstBox.Size = new System.Drawing.Size(47, 49);
+            this.b_lstBox.Size = new System.Drawing.Size(47, 79);
             this.b_lstBox.TabIndex = 3;
             // 
             // saveCalc_Btn
@@ -1517,10 +1517,12 @@ namespace Isotope_fitting
             this.a_lstBox.Items.AddRange(new object[] {
             "a",
             "a-1",
-            "a+1"});
+            "a-2",
+            "a+1",
+            "a+2"});
             this.a_lstBox.Location = new System.Drawing.Point(3, 29);
             this.a_lstBox.Name = "a_lstBox";
-            this.a_lstBox.Size = new System.Drawing.Size(47, 49);
+            this.a_lstBox.Size = new System.Drawing.Size(47, 79);
             this.a_lstBox.TabIndex = 2;
             // 
             // chargeMin_Label
