@@ -687,24 +687,23 @@ namespace Isotope_fitting
             // toolStrip_fragList
             // 
             this.toolStrip_fragList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip_fragList.AutoSize = false;
             this.toolStrip_fragList.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip_fragList.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip_fragList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_fragList.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip_fragList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveListBtn11,
-            this.loadListBtn11,
-            this.clearListBtn11,
-            this.frag_sort_Btn,
-            this.refresh_frag_Btn,
             this.checkall_Frag_Btn,
             this.uncheckall_Frag_Btn,
-            this.toggle_toolStripButton});
+            this.toggle_toolStripButton,
+            this.saveListBtn11,
+            this.loadListBtn11,
+            this.frag_sort_Btn,
+            this.refresh_frag_Btn,
+            this.clearListBtn11});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(681, 44);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(663, 46);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
-            this.toolStrip_fragList.Size = new System.Drawing.Size(210, 27);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(228, 27);
             this.toolStrip_fragList.TabIndex = 10000014;
             // 
             // saveListBtn11
@@ -739,11 +738,13 @@ namespace Isotope_fitting
             // 
             // frag_sort_Btn
             // 
+            this.frag_sort_Btn.BackColor = System.Drawing.Color.Lavender;
             this.frag_sort_Btn.Image = ((System.Drawing.Image)(resources.GetObject("frag_sort_Btn.Image")));
             this.frag_sort_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.frag_sort_Btn.Name = "frag_sort_Btn";
-            this.frag_sort_Btn.Size = new System.Drawing.Size(94, 24);
-            this.frag_sort_Btn.Text = "Filter && Sort";
+            this.frag_sort_Btn.Size = new System.Drawing.Size(57, 24);
+            this.frag_sort_Btn.Text = "Filter";
+            this.frag_sort_Btn.ToolTipText = "Filter";
             this.frag_sort_Btn.Click += new System.EventHandler(this.frag_sort_Btn_Click);
             // 
             // refresh_frag_Btn
@@ -830,6 +831,7 @@ namespace Isotope_fitting
             this.sortSettings_Btn.Name = "sortSettings_Btn";
             this.sortSettings_Btn.Size = new System.Drawing.Size(91, 22);
             this.sortSettings_Btn.Text = "Filter && Sort";
+            this.sortSettings_Btn.ToolTipText = "Filter & Sort";
             this.sortSettings_Btn.Click += new System.EventHandler(this.sortSettings_Btn_Click);
             // 
             // refresh_fitRes_Btn

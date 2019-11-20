@@ -3145,6 +3145,12 @@ namespace Isotope_fitting
             Form5 frm5 = new Form5();
             frm5.ShowDialog();
         }
+        private void settingsPeak_Btn_Click(object sender, EventArgs e)
+        {
+            Form8 frm8 = new Form8();
+            frm8.FormClosed += (s, f) => { save_preferences(); };
+            frm8.ShowDialog();
+        }
 
         #endregion
 
@@ -3613,6 +3619,69 @@ namespace Isotope_fitting
         private void clearListBtn1_Click(object sender, EventArgs e)
         {
             clearList();
+        }
+        #endregion
+
+        #region FILTER list fragments
+        private void frag_sort_Btn_Click(object sender, EventArgs e)
+        {
+            params_form();
+        }
+        private void refresh_frag_Btn_Click(object sender, EventArgs e)
+        {
+            int rr = 0;
+            while (rr < Fragments2.Count)
+            {
+                if (decision_algorithm2(Fragments2[rr]))
+                {
+                    Fragments2.RemoveAt(rr);
+                }
+                else
+                {
+                    rr++;
+                }
+            }
+            // thread safely fire event to continue calculations
+            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+        }
+        private bool decision_algorithm2(FragForm fra)
+        {
+            // all the decisions if a fragment is canidate for fitting
+            bool fragment_is_canditate = true;
+            // deceide how many peaks will be involved in the selection process
+            // results = {[resol1, ppm1], [resol2, ppm2], ....}
+            List<double[]> results = new List<double[]>();
+
+            int total_peaks = fra.Centroid.Count;
+            int contrib_peaks = 0;
+            int rule_idx = Array.IndexOf(selection_rule, true);
+
+            if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
+            else
+            {
+                if (rule_idx == 3) contrib_peaks = total_peaks / 2;                 // Total 8, use 4. Total 7, use 3
+                else if (rule_idx == 4) contrib_peaks = total_peaks / 2 - 1;        // Total 8, use 3. Total 7, use 2
+                else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
+            }
+
+            // sanity check. No matter what, check at least most intense peak!
+            if (contrib_peaks == 0) contrib_peaks = 1;
+
+            for (int i = 0; i < contrib_peaks; i++)
+            {
+                double[] tmp = ppm_calculator(fra.Centroid[i].X);
+
+                if (tmp[0] < ppmError) results.Add(tmp);
+                else { fragment_is_canditate = false; break; }
+            }
+
+            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
+            if (!fragment_is_canditate) { fra.Profile.Clear(); return false; }
+
+            //fra.PPM_Error = results.Average(p => p[0]);
+            //fra.Resolution = (float)results.Average(p => p[1]);
+
+            return fragment_is_canditate;
         }
         #endregion
 
@@ -8049,76 +8118,12 @@ namespace Isotope_fitting
             }
         }
 
-        
+
+
+
 
         #endregion
 
         #endregion
-
-        private void frag_sort_Btn_Click(object sender, EventArgs e)
-        {
-            params_form();
-        }
-
-        private void refresh_frag_Btn_Click(object sender, EventArgs e)
-        {
-            int rr = 0;
-            while (rr < Fragments2.Count - 1)
-            {
-                if (!decision_algorithm2(Fragments2[rr])){Fragments2.RemoveAt(rr);}
-                else{rr++;}
-            }
-            // thread safely fire event to continue calculations
-            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
-        }
-        private bool decision_algorithm2(FragForm fra )
-        {
-            // all the decisions if a fragment is canidate for fitting
-            bool fragment_is_canditate = true;
-            // deceide how many peaks will be involved in the selection process
-            // results = {[resol1, ppm1], [resol2, ppm2], ....}
-            List<double[]> results = new List<double[]>();
-
-            int total_peaks = fra.Centroid.Count;
-            int contrib_peaks = 0;
-            int rule_idx = Array.IndexOf(selection_rule, true);
-
-            if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
-            else
-            {
-                if (rule_idx == 3) contrib_peaks = total_peaks / 2;                 // Total 8, use 4. Total 7, use 3
-                else if (rule_idx == 4) contrib_peaks = total_peaks / 2 - 1;        // Total 8, use 3. Total 7, use 2
-                else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
-            }
-
-            // sanity check. No matter what, check at least most intense peak!
-            if (contrib_peaks == 0) contrib_peaks = 1;
-
-            for (int i = 0; i < contrib_peaks; i++)
-            {
-                double[] tmp = ppm_calculator(fra.Centroid[i].X);
-
-                if (tmp[0] < ppmError) results.Add(tmp);
-                else { fragment_is_canditate = false; break; }
-            }
-
-            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate) { fra.Profile.Clear();  return false; }
-
-            //fra.PPM_Error = results.Average(p => p[0]);
-            //fra.Resolution = (float)results.Average(p => p[1]);
-
-            return fragment_is_canditate;
-        }
-        private void settingsPeak_Btn_Click(object sender, EventArgs e)
-        {
-            Form8 frm8 = new Form8();
-            frm8.FormClosed += (s, f) => { save_preferences(); };
-            frm8.ShowDialog();
-        }
     }
 }
-
-
-
-
