@@ -223,7 +223,7 @@ namespace Isotope_fitting
 
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
-            load_preferences();           
+            load_preferences();
         }
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
@@ -251,29 +251,24 @@ namespace Isotope_fitting
 
         private void params_form()
         {
-            Form params_and_pref = new Form { Text = "Fragment selection filters", FormBorderStyle = FormBorderStyle.FixedDialog,  AutoSize = true, MaximizeBox = false, MinimizeBox = false };
+            Form params_and_pref = new Form { Text = "Fragment selection filters", FormBorderStyle = FormBorderStyle.FixedDialog, AutoSize = false, Size = new Size(300,220), MaximizeBox = false, MinimizeBox = false };
             Label ppm_lbl = new Label { Name = "ppm_lbl", Text = "max ppm error: ", Location = new Point(10, 8), AutoSize = true };
             NumericUpDown ppm_numUD = new NumericUpDown { Name = "ppm_numUD", Minimum = 1, Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)ppmError, Location = new Point(140, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             ppm_numUD.ValueChanged += (s, e) => { ppmError = (double)ppm_numUD.Value; save_preferences(); };
 
-            Label minIntensity_lbl = new Label { Name = "minIntensity_lbl", Text = "peak detect min intensity: ", Location = new Point(10, 38), AutoSize = true };
-            NumericUpDown minIntensity_numUD = new NumericUpDown { Name = "minIntensity_numUD", Minimum = 10, Value = (decimal)min_intes, Location = new Point(140, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            minIntensity_numUD.ValueChanged += (s, e) => { min_intes =  (double)minIntensity_numUD.Value; save_preferences(); };
-
-            Label fragGrps_lbl = new Label { Name = "fragGrps_lbl", Text = "size of fragment group: ", Location = new Point(10, 68), AutoSize = true };
-            NumericUpDown fragGrps_numUD = new NumericUpDown { Name = "fragGrps_numUD", Minimum = 10, Value = frag_mzGroups, Location = new Point(140, 65), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
+            Label fragGrps_lbl = new Label { Name = "fragGrps_lbl", Text = "size of fragment group: ", Location = new Point(10, 38), AutoSize = true };
+            NumericUpDown fragGrps_numUD = new NumericUpDown { Name = "fragGrps_numUD", Minimum = 10, Value = frag_mzGroups, Location = new Point(140, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
             fragGrps_numUD.ValueChanged += (s, e) => { frag_mzGroups = (int)fragGrps_numUD.Value; save_preferences(); };
 
-            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 118), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
-            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 143), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
-            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10,168), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
-            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 118), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
-            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 143), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
-            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 168), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
+            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 88), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
+            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 113), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
+            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10,138), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
+            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 88), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
+            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 113), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
+            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 138), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
 
-            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, minIntensity_lbl, minIntensity_numUD, fragGrps_lbl, fragGrps_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
+            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD,  fragGrps_lbl, fragGrps_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
             foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
-
             params_and_pref.ShowDialog();
         }
 
@@ -393,10 +388,9 @@ namespace Isotope_fitting
             if (!is_loading && !is_calc)
             {
                 OpenFileDialog expData = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
-                List<string> lista = new List<string>();
-
+                List<string> lista = new List<string>();                
                 if (expData.ShowDialog() != DialogResult.Cancel)
-                {
+                {                    
                     sw1.Reset(); sw1.Start();
                     StreamReader objReader = new StreamReader(expData.FileName);
                     file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
@@ -423,7 +417,8 @@ namespace Isotope_fitting
                     }
                     sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
                     progress_display_stop();
-                    plotExp_chkBox.Enabled = true;                    
+                    plotExp_chkBox.Enabled = true;
+                    filename_txtBx.Text = file_name;
                     return true;
                 }
                 else return false;
@@ -1973,7 +1968,7 @@ namespace Isotope_fitting
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node); fit_set_graph_zoomed(e.Node); };     
             //fit_tree.NodeMouseDoubleClick += (s, e) => { fitnode_Re_Sort(e.Node); };
-            fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => { refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
+            fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
 
             // interpret fitted results
             fit_tree.BeginUpdate();
@@ -2027,7 +2022,23 @@ namespace Isotope_fitting
             remove_child_nodes();            
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
         }
-        
+        private void remove_child_nodes()
+        {
+            if (fit_tree != null)
+            {
+                foreach (TreeNode node in fit_tree.Nodes)
+                {
+                    if (node.Nodes.Count <= visible_results) continue;
+                    else
+                    {
+                        while (visible_results < node.Nodes.Count)
+                        {
+                            node.Nodes[visible_results].Remove();
+                        }
+                    }
+                }
+            }
+        }
         private void show_error(TreeNode node)
         {
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
@@ -2280,6 +2291,11 @@ namespace Isotope_fitting
             //foreach (RadioButton rdBtn in sort_fit_results.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_fit_sort(sort_fit_results); };
             #endregion
         }
+        private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
+        {
+            uncheckall_Frag();
+            refresh_fit_tree_sorting();
+        }
         private void refresh_fit_tree_sorting()
         {           
             if (all_fitted_results != null)
@@ -2291,24 +2307,7 @@ namespace Isotope_fitting
                 frag_tree.EndUpdate();
                 refresh_iso_plot();
             }
-        }
-        private void remove_child_nodes()
-        {
-            if (fit_tree != null)
-            {
-                foreach (TreeNode node in fit_tree.Nodes)
-                {                    
-                    if (node.Nodes.Count <= visible_results) continue;
-                    else
-                    {
-                        while (visible_results < node.Nodes.Count)
-                        {
-                            node.Nodes[visible_results].Remove();
-                        }
-                    }
-                }
-            }                
-        }
+        }        
         private void update_fit_sort(Form options_form)
         {
             // sort fitted results rule for all radiobuttons
@@ -2375,14 +2374,7 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("'Refresh node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.");
             }
-        }
-        private void update_node_sort(Form options_form, int index)
-        {
-            // sort fitted results rule for all radiobuttons
-            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
-            foreach (RadioButton rdBtn in rdBtns)
-                tab_node[index][rdBtn.TabIndex] = rdBtn.Checked;
-        }
+        }        
         public class NodeSorter : IComparer
         {
             // Compare the length of the strings, or the strings
@@ -2513,10 +2505,7 @@ namespace Isotope_fitting
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
         }
-        private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
-        {
-            refresh_fit_tree_sorting();
-        }
+       
         #endregion
 
         #region UI control
@@ -3649,7 +3638,7 @@ namespace Isotope_fitting
             MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
             ctxMn1.MenuItems.AddRange(new MenuItem[] { copyRow, colorSelection });
             frag_listView.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
-
+            filename_txtBx.Text = file_name;
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
             progress_display_init();
 
@@ -4073,6 +4062,10 @@ namespace Isotope_fitting
 
         private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
         {
+            uncheckall_Frag();
+        }
+        private void uncheckall_Frag()
+        {
             if (frag_tree != null)
             {
                 frag_tree.BeginUpdate();
@@ -4088,7 +4081,7 @@ namespace Isotope_fitting
         }
         private void clear_toolStripButton_Click(object sender, EventArgs e)
         {
-            reset_all();
+            reset_all();           
             displayPeakList_btn.Enabled = false;
             Peptide = "";
             insert_exp = false;
@@ -4176,6 +4169,7 @@ namespace Isotope_fitting
             residual.Clear();
             custom_colors.Clear();
             all_data.Clear();
+            file_name = "";
             if (all_fitted_results!=null) {all_fitted_results.Clear(); all_fitted_sets.Clear();}
         }
         private List<double> get_UI_intensities2(int[] subSet, double max = 1.0, bool optimizer_default = false, bool window = false, int w = 1)
@@ -8068,9 +8062,60 @@ namespace Isotope_fitting
 
         private void refresh_frag_Btn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("not ready yet");
+            int rr = 0;
+            while (rr < Fragments2.Count - 1)
+            {
+                if (decision_algorithm2(Fragments2[rr]))
+                {
+                    Fragments2.RemoveAt(rr);
+                }
+                else
+                {
+                    rr++;
+                }
+            }
+            // thread safely fire event to continue calculations
+            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
         }
+        private bool decision_algorithm2(FragForm fra )
+        {
+            // all the decisions if a fragment is canidate for fitting
+            bool fragment_is_canditate = true;
+            // deceide how many peaks will be involved in the selection process
+            // results = {[resol1, ppm1], [resol2, ppm2], ....}
+            List<double[]> results = new List<double[]>();
 
+            int total_peaks = fra.Centroid.Count;
+            int contrib_peaks = 0;
+            int rule_idx = Array.IndexOf(selection_rule, true);
+
+            if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
+            else
+            {
+                if (rule_idx == 3) contrib_peaks = total_peaks / 2;                 // Total 8, use 4. Total 7, use 3
+                else if (rule_idx == 4) contrib_peaks = total_peaks / 2 - 1;        // Total 8, use 3. Total 7, use 2
+                else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
+            }
+
+            // sanity check. No matter what, check at least most intense peak!
+            if (contrib_peaks == 0) contrib_peaks = 1;
+
+            for (int i = 0; i < contrib_peaks; i++)
+            {
+                double[] tmp = ppm_calculator(fra.Centroid[i].X);
+
+                if (tmp[0] < ppmError) results.Add(tmp);
+                else { fragment_is_canditate = false; break; }
+            }
+
+            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
+            if (!fragment_is_canditate) { fra.Profile.Clear();  return false; }
+
+            fra.PPM_Error = results.Average(p => p[0]);
+            fra.Resolution = (float)results.Average(p => p[1]);
+
+            return fragment_is_canditate;
+        }
         private void settingsPeak_Btn_Click(object sender, EventArgs e)
         {
             Form8 frm8 = new Form8();

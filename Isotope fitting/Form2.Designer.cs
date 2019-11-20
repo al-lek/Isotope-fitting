@@ -52,6 +52,7 @@ namespace Isotope_fitting
             this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
             this.loadMS_Btn = new System.Windows.Forms.Button();
             this.expData_grpBx = new System.Windows.Forms.GroupBox();
+            this.displayPeakList_btn = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.settingsPeak_Btn = new System.Windows.Forms.ToolStripButton();
             this.fitMin_Label = new System.Windows.Forms.Label();
@@ -90,7 +91,6 @@ namespace Isotope_fitting
             this.fitStep_Box = new System.Windows.Forms.TextBox();
             this.fitStep_Label = new System.Windows.Forms.Label();
             this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.displayPeakList_btn = new System.Windows.Forms.Button();
             this.panel_calc = new System.Windows.Forms.Panel();
             this.hide_Btn = new System.Windows.Forms.Button();
             this.optionBtn = new System.Windows.Forms.Button();
@@ -216,6 +216,7 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.filename_txtBx = new System.Windows.Forms.TextBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -459,7 +460,7 @@ namespace Isotope_fitting
             this.theorData_grpBx.Controls.Add(this.loadMS_Btn);
             this.theorData_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.theorData_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
-            this.theorData_grpBx.Location = new System.Drawing.Point(6, 121);
+            this.theorData_grpBx.Location = new System.Drawing.Point(6, 139);
             this.theorData_grpBx.Name = "theorData_grpBx";
             this.theorData_grpBx.Size = new System.Drawing.Size(219, 86);
             this.theorData_grpBx.TabIndex = 10000019;
@@ -513,6 +514,7 @@ namespace Isotope_fitting
             // expData_grpBx
             // 
             this.expData_grpBx.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.expData_grpBx.Controls.Add(this.filename_txtBx);
             this.expData_grpBx.Controls.Add(this.displayPeakList_btn);
             this.expData_grpBx.Controls.Add(this.toolStrip1);
             this.expData_grpBx.Controls.Add(this.fitMin_Label);
@@ -526,10 +528,25 @@ namespace Isotope_fitting
             this.expData_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
             this.expData_grpBx.Location = new System.Drawing.Point(6, 6);
             this.expData_grpBx.Name = "expData_grpBx";
-            this.expData_grpBx.Size = new System.Drawing.Size(219, 109);
+            this.expData_grpBx.Size = new System.Drawing.Size(219, 127);
             this.expData_grpBx.TabIndex = 10000018;
             this.expData_grpBx.TabStop = false;
             this.expData_grpBx.Text = "Experimental Data";
+            // 
+            // displayPeakList_btn
+            // 
+            this.displayPeakList_btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.displayPeakList_btn.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.displayPeakList_btn.Enabled = false;
+            this.displayPeakList_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.displayPeakList_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.displayPeakList_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.displayPeakList_btn.Location = new System.Drawing.Point(3, 40);
+            this.displayPeakList_btn.Name = "displayPeakList_btn";
+            this.displayPeakList_btn.Size = new System.Drawing.Size(103, 21);
+            this.displayPeakList_btn.TabIndex = 40;
+            this.displayPeakList_btn.Text = "peak list";
+            this.displayPeakList_btn.UseVisualStyleBackColor = false;
             // 
             // toolStrip1
             // 
@@ -540,7 +557,7 @@ namespace Isotope_fitting
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(145, 38);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(103, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(72, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -559,11 +576,12 @@ namespace Isotope_fitting
             this.fitMin_Label.AutoSize = true;
             this.fitMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.fitMin_Label.Location = new System.Drawing.Point(110, 67);
+            this.fitMin_Label.Location = new System.Drawing.Point(110, 85);
             this.fitMin_Label.Name = "fitMin_Label";
             this.fitMin_Label.Size = new System.Drawing.Size(23, 13);
             this.fitMin_Label.TabIndex = 34;
             this.fitMin_Label.Text = "min";
+            this.fitMin_Label.Visible = false;
             // 
             // plotCentr_chkBox
             // 
@@ -573,7 +591,7 @@ namespace Isotope_fitting
             this.plotCentr_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotCentr_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotCentr_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 85);
+            this.plotCentr_chkBox.Location = new System.Drawing.Point(5, 103);
             this.plotCentr_chkBox.Name = "plotCentr_chkBox";
             this.plotCentr_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotCentr_chkBox.TabIndex = 0;
@@ -586,10 +604,11 @@ namespace Isotope_fitting
             this.fitMax_Box.Enabled = false;
             this.fitMax_Box.Font = new System.Drawing.Font("Microsoft Tai Le", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitMax_Box.Location = new System.Drawing.Point(166, 80);
+            this.fitMax_Box.Location = new System.Drawing.Point(166, 98);
             this.fitMax_Box.Name = "fitMax_Box";
             this.fitMax_Box.Size = new System.Drawing.Size(50, 19);
             this.fitMax_Box.TabIndex = 35;
+            this.fitMax_Box.Visible = false;
             this.fitMax_Box.TextChanged += new System.EventHandler(this.FitMax_Box_TextChanged);
             // 
             // fitMax_Label
@@ -598,11 +617,12 @@ namespace Isotope_fitting
             this.fitMax_Label.AutoSize = true;
             this.fitMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.fitMax_Label.Location = new System.Drawing.Point(166, 67);
+            this.fitMax_Label.Location = new System.Drawing.Point(166, 85);
             this.fitMax_Label.Name = "fitMax_Label";
             this.fitMax_Label.Size = new System.Drawing.Size(26, 13);
             this.fitMax_Label.TabIndex = 33;
             this.fitMax_Label.Text = "max";
+            this.fitMax_Label.Visible = false;
             // 
             // plotExp_chkBox
             // 
@@ -613,7 +633,7 @@ namespace Isotope_fitting
             this.plotExp_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotExp_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotExp_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotExp_chkBox.Location = new System.Drawing.Point(5, 67);
+            this.plotExp_chkBox.Location = new System.Drawing.Point(5, 85);
             this.plotExp_chkBox.Name = "plotExp_chkBox";
             this.plotExp_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotExp_chkBox.TabIndex = 0;
@@ -643,10 +663,11 @@ namespace Isotope_fitting
             this.fitMin_Box.Enabled = false;
             this.fitMin_Box.Font = new System.Drawing.Font("Microsoft Tai Le", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitMin_Box.Location = new System.Drawing.Point(110, 80);
+            this.fitMin_Box.Location = new System.Drawing.Point(110, 98);
             this.fitMin_Box.Name = "fitMin_Box";
             this.fitMin_Box.Size = new System.Drawing.Size(50, 19);
             this.fitMin_Box.TabIndex = 36;
+            this.fitMin_Box.Visible = false;
             this.fitMin_Box.TextChanged += new System.EventHandler(this.FitMin_Box_TextChanged);
             // 
             // fragStorage_Lbl
@@ -776,9 +797,9 @@ namespace Isotope_fitting
             this.uncheckFit_Btn,
             this.sortSettings_Btn,
             this.refresh_fitRes_Btn});
-            this.toolStrip_fit_sort.Location = new System.Drawing.Point(61, 292);
+            this.toolStrip_fit_sort.Location = new System.Drawing.Point(61, 308);
             this.toolStrip_fit_sort.Name = "toolStrip_fit_sort";
-            this.toolStrip_fit_sort.Size = new System.Drawing.Size(163, 25);
+            this.toolStrip_fit_sort.Size = new System.Drawing.Size(194, 25);
             this.toolStrip_fit_sort.TabIndex = 10000016;
             this.toolStrip_fit_sort.Text = "toolStrip1";
             // 
@@ -863,7 +884,7 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.Controls.Add(this.fitStep_Label);
             this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitOptions_grpBox.ForeColor = System.Drawing.Color.Teal;
-            this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 213);
+            this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 231);
             this.fitOptions_grpBox.Name = "fitOptions_grpBox";
             this.fitOptions_grpBox.Size = new System.Drawing.Size(219, 72);
             this.fitOptions_grpBox.TabIndex = 3;
@@ -998,27 +1019,12 @@ namespace Isotope_fitting
             this.bigPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.bigPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.bigPanel.Location = new System.Drawing.Point(5, 317);
+            this.bigPanel.Location = new System.Drawing.Point(5, 335);
             this.bigPanel.MinimumSize = new System.Drawing.Size(217, 217);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(217, 534);
+            this.bigPanel.Size = new System.Drawing.Size(217, 516);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
-            // 
-            // displayPeakList_btn
-            // 
-            this.displayPeakList_btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.displayPeakList_btn.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.displayPeakList_btn.Enabled = false;
-            this.displayPeakList_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.displayPeakList_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayPeakList_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.displayPeakList_btn.Location = new System.Drawing.Point(3, 40);
-            this.displayPeakList_btn.Name = "displayPeakList_btn";
-            this.displayPeakList_btn.Size = new System.Drawing.Size(103, 21);
-            this.displayPeakList_btn.TabIndex = 40;
-            this.displayPeakList_btn.Text = "peak list";
-            this.displayPeakList_btn.UseVisualStyleBackColor = false;
             // 
             // panel_calc
             // 
@@ -1753,7 +1759,7 @@ namespace Isotope_fitting
             this.fitResults_lbl.AutoSize = true;
             this.fitResults_lbl.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitResults_lbl.ForeColor = System.Drawing.Color.Teal;
-            this.fitResults_lbl.Location = new System.Drawing.Point(3, 300);
+            this.fitResults_lbl.Location = new System.Drawing.Point(3, 315);
             this.fitResults_lbl.Name = "fitResults_lbl";
             this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
             this.fitResults_lbl.TabIndex = 0;
@@ -2593,6 +2599,19 @@ namespace Isotope_fitting
             this.idxPlotLbl.TabIndex = 20;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
+            // filename_txtBx
+            // 
+            this.filename_txtBx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.filename_txtBx.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.filename_txtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.filename_txtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filename_txtBx.Location = new System.Drawing.Point(3, 66);
+            this.filename_txtBx.Name = "filename_txtBx";
+            this.filename_txtBx.ReadOnly = true;
+            this.filename_txtBx.Size = new System.Drawing.Size(213, 11);
+            this.filename_txtBx.TabIndex = 41;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2847,5 +2866,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton clear_toolStripButton;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton settingsPeak_Btn;
+        private System.Windows.Forms.TextBox filename_txtBx;
     }
 }
