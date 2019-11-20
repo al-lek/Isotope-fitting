@@ -28,6 +28,8 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
+        List<LineAnnotation> xxx = new List<LineAnnotation>();
+
         #region parameter set tab FIT
 
         bool plot_rem_Btns = false;
@@ -2788,6 +2790,7 @@ namespace Isotope_fitting
             if (cursor_chkBx.Checked && insert_exp && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked|| plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
             {
                 iso_plot.Model.Annotations.Clear();
+
                 double mz_a = iso_plot.Model.DefaultXAxis.InverseTransform(a.X);
                 double h_a = iso_plot.Model.DefaultYAxis.InverseTransform(a.Y);               
                 if (count_distance)
@@ -2833,7 +2836,7 @@ namespace Isotope_fitting
                     {
                         TextPosition = new DataPoint(mz_a, h_a),
                         TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
-                        Background = OxyColors.Transparent,
+                        Background = OxyColors.Gainsboro,
                         Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString(),
                         Layer= AnnotationLayer.AboveSeries,    
                         Stroke=OxyColors.Black,
@@ -2842,6 +2845,7 @@ namespace Isotope_fitting
                     });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
+                    invalidate_all();
                 }
                 invalidate_all();
             }            
@@ -8180,7 +8184,5 @@ namespace Isotope_fitting
                 if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName); }
             }
         }
-
-       
     }
 }
