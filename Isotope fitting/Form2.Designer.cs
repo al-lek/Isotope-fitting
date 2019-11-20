@@ -799,7 +799,7 @@ namespace Isotope_fitting
             this.refresh_fitRes_Btn});
             this.toolStrip_fit_sort.Location = new System.Drawing.Point(61, 308);
             this.toolStrip_fit_sort.Name = "toolStrip_fit_sort";
-            this.toolStrip_fit_sort.Size = new System.Drawing.Size(194, 25);
+            this.toolStrip_fit_sort.Size = new System.Drawing.Size(163, 25);
             this.toolStrip_fit_sort.TabIndex = 10000016;
             this.toolStrip_fit_sort.Text = "toolStrip1";
             // 

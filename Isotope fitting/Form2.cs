@@ -8065,14 +8065,8 @@ namespace Isotope_fitting
             int rr = 0;
             while (rr < Fragments2.Count - 1)
             {
-                if (decision_algorithm2(Fragments2[rr]))
-                {
-                    Fragments2.RemoveAt(rr);
-                }
-                else
-                {
-                    rr++;
-                }
+                if (!decision_algorithm2(Fragments2[rr])){Fragments2.RemoveAt(rr);}
+                else{rr++;}
             }
             // thread safely fire event to continue calculations
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
@@ -8111,8 +8105,8 @@ namespace Isotope_fitting
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate) { fra.Profile.Clear();  return false; }
 
-            fra.PPM_Error = results.Average(p => p[0]);
-            fra.Resolution = (float)results.Average(p => p[1]);
+            //fra.PPM_Error = results.Average(p => p[0]);
+            //fra.Resolution = (float)results.Average(p => p[1]);
 
             return fragment_is_canditate;
         }
