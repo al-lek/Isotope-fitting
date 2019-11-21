@@ -508,7 +508,7 @@ namespace Isotope_fitting
 
                 ChemFormulas.Clear();
                 Peptide = Path.GetFileNameWithoutExtension(fragment_import.FileName);
-
+                peptide_textBox1.Text = Peptide;
                 lista.RemoveAt(0);
                 get_precursor_carbons(lista.Last());
                 progress_display_start(lista.Count, "Importing fragments list...");
@@ -2480,6 +2480,7 @@ namespace Isotope_fitting
                 }
                 fit_tree.EndUpdate(); frag_tree.EndUpdate();
                 block_plot_refresh = false; block_fit_refresh = false;
+                refresh_iso_plot();
             }
         }
         private void best_checked(bool individual = false, int node_index = 1)
@@ -2611,7 +2612,7 @@ namespace Isotope_fitting
                 for (int j = 0; j < residual.Count; j++)
                     (res_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(residual[j][0], residual[j][1]));
 
-            // centroid (bar)
+            // 5. centroid (bar)
             if (plotCentr_chkBox.Checked)
             {
                 foreach (double[] peak in peak_points)
@@ -2622,6 +2623,10 @@ namespace Isotope_fitting
                     (iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));
                 }
             }
+
+            // 6. fragment annotations
+            frag_annotation(to_plot);
+
             invalidate_all();
         }
         private void reset_iso_plot()
@@ -2705,10 +2710,9 @@ namespace Isotope_fitting
 
             iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             fit_grpBox.Controls.Add(iso_plot);
-            iso_plot.MouseLeave += (s, e) => { iso_plot.Model.Annotations.Clear(); invalidate_all(); };
+            iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
              PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
-            iso_plot.Model = iso_model;
-
+            iso_plot.Model = iso_model;           
             iso_model.Updating += (s, e) =>
             {
                 if (iso_model.Series.Count > 15) iso_model.LegendFontSize = 9;
@@ -2744,10 +2748,10 @@ namespace Isotope_fitting
             //////    if (e.Delta > 0) iso_plot.Model.DefaultXAxis.ZoomAtCenter(1);
             //////    };
 
-            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
+            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
             iso_model.Axes.Add(linearAxis1);
 
-            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             iso_model.Axes.Add(linearAxis2);
 
             // residual plot
@@ -2759,11 +2763,11 @@ namespace Isotope_fitting
             PlotModel res_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendPosition = LegendPosition.TopRight, LegendFontSize = 11, TitleFontSize = 11 }; // Title = "",
             res_plot.Model = res_model;
 
-            var linearAxis1r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity", MinorGridlineStyle = LineStyle.Solid };
+            var linearAxis1r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity", MinorGridlineStyle = LineStyle.Solid };
             //linearAxis1r.MajorStep = linearAxis1r.ActualMaximum / 2.0;
             res_model.Axes.Add(linearAxis1r);
 
-            var linearAxis2r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis2r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             res_model.Axes.Add(linearAxis2r);
            
 
@@ -2856,9 +2860,34 @@ namespace Isotope_fitting
             invalidate_all();
         }
 
+        private void frag_annotation(List<int> to_plot)
+        {
+            if (fragPlotLbl_chkBx.Checked && !cursor_chkBx.Checked && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked) )
+            {
+                List<int> plot_idxs = new List<int>(to_plot);
+                iso_plot.Model.Annotations.Clear();
+                foreach (int p in plot_idxs)
+                {
+                    iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    {
+                        TextPosition = new DataPoint(Fragments2[p - 1].Centroid[0].X, Fragments2[p - 1].Centroid[0].Y* Fragments2[p - 1].Factor),
+                        TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
+                        TextVerticalAlignment=VerticalAlignment.Bottom,
+                        TextRotation=270,
+                        Background = OxyColors.Transparent,
+                        Text = Fragments2[p - 1].Name.ToString(),
+                        Layer = AnnotationLayer.AboveSeries,
+                        Stroke=OxyColors.Transparent,
+                        TextColor = Fragments2[p - 1].Color,
+                        FontWeight = 100
+                    });
+                }
+            }
+        }
         private void cursor_chkBx_Click(object sender, EventArgs e)
         {
-            if (!cursor_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all();}           
+            if (!cursor_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
+            else { fragPlotLbl_chkBx.Checked=false; }
         }
 
         public class CustomPlotController : PlotController
@@ -3511,7 +3540,7 @@ namespace Isotope_fitting
 
                         if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
                         else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                        else if (lista[j].StartsWith("AA")) { Peptide = str[1]; pep_Box.Text = Peptide; }                        
+                        else if (lista[j].StartsWith("AA")) { Peptide = str[1]; peptide_textBox1.Text = Peptide; }                        
                         else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
                         else if (lista[j].StartsWith("Name")) continue;
                         else
@@ -3636,14 +3665,18 @@ namespace Isotope_fitting
         }
         private void refresh_frag_Btn_Click(object sender, EventArgs e)
         {
+            uncheck_all(fit_tree, false);
             int rr = 0;
-            while (rr < Fragments2.Count)
+            if (Fragments2.Count>0)
             {
-                if (!decision_algorithm2(Fragments2[rr])){Fragments2.RemoveAt(rr);}
-                else{rr++;}
-            }
-            // thread safely fire event to continue calculations
-            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+                while (rr < Fragments2.Count)
+                {
+                    if (!decision_algorithm2(Fragments2[rr])) { Fragments2.RemoveAt(rr); }
+                    else { rr++; }
+                }
+                // thread safely fire event to continue calculations
+                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            }            
         }
         private bool decision_algorithm2(FragForm fra)
         {
@@ -4132,6 +4165,7 @@ namespace Isotope_fitting
 
         private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
         {
+            uncheck_all(fit_tree, false);
             uncheckall_Frag();
         }
         private void uncheckall_Frag()
@@ -4153,7 +4187,7 @@ namespace Isotope_fitting
         {
             reset_all();           
             displayPeakList_btn.Enabled = false;
-            Peptide = "";
+            Peptide = ""; peptide_textBox1.Text = Peptide;
             insert_exp = false;
             plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             saveFit_Btn.Enabled = false;
@@ -5126,7 +5160,7 @@ namespace Isotope_fitting
 
                         if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("m/z")) continue; // comments
                         else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                        else if (lista[j].StartsWith("AA")) { Peptide = str[1]; pep_Box.Text = Peptide; }
+                        else if (lista[j].StartsWith("AA")) { Peptide = str[1]; peptide_textBox1.Text = Peptide; }
                         else if (lista[j].StartsWith("Window")) { loaded_window = true; fit_sel_Btn.Enabled = true; windowList.Add(new WindowSet() { Code = Int32.Parse(str[1], NumberStyles.Integer), Aligned = new List<double[]>(), All_data = new List<List<double[]>>(), Checked_mono_fragments = new List<int>(), Ending = new int(), Fitted = new List<double[]>(), Fragments = new List<int>(), Max_exp = new double(), Mono_fragments = new List<int>(), PowerSet = new List<int[]>(), PowerSetTodistro = new List<int[]>(), Starting = new int() }); }
                         else if (lista[j].StartsWith("Starting")) windowList.Last().Starting = Int32.Parse(str[1], NumberStyles.Integer);
                         else if (lista[j].StartsWith("Ending")) windowList.Last().Ending = Int32.Parse(str[1], NumberStyles.Integer);
@@ -5227,7 +5261,7 @@ namespace Isotope_fitting
         private void new_Btn_Click(object sender, EventArgs e)
         {
             reset_all();
-            Peptide = "";
+            Peptide = ""; peptide_textBox1.Text = Peptide;
             insert_exp = false;
             plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             saveFit_Btn.Enabled = false;
@@ -7657,9 +7691,9 @@ namespace Isotope_fitting
             ax_Pnl.Controls.Add(ax_plot);
             PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
             ax_plot.Model = ax_model;
-            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
+            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
             ax_model.Axes.Add(linearAxis1);
-            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             ax_model.Axes.Add(linearAxis2);
             //ax_model.Updated += (s, e) => { if (Math.Abs(linearAxis1.ActualMaximum) > Math.Abs(linearAxis1.ActualMinimum)) { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMaximum), Math.Abs(linearAxis1.ActualMaximum)); } else { linearAxis1.Zoom(-Math.Abs(linearAxis1.ActualMinimum), Math.Abs(linearAxis1.ActualMinimum)); } ax_plot.InvalidatePlot(true); };
             ax_plot.MouseDoubleClick += (s, e) => { ax_model.ResetAllAxes(); ax_plot.InvalidatePlot(true); };
@@ -7670,9 +7704,9 @@ namespace Isotope_fitting
             by_Pnl.Controls.Add(by_plot);
             PlotModel by_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             by_plot.Model = by_model;
-            var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
+            var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
             by_model.Axes.Add(linearAxis3);
-            var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             by_model.Axes.Add(linearAxis4);
             //by_model.Updated += (s, e) => { if (Math.Abs(linearAxis3.ActualMaximum) > Math.Abs(linearAxis3.ActualMinimum)) { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMaximum), Math.Abs(linearAxis3.ActualMaximum)); } else { linearAxis3.Zoom(-Math.Abs(linearAxis3.ActualMinimum), Math.Abs(linearAxis3.ActualMinimum)); } by_plot.InvalidatePlot(true); };
             by_plot.MouseDoubleClick += (s, e) => { by_model.ResetAllAxes(); by_plot.InvalidatePlot(true); };
@@ -7683,9 +7717,9 @@ namespace Isotope_fitting
             cz_Pnl.Controls.Add(cz_plot);
             PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "c - z  fragments", TitleColor = OxyColors.Red };
             cz_plot.Model = cz_model;
-            var linearAxis5 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
+            var linearAxis5 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
             cz_model.Axes.Add(linearAxis5);
-            var linearAxis6 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis6 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             cz_model.Axes.Add(linearAxis6);
             //cz_model.Updated += (s, e) => { if (Math.Abs(linearAxis5.ActualMaximum) > Math.Abs(linearAxis5.ActualMinimum)) { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMaximum), Math.Abs(linearAxis5.ActualMaximum)); } else { linearAxis5.Zoom(-Math.Abs(linearAxis5.ActualMinimum), Math.Abs(linearAxis5.ActualMinimum)); } cz_plot.InvalidatePlot(true); };
             cz_plot.MouseDoubleClick += (s, e) => { cz_model.ResetAllAxes(); cz_plot.InvalidatePlot(true); };
@@ -7696,9 +7730,9 @@ namespace Isotope_fitting
             axCharge_Pnl.Controls.Add(axCharge_plot);
             PlotModel axCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
             axCharge_plot.Model = axCharge_model;
-            var linearAxis15 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
+            var linearAxis15 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
             axCharge_model.Axes.Add(linearAxis15);
-            var linearAxis16 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis16 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize =10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             axCharge_model.Axes.Add(linearAxis16);
             axCharge_plot.MouseDoubleClick += (s, e) => { axCharge_model.ResetAllAxes(); axCharge_plot.InvalidatePlot(true); };
 
@@ -7708,9 +7742,9 @@ namespace Isotope_fitting
             byCharge_Pnl.Controls.Add(byCharge_plot);
             PlotModel byCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             byCharge_plot.Model = byCharge_model;
-            var linearAxis17 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
+            var linearAxis17 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
             byCharge_model.Axes.Add(linearAxis17);
-            var linearAxis18 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis18 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             byCharge_model.Axes.Add(linearAxis18);
             byCharge_plot.MouseDoubleClick += (s, e) => { byCharge_model.ResetAllAxes(); byCharge_plot.InvalidatePlot(true); };
 
@@ -7720,9 +7754,9 @@ namespace Isotope_fitting
             czCharge_Pnl.Controls.Add(czCharge_plot);
             PlotModel czCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "c - z  fragments", TitleColor = OxyColors.Red };
             czCharge_plot.Model = czCharge_model;
-            var linearAxis19 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
+            var linearAxis19 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
             czCharge_model.Axes.Add(linearAxis19);
-            var linearAxis20 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis20 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             czCharge_model.Axes.Add(linearAxis20);
             czCharge_plot.MouseDoubleClick += (s, e) => { czCharge_model.ResetAllAxes(); czCharge_plot.InvalidatePlot(true); };
 
@@ -7733,9 +7767,9 @@ namespace Isotope_fitting
             idxPnl1.Controls.Add(index_plot);
             PlotModel index_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA initial", TitleColor = OxyColors.Teal };
             index_plot.Model = index_model;
-            var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, MinimumMinorStep = 1.0, TitleFontSize = 11, Title = " # fragments" };
+            var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize =10, AxisTitleDistance = 7, MinimumMinorStep = 1.0, TitleFontSize = 11, Title = " # fragments" };
             index_model.Axes.Add(linearAxis7);
-            var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize =10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             index_model.Axes.Add(linearAxis8);
             index_plot.MouseDoubleClick += (s, e) => { index_model.ResetAllAxes(); index_plot.InvalidatePlot(true); };
             // index intensity plot
@@ -7744,9 +7778,9 @@ namespace Isotope_fitting
             idxInt_Pnl1.Controls.Add(indexIntensity_plot);
             PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial",  IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indexIntensity_plot.Model = indexIntensity_model;
-            var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, MinimumMinorStep = 1.0, Position = OxyPlot.Axes.AxisPosition.Left };
+            var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, Position = OxyPlot.Axes.AxisPosition.Left };
             indexIntensity_model.Axes.Add(linearAxis11);
-            var linearAxis12 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis12 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexIntensity_model.Axes.Add(linearAxis12);
             indexIntensity_plot.MouseDoubleClick += (s, e) => { indexIntensity_model.ResetAllAxes(); indexIntensity_plot.InvalidatePlot(true); };
             //bind the 2 axes
@@ -7759,9 +7793,9 @@ namespace Isotope_fitting
             idxPnl2.Controls.Add(indexto_plot);
             PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA terminal", TitleColor = OxyColors.Teal };
             indexto_plot.Model = indexto_model;
-            var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments" };
+            var linearAxis9 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments" };
             indexto_model.Axes.Add(linearAxis9);
-            var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis10 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indexto_model.Axes.Add(linearAxis10);
             indexto_plot.MouseDoubleClick += (s, e) => { indexto_model.ResetAllAxes(); indexto_plot.InvalidatePlot(true); };
             // indexTo intensity plot
@@ -7770,9 +7804,9 @@ namespace Isotope_fitting
             idxInt_Pnl2.Controls.Add(indextoIntensity_plot);
             PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indextoIntensity_plot.Model = indextoIntensity_model;
-            var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid , FontSize = 8, MinimumMinorStep = 1.0};
+            var linearAxis13 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid , FontSize = 10, MinimumMinorStep = 1.0};
             indextoIntensity_model.Axes.Add(linearAxis13);
-            var linearAxis14 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 8, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis14 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
             indextoIntensity_model.Axes.Add(linearAxis14);
             indextoIntensity_plot.MouseDoubleClick += (s, e) => { indextoIntensity_model.ResetAllAxes(); indextoIntensity_plot.InvalidatePlot(true); };
             //bind the 2 axes
@@ -8168,6 +8202,9 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
+
+
+
         private void export_panel(bool copy, Panel pnl)
         {
             int width = pnl.Size.Width;
@@ -8183,6 +8220,12 @@ namespace Isotope_fitting
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
                 if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName); }
             }
+        }
+
+        private void fragPlotLbl_chkBx_Click(object sender, EventArgs e)
+        {
+            if (fragPlotLbl_chkBx.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
+            else { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
         }
     }
 }

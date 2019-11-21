@@ -44,6 +44,7 @@ namespace Isotope_fitting
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
             this.clear_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.Panel();
             this.new_Btn = new System.Windows.Forms.Button();
@@ -220,7 +221,7 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
+            this.peptide_textBox1 = new System.Windows.Forms.TextBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -392,6 +393,17 @@ namespace Isotope_fitting
             this.clear_toolStripButton.Text = "Clear all";
             this.clear_toolStripButton.Click += new System.EventHandler(this.clear_toolStripButton_Click);
             // 
+            // fragPlotLbl_chkBx
+            // 
+            this.fragPlotLbl_chkBx.CheckOnClick = true;
+            this.fragPlotLbl_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
+            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
+            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(24, 24);
+            this.fragPlotLbl_chkBx.Text = "Show Fragment Label";
+            this.fragPlotLbl_chkBx.Click += new System.EventHandler(this.fragPlotLbl_chkBx_Click);
+            // 
             // res_grpBox
             // 
             this.res_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -461,6 +473,7 @@ namespace Isotope_fitting
             // theorData_grpBx
             // 
             this.theorData_grpBx.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.theorData_grpBx.Controls.Add(this.peptide_textBox1);
             this.theorData_grpBx.Controls.Add(this.plotFragProf_chkBox);
             this.theorData_grpBx.Controls.Add(this.plotFragCent_chkBox);
             this.theorData_grpBx.Controls.Add(this.loadMS_Btn);
@@ -468,19 +481,20 @@ namespace Isotope_fitting
             this.theorData_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
             this.theorData_grpBx.Location = new System.Drawing.Point(6, 139);
             this.theorData_grpBx.Name = "theorData_grpBx";
-            this.theorData_grpBx.Size = new System.Drawing.Size(219, 86);
+            this.theorData_grpBx.Size = new System.Drawing.Size(219, 102);
             this.theorData_grpBx.TabIndex = 2;
             this.theorData_grpBx.TabStop = false;
             this.theorData_grpBx.Text = "Theoretical Data";
             // 
             // plotFragProf_chkBox
             // 
+            this.plotFragProf_chkBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.plotFragProf_chkBox.AutoSize = true;
             this.plotFragProf_chkBox.Enabled = false;
             this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragProf_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragProf_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotFragProf_chkBox.Location = new System.Drawing.Point(3, 41);
+            this.plotFragProf_chkBox.Location = new System.Drawing.Point(3, 58);
             this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
             this.plotFragProf_chkBox.Size = new System.Drawing.Size(66, 18);
             this.plotFragProf_chkBox.TabIndex = 2;
@@ -489,12 +503,13 @@ namespace Isotope_fitting
             // 
             // plotFragCent_chkBox
             // 
+            this.plotFragCent_chkBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.plotFragCent_chkBox.AutoSize = true;
             this.plotFragCent_chkBox.Enabled = false;
             this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragCent_chkBox.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragCent_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotFragCent_chkBox.Location = new System.Drawing.Point(3, 59);
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(3, 76);
             this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
             this.plotFragCent_chkBox.Size = new System.Drawing.Size(78, 18);
             this.plotFragCent_chkBox.TabIndex = 3;
@@ -817,7 +832,7 @@ namespace Isotope_fitting
             this.uncheckFit_Btn,
             this.sortSettings_Btn,
             this.refresh_fitRes_Btn});
-            this.toolStrip_fit_sort.Location = new System.Drawing.Point(61, 308);
+            this.toolStrip_fit_sort.Location = new System.Drawing.Point(61, 323);
             this.toolStrip_fit_sort.Name = "toolStrip_fit_sort";
             this.toolStrip_fit_sort.Size = new System.Drawing.Size(163, 25);
             this.toolStrip_fit_sort.TabIndex = 10000016;
@@ -905,7 +920,7 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.Controls.Add(this.fitStep_Label);
             this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitOptions_grpBox.ForeColor = System.Drawing.Color.Teal;
-            this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 231);
+            this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 247);
             this.fitOptions_grpBox.Name = "fitOptions_grpBox";
             this.fitOptions_grpBox.Size = new System.Drawing.Size(219, 72);
             this.fitOptions_grpBox.TabIndex = 4;
@@ -1040,10 +1055,10 @@ namespace Isotope_fitting
             this.bigPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.bigPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.bigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.bigPanel.Location = new System.Drawing.Point(5, 335);
+            this.bigPanel.Location = new System.Drawing.Point(5, 348);
             this.bigPanel.MinimumSize = new System.Drawing.Size(217, 217);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(217, 516);
+            this.bigPanel.Size = new System.Drawing.Size(217, 503);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
             // 
@@ -1782,7 +1797,7 @@ namespace Isotope_fitting
             this.fitResults_lbl.AutoSize = true;
             this.fitResults_lbl.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitResults_lbl.ForeColor = System.Drawing.Color.Teal;
-            this.fitResults_lbl.Location = new System.Drawing.Point(3, 315);
+            this.fitResults_lbl.Location = new System.Drawing.Point(3, 331);
             this.fitResults_lbl.Name = "fitResults_lbl";
             this.fitResults_lbl.Size = new System.Drawing.Size(63, 14);
             this.fitResults_lbl.TabIndex = 0;
@@ -2660,15 +2675,16 @@ namespace Isotope_fitting
             this.idxPlotLbl.TabIndex = 20;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
-            // fragPlotLbl_chkBx
+            // peptide_textBox1
             // 
-            this.fragPlotLbl_chkBx.CheckOnClick = true;
-            this.fragPlotLbl_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
-            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
-            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(24, 24);
-            this.fragPlotLbl_chkBx.Text = "Show Fragment Label";
+            this.peptide_textBox1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.peptide_textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.peptide_textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.peptide_textBox1.Location = new System.Drawing.Point(3, 43);
+            this.peptide_textBox1.Name = "peptide_textBox1";
+            this.peptide_textBox1.ReadOnly = true;
+            this.peptide_textBox1.Size = new System.Drawing.Size(213, 11);
+            this.peptide_textBox1.TabIndex = 42;
             // 
             // Form2
             // 
@@ -2931,5 +2947,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton seqCopy_Btn;
         private System.Windows.Forms.Panel panel1_intIdx;
         private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx;
+        private System.Windows.Forms.TextBox peptide_textBox1;
     }
 }
