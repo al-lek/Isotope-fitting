@@ -2013,13 +2013,28 @@ namespace Isotope_fitting
                             tmp += "SSE:" + all_fitted_results[i][j][all_fitted_results[i][j].Length - 3].ToString("0.###e0" + " ");
                             //tmp += "LSEi:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 3], 3).ToString("0.###e0" + " ");
                             tmp += "di:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 4], 3).ToString() + "% ";
+                            //sb.AppendLine("A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%");
+                            //sb.AppendLine("frag." + "     " + "m/z" + "         " + "di" + "         " + "sd");                            
+                            //tmp += "K:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString();                            
                             sb.AppendLine("A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%");
-                            sb.AppendLine("frag." + "     " + "factor" + "         " + "di" + "         " + "sd");
-                            //tmp += "K:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString();
+                            sb.AppendLine("frag.".PadRight(30) +"m/z".PadRight(20) + "di".PadRight(20) +  "sd");
+                            string pp = "";
                             for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
                             {
+                                string pp1,pp2,pp3;
+                                int cc1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.Length;
+                                int cc2 = Fragments2[all_fitted_sets[i][j][k] - 1].Mz.Length;
+                                int cc3 = (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").Length;
+                                pp1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(30);
+                                pp2 = Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20);
+                                pp3 = (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(19);
+                                int a1 = pp1.Length;
+                                int a2 = pp2.Length;
+                                int a3 = pp3.Length;
                                 //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
-                                sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name + "    " + all_fitted_results[i][j][k].ToString("0.###e0") + "    " + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%" + "    ±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
+                                //sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(40) + Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20) /*all_fitted_results[i][j][k].ToString("0.###e0")*/  + (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(19) + "±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
+                                sb.AppendLine(pp1 + pp2 + pp3 + "±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
+
                             }
                             TreeNode tr = new TreeNode
                             {
@@ -2409,8 +2424,8 @@ namespace Isotope_fitting
                 int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
                 int compare_result = 0;
                 // value to compare--->sse_coef*sse+Ai_coef*Ai+A_coef*A+di_coef*di
-                double value1 = tab_coef[tx_set_idx][3] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3]) + tab_coef[tx_set_idx][0] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2]) + tab_coef[tx_set_idx][1] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2] - 1) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
-                double value2 = tab_coef[tx_set_idx][3] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3]) + tab_coef[tx_set_idx][0] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]) + tab_coef[tx_set_idx][1] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
+                double value1 = tab_coef[tx_set_idx][3] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3] + tab_coef[tx_set_idx][0] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2] + tab_coef[tx_set_idx][1] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1] +tab_coef[tx_set_idx][2]  * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
+                double value2 = tab_coef[tx_set_idx][3] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3] + tab_coef[tx_set_idx][0] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2] + tab_coef[tx_set_idx][1] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1] + tab_coef[tx_set_idx][2]  * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
                 compare_result = Decimal.Compare((decimal)value1, (decimal)value2);                
                 return compare_result;
             }
