@@ -174,10 +174,13 @@ namespace Isotope_fitting
         /// [Ai thres,A thres,di thres]
         /// </summary>
         public static double[] fit_thres = new double[] {100.0,100.0,100.0};
-        public static double a_coef = 1.0;
+        /// <summary>
+        /// [Ai coef,A coef,di coef,sse coef]
+        /// </summary>
+        public static double[] a_coef = new double[] { 1.0,0.0,0.0,0.0 };
         public static int visible_results =100;
         public static List<bool[]> tab_node=new List<bool[]>();
-        public static List<double> tab_coef = new List<double>();
+        public static List<double[]> tab_coef = new List<double[]>();
         public static List<double[]> tab_thres = new List<double[]>();
         List<string> labels_checked = new List<string>();
         #endregion
@@ -315,11 +318,14 @@ namespace Isotope_fitting
                     fit_sort[2] = string_to_bool(preferences[13].Split(':')[1]);
                     fit_sort[3] = string_to_bool(preferences[14].Split(':')[1]);
 
-                    a_coef = Convert.ToDouble(preferences[15].Split(':')[1]);
-                    visible_results= Convert.ToInt32(preferences[16].Split(':')[1]);
-                    fit_thres[0]= Convert.ToDouble(preferences[17].Split(':')[1]); ;
-                    fit_thres[1] = Convert.ToDouble(preferences[18].Split(':')[1]); ;
-                    fit_thres[2] = Convert.ToDouble(preferences[19].Split(':')[1]); ;
+                    a_coef[0] = Convert.ToDouble(preferences[15].Split(':')[1]);
+                    a_coef[1] = Convert.ToDouble(preferences[16].Split(':')[1]);
+                    a_coef[2] = Convert.ToDouble(preferences[17].Split(':')[1]);
+                    a_coef[3] = Convert.ToDouble(preferences[18].Split(':')[1]);
+                    visible_results = Convert.ToInt32(preferences[19].Split(':')[1]);
+                    fit_thres[0]= Convert.ToDouble(preferences[20].Split(':')[1]); ;
+                    fit_thres[1] = Convert.ToDouble(preferences[21].Split(':')[1]); ;
+                    fit_thres[2] = Convert.ToDouble(preferences[22].Split(':')[1]); ;
 
                 }
                 catch { MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!"); }
@@ -353,7 +359,11 @@ namespace Isotope_fitting
             preferences[0] += "fit results sorting by di: " + fit_sort[2].ToString() + "\r\n";
             preferences[0] += "fit results sorting by sse: " + fit_sort[3].ToString() + "\r\n";
 
-            preferences[0] += "Area coeficient: " + a_coef.ToString() + "\r\n";
+            preferences[0] += "Ai coeficient: " + a_coef[0].ToString() + "\r\n";
+            preferences[0] += "A coeficient: " + a_coef[1].ToString() + "\r\n";
+            preferences[0] += "di coeficient: " + a_coef[2].ToString() + "\r\n";
+            preferences[0] += "sse coeficient: " + a_coef[3].ToString() + "\r\n";
+
             preferences[0] += "Amount of best solutions presented: " + visible_results.ToString() + "\r\n";
             preferences[0] += "Ai score threshold: " + fit_thres[0].ToString() + "\r\n";
             preferences[0] += "A score threshold: " + fit_thres[1].ToString() + "\r\n";
@@ -2339,7 +2349,7 @@ namespace Isotope_fitting
             if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); tab_thres.Clear(); labels_checked.Clear(); }
             for (int n = 0; n < all_fitted_results.Count; n++)
             {
-                tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3] }); tab_coef.Add(a_coef);
+                tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3] }); tab_coef.Add(new double[] { a_coef[0], a_coef[1], a_coef[2], a_coef[3] } );
                 tab_thres.Add(new double[] { fit_thres[0], fit_thres[1], fit_thres[2] });labels_checked.Add("");
             }
             return;
@@ -2398,34 +2408,10 @@ namespace Isotope_fitting
                 int ty_set_pos_idx = Convert.ToInt32(ty_idx_str_arr[1]);
                 int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
                 int compare_result = 0;
-                if (tab_node[tx_set_idx][1]&& tab_node[tx_set_idx][2])//sort by A + di 
-                {
-                    double value1 = tab_coef[tx_set_idx] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1]) + (tab_coef[tx_set_idx]-1) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
-                    double value2 = tab_coef[tx_set_idx] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
-                    compare_result = Decimal.Compare((decimal)value1, (decimal)value2);
-                }
-                else if (tab_node[tx_set_idx][0]&& tab_node[tx_set_idx][2])//sort by Ai + di 
-                {
-                    double value1 = tab_coef[tx_set_idx] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2]) + (tab_coef[tx_set_idx]-1) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
-                    double value2 = tab_coef[tx_set_idx] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]) + (tab_coef[tx_set_idx] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
-                    compare_result = Decimal.Compare((decimal)value1, (decimal)value2);
-                }
-                else if (tab_node[tx_set_idx][1])//sort by A
-                {
-                    compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]);
-                }
-                else if (tab_node[tx_set_idx][2])//sort by di
-                {
-                    compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4]);
-                }
-                else if(tab_node[tx_set_idx][0])//sort by Ai
-                {
-                    compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]);
-                }
-                else //sort by sse
-                {
-                    compare_result = Decimal.Compare((decimal)all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3], (decimal)all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3]);
-                }
+                // value to compare--->sse_coef*sse+Ai_coef*Ai+A_coef*A+di_coef*di
+                double value1 = tab_coef[tx_set_idx][3] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3]) + tab_coef[tx_set_idx][0] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2]) + tab_coef[tx_set_idx][1] * (all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2] - 1) * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4];
+                double value2 = tab_coef[tx_set_idx][3] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3]) + tab_coef[tx_set_idx][0] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]) + tab_coef[tx_set_idx][1] * (all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2] - 1) * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4];
+                compare_result = Decimal.Compare((decimal)value1, (decimal)value2);                
                 return compare_result;
             }
         }
@@ -2441,20 +2427,23 @@ namespace Isotope_fitting
         /// </summary>
         private void fit_set_graph_zoomed(TreeNode node)
         {
-            string[] idx_str_arr = new string[2];
-            string idx_str = node.Name;
-            if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
-            else idx_str_arr = node.Parent.Text.Split('-');
-            double min_border = dParser(idx_str_arr[0]);
-            double max_border = dParser(idx_str_arr[1]);
-            iso_plot.Model.Axes[1].Zoom(min_border-3, max_border+10);
-            if ((iso_plot.Model.Series[0] as LineSeries).Points.Count>0 && (plotFragProf_chkBox .Checked || plotFragCent_chkBox.Checked))
+            if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
             {
-                double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
-                iso_plot.Model.Axes[0].Zoom(-100, pt0 + 100);
-            }           
-            iso_plot.Refresh();
-            invalidate_all();            
+                string[] idx_str_arr = new string[2];
+                string idx_str = node.Name;
+                if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
+                else idx_str_arr = node.Parent.Text.Split('-');
+                double min_border = dParser(idx_str_arr[0]);
+                double max_border = dParser(idx_str_arr[1]);
+                iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
+                if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+                {
+                    double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
+                    iso_plot.Model.Axes[0].Zoom(-100, pt0 + 100);
+                }
+                iso_plot.Refresh();
+                invalidate_all();
+            }                     
         }
         private void uncheckFit_Btn_Click(object sender, EventArgs e)
         {

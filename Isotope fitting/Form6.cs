@@ -22,7 +22,7 @@ namespace Isotope_fitting
         /// [Ai thres,A thres,di thres]
         /// </summary>
         public static double[] thres = new double[3];
-        public static double a;
+        public static double[] a=new double[4];
         public static int vis_res;
        
 
@@ -34,7 +34,11 @@ namespace Isotope_fitting
             if (node)
             {
                 is_node = true;idx = node_idx;
-                Ai_coef_numUD.Value = A_coef_numUD.Value =(decimal) Form2.tab_coef[idx] ;
+                Ai_coef_numUD.Value = (decimal)Form2.tab_coef[idx][0];
+                A_coef_numUD.Value = (decimal)Form2.tab_coef[idx][1];                                
+                di_coef_numUD.Value =  (decimal)Form2.tab_coef[idx][2];
+                sse_coef_numUD.Value = (decimal)Form2.tab_coef[idx][3];
+
                 Ai_checkBox.Checked = Form2.tab_node[idx][0];
                 A_checkBox.Checked = Form2.tab_node[idx][1] ;
                 di_checkBox.Checked = Form2.tab_node[idx][2];
@@ -53,7 +57,10 @@ namespace Isotope_fitting
             }
             else
             {
-                Ai_coef_numUD.Value=A_coef_numUD.Value = (decimal)Form2.a_coef;
+                Ai_coef_numUD.Value = (decimal)Form2.a_coef[0];
+                A_coef_numUD.Value = (decimal)Form2.a_coef[1];
+                di_coef_numUD.Value = (decimal)Form2.a_coef[2];
+                sse_coef_numUD.Value = (decimal)Form2.a_coef[3];
                 Ai_checkBox.Checked = Form2.fit_sort[0];
                 A_checkBox.Checked= Form2.fit_sort[1];
                 di_checkBox.Checked= Form2.fit_sort[2];
@@ -74,29 +81,28 @@ namespace Isotope_fitting
        
         private void Ai_checkBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (A_checkBox.Checked==true)Ai_checkBox.Checked = false;
-            else if (Ai_checkBox.Checked == true && di_checkBox.Checked == true) { labelAi.Enabled = true; Ai_coef_numUD.Enabled = true; Ai_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
-            else { labelAi.Enabled = false; Ai_coef_numUD.Enabled = false; Ai_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; }
+            if (Ai_checkBox.Checked==true) { labelAi.Enabled = true; Ai_coef_numUD.Enabled = true; Ai_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }           
+            else { labelAi.Enabled = false; Ai_coef_numUD.Enabled = false; Ai_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; Ai_coef_numUD.Value = 0; }
             sort[0]= Ai_checkBox.Checked;
         }
 
         private void A_checkBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (Ai_checkBox.Checked == true) A_checkBox.Checked = false;            
-            else if(A_checkBox.Checked == true && di_checkBox.Checked==true){labelA.Enabled = true;A_coef_numUD.Enabled = true; A_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
-            else {labelA.Enabled = false; A_coef_numUD.Enabled = false; A_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; }
+            if (A_checkBox.Checked == true) { labelA.Enabled = true; A_coef_numUD.Enabled = true; A_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
+            else { labelA.Enabled = false; A_coef_numUD.Enabled = false; A_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; A_coef_numUD.Value = 0; }
             sort[1] = A_checkBox.Checked;
         }
 
         private void di_checkBox_CheckedChanged(object sender, EventArgs e)
         {
-            if(di_checkBox.Checked == true && Ai_checkBox.Checked == true) { labelAi.Enabled = true; Ai_coef_numUD.Enabled = true; Ai_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
-            else if(di_checkBox.Checked == true && A_checkBox.Checked == true) { labelA.Enabled = true; A_coef_numUD.Enabled = true; A_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
-            else { labelA.Enabled = false; A_coef_numUD.Enabled = false; A_coef_numUD.BackColor = DefaultBackColor; labelAi.Enabled = false; Ai_coef_numUD.Enabled = false; Ai_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; }
+            if (di_checkBox.Checked == true) { labeldi.Enabled = true; di_coef_numUD.Enabled = true; di_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
+            else { labeldi.Enabled = false; di_coef_numUD.Enabled = false; di_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; di_coef_numUD.Value = 0; }
             sort[2] = di_checkBox.Checked;
         }
         private void sse_checkBox_CheckedChanged(object sender, EventArgs e)
         {
+            if (sse_checkBox.Checked == true) { labelsse.Enabled = true; sse_coef_numUD.Enabled = true; sse_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
+            else { labelsse.Enabled = false; sse_coef_numUD.Enabled = false; sse_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; sse_coef_numUD.Value = 0; }
             sort[3] = sse_checkBox.Checked;
         }
 
@@ -104,32 +110,34 @@ namespace Isotope_fitting
         {
             vis_res = (int)numericUpDown1.Value;
         }
-
-        private void numericUpDownAi_ValueChanged(object sender, EventArgs e)
+        private void Ai_coef_numUD_ValueChanged(object sender, EventArgs e)
         {
-            a = (double)Ai_coef_numUD.Value;
+            a[0] = (double)Ai_coef_numUD.Value;
         }
-
-        private void numericUpDownA_ValueChanged(object sender, EventArgs e)
+        private void A_coef_numUD_ValueChanged(object sender, EventArgs e)
         {
-            a = (double)A_coef_numUD.Value;
+            a[1] = (double)A_coef_numUD.Value;
         }
-
+        private void di_coef_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            a[2] = (double)di_coef_numUD.Value;
+        }
+        private void sse_coef_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            a[3] = (double)sse_coef_numUD.Value;
+        }
         private void Ai_numUD_ValueChanged(object sender, EventArgs e)
         {
             thres[0] = (double)Ai_numUD.Value;
         }
-
         private void A_numUD_ValueChanged(object sender, EventArgs e)
         {
             thres[1] = (double)A_numUD.Value;
         }
-
         private void di_numUD_ValueChanged(object sender, EventArgs e)
         {
            thres[2] = (double)di_numUD.Value;
         }
-
         private void Form6_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (is_node)
@@ -159,6 +167,5 @@ namespace Isotope_fitting
             }
         }
 
-        
     }
 }
