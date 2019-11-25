@@ -1070,17 +1070,13 @@ namespace Isotope_fitting
 
         private void populate_frag_treeView()
         {
-            frag_listView.Visible = false;
-            //if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Dispose(); }        // for GC?
-            //frag_tree = new TreeView() { CheckBoxes = true, Location = new Point(555, 76), Name = "frag_tree", Size = new Size(338, 454), Anchor = AnchorStyles.Top |  AnchorStyles.Right };
-            //user_grpBox.Controls.Add(frag_tree);
-            //frag_tree.BringToFront();           
+            frag_listView.Visible = false;             
             if (frag_tree.Nodes.Count>0) { frag_tree.Nodes.Clear(); }
             frag_tree.AfterCheck += (s, e) => {frag_node_checkChanged(e.Node, e.Node.Checked); };
-            frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
-                                                                      new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
-                                                                      new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
-
+            //frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
+            //                                                          new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
+            //                                                          new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
+            //frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Remove", (s, e) => { remove_node(frag_tree.SelectedNode.Index); }) });
             frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
 
             // interpret fitted results
@@ -1102,8 +1098,16 @@ namespace Isotope_fitting
             frag_tree.EndUpdate();
             frag_tree.Visible = true;
         }
-
-         private void singleFrag_manipulation(TreeNode node)
+        private void remove_node(int index)
+        {
+            if (fit_tree != null) { fit_tree.Dispose(); }
+            if (Fragments2.Count > 0)
+            {
+                Fragments2.RemoveAt(index); // thread safely fire event to continue calculations
+                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            }
+        }
+        private void singleFrag_manipulation(TreeNode node)
         {
             //try
             //{
@@ -1516,16 +1520,25 @@ namespace Isotope_fitting
 
         private void fit_Btn_Click(object sender, EventArgs e)
         {
-            if (experimental.Count==0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!");return; }
-            // initialize a new background thread for fit 
-            Thread fit;
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Perform fit", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!"); return; }
+                // initialize a new background thread for fit 
+                Thread fit;
 
-            if ((sender as Button) == fit_Btn) fit = new Thread(() => main_fit(true));
-            else fit = new Thread(() => main_fit(false)); 
+                if ((sender as Button) == fit_Btn) fit = new Thread(() => main_fit(true));
+                else fit = new Thread(() => main_fit(false));
 
-            fit.Start();
+                fit.Start();
 
-            saveFit_Btn.Enabled = true;
+                saveFit_Btn.Enabled = true;
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+           
         }
 
         private void auto_fit()
@@ -2021,20 +2034,13 @@ namespace Isotope_fitting
                             string pp = "";
                             for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
                             {
-                                string pp1,pp2,pp3;
-                                int cc1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.Length;
-                                int cc2 = Fragments2[all_fitted_sets[i][j][k] - 1].Mz.Length;
-                                int cc3 = (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").Length;
+                                string pp1,pp2,pp3;                                
                                 pp1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(30);
                                 pp2 = Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20);
                                 pp3 = (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(19);
-                                int a1 = pp1.Length;
-                                int a2 = pp2.Length;
-                                int a3 = pp3.Length;
                                 //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
                                 //sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(40) + Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20) /*all_fitted_results[i][j][k].ToString("0.###e0")*/  + (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(19) + "±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
                                 sb.AppendLine(pp1 + pp2 + pp3 + "±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
-
                             }
                             TreeNode tr = new TreeNode
                             {
@@ -3669,7 +3675,7 @@ namespace Isotope_fitting
         }
         private void refresh_frag_Btn_Click(object sender, EventArgs e)
         {
-            uncheck_all(fit_tree, false);
+            if (fit_tree!=null) { fit_tree.Dispose(); }
             int rr = 0;
             if (Fragments2.Count>0)
             {
@@ -4133,7 +4139,15 @@ namespace Isotope_fitting
 
         private void clearListBtn11_Click(object sender, EventArgs e)
         {
-            clearList();
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear Fragment List", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                clearList();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
         }
 
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
@@ -4189,62 +4203,70 @@ namespace Isotope_fitting
         }
         private void clear_toolStripButton_Click(object sender, EventArgs e)
         {
-            reset_all();           
-            displayPeakList_btn.Enabled = false;
-            Peptide = ""; peptide_textBox1.Text = Peptide;
-            insert_exp = false;
-            plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
-            saveFit_Btn.Enabled = false;
-            loadMS_Btn.Enabled = true;
-            loadFit_Btn.Enabled = true;
-            clearCalc_Btn.Enabled = false;
-            calc_Btn.Enabled = false;
-            fitMin_Box.Enabled = false;
-            fitMin_Box.Text = null;
-            fitMax_Box.Enabled = false;
-            fitMax_Box.Text = null;
-            fitStep_Box.Enabled = false;
-            fitStep_Box.Text = null;
-            step_rangeBox.Text = null;
-            Fitting_chkBox.Checked = false;
-            Fitting_chkBox.Enabled = false;
-            Fragments2.Clear();
-            ChemFormulas.Clear();
-            selectedFragments.Clear();
-            pep_Box.Text = null;
-            frag_listView.Items.Clear();
-            UncheckAll_calculationPanel();
-            resolution_Box.Text = null;
-            machine_listBox.ClearSelected();
-            machine_listBox.SelectedIndex = 2;
-            loadExp_Btn.Enabled = true;
-            selected_window = 1000000;
-            bigPanel.Controls.Clear();
-            factor_Box.Text = null;
-            candidate_fragments = 1;
-            mzMax_Box.Enabled = false;
-            mzMin_Box.Enabled = false;
-            mzMax_Label.Enabled = false;
-            mzMin_Label.Enabled = false;
-            chargeMax_Box.Enabled = false;
-            chargeMin_Box.Enabled = false;
-            chargeAll_Btn.Enabled = false;
-            idxPr_Box.Enabled = false;
-            idxTo_Box.Enabled = false;
-            idxFrom_Box.Enabled = false;
-            resolution_Box.Enabled = false;
-            machine_listBox.Enabled = false;
-            saveWd_Btn.Enabled = false;
-            windowList.Clear();
-            loaded_window = false;
-            fit_sel_Btn.Enabled = false;
-            neues = 0;
-            mark_neues = false;
-            Form4.active = false;
-            if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
-            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
-            factor_panel.Controls.Clear();
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                reset_all();
+                displayPeakList_btn.Enabled = false;
+                Peptide = ""; peptide_textBox1.Text = Peptide;
+                insert_exp = false;
+                plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
+                saveFit_Btn.Enabled = false;
+                loadMS_Btn.Enabled = true;
+                loadFit_Btn.Enabled = true;
+                clearCalc_Btn.Enabled = false;
+                calc_Btn.Enabled = false;
+                fitMin_Box.Enabled = false;
+                fitMin_Box.Text = null;
+                fitMax_Box.Enabled = false;
+                fitMax_Box.Text = null;
+                fitStep_Box.Enabled = false;
+                fitStep_Box.Text = null;
+                step_rangeBox.Text = null;
+                Fitting_chkBox.Checked = false;
+                Fitting_chkBox.Enabled = false;
+                Fragments2.Clear();
+                ChemFormulas.Clear();
+                selectedFragments.Clear();
+                pep_Box.Text = null;
+                frag_listView.Items.Clear();
+                UncheckAll_calculationPanel();
+                resolution_Box.Text = null;
+                machine_listBox.ClearSelected();
+                machine_listBox.SelectedIndex = 2;
+                loadExp_Btn.Enabled = true;
+                selected_window = 1000000;
+                bigPanel.Controls.Clear();
+                factor_Box.Text = null;
+                candidate_fragments = 1;
+                mzMax_Box.Enabled = false;
+                mzMin_Box.Enabled = false;
+                mzMax_Label.Enabled = false;
+                mzMin_Label.Enabled = false;
+                chargeMax_Box.Enabled = false;
+                chargeMin_Box.Enabled = false;
+                chargeAll_Btn.Enabled = false;
+                idxPr_Box.Enabled = false;
+                idxTo_Box.Enabled = false;
+                idxFrom_Box.Enabled = false;
+                resolution_Box.Enabled = false;
+                machine_listBox.Enabled = false;
+                saveWd_Btn.Enabled = false;
+                windowList.Clear();
+                loaded_window = false;
+                fit_sel_Btn.Enabled = false;
+                neues = 0;
+                mark_neues = false;
+                Form4.active = false;
+                if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
+                if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
+                if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+                factor_panel.Controls.Clear();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return;
+            }            
         }
 
         #endregion
