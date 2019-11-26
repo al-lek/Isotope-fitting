@@ -17,13 +17,13 @@ namespace Isotope_fitting
         /// <summary>
         /// [Ai sort,A sort,di sort,sse sort]
         /// </summary>
-        public static bool[] sort = new bool[4];
+       bool[] sort = new bool[] { false, false, false, false };
         /// <summary>
         /// [Ai thres,A thres,di thres]
         /// </summary>
-        public static double[] thres = new double[3];
-        public static double[] a=new double[4];
-        public static int vis_res;
+        double[] thres = new double[3] { 100,100,100};
+        double[] coeff_matrix=new double[4] {0,0,0,0 };
+        int vis_res;
        
 
         public Form6(bool node,int node_idx)
@@ -46,7 +46,11 @@ namespace Isotope_fitting
                 Ai_numUD.Value = (decimal)Form2.tab_thres[idx][0];
                 A_numUD.Value = (decimal)Form2.tab_thres[idx][1];
                 di_numUD.Value = (decimal)Form2.tab_thres[idx][2];
-                a= Form2.tab_coef[idx];
+                coeff_matrix[0]= Form2.tab_coef[idx][0];
+                coeff_matrix[1] = Form2.tab_coef[idx][1];
+                coeff_matrix[2] = Form2.tab_coef[idx][2];
+                coeff_matrix[3] = Form2.tab_coef[idx][3];
+
                 sort[0] = Form2.tab_node[idx][0];
                 sort[1] = Form2.tab_node[idx][1];
                 sort[2] = Form2.tab_node[idx][2];
@@ -68,7 +72,11 @@ namespace Isotope_fitting
                 Ai_numUD.Value= (decimal)Form2.fit_thres[0];
                 A_numUD.Value =  (decimal)Form2.fit_thres[1];
                 di_numUD.Value =  (decimal)Form2.fit_thres[2];
-                a= Form2.a_coef;
+                coeff_matrix[0]= Form2.a_coef[0];
+                coeff_matrix[1] = Form2.a_coef[1];
+                coeff_matrix[2] = Form2.a_coef[2];
+                coeff_matrix[3] = Form2.a_coef[3];
+
                 sort[0] = Form2.fit_sort[0];
                 sort[1] = Form2.fit_sort[1];
                 sort[2] = Form2.fit_sort[2];
@@ -77,6 +85,7 @@ namespace Isotope_fitting
                 thres[1] = Form2.fit_thres[1];
                 thres[2] = Form2.fit_thres[2];
             }
+            vital_refresh();
         }
        
         private void Ai_checkBox_CheckedChanged(object sender, EventArgs e)
@@ -112,19 +121,19 @@ namespace Isotope_fitting
         }
         private void Ai_coef_numUD_ValueChanged(object sender, EventArgs e)
         {
-            a[0] = (double)Ai_coef_numUD.Value;
+            coeff_matrix[0] = (double)Ai_coef_numUD.Value;
         }
         private void A_coef_numUD_ValueChanged(object sender, EventArgs e)
         {
-            a[1] = (double)A_coef_numUD.Value;
+            coeff_matrix[1] = (double)A_coef_numUD.Value;
         }
         private void di_coef_numUD_ValueChanged(object sender, EventArgs e)
         {
-            a[2] = (double)di_coef_numUD.Value;
+            coeff_matrix[2] = (double)di_coef_numUD.Value;
         }
         private void sse_coef_numUD_ValueChanged(object sender, EventArgs e)
         {
-            a[3] = (double)sse_coef_numUD.Value;
+            coeff_matrix[3] = (double)sse_coef_numUD.Value;
         }
         private void Ai_numUD_ValueChanged(object sender, EventArgs e)
         {
@@ -138,23 +147,32 @@ namespace Isotope_fitting
         {
            thres[2] = (double)di_numUD.Value;
         }
+        private void vital_refresh()
+        {
+            for (int i=0;i<4 ;i++)
+            {
+                if (sort[i] == false) { coeff_matrix[i] = 0; }
+                else if (coeff_matrix[i] == 0) { sort[i] = false; }
+            }
+        }
         private void Form6_FormClosing(object sender, FormClosingEventArgs e)
         {
+            vital_refresh();
             if (is_node)
             {
-                Form2.tab_coef[idx] = a;
+                Form2.tab_coef[idx] = coeff_matrix;
                 Form2.tab_node[idx][0] = sort[0];
                 Form2.tab_node[idx][1] = sort[1];
                 Form2.tab_node[idx][2] = sort[2];
                 Form2.tab_node[idx][3] = sort[3];
-
+               
                 Form2.tab_thres[idx][0] = thres[0];
                 Form2.tab_thres[idx][1] = thres[1];
                 Form2.tab_thres[idx][2] = thres[2];                
             }
             else
             {
-                Form2.a_coef=a;
+                Form2.a_coef=coeff_matrix;
                 Form2.fit_sort[0]=sort[0];
                 Form2.fit_sort[1]= sort[1];
                 Form2.fit_sort[2]= sort[2];

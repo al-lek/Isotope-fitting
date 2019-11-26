@@ -359,10 +359,10 @@ namespace Isotope_fitting
             preferences[0] += "fit results sorting by di: " + fit_sort[2].ToString() + "\r\n";
             preferences[0] += "fit results sorting by sse: " + fit_sort[3].ToString() + "\r\n";
 
-            preferences[0] += "Ai coeficient: " + a_coef[0].ToString() + "\r\n";
-            preferences[0] += "A coeficient: " + a_coef[1].ToString() + "\r\n";
-            preferences[0] += "di coeficient: " + a_coef[2].ToString() + "\r\n";
-            preferences[0] += "sse coeficient: " + a_coef[3].ToString() + "\r\n";
+            preferences[0] += "Ai coefficient: " + a_coef[0].ToString() + "\r\n";
+            preferences[0] += "A coefficient: " + a_coef[1].ToString() + "\r\n";
+            preferences[0] += "di coefficient: " + a_coef[2].ToString() + "\r\n";
+            preferences[0] += "sse coefficient: " + a_coef[3].ToString() + "\r\n";
 
             preferences[0] += "Amount of best solutions presented: " + visible_results.ToString() + "\r\n";
             preferences[0] += "Ai score threshold: " + fit_thres[0].ToString() + "\r\n";
@@ -1844,7 +1844,7 @@ namespace Isotope_fitting
         private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities,double experimental_sum)
         {
             // 1. initialize needed params
-            // in coeficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
+            // in coefficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
             // UI_intensities is initial values to make a starting point
             int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
 
@@ -1870,9 +1870,9 @@ namespace Isotope_fitting
             for (int i = 0; i < distros_num; i++) result[i] = coeficients[i];
             result[3*distros_num+1] = state.fi[0];
             (result[3*distros_num+2] , result[3*distros_num + 3]) = per_cent_fit_coverage(aligned_intensities_subSet, coeficients,experimental_sum);
-           
+
             //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
-            //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coeficients);
+            //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coefficients);
             //result[distros_num + 3] = (result[distros_num])+ result[distros_num + 2] +(10/result[distros_num + 1]);
 
             return result;
