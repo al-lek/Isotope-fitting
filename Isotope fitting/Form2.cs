@@ -2731,7 +2731,7 @@ namespace Isotope_fitting
 
             iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             fit_grpBox.Controls.Add(iso_plot);
-            iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked || !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
+            iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked && !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
              PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
             iso_plot.Model = iso_model;           
             iso_model.Updating += (s, e) =>
