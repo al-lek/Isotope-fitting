@@ -44,11 +44,11 @@ namespace Isotope_fitting
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
             this.clear_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.Panel();
             this.new_Btn = new System.Windows.Forms.Button();
             this.theorData_grpBx = new System.Windows.Forms.GroupBox();
+            this.peptide_textBox1 = new System.Windows.Forms.TextBox();
             this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
             this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
             this.loadMS_Btn = new System.Windows.Forms.Button();
@@ -221,7 +221,8 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.peptide_textBox1 = new System.Windows.Forms.TextBox();
+            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
+            this.fragPlotLbl_chkBx2 = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -329,7 +330,8 @@ namespace Isotope_fitting
             this.cursor_chkBx,
             this.toolStripButton1,
             this.clear_toolStripButton,
-            this.fragPlotLbl_chkBx});
+            this.fragPlotLbl_chkBx,
+            this.fragPlotLbl_chkBx2});
             this.toolStrip_plot.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_plot.Name = "toolStrip_plot";
             this.toolStrip_plot.Size = new System.Drawing.Size(605, 27);
@@ -392,17 +394,6 @@ namespace Isotope_fitting
             this.clear_toolStripButton.Size = new System.Drawing.Size(73, 24);
             this.clear_toolStripButton.Text = "Clear all";
             this.clear_toolStripButton.Click += new System.EventHandler(this.clear_toolStripButton_Click);
-            // 
-            // fragPlotLbl_chkBx
-            // 
-            this.fragPlotLbl_chkBx.CheckOnClick = true;
-            this.fragPlotLbl_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
-            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
-            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(24, 24);
-            this.fragPlotLbl_chkBx.Text = "Show Fragment Label";
-            this.fragPlotLbl_chkBx.Click += new System.EventHandler(this.fragPlotLbl_chkBx_Click);
             // 
             // res_grpBox
             // 
@@ -485,6 +476,17 @@ namespace Isotope_fitting
             this.theorData_grpBx.TabIndex = 2;
             this.theorData_grpBx.TabStop = false;
             this.theorData_grpBx.Text = "Theoretical Data";
+            // 
+            // peptide_textBox1
+            // 
+            this.peptide_textBox1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.peptide_textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.peptide_textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.peptide_textBox1.Location = new System.Drawing.Point(3, 43);
+            this.peptide_textBox1.Name = "peptide_textBox1";
+            this.peptide_textBox1.ReadOnly = true;
+            this.peptide_textBox1.Size = new System.Drawing.Size(213, 11);
+            this.peptide_textBox1.TabIndex = 42;
             // 
             // plotFragProf_chkBox
             // 
@@ -2675,16 +2677,27 @@ namespace Isotope_fitting
             this.idxPlotLbl.TabIndex = 20;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
-            // peptide_textBox1
+            // fragPlotLbl_chkBx
             // 
-            this.peptide_textBox1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.peptide_textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.peptide_textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.peptide_textBox1.Location = new System.Drawing.Point(3, 43);
-            this.peptide_textBox1.Name = "peptide_textBox1";
-            this.peptide_textBox1.ReadOnly = true;
-            this.peptide_textBox1.Size = new System.Drawing.Size(213, 11);
-            this.peptide_textBox1.TabIndex = 42;
+            this.fragPlotLbl_chkBx.CheckOnClick = true;
+            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
+            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
+            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(72, 24);
+            this.fragPlotLbl_chkBx.Text = "Primary";
+            this.fragPlotLbl_chkBx.ToolTipText = "Show Primary Fragment Label";
+            this.fragPlotLbl_chkBx.Click += new System.EventHandler(this.fragPlotLbl_chkBx_Click);
+            // 
+            // fragPlotLbl_chkBx2
+            // 
+            this.fragPlotLbl_chkBx2.CheckOnClick = true;
+            this.fragPlotLbl_chkBx2.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx2.Image")));
+            this.fragPlotLbl_chkBx2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fragPlotLbl_chkBx2.Name = "fragPlotLbl_chkBx2";
+            this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(71, 24);
+            this.fragPlotLbl_chkBx2.Text = "Internal";
+            this.fragPlotLbl_chkBx2.ToolTipText = "Show Internal Fragments Label";
+            this.fragPlotLbl_chkBx2.Click += new System.EventHandler(this.fragPlotLbl_chkBx2_Click);
             // 
             // Form2
             // 
@@ -2946,7 +2959,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton seqSave_Btn;
         private System.Windows.Forms.ToolStripButton seqCopy_Btn;
         private System.Windows.Forms.Panel panel1_intIdx;
-        private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx;
         private System.Windows.Forms.TextBox peptide_textBox1;
+        private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx;
+        private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx2;
     }
 }

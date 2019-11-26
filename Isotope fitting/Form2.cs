@@ -1997,7 +1997,7 @@ namespace Isotope_fitting
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node);  };     
             fit_tree.NodeMouseClick += (s, e) => { fit_set_graph_zoomed(e.Node); };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
-
+            
             // interpret fitted results
             fit_tree.BeginUpdate();
             for (int i = 0; i < all_fitted_results.Count; i++)
@@ -2021,14 +2021,9 @@ namespace Isotope_fitting
                         if (print)
                         {
                             StringBuilder sb = new StringBuilder();
-                            //tree_index[j] = j; tree_sse[j] = all_fitted_results[i][j][all_fitted_sets[i][j].Length];
                             string tmp = "";
                             tmp += "SSE:" + all_fitted_results[i][j][all_fitted_results[i][j].Length - 3].ToString("0.###e0" + " ");
-                            //tmp += "LSEi:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 3], 3).ToString("0.###e0" + " ");
                             tmp += "di:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 4], 3).ToString() + "% ";
-                            //sb.AppendLine("A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%");
-                            //sb.AppendLine("frag." + "     " + "m/z" + "         " + "di" + "         " + "sd");                            
-                            //tmp += "K:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString();                            
                             sb.AppendLine("A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%");
                             sb.AppendLine("frag.".PadRight(30) +"m/z".PadRight(20) + "di".PadRight(20) +  "sd");
                             string pp = "";
@@ -2038,8 +2033,6 @@ namespace Isotope_fitting
                                 pp1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(30);
                                 pp2 = Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20);
                                 pp3 = (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(19);
-                                //tmp += " / "+Fragments2[all_fitted_sets[i][j][k] - 1].Name  /*+ " - " + all_fitted_results[i][j][k].ToString("0.###e0" + "  ")*/;
-                                //sb.AppendLine(Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(40) + Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20) /*all_fitted_results[i][j][k].ToString("0.###e0")*/  + (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(19) + "±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
                                 sb.AppendLine(pp1 + pp2 + pp3 + "±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString());
                             }
                             TreeNode tr = new TreeNode
@@ -2720,7 +2713,7 @@ namespace Isotope_fitting
 
             iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             fit_grpBox.Controls.Add(iso_plot);
-            iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
+            iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked || !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
              PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
             iso_plot.Model = iso_model;           
             iso_model.Updating += (s, e) =>
@@ -2872,32 +2865,35 @@ namespace Isotope_fitting
 
         private void frag_annotation(List<int> to_plot)
         {
-            if (fragPlotLbl_chkBx.Checked && !cursor_chkBx.Checked && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked) )
+            if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked) && !cursor_chkBx.Checked && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked) )
             {
                 List<int> plot_idxs = new List<int>(to_plot);
                 iso_plot.Model.Annotations.Clear();
                 foreach (int p in plot_idxs)
                 {
-                    iso_plot.Model.Annotations.Add(new TextAnnotation()
+                    if ((fragPlotLbl_chkBx.Checked && !Fragments2[p - 1].Ion_type.StartsWith("inte")) || (fragPlotLbl_chkBx2.Checked && Fragments2[p - 1].Ion_type.StartsWith("inte")))
                     {
-                        TextPosition = new DataPoint(Fragments2[p - 1].Centroid[0].X, Fragments2[p - 1].Centroid[0].Y* Fragments2[p - 1].Factor),
-                        TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
-                        TextVerticalAlignment=VerticalAlignment.Bottom,
-                        TextRotation=270,
-                        Background = OxyColors.Transparent,
-                        Text = Fragments2[p - 1].Name.ToString(),
-                        Layer = AnnotationLayer.AboveSeries,
-                        Stroke=OxyColors.Transparent,
-                        TextColor = Fragments2[p - 1].Color,
-                        FontWeight = 100
-                    });
+                        iso_plot.Model.Annotations.Add(new TextAnnotation()
+                        {
+                            TextPosition = new DataPoint(Fragments2[p - 1].Centroid[0].X, Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor),
+                            TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
+                            TextVerticalAlignment = VerticalAlignment.Bottom,
+                            TextRotation = 270,
+                            Background = OxyColors.Transparent,
+                            Text = Fragments2[p - 1].Name.ToString(),
+                            Layer = AnnotationLayer.AboveSeries,
+                            Stroke = OxyColors.Transparent,
+                            TextColor = Fragments2[p - 1].Color,
+                            FontWeight = 100
+                        });
+                    }                    
                 }
             }
         }
         private void cursor_chkBx_Click(object sender, EventArgs e)
         {
             if (!cursor_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
-            else { fragPlotLbl_chkBx.Checked=false; }
+            else { fragPlotLbl_chkBx.Checked=false; fragPlotLbl_chkBx2.Checked = false; }
         }
 
         public class CustomPlotController : PlotController
@@ -8251,6 +8247,14 @@ namespace Isotope_fitting
         private void fragPlotLbl_chkBx_Click(object sender, EventArgs e)
         {
             if (fragPlotLbl_chkBx.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
+            else if (fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); refresh_iso_plot(); }
+            else { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
+        }
+
+        private void fragPlotLbl_chkBx2_Click(object sender, EventArgs e)
+        {
+            if (fragPlotLbl_chkBx2.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
+            else if(fragPlotLbl_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); refresh_iso_plot(); }
             else { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
         }
     }
