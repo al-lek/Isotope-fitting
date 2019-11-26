@@ -1524,6 +1524,7 @@ namespace Isotope_fitting
             if (dialogResult == DialogResult.Yes)
             {
                 if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!"); return; }
+                uncheckall_Frag(); 
                 // initialize a new background thread for fit 
                 Thread fit;
 
@@ -1995,7 +1996,7 @@ namespace Isotope_fitting
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node);  };     
-            fit_tree.NodeMouseClick += (s, e) => { fit_set_graph_zoomed(e.Node); };
+            fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
             
             // interpret fitted results
@@ -2388,6 +2389,7 @@ namespace Isotope_fitting
         }
         private void refresh_fitnode_sorting(TreeNode node)
         {
+            int node_index = node.Index;
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
             if (all_fitted_results != null && string.IsNullOrEmpty(node.Name))
             {
@@ -2395,7 +2397,7 @@ namespace Isotope_fitting
                 generate_fit_results();
                 best_checked(true, node.Index);
                 checked_labels();
-                node.Expand();
+                fit_tree.Nodes[node_index].Expand();
                 refresh_iso_plot();
                 frag_tree.EndUpdate();
             }
@@ -2612,8 +2614,11 @@ namespace Isotope_fitting
 
             // 4. residual plot
             if (residual.Count > 0)
+            {
                 for (int j = 0; j < residual.Count; j++)
                     (res_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(residual[j][0], residual[j][1]));
+                
+            }                         
 
             // 5. centroid (bar)
             if (plotCentr_chkBox.Checked)
@@ -2688,8 +2693,21 @@ namespace Isotope_fitting
                     intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
 
                 summation.Add(new double[] { all_data[0][i][0], intensity });
-
-                residual.Add(new double[] { all_data[0][i][0], all_data[0][i][1] - intensity });
+                if (rel_res_chkBx.Checked)
+                {
+                    if (all_data[0][i][1]==0 || intensity==0)
+                    {
+                        residual.Add(new double[] { all_data[0][i][0], 1 });
+                    }
+                    else
+                    {
+                        residual.Add(new double[] { all_data[0][i][0], (all_data[0][i][1] - intensity) / all_data[0][i][1] });
+                    }                    
+                }
+                else
+                {
+                    residual.Add(new double[] { all_data[0][i][0], all_data[0][i][1] - intensity });
+                }
             }
         }
         private void invalidate_all()
@@ -8256,6 +8274,11 @@ namespace Isotope_fitting
             if (fragPlotLbl_chkBx2.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
             else if(fragPlotLbl_chkBx.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); refresh_iso_plot(); }
             else { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
+        }
+
+        private void toolStripButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            refresh_iso_plot();
         }
     }
 }
