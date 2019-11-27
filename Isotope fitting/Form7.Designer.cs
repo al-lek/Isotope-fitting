@@ -33,8 +33,11 @@
             this.fitCover_lbl = new System.Windows.Forms.Label();
             this.fitBunch_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // fitCover_numUD
@@ -43,7 +46,7 @@
             this.fitCover_numUD.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fitCover_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitCover_numUD.ForeColor = System.Drawing.Color.Transparent;
-            this.fitCover_numUD.Location = new System.Drawing.Point(276, 72);
+            this.fitCover_numUD.Location = new System.Drawing.Point(276, 75);
             this.fitCover_numUD.Maximum = new decimal(new int[] {
             5,
             0,
@@ -91,7 +94,7 @@
             this.fitCover_lbl.AutoSize = true;
             this.fitCover_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitCover_lbl.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.fitCover_lbl.Location = new System.Drawing.Point(12, 72);
+            this.fitCover_lbl.Location = new System.Drawing.Point(12, 75);
             this.fitCover_lbl.Name = "fitCover_lbl";
             this.fitCover_lbl.Size = new System.Drawing.Size(203, 15);
             this.fitCover_lbl.TabIndex = 10;
@@ -119,12 +122,46 @@
             this.label1.TabIndex = 22;
             this.label1.Text = "Theoritical isotopic distributions :";
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.BackColor = System.Drawing.Color.Teal;
+            this.numericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown1.ForeColor = System.Drawing.Color.Transparent;
+            this.numericUpDown1.Location = new System.Drawing.Point(276, 109);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(39, 16);
+            this.numericUpDown1.TabIndex = 24;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label2.Location = new System.Drawing.Point(12, 109);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(199, 15);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "max ppm Error for di εi calculation  ";
+            // 
             // Form7
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(331, 102);
+            this.ClientSize = new System.Drawing.Size(334, 139);
+            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.fitCover_numUD);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.fitBunch_numUD);
@@ -138,6 +175,7 @@
             this.Text = "Fitting calculations";
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,5 +187,7 @@
         private System.Windows.Forms.Label fitCover_lbl;
         private System.Windows.Forms.Label fitBunch_lbl;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label2;
     }
 }

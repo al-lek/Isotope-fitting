@@ -165,6 +165,10 @@ namespace Isotope_fitting
         bool[] selection_rule = new bool[] { false, true, false, false, false, false };
         bool block_plot_refresh = false;
         bool block_fit_refresh = false;
+        /// <summary>
+        /// max ppm error used in di and ci calculation during fitting
+        /// </summary>
+        public double ppmDi = 8.0;
         #endregion
 
         #region fit results sorting parameteres
@@ -332,10 +336,15 @@ namespace Isotope_fitting
                     fit_thres[1] = Convert.ToDouble(preferences[21].Split(':')[1]); 
                     fit_thres[2] = Convert.ToDouble(preferences[22].Split(':')[1]);
                     fit_thres[3] = Convert.ToDouble(preferences[23].Split(':')[1]);
-
+                    ppmDi = Convert.ToDouble(preferences[24].Split(':')[1]);
 
                 }
-                catch { MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!"); }
+                catch
+                {
+                    MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!");
+                    ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2;selection_rule = new bool[] { false, true, false, false, false, false };
+                    fit_sort = new bool[] { true, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+                }
             }           
         }
 
@@ -377,6 +386,7 @@ namespace Isotope_fitting
             preferences[0] += "di score threshold: " + fit_thres[2].ToString() + "\r\n";
             preferences[0] += "ci score threshold: " + fit_thres[3].ToString() + "\r\n";
 
+            preferences[0] += "max ppm error for di ci calculation: " + ppmDi.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -491,8 +501,8 @@ namespace Isotope_fitting
                     {
                         if (peak[5] > 200000)
                         {
-                            tmp1.Add((float)(peak[1] + peak[4]));
-                            tmp2.Add((float)peak[3]);
+                            tmp1.Add((double)(peak[1] + peak[4]));
+                            tmp2.Add((double)peak[3]);
                         }
                     }
                     if (tmp1.Count > 0)
@@ -576,7 +586,7 @@ namespace Isotope_fitting
                 Monoisotopic = new CompoundMulti(),
                 Points = new List<PointPlot>(),
                 Machine = string.Empty,
-                Resolution = new float(),
+                Resolution = new double(),
                 Combinations = new List<Combination_1>(),
                 Profile = new List<PointPlot>(),
                 Centroid = new List<PointPlot>(),
@@ -907,7 +917,7 @@ namespace Isotope_fitting
                 }
                 else
                 {
-                    chem.Resolution = float.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+                    chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
                 }
             }
         }
@@ -1370,7 +1380,7 @@ namespace Isotope_fitting
             if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
 
             chem.PPM_Error = results.Average(p => p[0]);
-            chem.Resolution = (float)results.Average(p => p[1]);
+            chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
         }
@@ -3615,7 +3625,7 @@ namespace Isotope_fitting
                                     Monoisotopic = new CompoundMulti(),
                                     Points = new List<PointPlot>(),
                                     Machine = string.Empty,
-                                    Resolution = float.Parse(str[13]),
+                                    Resolution = double.Parse(str[13]),
                                     Combinations = new List<Combination_1>(),
                                     Profile = new List<PointPlot>(),
                                     Centroid = new List<PointPlot>(),
@@ -5563,16 +5573,16 @@ namespace Isotope_fitting
                 refresh_iso_plot();
             }
         }
-        private float ppm_calculator3(double centroid)
+        private double ppm_calculator3(double centroid)
         {
-            float res = 0f;
+            double res = 0;
             double ppm = 0.0;
             double diff = 0.0;
             int d = 1;
             if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
             {
                 ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
-                if (ppm < ppmError) { res = (float)peak_points[0][3]; return res; }
+                if (ppm < ppmError) { res = (double)peak_points[0][3]; return res; }
                 else return res;
             }
 
@@ -5588,9 +5598,9 @@ namespace Isotope_fitting
                 if (diff >= 0)
                 {
                     ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d][3]; return res; }
+                    if (ppm < ppmError) { res = (double)peak_points[d][3]; return res; }
                     ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
-                    if (ppm < ppmError) { res = (float)peak_points[d - 1][3]; return res; }
+                    if (ppm < ppmError) { res = (double)peak_points[d - 1][3]; return res; }
                     else return res;
                 }
 
