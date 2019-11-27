@@ -3552,6 +3552,7 @@ namespace Isotope_fitting
                 sb.AppendLine(loaded_lists);
                 sb.AppendLine(Path.GetFileNameWithoutExtension(loadData.FileName));
                 loaded_lists = sb.ToString();
+                show_files_Btn.ToolTipText = loaded_lists;
                 is_loading = true;  // performance
                 fullPath = loadData.FileName;
 
@@ -3660,7 +3661,7 @@ namespace Isotope_fitting
         }
         private void clearList()
         {
-            loaded_lists = "";
+            loaded_lists = ""; show_files_Btn.ToolTipText = "";
             if (Fragments2.Count == 0 || all_data.Count<2) return;
             if (IonDraw.Count > 0) IonDraw.Clear();
             selectedFragments.Clear();
@@ -4238,7 +4239,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                loaded_lists = "";
+                loaded_lists = ""; show_files_Btn.ToolTipText = "";
                 reset_all();
                 displayPeakList_btn.Enabled = false;
                 Peptide = ""; peptide_textBox1.Text = Peptide;
@@ -8302,8 +8303,6 @@ namespace Isotope_fitting
 
         private void show_files_Btn_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(loaded_lists)) return;
-            MessageBox.Show(loaded_lists,"Loaded Fragment lists");
 
         }
     }
