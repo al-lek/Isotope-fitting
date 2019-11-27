@@ -19,9 +19,9 @@ namespace Isotope_fitting
         /// </summary>
        bool[] sort = new bool[] { false, false, false, false };
         /// <summary>
-        /// [Ai thres,A thres,di thres]
+        /// [Ai thres,A thres,di thres,ci thres]
         /// </summary>
-        double[] thres = new double[3] { 100,100,100};
+        double[] thres = new double[4] { 100,100,100,100};
         double[] coeff_matrix=new double[4] {0,0,0,0 };
         int vis_res;
        
@@ -46,6 +46,8 @@ namespace Isotope_fitting
                 Ai_numUD.Value = (decimal)Form2.tab_thres[idx][0];
                 A_numUD.Value = (decimal)Form2.tab_thres[idx][1];
                 di_numUD.Value = (decimal)Form2.tab_thres[idx][2];
+                ci_numUD.Value = (decimal)Form2.tab_thres[idx][3];
+
                 coeff_matrix[0]= Form2.tab_coef[idx][0];
                 coeff_matrix[1] = Form2.tab_coef[idx][1];
                 coeff_matrix[2] = Form2.tab_coef[idx][2];
@@ -58,6 +60,8 @@ namespace Isotope_fitting
                 thres[0] = Form2.tab_thres[idx][0];
                 thres[1] = Form2.tab_thres[idx][1];
                 thres[2] = Form2.tab_thres[idx][2];
+                thres[3] = Form2.tab_thres[idx][3];
+
             }
             else
             {
@@ -72,6 +76,8 @@ namespace Isotope_fitting
                 Ai_numUD.Value= (decimal)Form2.fit_thres[0];
                 A_numUD.Value =  (decimal)Form2.fit_thres[1];
                 di_numUD.Value =  (decimal)Form2.fit_thres[2];
+                ci_numUD.Value = (decimal)Form2.fit_thres[3];
+
                 coeff_matrix[0]= Form2.a_coef[0];
                 coeff_matrix[1] = Form2.a_coef[1];
                 coeff_matrix[2] = Form2.a_coef[2];
@@ -84,6 +90,8 @@ namespace Isotope_fitting
                 thres[0] = Form2.fit_thres[0];
                 thres[1] = Form2.fit_thres[1];
                 thres[2] = Form2.fit_thres[2];
+                thres[3] = Form2.fit_thres[3];
+
             }
             vital_refresh();
         }
@@ -168,7 +176,9 @@ namespace Isotope_fitting
                
                 Form2.tab_thres[idx][0] = thres[0];
                 Form2.tab_thres[idx][1] = thres[1];
-                Form2.tab_thres[idx][2] = thres[2];                
+                Form2.tab_thres[idx][2] = thres[2];  
+                Form2.tab_thres[idx][3] = thres[3];
+
             }
             else
             {
@@ -181,9 +191,15 @@ namespace Isotope_fitting
                 Form2.fit_thres[0]=thres[0];
                 Form2.fit_thres[1]= thres[1];
                 Form2.fit_thres[2]= thres[2];
+                Form2.fit_thres[3] = thres[3];
+
                 Form2.visible_results = vis_res;
             }
         }
 
+        private void ci_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            thres[3] = (double)ci_numUD.Value;
+        }
     }
 }

@@ -44,6 +44,11 @@ namespace Isotope_fitting
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
             this.clear_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
+            this.fragPlotLbl_chkBx2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripSeparator();
+            this.rel_res_chkBx = new System.Windows.Forms.ToolStripButton();
             this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.Panel();
             this.new_Btn = new System.Windows.Forms.Button();
@@ -221,11 +226,6 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
-            this.fragPlotLbl_chkBx2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripSeparator();
-            this.rel_res_chkBx = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -400,6 +400,51 @@ namespace Isotope_fitting
             this.clear_toolStripButton.Size = new System.Drawing.Size(73, 24);
             this.clear_toolStripButton.Text = "Clear all";
             this.clear_toolStripButton.Click += new System.EventHandler(this.clear_toolStripButton_Click);
+            // 
+            // fragPlotLbl_chkBx
+            // 
+            this.fragPlotLbl_chkBx.CheckOnClick = true;
+            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
+            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
+            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(72, 24);
+            this.fragPlotLbl_chkBx.Text = "Primary";
+            this.fragPlotLbl_chkBx.ToolTipText = "Show Primary Fragment Label";
+            this.fragPlotLbl_chkBx.Click += new System.EventHandler(this.fragPlotLbl_chkBx_Click);
+            // 
+            // fragPlotLbl_chkBx2
+            // 
+            this.fragPlotLbl_chkBx2.CheckOnClick = true;
+            this.fragPlotLbl_chkBx2.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx2.Image")));
+            this.fragPlotLbl_chkBx2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fragPlotLbl_chkBx2.Name = "fragPlotLbl_chkBx2";
+            this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(71, 24);
+            this.fragPlotLbl_chkBx2.Text = "Internal";
+            this.fragPlotLbl_chkBx2.ToolTipText = "Show Internal Fragments Label";
+            this.fragPlotLbl_chkBx2.Click += new System.EventHandler(this.fragPlotLbl_chkBx2_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(6, 27);
+            // 
+            // rel_res_chkBx
+            // 
+            this.rel_res_chkBx.CheckOnClick = true;
+            this.rel_res_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.rel_res_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("rel_res_chkBx.Image")));
+            this.rel_res_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rel_res_chkBx.Name = "rel_res_chkBx";
+            this.rel_res_chkBx.Size = new System.Drawing.Size(23, 24);
+            this.rel_res_chkBx.Text = "%";
+            this.rel_res_chkBx.ToolTipText = "display % relative residual";
+            this.rel_res_chkBx.CheckedChanged += new System.EventHandler(this.toolStripButton4_CheckedChanged);
             // 
             // res_grpBox
             // 
@@ -2682,51 +2727,6 @@ namespace Isotope_fitting
             this.idxPlotLbl.Size = new System.Drawing.Size(172, 20);
             this.idxPlotLbl.TabIndex = 20;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
-            // 
-            // fragPlotLbl_chkBx
-            // 
-            this.fragPlotLbl_chkBx.CheckOnClick = true;
-            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
-            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
-            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(72, 24);
-            this.fragPlotLbl_chkBx.Text = "Primary";
-            this.fragPlotLbl_chkBx.ToolTipText = "Show Primary Fragment Label";
-            this.fragPlotLbl_chkBx.Click += new System.EventHandler(this.fragPlotLbl_chkBx_Click);
-            // 
-            // fragPlotLbl_chkBx2
-            // 
-            this.fragPlotLbl_chkBx2.CheckOnClick = true;
-            this.fragPlotLbl_chkBx2.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx2.Image")));
-            this.fragPlotLbl_chkBx2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fragPlotLbl_chkBx2.Name = "fragPlotLbl_chkBx2";
-            this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(71, 24);
-            this.fragPlotLbl_chkBx2.Text = "Internal";
-            this.fragPlotLbl_chkBx2.ToolTipText = "Show Internal Fragments Label";
-            this.fragPlotLbl_chkBx2.Click += new System.EventHandler(this.fragPlotLbl_chkBx2_Click);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(6, 27);
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(6, 27);
-            // 
-            // rel_res_chkBx
-            // 
-            this.rel_res_chkBx.CheckOnClick = true;
-            this.rel_res_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.rel_res_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("rel_res_chkBx.Image")));
-            this.rel_res_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.rel_res_chkBx.Name = "rel_res_chkBx";
-            this.rel_res_chkBx.Size = new System.Drawing.Size(23, 24);
-            this.rel_res_chkBx.Text = "%";
-            this.rel_res_chkBx.ToolTipText = "display % relative residual";
-            this.rel_res_chkBx.CheckedChanged += new System.EventHandler(this.toolStripButton4_CheckedChanged);
             // 
             // Form2
             // 

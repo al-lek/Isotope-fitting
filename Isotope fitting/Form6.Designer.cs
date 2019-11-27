@@ -52,6 +52,8 @@
             this.labeldi = new System.Windows.Forms.Label();
             this.sse_coef_numUD = new System.Windows.Forms.NumericUpDown();
             this.di_coef_numUD = new System.Windows.Forms.NumericUpDown();
+            this.ci_numUD = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Ai_coef_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.A_coef_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -60,6 +62,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.A_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sse_coef_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.di_coef_numUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ci_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // di_checkBox
@@ -67,7 +70,7 @@
             this.di_checkBox.AutoSize = true;
             this.di_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.di_checkBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.di_checkBox.Location = new System.Drawing.Point(16, 250);
+            this.di_checkBox.Location = new System.Drawing.Point(16, 263);
             this.di_checkBox.Name = "di_checkBox";
             this.di_checkBox.Size = new System.Drawing.Size(36, 19);
             this.di_checkBox.TabIndex = 2;
@@ -80,7 +83,7 @@
             this.A_checkBox.AutoSize = true;
             this.A_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.A_checkBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.A_checkBox.Location = new System.Drawing.Point(16, 225);
+            this.A_checkBox.Location = new System.Drawing.Point(16, 238);
             this.A_checkBox.Name = "A_checkBox";
             this.A_checkBox.Size = new System.Drawing.Size(33, 19);
             this.A_checkBox.TabIndex = 1;
@@ -94,7 +97,7 @@
             this.labelA.Enabled = false;
             this.labelA.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelA.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.labelA.Location = new System.Drawing.Point(87, 226);
+            this.labelA.Location = new System.Drawing.Point(87, 239);
             this.labelA.Name = "labelA";
             this.labelA.Size = new System.Drawing.Size(29, 15);
             this.labelA.TabIndex = 3;
@@ -105,7 +108,7 @@
             this.Ai_checkBox.AutoSize = true;
             this.Ai_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Ai_checkBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.Ai_checkBox.Location = new System.Drawing.Point(16, 200);
+            this.Ai_checkBox.Location = new System.Drawing.Point(16, 213);
             this.Ai_checkBox.Name = "Ai_checkBox";
             this.Ai_checkBox.Size = new System.Drawing.Size(36, 19);
             this.Ai_checkBox.TabIndex = 0;
@@ -119,7 +122,7 @@
             this.labelAi.Enabled = false;
             this.labelAi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAi.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.labelAi.Location = new System.Drawing.Point(87, 201);
+            this.labelAi.Location = new System.Drawing.Point(87, 214);
             this.labelAi.Name = "labelAi";
             this.labelAi.Size = new System.Drawing.Size(29, 15);
             this.labelAi.TabIndex = 4;
@@ -138,7 +141,7 @@
             0,
             0,
             65536});
-            this.Ai_coef_numUD.Location = new System.Drawing.Point(119, 203);
+            this.Ai_coef_numUD.Location = new System.Drawing.Point(119, 216);
             this.Ai_coef_numUD.Maximum = new decimal(new int[] {
             1,
             0,
@@ -167,7 +170,7 @@
             0,
             0,
             65536});
-            this.A_coef_numUD.Location = new System.Drawing.Point(119, 227);
+            this.A_coef_numUD.Location = new System.Drawing.Point(119, 240);
             this.A_coef_numUD.Maximum = new decimal(new int[] {
             1,
             0,
@@ -210,7 +213,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Teal;
-            this.label3.Location = new System.Drawing.Point(12, 174);
+            this.label3.Location = new System.Drawing.Point(12, 187);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 17);
             this.label3.TabIndex = 9;
@@ -222,7 +225,7 @@
             this.ObjLbl.Enabled = false;
             this.ObjLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ObjLbl.ForeColor = System.Drawing.Color.Teal;
-            this.ObjLbl.Location = new System.Drawing.Point(87, 176);
+            this.ObjLbl.Location = new System.Drawing.Point(87, 189);
             this.ObjLbl.Name = "ObjLbl";
             this.ObjLbl.Size = new System.Drawing.Size(261, 15);
             this.ObjLbl.TabIndex = 10;
@@ -267,7 +270,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label6.Location = new System.Drawing.Point(182, 109);
+            this.label6.Location = new System.Drawing.Point(182, 107);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(31, 15);
             this.label6.TabIndex = 14;
@@ -278,7 +281,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label7.Location = new System.Drawing.Point(182, 136);
+            this.label7.Location = new System.Drawing.Point(182, 132);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 15);
             this.label7.TabIndex = 15;
@@ -317,7 +320,7 @@
             0,
             0,
             0});
-            this.di_numUD.Location = new System.Drawing.Point(225, 135);
+            this.di_numUD.Location = new System.Drawing.Point(225, 131);
             this.di_numUD.Name = "di_numUD";
             this.di_numUD.Size = new System.Drawing.Size(39, 16);
             this.di_numUD.TabIndex = 17;
@@ -339,7 +342,7 @@
             0,
             0,
             0});
-            this.A_numUD.Location = new System.Drawing.Point(225, 108);
+            this.A_numUD.Location = new System.Drawing.Point(225, 106);
             this.A_numUD.Name = "A_numUD";
             this.A_numUD.Size = new System.Drawing.Size(39, 16);
             this.A_numUD.TabIndex = 18;
@@ -355,7 +358,7 @@
             this.sse_checkBox.AutoSize = true;
             this.sse_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sse_checkBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.sse_checkBox.Location = new System.Drawing.Point(16, 275);
+            this.sse_checkBox.Location = new System.Drawing.Point(16, 288);
             this.sse_checkBox.Name = "sse_checkBox";
             this.sse_checkBox.Size = new System.Drawing.Size(50, 19);
             this.sse_checkBox.TabIndex = 19;
@@ -369,7 +372,7 @@
             this.labelsse.Enabled = false;
             this.labelsse.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelsse.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.labelsse.Location = new System.Drawing.Point(87, 276);
+            this.labelsse.Location = new System.Drawing.Point(87, 289);
             this.labelsse.Name = "labelsse";
             this.labelsse.Size = new System.Drawing.Size(29, 15);
             this.labelsse.TabIndex = 20;
@@ -381,7 +384,7 @@
             this.labeldi.Enabled = false;
             this.labeldi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labeldi.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.labeldi.Location = new System.Drawing.Point(87, 251);
+            this.labeldi.Location = new System.Drawing.Point(87, 264);
             this.labeldi.Name = "labeldi";
             this.labeldi.Size = new System.Drawing.Size(29, 15);
             this.labeldi.TabIndex = 21;
@@ -400,7 +403,7 @@
             0,
             0,
             65536});
-            this.sse_coef_numUD.Location = new System.Drawing.Point(119, 275);
+            this.sse_coef_numUD.Location = new System.Drawing.Point(119, 288);
             this.sse_coef_numUD.Maximum = new decimal(new int[] {
             1,
             0,
@@ -429,7 +432,7 @@
             0,
             0,
             65536});
-            this.di_coef_numUD.Location = new System.Drawing.Point(119, 251);
+            this.di_coef_numUD.Location = new System.Drawing.Point(119, 264);
             this.di_coef_numUD.Maximum = new decimal(new int[] {
             1,
             0,
@@ -445,12 +448,47 @@
             65536});
             this.di_coef_numUD.ValueChanged += new System.EventHandler(this.di_coef_numUD_ValueChanged);
             // 
+            // ci_numUD
+            // 
+            this.ci_numUD.BackColor = System.Drawing.Color.Teal;
+            this.ci_numUD.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ci_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ci_numUD.ForeColor = System.Drawing.Color.Transparent;
+            this.ci_numUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.ci_numUD.Location = new System.Drawing.Point(225, 156);
+            this.ci_numUD.Name = "ci_numUD";
+            this.ci_numUD.Size = new System.Drawing.Size(39, 16);
+            this.ci_numUD.TabIndex = 25;
+            this.ci_numUD.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ci_numUD.ValueChanged += new System.EventHandler(this.ci_numUD_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label8.Location = new System.Drawing.Point(182, 157);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 15);
+            this.label8.TabIndex = 24;
+            this.label8.Text = "ci <";
+            // 
             // Form6
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(356, 317);
+            this.ClientSize = new System.Drawing.Size(356, 333);
+            this.Controls.Add(this.ci_numUD);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.labelsse);
             this.Controls.Add(this.labeldi);
             this.Controls.Add(this.sse_coef_numUD);
@@ -491,6 +529,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.A_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sse_coef_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.di_coef_numUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ci_numUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -521,5 +560,7 @@
         private System.Windows.Forms.Label labeldi;
         private System.Windows.Forms.NumericUpDown sse_coef_numUD;
         private System.Windows.Forms.NumericUpDown di_coef_numUD;
+        private System.Windows.Forms.NumericUpDown ci_numUD;
+        private System.Windows.Forms.Label label8;
     }
 }
