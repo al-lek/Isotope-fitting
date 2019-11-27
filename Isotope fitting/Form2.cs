@@ -136,6 +136,8 @@ namespace Isotope_fitting
         TreeView fit_tree/*,*/ /*frag_tree*//*,*/ /*fragTypes_tree*/;
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
+        string loaded_lists="";
+
         #region parameters
         /// <summary>
         /// max ppm error
@@ -3546,6 +3548,10 @@ namespace Isotope_fitting
             List<ChemiForm> fitted_chem = new List<ChemiForm>();
             if (loadData.ShowDialog() != DialogResult.Cancel)
             {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(loaded_lists);
+                sb.AppendLine(Path.GetFileNameWithoutExtension(loadData.FileName));
+                loaded_lists = sb.ToString();
                 is_loading = true;  // performance
                 fullPath = loadData.FileName;
 
@@ -3654,6 +3660,7 @@ namespace Isotope_fitting
         }
         private void clearList()
         {
+            loaded_lists = "";
             if (Fragments2.Count == 0 || all_data.Count<2) return;
             if (IonDraw.Count > 0) IonDraw.Clear();
             selectedFragments.Clear();
@@ -4231,6 +4238,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
+                loaded_lists = "";
                 reset_all();
                 displayPeakList_btn.Enabled = false;
                 Peptide = ""; peptide_textBox1.Text = Peptide;
@@ -8290,6 +8298,13 @@ namespace Isotope_fitting
         private void toolStripButton4_CheckedChanged(object sender, EventArgs e)
         {
             refresh_iso_plot();
+        }
+
+        private void show_files_Btn_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(loaded_lists)) return;
+            MessageBox.Show(loaded_lists,"Loaded Fragment lists");
+
         }
     }
 }

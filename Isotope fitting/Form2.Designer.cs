@@ -226,6 +226,7 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.show_files_Btn = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -761,11 +762,11 @@ namespace Isotope_fitting
             // 
             this.fragStorage_Lbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.fragStorage_Lbl.AutoSize = true;
-            this.fragStorage_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fragStorage_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fragStorage_Lbl.ForeColor = System.Drawing.Color.SteelBlue;
             this.fragStorage_Lbl.Location = new System.Drawing.Point(555, 505);
             this.fragStorage_Lbl.Name = "fragStorage_Lbl";
-            this.fragStorage_Lbl.Size = new System.Drawing.Size(127, 18);
+            this.fragStorage_Lbl.Size = new System.Drawing.Size(122, 17);
             this.fragStorage_Lbl.TabIndex = 10000017;
             this.fragStorage_Lbl.Text = "Fragment Storage";
             this.toolTip1.SetToolTip(this.fragStorage_Lbl, "Select all fragments presented in the list");
@@ -784,13 +785,14 @@ namespace Isotope_fitting
             this.toggle_toolStripButton,
             this.saveListBtn11,
             this.loadListBtn11,
+            this.show_files_Btn,
             this.frag_sort_Btn,
             this.refresh_frag_Btn,
             this.clearListBtn11});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(663, 46);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(610, 46);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
-            this.toolStrip_fragList.Size = new System.Drawing.Size(228, 27);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(283, 27);
             this.toolStrip_fragList.TabIndex = 10000014;
             // 
             // checkall_Frag_Btn
@@ -1962,11 +1964,11 @@ namespace Isotope_fitting
             // 
             this.selFrag_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selFrag_Label.AutoSize = true;
-            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selFrag_Label.ForeColor = System.Drawing.Color.SteelBlue;
             this.selFrag_Label.Location = new System.Drawing.Point(555, 53);
             this.selFrag_Label.Name = "selFrag_Label";
-            this.selFrag_Label.Size = new System.Drawing.Size(93, 18);
+            this.selFrag_Label.Size = new System.Drawing.Size(89, 17);
             this.selFrag_Label.TabIndex = 38;
             this.selFrag_Label.Text = "Fragment list";
             this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
@@ -2728,6 +2730,16 @@ namespace Isotope_fitting
             this.idxPlotLbl.TabIndex = 20;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
+            // show_files_Btn
+            // 
+            this.show_files_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.show_files_Btn.Image = ((System.Drawing.Image)(resources.GetObject("show_files_Btn.Image")));
+            this.show_files_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.show_files_Btn.Name = "show_files_Btn";
+            this.show_files_Btn.Size = new System.Drawing.Size(24, 24);
+            this.show_files_Btn.Text = "Display loaded Fragment lists";
+            this.show_files_Btn.Click += new System.EventHandler(this.show_files_Btn_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2994,5 +3006,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripSeparator toolStripButton2;
         private System.Windows.Forms.ToolStripSeparator toolStripButton3;
         private System.Windows.Forms.ToolStripButton rel_res_chkBx;
+        private System.Windows.Forms.ToolStripButton show_files_Btn;
     }
 }
