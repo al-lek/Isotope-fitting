@@ -1082,9 +1082,9 @@ namespace Isotope_fitting
             frag_listView.Visible = false;             
             if (frag_tree.Nodes.Count>0) { frag_tree.Nodes.Clear(); }
             frag_tree.AfterCheck += (s, e) => {frag_node_checkChanged(e.Node, e.Node.Checked); };
-            //frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
-            //                                                          new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
-            //                                                          new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
+            frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
+                                                                      new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
+                                                                      new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
             //frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Remove", (s, e) => { remove_node(frag_tree.SelectedNode.Index); }) });
             frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
 

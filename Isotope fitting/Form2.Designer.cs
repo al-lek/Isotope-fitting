@@ -214,10 +214,8 @@ namespace Isotope_fitting
             this.cz_Pnl = new System.Windows.Forms.Panel();
             this.tabInternal = new System.Windows.Forms.TabPage();
             this.panel2_intIdxTo = new System.Windows.Forms.Panel();
-            this.idxPnl2 = new System.Windows.Forms.Panel();
             this.idxInt_Pnl2 = new System.Windows.Forms.Panel();
             this.panel1_intIdx = new System.Windows.Forms.Panel();
-            this.idxPnl1 = new System.Windows.Forms.Panel();
             this.idxInt_Pnl1 = new System.Windows.Forms.Panel();
             this.int_IdxTo_toolStrip = new System.Windows.Forms.ToolStrip();
             this.int_IdxToSave_Btn = new System.Windows.Forms.ToolStripButton();
@@ -228,6 +226,10 @@ namespace Isotope_fitting
             this.idxPlotLbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.idxPnl1 = new System.Windows.Forms.Panel();
+            this.splitter3 = new System.Windows.Forms.Splitter();
+            this.idxPnl2 = new System.Windows.Forms.Panel();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -2608,21 +2610,12 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2_intIdxTo.Controls.Add(this.idxPnl2);
+            this.panel2_intIdxTo.Controls.Add(this.splitter3);
             this.panel2_intIdxTo.Controls.Add(this.idxInt_Pnl2);
             this.panel2_intIdxTo.Location = new System.Drawing.Point(31, 3);
             this.panel2_intIdxTo.Name = "panel2_intIdxTo";
             this.panel2_intIdxTo.Size = new System.Drawing.Size(1467, 432);
             this.panel2_intIdxTo.TabIndex = 28;
-            // 
-            // idxPnl2
-            // 
-            this.idxPnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.idxPnl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPnl2.Location = new System.Drawing.Point(0, 0);
-            this.idxPnl2.Name = "idxPnl2";
-            this.idxPnl2.Size = new System.Drawing.Size(1232, 432);
-            this.idxPnl2.TabIndex = 27;
             // 
             // idxInt_Pnl2
             // 
@@ -2640,21 +2633,12 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1_intIdx.Controls.Add(this.idxPnl1);
+            this.panel1_intIdx.Controls.Add(this.splitter2);
             this.panel1_intIdx.Controls.Add(this.idxInt_Pnl1);
             this.panel1_intIdx.Location = new System.Drawing.Point(31, 30);
             this.panel1_intIdx.Name = "panel1_intIdx";
             this.panel1_intIdx.Size = new System.Drawing.Size(1467, 380);
             this.panel1_intIdx.TabIndex = 27;
-            // 
-            // idxPnl1
-            // 
-            this.idxPnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.idxPnl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxPnl1.Location = new System.Drawing.Point(0, 0);
-            this.idxPnl1.Name = "idxPnl1";
-            this.idxPnl1.Size = new System.Drawing.Size(1232, 380);
-            this.idxPnl1.TabIndex = 26;
             // 
             // idxInt_Pnl1
             // 
@@ -2762,6 +2746,44 @@ namespace Isotope_fitting
             this.splitContainer1.SplitterDistance = 413;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 29;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter2.Location = new System.Drawing.Point(1229, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 380);
+            this.splitter2.TabIndex = 27;
+            this.splitter2.TabStop = false;
+            // 
+            // idxPnl1
+            // 
+            this.idxPnl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxPnl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxPnl1.Location = new System.Drawing.Point(0, 0);
+            this.idxPnl1.Name = "idxPnl1";
+            this.idxPnl1.Size = new System.Drawing.Size(1229, 380);
+            this.idxPnl1.TabIndex = 28;
+            // 
+            // splitter3
+            // 
+            this.splitter3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter3.Location = new System.Drawing.Point(1229, 0);
+            this.splitter3.Name = "splitter3";
+            this.splitter3.Size = new System.Drawing.Size(3, 432);
+            this.splitter3.TabIndex = 28;
+            this.splitter3.TabStop = false;
+            // 
+            // idxPnl2
+            // 
+            this.idxPnl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.idxPnl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.idxPnl2.Location = new System.Drawing.Point(0, 0);
+            this.idxPnl2.Name = "idxPnl2";
+            this.idxPnl2.Size = new System.Drawing.Size(1229, 432);
+            this.idxPnl2.TabIndex = 29;
             // 
             // Form2
             // 
@@ -2968,8 +2990,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel panel2_intIdxTo;
         private System.Windows.Forms.Panel idxInt_Pnl2;
         private System.Windows.Forms.Panel idxInt_Pnl1;
-        private System.Windows.Forms.Panel idxPnl2;
-        private System.Windows.Forms.Panel idxPnl1;
         private System.Windows.Forms.Panel panel2_tab3;
         private System.Windows.Forms.ToolStrip czCharge_toolStrip;
         private System.Windows.Forms.ToolStripButton czChargeSave_Btn;
@@ -3036,5 +3056,9 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton rel_res_chkBx;
         private System.Windows.Forms.ToolStripButton show_files_Btn;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Panel idxPnl1;
+        private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.Panel idxPnl2;
+        private System.Windows.Forms.Splitter splitter3;
     }
 }
