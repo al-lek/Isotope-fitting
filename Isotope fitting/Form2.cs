@@ -1543,8 +1543,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Perform fit", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!"); return; }
-                uncheckall_Frag(); 
+                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!"); return; }                
                 // initialize a new background thread for fit 
                 Thread fit;
 
@@ -1553,7 +1552,7 @@ namespace Isotope_fitting
 
                 fit.Start();
 
-                saveFit_Btn.Enabled = true;
+                saveFit_Btn.Enabled = true;                
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -2075,6 +2074,7 @@ namespace Isotope_fitting
             fit_tree.EndUpdate();
             remove_child_nodes();            
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
+            uncheckall_Frag();
         }
         private void remove_child_nodes()
         {
@@ -2496,6 +2496,7 @@ namespace Isotope_fitting
         {
             if (tree != null)
             {
+                uncheckall_Frag();
                 fit_tree.BeginUpdate();frag_tree.BeginUpdate();
                 block_plot_refresh = true; block_fit_refresh = true;
                 foreach (TreeNode node in tree.Nodes)
@@ -2515,6 +2516,7 @@ namespace Isotope_fitting
         {
             if (fit_tree != null)
             {
+                uncheckall_Frag();
                 block_plot_refresh = true; block_fit_refresh = true;
                 fit_tree.BeginUpdate();frag_tree.BeginUpdate();
                 if (individual && fit_tree.Nodes.Count > node_index && fit_tree.Nodes[node_index].Nodes.Count > 0)
@@ -2963,6 +2965,8 @@ namespace Isotope_fitting
             tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(599, 20), Style = 0, Minimum = 0, Value = 0, Size = new Size(292, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
             prg_lbl = new Label { Name = "prg_lbl", Location = new Point(608,3), AutoSize = true, Visible = false, Anchor = AnchorStyles.Right | AnchorStyles.Top };
             user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
+            prg_lbl.BringToFront(); tlPrgBr.BringToFront();
+
         }
 
         /// <summary>
@@ -5701,26 +5705,35 @@ namespace Isotope_fitting
 
         private void hide_Btn_Click(object sender, EventArgs e)
         {
-            panel_calc.Hide();
+            
+            panel_calc.Hide(); splitContainer2.Panel1Collapsed = true;
+            Size initial_splitcontSize = splitContainer2.Size;
+            splitContainer2.Size = new Size(initial_splitcontSize.Width - panel_calc.Size.Width, initial_splitcontSize.Height);
             Size initial_ug_size = user_grpBox.Size;
             user_grpBox.Size = new Size(initial_ug_size.Width - panel_calc.Size.Width, initial_ug_size.Height);
             Point initial_ug_loc = user_grpBox.Location;
             user_grpBox.Location = new Point(initial_ug_loc.X + panel_calc.Size.Width, initial_ug_loc.Y);
             Size initial_plot_size = plots_grpBox.Size;
             plots_grpBox.Size = new Size(initial_plot_size.Width + panel_calc.Size.Width, initial_plot_size.Height);
-            show_Btn.Visible = true;            
+            show_Btn.Visible = true; show_Btn.BringToFront();
+            splitContainer2.Invalidate();
+
         }
 
         private void show_Btn_Click(object sender, EventArgs e)
         {
-            panel_calc.Show();
+            panel_calc.Show(); splitContainer2.Panel1Collapsed = false;
+            Size initial_splitcontSize = splitContainer2.Size;
+            splitContainer2.Size = new Size(initial_splitcontSize.Width + panel_calc.Size.Width, initial_splitcontSize.Height);
             Size initial_ug_size = user_grpBox.Size;
             user_grpBox.Size = new Size(initial_ug_size.Width + panel_calc.Size.Width, initial_ug_size.Height);
             Point initial_ug_loc = user_grpBox.Location;
             user_grpBox.Location = new Point(initial_ug_loc.X - panel_calc.Size.Width, initial_ug_loc.Y);
             Size initial_plot_size = plots_grpBox.Size;
             plots_grpBox.Size = new Size(initial_plot_size.Width - panel_calc.Size.Width, initial_plot_size.Height);
-            hide_Btn.Visible = true;
+            splitContainer2.SplitterDistance = 318;
+            splitContainer2.Invalidate();
+            hide_Btn.Visible = true; hide_Btn.BringToFront();
             show_Btn.Visible = false;
         }
 
@@ -8306,12 +8319,17 @@ namespace Isotope_fitting
             else { iso_plot.Model.Annotations.Clear(); invalidate_all(); }
         }
 
-        private void toolStripButton4_CheckedChanged(object sender, EventArgs e)
+        private void rel_res_chkBx_CheckedChanged(object sender, EventArgs e)
         {
             refresh_iso_plot();
         }
 
         private void show_files_Btn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
