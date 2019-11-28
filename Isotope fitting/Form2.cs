@@ -1905,7 +1905,7 @@ namespace Isotope_fitting
                         }                        
                     }
                 }               
-            }
+            }            
             frag_info= frag_info_sorted.OrderBy(p => p[4]).ToList(); //sorted by fragment index in tmp-->ss 
             //di' aka dinew calculation and dinew_average calculation
             for (int a = 0; a < frag_info.Count; a++)
@@ -2169,11 +2169,11 @@ namespace Isotope_fitting
                                 string pp1,pp2,pp3,pp4,pp5,pp6,pp7;                                
                                 pp1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(30);//fragment name
                                 pp2 = "(m/z)"+ Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20);//fragments m/z
-                                pp3 = "(di)"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(20);//fragment di
-                                pp4 = "(sd)"+("±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString()).PadRight(20);//fragment sd
-                                pp5 = "(ei)"+ Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 3], 2).ToString().PadRight(20);//fragment ei
-                                pp6 = "(di')"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length*4], 3).ToString() + "%").PadRight(20);//fragment di'
-                                pp7 = "(sd')"+Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 5], 3).ToString().PadRight(20);//fragment sd'
+                                pp3 = "(di)"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(20);//fragment's di
+                                pp4 = "(sd)"+("±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString()).PadRight(20);//fragment's sd
+                                pp5 = "(ei)"+ (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 3], 2).ToString() + "%").PadRight(20);//fragment's ei
+                                pp6 = "(di')"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length*4], 3).ToString() + "%").PadRight(20);//fragment's di'
+                                pp7 = "(sd')"+Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 5], 3).ToString().PadRight(20);//fragment's sd'
                                 sb.AppendLine(pp1 + pp2 + pp3 + pp4 +pp5+pp6+pp7);
                             }
                             TreeNode tr = new TreeNode
