@@ -33,11 +33,11 @@
             this.fitCover_lbl = new System.Windows.Forms.Label();
             this.fitBunch_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.ppmDi_numUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ppmDi_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // fitCover_numUD
@@ -118,30 +118,37 @@
             this.label1.ForeColor = System.Drawing.Color.Teal;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(259, 18);
+            this.label1.Size = new System.Drawing.Size(264, 18);
             this.label1.TabIndex = 22;
-            this.label1.Text = "Theoritical isotopic distributions :";
+            this.label1.Text = "Theoretical isotopic distributions :";
             // 
-            // numericUpDown1
+            // ppmDi_numUD
             // 
-            this.numericUpDown1.BackColor = System.Drawing.Color.Teal;
-            this.numericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown1.ForeColor = System.Drawing.Color.Transparent;
-            this.numericUpDown1.Location = new System.Drawing.Point(276, 109);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.ppmDi_numUD.BackColor = System.Drawing.Color.Teal;
+            this.ppmDi_numUD.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ppmDi_numUD.DecimalPlaces = 1;
+            this.ppmDi_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppmDi_numUD.ForeColor = System.Drawing.Color.Transparent;
+            this.ppmDi_numUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ppmDi_numUD.Location = new System.Drawing.Point(276, 109);
+            this.ppmDi_numUD.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.ppmDi_numUD.Name = "ppmDi_numUD";
+            this.ppmDi_numUD.Size = new System.Drawing.Size(39, 16);
+            this.ppmDi_numUD.TabIndex = 24;
+            this.ppmDi_numUD.Value = new decimal(new int[] {
             5,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(39, 16);
-            this.numericUpDown1.TabIndex = 24;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
+            this.ppmDi_numUD.ValueChanged += new System.EventHandler(this.ppmDi_numUD_ValueChanged);
             // 
             // label2
             // 
@@ -160,7 +167,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(334, 139);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.ppmDi_numUD);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.fitCover_numUD);
             this.Controls.Add(this.label1);
@@ -175,7 +182,7 @@
             this.Text = "Fitting calculations";
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ppmDi_numUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,7 +194,7 @@
         private System.Windows.Forms.Label fitCover_lbl;
         private System.Windows.Forms.Label fitBunch_lbl;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown ppmDi_numUD;
         private System.Windows.Forms.Label label2;
     }
 }

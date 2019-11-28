@@ -17,6 +17,7 @@ namespace Isotope_fitting
             InitializeComponent();
             fitBunch_numUD.Value = Form2.fit_bunch;
             fitCover_numUD.Value = Form2.fit_cover;
+            ppmDi_numUD.Value = (decimal)Form2.ppmDi;
         }
 
         private void fitBunch_numUD_ValueChanged(object sender, EventArgs e)
@@ -27,6 +28,11 @@ namespace Isotope_fitting
         private void fitCover_numUD_ValueChanged(object sender, EventArgs e)
         {
             Form2.fit_cover = (int)fitCover_numUD.Value;
+        }
+
+        private void ppmDi_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            Form2.ppmDi = (double)ppmDi_numUD.Value;
         }
     }
 }
