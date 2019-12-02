@@ -30,7 +30,16 @@
         {
             System.Windows.Forms.ColumnHeader z_clmn;
             this.panel_calc = new System.Windows.Forms.Panel();
-            this.optionBtn = new System.Windows.Forms.Button();
+            this.calc_param9Lbl = new System.Windows.Forms.Label();
+            this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
+            this.half_plus_rdBtn = new System.Windows.Forms.RadioButton();
+            this.half_rdBtn = new System.Windows.Forms.RadioButton();
+            this.three_rdBtn = new System.Windows.Forms.RadioButton();
+            this.two_rdBtn = new System.Windows.Forms.RadioButton();
+            this.one_rdBtn9 = new System.Windows.Forms.RadioButton();
+            this.ppm9_numUD = new System.Windows.Forms.NumericUpDown();
+            this.ppm9_Lbl = new System.Windows.Forms.Label();
+            this.Mdvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
             this.addin_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -49,7 +58,6 @@
             this.mzMin_Box = new System.Windows.Forms.TextBox();
             this.b_lstBox = new System.Windows.Forms.CheckedListBox();
             this.idxTo_Label = new System.Windows.Forms.Label();
-            this.clearCalc_Btn = new System.Windows.Forms.Button();
             this.idxFrom_Label = new System.Windows.Forms.Label();
             this.chargeMax_Label = new System.Windows.Forms.Label();
             this.a_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -61,14 +69,14 @@
             this.idxPr_Box = new System.Windows.Forms.TextBox();
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.fragListView9 = new System.Windows.Forms.ListView();
             this.name_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.slice_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mz_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Mdvw_lstBox = new System.Windows.Forms.CheckedListBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_calc
@@ -77,8 +85,16 @@
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_calc.Controls.Add(this.calc_param9Lbl);
+            this.panel_calc.Controls.Add(this.half_minus_rdBtn);
+            this.panel_calc.Controls.Add(this.half_plus_rdBtn);
+            this.panel_calc.Controls.Add(this.half_rdBtn);
+            this.panel_calc.Controls.Add(this.three_rdBtn);
+            this.panel_calc.Controls.Add(this.two_rdBtn);
+            this.panel_calc.Controls.Add(this.one_rdBtn9);
+            this.panel_calc.Controls.Add(this.ppm9_numUD);
+            this.panel_calc.Controls.Add(this.ppm9_Lbl);
             this.panel_calc.Controls.Add(this.Mdvw_lstBox);
-            this.panel_calc.Controls.Add(this.optionBtn);
             this.panel_calc.Controls.Add(this.chargeMax_Box);
             this.panel_calc.Controls.Add(this.internal_lstBox);
             this.panel_calc.Controls.Add(this.addin_lstBox);
@@ -97,7 +113,6 @@
             this.panel_calc.Controls.Add(this.mzMin_Box);
             this.panel_calc.Controls.Add(this.b_lstBox);
             this.panel_calc.Controls.Add(this.idxTo_Label);
-            this.panel_calc.Controls.Add(this.clearCalc_Btn);
             this.panel_calc.Controls.Add(this.idxFrom_Label);
             this.panel_calc.Controls.Add(this.chargeMax_Label);
             this.panel_calc.Controls.Add(this.a_lstBox);
@@ -109,31 +124,143 @@
             this.panel_calc.Controls.Add(this.idxPr_Box);
             this.panel_calc.Controls.Add(this.primary_Label);
             this.panel_calc.Controls.Add(this.internal_Label);
+            this.panel_calc.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel_calc.Location = new System.Drawing.Point(10, 12);
-            this.panel_calc.MaximumSize = new System.Drawing.Size(318, 600);
-            this.panel_calc.MinimumSize = new System.Drawing.Size(318, 510);
+            this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(318, 523);
+            this.panel_calc.Size = new System.Drawing.Size(327, 690);
             this.panel_calc.TabIndex = 4;
             // 
-            // optionBtn
+            // calc_param9Lbl
             // 
-            this.optionBtn.BackColor = System.Drawing.Color.LightSlateGray;
-            this.optionBtn.FlatAppearance.BorderColor = System.Drawing.Color.Thistle;
-            this.optionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.optionBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.optionBtn.Location = new System.Drawing.Point(68, 484);
-            this.optionBtn.Name = "optionBtn";
-            this.optionBtn.Size = new System.Drawing.Size(119, 23);
-            this.optionBtn.TabIndex = 40;
-            this.optionBtn.Text = "Calculation Settings";
-            this.optionBtn.UseVisualStyleBackColor = false;
+            this.calc_param9Lbl.AutoSize = true;
+            this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.calc_param9Lbl.ForeColor = System.Drawing.Color.SteelBlue;
+            this.calc_param9Lbl.Location = new System.Drawing.Point(3, 482);
+            this.calc_param9Lbl.Name = "calc_param9Lbl";
+            this.calc_param9Lbl.Size = new System.Drawing.Size(153, 17);
+            this.calc_param9Lbl.TabIndex = 51;
+            this.calc_param9Lbl.Text = "Calculation parameters";
+            // 
+            // half_minus_rdBtn
+            // 
+            this.half_minus_rdBtn.AutoSize = true;
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(151, 588);
+            this.half_minus_rdBtn.Name = "half_minus_rdBtn";
+            this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
+            this.half_minus_rdBtn.TabIndex = 50;
+            this.half_minus_rdBtn.TabStop = true;
+            this.half_minus_rdBtn.Text = "half(-) most intense";
+            this.half_minus_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // half_plus_rdBtn
+            // 
+            this.half_plus_rdBtn.AutoSize = true;
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(151, 613);
+            this.half_plus_rdBtn.Name = "half_plus_rdBtn";
+            this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
+            this.half_plus_rdBtn.TabIndex = 49;
+            this.half_plus_rdBtn.TabStop = true;
+            this.half_plus_rdBtn.Text = "half(+) most intense";
+            this.half_plus_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // half_rdBtn
+            // 
+            this.half_rdBtn.AutoSize = true;
+            this.half_rdBtn.Location = new System.Drawing.Point(151, 564);
+            this.half_rdBtn.Name = "half_rdBtn";
+            this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
+            this.half_rdBtn.TabIndex = 48;
+            this.half_rdBtn.TabStop = true;
+            this.half_rdBtn.Text = "half most intense";
+            this.half_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // three_rdBtn
+            // 
+            this.three_rdBtn.AutoSize = true;
+            this.three_rdBtn.Location = new System.Drawing.Point(6, 612);
+            this.three_rdBtn.Name = "three_rdBtn";
+            this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
+            this.three_rdBtn.TabIndex = 47;
+            this.three_rdBtn.TabStop = true;
+            this.three_rdBtn.Text = "3 most intense";
+            this.three_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // two_rdBtn
+            // 
+            this.two_rdBtn.AutoSize = true;
+            this.two_rdBtn.Location = new System.Drawing.Point(6, 588);
+            this.two_rdBtn.Name = "two_rdBtn";
+            this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
+            this.two_rdBtn.TabIndex = 46;
+            this.two_rdBtn.TabStop = true;
+            this.two_rdBtn.Text = "2 most intense";
+            this.two_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // one_rdBtn9
+            // 
+            this.one_rdBtn9.AutoSize = true;
+            this.one_rdBtn9.Location = new System.Drawing.Point(6, 564);
+            this.one_rdBtn9.Name = "one_rdBtn9";
+            this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
+            this.one_rdBtn9.TabIndex = 45;
+            this.one_rdBtn9.TabStop = true;
+            this.one_rdBtn9.Text = "1 most intense";
+            this.one_rdBtn9.UseVisualStyleBackColor = true;
+            // 
+            // ppm9_numUD
+            // 
+            this.ppm9_numUD.DecimalPlaces = 1;
+            this.ppm9_numUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ppm9_numUD.Location = new System.Drawing.Point(85, 518);
+            this.ppm9_numUD.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ppm9_numUD.Name = "ppm9_numUD";
+            this.ppm9_numUD.Size = new System.Drawing.Size(53, 20);
+            this.ppm9_numUD.TabIndex = 44;
+            // 
+            // ppm9_Lbl
+            // 
+            this.ppm9_Lbl.AutoSize = true;
+            this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm9_Lbl.ForeColor = System.Drawing.Color.SlateGray;
+            this.ppm9_Lbl.Location = new System.Drawing.Point(3, 519);
+            this.ppm9_Lbl.Name = "ppm9_Lbl";
+            this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
+            this.ppm9_Lbl.TabIndex = 43;
+            this.ppm9_Lbl.Text = "max ppm error";
+            // 
+            // Mdvw_lstBox
+            // 
+            this.Mdvw_lstBox.CheckOnClick = true;
+            this.Mdvw_lstBox.ColumnWidth = 57;
+            this.Mdvw_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.Mdvw_lstBox.FormattingEnabled = true;
+            this.Mdvw_lstBox.IntegralHeight = false;
+            this.Mdvw_lstBox.Items.AddRange(new object[] {
+            "M",
+            "M-H2O",
+            "M-NH3",
+            "da",
+            "wa",
+            "db",
+            "wb",
+            "v"});
+            this.Mdvw_lstBox.Location = new System.Drawing.Point(3, 213);
+            this.Mdvw_lstBox.MultiColumn = true;
+            this.Mdvw_lstBox.Name = "Mdvw_lstBox";
+            this.Mdvw_lstBox.Size = new System.Drawing.Size(175, 60);
+            this.Mdvw_lstBox.TabIndex = 42;
             // 
             // chargeMax_Box
             // 
-            this.chargeMax_Box.Enabled = false;
             this.chargeMax_Box.ForeColor = System.Drawing.Color.Black;
             this.chargeMax_Box.Location = new System.Drawing.Point(52, 379);
             this.chargeMax_Box.Name = "chargeMax_Box";
@@ -183,11 +310,11 @@
             // frag_Label
             // 
             this.frag_Label.AutoSize = true;
-            this.frag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.frag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.frag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.frag_Label.Location = new System.Drawing.Point(3, 8);
+            this.frag_Label.Location = new System.Drawing.Point(3, 5);
             this.frag_Label.Name = "frag_Label";
-            this.frag_Label.Size = new System.Drawing.Size(56, 13);
+            this.frag_Label.Size = new System.Drawing.Size(75, 17);
             this.frag_Label.TabIndex = 1;
             this.frag_Label.Text = "Fragments";
             // 
@@ -213,7 +340,7 @@
             "z-2",
             "z+1",
             "z+2"});
-            this.z_lstBox.Location = new System.Drawing.Point(131, 121);
+            this.z_lstBox.Location = new System.Drawing.Point(125, 121);
             this.z_lstBox.Name = "z_lstBox";
             this.z_lstBox.Size = new System.Drawing.Size(47, 79);
             this.z_lstBox.TabIndex = 8;
@@ -221,7 +348,6 @@
             // chargeAll_Btn
             // 
             this.chargeAll_Btn.BackColor = System.Drawing.Color.Gainsboro;
-            this.chargeAll_Btn.Enabled = false;
             this.chargeAll_Btn.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.chargeAll_Btn.Location = new System.Drawing.Point(101, 377);
             this.chargeAll_Btn.Name = "chargeAll_Btn";
@@ -233,14 +359,14 @@
             // calc_Btn
             // 
             this.calc_Btn.BackColor = System.Drawing.Color.SteelBlue;
-            this.calc_Btn.Enabled = false;
+            this.calc_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.calc_Btn.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(193, 484);
+            this.calc_Btn.Location = new System.Drawing.Point(0, 663);
             this.calc_Btn.Name = "calc_Btn";
-            this.calc_Btn.Size = new System.Drawing.Size(105, 23);
+            this.calc_Btn.Size = new System.Drawing.Size(323, 23);
             this.calc_Btn.TabIndex = 41;
             this.calc_Btn.Text = "Calculate";
             this.calc_Btn.UseVisualStyleBackColor = false;
@@ -256,7 +382,7 @@
             "y-2",
             "y+1",
             "y+2"});
-            this.y_lstBox.Location = new System.Drawing.Point(67, 121);
+            this.y_lstBox.Location = new System.Drawing.Point(64, 121);
             this.y_lstBox.Name = "y_lstBox";
             this.y_lstBox.Size = new System.Drawing.Size(47, 79);
             this.y_lstBox.TabIndex = 7;
@@ -283,7 +409,7 @@
             "c-2",
             "c+1",
             "c+2"});
-            this.c_lstBox.Location = new System.Drawing.Point(131, 29);
+            this.c_lstBox.Location = new System.Drawing.Point(125, 29);
             this.c_lstBox.Name = "c_lstBox";
             this.c_lstBox.Size = new System.Drawing.Size(47, 79);
             this.c_lstBox.TabIndex = 4;
@@ -337,7 +463,6 @@
             // 
             // mzMin_Box
             // 
-            this.mzMin_Box.Enabled = false;
             this.mzMin_Box.ForeColor = System.Drawing.Color.Black;
             this.mzMin_Box.Location = new System.Drawing.Point(3, 310);
             this.mzMin_Box.Name = "mzMin_Box";
@@ -355,7 +480,7 @@
             "b-2",
             "b+1",
             "b+2"});
-            this.b_lstBox.Location = new System.Drawing.Point(67, 29);
+            this.b_lstBox.Location = new System.Drawing.Point(64, 29);
             this.b_lstBox.Name = "b_lstBox";
             this.b_lstBox.Size = new System.Drawing.Size(47, 79);
             this.b_lstBox.TabIndex = 3;
@@ -370,19 +495,6 @@
             this.idxTo_Label.Size = new System.Drawing.Size(16, 13);
             this.idxTo_Label.TabIndex = 21;
             this.idxTo_Label.Text = "to";
-            // 
-            // clearCalc_Btn
-            // 
-            this.clearCalc_Btn.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.clearCalc_Btn.Enabled = false;
-            this.clearCalc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.clearCalc_Btn.ForeColor = System.Drawing.Color.White;
-            this.clearCalc_Btn.Location = new System.Drawing.Point(4, 484);
-            this.clearCalc_Btn.Name = "clearCalc_Btn";
-            this.clearCalc_Btn.Size = new System.Drawing.Size(60, 23);
-            this.clearCalc_Btn.TabIndex = 19;
-            this.clearCalc_Btn.Text = "Clear ";
-            this.clearCalc_Btn.UseVisualStyleBackColor = false;
             // 
             // idxFrom_Label
             // 
@@ -435,7 +547,6 @@
             // 
             // idxTo_Box
             // 
-            this.idxTo_Box.Enabled = false;
             this.idxTo_Box.ForeColor = System.Drawing.Color.Black;
             this.idxTo_Box.Location = new System.Drawing.Point(184, 447);
             this.idxTo_Box.Name = "idxTo_Box";
@@ -444,7 +555,6 @@
             // 
             // chargeMin_Box
             // 
-            this.chargeMin_Box.Enabled = false;
             this.chargeMin_Box.ForeColor = System.Drawing.Color.Black;
             this.chargeMin_Box.Location = new System.Drawing.Point(3, 379);
             this.chargeMin_Box.Name = "chargeMin_Box";
@@ -453,7 +563,6 @@
             // 
             // idxFrom_Box
             // 
-            this.idxFrom_Box.Enabled = false;
             this.idxFrom_Box.ForeColor = System.Drawing.Color.Black;
             this.idxFrom_Box.Location = new System.Drawing.Point(94, 447);
             this.idxFrom_Box.Name = "idxFrom_Box";
@@ -473,7 +582,6 @@
             // 
             // idxPr_Box
             // 
-            this.idxPr_Box.Enabled = false;
             this.idxPr_Box.ForeColor = System.Drawing.Color.Black;
             this.idxPr_Box.Location = new System.Drawing.Point(3, 447);
             this.idxPr_Box.Name = "idxPr_Box";
@@ -502,24 +610,27 @@
             this.internal_Label.TabIndex = 19;
             this.internal_Label.Text = "internal";
             // 
-            // listView1
+            // fragListView9
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.fragListView9.CheckBoxes = true;
+            this.fragListView9.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name_clmn,
             this.slice_clmn,
             this.mz_clmn,
             z_clmn,
             this.seq_clmn});
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(334, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(318, 613);
-            this.listView1.TabIndex = 42;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.fragListView9.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.fragListView9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fragListView9.FullRowSelect = true;
+            this.fragListView9.GridLines = true;
+            this.fragListView9.HideSelection = false;
+            this.fragListView9.Location = new System.Drawing.Point(327, 0);
+            this.fragListView9.Name = "fragListView9";
+            this.fragListView9.Size = new System.Drawing.Size(334, 690);
+            this.fragListView9.TabIndex = 43;
+            this.fragListView9.UseCompatibleStateImageBehavior = false;
+            this.fragListView9.View = System.Windows.Forms.View.Details;
+            this.fragListView9.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.fragListView9_ColumnClick);
             // 
             // name_clmn
             // 
@@ -541,39 +652,18 @@
             // 
             this.seq_clmn.Text = "sequence";
             // 
-            // Mdvw_lstBox
-            // 
-            this.Mdvw_lstBox.CheckOnClick = true;
-            this.Mdvw_lstBox.ColumnWidth = 57;
-            this.Mdvw_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.Mdvw_lstBox.FormattingEnabled = true;
-            this.Mdvw_lstBox.IntegralHeight = false;
-            this.Mdvw_lstBox.Items.AddRange(new object[] {
-            "M",
-            "M-H2O",
-            "M-NH3",
-            "da",
-            "wa",
-            "db",
-            "wb",
-            "v"});
-            this.Mdvw_lstBox.Location = new System.Drawing.Point(3, 213);
-            this.Mdvw_lstBox.MultiColumn = true;
-            this.Mdvw_lstBox.Name = "Mdvw_lstBox";
-            this.Mdvw_lstBox.Size = new System.Drawing.Size(175, 60);
-            this.Mdvw_lstBox.TabIndex = 42;
-            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(661, 637);
-            this.Controls.Add(this.listView1);
+            this.ClientSize = new System.Drawing.Size(661, 690);
+            this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.panel_calc);
             this.Name = "Form9";
             this.Text = "Fragment Calculator";
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -581,7 +671,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel_calc;
-        private System.Windows.Forms.Button optionBtn;
         private System.Windows.Forms.TextBox chargeMax_Box;
         private System.Windows.Forms.CheckedListBox internal_lstBox;
         private System.Windows.Forms.CheckedListBox addin_lstBox;
@@ -600,7 +689,6 @@
         private System.Windows.Forms.TextBox mzMin_Box;
         private System.Windows.Forms.CheckedListBox b_lstBox;
         private System.Windows.Forms.Label idxTo_Label;
-        private System.Windows.Forms.Button clearCalc_Btn;
         private System.Windows.Forms.Label idxFrom_Label;
         private System.Windows.Forms.Label chargeMax_Label;
         private System.Windows.Forms.CheckedListBox a_lstBox;
@@ -612,11 +700,20 @@
         private System.Windows.Forms.TextBox idxPr_Box;
         private System.Windows.Forms.Label primary_Label;
         private System.Windows.Forms.Label internal_Label;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.CheckedListBox Mdvw_lstBox;
+        private System.Windows.Forms.NumericUpDown ppm9_numUD;
+        private System.Windows.Forms.Label ppm9_Lbl;
+        private System.Windows.Forms.RadioButton half_minus_rdBtn;
+        private System.Windows.Forms.RadioButton half_plus_rdBtn;
+        private System.Windows.Forms.RadioButton half_rdBtn;
+        private System.Windows.Forms.RadioButton three_rdBtn;
+        private System.Windows.Forms.RadioButton two_rdBtn;
+        private System.Windows.Forms.RadioButton one_rdBtn9;
+        private System.Windows.Forms.Label calc_param9Lbl;
+        private System.Windows.Forms.ListView fragListView9;
         private System.Windows.Forms.ColumnHeader name_clmn;
         private System.Windows.Forms.ColumnHeader slice_clmn;
         private System.Windows.Forms.ColumnHeader mz_clmn;
         private System.Windows.Forms.ColumnHeader seq_clmn;
-        private System.Windows.Forms.CheckedListBox Mdvw_lstBox;
     }
 }

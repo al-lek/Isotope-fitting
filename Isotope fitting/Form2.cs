@@ -284,7 +284,7 @@ namespace Isotope_fitting
             RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10,138), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
             RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 88), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
             RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 113), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
-            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half(+) most intense", Location = new Point(130, 138), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
+            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_plus_rdBtn", Text = "half(+) most intense", Location = new Point(130, 138), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
 
             params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD,  fragGrps_lbl, fragGrps_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });            
             foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
@@ -2635,7 +2635,7 @@ namespace Isotope_fitting
             {
                 clearCalc_Btn.Enabled = mzMax_Box.Enabled = mzMin_Box.Enabled = mzMax_Label.Enabled = mzMin_Label.Enabled = chargeMax_Box.Enabled = true;
                 chargeMin_Box.Enabled = chargeAll_Btn.Enabled = idxPr_Box.Enabled = idxTo_Box.Enabled = idxFrom_Box.Enabled = resolution_Box.Enabled = true;
-                machine_listBox.Enabled = calc_Btn.Enabled = true;
+                machine_listBox.Enabled = calc_Btn.Enabled =fragCalc_Btn.Enabled= true;
                 loadFit_Btn.Enabled = false;
             }
             else if (status == "post calculations")
@@ -3339,7 +3339,7 @@ namespace Isotope_fitting
         #endregion
 
         #region Helpers
-        public IEnumerable<Control> GetControls(Control c)
+        public static IEnumerable<Control> GetControls(Control c)
         {
             return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
         }
@@ -3774,8 +3774,7 @@ namespace Isotope_fitting
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
-            fit_sel_Btn.Enabled = false;
-            fit_Btn.Enabled = false;
+            fit_sel_Btn.Enabled = fit_Btn.Enabled = fragCalc_Btn.Enabled = false;            
             Initialize_Oxy();
             initialize_tabs();
             factor_panel.Controls.Clear();
@@ -4339,28 +4338,17 @@ namespace Isotope_fitting
                 displayPeakList_btn.Enabled = false;
                 Peptide = ""; peptide_textBox1.Text = Peptide;
                 insert_exp = false;
-                plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
-                saveFit_Btn.Enabled = false;
-                loadMS_Btn.Enabled = true;
-                loadFit_Btn.Enabled = true;
-                clearCalc_Btn.Enabled = false;
-                calc_Btn.Enabled = false;
-                fitMin_Box.Enabled = false;
-                fitMin_Box.Text = null;
-                fitMax_Box.Enabled = false;
-                fitMax_Box.Text = null;
-                fitStep_Box.Enabled = false;
-                fitStep_Box.Text = null;
-                step_rangeBox.Text = null;
+                plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = plotFragCent_chkBox.Enabled =saveFit_Btn.Enabled = false;
+                loadMS_Btn.Enabled =loadFit_Btn.Enabled = true;
+                clearCalc_Btn.Enabled = calc_Btn.Enabled = fragCalc_Btn.Enabled = fitMin_Box.Enabled = fitMax_Box.Enabled = false;
+                fitMin_Box.Text = fitMax_Box.Text =fitStep_Box.Text =step_rangeBox.Text = null;
                 Fitting_chkBox.Checked = false;
-                Fitting_chkBox.Enabled = false;
-                Fragments2.Clear();
-                ChemFormulas.Clear();
+                Fitting_chkBox.Enabled = fitStep_Box.Enabled = false;
+                Fragments2.Clear();ChemFormulas.Clear();
                 selectedFragments.Clear();
-                pep_Box.Text = null;
                 frag_listView.Items.Clear();
                 UncheckAll_calculationPanel();
-                resolution_Box.Text = null;
+                pep_Box.Text = resolution_Box.Text = null;
                 machine_listBox.ClearSelected();
                 machine_listBox.SelectedIndex = 2;
                 loadExp_Btn.Enabled = true;
@@ -4368,24 +4356,12 @@ namespace Isotope_fitting
                 bigPanel.Controls.Clear();
                 factor_Box.Text = null;
                 candidate_fragments = 1;
-                mzMax_Box.Enabled = false;
-                mzMin_Box.Enabled = false;
-                mzMax_Label.Enabled = false;
-                mzMin_Label.Enabled = false;
-                chargeMax_Box.Enabled = false;
-                chargeMin_Box.Enabled = false;
-                chargeAll_Btn.Enabled = false;
-                idxPr_Box.Enabled = false;
-                idxTo_Box.Enabled = false;
-                idxFrom_Box.Enabled = false;
-                resolution_Box.Enabled = false;
-                machine_listBox.Enabled = false;
-                saveWd_Btn.Enabled = false;
+                mzMax_Box.Enabled = mzMin_Box.Enabled =mzMax_Label.Enabled =mzMin_Label.Enabled = chargeMax_Box.Enabled =chargeMin_Box.Enabled =chargeAll_Btn.Enabled = false;
+                idxPr_Box.Enabled =idxTo_Box.Enabled =idxFrom_Box.Enabled =resolution_Box.Enabled=machine_listBox.Enabled = false;
+                fit_sel_Btn.Enabled = saveWd_Btn.Enabled = false;
                 windowList.Clear();
-                loaded_window = false;
-                fit_sel_Btn.Enabled = false;
-                neues = 0;
-                mark_neues = false;
+                mark_neues = loaded_window = false;
+                neues = 0;               
                 Form4.active = false;
                 if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
                 if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
@@ -8404,5 +8380,10 @@ namespace Isotope_fitting
 
         #endregion
 
+        private void fragCalc_Btn_Click(object sender, EventArgs e)
+        {
+            Form9 frag_Calc_form = new Form9();            
+            frag_Calc_form.ShowDialog();
+        }
     }
 }
