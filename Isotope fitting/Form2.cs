@@ -57,7 +57,7 @@ namespace Isotope_fitting
         public List<int> selectedFragments = new List<int>();
         int start_idx = 0;
         int end_idx = 0;
-        double max_exp = 0.0;
+        public static double max_exp = 0.0;
         public static List<WindowSet> windowList = new List<WindowSet>();
         public static int window_count = 1;
         public static int selected_window = 1000000;
@@ -1403,7 +1403,7 @@ namespace Isotope_fitting
             return fragment_is_canditate;
         }
 
-        private double[] ppm_calculator(double centroid)
+        public static double[] ppm_calculator(double centroid)
         {
             // find the closest experimental peak, and return calculated ppm and resolution
             double exp_cen, curr_diff, ppm;
@@ -3384,14 +3384,14 @@ namespace Isotope_fitting
             return powerSet;
         }
 
-        private double dParser(string t)
+        public static double dParser(string t)
         {
             if (double.TryParse(t, out double d)) return d;
 
             return double.NaN;
         }
 
-        private double txt_to_d(TextBox txtBox)
+        public static double txt_to_d(TextBox txtBox)
         {
             if (double.TryParse(txtBox.Text, out double d)) return d;
 
@@ -3458,7 +3458,7 @@ namespace Isotope_fitting
                         compareResult = CompareString(listviewX, listviewY);
                     }
                 }
-                else if (ColumnToSort == 0 || ColumnToSort == 3)
+                else if (ColumnToSort == 0 || ColumnToSort == 4)
                 {
                     compareResult = CompareString(listviewX, listviewY);
                 }
@@ -3774,7 +3774,7 @@ namespace Isotope_fitting
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
-            fit_sel_Btn.Enabled = fit_Btn.Enabled = fragCalc_Btn.Enabled = false;            
+            fit_sel_Btn.Enabled = fit_Btn.Enabled =  false;            
             Initialize_Oxy();
             initialize_tabs();
             factor_panel.Controls.Clear();
@@ -5724,7 +5724,7 @@ namespace Isotope_fitting
             saveCalc_Btn.Enabled = false;
         }
 
-        private string fix_formula(string input, bool simple = true, int h = -1, int h2o = 0, int nh3 = 0)
+        public static string fix_formula(string input, bool simple = true, int h = -1, int h2o = 0, int nh3 = 0)
         {
             string formula = "";
             if (simple == true) { formula = find_index_fix_formula(input, h); return formula; }
@@ -5741,7 +5741,7 @@ namespace Isotope_fitting
             formula = input;
             return formula;
         }
-        private string find_index_fix_formula(string input, int amount = -1, char element = 'H')
+        public static string find_index_fix_formula(string input, int amount = -1, char element = 'H')
         {
             int idx = input.IndexOf(element);
             var theString = input;
