@@ -101,7 +101,7 @@ namespace Isotope_fitting
         List<int[]> powerSet_distroIdx = new List<int[]>();
         List<double[]> summation = new List<double[]>();
         List<double[]> residual = new List<double[]>();
-        List<int> custom_colors = new List<int>();
+        public static List<int> custom_colors = new List<int>();
       
         const double H_mass = 1.008;
         OxyPlot.ScreenPoint charge_center;
@@ -128,8 +128,12 @@ namespace Isotope_fitting
         Object _locker = new Object();
         delegate void EnvelopeCalcCompleted();
         delegate void FittingCalcCompleted();
+        delegate void Recalculate_completed();
+
         event EnvelopeCalcCompleted OnEnvelopeCalcCompleted;
         event FittingCalcCompleted OnFittingCalcCompleted;
+        event Recalculate_completed OnRecalculate_completed;
+
         public static List<List<double[]>> all_fitted_results;
         List<List<int[]>> all_fitted_sets;
         TreeView fit_tree/*,*/ /*frag_tree*//*,*/ /*fragTypes_tree*/;
@@ -239,6 +243,9 @@ namespace Isotope_fitting
 
             // declare event to plot fit results after fitting calculations are complete
             OnFittingCalcCompleted += () => { update_sorting_parameters_lists(); generate_fit_results(); };
+
+
+            OnRecalculate_completed += () => { refresh_iso_plot(); };
 
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
@@ -1514,6 +1521,7 @@ namespace Isotope_fitting
             sw1.Stop(); Debug.WriteLine("All data aligned(M): " + sw1.ElapsedMilliseconds.ToString());
 
             progress_display_stop();
+            Invoke(new Action(() => OnRecalculate_completed()));
             return aligned_intensities;
         }
 
@@ -2688,9 +2696,17 @@ namespace Isotope_fitting
                             (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
                     }
                 }
+                if (Form9.now)
+                {
+                    string name_str = Form9.Fragments3[Form9.selected_idx].Name;
+                    (iso_plot.Model.Series[Fragments2.Count+1] as LineSeries).Title = name_str;
+                    for (int j = 0; j < all_data.Last().Count; j++)
+                        (iso_plot.Model.Series[Fragments2.Count+1] as LineSeries).Points.Add(new DataPoint(all_data.Last()[j][0], Form9.Fragments3[Form9.selected_idx].Factor * all_data.Last()[j][1]));
+                }
             }
             if (plotFragCent_chkBox.Checked)
             {
+                int help=Convert.ToInt32(Form9.now);
                 for (int i = 0; i < to_plot.Count; i++)
                 {
                     int curr_idx = to_plot[i];
@@ -2698,14 +2714,31 @@ namespace Isotope_fitting
                     {
                         // get name of each line to be ploted
                         string name_str = Fragments2[curr_idx - 1].Name;
-                        (iso_plot.Model.Series[curr_idx + Fragments2.Count] as LinearBarSeries).Title = name_str;
+                        (iso_plot.Model.Series[curr_idx + Fragments2.Count+help] as LinearBarSeries).Title = name_str;
 
                         // paint frag envelope
                         for (int j = 0; j < Fragments2[curr_idx - 1].Centroid.Count; j++)
                         {
                             List<PointPlot> cenn = Fragments2[curr_idx - 1].Centroid.OrderBy(p => p.X).ToList();
-                            (iso_plot.Model.Series[curr_idx + Fragments2.Count] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Fragments2[curr_idx - 1].Factor * cenn[j].Y));
+                            (iso_plot.Model.Series[curr_idx + Fragments2.Count + help] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Fragments2[curr_idx - 1].Factor * cenn[j].Y));
 
+                        }
+                    }
+                }
+                if (Form9.now)
+                {
+                    int curr_idx = Form9.selected_idx;
+                    if (all_data.Count != 0)
+                    {
+                        // get name of each line to be ploted
+                        string name_str = Form9.Fragments3[curr_idx].Name;
+                        (iso_plot.Model.Series[2*Fragments2.Count+2] as LinearBarSeries).Title = name_str;
+
+                        // paint frag envelope
+                        for (int j = 0; j < Form9.Fragments3[curr_idx ].Centroid.Count; j++)
+                        {
+                            List<PointPlot> cenn = Form9.Fragments3[curr_idx ].Centroid.OrderBy(p => p.X).ToList();
+                            (iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Form9.Fragments3[curr_idx ].Factor * cenn[j].Y));
                         }
                     }
                 }
@@ -2746,15 +2779,35 @@ namespace Isotope_fitting
             iso_plot.Model.Series.Clear();
             for (int i = 0; i < all_data.Count; i++)
             {
-                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = get_fragment_color(i) };
+                OxyColor cc;
+                if (Form9.now == true && i == all_data.Count - 1)
+                {
+                    cc = Form9.Fragments3[Form9.selected_idx].Color;                    
+                }
+                else
+                {
+                    cc = get_fragment_color(i);
+                }
+                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = cc };
                 if (i == 0) tmp.StrokeThickness = 1;
                 iso_plot.Model.Series.Add(tmp);
             }
             for (int i = 1; i < all_data.Count; i++)
             {
-                OxyColor cc = get_fragment_color(i);
-                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor =cc, FillColor = cc, BarWidth = 1 };
-                iso_plot.Model.Series.Add(bar);
+                if (Form9.now == true && i==all_data.Count-1 )
+                {
+                    OxyColor cc = Form9.Fragments3[Form9.selected_idx].Color;
+                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = 1 };
+                    iso_plot.Model.Series.Add(bar);
+                    break;
+                }
+                else
+                {
+                    OxyColor cc = get_fragment_color(i);
+                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = 1 };
+                    iso_plot.Model.Series.Add(bar);
+                }
+               
             }
             if (insert_exp == true)
             {
@@ -2795,7 +2848,7 @@ namespace Isotope_fitting
 
                 for (int j = 0; j < plot_idxs.Count; j++)
                     intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
-
+                if (Form9.now) { intensity += all_data_aligned[i].Last() *Form9.Fragments3[Form9.selected_idx].Factor; }
                 summation.Add(new double[] { all_data[0][i][0], intensity });
                 if (rel_res_chkBx.Checked)
                 {
@@ -3458,7 +3511,7 @@ namespace Isotope_fitting
                         compareResult = CompareString(listviewX, listviewY);
                     }
                 }
-                else if (ColumnToSort == 0 || ColumnToSort == 4)
+                else if (ColumnToSort == 0 || ColumnToSort == 4 || ColumnToSort == 1)
                 {
                     compareResult = CompareString(listviewX, listviewY);
                 }
@@ -8382,8 +8435,16 @@ namespace Isotope_fitting
 
         private void fragCalc_Btn_Click(object sender, EventArgs e)
         {
-            Form9 frag_Calc_form = new Form9();            
-            frag_Calc_form.ShowDialog();
+            Form9 frag_Calc_form = new Form9(this);            
+            frag_Calc_form.Show();
+            
+        }
+        public void do_it()
+        {
+            if (Form9.now)
+            {
+                recalculate_all_data_aligned();            
+            }
         }
     }
 }

@@ -79,6 +79,7 @@
             this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
             this.insert_Btn = new System.Windows.Forms.Button();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
+            this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
@@ -623,7 +624,8 @@
             this.slice_clmn,
             this.mz_clmn,
             z_clmn,
-            this.seq_clmn});
+            this.seq_clmn,
+            this.code_clmn});
             this.fragListView9.Cursor = System.Windows.Forms.Cursors.Hand;
             this.fragListView9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fragListView9.FullRowSelect = true;
@@ -637,6 +639,8 @@
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
             this.fragListView9.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.fragListView9_ColumnClick);
+            this.fragListView9.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.fragListView9_ItemCheck);
+            this.fragListView9.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.fragListView9_ItemSelectionChanged);
             // 
             // name_clmn
             // 
@@ -708,6 +712,10 @@
             this.dvw_lstBox.Name = "dvw_lstBox";
             this.dvw_lstBox.Size = new System.Drawing.Size(89, 49);
             this.dvw_lstBox.TabIndex = 11;
+            // 
+            // code_clmn
+            // 
+            this.code_clmn.Text = "Code";
             // 
             // Form9
             // 
@@ -781,5 +789,6 @@
         private System.Windows.Forms.ToolStripProgressBar ProgressBar9;
         private System.Windows.Forms.Button insert_Btn;
         private System.Windows.Forms.CheckedListBox dvw_lstBox;
+        private System.Windows.Forms.ColumnHeader code_clmn;
     }
 }

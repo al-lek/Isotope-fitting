@@ -1,4 +1,7 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.WindowsForms;
+using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,19 +18,23 @@ namespace Isotope_fitting
 {
     public partial class Form9 : Form
     {
+        Form2 frm2;
         private double ppmError9=8.0;        
         private bool[] selection_rule9 = new bool[] { true, false, false, false, false, false };
         private ListViewItemComparer _lvwItemComparer;
         Stopwatch sw1 = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
         public static List<FragForm> Fragments3 = new List<FragForm>();
+        public static int selected_idx = 0;
+        public static bool now=false;
         Object _locker = new Object();
         delegate void CalcFrag3Completed();
         event CalcFrag3Completed OnCalcFrag3Completed;
+        bool first = true;
 
-
-        public Form9()
+        public Form9(Form2 f)
         {
+            frm2 = f;
             InitializeComponent();
             OnCalcFrag3Completed += () => { Fragments3_to_listview(); };
 
@@ -49,8 +56,10 @@ namespace Isotope_fitting
             half_rdBtn.Checked = selection_rule9[3];
             half_minus_rdBtn.Checked = selection_rule9[4];
             half_plus_rdBtn.Checked = selection_rule9[5];
-
         }
+
+       
+        #region listview UI
         private void Initialize_listviewComparer()
         {
             fragListView9.ListViewItemSorter = _lvwItemComparer;
@@ -79,6 +88,69 @@ namespace Isotope_fitting
 
             // Perform the sort with these new sort options.
             this.fragListView9.Sort();
+        }
+        private void Fragments3_to_listview()
+        {
+            fragListView9.BeginUpdate();
+            fragListView9.Items.Clear();
+            foreach (FragForm fra in Fragments3)
+            {
+                var listviewitem = new ListViewItem(fra.Name);
+                if (fra.Ion_type.StartsWith("inter")) { listviewitem.SubItems.Add(fra.Index + "-" + fra.IndexTo); }
+                else { listviewitem.SubItems.Add(fra.Index); }
+                listviewitem.SubItems.Add(fra.Mz);
+                listviewitem.SubItems.Add(fra.Charge.ToString());
+                listviewitem.SubItems.Add(fra.FinalFormula.ToString());
+                listviewitem.SubItems.Add(fra.Counter.ToString());
+
+                fragListView9.Items.Add(listviewitem);
+            }
+            fragListView9.EndUpdate();
+        }
+        private void fragListView9_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (e.CurrentValue != CheckState.Checked)
+            {
+                foreach (ListViewItem lili in fragListView9.Items)
+                {
+                    lili.Checked = false;
+                }
+            }
+        }
+
+        private void fragListView9_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            selected_idx = System.Convert.ToInt32(e.Item.SubItems[5].Text);
+            if (first)
+            {
+                // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
+                if (all_data.Count == 0) { all_data.Add(new List<double[]>()); Form2.custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
+                custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());                
+            }
+            else
+            {
+                all_data.RemoveAt(all_data.Count-1); custom_colors.RemoveAt(custom_colors.Count-1);
+            }
+            all_data.Add(new List<double[]>());
+            for (int p = 0; p < Fragments3[selected_idx].Profile.Count; p++)
+                all_data.Last().Add(new double[] { Fragments3[selected_idx].Profile[p].X, Fragments3[selected_idx].Profile[p].Y });
+            custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
+            first = false;now = true;
+            frm2.do_it();
+        }
+        private void clear_FragListview9()
+        {
+
+        }
+        #endregion
+
+
+
+        #region isotopic distributions calculations
+        private void calc_Btn_Click(object sender, EventArgs e)
+        {
+            if (Fragments3.Count > 0) Fragments3.Clear();
+            fragments_and_calculations_sequence_A();
         }
         private void fragments_and_calculations_sequence_A()
         {
@@ -247,7 +319,7 @@ namespace Isotope_fitting
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
-            for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = (k + 1); }
+            for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
             progress_display_stop();
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
@@ -305,7 +377,7 @@ namespace Isotope_fitting
         {
             // adds safely a matched fragment to Fragments3, and releases memory
             lock (_locker)
-            {
+            {                
                 Fragments3.Add(new FragForm()
                 {
                     Adduct = chem.Adduct,
@@ -333,17 +405,15 @@ namespace Isotope_fitting
                     Fix = 1.0,
                     Max_intensity = 0.0,
                     Fixed = chem.Fixed,
-                });
-
+                });               
                 Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
-                Fragments3.Last().Counter = Fragments3.Count;
                 Fragments3.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
-                if (!Fragments3.Last().Fixed) Fragments3.Last().Factor = 0.1 * Form2.max_exp / Fragments3.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
+                Fragments3.Last().Factor = 0.1 * Form2.max_exp / Fragments3.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
 
                 if (chem.Charge > 0) Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-
+                
                 // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                 // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                 chem.Profile.Clear();
@@ -390,31 +460,9 @@ namespace Isotope_fitting
 
             return fragment_is_canditate;
         }
+        #endregion
 
-        private void Fragments3_to_listview()
-        {
-            fragListView9.BeginUpdate();
-            fragListView9.Items.Clear();
-            foreach (FragForm fra in Fragments3)
-            {
-                var listviewitem = new ListViewItem(fra.Name);
-                if (fra.Ion_type.StartsWith("inter")) { listviewitem.SubItems.Add(fra.Index + "-" + fra.IndexTo); }
-                else { listviewitem.SubItems.Add(fra.Index);}                
-                listviewitem.SubItems.Add(fra.Mz);
-                listviewitem.SubItems.Add(fra.Charge.ToString());
-                listviewitem.SubItems.Add(fra.FinalFormula.ToString());                
-                fragListView9.Items.Add(listviewitem);
-            }
-            fragListView9.EndUpdate();
-        }
-        private void clear_FragListview9()
-        {
 
-        }
-        private void calc_Btn_Click(object sender, EventArgs e)
-        {
-            fragments_and_calculations_sequence_A();
-        }
 
         #region progress display
         private void progress9_display_start(int barMax, string info)
@@ -437,5 +485,7 @@ namespace Isotope_fitting
             statusStrpFrm9.Invoke(new Action(() => ProgressBar9.ProgressBar.Update()));   //thread safe call
         }
         #endregion
+
+        
     }
 }
