@@ -58,14 +58,24 @@ namespace Isotope_fitting
             half_plus_rdBtn.Checked = selection_rule9[5];
         }
 
-       
+        private void initialize_data()
+        {
+            if (Fragments3.Count > 0) Fragments3.Clear();
+            first = true; now = false; selected_idx = 0; 
+        }
+
         #region listview UI
         private void Initialize_listviewComparer()
         {
             fragListView9.ListViewItemSorter = _lvwItemComparer;
         }
-        private void fragListView9_ColumnClick(object sender, ColumnClickEventArgs e)
+        private void fragListView9_ColumnClick_1(object sender, ColumnClickEventArgs e)
         {
+            //ensure that the focus is mainly on numeric up down box in the factor_panel9 
+            if (factor_panel9.Visible)
+            {
+                factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
+            }
             // Determine if clicked column is already the column that is being sorted.
             if (e.Column == _lvwItemComparer.SortColumn)
             {
@@ -89,6 +99,7 @@ namespace Isotope_fitting
             // Perform the sort with these new sort options.
             this.fragListView9.Sort();
         }
+
         private void Fragments3_to_listview()
         {
             fragListView9.BeginUpdate();
@@ -117,26 +128,63 @@ namespace Isotope_fitting
                 }
             }
         }
-
         private void fragListView9_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            selected_idx = System.Convert.ToInt32(e.Item.SubItems[5].Text);
-            if (first)
+            now = true;
+            //if (factor_panel9.Controls.Count > 0) { factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus(); }
+            if (e.IsSelected)
             {
-                // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
-                if (all_data.Count == 0) { all_data.Add(new List<double[]>()); Form2.custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
-                custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());                
-            }
-            else
+                selected_idx = System.Convert.ToInt32(e.Item.SubItems[5].Text);
+                if (first)
+                {
+                    // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
+                    if (all_data.Count == 0) { all_data.Add(new List<double[]>()); Form2.custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
+                    custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
+                }
+                else
+                {
+                    all_data.RemoveAt(all_data.Count - 1); custom_colors.RemoveAt(custom_colors.Count - 1);
+                }
+                all_data.Add(new List<double[]>());
+                for (int p = 0; p < Fragments3[selected_idx].Profile.Count; p++)
+                {
+                    all_data.Last().Add(new double[] { Fragments3[selected_idx].Profile[p].X, Fragments3[selected_idx].Profile[p].Y });
+                }
+                custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
+                first = false; now = true;
+                frm2.recalc_frm9();
+                adjust_height();
+            }           
+        }
+        private void adjust_height()
+        {
+            double frag_intensity = Fragments3[selected_idx].Factor * Fragments3[selected_idx].Max_intensity;
+            factor_panel9.Visible = true;
+            factor_panel9.Controls.Clear();
+            Label factor_lbl = new Label { Text = Fragments3[selected_idx].Name, Location = new Point(5, 10), AutoSize = true };
+
+            NumericUpDown numUD = new NumericUpDown
             {
-                all_data.RemoveAt(all_data.Count-1); custom_colors.RemoveAt(custom_colors.Count-1);
-            }
-            all_data.Add(new List<double[]>());
-            for (int p = 0; p < Fragments3[selected_idx].Profile.Count; p++)
-                all_data.Last().Add(new double[] { Fragments3[selected_idx].Profile[p].X, Fragments3[selected_idx].Profile[p].Y });
-            custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
-            first = false;now = true;
-            frm2.do_it();
+                Minimum = 0,
+                Maximum = 1e8M,
+                Value = (decimal)Math.Round(frag_intensity, 1),
+                Increment = (decimal)Math.Round(frag_intensity) / 50,
+                Location = new Point(275, 7),
+                Size = new Size(60, 20),TabIndex=0
+            };
+            numUD.ValueChanged += (s, e) =>
+            {
+                // manualy adjust height. We have also to maualy call refresh plot
+                Fragments3[selected_idx].Factor = Convert.ToDouble(numUD.Value) / Fragments3[selected_idx].Max_intensity;
+                frm2.refresh_frm9();
+            };
+            numUD.Focus();
+            //ensure that the focus is mainly on numeric up down box in the factor_panel9 
+            //that way when the user clicks a fragment from the listview the focus is not on the listview but on the numeric up down
+            //and can control height of the fragment instantly from the buttons "up" "down"
+            numUD.Leave += (s, e) => { numUD.Focus(); };
+             factor_panel9.Controls.AddRange(new Control[] { factor_lbl, numUD });
+            factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
         }
         private void clear_FragListview9()
         {
@@ -144,31 +192,30 @@ namespace Isotope_fitting
         }
         #endregion
 
-
-
         #region isotopic distributions calculations
         private void calc_Btn_Click(object sender, EventArgs e)
         {
             if (Fragments3.Count > 0) Fragments3.Clear();
-            fragments_and_calculations_sequence_A();
+            //the basic algorithm with small changes for the specific form9
+            fragments_and_calculations_sequence_A_frm9();
         }
-        private void fragments_and_calculations_sequence_A()
+        private void fragments_and_calculations_sequence_A_frm9()
         {
             // this the main sequence after loadind data
             // 1. select fragments according to UI            
             sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = select_fragments2();
+            List<ChemiForm> selected_fragments = select_fragments2_frm9();
             if (selected_fragments == null) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution
-            calculate_fragments_resolution(selected_fragments);
+            calculate_fragments_resolution_frm9(selected_fragments);
             sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
             // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments3.
-            Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
+            Thread envipat_properties = new Thread(() => calculate_fragment_properties_frm9(selected_fragments));
             envipat_properties.Start();
         }
-        private List<ChemiForm> select_fragments2()
+        private List<ChemiForm> select_fragments2_frm9()
         {
             List<ChemiForm> res = new List<ChemiForm>();
             List<string> primary = new List<string> { "a", "b", "c", "x", "y", "z" };
@@ -284,7 +331,7 @@ namespace Isotope_fitting
             return res;
         }
 
-        private void calculate_fragments_resolution(List<ChemiForm> selected_fragments)
+        private void calculate_fragments_resolution_frm9(List<ChemiForm> selected_fragments)
         {
             foreach (ChemiForm chem in selected_fragments)
             {
@@ -292,7 +339,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
+        private void calculate_fragment_properties_frm9(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
             sw1.Reset(); sw1.Start(); int progress = 0;
@@ -301,7 +348,7 @@ namespace Isotope_fitting
             {
                 Parallel.For(0, selected_fragments.Count, (i, state) =>
                 {
-                    Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
+                    Envipat_Calcs_and_filter_byPPM_frm9(selected_fragments[i]);
 
 
                     Interlocked.Increment(ref progress);
@@ -326,7 +373,7 @@ namespace Isotope_fitting
             MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results");
             Invoke(new Action(() => OnCalcFrag3Completed()));
         }
-        private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
+        private void Envipat_Calcs_and_filter_byPPM_frm9(ChemiForm chem)
         {
             ChemiForm.CheckChem(chem);      // will also generate chem.FinalFormula
 
@@ -362,7 +409,7 @@ namespace Isotope_fitting
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
             // MAIN decesion algorithm
-            bool fragment_is_canditate = decision_algorithm(chem, cen);
+            bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
             // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
             if (fragment_is_canditate)
@@ -420,7 +467,7 @@ namespace Isotope_fitting
                 chem.Points.Clear();
             }
         }
-        private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
+        private bool decision_algorithm_frm9(ChemiForm chem, List<PointPlot> cen)
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
@@ -462,8 +509,6 @@ namespace Isotope_fitting
         }
         #endregion
 
-
-
         #region progress display
         private void progress9_display_start(int barMax, string info)
         {
@@ -484,7 +529,92 @@ namespace Isotope_fitting
             statusStrpFrm9.Invoke(new Action(() => ProgressBar9.ProgressBar.Value = idx - 1));
             statusStrpFrm9.Invoke(new Action(() => ProgressBar9.ProgressBar.Update()));   //thread safe call
         }
+
+
+
         #endregion
+
+        
+
+        #region insert fragment to Fragments2
+        private void insert_Btn_Click(object sender, EventArgs e)
+        {
+            insert_frag_to_Fragments2();
+        }
+        private void insert_frag_to_Fragments2()
+        {
+            if (fragListView9.SelectedItems.Count == 1)
+            {
+                //set now to false in order to let refresh_iso_plot follow the basic algorithm 
+                now = false;
+                Fragments2.Add(new FragForm()
+                {
+                    Adduct = Fragments3[selected_idx].Adduct,
+                    Charge = Fragments3[selected_idx].Charge,
+                    FinalFormula = Fragments3[selected_idx].FinalFormula,
+                    Deduct = Fragments3[selected_idx].Deduct,
+                    Error = Fragments3[selected_idx].Error,
+                    PPM_Error = Fragments3[selected_idx].PPM_Error,
+                    Index = Fragments3[selected_idx].Index,
+                    IndexTo = Fragments3[selected_idx].IndexTo,
+                    InputFormula = Fragments3[selected_idx].InputFormula,
+                    Ion = Fragments3[selected_idx].Ion,
+                    Ion_type = Fragments3[selected_idx].Ion_type,
+                    Machine = Fragments3[selected_idx].Machine,
+                    Multiplier = Fragments3[selected_idx].Multiplier,
+                    Mz = Fragments3[selected_idx].Mz,
+                    Radio_label = Fragments3[selected_idx].Radio_label,
+                    Resolution = Fragments3[selected_idx].Resolution,
+                    Factor = Fragments3[selected_idx].Factor,
+                    Counter = 0,
+                    To_plot = true,
+                    Color = Fragments3[selected_idx].Color,
+                    Name = Fragments3[selected_idx].Name,
+                    ListName = new string[4],
+                    Fix = 1.0,
+                    Max_intensity = 0.0,
+                    Fixed = true,
+                });
+
+                Fragments2.Last().Centroid = Fragments3[selected_idx].Centroid.Select(point => point.DeepCopy()).ToList();
+                Fragments2.Last().Profile = Fragments3[selected_idx].Profile.Select(point => point.DeepCopy()).ToList();
+                Fragments2.Last().Counter = Fragments3.Count;
+                Fragments2.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
+
+                // sort by mz the fragments list (global) 
+                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+                // also restore indexes to match array position
+                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+                frm2.add_frag_frm9();
+
+                //remove fragment from the current listview
+                Fragments3.RemoveAt(selected_idx);
+                // sort by mz the fragments list 
+                Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+                // also restore indexes to match array position
+                for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k ; }
+                //refresh listview 
+                Fragments3_to_listview();
+                //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
+                first = true; 
+                factor_panel9.Visible = false;selected_idx = 0;
+            }
+            else
+            {
+                MessageBox.Show("There isn't any selected fragment.");
+            }
+            
+        }
+        #endregion
+
+        private void Form9_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //when closing the form public data from this form are restored in their initial values
+            initialize_data();
+            //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
+            //we don't want to refresh fragment trees in the basic form
+            frm2.ending_frm9();
+        }
 
         
     }

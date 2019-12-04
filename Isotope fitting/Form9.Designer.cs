@@ -30,6 +30,8 @@
         {
             System.Windows.Forms.ColumnHeader z_clmn;
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
+            this.insert_Btn = new System.Windows.Forms.Button();
             this.calc_param9Lbl = new System.Windows.Forms.Label();
             this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
             this.half_plus_rdBtn = new System.Windows.Forms.RadioButton();
@@ -69,16 +71,15 @@
             this.idxPr_Box = new System.Windows.Forms.TextBox();
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
+            this.statusStrpFrm9 = new System.Windows.Forms.StatusStrip();
+            this.progressLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
+            this.factor_panel9 = new System.Windows.Forms.Panel();
             this.fragListView9 = new System.Windows.Forms.ListView();
             this.name_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.slice_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mz_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.statusStrpFrm9 = new System.Windows.Forms.StatusStrip();
-            this.progressLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
-            this.insert_Btn = new System.Windows.Forms.Button();
-            this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
@@ -89,6 +90,7 @@
             // z_clmn
             // 
             z_clmn.Text = "z";
+            z_clmn.Width = 34;
             // 
             // panel_calc
             // 
@@ -143,6 +145,38 @@
             this.panel_calc.Name = "panel_calc";
             this.panel_calc.Size = new System.Drawing.Size(327, 690);
             this.panel_calc.TabIndex = 4;
+            // 
+            // dvw_lstBox
+            // 
+            this.dvw_lstBox.ColumnWidth = 40;
+            this.dvw_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.dvw_lstBox.FormattingEnabled = true;
+            this.dvw_lstBox.Items.AddRange(new object[] {
+            "da",
+            "wa",
+            "db",
+            "wb",
+            "v"});
+            this.dvw_lstBox.Location = new System.Drawing.Point(83, 214);
+            this.dvw_lstBox.MultiColumn = true;
+            this.dvw_lstBox.Name = "dvw_lstBox";
+            this.dvw_lstBox.Size = new System.Drawing.Size(89, 49);
+            this.dvw_lstBox.TabIndex = 11;
+            // 
+            // insert_Btn
+            // 
+            this.insert_Btn.BackColor = System.Drawing.Color.CadetBlue;
+            this.insert_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.insert_Btn.Location = new System.Drawing.Point(0, 641);
+            this.insert_Btn.Name = "insert_Btn";
+            this.insert_Btn.Size = new System.Drawing.Size(323, 23);
+            this.insert_Btn.TabIndex = 53;
+            this.insert_Btn.Text = "Insert";
+            this.insert_Btn.UseVisualStyleBackColor = false;
+            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
             // 
             // calc_param9Lbl
             // 
@@ -617,47 +651,6 @@
             this.internal_Label.TabIndex = 19;
             this.internal_Label.Text = "internal";
             // 
-            // fragListView9
-            // 
-            this.fragListView9.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.name_clmn,
-            this.slice_clmn,
-            this.mz_clmn,
-            z_clmn,
-            this.seq_clmn,
-            this.code_clmn});
-            this.fragListView9.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.fragListView9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fragListView9.FullRowSelect = true;
-            this.fragListView9.GridLines = true;
-            this.fragListView9.HideSelection = false;
-            this.fragListView9.Location = new System.Drawing.Point(327, 0);
-            this.fragListView9.MultiSelect = false;
-            this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(344, 690);
-            this.fragListView9.TabIndex = 43;
-            this.fragListView9.UseCompatibleStateImageBehavior = false;
-            this.fragListView9.View = System.Windows.Forms.View.Details;
-            this.fragListView9.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.fragListView9_ColumnClick);
-            this.fragListView9.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.fragListView9_ItemCheck);
-            this.fragListView9.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.fragListView9_ItemSelectionChanged);
-            // 
-            // name_clmn
-            // 
-            this.name_clmn.Text = "Fragment";
-            // 
-            // slice_clmn
-            // 
-            this.slice_clmn.Text = "slice";
-            // 
-            // mz_clmn
-            // 
-            this.mz_clmn.Text = "m/z";
-            // 
-            // seq_clmn
-            // 
-            this.seq_clmn.Text = "sequence";
-            // 
             // statusStrpFrm9
             // 
             this.statusStrpFrm9.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -682,36 +675,55 @@
             this.ProgressBar9.Name = "ProgressBar9";
             this.ProgressBar9.Size = new System.Drawing.Size(300, 15);
             // 
-            // insert_Btn
+            // factor_panel9
             // 
-            this.insert_Btn.BackColor = System.Drawing.Color.CadetBlue;
-            this.insert_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(0, 641);
-            this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(323, 23);
-            this.insert_Btn.TabIndex = 53;
-            this.insert_Btn.Text = "Insert";
-            this.insert_Btn.UseVisualStyleBackColor = false;
+            this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.factor_panel9.Location = new System.Drawing.Point(327, 0);
+            this.factor_panel9.Name = "factor_panel9";
+            this.factor_panel9.Size = new System.Drawing.Size(344, 37);
+            this.factor_panel9.TabIndex = 54;
+            this.factor_panel9.Visible = false;
             // 
-            // dvw_lstBox
+            // fragListView9
             // 
-            this.dvw_lstBox.ColumnWidth = 40;
-            this.dvw_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.dvw_lstBox.FormattingEnabled = true;
-            this.dvw_lstBox.Items.AddRange(new object[] {
-            "da",
-            "wa",
-            "db",
-            "wb",
-            "v"});
-            this.dvw_lstBox.Location = new System.Drawing.Point(83, 214);
-            this.dvw_lstBox.MultiColumn = true;
-            this.dvw_lstBox.Name = "dvw_lstBox";
-            this.dvw_lstBox.Size = new System.Drawing.Size(89, 49);
-            this.dvw_lstBox.TabIndex = 11;
+            this.fragListView9.BackColor = System.Drawing.Color.White;
+            this.fragListView9.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.name_clmn,
+            this.slice_clmn,
+            this.mz_clmn,
+            z_clmn,
+            this.seq_clmn,
+            this.code_clmn});
+            this.fragListView9.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.fragListView9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fragListView9.FullRowSelect = true;
+            this.fragListView9.GridLines = true;
+            this.fragListView9.HideSelection = false;
+            this.fragListView9.Location = new System.Drawing.Point(327, 37);
+            this.fragListView9.MultiSelect = false;
+            this.fragListView9.Name = "fragListView9";
+            this.fragListView9.Size = new System.Drawing.Size(344, 653);
+            this.fragListView9.TabIndex = 55;
+            this.fragListView9.UseCompatibleStateImageBehavior = false;
+            this.fragListView9.View = System.Windows.Forms.View.Details;
+            this.fragListView9.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.fragListView9_ColumnClick_1);
+            this.fragListView9.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.fragListView9_ItemSelectionChanged);
+            // 
+            // name_clmn
+            // 
+            this.name_clmn.Text = "Fragment";
+            // 
+            // slice_clmn
+            // 
+            this.slice_clmn.Text = "slice";
+            // 
+            // mz_clmn
+            // 
+            this.mz_clmn.Text = "m/z";
+            // 
+            // seq_clmn
+            // 
+            this.seq_clmn.Text = "sequence";
             // 
             // code_clmn
             // 
@@ -723,10 +735,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(671, 690);
             this.Controls.Add(this.fragListView9);
+            this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.statusStrpFrm9);
             this.Name = "Form9";
             this.Text = "Fragment Calculator";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
@@ -779,16 +793,17 @@
         private System.Windows.Forms.RadioButton two_rdBtn;
         private System.Windows.Forms.RadioButton one_rdBtn9;
         private System.Windows.Forms.Label calc_param9Lbl;
-        private System.Windows.Forms.ListView fragListView9;
-        private System.Windows.Forms.ColumnHeader name_clmn;
-        private System.Windows.Forms.ColumnHeader slice_clmn;
-        private System.Windows.Forms.ColumnHeader mz_clmn;
-        private System.Windows.Forms.ColumnHeader seq_clmn;
         private System.Windows.Forms.StatusStrip statusStrpFrm9;
         private System.Windows.Forms.ToolStripStatusLabel progressLabel9;
         private System.Windows.Forms.ToolStripProgressBar ProgressBar9;
         private System.Windows.Forms.Button insert_Btn;
         private System.Windows.Forms.CheckedListBox dvw_lstBox;
+        private System.Windows.Forms.Panel factor_panel9;
+        private System.Windows.Forms.ListView fragListView9;
+        private System.Windows.Forms.ColumnHeader name_clmn;
+        private System.Windows.Forms.ColumnHeader slice_clmn;
+        private System.Windows.Forms.ColumnHeader mz_clmn;
+        private System.Windows.Forms.ColumnHeader seq_clmn;
         private System.Windows.Forms.ColumnHeader code_clmn;
     }
 }

@@ -494,15 +494,16 @@ namespace Isotope_fitting
             fitMin_Box.Text = experimental[0][0].ToString();
             fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
 
-            // copy experimental to all_data
-            experimental_to_all_data();
-            recalculate_all_data_aligned();
             // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
             else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
 
-            // add experimental to plot
-            refresh_iso_plot();
+            // copy experimental to all_data
+            experimental_to_all_data();
+            recalculate_all_data_aligned();           
+
+            //// add experimental to plot
+            //refresh_iso_plot();
 
             start_idx = 0;
             end_idx = experimental.Count;
@@ -1153,27 +1154,13 @@ namespace Isotope_fitting
         }
         private void singleFrag_manipulation(TreeNode node)
         {
-            //try
-            //{
-            //   Panel pnl = GetControls(user_grpBox).OfType<Panel>().FirstOrDefault(l => l.Name == "Fragment intensity adjustment");
-            //   this.Controls.Remove(pnl);pnl.Dispose();
-            //}
-            //catch { }           
-            
             // will handle the height of frag. Automaticaly by solo fit, or manualy
             int frag_idx = Convert.ToInt32(node.Name);
             double frag_intensity = Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity;
-
-            //Form frm = new Form { Size = new Size(200, 35), AutoSizeMode = AutoSizeMode.GrowAndShrink, TopMost = true, ControlBox = false, StartPosition = FormStartPosition.Manual,
-            //    FormBorderStyle = FormBorderStyle.FixedToolWindow, Location = new Point(1570, 580) };
-
-            //Panel factor_panel = new Panel { Location = new Point(555, 525), Size = new Size(190, 35),BorderStyle=BorderStyle.Fixed3D,Name="Fragment intensity adjustment",Visible= true ,Anchor = AnchorStyles.Top  | AnchorStyles.Right };
             factor_panel.Visible = true;
             factor_panel.Controls.Clear();
-            //if (show_Btn.Visible) factor_panel.Location = new Point(555-panel1.Size.Width, 555);
             Label factor_lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true};
             Button btn_solo = new Button { Text = "fit", Location = new Point(200, 6), Size = new Size(60, 23) };
-            //Button btn_ok = new Button { Location = new Point(165, 5), Size = new Size(29, 23), Text = "ok" };
             NumericUpDown numUD = new NumericUpDown { Minimum =0, Maximum = 1e8M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
                                                         Location = new Point(275, 7), Size = new Size(60, 20) };
             btn_solo.Click += (s, e) => 
@@ -1193,12 +1180,9 @@ namespace Isotope_fitting
                 Fragments2[frag_idx].Factor = Convert.ToDouble(numUD.Value) / Fragments2[frag_idx].Max_intensity;
                 node.Text = node.Text.Remove(node.Text.LastIndexOf(' ')) + " " + (Fragments2[frag_idx].Factor * Fragments2[frag_idx].Max_intensity).ToString("#######");
                 refresh_iso_plot();
-            };
-            //btn_ok.Click += (s, e) => { frm.Close(); };
+            };            
 
-            factor_panel.Controls.AddRange(new Control[] { factor_lbl, btn_solo, /*btn_ok,*/ numUD });
-            //user_grpBox.Controls.Add(factor_panel);
-            //factor_panel.BringToFront();
+            factor_panel.Controls.AddRange(new Control[] { factor_lbl, btn_solo, /*btn_ok,*/ numUD });            
         }      
         private void populate_fragtypes_treeView()
         {
@@ -1291,8 +1275,12 @@ namespace Isotope_fitting
                 Text = Fragments2[idx].Name + "  -  " + Fragments2[idx].Mz + "  -  " + Fragments2[idx].FinalFormula + "  -  " + Fragments2[idx].PPM_Error.ToString("0.##") + "  -  " +
                                        (Fragments2[idx].Factor * Fragments2[idx].Max_intensity).ToString("0"),
                 Name = idx.ToString(),
-                Tag = Fragments2[idx].Counter.ToString()
+                Tag = Fragments2[idx].Counter.ToString(),
+                Checked = Fragments2[idx].To_plot
             };
+            //this extra line is added in case of extra fragments are added while the user has already loaded and checked some other
+            //one example is when the user adds an extra fragments from the fragment calculator
+            if (Fragments2[idx].To_plot) { selectedFragments.Add(idx+1); }
             if (Fragments2[idx].Fixed)
             {
                 tr.ForeColor = Color.DarkGreen;
@@ -2543,9 +2531,7 @@ namespace Isotope_fitting
         }
         private void select_check(TreeNode node)
         {
-            if (string.IsNullOrEmpty(node.Name) && node.IsExpanded) /*node.Collapse()*/;
-            else if(string.IsNullOrEmpty(node.Name)) /*node.Expand()*/;
-            else if(node.Checked) node.Checked = false;
+            if(node.Checked) node.Checked = false;
             else node.Checked = true;
         }
         /// <summary>
@@ -4555,7 +4541,7 @@ namespace Isotope_fitting
             if (later == false && recalc)
             {
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
                 recalc = false;
             }
 
@@ -5428,7 +5414,7 @@ namespace Isotope_fitting
                 is_loading = false;
                 // post load actions                                
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
                 //listview
                 frag_listView.BeginUpdate();
                 frag_listView.Items.Clear();
@@ -5459,7 +5445,7 @@ namespace Isotope_fitting
                 Fitting_chkBox.Enabled = true;
                 // post load actions                                
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
 
             }
 
@@ -5706,7 +5692,7 @@ namespace Isotope_fitting
                 create_step_panels();
                 // post load actions                                
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
             }
         }
         private double ppm_calculator3(double centroid)
@@ -8433,18 +8419,50 @@ namespace Isotope_fitting
 
         #endregion
 
+
+        #region FORM 9 fragment calculator
         private void fragCalc_Btn_Click(object sender, EventArgs e)
         {
-            Form9 frag_Calc_form = new Form9(this);            
-            frag_Calc_form.Show();
-            
-        }
-        public void do_it()
-        {
-            if (Form9.now)
+            FormCollection fc = Application.OpenForms;
+            bool open = false;
+            foreach (Form frm in fc)
             {
-                recalculate_all_data_aligned();            
+                //iterate through
+                if (frm.Name == "Form9")
+                {
+                    open = true; frm.BringToFront();  break;
+                }      
+            }
+            if (!open)
+            {
+                Form9 frag_Calc_form = new Form9(this);
+                frag_Calc_form.Show();
+            }
+            else
+            {
+                
+                return;
             }
         }
+        public void recalc_frm9()
+        {
+            recalculate_all_data_aligned();
+        }
+        public void refresh_frm9()
+        {
+            refresh_iso_plot();
+        }
+        public void add_frag_frm9()
+        {
+            selectedFragments.Clear();
+            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            if ( fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
+        }
+        public void ending_frm9()
+        {
+            add_fragments_to_all_data();
+            recalculate_all_data_aligned();
+        }
+        #endregion
     }
 }
