@@ -81,6 +81,7 @@
             this.mz_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
@@ -148,6 +149,7 @@
             // 
             // dvw_lstBox
             // 
+            this.dvw_lstBox.CheckOnClick = true;
             this.dvw_lstBox.ColumnWidth = 40;
             this.dvw_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.dvw_lstBox.FormattingEnabled = true;
@@ -680,7 +682,7 @@
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.factor_panel9.Location = new System.Drawing.Point(327, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(344, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(458, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -693,7 +695,8 @@
             this.mz_clmn,
             z_clmn,
             this.seq_clmn,
-            this.code_clmn});
+            this.code_clmn,
+            this.ppm_clmn});
             this.fragListView9.Cursor = System.Windows.Forms.Cursors.Hand;
             this.fragListView9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fragListView9.FullRowSelect = true;
@@ -702,7 +705,7 @@
             this.fragListView9.Location = new System.Drawing.Point(327, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(344, 653);
+            this.fragListView9.Size = new System.Drawing.Size(458, 653);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -727,13 +730,19 @@
             // 
             // code_clmn
             // 
+            this.code_clmn.DisplayIndex = 6;
             this.code_clmn.Text = "Code";
+            // 
+            // ppm_clmn
+            // 
+            this.ppm_clmn.DisplayIndex = 6;
+            this.ppm_clmn.Text = "ppm";
             // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(671, 690);
+            this.ClientSize = new System.Drawing.Size(785, 690);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel_calc);
@@ -805,5 +814,6 @@
         private System.Windows.Forms.ColumnHeader mz_clmn;
         private System.Windows.Forms.ColumnHeader seq_clmn;
         private System.Windows.Forms.ColumnHeader code_clmn;
+        private System.Windows.Forms.ColumnHeader ppm_clmn;
     }
 }

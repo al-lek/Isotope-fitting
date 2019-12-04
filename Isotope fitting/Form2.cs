@@ -203,6 +203,7 @@ namespace Isotope_fitting
         List<string> labels_checked = new List<string>();
         #endregion
 
+
         #region  Constants for the SendMessage() method.
         private const int WM_HSCROLL = 276;
         private const int SB_LEFT = 6;
@@ -211,6 +212,18 @@ namespace Isotope_fitting
                                           int wParam, int lParam);
 
         #endregion
+
+        #region tooltip tree_view
+
+        private const int InitialToolTipDelay =1, MaxToolTipDisplayTime = 4000;
+
+        private ToolTip toolTip = new ToolTip();
+        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        private TreeNode toolTipNode;
+        string tool_text = "";
+        #endregion
+
+
         #endregion
 
         #region parameter set tab DIAGRAMS
@@ -250,6 +263,11 @@ namespace Isotope_fitting
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
             load_preferences();
+
+
+            toolTip.IsBalloon = false;
+            timer.Tick += new EventHandler(timer_Tick);
+
         }
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
@@ -261,6 +279,37 @@ namespace Isotope_fitting
                 // ..and afterwards we scroll to the left again!
                 SendMessage(frag_tree.Handle, WM_HSCROLL, SB_LEFT, 0);
             }           
+        }
+        void timer_Tick(object sender, EventArgs e)
+        {
+            timer.Stop();
+            if (timer.Interval == InitialToolTipDelay)
+            {
+                Point mousePos = fit_tree.PointToClient(MousePosition);
+
+                // Show the ToolTip if the mouse is still over the same node.
+                if (toolTipNode.Bounds.Contains(mousePos))
+                {
+                    // Node location in treeView coordinates.
+                    Point loc = toolTipNode.Bounds.Location;
+
+                    // Node location in form client coordinates.
+                    loc.Offset(fit_tree.Location);
+
+                    // Make balloon point to upper right corner of the node.
+                    loc.Offset(toolTipNode.Bounds.Width , 0);
+
+                    toolTip.Show(tool_text, bigPanel, loc);
+
+                    timer.Interval = MaxToolTipDisplayTime;
+                    timer.Start();
+                }
+            }
+            else
+            {
+                // Maximium ToolTip display time exceeded.
+                toolTip.Hide(this);
+            }
         }
 
         #region TAB FIT
@@ -2120,7 +2169,7 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             // init tree view
-            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = true,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
+            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = false,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
@@ -2129,7 +2178,8 @@ namespace Isotope_fitting
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node);  };     
             fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
-            
+            fit_tree.NodeMouseHover += (s, e) => { fit_tree_tooltip(e.Node); };
+            fit_tree.MouseLeave += (s, e) => {timer.Stop();toolTip.Hide(this);};
             // interpret fitted results
             fit_tree.BeginUpdate();
             for (int i = 0; i < all_fitted_results.Count; i++)
@@ -2158,25 +2208,25 @@ namespace Isotope_fitting
                             tmp += "SSE:" + all_fitted_results[i][j][all_fitted_results[i][j].Length - 3].ToString("0.###e0" + " ");
                             tmp += "di:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 4], 3).ToString() + "% ";
 
-                            sb.AppendLine("A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%" + "    " + "ei:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 5], 2).ToString() + "%" + "    " + "di':" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 6], 2).ToString() + "%");
-                            sb.AppendLine();                           
-                            for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
-                            {
-                                string pp1,pp2,pp3,pp4,pp5,pp6,pp7;                                
-                                pp1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(30);//fragment name
-                                pp2 = "(m/z)"+ Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20);//fragments m/z
-                                pp3 = "(di)"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(20);//fragment's di
-                                pp4 = "(sd)"+("±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString()).PadRight(20);//fragment's sd
-                                pp5 = "(ei)"+ (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 3], 2).ToString() + "%").PadRight(20);//fragment's ei
-                                pp6 = "(di')"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length*4], 3).ToString() + "%").PadRight(20);//fragment's di'
-                                pp7 = "(sd')"+Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 5], 3).ToString().PadRight(20);//fragment's sd'
-                                sb.AppendLine(pp1 + pp2 + pp3 + pp4 +pp5+pp6+pp7);
-                            }
+                            //sb.AppendLine("A:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 2], 2).ToString() + "%" + "    " + "ei:" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 5], 2).ToString() + "%" + "    " + "di':" + Math.Round(all_fitted_results[i][j][all_fitted_results[i][j].Length - 6], 2).ToString() + "%");
+                            //sb.AppendLine();                           
+                            //for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
+                            //{
+                            //    string pp1,pp2,pp3,pp4,pp5,pp6,pp7;                                
+                            //    pp1 = Fragments2[all_fitted_sets[i][j][k] - 1].Name.PadRight(30);//fragment name
+                            //    pp2 = "(m/z)"+ Fragments2[all_fitted_sets[i][j][k] - 1].Mz.PadRight(20);//fragments m/z
+                            //    pp3 = "(di)"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length], 3).ToString() + "%").PadRight(20);//fragment's di
+                            //    pp4 = "(sd)"+("±" + Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 2], 2).ToString()).PadRight(20);//fragment's sd
+                            //    pp5 = "(ei)"+ (Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 3], 2).ToString() + "%").PadRight(20);//fragment's ei
+                            //    pp6 = "(di')"+(Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length*4], 3).ToString() + "%").PadRight(20);//fragment's di'
+                            //    pp7 = "(sd')"+Math.Round(all_fitted_results[i][j][k + all_fitted_sets[i][j].Length * 5], 3).ToString().PadRight(20);//fragment's sd'
+                            //    sb.AppendLine(pp1 + pp2 + pp3 + pp4 +pp5+pp6+pp7);
+                            //}
                             TreeNode tr = new TreeNode
                             {
                                 Text = tmp,
-                                Name = i.ToString() + " " + j.ToString(),
-                                ToolTipText = sb.ToString()
+                                Name = i.ToString() + " " + j.ToString()
+                                //ToolTipText = sb.ToString()
                             };                            
                             fit_tree.Nodes[i].Nodes.Add(tr);
                         }                       
@@ -2188,6 +2238,38 @@ namespace Isotope_fitting
             remove_child_nodes();            
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
             uncheckall_Frag();
+        }
+        private void fit_tree_tooltip(TreeNode fitnode)
+        {
+            string idx_str = fitnode.Name;
+            if (string.IsNullOrEmpty(idx_str)) return;
+            string[] idx_str_arr = idx_str.Split(' ');
+            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("A:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 2], 2).ToString() + "%" + "    " + "ei:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 5], 2).ToString() + "%" + "    " + "di':" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 6], 2).ToString() + "%");
+            sb.AppendLine();
+            for (int k = 0; k < all_fitted_sets[set_idx][set_pos_idx].Length; k++)
+            {
+                string pp1, pp2, pp3, pp4, pp5, pp6, pp7;
+                pp1 = Fragments2[all_fitted_sets[set_idx][set_pos_idx][k] - 1].Name.PadRight(30);//fragment name
+                pp2 = "(m/z)" + Fragments2[all_fitted_sets[set_idx][set_pos_idx][k] - 1].Mz.PadRight(20);//fragments m/z
+                pp3 = "(di)" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%").PadRight(20);//fragment's di
+                pp4 = "(sd)" + ("±" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 2], 2).ToString()).PadRight(20);//fragment's sd
+                pp5 = "(ei)" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%").PadRight(20);//fragment's ei
+                pp6 = "(di')" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%").PadRight(20);//fragment's di'
+                pp7 = "(sd')" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 5], 3).ToString();//fragment's sd'
+                sb.AppendLine(pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7);
+            }
+            tool_text = sb.ToString();
+            timer.Stop();
+            toolTip.Hide(this);
+
+            toolTipNode = fitnode;
+
+            timer.Interval = InitialToolTipDelay;
+            timer.Start();
         }
         private void remove_child_nodes()
         {

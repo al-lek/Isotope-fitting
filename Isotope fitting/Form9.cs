@@ -113,6 +113,7 @@ namespace Isotope_fitting
                 listviewitem.SubItems.Add(fra.Charge.ToString());
                 listviewitem.SubItems.Add(fra.FinalFormula.ToString());
                 listviewitem.SubItems.Add(fra.Counter.ToString());
+                listviewitem.SubItems.Add(fra.PPM_Error.ToString());
 
                 fragListView9.Items.Add(listviewitem);
             }
@@ -185,10 +186,6 @@ namespace Isotope_fitting
             numUD.Leave += (s, e) => { numUD.Focus(); };
              factor_panel9.Controls.AddRange(new Control[] { factor_lbl, numUD });
             factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
-        }
-        private void clear_FragListview9()
-        {
-
         }
         #endregion
 
@@ -534,8 +531,6 @@ namespace Isotope_fitting
 
         #endregion
 
-        
-
         #region insert fragment to Fragments2
         private void insert_Btn_Click(object sender, EventArgs e)
         {
@@ -573,7 +568,7 @@ namespace Isotope_fitting
                     ListName = new string[4],
                     Fix = 1.0,
                     Max_intensity = 0.0,
-                    Fixed = true,
+                    Fixed = false,
                 });
 
                 Fragments2.Last().Centroid = Fragments3[selected_idx].Centroid.Select(point => point.DeepCopy()).ToList();
@@ -616,6 +611,5 @@ namespace Isotope_fitting
             frm2.ending_frm9();
         }
 
-        
     }
 }
