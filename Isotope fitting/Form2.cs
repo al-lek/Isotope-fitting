@@ -2296,7 +2296,7 @@ namespace Isotope_fitting
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
         {
             // The code only executes if the user caused the checked state to change.
-            if (e.Action== TreeViewAction.ByMouse && !string.IsNullOrEmpty(e.Node.Name) && !e.Node.Checked)
+            if ((e.Action== TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard) && !string.IsNullOrEmpty(e.Node.Name) && !e.Node.Checked)
             {
                 // for all the nodes in the tree which are not the freshly checked one uncheck them
                 block_fit_refresh = true;
