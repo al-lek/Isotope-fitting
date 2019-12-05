@@ -512,10 +512,10 @@ namespace Isotope_fitting
 
             // copy experimental to all_data
             experimental_to_all_data();
-            recalculate_all_data_aligned();           
+            recalculate_all_data_aligned();
 
             //// add experimental to plot
-            //refresh_iso_plot();
+            refresh_iso_plot();
 
             start_idx = 0;
             end_idx = experimental.Count;
@@ -1292,7 +1292,7 @@ namespace Isotope_fitting
             };
             //this extra line is added in case of extra fragments are added while the user has already loaded and checked some other
             //one example is when the user adds an extra fragments from the fragment calculator
-            if (Fragments2[idx].To_plot) { selectedFragments.Add(idx+1); }
+            if (Fragments2[idx].To_plot) { if (!selectedFragments.Contains(idx + 1)) { selectedFragments.Add(idx + 1); } }
             if (Fragments2[idx].Fixed)
             {
                 tr.ForeColor = Color.DarkGreen;
@@ -1521,7 +1521,10 @@ namespace Isotope_fitting
             sw1.Stop(); Debug.WriteLine("All data aligned(M): " + sw1.ElapsedMilliseconds.ToString());
 
             progress_display_stop();
+            
             Invoke(new Action(() => OnRecalculate_completed()));
+            
+
             return aligned_intensities;
         }
 
@@ -3717,6 +3720,7 @@ namespace Isotope_fitting
                 }
                 populate_fragtypes_treeView();
                 file.Flush(); file.Close(); file.Dispose();
+                MessageBox.Show("completed");
             }
         }
         private void loadList()
@@ -4347,7 +4351,7 @@ namespace Isotope_fitting
         }
         private void saveListBtn11_Click(object sender, EventArgs e)
         {
-            saveList(selectedFragments);
+            saveList(selectedFragments.ToList());
         }
 
         private void loadListBtn11_Click(object sender, EventArgs e)
@@ -4593,7 +4597,7 @@ namespace Isotope_fitting
             if (later == false && recalc)
             {
                 recalculate_all_data_aligned();
-                //refresh_iso_plot();
+                refresh_iso_plot();
                 recalc = false;
             }
 
@@ -5466,7 +5470,7 @@ namespace Isotope_fitting
                 is_loading = false;
                 // post load actions                                
                 recalculate_all_data_aligned();
-                //refresh_iso_plot();
+                refresh_iso_plot();
                 //listview
                 frag_listView.BeginUpdate();
                 frag_listView.Items.Clear();
@@ -5497,7 +5501,7 @@ namespace Isotope_fitting
                 Fitting_chkBox.Enabled = true;
                 // post load actions                                
                 recalculate_all_data_aligned();
-                //refresh_iso_plot();
+                refresh_iso_plot();
 
             }
 
@@ -5744,7 +5748,7 @@ namespace Isotope_fitting
                 create_step_panels();
                 // post load actions                                
                 recalculate_all_data_aligned();
-                //refresh_iso_plot();
+                refresh_iso_plot();
             }
         }
         private double ppm_calculator3(double centroid)
@@ -8510,8 +8514,19 @@ namespace Isotope_fitting
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             if ( fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
         }
+
+        private void ax_window_Click(object sender, EventArgs e)
+        {
+            //Form plot = new Form() { };
+            //plot.Controls.AddRange(new Control[] { });
+            //plot.Show();
+            //plot.FormClosing += (s, f) => { };
+
+        }
+
         public void ending_frm9()
         {
+            all_data.RemoveRange(1, all_data.Count - 1);
             add_fragments_to_all_data();
             recalculate_all_data_aligned();
         }
