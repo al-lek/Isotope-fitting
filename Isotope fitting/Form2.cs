@@ -1296,7 +1296,8 @@ namespace Isotope_fitting
             if (Fragments2[idx].Fixed)
             {
                 tr.ForeColor = Color.DarkGreen;
-            }                      
+            }
+            selectedFragments = selectedFragments.OrderBy(p => p).ToList();
             return tr;
         }
 
