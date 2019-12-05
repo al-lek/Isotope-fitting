@@ -217,9 +217,7 @@ namespace Isotope_fitting
 
         private const int InitialToolTipDelay =1, MaxToolTipDisplayTime = 4000;
 
-        private ToolTip toolTip = new ToolTip();
-        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-        private TreeNode toolTipNode;
+        private ToolTip toolTip = new ToolTip() { InitialDelay=1,IsBalloon=false,ReshowDelay=1,UseFading=true,AutoPopDelay=5000};      
         string tool_text = "";
         #endregion
 
@@ -264,10 +262,6 @@ namespace Isotope_fitting
             reset_all();
             load_preferences();
 
-
-            toolTip.IsBalloon = false;
-            timer.Tick += new EventHandler(timer_Tick);
-
         }
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
@@ -279,38 +273,7 @@ namespace Isotope_fitting
                 // ..and afterwards we scroll to the left again!
                 SendMessage(frag_tree.Handle, WM_HSCROLL, SB_LEFT, 0);
             }           
-        }
-        void timer_Tick(object sender, EventArgs e)
-        {
-            timer.Stop();
-            if (timer.Interval == InitialToolTipDelay)
-            {
-                Point mousePos = fit_tree.PointToClient(MousePosition);
-
-                // Show the ToolTip if the mouse is still over the same node.
-                if (toolTipNode.Bounds.Contains(mousePos))
-                {
-                    // Node location in treeView coordinates.
-                    Point loc = toolTipNode.Bounds.Location;
-
-                    // Node location in form client coordinates.
-                    loc.Offset(fit_tree.Location);
-
-                    // Make balloon point to upper right corner of the node.
-                    loc.Offset(toolTipNode.Bounds.Width , 0);
-
-                    toolTip.Show(tool_text, bigPanel, loc);
-
-                    timer.Interval = MaxToolTipDisplayTime;
-                    timer.Start();
-                }
-            }
-            else
-            {
-                // Maximium ToolTip display time exceeded.
-                toolTip.Hide(this);
-            }
-        }
+        }        
 
         #region TAB FIT
         // UI UncheckAll()
@@ -2178,8 +2141,10 @@ namespace Isotope_fitting
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node);  };     
             fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
-            fit_tree.NodeMouseHover += (s, e) => { fit_tree_tooltip(e.Node); };
-            fit_tree.MouseLeave += (s, e) => {timer.Stop();toolTip.Hide(this);};
+            fit_tree.NodeMouseHover += (s, e) => {toolTip.Hide(fit_tree); fit_tree_tooltip(e.Node); };
+            fit_tree.MouseLeave += (s, e) => {toolTip.Hide(fit_tree);};
+            fit_tree.MouseHover += (s, e) => { toolTip.Hide(fit_tree); };
+
             // interpret fitted results
             fit_tree.BeginUpdate();
             for (int i = 0; i < all_fitted_results.Count; i++)
@@ -2262,14 +2227,19 @@ namespace Isotope_fitting
                 pp7 = "(sd')" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 5], 3).ToString();//fragment's sd'
                 sb.AppendLine(pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7);
             }
-            tool_text = sb.ToString();
-            timer.Stop();
-            toolTip.Hide(this);
+            tool_text = sb.ToString();   
+           
+            // Node location in treeView coordinates.
+            Point loc = fitnode.Bounds.Location;
 
-            toolTipNode = fitnode;
+            // Node location in form client coordinates.
+            loc.Offset(fit_tree.Location);
 
-            timer.Interval = InitialToolTipDelay;
-            timer.Start();
+            // Make balloon point to upper right corner of the node.
+            loc.Offset(fitnode.Bounds.Width, 0);
+
+            toolTip.Show(tool_text, fit_tree, loc);
+           
         }
         private void remove_child_nodes()
         {
