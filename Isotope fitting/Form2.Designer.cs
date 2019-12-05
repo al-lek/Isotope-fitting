@@ -234,6 +234,13 @@ namespace Isotope_fitting
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.ax_window = new System.Windows.Forms.ToolStripButton();
+            this.disp_a = new System.Windows.Forms.ToolStripButton();
+            this.disp_b = new System.Windows.Forms.ToolStripButton();
+            this.disp_c = new System.Windows.Forms.ToolStripButton();
+            this.disp_x = new System.Windows.Forms.ToolStripButton();
+            this.disp_y = new System.Windows.Forms.ToolStripButton();
+            this.disp_z = new System.Windows.Forms.ToolStripButton();
+            this.disp_internal = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -353,7 +360,14 @@ namespace Isotope_fitting
             this.fragPlotLbl_chkBx2,
             this.toolStripButton2,
             this.toolStripButton3,
-            this.rel_res_chkBx});
+            this.rel_res_chkBx,
+            this.disp_a,
+            this.disp_b,
+            this.disp_c,
+            this.disp_x,
+            this.disp_y,
+            this.disp_z,
+            this.disp_internal});
             this.toolStrip_plot.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_plot.Name = "toolStrip_plot";
             this.toolStrip_plot.Size = new System.Drawing.Size(605, 27);
@@ -2587,7 +2601,7 @@ namespace Isotope_fitting
             this.ax_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ax_toolStrip.Location = new System.Drawing.Point(2, 0);
             this.ax_toolStrip.Name = "ax_toolStrip";
-            this.ax_toolStrip.Size = new System.Drawing.Size(32, 96);
+            this.ax_toolStrip.Size = new System.Drawing.Size(24, 77);
             this.ax_toolStrip.TabIndex = 24;
             // 
             // axSave_Btn
@@ -2596,7 +2610,7 @@ namespace Isotope_fitting
             this.axSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axSave_Btn.Image")));
             this.axSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.axSave_Btn.Name = "axSave_Btn";
-            this.axSave_Btn.Size = new System.Drawing.Size(30, 22);
+            this.axSave_Btn.Size = new System.Drawing.Size(22, 22);
             this.axSave_Btn.Text = "Save";
             // 
             // axCopy_Btn
@@ -2605,7 +2619,7 @@ namespace Isotope_fitting
             this.axCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axCopy_Btn.Image")));
             this.axCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.axCopy_Btn.Name = "axCopy_Btn";
-            this.axCopy_Btn.Size = new System.Drawing.Size(30, 22);
+            this.axCopy_Btn.Size = new System.Drawing.Size(22, 22);
             this.axCopy_Btn.Text = "Copy";
             // 
             // ax_Pnl
@@ -2849,9 +2863,113 @@ namespace Isotope_fitting
             this.ax_window.Image = ((System.Drawing.Image)(resources.GetObject("ax_window.Image")));
             this.ax_window.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ax_window.Name = "ax_window";
-            this.ax_window.Size = new System.Drawing.Size(30, 22);
+            this.ax_window.Size = new System.Drawing.Size(22, 22);
             this.ax_window.Text = "Open Window";
             this.ax_window.Click += new System.EventHandler(this.ax_window_Click);
+            // 
+            // disp_a
+            // 
+            this.disp_a.Checked = true;
+            this.disp_a.CheckOnClick = true;
+            this.disp_a.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_a.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_a.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_a.ForeColor = System.Drawing.Color.Green;
+            this.disp_a.Image = ((System.Drawing.Image)(resources.GetObject("disp_a.Image")));
+            this.disp_a.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_a.Name = "disp_a";
+            this.disp_a.Size = new System.Drawing.Size(23, 24);
+            this.disp_a.Text = "a";
+            this.disp_a.ToolTipText = "Control whether this primary fragment will appear to plot";
+            // 
+            // disp_b
+            // 
+            this.disp_b.Checked = true;
+            this.disp_b.CheckOnClick = true;
+            this.disp_b.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_b.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_b.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_b.ForeColor = System.Drawing.Color.Blue;
+            this.disp_b.Image = ((System.Drawing.Image)(resources.GetObject("disp_b.Image")));
+            this.disp_b.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_b.Name = "disp_b";
+            this.disp_b.Size = new System.Drawing.Size(23, 24);
+            this.disp_b.Text = "b";
+            this.disp_b.ToolTipText = "Control whether this primary fragment will appear to plot";
+            // 
+            // disp_c
+            // 
+            this.disp_c.Checked = true;
+            this.disp_c.CheckOnClick = true;
+            this.disp_c.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_c.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_c.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_c.ForeColor = System.Drawing.Color.Firebrick;
+            this.disp_c.Image = ((System.Drawing.Image)(resources.GetObject("disp_c.Image")));
+            this.disp_c.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_c.Name = "disp_c";
+            this.disp_c.Size = new System.Drawing.Size(23, 24);
+            this.disp_c.Text = "c";
+            this.disp_c.ToolTipText = "Control whether this primary fragment will appear to plot";
+            // 
+            // disp_x
+            // 
+            this.disp_x.Checked = true;
+            this.disp_x.CheckOnClick = true;
+            this.disp_x.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_x.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_x.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_x.ForeColor = System.Drawing.Color.Lime;
+            this.disp_x.Image = ((System.Drawing.Image)(resources.GetObject("disp_x.Image")));
+            this.disp_x.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_x.Name = "disp_x";
+            this.disp_x.Size = new System.Drawing.Size(23, 24);
+            this.disp_x.Text = "x";
+            this.disp_x.ToolTipText = "Control whether this primary fragment will appear to plot";
+            // 
+            // disp_y
+            // 
+            this.disp_y.Checked = true;
+            this.disp_y.CheckOnClick = true;
+            this.disp_y.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_y.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_y.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_y.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.disp_y.Image = ((System.Drawing.Image)(resources.GetObject("disp_y.Image")));
+            this.disp_y.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_y.Name = "disp_y";
+            this.disp_y.Size = new System.Drawing.Size(23, 24);
+            this.disp_y.Text = "y";
+            this.disp_y.ToolTipText = "Control whether this primary fragment will appear to plot";
+            // 
+            // disp_z
+            // 
+            this.disp_z.Checked = true;
+            this.disp_z.CheckOnClick = true;
+            this.disp_z.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_z.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_z.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_z.ForeColor = System.Drawing.Color.Tomato;
+            this.disp_z.Image = ((System.Drawing.Image)(resources.GetObject("disp_z.Image")));
+            this.disp_z.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_z.Name = "disp_z";
+            this.disp_z.Size = new System.Drawing.Size(23, 24);
+            this.disp_z.Text = "z";
+            this.disp_z.ToolTipText = "Control whether this primary fragment will appear to plot";
+            // 
+            // disp_internal
+            // 
+            this.disp_internal.Checked = true;
+            this.disp_internal.CheckOnClick = true;
+            this.disp_internal.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.disp_internal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.disp_internal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.disp_internal.ForeColor = System.Drawing.Color.Violet;
+            this.disp_internal.Image = ((System.Drawing.Image)(resources.GetObject("disp_internal.Image")));
+            this.disp_internal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disp_internal.Name = "disp_internal";
+            this.disp_internal.Size = new System.Drawing.Size(64, 24);
+            this.disp_internal.Text = "internal";
             // 
             // Form2
             // 
@@ -3137,5 +3255,12 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton fragCalc_Btn;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.ToolStripButton ax_window;
+        private System.Windows.Forms.ToolStripButton disp_a;
+        private System.Windows.Forms.ToolStripButton disp_b;
+        private System.Windows.Forms.ToolStripButton disp_c;
+        private System.Windows.Forms.ToolStripButton disp_x;
+        private System.Windows.Forms.ToolStripButton disp_y;
+        private System.Windows.Forms.ToolStripButton disp_z;
+        private System.Windows.Forms.ToolStripButton disp_internal;
     }
 }

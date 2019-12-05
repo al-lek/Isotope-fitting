@@ -2700,9 +2700,47 @@ namespace Isotope_fitting
         #region refresh plot
         private void refresh_iso_plot()
         {
-            // 0.a gather info on which fragments are selected to plot, and their respective intensities
-            List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
+            //// 0.a gather info on which fragments are selected to plot, and their respective intensities
+            //List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
+            List<int> to_plot = new List<int>();
+            //0.a add only the desired fragments to to_plot
+            foreach (int idx in selectedFragments)
+            {
+                string ion = Fragments2[idx - 1].Ion_type;
+                if (ion.StartsWith("a")|| ion.StartsWith("(a"))
+                {
+                    if (disp_a.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("b")|| ion.StartsWith("(b"))
+                {
+                    if (disp_b.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("c")|| ion.StartsWith("(c"))
+                {
+                    if (disp_c.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("x")|| ion.StartsWith("(x"))
+                {
+                    if (disp_x.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("y")|| ion.StartsWith("(y"))
+                {
+                    if (disp_y.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("z")|| ion.StartsWith("(z"))
+                {
+                    if (disp_z.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.Contains("inter"))
+                {
+                    if (disp_internal.Checked) { to_plot.Add(idx); }
+                }
+                else
+                {
+                    to_plot.Add(idx);
+                }
 
+            }
             // 0.b. reset iso plot
             reset_iso_plot();
 
@@ -2710,7 +2748,7 @@ namespace Isotope_fitting
             recalculate_fitted_residual(to_plot);
 
             // 1.b Add the experimental to plot if selected
-            if (plotExp_chkBox.Checked)
+            if (plotExp_chkBox.Checked && all_data.Count>0)
             {
                 (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
                 for (int j = 0; j < all_data[0].Count; j++)
@@ -2718,7 +2756,7 @@ namespace Isotope_fitting
             }
 
             // 2. replot all isotopes
-            if (plotFragProf_chkBox.Checked)
+            if (plotFragProf_chkBox.Checked && all_data.Count > 0)
             {
                 for (int i = 0; i < to_plot.Count; i++)
                 {
@@ -2746,7 +2784,7 @@ namespace Isotope_fitting
                         (iso_plot.Model.Series[Fragments2.Count+1] as LineSeries).Points.Add(new DataPoint(all_data.Last()[j][0], Form9.Fragments3[Form9.selected_idx].Factor * all_data.Last()[j][1]));
                 }
             }
-            if (plotFragCent_chkBox.Checked)
+            if (plotFragCent_chkBox.Checked && all_data.Count > 0)
             {
                 int help=Convert.ToInt32(Form9.now);
                 for (int i = 0; i < to_plot.Count; i++)
@@ -2786,7 +2824,7 @@ namespace Isotope_fitting
                 }
             }          
             // 3. fitted plot
-            if (summation.Count > 0)
+            if (summation.Count > 0 )
                 if (Fitting_chkBox.Checked)
                     for (int j = 0; j < summation.Count; j++)
                         (iso_plot.Model.Series[(all_data.Count*2)-1] as LineSeries).Points.Add(new DataPoint(summation[j][0], summation[j][1]));
@@ -2920,6 +2958,7 @@ namespace Isotope_fitting
             OxyColor clr = OxyColor.FromUInt32((uint)custom_colors[idx]);
             return clr;
         }
+
         #endregion
 
         #region OxyPlot
@@ -3977,6 +4016,20 @@ namespace Isotope_fitting
             filename_txtBx.Text = file_name;
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
             progress_display_init();
+            disp_a.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_b.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_c.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_x.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_y.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_z.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_internal.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            disp_a.Checked=true;
+            disp_b.Checked = true;
+            disp_c.Checked = true;
+            disp_x.Checked = true;
+            disp_y.Checked = true;
+            disp_z.Checked = true;
+            disp_internal.Checked = true;
 
             #region unused
             ////index menu for fragment type ckeckboxes
@@ -4429,6 +4482,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
+                plotExp_chkBox.Checked = false;plotCentr_chkBox.Checked = false;plotFragCent_chkBox.Checked = false;plotFragProf_chkBox.Checked = false;
                 loaded_lists = ""; show_files_Btn.ToolTipText = "";
                 reset_all();
                 displayPeakList_btn.Enabled = false;
@@ -7813,13 +7867,16 @@ namespace Isotope_fitting
 
         #endregion
         #endregion
-
-
+        
+        
+        
         #region TAB DIAGRAMS
         private void tabFit_Leave(object sender, EventArgs e)
         {
             initialize_ions_todraw(); initialize_plot_tabs();
         }
+
+
         #region sequence
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
@@ -7939,6 +7996,7 @@ namespace Isotope_fitting
 
         #endregion
 
+
         #region fragments' diagrams
         private void initialize_tabs()
         {
@@ -7947,7 +8005,7 @@ namespace Isotope_fitting
             if (ax_plot != null) ax_plot.Dispose();
             ax_plot = new PlotView() { Name = "ax_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
             ax_Pnl.Controls.Add(ax_plot);
-            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
+            PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green};
             ax_plot.Model = ax_model;
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
             ax_model.Axes.Add(linearAxis1);
@@ -8122,12 +8180,12 @@ namespace Isotope_fitting
 
             if (index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
 
-            LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 0.5 };
-            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.Lime, BarWidth = 0.5 };
-            LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 0.5 };
-            LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 0.5 };
-            LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 0.5 };
-            LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 0.5 };            
+            LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 1 };
+            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.Lime, BarWidth = 1 };
+            LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 1 };
+            LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 1 };
+            LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 1 };
+            LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 1 };            
             ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
 
             ScatterSeries a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
@@ -8196,7 +8254,7 @@ namespace Isotope_fitting
                         merged_a.Last()[1] += nn.Max_intensity;
                     }
                     if (max_a < merged_a.Last()[1]) { max_a = merged_a.Last()[1]; }
-
+                    if (maxcharge_a< nn.Charge) { maxcharge_a = nn.Charge; }
                 }
                 else if (nn.Ion_type.StartsWith("b"))
                 {
@@ -8215,6 +8273,7 @@ namespace Isotope_fitting
                         merged_b.Last()[1] += nn.Max_intensity;
                     }
                     if (max_b < merged_b.Last()[1]) { max_b = merged_b.Last()[1]; }
+                    if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
                 }
                 else if (nn.Ion_type.StartsWith("c"))
                 {
@@ -8233,6 +8292,7 @@ namespace Isotope_fitting
                         merged_c.Last()[1] += nn.Max_intensity;
                     }
                     if (max_c < merged_c.Last()[1]) { max_c = merged_c.Last()[1]; }
+                    if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
                 }
                 else if (nn.Ion_type.StartsWith("x"))
                 {
@@ -8251,6 +8311,7 @@ namespace Isotope_fitting
                         merged_x.Last()[1] -= nn.Max_intensity;
                     }
                     if (max_a < -merged_x.Last()[1]) { max_a = -merged_x.Last()[1]; }
+                    if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
                 }
                 else if (nn.Ion_type.StartsWith("y"))
                 {
@@ -8269,6 +8330,7 @@ namespace Isotope_fitting
                         merged_y.Last()[1] -= nn.Max_intensity;
                     }
                     if (max_b < -merged_y.Last()[1]) { max_b = -merged_y.Last()[1]; }
+                    if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
                 }
                 else if (nn.Ion_type.StartsWith("z"))
                 {
@@ -8287,6 +8349,7 @@ namespace Isotope_fitting
                         merged_z.Last()[1] -= nn.Max_intensity;
                     }
                     if (max_c < -merged_z.Last()[1]) { max_c = -merged_z.Last()[1]; }
+                    if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
                 }
                 else if (nn.Ion_type.StartsWith("inter"))
                 {
@@ -8358,16 +8421,18 @@ namespace Isotope_fitting
             {
                 if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
                 {
-                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a - 3000)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b - 3000)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c - 3000));
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a *1.3)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b * 1.3)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c * 1.3));
                 }
                 else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
                 {
-                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a + 3000)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b + 3000)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c + 3000));
+                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a * 1.3)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b * 1.3)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c * 1.3));
                 }
             }
             ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
             ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
+            axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;
+
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true);
 
             if (IonDrawIndexTo.Count() > 0)
@@ -8471,10 +8536,11 @@ namespace Isotope_fitting
         }
 
 
+        #endregion
+
 
         #endregion
 
-        #endregion
 
 
         #region FORM 9 fragment calculator
