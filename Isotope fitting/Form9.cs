@@ -610,6 +610,5 @@ namespace Isotope_fitting
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
         }
-
     }
 }

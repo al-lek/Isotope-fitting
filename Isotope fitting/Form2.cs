@@ -221,8 +221,21 @@ namespace Isotope_fitting
         string tool_text = "";
         #endregion
 
+        #region plot area format tab1
 
         #endregion
+        public OxyColor fit_color = OxyColors.Black;
+        public int exp_color = OxyColors.Black.ToColor().ToArgb();
+
+        public LineStyle fit_style = LineStyle.Dot;
+        public LineStyle exper_style = LineStyle.Solid;
+        public LineStyle frag_style = LineStyle.Solid;
+        public double exp_width = 1;
+        public double frag_width = 2;
+        public double fit_width = 1;
+        #endregion
+
+
 
         #region parameter set tab DIAGRAMS
         List<ion> IonDraw = new List<ion>();
@@ -507,8 +520,8 @@ namespace Isotope_fitting
             fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
 
             // set experimental line color to black
-            if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-            else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+            if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+            else custom_colors.Add(exp_color);
 
             // copy experimental to all_data
             experimental_to_all_data();
@@ -789,7 +802,7 @@ namespace Isotope_fitting
             Fragments2.Clear();
             selectedFragments.Clear();
             custom_colors.Clear();
-            custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+            custom_colors.Add(exp_color);
             sw1.Reset(); sw1.Start();
             List<ChemiForm> selected_fragments = select_fragments2();
             if (selected_fragments == null) return;
@@ -1106,7 +1119,7 @@ namespace Isotope_fitting
         private void add_fragments_to_all_data()
         {
             // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
-            if (all_data.Count == 0) { all_data.Add(new List<double[]>()); custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
+            if (all_data.Count == 0) { all_data.Add(new List<double[]>()); custom_colors.Clear(); custom_colors.Add(exp_color); }
 
             // !!!needs rework for recalculating
             int existing_fragments = all_data.Count - 1;
@@ -2868,8 +2881,8 @@ namespace Isotope_fitting
                 {
                     cc = get_fragment_color(i);
                 }
-                LineSeries tmp = new LineSeries() { StrokeThickness = 2, Color = cc };
-                if (i == 0) tmp.StrokeThickness = 1;
+                LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
+                if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
                 iso_plot.Model.Series.Add(tmp);
             }
             for (int i = 1; i < all_data.Count; i++)
@@ -2891,7 +2904,7 @@ namespace Isotope_fitting
             }
             if (insert_exp == true)
             {
-                LineSeries fit = new LineSeries() { StrokeThickness = 1, Color = OxyColors.Black, LineStyle = LineStyle.Dot };
+                LineSeries fit = new LineSeries() { StrokeThickness = fit_width, Color = fit_color, LineStyle = fit_style };
                 iso_plot.Model.Series.Add(fit);
             }
             res_plot.Model.Series.Clear();
@@ -3823,8 +3836,8 @@ namespace Isotope_fitting
                                 if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
                                 {
                                     all_data.Add(new List<double[]>());
-                                    if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                                    else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                    if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                    else custom_colors.Add(exp_color);
                                 }
                                 f++;
                                 fitted_chem.Add(new ChemiForm
@@ -3896,7 +3909,7 @@ namespace Isotope_fitting
             Fragments2.Clear();
             plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             custom_colors.Clear();
-            custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+            custom_colors.Add(exp_color);
             aligned_intensities.Clear();
             all_data_aligned.Clear();
             fitted_results.Clear();
@@ -4578,7 +4591,10 @@ namespace Isotope_fitting
             all_data.Clear();
             file_name = "";
             if (all_fitted_results!=null) {all_fitted_results.Clear(); all_fitted_sets.Clear();}
-        }
+            fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
+            fit_style = LineStyle.Dot;exper_style = LineStyle.Solid;frag_style = LineStyle.Solid;
+            exp_width = 1;frag_width = 2;fit_width = 1;
+    }
         private List<double> get_UI_intensities2(int[] subSet, double max = 1.0, bool optimizer_default = false, bool window = false, int w = 1)
         {
             //(Μ)to subset einai to to_plot se array to opoio perieei touw indexes tvn epilegmenvn fragments
@@ -5475,14 +5491,14 @@ namespace Isotope_fitting
                             if (isotope_count == 0 && all_data.Count > 0)//experimental
                             {
                                 all_data[0].Clear();
-                                if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                                else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                else custom_colors.Add(exp_color);
                             }
                             else if (isotope_count == 0)//experimental
                             {
                                 all_data.Add(new List<double[]>());
-                                if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                                else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                else custom_colors.Add(exp_color);
                             }
                             else//fragments
                             {
@@ -5732,14 +5748,14 @@ namespace Isotope_fitting
                             if (isotope_count == 0 && all_data.Count > 0)//experimental
                             {
                                 all_data[0].Clear();
-                                if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                                else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                else custom_colors.Add(exp_color);
                             }
                             else if (isotope_count == 0)//experimental
                             {
                                 all_data.Add(new List<double[]>());
-                                if (custom_colors.Count > 0) custom_colors[0] = OxyColors.Black.ToColor().ToArgb();
-                                else custom_colors.Add(OxyColors.Black.ToColor().ToArgb());
+                                if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                else custom_colors.Add(exp_color);
                             }
                             else//fragments
                             {
@@ -8583,6 +8599,12 @@ namespace Isotope_fitting
             selectedFragments.Clear();
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             if ( fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
+        }
+
+        private void styleFormatBtn_Click(object sender, EventArgs e)
+        {
+            Form10 frm10 = new Form10(this);
+            frm10.ShowDialog();
         }
 
         public void ending_frm9()

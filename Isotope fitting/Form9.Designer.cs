@@ -730,12 +730,10 @@
             // 
             // code_clmn
             // 
-            this.code_clmn.DisplayIndex = 6;
             this.code_clmn.Text = "Code";
             // 
             // ppm_clmn
             // 
-            this.ppm_clmn.DisplayIndex = 6;
             this.ppm_clmn.Text = "ppm";
             // 
             // Form9
