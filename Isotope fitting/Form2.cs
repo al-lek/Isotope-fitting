@@ -2983,7 +2983,7 @@ namespace Isotope_fitting
             iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             fit_grpBox.Controls.Add(iso_plot);
             iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked && !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
-             PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
+            PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
             iso_plot.Model = iso_model;           
             iso_model.Updating += (s, e) =>
             {
@@ -2991,15 +2991,19 @@ namespace Isotope_fitting
                 else if (iso_model.Series.Count > 40) iso_model.LegendFontSize = 5;
                 else iso_model.LegendFontSize = 13;
             };
-            //////iso_model.TrackerChanged += (s, e) => { e.HitResult.Position.X };
-            //////iso_model.MouseDown += (s, e) =>
-            //////{
-            //////    OxyPlot.Axes.Axis x; OxyPlot.Axes.Axis y;
-            //////    iso_model.GetAxesFromPoint(e.Position, out x, out y);
-            //////    DataPoint p = OxyPlot.Axes.Axis.InverseTransform(e.Position, x, y);
-            //////};
+            iso_model.TrackerChanged += (s, e) =>
+            {
+                iso_plot.HideTracker();
+            };
+             //////iso_model.TrackerChanged += (s, e) => { e.HitResult.Position.X };
+             //////iso_model.MouseDown += (s, e) =>
+             //////{
+             //////    OxyPlot.Axes.Axis x; OxyPlot.Axes.Axis y;
+             //////    iso_model.GetAxesFromPoint(e.Position, out x, out y);
+             //////    DataPoint p = OxyPlot.Axes.Axis.InverseTransform(e.Position, x, y);
+             //////};
 
-            iso_plot.Controller = new CustomPlotController();
+             iso_plot.Controller = new CustomPlotController();
             ContextMenu ctxMn = new ContextMenu() { };
             MenuItem showPoints = new MenuItem("Show charge ruler", manage_charge_points);
             MenuItem clearPoints = new MenuItem("Clear charge ruler", manage_charge_points);
@@ -3008,9 +3012,9 @@ namespace Isotope_fitting
             ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
             
             //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
-            iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
-            iso_model.MouseMove += (s, e) => { if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
-            iso_model.MouseUp += (s, e) => { count_distance = false;};
+            iso_model.MouseDown += (s, e) => { iso_plot.HideTracker(); if (e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
+            iso_model.MouseMove += (s, e) => { iso_plot.HideTracker(); if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
+            iso_model.MouseUp += (s, e) => { iso_plot.HideTracker(); count_distance = false;};
 
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
@@ -3041,10 +3045,11 @@ namespace Isotope_fitting
 
             var linearAxis2r = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             res_model.Axes.Add(linearAxis2r);
-           
+
+            res_plot.Controller = new CustomPlotController();
 
             // bind the 2 x-axes :D
-            linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); /*linearAxis1r.Zoom(linearAxis1r.ActualMinimum, linearAxis1r.ActualMaximum)*/; res_plot.InvalidatePlot(true); };            
+            linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum);  res_plot.InvalidatePlot(true); };            
             iso_model.Updated += (s, e) => 
             {
                 res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum,  iso_plot.Model.Axes[1].ActualMaximum);
