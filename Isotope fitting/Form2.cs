@@ -4118,9 +4118,9 @@ namespace Isotope_fitting
             {
                 z_lstBox.SetItemCheckState(i, CheckState.Unchecked);
             }
-            foreach (int i in Mdvw_lstBox.CheckedIndices)
+            foreach (int i in M_lstBox.CheckedIndices)
             {
-                Mdvw_lstBox.SetItemCheckState(i, CheckState.Unchecked);
+                M_lstBox.SetItemCheckState(i, CheckState.Unchecked);
             }
             foreach (int i in addin_lstBox.CheckedIndices)
             {
@@ -4136,7 +4136,7 @@ namespace Isotope_fitting
             x_lstBox.ClearSelected();
             y_lstBox.ClearSelected();
             z_lstBox.ClearSelected();
-            Mdvw_lstBox.ClearSelected();
+            M_lstBox.ClearSelected();
             internal_lstBox.ClearSelected();
             addin_lstBox.ClearSelected();
             mzMax_Box.Text = null;
@@ -8538,7 +8538,10 @@ namespace Isotope_fitting
 
         #endregion
 
-
+        private void ax_window_Click(object sender, EventArgs e)
+        {
+           
+        }
         #endregion
 
 
@@ -8580,15 +8583,6 @@ namespace Isotope_fitting
             selectedFragments.Clear();
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             if ( fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
-        }
-
-        private void ax_window_Click(object sender, EventArgs e)
-        {
-            //Form plot = new Form() { };
-            //plot.Controls.AddRange(new Control[] { });
-            //plot.Show();
-            //plot.FormClosing += (s, f) => { };
-
         }
 
         public void ending_frm9()
