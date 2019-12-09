@@ -25,6 +25,7 @@ namespace Isotope_fitting
 
         }
 
+        #region tab1 Line Style
         private void expW1_Btn_Click(object sender, EventArgs e)
         {
             ColorDialog clrDlg = new ColorDialog();            
@@ -141,5 +142,10 @@ namespace Isotope_fitting
             fitW1_numUD.Value = 1;
             fragW1_numUD.Value = 2;
         }
+        #endregion
+
+        #region tab2 Plot step etc
+
+        #endregion
     }
 }

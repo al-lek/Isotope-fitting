@@ -2620,7 +2620,7 @@ namespace Isotope_fitting
                 if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
                 {
                     double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
-                    iso_plot.Model.Axes[0].Zoom(-100, pt0 + 100);
+                    iso_plot.Model.Axes[0].Zoom(-100, pt0 *1.2);
                 }
                 iso_plot.Refresh();
                 invalidate_all();
@@ -3010,15 +3010,15 @@ namespace Isotope_fitting
             //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
             iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
             iso_model.MouseMove += (s, e) => { if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
-            iso_model.MouseUp += (s, e) => { count_distance = false;};            
-          
+            iso_model.MouseUp += (s, e) => { count_distance = false;};
+
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
             //////var m = new ZoomStepManipulator(this, e.Delta * 0.001, isControlDown);
-            //////iso_plot.MouseWheel += (s, e) => 
+            //////iso_plot.MouseWheel += (s, e) =>
             //////{
             //////    if (e.Delta > 0) iso_plot.Model.DefaultXAxis.ZoomAtCenter(1);
-            //////    };
+            //////};
 
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
             iso_model.Axes.Add(linearAxis1);
@@ -3054,7 +3054,22 @@ namespace Isotope_fitting
                     double pt1 = (res_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Min(k => k.Y);
                     res_plot.Model.Axes[0].Zoom(pt1, pt0);
                 }
-                
+                double max_iso = 200;
+                if (iso_plot.Model.Series.Count>0 && plotExp_chkBox.Checked)
+                {
+                    if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0)
+                    {
+                        double iso_1 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+                        if (iso_1 > max_iso) max_iso = iso_1;
+                    }
+                    if (all_data.Count>0 && (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
+                    {
+                        double iso_1 = (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+                        if (iso_1 > max_iso) max_iso = iso_1;
+                    }
+                    iso_plot.Model.Axes[0].Zoom(-100, max_iso * 1.2);
+                }                
+
             };
             iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
             //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
