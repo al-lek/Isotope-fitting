@@ -47,7 +47,7 @@
             this.toolStrip_frm11.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStrip_frm11.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_frm11.Name = "toolStrip_frm11";
-            this.toolStrip_frm11.Size = new System.Drawing.Size(32, 450);
+            this.toolStrip_frm11.Size = new System.Drawing.Size(24, 450);
             this.toolStrip_frm11.TabIndex = 27;
             // 
             // Save_Btn
@@ -56,7 +56,7 @@
             this.Save_Btn.Image = ((System.Drawing.Image)(resources.GetObject("Save_Btn.Image")));
             this.Save_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Save_Btn.Name = "Save_Btn";
-            this.Save_Btn.Size = new System.Drawing.Size(29, 22);
+            this.Save_Btn.Size = new System.Drawing.Size(21, 22);
             this.Save_Btn.Text = "Save";
             this.Save_Btn.Click += new System.EventHandler(this.Save_Btn_Click);
             // 
@@ -75,9 +75,9 @@
             this.panel_frm11.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_frm11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel_frm11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_frm11.Location = new System.Drawing.Point(32, 0);
+            this.panel_frm11.Location = new System.Drawing.Point(24, 0);
             this.panel_frm11.Name = "panel_frm11";
-            this.panel_frm11.Size = new System.Drawing.Size(768, 450);
+            this.panel_frm11.Size = new System.Drawing.Size(776, 450);
             this.panel_frm11.TabIndex = 28;
             // 
             // Form11

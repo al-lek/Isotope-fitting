@@ -267,7 +267,7 @@
             65536});
             this.ppm9_numUD.Location = new System.Drawing.Point(85, 518);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
-            10,
+            50,
             0,
             0,
             0});

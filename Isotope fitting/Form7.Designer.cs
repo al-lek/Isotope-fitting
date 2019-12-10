@@ -136,7 +136,7 @@
             65536});
             this.ppmDi_numUD.Location = new System.Drawing.Point(276, 109);
             this.ppmDi_numUD.Maximum = new decimal(new int[] {
-            15,
+            50,
             0,
             0,
             0});
