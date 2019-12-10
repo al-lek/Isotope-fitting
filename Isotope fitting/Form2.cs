@@ -3082,19 +3082,19 @@ namespace Isotope_fitting
                     res_plot.Model.Axes[0].Zoom(pt1, pt0);
                 }
                 double max_iso = 200;
-                if (iso_plot.Model.Series.Count>0 && plotExp_chkBox.Checked)
+                if (iso_plot.Model.Series.Count>0 && autoscale_Btn.Checked)
                 {
                     if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0)
                     {
                         double iso_1 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
                         if (iso_1 > max_iso) max_iso = iso_1;
                     }
-                    if (all_data.Count>0 && (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
+                    if (all_data.Count>1 && (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
                     {
                         double iso_1 = (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
                         if (iso_1 > max_iso) max_iso = iso_1;
                     }
-                    iso_plot.Model.Axes[0].Zoom(-100, max_iso * 1.2);
+                    iso_plot.Model.Axes[0].Zoom(-max_iso * 0.2, max_iso * 1.2);
                 }                
 
             };

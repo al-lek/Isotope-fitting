@@ -245,6 +245,7 @@ namespace Isotope_fitting
             this.int_IdxToCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.extractPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoscale_Btn = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -359,6 +360,7 @@ namespace Isotope_fitting
             this.copyImage_Btn,
             this.legend_chkBx,
             this.cursor_chkBx,
+            this.autoscale_Btn,
             this.toolStripButton1,
             this.clear_toolStripButton,
             this.fragPlotLbl_chkBx,
@@ -2263,7 +2265,7 @@ namespace Isotope_fitting
             this.int_Idx_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.int_Idx_toolStrip.Location = new System.Drawing.Point(5, 30);
             this.int_Idx_toolStrip.Name = "int_Idx_toolStrip";
-            this.int_Idx_toolStrip.Size = new System.Drawing.Size(32, 71);
+            this.int_Idx_toolStrip.Size = new System.Drawing.Size(24, 52);
             this.int_Idx_toolStrip.TabIndex = 25;
             // 
             // int_IdxTo_toolStrip
@@ -2543,8 +2545,8 @@ namespace Isotope_fitting
             this.disp_internal.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.disp_internal.Name = "disp_internal";
             this.disp_internal.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.disp_internal.Size = new System.Drawing.Size(64, 24);
-            this.disp_internal.Text = "internal";
+            this.disp_internal.Size = new System.Drawing.Size(47, 24);
+            this.disp_internal.Text = "inter.";
             // 
             // hide_Btn
             // 
@@ -2985,7 +2987,7 @@ namespace Isotope_fitting
             this.int_IdxSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxSave_Btn.Image")));
             this.int_IdxSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.int_IdxSave_Btn.Name = "int_IdxSave_Btn";
-            this.int_IdxSave_Btn.Size = new System.Drawing.Size(30, 22);
+            this.int_IdxSave_Btn.Size = new System.Drawing.Size(22, 22);
             this.int_IdxSave_Btn.Text = "Save";
             // 
             // int_IdxCopy_Btn
@@ -2994,7 +2996,7 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxCopy_Btn.Image")));
             this.int_IdxCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.int_IdxCopy_Btn.Name = "int_IdxCopy_Btn";
-            this.int_IdxCopy_Btn.Size = new System.Drawing.Size(30, 22);
+            this.int_IdxCopy_Btn.Size = new System.Drawing.Size(22, 22);
             this.int_IdxCopy_Btn.Text = "Copy";
             // 
             // int_IdxToSave_Btn
@@ -3030,6 +3032,17 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
+            // 
+            // autoscale_Btn
+            // 
+            this.autoscale_Btn.CheckOnClick = true;
+            this.autoscale_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.autoscale_Btn.Image = ((System.Drawing.Image)(resources.GetObject("autoscale_Btn.Image")));
+            this.autoscale_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.autoscale_Btn.Name = "autoscale_Btn";
+            this.autoscale_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.autoscale_Btn.Size = new System.Drawing.Size(24, 24);
+            this.autoscale_Btn.Text = "Autoscale";
             // 
             // Form2
             // 
@@ -3326,5 +3339,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripDropDownButton chartFormatBtn;
         private System.Windows.Forms.ToolStripMenuItem styleFormatBtn;
         private System.Windows.Forms.ToolStripMenuItem extractPlotToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton autoscale_Btn;
     }
 }
