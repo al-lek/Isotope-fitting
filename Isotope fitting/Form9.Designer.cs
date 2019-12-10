@@ -746,6 +746,7 @@
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.statusStrpFrm9);
             this.Name = "Form9";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fragment Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
             this.panel_calc.ResumeLayout(false);

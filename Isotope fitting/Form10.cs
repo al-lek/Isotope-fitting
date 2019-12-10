@@ -165,7 +165,7 @@ namespace Isotope_fitting
                     frm2.Xmajor_grid = LineStyle.Solid;
                     break;
             }
-            frm2.oxy_init();
+            frm2.oxy_changes();
         }
 
         private void x_minorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
@@ -180,7 +180,7 @@ namespace Isotope_fitting
                     break;
 
             }
-            frm2.oxy_init();
+            frm2.oxy_changes();
         }
 
         private void y_majorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
@@ -195,7 +195,7 @@ namespace Isotope_fitting
                     break;
 
             }
-            frm2.oxy_init();
+            frm2.oxy_changes();
         }
 
         private void y_minorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
@@ -210,7 +210,7 @@ namespace Isotope_fitting
                     break;
 
             }
-            frm2.oxy_init();
+            frm2.oxy_changes();
         }
 
         private void axisxtickUD_SelectedItemChanged(object sender, EventArgs e)
@@ -230,7 +230,7 @@ namespace Isotope_fitting
                     frm2.X_tick = OxyPlot.Axes.TickStyle.Crossing;
                     break;
             }
-            frm2.oxy_init();
+            frm2.oxy_changes();
         }
 
         private void axisytickUD_SelectedItemChanged(object sender, EventArgs e)
@@ -250,7 +250,7 @@ namespace Isotope_fitting
                     frm2.Y_tick = OxyPlot.Axes.TickStyle.Crossing;
                     break;
             }
-            frm2.oxy_init();
+            frm2.oxy_changes();
         }
 
 
@@ -259,12 +259,12 @@ namespace Isotope_fitting
         
         private void xInterval_UD_ValueChanged(object sender, EventArgs e)
         {
-            frm2.x_interval = (double)xInterval_UD.Value; frm2.oxy_init();
+            frm2.x_interval = (double)xInterval_UD.Value; frm2.oxy_changes();
         }
 
         private void yInterval_UD_ValueChanged(object sender, EventArgs e)
         {
-            frm2.y_interval = (double)yInterval_UD.Value; frm2.oxy_init();
+            frm2.y_interval = (double)yInterval_UD.Value; frm2.oxy_changes();
         }
     }
 }

@@ -888,6 +888,7 @@
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form10";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Format Plot Area : Style";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
