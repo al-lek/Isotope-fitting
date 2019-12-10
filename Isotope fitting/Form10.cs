@@ -24,6 +24,8 @@ namespace Isotope_fitting
             fragW1_numUD.Value = (decimal)frm2.frag_width;
             cenW1_numUD.Value = (decimal)frm2.cen_width;
             peakW1_numUD.Value = (decimal)frm2.peak_width;
+            xInterval_UD.Value= (decimal)frm2.x_interval;
+            yInterval_UD.Value = (decimal)frm2.y_interval;
 
         }
 
@@ -139,13 +141,8 @@ namespace Isotope_fitting
         {
             frm2.fit_color = OxyColors.Black; frm2.peak_color = OxyColors.Crimson; frm2.exp_color = OxyColors.Black.ToColor().ToArgb(); if (Form2.custom_colors.Count>0) { Form2.custom_colors[0] = OxyColors.Black.ToColor().ToArgb(); }
             frm2.fit_style = LineStyle.Dot; frm2.exper_style = LineStyle.Solid; frm2.frag_style = LineStyle.Solid;
-            frm2.exp_width = 1; frm2.frag_width = 2; frm2.fit_width = 1;
-            expW1_numUD.Value = 1;
-            fitW1_numUD.Value = 1;
-            fragW1_numUD.Value = 2;
-            cenW1_numUD.Value = 1;
-            peakW1_numUD.Value = 1;
-
+            frm2.exp_width = 1; frm2.frag_width = 2; frm2.fit_width = 1; frm2.peak_width = 1; frm2.cen_width = 1;
+            expW1_numUD.Value = 1;fitW1_numUD.Value = 1;fragW1_numUD.Value = 2;cenW1_numUD.Value = 1;peakW1_numUD.Value = 1;
         }
         private void refresh10_Btn_Click(object sender, EventArgs e)
         {
@@ -157,12 +154,117 @@ namespace Isotope_fitting
         #endregion
 
         #region tab2 Plot step etc
+        private void x_majorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (x_majorGrid_UD.SelectedIndex)
+            {
+                case 0:
+                    frm2.Xmajor_grid = LineStyle.None;
+                    break;
+                case 1:
+                    frm2.Xmajor_grid = LineStyle.Solid;
+                    break;
+            }
+            frm2.oxy_init();
+        }
+
+        private void x_minorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (x_minorGrid_UD.SelectedIndex)
+            {
+                case 0:
+                    frm2.Xminor_grid = LineStyle.None;
+                    break;
+                case 1:
+                    frm2.Xminor_grid = LineStyle.Solid;
+                    break;
+
+            }
+            frm2.oxy_init();
+        }
+
+        private void y_majorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (y_majorGrid_UD.SelectedIndex)
+            {
+                case 0:
+                    frm2.Ymajor_grid = LineStyle.None;
+                    break;
+                case 1:
+                    frm2.Ymajor_grid = LineStyle.Solid;
+                    break;
+
+            }
+            frm2.oxy_init();
+        }
+
+        private void y_minorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (y_minorGrid_UD.SelectedIndex)
+            {
+                case 0:
+                    frm2.Yminor_grid = LineStyle.None;
+                    break;
+                case 1:
+                    frm2.Yminor_grid = LineStyle.Solid;
+                    break;
+
+            }
+            frm2.oxy_init();
+        }
+
+        private void axisxtickUD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (xtickUD.SelectedIndex)
+            {
+                case 0:
+                    frm2.X_tick = OxyPlot.Axes.TickStyle.None;
+                    break;
+                case 1:
+                    frm2.X_tick = OxyPlot.Axes.TickStyle.Outside;
+                    break;
+                case 2:
+                    frm2.X_tick = OxyPlot.Axes.TickStyle.Inside;
+                    break;
+                case 3:
+                    frm2.X_tick = OxyPlot.Axes.TickStyle.Crossing;
+                    break;
+            }
+            frm2.oxy_init();
+        }
+
+        private void axisytickUD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (ytickUD.SelectedIndex)
+            {
+                case 0:
+                    frm2.Y_tick = OxyPlot.Axes.TickStyle.None;
+                    break;
+                case 1:
+                    frm2.Y_tick = OxyPlot.Axes.TickStyle.Outside;
+                    break;
+                case 2:
+                    frm2.Y_tick = OxyPlot.Axes.TickStyle.Inside;
+                    break;
+                case 3:
+                    frm2.Y_tick = OxyPlot.Axes.TickStyle.Crossing;
+                    break;
+            }
+            frm2.oxy_init();
+        }
+
 
         #endregion
 
-        private void Theor_grpBx_Enter(object sender, EventArgs e)
+        
+        private void xInterval_UD_ValueChanged(object sender, EventArgs e)
         {
+            frm2.x_interval = (double)xInterval_UD.Value; frm2.oxy_init();
+        }
 
+        private void yInterval_UD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.y_interval = (double)yInterval_UD.Value; frm2.oxy_init();
         }
     }
 }
