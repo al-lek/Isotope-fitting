@@ -30,23 +30,22 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.reset_Btn = new System.Windows.Forms.Button();
-            this.refresh10_Btn = new System.Windows.Forms.Button();
-            this.fitW1_Btn = new System.Windows.Forms.Button();
-            this.frag10_UD = new System.Windows.Forms.DomainUpDown();
-            this.fragS1_Lbl = new System.Windows.Forms.Label();
-            this.fragW1_numUD = new System.Windows.Forms.NumericUpDown();
-            this.fragW1_Lbl = new System.Windows.Forms.Label();
-            this.fitC1_Lbl = new System.Windows.Forms.Label();
-            this.fit10_UD = new System.Windows.Forms.DomainUpDown();
-            this.fitS1_Lbl = new System.Windows.Forms.Label();
-            this.fitW1_numUD = new System.Windows.Forms.NumericUpDown();
+            this.fit_grpBx = new System.Windows.Forms.GroupBox();
             this.fitW1_Lbl = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.fitW1_numUD = new System.Windows.Forms.NumericUpDown();
+            this.fitS1_Lbl = new System.Windows.Forms.Label();
+            this.fit10_UD = new System.Windows.Forms.DomainUpDown();
+            this.fitC1_Lbl = new System.Windows.Forms.Label();
+            this.fitW1_Btn = new System.Windows.Forms.Button();
+            this.Theor_grpBx = new System.Windows.Forms.GroupBox();
+            this.frag10_UD = new System.Windows.Forms.DomainUpDown();
+            this.fragW1_Lbl = new System.Windows.Forms.Label();
+            this.Profile_Lbl = new System.Windows.Forms.Label();
+            this.fragW1_numUD = new System.Windows.Forms.NumericUpDown();
+            this.Centroids_Lbl = new System.Windows.Forms.Label();
+            this.fragS1_Lbl = new System.Windows.Forms.Label();
             this.cenW1_numUD = new System.Windows.Forms.NumericUpDown();
             this.cenW1_Lbl = new System.Windows.Forms.Label();
-            this.Centroids_Lbl = new System.Windows.Forms.Label();
-            this.Profile_Lbl = new System.Windows.Forms.Label();
             this.exp1_grpBx = new System.Windows.Forms.GroupBox();
             this.Spectrum_Lbl = new System.Windows.Forms.Label();
             this.Peaks_Lbl = new System.Windows.Forms.Label();
@@ -60,41 +59,46 @@
             this.expS1_Lbl = new System.Windows.Forms.Label();
             this.expW1_numUD = new System.Windows.Forms.NumericUpDown();
             this.expW1_Lbl = new System.Windows.Forms.Label();
-            this.Theor_grpBx = new System.Windows.Forms.GroupBox();
-            this.fit_grpBx = new System.Windows.Forms.GroupBox();
-            this.tickmark_grpBx = new System.Windows.Forms.GroupBox();
-            this.axisxtick_Lbl = new System.Windows.Forms.Label();
-            this.axisytick_Lbl = new System.Windows.Forms.Label();
-            this.xtickUD = new System.Windows.Forms.DomainUpDown();
-            this.ytickUD = new System.Windows.Forms.DomainUpDown();
+            this.reset_Btn = new System.Windows.Forms.Button();
+            this.refresh10_Btn = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.units_grpBx = new System.Windows.Forms.GroupBox();
-            this.x_majorGrid_UD = new System.Windows.Forms.DomainUpDown();
-            this.x_majorGrid_Lbl = new System.Windows.Forms.Label();
-            this.x_minorGrid_Lbl = new System.Windows.Forms.Label();
-            this.x_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
+            this.yInterval_UD = new System.Windows.Forms.NumericUpDown();
+            this.intervalY_Lbl = new System.Windows.Forms.Label();
             this.y_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
             this.y_minorGrid_Lbl = new System.Windows.Forms.Label();
             this.y_majorGrid_UD = new System.Windows.Forms.DomainUpDown();
             this.y_majorGrid_Lbl = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ytickUD = new System.Windows.Forms.DomainUpDown();
+            this.axisytick_Lbl = new System.Windows.Forms.Label();
+            this.tickmark_grpBx = new System.Windows.Forms.GroupBox();
             this.xInterval_UD = new System.Windows.Forms.NumericUpDown();
-            this.yInterval_UD = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
+            this.intervalX_Lbl = new System.Windows.Forms.Label();
+            this.x_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
+            this.x_minorGrid_Lbl = new System.Windows.Forms.Label();
+            this.x_majorGrid_UD = new System.Windows.Forms.DomainUpDown();
+            this.x_majorGrid_Lbl = new System.Windows.Forms.Label();
+            this.xtickUD = new System.Windows.Forms.DomainUpDown();
+            this.axisxtick_Lbl = new System.Windows.Forms.Label();
+            this.formatX_Lbl = new System.Windows.Forms.Label();
+            this.formatY_Lbl = new System.Windows.Forms.Label();
+            this.formatY_UD = new System.Windows.Forms.DomainUpDown();
+            this.formatX_UD = new System.Windows.Forms.DomainUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fragW1_numUD)).BeginInit();
+            this.fit_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fitW1_numUD)).BeginInit();
-            this.tabPage2.SuspendLayout();
+            this.Theor_grpBx.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fragW1_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cenW1_numUD)).BeginInit();
             this.exp1_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.peakW1_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.expW1_numUD)).BeginInit();
-            this.Theor_grpBx.SuspendLayout();
-            this.fit_grpBx.SuspendLayout();
-            this.tickmark_grpBx.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.units_grpBx.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yInterval_UD)).BeginInit();
+            this.tickmark_grpBx.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -123,153 +127,33 @@
             this.tabPage1.Text = "Lines";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // reset_Btn
+            // fit_grpBx
             // 
-            this.reset_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.reset_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reset_Btn.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.reset_Btn.Location = new System.Drawing.Point(279, 219);
-            this.reset_Btn.Name = "reset_Btn";
-            this.reset_Btn.Size = new System.Drawing.Size(257, 34);
-            this.reset_Btn.TabIndex = 13;
-            this.reset_Btn.Text = "Reset";
-            this.reset_Btn.UseVisualStyleBackColor = true;
-            this.reset_Btn.Click += new System.EventHandler(this.reset_Btn_Click);
+            this.fit_grpBx.Controls.Add(this.fitW1_Lbl);
+            this.fit_grpBx.Controls.Add(this.fitW1_numUD);
+            this.fit_grpBx.Controls.Add(this.fitS1_Lbl);
+            this.fit_grpBx.Controls.Add(this.fit10_UD);
+            this.fit_grpBx.Controls.Add(this.fitC1_Lbl);
+            this.fit_grpBx.Controls.Add(this.fitW1_Btn);
+            this.fit_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fit_grpBx.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fit_grpBx.Location = new System.Drawing.Point(555, 16);
+            this.fit_grpBx.Name = "fit_grpBx";
+            this.fit_grpBx.Size = new System.Drawing.Size(257, 144);
+            this.fit_grpBx.TabIndex = 2;
+            this.fit_grpBx.TabStop = false;
+            this.fit_grpBx.Text = "Fit";
             // 
-            // refresh10_Btn
+            // fitW1_Lbl
             // 
-            this.refresh10_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.refresh10_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.refresh10_Btn.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.refresh10_Btn.Location = new System.Drawing.Point(555, 219);
-            this.refresh10_Btn.Name = "refresh10_Btn";
-            this.refresh10_Btn.Size = new System.Drawing.Size(257, 34);
-            this.refresh10_Btn.TabIndex = 12;
-            this.refresh10_Btn.Text = "Refresh Plot";
-            this.refresh10_Btn.UseVisualStyleBackColor = true;
-            this.refresh10_Btn.Click += new System.EventHandler(this.refresh10_Btn_Click);
-            // 
-            // fitW1_Btn
-            // 
-            this.fitW1_Btn.BackColor = System.Drawing.Color.Lavender;
-            this.fitW1_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.fitW1_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitW1_Btn.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fitW1_Btn.Location = new System.Drawing.Point(116, 107);
-            this.fitW1_Btn.Name = "fitW1_Btn";
-            this.fitW1_Btn.Size = new System.Drawing.Size(120, 20);
-            this.fitW1_Btn.TabIndex = 11;
-            this.fitW1_Btn.Text = "Set Color";
-            this.fitW1_Btn.UseVisualStyleBackColor = false;
-            this.fitW1_Btn.Click += new System.EventHandler(this.fitW1_Btn_Click);
-            // 
-            // frag10_UD
-            // 
-            this.frag10_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.frag10_UD.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.frag10_UD.Items.Add("Solid");
-            this.frag10_UD.Items.Add("Dot");
-            this.frag10_UD.Items.Add("Dash");
-            this.frag10_UD.Items.Add("LongDash");
-            this.frag10_UD.Items.Add("DashDot");
-            this.frag10_UD.Items.Add("LongDashDot");
-            this.frag10_UD.Location = new System.Drawing.Point(119, 70);
-            this.frag10_UD.Name = "frag10_UD";
-            this.frag10_UD.Size = new System.Drawing.Size(120, 20);
-            this.frag10_UD.TabIndex = 7;
-            this.frag10_UD.SelectedItemChanged += new System.EventHandler(this.frag10_UD_SelectedItemChanged);
-            // 
-            // fragS1_Lbl
-            // 
-            this.fragS1_Lbl.AutoSize = true;
-            this.fragS1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fragS1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fragS1_Lbl.Location = new System.Drawing.Point(80, 74);
-            this.fragS1_Lbl.Name = "fragS1_Lbl";
-            this.fragS1_Lbl.Size = new System.Drawing.Size(30, 13);
-            this.fragS1_Lbl.TabIndex = 29;
-            this.fragS1_Lbl.Text = "Style";
-            // 
-            // fragW1_numUD
-            // 
-            this.fragW1_numUD.DecimalPlaces = 1;
-            this.fragW1_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fragW1_numUD.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fragW1_numUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.fragW1_numUD.Location = new System.Drawing.Point(119, 27);
-            this.fragW1_numUD.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.fragW1_numUD.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.fragW1_numUD.Name = "fragW1_numUD";
-            this.fragW1_numUD.ReadOnly = true;
-            this.fragW1_numUD.Size = new System.Drawing.Size(41, 20);
-            this.fragW1_numUD.TabIndex = 6;
-            this.fragW1_numUD.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.fragW1_numUD.ValueChanged += new System.EventHandler(this.fragW1_numUD_ValueChanged);
-            // 
-            // fragW1_Lbl
-            // 
-            this.fragW1_Lbl.AutoSize = true;
-            this.fragW1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fragW1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fragW1_Lbl.Location = new System.Drawing.Point(75, 31);
-            this.fragW1_Lbl.Name = "fragW1_Lbl";
-            this.fragW1_Lbl.Size = new System.Drawing.Size(35, 13);
-            this.fragW1_Lbl.TabIndex = 28;
-            this.fragW1_Lbl.Text = "Width";
-            // 
-            // fitC1_Lbl
-            // 
-            this.fitC1_Lbl.AutoSize = true;
-            this.fitC1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitC1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fitC1_Lbl.Location = new System.Drawing.Point(74, 110);
-            this.fitC1_Lbl.Name = "fitC1_Lbl";
-            this.fitC1_Lbl.Size = new System.Drawing.Size(36, 15);
-            this.fitC1_Lbl.TabIndex = 34;
-            this.fitC1_Lbl.Text = "Color";
-            // 
-            // fit10_UD
-            // 
-            this.fit10_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fit10_UD.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fit10_UD.Items.Add("Solid");
-            this.fit10_UD.Items.Add("Dot");
-            this.fit10_UD.Items.Add("Dash");
-            this.fit10_UD.Items.Add("LongDash");
-            this.fit10_UD.Items.Add("DashDot");
-            this.fit10_UD.Items.Add("LongDashDot");
-            this.fit10_UD.Location = new System.Drawing.Point(116, 64);
-            this.fit10_UD.Name = "fit10_UD";
-            this.fit10_UD.Size = new System.Drawing.Size(120, 20);
-            this.fit10_UD.TabIndex = 10;
-            this.fit10_UD.SelectedItemChanged += new System.EventHandler(this.fit10_UD_SelectedItemChanged);
-            // 
-            // fitS1_Lbl
-            // 
-            this.fitS1_Lbl.AutoSize = true;
-            this.fitS1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitS1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fitS1_Lbl.Location = new System.Drawing.Point(77, 67);
-            this.fitS1_Lbl.Name = "fitS1_Lbl";
-            this.fitS1_Lbl.Size = new System.Drawing.Size(33, 15);
-            this.fitS1_Lbl.TabIndex = 33;
-            this.fitS1_Lbl.Text = "Style";
+            this.fitW1_Lbl.AutoSize = true;
+            this.fitW1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitW1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fitW1_Lbl.Location = new System.Drawing.Point(72, 24);
+            this.fitW1_Lbl.Name = "fitW1_Lbl";
+            this.fitW1_Lbl.Size = new System.Drawing.Size(38, 15);
+            this.fitW1_Lbl.TabIndex = 32;
+            this.fitW1_Lbl.Text = "Width";
             // 
             // fitW1_numUD
             // 
@@ -303,28 +187,168 @@
             0});
             this.fitW1_numUD.ValueChanged += new System.EventHandler(this.fitW1_numUD_ValueChanged);
             // 
-            // fitW1_Lbl
+            // fitS1_Lbl
             // 
-            this.fitW1_Lbl.AutoSize = true;
-            this.fitW1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitW1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fitW1_Lbl.Location = new System.Drawing.Point(72, 24);
-            this.fitW1_Lbl.Name = "fitW1_Lbl";
-            this.fitW1_Lbl.Size = new System.Drawing.Size(38, 15);
-            this.fitW1_Lbl.TabIndex = 32;
-            this.fitW1_Lbl.Text = "Width";
+            this.fitS1_Lbl.AutoSize = true;
+            this.fitS1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitS1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fitS1_Lbl.Location = new System.Drawing.Point(77, 67);
+            this.fitS1_Lbl.Name = "fitS1_Lbl";
+            this.fitS1_Lbl.Size = new System.Drawing.Size(33, 15);
+            this.fitS1_Lbl.TabIndex = 33;
+            this.fitS1_Lbl.Text = "Style";
             // 
-            // tabPage2
+            // fit10_UD
             // 
-            this.tabPage2.Controls.Add(this.units_grpBx);
-            this.tabPage2.Controls.Add(this.tickmark_grpBx);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(823, 264);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Axis";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.fit10_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fit10_UD.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fit10_UD.Items.Add("Solid");
+            this.fit10_UD.Items.Add("Dot");
+            this.fit10_UD.Items.Add("Dash");
+            this.fit10_UD.Items.Add("LongDash");
+            this.fit10_UD.Items.Add("DashDot");
+            this.fit10_UD.Items.Add("LongDashDot");
+            this.fit10_UD.Location = new System.Drawing.Point(116, 64);
+            this.fit10_UD.Name = "fit10_UD";
+            this.fit10_UD.Size = new System.Drawing.Size(120, 20);
+            this.fit10_UD.TabIndex = 10;
+            this.fit10_UD.SelectedItemChanged += new System.EventHandler(this.fit10_UD_SelectedItemChanged);
+            // 
+            // fitC1_Lbl
+            // 
+            this.fitC1_Lbl.AutoSize = true;
+            this.fitC1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitC1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fitC1_Lbl.Location = new System.Drawing.Point(74, 110);
+            this.fitC1_Lbl.Name = "fitC1_Lbl";
+            this.fitC1_Lbl.Size = new System.Drawing.Size(36, 15);
+            this.fitC1_Lbl.TabIndex = 34;
+            this.fitC1_Lbl.Text = "Color";
+            // 
+            // fitW1_Btn
+            // 
+            this.fitW1_Btn.BackColor = System.Drawing.Color.Lavender;
+            this.fitW1_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.fitW1_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitW1_Btn.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fitW1_Btn.Location = new System.Drawing.Point(116, 107);
+            this.fitW1_Btn.Name = "fitW1_Btn";
+            this.fitW1_Btn.Size = new System.Drawing.Size(120, 20);
+            this.fitW1_Btn.TabIndex = 11;
+            this.fitW1_Btn.Text = "Set Color";
+            this.fitW1_Btn.UseVisualStyleBackColor = false;
+            this.fitW1_Btn.Click += new System.EventHandler(this.fitW1_Btn_Click);
+            // 
+            // Theor_grpBx
+            // 
+            this.Theor_grpBx.Controls.Add(this.frag10_UD);
+            this.Theor_grpBx.Controls.Add(this.fragW1_Lbl);
+            this.Theor_grpBx.Controls.Add(this.Profile_Lbl);
+            this.Theor_grpBx.Controls.Add(this.fragW1_numUD);
+            this.Theor_grpBx.Controls.Add(this.Centroids_Lbl);
+            this.Theor_grpBx.Controls.Add(this.fragS1_Lbl);
+            this.Theor_grpBx.Controls.Add(this.cenW1_numUD);
+            this.Theor_grpBx.Controls.Add(this.cenW1_Lbl);
+            this.Theor_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Theor_grpBx.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.Theor_grpBx.Location = new System.Drawing.Point(279, 16);
+            this.Theor_grpBx.Name = "Theor_grpBx";
+            this.Theor_grpBx.Size = new System.Drawing.Size(257, 144);
+            this.Theor_grpBx.TabIndex = 1;
+            this.Theor_grpBx.TabStop = false;
+            this.Theor_grpBx.Text = "Theoretical Data";
+            // 
+            // frag10_UD
+            // 
+            this.frag10_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.frag10_UD.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.frag10_UD.Items.Add("Solid");
+            this.frag10_UD.Items.Add("Dot");
+            this.frag10_UD.Items.Add("Dash");
+            this.frag10_UD.Items.Add("LongDash");
+            this.frag10_UD.Items.Add("DashDot");
+            this.frag10_UD.Items.Add("LongDashDot");
+            this.frag10_UD.Location = new System.Drawing.Point(119, 70);
+            this.frag10_UD.Name = "frag10_UD";
+            this.frag10_UD.Size = new System.Drawing.Size(120, 20);
+            this.frag10_UD.TabIndex = 7;
+            this.frag10_UD.SelectedItemChanged += new System.EventHandler(this.frag10_UD_SelectedItemChanged);
+            // 
+            // fragW1_Lbl
+            // 
+            this.fragW1_Lbl.AutoSize = true;
+            this.fragW1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fragW1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fragW1_Lbl.Location = new System.Drawing.Point(75, 31);
+            this.fragW1_Lbl.Name = "fragW1_Lbl";
+            this.fragW1_Lbl.Size = new System.Drawing.Size(35, 13);
+            this.fragW1_Lbl.TabIndex = 28;
+            this.fragW1_Lbl.Text = "Width";
+            // 
+            // Profile_Lbl
+            // 
+            this.Profile_Lbl.AutoSize = true;
+            this.Profile_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Profile_Lbl.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.Profile_Lbl.Location = new System.Drawing.Point(27, 29);
+            this.Profile_Lbl.Name = "Profile_Lbl";
+            this.Profile_Lbl.Size = new System.Drawing.Size(42, 15);
+            this.Profile_Lbl.TabIndex = 27;
+            this.Profile_Lbl.Text = "Profile";
+            // 
+            // fragW1_numUD
+            // 
+            this.fragW1_numUD.DecimalPlaces = 1;
+            this.fragW1_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fragW1_numUD.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fragW1_numUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.fragW1_numUD.Location = new System.Drawing.Point(119, 27);
+            this.fragW1_numUD.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.fragW1_numUD.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.fragW1_numUD.Name = "fragW1_numUD";
+            this.fragW1_numUD.ReadOnly = true;
+            this.fragW1_numUD.Size = new System.Drawing.Size(41, 20);
+            this.fragW1_numUD.TabIndex = 6;
+            this.fragW1_numUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.fragW1_numUD.ValueChanged += new System.EventHandler(this.fragW1_numUD_ValueChanged);
+            // 
+            // Centroids_Lbl
+            // 
+            this.Centroids_Lbl.AutoSize = true;
+            this.Centroids_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Centroids_Lbl.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.Centroids_Lbl.Location = new System.Drawing.Point(10, 115);
+            this.Centroids_Lbl.Name = "Centroids_Lbl";
+            this.Centroids_Lbl.Size = new System.Drawing.Size(59, 15);
+            this.Centroids_Lbl.TabIndex = 30;
+            this.Centroids_Lbl.Text = "Centroids";
+            // 
+            // fragS1_Lbl
+            // 
+            this.fragS1_Lbl.AutoSize = true;
+            this.fragS1_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fragS1_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fragS1_Lbl.Location = new System.Drawing.Point(80, 74);
+            this.fragS1_Lbl.Name = "fragS1_Lbl";
+            this.fragS1_Lbl.Size = new System.Drawing.Size(30, 13);
+            this.fragS1_Lbl.TabIndex = 29;
+            this.fragS1_Lbl.Text = "Style";
             // 
             // cenW1_numUD
             // 
@@ -368,28 +392,6 @@
             this.cenW1_Lbl.Size = new System.Drawing.Size(35, 13);
             this.cenW1_Lbl.TabIndex = 31;
             this.cenW1_Lbl.Text = "Width";
-            // 
-            // Centroids_Lbl
-            // 
-            this.Centroids_Lbl.AutoSize = true;
-            this.Centroids_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Centroids_Lbl.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.Centroids_Lbl.Location = new System.Drawing.Point(10, 115);
-            this.Centroids_Lbl.Name = "Centroids_Lbl";
-            this.Centroids_Lbl.Size = new System.Drawing.Size(59, 15);
-            this.Centroids_Lbl.TabIndex = 30;
-            this.Centroids_Lbl.Text = "Centroids";
-            // 
-            // Profile_Lbl
-            // 
-            this.Profile_Lbl.AutoSize = true;
-            this.Profile_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Profile_Lbl.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.Profile_Lbl.Location = new System.Drawing.Point(27, 29);
-            this.Profile_Lbl.Name = "Profile_Lbl";
-            this.Profile_Lbl.Size = new System.Drawing.Size(42, 15);
-            this.Profile_Lbl.TabIndex = 27;
-            this.Profile_Lbl.Text = "Profile";
             // 
             // exp1_grpBx
             // 
@@ -599,113 +601,50 @@
             this.expW1_Lbl.TabIndex = 21;
             this.expW1_Lbl.Text = "Width";
             // 
-            // Theor_grpBx
+            // reset_Btn
             // 
-            this.Theor_grpBx.Controls.Add(this.frag10_UD);
-            this.Theor_grpBx.Controls.Add(this.fragW1_Lbl);
-            this.Theor_grpBx.Controls.Add(this.Profile_Lbl);
-            this.Theor_grpBx.Controls.Add(this.fragW1_numUD);
-            this.Theor_grpBx.Controls.Add(this.Centroids_Lbl);
-            this.Theor_grpBx.Controls.Add(this.fragS1_Lbl);
-            this.Theor_grpBx.Controls.Add(this.cenW1_numUD);
-            this.Theor_grpBx.Controls.Add(this.cenW1_Lbl);
-            this.Theor_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Theor_grpBx.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.Theor_grpBx.Location = new System.Drawing.Point(279, 16);
-            this.Theor_grpBx.Name = "Theor_grpBx";
-            this.Theor_grpBx.Size = new System.Drawing.Size(257, 144);
-            this.Theor_grpBx.TabIndex = 1;
-            this.Theor_grpBx.TabStop = false;
-            this.Theor_grpBx.Text = "Theoretical Data";
+            this.reset_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.reset_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.reset_Btn.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.reset_Btn.Location = new System.Drawing.Point(279, 219);
+            this.reset_Btn.Name = "reset_Btn";
+            this.reset_Btn.Size = new System.Drawing.Size(257, 34);
+            this.reset_Btn.TabIndex = 13;
+            this.reset_Btn.Text = "Reset";
+            this.reset_Btn.UseVisualStyleBackColor = true;
+            this.reset_Btn.Click += new System.EventHandler(this.reset_Btn_Click);
             // 
-            // fit_grpBx
+            // refresh10_Btn
             // 
-            this.fit_grpBx.Controls.Add(this.fitW1_Lbl);
-            this.fit_grpBx.Controls.Add(this.fitW1_numUD);
-            this.fit_grpBx.Controls.Add(this.fitS1_Lbl);
-            this.fit_grpBx.Controls.Add(this.fit10_UD);
-            this.fit_grpBx.Controls.Add(this.fitC1_Lbl);
-            this.fit_grpBx.Controls.Add(this.fitW1_Btn);
-            this.fit_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fit_grpBx.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fit_grpBx.Location = new System.Drawing.Point(555, 16);
-            this.fit_grpBx.Name = "fit_grpBx";
-            this.fit_grpBx.Size = new System.Drawing.Size(257, 144);
-            this.fit_grpBx.TabIndex = 2;
-            this.fit_grpBx.TabStop = false;
-            this.fit_grpBx.Text = "Fit";
+            this.refresh10_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.refresh10_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.refresh10_Btn.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.refresh10_Btn.Location = new System.Drawing.Point(555, 219);
+            this.refresh10_Btn.Name = "refresh10_Btn";
+            this.refresh10_Btn.Size = new System.Drawing.Size(257, 34);
+            this.refresh10_Btn.TabIndex = 12;
+            this.refresh10_Btn.Text = "Refresh Plot";
+            this.refresh10_Btn.UseVisualStyleBackColor = true;
+            this.refresh10_Btn.Click += new System.EventHandler(this.refresh10_Btn_Click);
             // 
-            // tickmark_grpBx
+            // tabPage2
             // 
-            this.tickmark_grpBx.Controls.Add(this.xInterval_UD);
-            this.tickmark_grpBx.Controls.Add(this.label1);
-            this.tickmark_grpBx.Controls.Add(this.x_minorGrid_UD);
-            this.tickmark_grpBx.Controls.Add(this.x_minorGrid_Lbl);
-            this.tickmark_grpBx.Controls.Add(this.x_majorGrid_UD);
-            this.tickmark_grpBx.Controls.Add(this.x_majorGrid_Lbl);
-            this.tickmark_grpBx.Controls.Add(this.xtickUD);
-            this.tickmark_grpBx.Controls.Add(this.axisxtick_Lbl);
-            this.tickmark_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tickmark_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
-            this.tickmark_grpBx.Location = new System.Drawing.Point(8, 17);
-            this.tickmark_grpBx.Name = "tickmark_grpBx";
-            this.tickmark_grpBx.Size = new System.Drawing.Size(252, 198);
-            this.tickmark_grpBx.TabIndex = 0;
-            this.tickmark_grpBx.TabStop = false;
-            this.tickmark_grpBx.Text = "Axis X";
-            // 
-            // axisxtick_Lbl
-            // 
-            this.axisxtick_Lbl.AutoSize = true;
-            this.axisxtick_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.axisxtick_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.axisxtick_Lbl.Location = new System.Drawing.Point(28, 37);
-            this.axisxtick_Lbl.Name = "axisxtick_Lbl";
-            this.axisxtick_Lbl.Size = new System.Drawing.Size(66, 15);
-            this.axisxtick_Lbl.TabIndex = 0;
-            this.axisxtick_Lbl.Text = "Tick Marks";
-            // 
-            // axisytick_Lbl
-            // 
-            this.axisytick_Lbl.AutoSize = true;
-            this.axisytick_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.axisytick_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.axisytick_Lbl.Location = new System.Drawing.Point(24, 37);
-            this.axisytick_Lbl.Name = "axisytick_Lbl";
-            this.axisytick_Lbl.Size = new System.Drawing.Size(66, 15);
-            this.axisytick_Lbl.TabIndex = 1;
-            this.axisytick_Lbl.Text = "Tick Marks";
-            // 
-            // xtickUD
-            // 
-            this.xtickUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xtickUD.Items.Add("None");
-            this.xtickUD.Items.Add("Outside");
-            this.xtickUD.Items.Add("Inside");
-            this.xtickUD.Items.Add("Cross");
-            this.xtickUD.Location = new System.Drawing.Point(110, 34);
-            this.xtickUD.Name = "xtickUD";
-            this.xtickUD.Size = new System.Drawing.Size(120, 20);
-            this.xtickUD.TabIndex = 2;
-            this.xtickUD.SelectedItemChanged += new System.EventHandler(this.axisxtickUD_SelectedItemChanged);
-            // 
-            // ytickUD
-            // 
-            this.ytickUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ytickUD.Items.Add("None");
-            this.ytickUD.Items.Add("Outside");
-            this.ytickUD.Items.Add("Inside");
-            this.ytickUD.Items.Add("Cross");
-            this.ytickUD.Location = new System.Drawing.Point(106, 34);
-            this.ytickUD.Name = "ytickUD";
-            this.ytickUD.Size = new System.Drawing.Size(120, 20);
-            this.ytickUD.TabIndex = 3;
-            this.ytickUD.SelectedItemChanged += new System.EventHandler(this.axisytickUD_SelectedItemChanged);
+            this.tabPage2.Controls.Add(this.units_grpBx);
+            this.tabPage2.Controls.Add(this.tickmark_grpBx);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(823, 264);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Axis";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // units_grpBx
             // 
+            this.units_grpBx.Controls.Add(this.formatY_UD);
+            this.units_grpBx.Controls.Add(this.formatY_Lbl);
             this.units_grpBx.Controls.Add(this.yInterval_UD);
-            this.units_grpBx.Controls.Add(this.label2);
+            this.units_grpBx.Controls.Add(this.intervalY_Lbl);
             this.units_grpBx.Controls.Add(this.y_minorGrid_UD);
             this.units_grpBx.Controls.Add(this.y_minorGrid_Lbl);
             this.units_grpBx.Controls.Add(this.y_majorGrid_UD);
@@ -716,133 +655,10 @@
             this.units_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
             this.units_grpBx.Location = new System.Drawing.Point(275, 17);
             this.units_grpBx.Name = "units_grpBx";
-            this.units_grpBx.Size = new System.Drawing.Size(252, 198);
+            this.units_grpBx.Size = new System.Drawing.Size(252, 226);
             this.units_grpBx.TabIndex = 1;
             this.units_grpBx.TabStop = false;
             this.units_grpBx.Text = "Axis Y";
-            // 
-            // x_majorGrid_UD
-            // 
-            this.x_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_majorGrid_UD.Items.Add("None");
-            this.x_majorGrid_UD.Items.Add("Solid");
-            this.x_majorGrid_UD.Location = new System.Drawing.Point(110, 106);
-            this.x_majorGrid_UD.Name = "x_majorGrid_UD";
-            this.x_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.x_majorGrid_UD.TabIndex = 9;
-            this.x_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_majorGrid_UD_SelectedItemChanged);
-            // 
-            // x_majorGrid_Lbl
-            // 
-            this.x_majorGrid_Lbl.AutoSize = true;
-            this.x_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_majorGrid_Lbl.Location = new System.Drawing.Point(9, 109);
-            this.x_majorGrid_Lbl.Name = "x_majorGrid_Lbl";
-            this.x_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.x_majorGrid_Lbl.TabIndex = 8;
-            this.x_majorGrid_Lbl.Text = "Major Gridline";
-            // 
-            // x_minorGrid_Lbl
-            // 
-            this.x_minorGrid_Lbl.AutoSize = true;
-            this.x_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_minorGrid_Lbl.Location = new System.Drawing.Point(9, 145);
-            this.x_minorGrid_Lbl.Name = "x_minorGrid_Lbl";
-            this.x_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.x_minorGrid_Lbl.TabIndex = 10;
-            this.x_minorGrid_Lbl.Text = "Minor Gridline";
-            // 
-            // x_minorGrid_UD
-            // 
-            this.x_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_minorGrid_UD.Items.Add("None");
-            this.x_minorGrid_UD.Items.Add("Solid");
-            this.x_minorGrid_UD.Location = new System.Drawing.Point(110, 142);
-            this.x_minorGrid_UD.Name = "x_minorGrid_UD";
-            this.x_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.x_minorGrid_UD.TabIndex = 11;
-            this.x_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_minorGrid_UD_SelectedItemChanged);
-            // 
-            // y_minorGrid_UD
-            // 
-            this.y_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_minorGrid_UD.Items.Add("None");
-            this.y_minorGrid_UD.Items.Add("Solid");
-            this.y_minorGrid_UD.Location = new System.Drawing.Point(106, 142);
-            this.y_minorGrid_UD.Name = "y_minorGrid_UD";
-            this.y_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.y_minorGrid_UD.TabIndex = 15;
-            this.y_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_minorGrid_UD_SelectedItemChanged);
-            // 
-            // y_minorGrid_Lbl
-            // 
-            this.y_minorGrid_Lbl.AutoSize = true;
-            this.y_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.y_minorGrid_Lbl.Location = new System.Drawing.Point(5, 145);
-            this.y_minorGrid_Lbl.Name = "y_minorGrid_Lbl";
-            this.y_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.y_minorGrid_Lbl.TabIndex = 14;
-            this.y_minorGrid_Lbl.Text = "Minor Gridline";
-            // 
-            // y_majorGrid_UD
-            // 
-            this.y_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_majorGrid_UD.Items.Add("None");
-            this.y_majorGrid_UD.Items.Add("Solid");
-            this.y_majorGrid_UD.Location = new System.Drawing.Point(106, 106);
-            this.y_majorGrid_UD.Name = "y_majorGrid_UD";
-            this.y_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.y_majorGrid_UD.TabIndex = 13;
-            this.y_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_majorGrid_UD_SelectedItemChanged);
-            // 
-            // y_majorGrid_Lbl
-            // 
-            this.y_majorGrid_Lbl.AutoSize = true;
-            this.y_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.y_majorGrid_Lbl.Location = new System.Drawing.Point(5, 109);
-            this.y_majorGrid_Lbl.Name = "y_majorGrid_Lbl";
-            this.y_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.y_majorGrid_Lbl.TabIndex = 12;
-            this.y_majorGrid_Lbl.Text = "Major Gridline";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(7, 73);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(87, 15);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Interval Length";
-            // 
-            // xInterval_UD
-            // 
-            this.xInterval_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xInterval_UD.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.xInterval_UD.Location = new System.Drawing.Point(110, 70);
-            this.xInterval_UD.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.xInterval_UD.Name = "xInterval_UD";
-            this.xInterval_UD.Size = new System.Drawing.Size(82, 20);
-            this.xInterval_UD.TabIndex = 13;
-            this.xInterval_UD.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.xInterval_UD.ValueChanged += new System.EventHandler(this.xInterval_UD_ValueChanged);
             // 
             // yInterval_UD
             // 
@@ -852,7 +668,12 @@
             0,
             0,
             0});
-            this.yInterval_UD.Location = new System.Drawing.Point(106, 70);
+            this.yInterval_UD.Location = new System.Drawing.Point(114, 71);
+            this.yInterval_UD.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
             this.yInterval_UD.Minimum = new decimal(new int[] {
             20,
             0,
@@ -868,16 +689,259 @@
             0});
             this.yInterval_UD.ValueChanged += new System.EventHandler(this.yInterval_UD_ValueChanged);
             // 
-            // label2
+            // intervalY_Lbl
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(3, 73);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 15);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "Interval Length";
+            this.intervalY_Lbl.AutoSize = true;
+            this.intervalY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intervalY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.intervalY_Lbl.Location = new System.Drawing.Point(11, 74);
+            this.intervalY_Lbl.Name = "intervalY_Lbl";
+            this.intervalY_Lbl.Size = new System.Drawing.Size(87, 15);
+            this.intervalY_Lbl.TabIndex = 16;
+            this.intervalY_Lbl.Text = "Interval Length";
+            // 
+            // y_minorGrid_UD
+            // 
+            this.y_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_minorGrid_UD.Items.Add("None");
+            this.y_minorGrid_UD.Items.Add("Solid");
+            this.y_minorGrid_UD.Location = new System.Drawing.Point(114, 145);
+            this.y_minorGrid_UD.Name = "y_minorGrid_UD";
+            this.y_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
+            this.y_minorGrid_UD.TabIndex = 15;
+            this.y_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_minorGrid_UD_SelectedItemChanged);
+            // 
+            // y_minorGrid_Lbl
+            // 
+            this.y_minorGrid_Lbl.AutoSize = true;
+            this.y_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.y_minorGrid_Lbl.Location = new System.Drawing.Point(13, 148);
+            this.y_minorGrid_Lbl.Name = "y_minorGrid_Lbl";
+            this.y_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
+            this.y_minorGrid_Lbl.TabIndex = 14;
+            this.y_minorGrid_Lbl.Text = "Minor Gridline";
+            // 
+            // y_majorGrid_UD
+            // 
+            this.y_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_majorGrid_UD.Items.Add("None");
+            this.y_majorGrid_UD.Items.Add("Solid");
+            this.y_majorGrid_UD.Location = new System.Drawing.Point(114, 108);
+            this.y_majorGrid_UD.Name = "y_majorGrid_UD";
+            this.y_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
+            this.y_majorGrid_UD.TabIndex = 13;
+            this.y_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_majorGrid_UD_SelectedItemChanged);
+            // 
+            // y_majorGrid_Lbl
+            // 
+            this.y_majorGrid_Lbl.AutoSize = true;
+            this.y_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.y_majorGrid_Lbl.Location = new System.Drawing.Point(13, 111);
+            this.y_majorGrid_Lbl.Name = "y_majorGrid_Lbl";
+            this.y_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
+            this.y_majorGrid_Lbl.TabIndex = 12;
+            this.y_majorGrid_Lbl.Text = "Major Gridline";
+            // 
+            // ytickUD
+            // 
+            this.ytickUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ytickUD.Items.Add("None");
+            this.ytickUD.Items.Add("Outside");
+            this.ytickUD.Items.Add("Inside");
+            this.ytickUD.Items.Add("Cross");
+            this.ytickUD.Location = new System.Drawing.Point(114, 34);
+            this.ytickUD.Name = "ytickUD";
+            this.ytickUD.Size = new System.Drawing.Size(120, 20);
+            this.ytickUD.TabIndex = 3;
+            this.ytickUD.SelectedItemChanged += new System.EventHandler(this.axisytickUD_SelectedItemChanged);
+            // 
+            // axisytick_Lbl
+            // 
+            this.axisytick_Lbl.AutoSize = true;
+            this.axisytick_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.axisytick_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.axisytick_Lbl.Location = new System.Drawing.Point(32, 37);
+            this.axisytick_Lbl.Name = "axisytick_Lbl";
+            this.axisytick_Lbl.Size = new System.Drawing.Size(66, 15);
+            this.axisytick_Lbl.TabIndex = 1;
+            this.axisytick_Lbl.Text = "Tick Marks";
+            // 
+            // tickmark_grpBx
+            // 
+            this.tickmark_grpBx.Controls.Add(this.formatX_UD);
+            this.tickmark_grpBx.Controls.Add(this.formatX_Lbl);
+            this.tickmark_grpBx.Controls.Add(this.xInterval_UD);
+            this.tickmark_grpBx.Controls.Add(this.intervalX_Lbl);
+            this.tickmark_grpBx.Controls.Add(this.x_minorGrid_UD);
+            this.tickmark_grpBx.Controls.Add(this.x_minorGrid_Lbl);
+            this.tickmark_grpBx.Controls.Add(this.x_majorGrid_UD);
+            this.tickmark_grpBx.Controls.Add(this.x_majorGrid_Lbl);
+            this.tickmark_grpBx.Controls.Add(this.xtickUD);
+            this.tickmark_grpBx.Controls.Add(this.axisxtick_Lbl);
+            this.tickmark_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tickmark_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
+            this.tickmark_grpBx.Location = new System.Drawing.Point(8, 17);
+            this.tickmark_grpBx.Name = "tickmark_grpBx";
+            this.tickmark_grpBx.Size = new System.Drawing.Size(252, 226);
+            this.tickmark_grpBx.TabIndex = 0;
+            this.tickmark_grpBx.TabStop = false;
+            this.tickmark_grpBx.Text = "Axis X";
+            // 
+            // xInterval_UD
+            // 
+            this.xInterval_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xInterval_UD.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.xInterval_UD.Location = new System.Drawing.Point(113, 71);
+            this.xInterval_UD.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.xInterval_UD.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.xInterval_UD.Name = "xInterval_UD";
+            this.xInterval_UD.Size = new System.Drawing.Size(82, 20);
+            this.xInterval_UD.TabIndex = 13;
+            this.xInterval_UD.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.xInterval_UD.ValueChanged += new System.EventHandler(this.xInterval_UD_ValueChanged);
+            // 
+            // intervalX_Lbl
+            // 
+            this.intervalX_Lbl.AutoSize = true;
+            this.intervalX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.intervalX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.intervalX_Lbl.Location = new System.Drawing.Point(10, 74);
+            this.intervalX_Lbl.Name = "intervalX_Lbl";
+            this.intervalX_Lbl.Size = new System.Drawing.Size(87, 15);
+            this.intervalX_Lbl.TabIndex = 12;
+            this.intervalX_Lbl.Text = "Interval Length";
+            // 
+            // x_minorGrid_UD
+            // 
+            this.x_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_minorGrid_UD.Items.Add("None");
+            this.x_minorGrid_UD.Items.Add("Solid");
+            this.x_minorGrid_UD.Location = new System.Drawing.Point(113, 145);
+            this.x_minorGrid_UD.Name = "x_minorGrid_UD";
+            this.x_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
+            this.x_minorGrid_UD.TabIndex = 11;
+            this.x_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_minorGrid_UD_SelectedItemChanged);
+            // 
+            // x_minorGrid_Lbl
+            // 
+            this.x_minorGrid_Lbl.AutoSize = true;
+            this.x_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.x_minorGrid_Lbl.Location = new System.Drawing.Point(12, 148);
+            this.x_minorGrid_Lbl.Name = "x_minorGrid_Lbl";
+            this.x_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
+            this.x_minorGrid_Lbl.TabIndex = 10;
+            this.x_minorGrid_Lbl.Text = "Minor Gridline";
+            // 
+            // x_majorGrid_UD
+            // 
+            this.x_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_majorGrid_UD.Items.Add("None");
+            this.x_majorGrid_UD.Items.Add("Solid");
+            this.x_majorGrid_UD.Location = new System.Drawing.Point(113, 108);
+            this.x_majorGrid_UD.Name = "x_majorGrid_UD";
+            this.x_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
+            this.x_majorGrid_UD.TabIndex = 9;
+            this.x_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_majorGrid_UD_SelectedItemChanged);
+            // 
+            // x_majorGrid_Lbl
+            // 
+            this.x_majorGrid_Lbl.AutoSize = true;
+            this.x_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.x_majorGrid_Lbl.Location = new System.Drawing.Point(12, 111);
+            this.x_majorGrid_Lbl.Name = "x_majorGrid_Lbl";
+            this.x_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
+            this.x_majorGrid_Lbl.TabIndex = 8;
+            this.x_majorGrid_Lbl.Text = "Major Gridline";
+            // 
+            // xtickUD
+            // 
+            this.xtickUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xtickUD.Items.Add("None");
+            this.xtickUD.Items.Add("Outside");
+            this.xtickUD.Items.Add("Inside");
+            this.xtickUD.Items.Add("Cross");
+            this.xtickUD.Location = new System.Drawing.Point(113, 34);
+            this.xtickUD.Name = "xtickUD";
+            this.xtickUD.Size = new System.Drawing.Size(120, 20);
+            this.xtickUD.TabIndex = 2;
+            this.xtickUD.SelectedItemChanged += new System.EventHandler(this.axisxtickUD_SelectedItemChanged);
+            // 
+            // axisxtick_Lbl
+            // 
+            this.axisxtick_Lbl.AutoSize = true;
+            this.axisxtick_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.axisxtick_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.axisxtick_Lbl.Location = new System.Drawing.Point(31, 37);
+            this.axisxtick_Lbl.Name = "axisxtick_Lbl";
+            this.axisxtick_Lbl.Size = new System.Drawing.Size(66, 15);
+            this.axisxtick_Lbl.TabIndex = 0;
+            this.axisxtick_Lbl.Text = "Tick Marks";
+            // 
+            // formatX_Lbl
+            // 
+            this.formatX_Lbl.AutoSize = true;
+            this.formatX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.formatX_Lbl.Location = new System.Drawing.Point(3, 185);
+            this.formatX_Lbl.Name = "formatX_Lbl";
+            this.formatX_Lbl.Size = new System.Drawing.Size(94, 15);
+            this.formatX_Lbl.TabIndex = 14;
+            this.formatX_Lbl.Text = "Number Format";
+            // 
+            // formatY_Lbl
+            // 
+            this.formatY_Lbl.AutoSize = true;
+            this.formatY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.formatY_Lbl.Location = new System.Drawing.Point(4, 185);
+            this.formatY_Lbl.Name = "formatY_Lbl";
+            this.formatY_Lbl.Size = new System.Drawing.Size(94, 15);
+            this.formatY_Lbl.TabIndex = 18;
+            this.formatY_Lbl.Text = "Number Format";
+            // 
+            // formatY_UD
+            // 
+            this.formatY_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_UD.Items.Add("0");
+            this.formatY_UD.Items.Add("0E0");
+            this.formatY_UD.Items.Add("0.0E0");
+            this.formatY_UD.Location = new System.Drawing.Point(114, 180);
+            this.formatY_UD.Name = "formatY_UD";
+            this.formatY_UD.Size = new System.Drawing.Size(120, 20);
+            this.formatY_UD.TabIndex = 19;
+            this.formatY_UD.SelectedItemChanged += new System.EventHandler(this.formatY_UD_SelectedItemChanged);
+            // 
+            // formatX_UD
+            // 
+            this.formatX_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatX_UD.Items.Add("0");
+            this.formatX_UD.Items.Add("0E0");
+            this.formatX_UD.Items.Add("0.0E0");
+            this.formatX_UD.Location = new System.Drawing.Point(113, 180);
+            this.formatX_UD.Name = "formatX_UD";
+            this.formatX_UD.Size = new System.Drawing.Size(120, 20);
+            this.formatX_UD.TabIndex = 20;
+            this.formatX_UD.SelectedItemChanged += new System.EventHandler(this.formatX_UD_SelectedItemChanged);
             // 
             // Form10
             // 
@@ -892,24 +956,24 @@
             this.Text = "Format Plot Area : Style";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fragW1_numUD)).EndInit();
+            this.fit_grpBx.ResumeLayout(false);
+            this.fit_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fitW1_numUD)).EndInit();
-            this.tabPage2.ResumeLayout(false);
+            this.Theor_grpBx.ResumeLayout(false);
+            this.Theor_grpBx.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fragW1_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cenW1_numUD)).EndInit();
             this.exp1_grpBx.ResumeLayout(false);
             this.exp1_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.peakW1_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.expW1_numUD)).EndInit();
-            this.Theor_grpBx.ResumeLayout(false);
-            this.Theor_grpBx.PerformLayout();
-            this.fit_grpBx.ResumeLayout(false);
-            this.fit_grpBx.PerformLayout();
-            this.tickmark_grpBx.ResumeLayout(false);
-            this.tickmark_grpBx.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
             this.units_grpBx.ResumeLayout(false);
             this.units_grpBx.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yInterval_UD)).EndInit();
+            this.tickmark_grpBx.ResumeLayout(false);
+            this.tickmark_grpBx.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -965,8 +1029,12 @@
         private System.Windows.Forms.DomainUpDown x_majorGrid_UD;
         private System.Windows.Forms.Label x_majorGrid_Lbl;
         private System.Windows.Forms.NumericUpDown yInterval_UD;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label intervalY_Lbl;
         private System.Windows.Forms.NumericUpDown xInterval_UD;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label intervalX_Lbl;
+        private System.Windows.Forms.Label formatX_Lbl;
+        private System.Windows.Forms.Label formatY_Lbl;
+        private System.Windows.Forms.DomainUpDown formatY_UD;
+        private System.Windows.Forms.DomainUpDown formatX_UD;
     }
 }

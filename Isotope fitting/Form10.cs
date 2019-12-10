@@ -266,5 +266,39 @@ namespace Isotope_fitting
         {
             frm2.y_interval = (double)yInterval_UD.Value; frm2.oxy_changes();
         }
+
+        private void formatX_UD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (formatX_UD.SelectedIndex)
+            {
+                case 0:
+                    frm2.x_format ="0" ;
+                    break;
+                case 1:
+                    frm2.x_format = "0E0";
+                    break;
+                case 2:
+                    frm2.x_format = "0.0E0";
+                    break;                
+            }
+            frm2.oxy_changes();
+        }
+
+        private void formatY_UD_SelectedItemChanged(object sender, EventArgs e)
+        {
+            switch (formatY_UD.SelectedIndex)
+            {
+                case 0:
+                    frm2.y_format = "0";
+                    break;
+                case 1:
+                    frm2.y_format = "0E0";
+                    break;
+                case 2:
+                    frm2.y_format = "0.0E0";
+                    break;
+            }
+            frm2.oxy_changes();
+        }
     }
 }
