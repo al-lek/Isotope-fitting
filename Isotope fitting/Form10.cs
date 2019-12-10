@@ -22,6 +22,8 @@ namespace Isotope_fitting
             expW1_numUD.Value = (decimal)frm2.exp_width;
             fitW1_numUD.Value = (decimal)frm2.fit_width;
             fragW1_numUD.Value = (decimal)frm2.frag_width;
+            cenW1_numUD.Value = (decimal)frm2.cen_width;
+            peakW1_numUD.Value = (decimal)frm2.peak_width;
 
         }
 
@@ -31,33 +33,36 @@ namespace Isotope_fitting
             ColorDialog clrDlg = new ColorDialog();            
             if (clrDlg.ShowDialog() == DialogResult.OK) { frm2.exp_color = clrDlg.Color.ToArgb(); if (Form2.custom_colors.Count > 0) { Form2.custom_colors[0] = clrDlg.Color.ToArgb(); } }
         }
-
         private void fitW1_Btn_Click(object sender, EventArgs e)
         {
             ColorDialog clrDlg = new ColorDialog();
             if (clrDlg.ShowDialog() == DialogResult.OK) { frm2.fit_color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb());  }
         }
-
-        private void refresh10_Btn_Click(object sender, EventArgs e)
+        private void peakW1_Btn_Click(object sender, EventArgs e)
         {
-            frm2.refresh_frm9();
+            ColorDialog clrDlg = new ColorDialog();
+            if (clrDlg.ShowDialog() == DialogResult.OK) { frm2.peak_color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
         }
-
         private void expW1_numUD_ValueChanged(object sender, EventArgs e)
         {
             frm2.exp_width = (double)expW1_numUD.Value; 
         }
-
         private void fitW1_numUD_ValueChanged(object sender, EventArgs e)
         {
             frm2.fit_width = (double)fitW1_numUD.Value;
         }
-
         private void fragW1_numUD_ValueChanged(object sender, EventArgs e)
         {
             frm2.frag_width = (double)fragW1_numUD.Value;
         }
-
+        private void peakW1_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.peak_width = (double)peakW1_numUD.Value;
+        }
+        private void cenW1_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.cen_width = (double)cenW1_numUD.Value;
+        }
         private void exp10_UD_SelectedItemChanged(object sender, EventArgs e)
         {
             switch (exp10_UD.SelectedIndex)
@@ -82,7 +87,6 @@ namespace Isotope_fitting
                     break;
             }
         }
-
         private void fit10_UD_SelectedItemChanged(object sender, EventArgs e)
         {
             switch (fit10_UD.SelectedIndex)
@@ -107,7 +111,6 @@ namespace Isotope_fitting
                     break;
             }
         }
-
         private void frag10_UD_SelectedItemChanged(object sender, EventArgs e)
         {
             switch (frag10_UD.SelectedIndex)
@@ -132,20 +135,34 @@ namespace Isotope_fitting
                     break;
             }
         }
-
         private void reset_Btn_Click(object sender, EventArgs e)
         {
-            frm2.fit_color = OxyColors.Black; frm2.exp_color = OxyColors.Black.ToColor().ToArgb(); if (Form2.custom_colors.Count>0) { Form2.custom_colors[0] = OxyColors.Black.ToColor().ToArgb(); }
+            frm2.fit_color = OxyColors.Black; frm2.peak_color = OxyColors.Crimson; frm2.exp_color = OxyColors.Black.ToColor().ToArgb(); if (Form2.custom_colors.Count>0) { Form2.custom_colors[0] = OxyColors.Black.ToColor().ToArgb(); }
             frm2.fit_style = LineStyle.Dot; frm2.exper_style = LineStyle.Solid; frm2.frag_style = LineStyle.Solid;
             frm2.exp_width = 1; frm2.frag_width = 2; frm2.fit_width = 1;
             expW1_numUD.Value = 1;
             fitW1_numUD.Value = 1;
             fragW1_numUD.Value = 2;
+            cenW1_numUD.Value = 1;
+            peakW1_numUD.Value = 1;
+
         }
+        private void refresh10_Btn_Click(object sender, EventArgs e)
+        {
+            frm2.refresh_frm9();
+        }
+
+
+
         #endregion
 
         #region tab2 Plot step etc
 
         #endregion
+
+        private void Theor_grpBx_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

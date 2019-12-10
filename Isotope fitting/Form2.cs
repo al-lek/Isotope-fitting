@@ -222,17 +222,19 @@ namespace Isotope_fitting
         #endregion
 
         #region plot area format tab1
-
-        #endregion
         public OxyColor fit_color = OxyColors.Black;
         public int exp_color = OxyColors.Black.ToColor().ToArgb();
-
+        public OxyColor peak_color = OxyColors.Crimson;
         public LineStyle fit_style = LineStyle.Dot;
         public LineStyle exper_style = LineStyle.Solid;
         public LineStyle frag_style = LineStyle.Solid;
         public double exp_width = 1;
         public double frag_width = 2;
         public double fit_width = 1;
+        public double peak_width = 1;
+        public double cen_width = 1;
+        #endregion
+
         #endregion
 
 
@@ -2890,14 +2892,14 @@ namespace Isotope_fitting
                 if (Form9.now == true && i==all_data.Count-1 )
                 {
                     OxyColor cc = Form9.Fragments3[Form9.selected_idx].Color;
-                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = 1 };
+                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
                     iso_plot.Model.Series.Add(bar);
                     break;
                 }
                 else
                 {
                     OxyColor cc = get_fragment_color(i);
-                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = 1 };
+                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
                     iso_plot.Model.Series.Add(bar);
                 }
                
@@ -2917,7 +2919,7 @@ namespace Isotope_fitting
             {
                 //RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson };
                 //iso_plot.Model.Series.Add(bar);
-                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1,StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson,BarWidth=1 };
+                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1,StrokeColor = peak_color, FillColor = peak_color,BarWidth= peak_width };
                 iso_plot.Model.Series.Add(bar);
             }
             
@@ -8217,7 +8219,7 @@ namespace Isotope_fitting
             if (index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
 
             LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 1 };
-            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.Lime, BarWidth = 1 };
+            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 1 };
             LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 1 };
             LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = 1 };
             LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 1 };
@@ -8242,12 +8244,12 @@ namespace Isotope_fitting
             ScatterSeries c_10000 = new ScatterSeries() { MarkerSize =5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.Firebrick).ToOxyColor() };
             ScatterSeries c_100000 = new ScatterSeries() { MarkerSize =6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.Firebrick).ToOxyColor() };
             ScatterSeries c_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.Firebrick).ToOxyColor() };
-            ScatterSeries x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Lime).ToOxyColor() };
-            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.Lime).ToOxyColor() };
-            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.Lime).ToOxyColor() };
-            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.Lime).ToOxyColor() };
-            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize =6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.Lime).ToOxyColor() };
-            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.Lime).ToOxyColor() };
+            ScatterSeries x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize =6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.LimeGreen).ToOxyColor() };
             ScatterSeries y_10 = new ScatterSeries() { MarkerSize = 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
             ScatterSeries y_100 = new ScatterSeries() { MarkerSize =3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.DodgerBlue).ToOxyColor() };
             ScatterSeries y_1000 = new ScatterSeries() { MarkerSize =4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.DodgerBlue).ToOxyColor() };
