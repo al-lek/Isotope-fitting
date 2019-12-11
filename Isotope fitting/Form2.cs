@@ -257,8 +257,7 @@ namespace Isotope_fitting
 
         #endregion
 
-
-
+        
         #region PARAMETER SET TAB DIAGRAMS
         List<ion> IonDraw = new List<ion>();
         List<ion> IonDrawIndex = new List<ion>();
@@ -1175,9 +1174,10 @@ namespace Isotope_fitting
             frag_listView.Visible = false;             
             if (frag_tree.Nodes.Count>0) { frag_tree.Nodes.Clear(); }
             frag_tree.AfterCheck += (s, e) => {frag_node_checkChanged(e.Node, e.Node.Checked); };
-            frag_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
+            frag_tree.ContextMenu = new ContextMenu(new MenuItem[4] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
-                                                                      new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); })});
+                                                                      new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
+                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }) });
             //frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Remove", (s, e) => { remove_node(frag_tree.SelectedNode.Index); }) });
             frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
 
@@ -1200,12 +1200,14 @@ namespace Isotope_fitting
             frag_tree.EndUpdate();
             frag_tree.Visible = true;
         }
-        private void remove_node(int index)
+        private void remove_node(TreeNode node)
         {
-            if (fit_tree != null) { fit_tree.Dispose(); }
+            if (string.IsNullOrEmpty(node.Name)) return;
+            int idx = Convert.ToInt32(node.Name);
+            if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (Fragments2.Count > 0)
             {
-                Fragments2.RemoveAt(index); // thread safely fire event to continue calculations
+                Fragments2.RemoveAt(idx); // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             }
         }
@@ -1490,7 +1492,7 @@ namespace Isotope_fitting
 
             return new double[] { ppm, peak_points[closest_idx][3] };
         }
-
+      
         #endregion
 
         #region 3.a Recalculate data aligned
@@ -4022,7 +4024,7 @@ namespace Isotope_fitting
                 // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             }
-            if (initial_count> Fragments2.Count && fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
+            if (initial_count> Fragments2.Count && fit_tree != null){selectedFragments.Clear();fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); }
         }
         private bool decision_algorithm2(FragForm fra)
@@ -8684,6 +8686,8 @@ namespace Isotope_fitting
         {
             selectedFragments.Clear();
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
+
             if ( fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
         }
         private void styleFormatBtn_Click(object sender, EventArgs e)
@@ -8693,7 +8697,7 @@ namespace Isotope_fitting
         }
         public void ending_frm9()
         {
-            all_data.RemoveRange(1, all_data.Count - 1);
+            all_data.RemoveRange(1, all_data.Count - 1); custom_colors.RemoveRange(1, custom_colors.Count - 1);
             add_fragments_to_all_data();
             recalculate_all_data_aligned();
         }
