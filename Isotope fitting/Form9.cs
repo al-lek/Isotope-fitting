@@ -113,7 +113,7 @@ namespace Isotope_fitting
                 listviewitem.SubItems.Add(fra.Charge.ToString());
                 listviewitem.SubItems.Add(fra.FinalFormula.ToString());
                 listviewitem.SubItems.Add(fra.Counter.ToString());
-                listviewitem.SubItems.Add(fra.PPM_Error.ToString());
+                listviewitem.SubItems.Add(fra.PPM_Error.ToString("0.##"));
 
                 fragListView9.Items.Add(listviewitem);
             }

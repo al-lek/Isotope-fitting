@@ -216,9 +216,7 @@ namespace Isotope_fitting
 
         #region tooltip tree_view
 
-        private const int InitialToolTipDelay =1, MaxToolTipDisplayTime = 4000;
-
-        private ToolTip toolTip = new ToolTip() { InitialDelay=1,IsBalloon=false,ReshowDelay=1,UseFading=true,AutoPopDelay=5000};      
+        private ToolTip toolTip_fit = new ToolTip() { InitialDelay=1,IsBalloon=false,ReshowDelay=1,UseFading=true,AutoPopDelay=10000};      
         string tool_text = "";
         #endregion
 
@@ -2199,9 +2197,9 @@ namespace Isotope_fitting
             fit_tree.AfterSelect += (s, e) => { select_check(e.Node);  };     
             fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
-            fit_tree.NodeMouseHover += (s, e) => {toolTip.Hide(fit_tree); fit_tree_tooltip(e.Node); };
-            fit_tree.MouseLeave += (s, e) => {toolTip.Hide(fit_tree);};
-            fit_tree.MouseHover += (s, e) => { toolTip.Hide(fit_tree); };
+            fit_tree.NodeMouseHover += (s, e) => {toolTip_fit.Hide(fit_tree); fit_tree_tooltip(e.Node); };
+            fit_tree.MouseLeave += (s, e) => {toolTip_fit.Hide(fit_tree);};
+            fit_tree.MouseHover += (s, e) => { toolTip_fit.Hide(fit_tree); };
 
             // interpret fitted results
             fit_tree.BeginUpdate();
@@ -2277,11 +2275,11 @@ namespace Isotope_fitting
             {
                 string pp1, pp2, pp3, pp4, pp5, pp6, pp7;
                 pp1 = Fragments2[all_fitted_sets[set_idx][set_pos_idx][k] - 1].Name.PadRight(30);//fragment name
-                pp2 = "(m/z)" + Fragments2[all_fitted_sets[set_idx][set_pos_idx][k] - 1].Mz.PadRight(20);//fragments m/z
-                pp3 = "(di)" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%").PadRight(20);//fragment's di
-                pp4 = "(sd)" + ("±" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 2], 2).ToString()).PadRight(20);//fragment's sd
-                pp5 = "(ei)" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%").PadRight(20);//fragment's ei
-                pp6 = "(di')" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%").PadRight(20);//fragment's di'
+                pp2 = "(m/z)" + Fragments2[all_fitted_sets[set_idx][set_pos_idx][k] - 1].Mz.PadRight(15);//fragments m/z
+                pp3 = "(di)" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%").PadRight(15);//fragment's di
+                pp4 = "(sd)" + ("±" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 2], 2).ToString()).PadRight(13);//fragment's sd
+                pp5 = "(ei)" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%").PadRight(13);//fragment's ei
+                pp6 = "(di')" + (Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%").PadRight(15);//fragment's di'
                 pp7 = "(sd')" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 5], 3).ToString();//fragment's sd'
                 sb.AppendLine(pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7);
             }
@@ -2296,7 +2294,7 @@ namespace Isotope_fitting
             // Make balloon point to upper right corner of the node.
             loc.Offset(fitnode.Bounds.Width, 0);
 
-            toolTip.Show(tool_text, fit_tree, loc);
+            toolTip_fit.Show(tool_text, fit_tree, loc);
            
         }
         private void remove_child_nodes()
