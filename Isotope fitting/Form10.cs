@@ -272,14 +272,11 @@ namespace Isotope_fitting
             switch (formatX_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.x_format ="0" ;
+                    frm2.x_format ="G" ;
                     break;
                 case 1:
-                    frm2.x_format = "0E0";
-                    break;
-                case 2:
-                    frm2.x_format = "0.0E0";
-                    break;                
+                    frm2.x_format = "E";
+                    break;                            
             }
             frm2.oxy_changes();
         }
@@ -289,16 +286,23 @@ namespace Isotope_fitting
             switch (formatY_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.y_format = "0";
+                    frm2.y_format = "G";
                     break;
                 case 1:
-                    frm2.y_format = "0E0";
-                    break;
-                case 2:
-                    frm2.y_format = "0.0E0";
-                    break;
+                    frm2.y_format = "E";
+                    break;               
             }
             frm2.oxy_changes();
+        }
+
+        private void formatX_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.x_numformat = formatX_numUD.Value.ToString(); frm2.oxy_changes();
+        }
+
+        private void formatY_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.y_numformat = formatY_numUD.Value.ToString(); frm2.oxy_changes();
         }
     }
 }

@@ -63,6 +63,8 @@
             this.refresh10_Btn = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.units_grpBx = new System.Windows.Forms.GroupBox();
+            this.formatY_UD = new System.Windows.Forms.DomainUpDown();
+            this.formatY_Lbl = new System.Windows.Forms.Label();
             this.yInterval_UD = new System.Windows.Forms.NumericUpDown();
             this.intervalY_Lbl = new System.Windows.Forms.Label();
             this.y_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
@@ -72,6 +74,8 @@
             this.ytickUD = new System.Windows.Forms.DomainUpDown();
             this.axisytick_Lbl = new System.Windows.Forms.Label();
             this.tickmark_grpBx = new System.Windows.Forms.GroupBox();
+            this.formatX_UD = new System.Windows.Forms.DomainUpDown();
+            this.formatX_Lbl = new System.Windows.Forms.Label();
             this.xInterval_UD = new System.Windows.Forms.NumericUpDown();
             this.intervalX_Lbl = new System.Windows.Forms.Label();
             this.x_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
@@ -80,10 +84,8 @@
             this.x_majorGrid_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
-            this.formatX_Lbl = new System.Windows.Forms.Label();
-            this.formatY_Lbl = new System.Windows.Forms.Label();
-            this.formatY_UD = new System.Windows.Forms.DomainUpDown();
-            this.formatX_UD = new System.Windows.Forms.DomainUpDown();
+            this.formatX_numUD = new System.Windows.Forms.NumericUpDown();
+            this.formatY_numUD = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.fit_grpBx.SuspendLayout();
@@ -99,6 +101,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.yInterval_UD)).BeginInit();
             this.tickmark_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.formatY_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -641,6 +645,7 @@
             // 
             // units_grpBx
             // 
+            this.units_grpBx.Controls.Add(this.formatY_numUD);
             this.units_grpBx.Controls.Add(this.formatY_UD);
             this.units_grpBx.Controls.Add(this.formatY_Lbl);
             this.units_grpBx.Controls.Add(this.yInterval_UD);
@@ -659,6 +664,28 @@
             this.units_grpBx.TabIndex = 1;
             this.units_grpBx.TabStop = false;
             this.units_grpBx.Text = "Axis Y";
+            // 
+            // formatY_UD
+            // 
+            this.formatY_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_UD.Items.Add("General");
+            this.formatY_UD.Items.Add("Scientific");
+            this.formatY_UD.Location = new System.Drawing.Point(114, 180);
+            this.formatY_UD.Name = "formatY_UD";
+            this.formatY_UD.Size = new System.Drawing.Size(85, 20);
+            this.formatY_UD.TabIndex = 19;
+            this.formatY_UD.SelectedItemChanged += new System.EventHandler(this.formatY_UD_SelectedItemChanged);
+            // 
+            // formatY_Lbl
+            // 
+            this.formatY_Lbl.AutoSize = true;
+            this.formatY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.formatY_Lbl.Location = new System.Drawing.Point(4, 185);
+            this.formatY_Lbl.Name = "formatY_Lbl";
+            this.formatY_Lbl.Size = new System.Drawing.Size(94, 15);
+            this.formatY_Lbl.TabIndex = 18;
+            this.formatY_Lbl.Text = "Number Format";
             // 
             // yInterval_UD
             // 
@@ -770,6 +797,7 @@
             // 
             // tickmark_grpBx
             // 
+            this.tickmark_grpBx.Controls.Add(this.formatX_numUD);
             this.tickmark_grpBx.Controls.Add(this.formatX_UD);
             this.tickmark_grpBx.Controls.Add(this.formatX_Lbl);
             this.tickmark_grpBx.Controls.Add(this.xInterval_UD);
@@ -788,6 +816,28 @@
             this.tickmark_grpBx.TabIndex = 0;
             this.tickmark_grpBx.TabStop = false;
             this.tickmark_grpBx.Text = "Axis X";
+            // 
+            // formatX_UD
+            // 
+            this.formatX_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatX_UD.Items.Add("General");
+            this.formatX_UD.Items.Add("Scientific");
+            this.formatX_UD.Location = new System.Drawing.Point(113, 180);
+            this.formatX_UD.Name = "formatX_UD";
+            this.formatX_UD.Size = new System.Drawing.Size(85, 20);
+            this.formatX_UD.TabIndex = 20;
+            this.formatX_UD.SelectedItemChanged += new System.EventHandler(this.formatX_UD_SelectedItemChanged);
+            // 
+            // formatX_Lbl
+            // 
+            this.formatX_Lbl.AutoSize = true;
+            this.formatX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.formatX_Lbl.Location = new System.Drawing.Point(3, 185);
+            this.formatX_Lbl.Name = "formatX_Lbl";
+            this.formatX_Lbl.Size = new System.Drawing.Size(94, 15);
+            this.formatX_Lbl.TabIndex = 14;
+            this.formatX_Lbl.Text = "Number Format";
             // 
             // xInterval_UD
             // 
@@ -897,51 +947,43 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
-            // formatX_Lbl
+            // formatX_numUD
             // 
-            this.formatX_Lbl.AutoSize = true;
-            this.formatX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.formatX_Lbl.Location = new System.Drawing.Point(3, 185);
-            this.formatX_Lbl.Name = "formatX_Lbl";
-            this.formatX_Lbl.Size = new System.Drawing.Size(94, 15);
-            this.formatX_Lbl.TabIndex = 14;
-            this.formatX_Lbl.Text = "Number Format";
+            this.formatX_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatX_numUD.Location = new System.Drawing.Point(201, 180);
+            this.formatX_numUD.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.formatX_numUD.Name = "formatX_numUD";
+            this.formatX_numUD.Size = new System.Drawing.Size(32, 20);
+            this.formatX_numUD.TabIndex = 21;
+            this.formatX_numUD.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.formatX_numUD.ValueChanged += new System.EventHandler(this.formatX_numUD_ValueChanged);
             // 
-            // formatY_Lbl
+            // formatY_numUD
             // 
-            this.formatY_Lbl.AutoSize = true;
-            this.formatY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.formatY_Lbl.Location = new System.Drawing.Point(4, 185);
-            this.formatY_Lbl.Name = "formatY_Lbl";
-            this.formatY_Lbl.Size = new System.Drawing.Size(94, 15);
-            this.formatY_Lbl.TabIndex = 18;
-            this.formatY_Lbl.Text = "Number Format";
-            // 
-            // formatY_UD
-            // 
-            this.formatY_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatY_UD.Items.Add("0");
-            this.formatY_UD.Items.Add("0E0");
-            this.formatY_UD.Items.Add("0.0E0");
-            this.formatY_UD.Location = new System.Drawing.Point(114, 180);
-            this.formatY_UD.Name = "formatY_UD";
-            this.formatY_UD.Size = new System.Drawing.Size(120, 20);
-            this.formatY_UD.TabIndex = 19;
-            this.formatY_UD.SelectedItemChanged += new System.EventHandler(this.formatY_UD_SelectedItemChanged);
-            // 
-            // formatX_UD
-            // 
-            this.formatX_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatX_UD.Items.Add("0");
-            this.formatX_UD.Items.Add("0E0");
-            this.formatX_UD.Items.Add("0.0E0");
-            this.formatX_UD.Location = new System.Drawing.Point(113, 180);
-            this.formatX_UD.Name = "formatX_UD";
-            this.formatX_UD.Size = new System.Drawing.Size(120, 20);
-            this.formatX_UD.TabIndex = 20;
-            this.formatX_UD.SelectedItemChanged += new System.EventHandler(this.formatX_UD_SelectedItemChanged);
+            this.formatY_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_numUD.Location = new System.Drawing.Point(202, 180);
+            this.formatY_numUD.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.formatY_numUD.Name = "formatY_numUD";
+            this.formatY_numUD.Size = new System.Drawing.Size(32, 20);
+            this.formatY_numUD.TabIndex = 22;
+            this.formatY_numUD.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.formatY_numUD.ValueChanged += new System.EventHandler(this.formatY_numUD_ValueChanged);
             // 
             // Form10
             // 
@@ -974,6 +1016,8 @@
             this.tickmark_grpBx.ResumeLayout(false);
             this.tickmark_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.formatY_numUD)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1036,5 +1080,7 @@
         private System.Windows.Forms.Label formatY_Lbl;
         private System.Windows.Forms.DomainUpDown formatY_UD;
         private System.Windows.Forms.DomainUpDown formatX_UD;
+        private System.Windows.Forms.NumericUpDown formatY_numUD;
+        private System.Windows.Forms.NumericUpDown formatX_numUD;
     }
 }

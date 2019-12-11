@@ -244,8 +244,10 @@ namespace Isotope_fitting
         public double x_majorStep = 100;
         public double y_minorStep = 50;
         public double y_majorStep = 100;
-        public string x_format = "0";
-        public string y_format = "0";
+        public string x_format = "G";
+        public string y_format = "G";
+        public string x_numformat = "0";
+        public string y_numformat = "0";
 
         public LineStyle Ymajor_grid = LineStyle.Solid;
         public LineStyle Yminor_grid = LineStyle.Solid;
@@ -3049,10 +3051,10 @@ namespace Isotope_fitting
             //////    if (e.Delta > 0) iso_plot.Model.DefaultXAxis.ZoomAtCenter(1);
             //////};
 
-            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { StringFormat = y_format, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid,MinorGridlineStyle=Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
+            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { StringFormat = y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid,MinorGridlineStyle=Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
             iso_model.Axes.Add(linearAxis1);
 
-            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle =Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format+x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle =Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             iso_model.Axes.Add(linearAxis2);
 
             // residual plot
@@ -3064,10 +3066,10 @@ namespace Isotope_fitting
             PlotModel res_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendPosition = LegendPosition.TopRight, LegendFontSize = 11, TitleFontSize = 11 }; // Title = "",
             res_plot.Model = res_model;
 
-            var linearAxis1r = new OxyPlot.Axes.LinearAxis() { StringFormat =y_format, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid, MinorGridlineStyle = Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
+            var linearAxis1r = new OxyPlot.Axes.LinearAxis() { StringFormat =y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid, MinorGridlineStyle = Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
             //linearAxis1r.MajorStep = linearAxis1r.ActualMaximum / 2.0;
             res_model.Axes.Add(linearAxis1r);
-            var linearAxis2r = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle = Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis2r = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format + x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle = Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             res_model.Axes.Add(linearAxis2r);
 
             res_plot.Controller = new CustomPlotController();
@@ -8670,25 +8672,25 @@ namespace Isotope_fitting
             iso_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
             iso_plot.Model.Axes[0].TickStyle = Y_tick;
             iso_plot.Model.Axes[0].IntervalLength = y_interval;
-            iso_plot.Model.Axes[0].StringFormat = y_format;
+            iso_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
 
             iso_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
             iso_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
             iso_plot.Model.Axes[1].TickStyle = X_tick;
             iso_plot.Model.Axes[1].IntervalLength = x_interval;
-            iso_plot.Model.Axes[1].StringFormat = x_format;
+            iso_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
 
             res_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
             res_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
             res_plot.Model.Axes[0].TickStyle = Y_tick;
             res_plot.Model.Axes[0].IntervalLength = y_interval;
-            res_plot.Model.Axes[0].StringFormat = y_format;
+            res_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
 
             res_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
             res_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
             res_plot.Model.Axes[1].TickStyle = X_tick;
             res_plot.Model.Axes[1].IntervalLength = x_interval;
-            res_plot.Model.Axes[1].StringFormat = x_format;
+            res_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
 
             invalidate_all();
         }
