@@ -24,13 +24,18 @@ namespace Isotope_fitting
         double[] thres = new double[5] { 100,100,100,100,100};
         double[] coeff_matrix=new double[6] {0.0,0.0,0.0,0.0,0.0,0.0 };
         int vis_res;
+        int best_num;
        
 
         public Form6(bool node,int node_idx)
         {
             InitializeComponent();
             numericUpDown1.Value = (decimal)Form2.visible_results;
-            vis_res= Form2.visible_results;
+            best_num_UD.Value = (decimal)Form2.best_num_results;
+
+            vis_res = Form2.visible_results;
+            best_num = Form2.best_num_results;
+
             if (node)
             {
                 is_node = true;idx = node_idx;
@@ -242,6 +247,8 @@ namespace Isotope_fitting
                 Form2.tab_thres[idx][4] = thres[4];
 
 
+                Form2.visible_results = vis_res;
+                Form2.best_num_results = best_num;
             }
             else
             {
@@ -262,6 +269,8 @@ namespace Isotope_fitting
 
 
                 Form2.visible_results = vis_res;
+                Form2.best_num_results = best_num;
+
             }
         }
 
@@ -270,6 +279,11 @@ namespace Isotope_fitting
             if (dinew_checkBox.Checked == true) { labeldinew.Enabled = true; dinew_coef_numUD.Enabled = true; dinew_coef_numUD.BackColor = Color.Teal; ObjLbl.Enabled = true; }
             else { labeldinew.Enabled = false; dinew_coef_numUD.Enabled = false; dinew_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; dinew_coef_numUD.Value = 0; }
             sort[5] = dinew_checkBox.Checked;
+        }
+
+        private void best_num_UD_ValueChanged(object sender, EventArgs e)
+        {
+            best_num = (int)best_num_UD.Value;
         }
     }
 }

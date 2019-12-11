@@ -189,6 +189,8 @@ namespace Isotope_fitting
         /// </summary>
         public static double[] a_coef = new double[] { 1.0,0.0,0.0,0.0,0.0, 0.0 };
         public static int visible_results =100;
+        public static int best_num_results = 1;
+
         /// <summary>
         /// list [Ai sort,A sort,di sort,sse sort, ei sort, dinew sort](6)
         /// </summary>
@@ -2639,8 +2641,8 @@ namespace Isotope_fitting
                 int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
                 int compare_result = 0;
                 // value to compare--->sse_coef*sse+Ai_coef*Ai+A_coef*A+di_coef*di+ei_coef*ei+dinew_coef+dinew
-                double value1 = tab_coef[tx_set_idx][3] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3] + tab_coef[tx_set_idx][0] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2] + tab_coef[tx_set_idx][1] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1] +tab_coef[tx_set_idx][2]  * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4] + tab_coef[tx_set_idx][4] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 5] + tab_coef[tx_set_idx][5] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 6];
-                double value2 = tab_coef[tx_set_idx][3] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3] + tab_coef[tx_set_idx][0] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2] + tab_coef[tx_set_idx][1] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1] + tab_coef[tx_set_idx][2]  * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4] + tab_coef[tx_set_idx][4] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 5] + tab_coef[tx_set_idx][5] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 6];
+                double value1 = (tab_coef[tx_set_idx][3] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3]) + (tab_coef[tx_set_idx][0] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2]) + (tab_coef[tx_set_idx][1] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1]) +(tab_coef[tx_set_idx][2]  * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4]) + (tab_coef[tx_set_idx][4] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 5]) + (tab_coef[tx_set_idx][5] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 6]);
+                double value2 = (tab_coef[tx_set_idx][3] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3]) + (tab_coef[tx_set_idx][0] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]) + (tab_coef[tx_set_idx][1] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2]  * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4]) + (tab_coef[tx_set_idx][4] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 5]) + (tab_coef[tx_set_idx][5] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 6]);
                 compare_result = Decimal.Compare((decimal)value1, (decimal)value2);                
                 return compare_result;
             }
@@ -2708,17 +2710,49 @@ namespace Isotope_fitting
                 uncheckall_Frag();
                 block_plot_refresh = true; block_fit_refresh = true;
                 fit_tree.BeginUpdate();frag_tree.BeginUpdate();
-                if (individual && fit_tree.Nodes.Count > node_index && fit_tree.Nodes[node_index].Nodes.Count > 0)
+                if (best_num_results==1)
                 {
-                    fit_tree.Nodes[node_index].Nodes[0].Checked = true;
+                    if (individual && fit_tree.Nodes.Count > node_index && fit_tree.Nodes[node_index].Nodes.Count > 0)
+                    {
+                        fit_tree.Nodes[node_index].Nodes[0].Checked = true;
+                    }
+                    else
+                    {
+                        foreach (TreeNode node in fit_tree.Nodes)
+                        {
+                            if (node.Nodes.Count > 0) { node.Nodes[0].Checked = true; }
+                        }
+                    }
                 }
                 else
                 {
-                    foreach (TreeNode node in fit_tree.Nodes)
+                    int best1 = best_num_results-1;
+                    if (individual && fit_tree.Nodes.Count > node_index && fit_tree.Nodes[node_index].Nodes.Count > 0)
                     {
-                        if (node.Nodes.Count > 0) { node.Nodes[0].Checked = true; }
+                        if(fit_tree.Nodes[node_index].Nodes.Count< best_num_results) { best1 = fit_tree.Nodes[node_index].Nodes.Count-1; }
+                        for (int i=best1; i>-1;i--)
+                        {
+                            fit_tree.Nodes[node_index].Nodes[i].Checked = true;
+                        }
+                    }
+                    else
+                    {
+                        foreach (TreeNode node in fit_tree.Nodes)
+                        {
+                            best1 = best_num_results-1;
+                            if (node.Nodes.Count > 0)
+                            {
+                                if (node.Nodes.Count < best_num_results) { best1 = node.Nodes.Count-1; }
+
+                                for (int i = best1; i > -1; i--)
+                                {
+                                    node.Nodes[i].Checked = true;
+                                }                                
+                            }
+                        }
                     }
                 }
+                
                 block_plot_refresh = false; block_fit_refresh = false;
                 fit_tree.EndUpdate(); frag_tree.EndUpdate();
                 refresh_iso_plot();
