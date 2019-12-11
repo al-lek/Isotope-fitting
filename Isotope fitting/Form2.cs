@@ -848,8 +848,12 @@ namespace Isotope_fitting
         public void fragments_and_calculations_sequence_B()
         {
             GC.Collect();
-            all_data.RemoveRange(1, all_data.Count - 1);
-            custom_colors.RemoveRange(1, custom_colors.Count - 1);
+            if (all_data.Count > 1)
+            {
+                all_data.RemoveRange(1, all_data.Count - 1);
+                custom_colors.RemoveRange(1, custom_colors.Count - 1);
+            }
+            
             all_data_aligned.Clear();
             GC.Collect();
             sw1.Reset(); sw1.Start();
@@ -1038,9 +1042,9 @@ namespace Isotope_fitting
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
                 MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");               
             }
-            else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");    
+            else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");
             // thread safely fire event to continue calculations
-            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            if (selected_fragments.Count>0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }            
         }
 
         private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
@@ -1132,7 +1136,7 @@ namespace Isotope_fitting
                 Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Counter = Fragments2.Count;
                 Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
-                if(!Fragments2.Last().Fixed) Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
+                if(!Fragments2.Last().Fixed && max_exp>0) Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
 
                 if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
