@@ -467,6 +467,7 @@ namespace Isotope_fitting
 
             preferences[0] += "max ppm error for di ei calculation: " + ppmDi.ToString() + "\r\n";
 
+
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
         }
@@ -7936,8 +7937,9 @@ namespace Isotope_fitting
         #endregion
         #endregion
         
-        
-        
+
+
+
         #region TAB DIAGRAMS
         private void tabFit_Leave(object sender, EventArgs e)
         {
@@ -8631,6 +8633,7 @@ namespace Isotope_fitting
         #endregion
 
         
+
 
         #region FORM 9 fragment calculator
         private void fragCalc_Btn_Click(object sender, EventArgs e)
