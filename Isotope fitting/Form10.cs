@@ -252,11 +252,6 @@ namespace Isotope_fitting
             }
             frm2.oxy_changes();
         }
-
-
-        #endregion
-
-        
         private void xInterval_UD_ValueChanged(object sender, EventArgs e)
         {
             frm2.x_interval = (double)xInterval_UD.Value; frm2.oxy_changes();
@@ -272,11 +267,11 @@ namespace Isotope_fitting
             switch (formatX_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.x_format ="G" ;
+                    frm2.x_format = "G";
                     break;
                 case 1:
                     frm2.x_format = "E";
-                    break;                            
+                    break;
             }
             frm2.oxy_changes();
         }
@@ -290,7 +285,7 @@ namespace Isotope_fitting
                     break;
                 case 1:
                     frm2.y_format = "E";
-                    break;               
+                    break;
             }
             frm2.oxy_changes();
         }
@@ -304,5 +299,7 @@ namespace Isotope_fitting
         {
             frm2.y_numformat = formatY_numUD.Value.ToString(); frm2.oxy_changes();
         }
+
+        #endregion
     }
 }

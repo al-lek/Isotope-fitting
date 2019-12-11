@@ -278,6 +278,8 @@ namespace Isotope_fitting
         PlotView indexto_plot;
         PlotView indexIntensity_plot;
         PlotView indextoIntensity_plot;
+        PlotView ppm_plot;
+
 
         #endregion
 
@@ -3813,7 +3815,7 @@ namespace Isotope_fitting
                 {
                     Form2.Fragments2[indexS - 1].Fixed = true;
                     file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);
-                    IonDraw.Add(new ion() {Charge=Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
+                    IonDraw.Add(new ion() {PPM_Error= Fragments2[indexS - 1].PPM_Error, Charge =Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
                     if ((IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z"))) IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
                     else IonDraw.Last().SortIdx = IonDraw.Last().Index;
                 }
@@ -3919,7 +3921,7 @@ namespace Isotope_fitting
                                     Fixed=true
                                 });
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                IonDraw.Add(new ion() {Charge= Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
+                                IonDraw.Add(new ion() {PPM_Error= dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
                                 if ((str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z"))) IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
                                 else IonDraw.Last().SortIdx = IonDraw.Last().Index;
                             }
@@ -8194,6 +8196,19 @@ namespace Isotope_fitting
             //bind the 2 axes
             linearAxis9.AxisChanged += (s, e) => { linearAxis13.Zoom(linearAxis9.ActualMinimum, linearAxis9.ActualMaximum); indextoIntensity_plot.InvalidatePlot(true); };
             indexto_model.Updated += (s, e) => { indextoIntensity_plot.Model.Axes[0].Zoom(indexto_plot.Model.Axes[0].ActualMinimum, indexto_plot.Model.Axes[0].ActualMaximum); };
+
+            //PPM plot
+            if (ppm_plot != null) ppm_plot.Dispose();
+            ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            ppm_panel.Controls.Add(ppm_plot);
+            PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal };
+            ppm_plot.Model = ppm_model;
+            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
+            ppm_model.Axes.Add(linearAxis21);
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            ppm_model.Axes.Add(linearAxis22);
+            ppm_plot.MouseDoubleClick += (s, e) => { ppm_model.ResetAllAxes(); ppm_plot.InvalidatePlot(true); };
+
             #endregion
 
             #region toolstrip save-copy etc initiliazation
@@ -8221,6 +8236,7 @@ namespace Isotope_fitting
             int_IdxToCopy_Btn.Click += (s, e) => { export_panel(true, panel1_intIdx); };
             int_IdxToSave_Btn.Click += (s, e) => { export_panel(false, panel1_intIdx); };
 
+            ppmSave_Btn.Click += (s, e) => { export_copy_plot(false, ppm_plot); }; ppmCopy_Btn.Click += (s, e) => { export_copy_plot(true, ppm_plot); };
             #endregion
 
         }
@@ -8242,10 +8258,10 @@ namespace Isotope_fitting
             List<double[]> merged_z = new List<double[]>();
 
             #region initialize graphics
-            if (ax_plot.Model.Series != null) { ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); axCharge_plot.Model.Series.Clear(); byCharge_plot.Model.Series.Clear(); czCharge_plot.Model.Series.Clear(); }
+            if (ax_plot.Model.Series != null) { ppm_plot.Model.Series.Clear(); ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); axCharge_plot.Model.Series.Clear(); byCharge_plot.Model.Series.Clear(); czCharge_plot.Model.Series.Clear(); }
 
-            if (index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
-
+            if (index_plot.Model.Series != null) { ppm_plot.Model.Series.Clear(); index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
+            //
             LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = 1 };
             LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = 1 };
             LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = 1 };
@@ -8253,7 +8269,10 @@ namespace Isotope_fitting
             LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = 1 };
             LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = 1 };            
             ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
-
+            //
+            ScatterSeries ppm_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
+             
+            //
             ScatterSeries a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
             ScatterSeries a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.Green).ToOxyColor() };
             ScatterSeries a_1000 = new ScatterSeries() { MarkerSize = 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.Green).ToOxyColor() };
@@ -8300,6 +8319,7 @@ namespace Isotope_fitting
             for (int i=0;i<IonDraw.Count() ; i++)
             {
                 ion nn = IonDraw[i];
+                ppm_series.Points.Add(new ScatterPoint(i+1, nn.PPM_Error));
                 if (nn.Ion_type.StartsWith("a"))
                 {
                     if (nn.Max_intensity/10<10)
@@ -8423,7 +8443,9 @@ namespace Isotope_fitting
                     else { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Red, Max_intensity = nn.Max_intensity }); }
                 }
             }
-            if(a_Btn.Checked && x_Btn.Checked)
+            ppm_plot.Model.Series.Add(ppm_series);
+
+            if (a_Btn.Checked && x_Btn.Checked)
             {
                 axCharge_plot.Model.Title ="a - x  fragments"; axCharge_plot.Model.Series.Add(a_1000000); axCharge_plot.Model.Series.Add(x_1000000); axCharge_plot.Model.Series.Add(a_100000); axCharge_plot.Model.Series.Add(x_100000); axCharge_plot.Model.Series.Add(a_10000); axCharge_plot.Model.Series.Add(x_10000); axCharge_plot.Model.Series.Add(a_1000); axCharge_plot.Model.Series.Add(x_1000); axCharge_plot.Model.Series.Add(a_100); axCharge_plot.Model.Series.Add(x_100); axCharge_plot.Model.Series.Add(a_10); axCharge_plot.Model.Series.Add(x_10);
             }
@@ -8497,9 +8519,10 @@ namespace Isotope_fitting
             ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
             ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
-            axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;
-
+            axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true);
+            ppm_plot.Model.Axes[1].Maximum = IonDraw.Count() + 1; ppm_plot.Model.Axes[1].Minimum = 0;
+            ppm_plot.InvalidatePlot(true);
 
             if (IonDrawIndexTo.Count() > 0)
             {
@@ -8604,10 +8627,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void ax_window_Click(object sender, EventArgs e)
-        {
-           
-        }
+       
         #endregion
 
         
@@ -8883,6 +8903,7 @@ namespace Isotope_fitting
             
             invalidate_all();
         }
+
         private void reset_temp_plot(PlotView temp_plot)
         {
             temp_plot.Model.Series.Clear();

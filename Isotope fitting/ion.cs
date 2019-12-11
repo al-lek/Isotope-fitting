@@ -15,6 +15,8 @@ namespace Isotope_fitting
         private string ion_type;
         private int sort_idx;
         private int charge;
+        private double ppm_error;
+
 
         private double max_intensity;
 
@@ -52,6 +54,11 @@ namespace Isotope_fitting
         {
             get { return this.charge; }
             set { this.charge = value; }
+        }
+        public double PPM_Error
+        {
+            get { return this.ppm_error; }
+            set { this.ppm_error = value; }
         }
     }
 }
