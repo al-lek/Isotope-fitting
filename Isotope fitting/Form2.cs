@@ -542,9 +542,9 @@ namespace Isotope_fitting
             // post load actions
             enable_UIcontrols("post load");
 
-            selected_window = 1000000;
-            fitMin_Box.Text = experimental[0][0].ToString();
-            fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
+            //selected_window = 1000000;
+            //fitMin_Box.Text = experimental[0][0].ToString();
+            //fitMax_Box.Text = experimental[experimental.Count - 1][0].ToString();
 
             // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = exp_color;
@@ -554,8 +554,8 @@ namespace Isotope_fitting
             experimental_to_all_data();
             recalculate_all_data_aligned();
 
-            //// add experimental to plot
-            refresh_iso_plot();
+            ////// add experimental to plot
+            //refresh_iso_plot();
 
             start_idx = 0;
             end_idx = experimental.Count;
@@ -1204,6 +1204,8 @@ namespace Isotope_fitting
         {
             if (string.IsNullOrEmpty(node.Name)) return;
             int idx = Convert.ToInt32(node.Name);
+            fitted_results.Clear();
+            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
             if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (Fragments2.Count > 0)
             {
@@ -3380,7 +3382,14 @@ namespace Isotope_fitting
                         lock (_locker) { temp_peaks.Add(point); }
                     }
                 }
-                if (progress % 5000 == 0 && progress > 0) progress_display_update(progress);
+                try
+                {
+                    if (progress % 5000 == 0 && progress > 0) progress_display_update(progress);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                };
             });
             progress_display_stop();
 
@@ -3842,6 +3851,9 @@ namespace Isotope_fitting
         }
         private void loadList()
         {
+            fitted_results.Clear();
+            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
             string fullPath = "";
@@ -4024,6 +4036,8 @@ namespace Isotope_fitting
                 // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             }
+            fitted_results.Clear();
+            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
             if (initial_count> Fragments2.Count && fit_tree != null){selectedFragments.Clear();fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); }
         }
@@ -4487,7 +4501,15 @@ namespace Isotope_fitting
 
         private void loadListBtn11_Click(object sender, EventArgs e)
         {
-            loadList();
+            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                loadList();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
         }
 
         private void clearListBtn11_Click(object sender, EventArgs e)
@@ -4736,7 +4758,7 @@ namespace Isotope_fitting
             if (later == false && recalc)
             {
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
                 recalc = false;
             }
 
@@ -5609,7 +5631,7 @@ namespace Isotope_fitting
                 is_loading = false;
                 // post load actions                                
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
                 //listview
                 frag_listView.BeginUpdate();
                 frag_listView.Items.Clear();
@@ -5640,7 +5662,7 @@ namespace Isotope_fitting
                 Fitting_chkBox.Enabled = true;
                 // post load actions                                
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
 
             }
 
@@ -5887,7 +5909,7 @@ namespace Isotope_fitting
                 create_step_panels();
                 // post load actions                                
                 recalculate_all_data_aligned();
-                refresh_iso_plot();
+                //refresh_iso_plot();
             }
         }
         private double ppm_calculator3(double centroid)
