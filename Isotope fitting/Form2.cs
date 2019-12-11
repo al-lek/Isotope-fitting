@@ -482,7 +482,7 @@ namespace Isotope_fitting
         private void load_experimental_sequence()
         {
             // load experimental and break if not loaded ok
-            if (!load_experimental()) return;
+            if (!load_experimental()) return;            
 
             sw1.Reset(); sw1.Start();
             post_load_actions();
@@ -2687,6 +2687,7 @@ namespace Isotope_fitting
         {
             if (tree != null)
             {
+                fit_tree.Cursor = System.Windows.Forms.Cursors.Default;
                 uncheckall_Frag();
                 fit_tree.BeginUpdate();frag_tree.BeginUpdate();
                 block_plot_refresh = true; block_fit_refresh = true;
@@ -2704,9 +2705,10 @@ namespace Isotope_fitting
             }
         }
         private void best_checked(bool individual = false, int node_index = 1)
-        {
+        {            
             if (fit_tree != null)
             {
+                fit_tree.Cursor = System.Windows.Forms.Cursors.Default;
                 uncheckall_Frag();
                 block_plot_refresh = true; block_fit_refresh = true;
                 fit_tree.BeginUpdate();frag_tree.BeginUpdate();
@@ -2752,7 +2754,7 @@ namespace Isotope_fitting
                         }
                     }
                 }
-                
+                fit_tree.Cursor = System.Windows.Forms.Cursors.No;
                 block_plot_refresh = false; block_fit_refresh = false;
                 fit_tree.EndUpdate(); frag_tree.EndUpdate();
                 refresh_iso_plot();
