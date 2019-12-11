@@ -1407,12 +1407,23 @@ namespace Isotope_fitting
 
                 selectedFragments = selectedFragments.OrderBy(p => p).ToList();
                 Fragments2[idx].To_plot = is_checked;
-
+                int k = node.Parent.Text.IndexOf('(');
+                if (k > 0) { node.Parent.Text=node.Parent.Text.Remove(k); }
+                int node_count=Find_selected_subnodes(node.Parent);
+                node.Parent.Text +="("+ node_count.ToString()+ ")";
                 // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
                 if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
             }
         }
-
+        private int Find_selected_subnodes(TreeNode node)
+        {
+            int count = 0;
+            foreach(TreeNode nn in node.Nodes)
+            {
+                if (nn.Checked) count++;
+            }
+            return count;
+        }
         private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
         {
             // all the decisions if a fragment is canidate for fitting
