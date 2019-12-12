@@ -122,7 +122,7 @@ namespace Isotope_fitting
             this.fragCalc_Btn = new System.Windows.Forms.ToolStripButton();
             this.factor_panel = new System.Windows.Forms.Panel();
             this.fragTypes_tree = new System.Windows.Forms.TreeView();
-            this.frag_tree = new MyTreeView();
+            //this.frag_tree = new MyTreeView();
             this.remPlot_Btn = new System.Windows.Forms.Button();
             this.plot_Btn = new System.Windows.Forms.Button();
             this.frag_listView = new System.Windows.Forms.ListView();
@@ -696,7 +696,7 @@ namespace Isotope_fitting
             this.splitContainer2.Panel2.Controls.Add(this.toolStrip_fragList);
             this.splitContainer2.Panel2.Controls.Add(this.factor_panel);
             this.splitContainer2.Panel2.Controls.Add(this.fragTypes_tree);
-            this.splitContainer2.Panel2.Controls.Add(this.frag_tree);
+            //this.splitContainer2.Panel2.Controls.Add(this.frag_tree);
             this.splitContainer2.Panel2.Controls.Add(this.remPlot_Btn);
             this.splitContainer2.Panel2.Controls.Add(this.plot_Btn);
             this.splitContainer2.Panel2.Controls.Add(this.frag_listView);
@@ -1542,17 +1542,17 @@ namespace Isotope_fitting
             // 
             // frag_tree
             // 
-            this.frag_tree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.frag_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.frag_tree.CheckBoxes = true;
-            this.frag_tree.HideSelection = false;
-            this.frag_tree.Location = new System.Drawing.Point(2, 76);
-            this.frag_tree.Name = "frag_tree";
-            this.frag_tree.Size = new System.Drawing.Size(333, 391);
-            this.frag_tree.TabIndex = 10000011;
-            this.frag_tree.Visible = false;
+            //this.frag_tree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //| System.Windows.Forms.AnchorStyles.Left) 
+            //| System.Windows.Forms.AnchorStyles.Right)));
+            //this.frag_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //this.frag_tree.CheckBoxes = true;
+            //this.frag_tree.HideSelection = false;
+            //this.frag_tree.Location = new System.Drawing.Point(2, 76);
+            //this.frag_tree.Name = "frag_tree";
+            //this.frag_tree.Size = new System.Drawing.Size(333, 391);
+            //this.frag_tree.TabIndex = 10000011;
+            //this.frag_tree.Visible = false;
             // 
             // remPlot_Btn
             // 
@@ -3274,7 +3274,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel panel1_tab2;
         private System.Windows.Forms.Panel factor_panel;
         private System.Windows.Forms.TreeView fragTypes_tree;
-        private MyTreeView frag_tree;
+        //private MyTreeView frag_tree;
         private System.Windows.Forms.TabPage tabPrimary;
         private System.Windows.Forms.Panel plots_grpBox;
         private System.Windows.Forms.ToolStrip toolStrip_plot;

@@ -137,7 +137,16 @@ namespace Isotope_fitting
 
         public static List<List<double[]>> all_fitted_results;
         List<List<int[]>> all_fitted_sets;
-        MyTreeView fit_tree/*,*/ /*frag_tree*//*,*/ /*fragTypes_tree*/;
+        MyTreeView fit_tree;
+        MyTreeView frag_tree = new MyTreeView() { Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+           BorderStyle = BorderStyle.FixedSingle,
+            CheckBoxes = true,
+            HideSelection = false,
+            Location = new System.Drawing.Point(2, 76),
+            Name = "frag_tree",
+            Size = new System.Drawing.Size(333, 391),
+            TabIndex = 10000011,
+            Visible = false };
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
         string loaded_lists="";
@@ -303,9 +312,10 @@ namespace Isotope_fitting
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
             load_preferences();
-            
+            splitContainer2.Panel2.Controls.Add(frag_tree);
 
         }
+        
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
             if (!block_fit_refresh)
