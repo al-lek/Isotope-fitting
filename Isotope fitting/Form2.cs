@@ -136,7 +136,7 @@ namespace Isotope_fitting
 
         public static List<List<double[]>> all_fitted_results;
         List<List<int[]>> all_fitted_sets;
-        TreeView fit_tree/*,*/ /*frag_tree*//*,*/ /*fragTypes_tree*/;
+        MyTreeView fit_tree/*,*/ /*frag_tree*//*,*/ /*fragTypes_tree*/;
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
         string loaded_lists="";
@@ -302,6 +302,7 @@ namespace Isotope_fitting
             frag_listView.Visible = frag_listView.Enabled = false;
             reset_all();
             load_preferences();
+            
 
         }
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
@@ -1174,14 +1175,21 @@ namespace Isotope_fitting
         private void populate_frag_treeView()
         {
             frag_listView.Visible = false;             
-            if (frag_tree.Nodes.Count>0) { frag_tree.Nodes.Clear(); }
-            frag_tree.AfterCheck += (s, e) => {frag_node_checkChanged(e.Node, e.Node.Checked); };
-            frag_tree.ContextMenu = new ContextMenu(new MenuItem[4] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
+            if (frag_tree.Nodes.Count>0)
+            {
+                frag_tree.Nodes.Clear();
+            }
+            else
+            {
+                frag_tree.AfterCheck += (s, e) => {  frag_node_checkChanged(e.Node, e.Node.Checked); };
+                frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[4] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
                                                                       new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }) });
+
+            }
             //frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Remove", (s, e) => { remove_node(frag_tree.SelectedNode.Index); }) });
-            frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
 
             // interpret fitted results
             frag_tree.BeginUpdate();
@@ -1383,6 +1391,7 @@ namespace Isotope_fitting
 
         private void frag_node_checkChanged(TreeNode node, bool is_checked)
         {
+            this.Cursor= System.Windows.Forms.Cursors.WaitCursor;
             // this event is called from the fragTree directly, but also from the fitTree indirectly
 
             // if it is a base node, (un)check all subNodes
@@ -1401,27 +1410,39 @@ namespace Isotope_fitting
             }
             else
             {
-                frag_tree.BeginUpdate();
                 int idx = Convert.ToInt32(node.Name);
-                if (is_checked) { node.BackColor = Color.Gainsboro; EnsureVisibleWithoutRightScrolling(node); }
-                else { node.BackColor = Color.Transparent; }
-                frag_tree.EndUpdate();
-                // selectedFragments list starts with 1, Fragments2 start with 0. Also first check if it is already checked (avoid entering the same frag multiple times)
-                if (is_checked)
+                if (Fragments2[idx].To_plot != is_checked)
                 {
-                    if (!selectedFragments.Contains(idx + 1)) selectedFragments.Add(idx + 1);
-                }
-                else selectedFragments.Remove(idx + 1);
+                    frag_tree.BeginUpdate();
+                    if (is_checked)
+                    {
+                        node.BackColor = Color.Gainsboro; EnsureVisibleWithoutRightScrolling(node); Fragments2[idx].To_plot = is_checked;
+                        // selectedFragments list starts with 1, Fragments2 start with 0. Also first check if it is already checked (avoid entering the same frag multiple times)
+                        if (!selectedFragments.Contains(idx + 1)) selectedFragments.Add(idx + 1);
+                    }
+                    else
+                    {
+                        node.BackColor = Color.Transparent; Fragments2[idx].To_plot = is_checked;
+                        // selectedFragments list starts with 1, Fragments2 start with 0.
+                        selectedFragments.Remove(idx + 1);
+                    }
 
-                selectedFragments = selectedFragments.OrderBy(p => p).ToList();
-                Fragments2[idx].To_plot = is_checked;
-                int k = node.Parent.Text.IndexOf('(');
-                if (k > 0) { node.Parent.Text=node.Parent.Text.Remove(k); }
-                int node_count=Find_selected_subnodes(node.Parent);
-                node.Parent.Text +="("+ node_count.ToString()+ ")";
-                // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
-                if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
+                    selectedFragments = selectedFragments.OrderBy(p => p).ToList();
+
+                    int k = node.Parent.Text.IndexOf('(');
+                    if (k > 0) { node.Parent.Text = node.Parent.Text.Remove(k); }
+                    int node_count = Find_selected_subnodes(node.Parent);
+                    node.Parent.Text += "(" + node_count.ToString() + ")";
+                    // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
+                    if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
+                    frag_tree.EndUpdate();                    
+                }
+                if (Fragments2[idx].To_plot != is_checked)
+                {
+                    return;
+                }
             }
+            this.Cursor = System.Windows.Forms.Cursors.Default;
         }
         private int Find_selected_subnodes(TreeNode node)
         {
@@ -2198,7 +2219,7 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
             // init tree view
-            fit_tree = new TreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = false,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
+            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = false,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
@@ -2693,7 +2714,7 @@ namespace Isotope_fitting
                 block_plot_refresh = true; block_fit_refresh = true;
                 foreach (TreeNode node in tree.Nodes)
                 {
-                    node.Checked = check;
+                    if(node.Checked != check) node.Checked = check;
                     foreach (TreeNode nn in node.Nodes)
                     {
                         if(nn.Checked!= check) nn.Checked = check;
@@ -4584,7 +4605,7 @@ namespace Isotope_fitting
                 block_plot_refresh = true; block_fit_refresh = true;
                 foreach (TreeNode node in frag_tree.Nodes)
                 {
-                    node.Checked = true;
+                    node.Checked = true; 
                 }
                 block_plot_refresh = false; block_fit_refresh = false;
                 frag_tree.EndUpdate();
@@ -4594,8 +4615,8 @@ namespace Isotope_fitting
 
         private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
         {
-            uncheck_all(fit_tree, false);
-            uncheckall_Frag();
+            if(fit_tree!=null) uncheck_all(fit_tree, false);
+            else uncheckall_Frag();
         }
         private void uncheckall_Frag()
         {
@@ -4623,17 +4644,17 @@ namespace Isotope_fitting
                 displayPeakList_btn.Enabled = false;
                 Peptide = ""; peptide_textBox1.Text = Peptide;
                 insert_exp = false;
-                plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = plotFragCent_chkBox.Enabled =saveFit_Btn.Enabled = false;
-                loadMS_Btn.Enabled =loadFit_Btn.Enabled = true;
-                clearCalc_Btn.Enabled = calc_Btn.Enabled = fragCalc_Btn.Enabled = fitMin_Box.Enabled = fitMax_Box.Enabled = false;
-                fitMin_Box.Text = fitMax_Box.Text =fitStep_Box.Text =step_rangeBox.Text = null;
+                plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
+                loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
+                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false; fragCalc_Btn.Enabled = false; fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
+                fitMin_Box.Text = null; fitMax_Box.Text = null; fitStep_Box.Text = null; step_rangeBox.Text = null;
                 Fitting_chkBox.Checked = false;
-                Fitting_chkBox.Enabled = fitStep_Box.Enabled = false;
+                Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
                 Fragments2.Clear();ChemFormulas.Clear();
                 selectedFragments.Clear();
                 frag_listView.Items.Clear();
                 UncheckAll_calculationPanel();
-                pep_Box.Text = resolution_Box.Text = null;
+                pep_Box.Text = null; resolution_Box.Text = null;
                 machine_listBox.ClearSelected();
                 machine_listBox.SelectedIndex = 2;
                 loadExp_Btn.Enabled = true;
@@ -4641,11 +4662,11 @@ namespace Isotope_fitting
                 bigPanel.Controls.Clear();
                 factor_Box.Text = null;
                 candidate_fragments = 1;
-                mzMax_Box.Enabled = mzMin_Box.Enabled =mzMax_Label.Enabled =mzMin_Label.Enabled = chargeMax_Box.Enabled =chargeMin_Box.Enabled =chargeAll_Btn.Enabled = false;
-                idxPr_Box.Enabled =idxTo_Box.Enabled =idxFrom_Box.Enabled =resolution_Box.Enabled=machine_listBox.Enabled = false;
-                fit_sel_Btn.Enabled = saveWd_Btn.Enabled = false;
+                mzMax_Box.Enabled = false; mzMin_Box.Enabled = false; mzMax_Label.Enabled = false; mzMin_Label.Enabled = false; chargeMax_Box.Enabled = false; chargeMin_Box.Enabled = false; chargeAll_Btn.Enabled = false;
+                idxPr_Box.Enabled = false; idxTo_Box.Enabled = false; idxFrom_Box.Enabled = false; resolution_Box.Enabled= false; machine_listBox.Enabled = false;
+                fit_sel_Btn.Enabled = false; saveWd_Btn.Enabled = false;
                 windowList.Clear();
-                mark_neues = loaded_window = false;
+                mark_neues = false; loaded_window = false;
                 neues = 0;               
                 Form4.active = false;
                 if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
@@ -9035,7 +9056,22 @@ namespace Isotope_fitting
             }
 
         }
+
         #endregion
 
+        class MyTreeView : TreeView
+        {
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == 0x0203)
+                {
+                    m.Result = IntPtr.Zero;
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+            }
+        }
     }
 }
