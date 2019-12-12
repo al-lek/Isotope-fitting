@@ -2753,7 +2753,7 @@ namespace Isotope_fitting
             this.by_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.by_toolStrip.Location = new System.Drawing.Point(2, 267);
             this.by_toolStrip.Name = "by_toolStrip";
-            this.by_toolStrip.Size = new System.Drawing.Size(32, 77);
+            this.by_toolStrip.Size = new System.Drawing.Size(24, 52);
             this.by_toolStrip.TabIndex = 26;
             // 
             // bySave_Btn
@@ -2786,7 +2786,7 @@ namespace Isotope_fitting
             this.cz_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.cz_toolStrip.Location = new System.Drawing.Point(2, 526);
             this.cz_toolStrip.Name = "cz_toolStrip";
-            this.cz_toolStrip.Size = new System.Drawing.Size(32, 77);
+            this.cz_toolStrip.Size = new System.Drawing.Size(32, 96);
             this.cz_toolStrip.TabIndex = 25;
             // 
             // czSave_Btn
@@ -2819,7 +2819,7 @@ namespace Isotope_fitting
             this.ax_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ax_toolStrip.Location = new System.Drawing.Point(2, 0);
             this.ax_toolStrip.Name = "ax_toolStrip";
-            this.ax_toolStrip.Size = new System.Drawing.Size(32, 77);
+            this.ax_toolStrip.Size = new System.Drawing.Size(24, 52);
             this.ax_toolStrip.TabIndex = 24;
             // 
             // axSave_Btn
@@ -3083,6 +3083,7 @@ namespace Isotope_fitting
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(30, 22);
             this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.Visible = false;
             // 
             // toolStripButton6
             // 
@@ -3092,6 +3093,7 @@ namespace Isotope_fitting
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(30, 22);
             this.toolStripButton6.Text = "toolStripButton6";
+            this.toolStripButton6.Visible = false;
             // 
             // toolStripButton7
             // 
@@ -3101,6 +3103,7 @@ namespace Isotope_fitting
             this.toolStripButton7.Name = "toolStripButton7";
             this.toolStripButton7.Size = new System.Drawing.Size(30, 22);
             this.toolStripButton7.Text = "toolStripButton7";
+            this.toolStripButton7.Visible = false;
             // 
             // Form2
             // 
