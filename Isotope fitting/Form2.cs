@@ -2332,9 +2332,17 @@ namespace Isotope_fitting
 
             // Node location in form client coordinates.
             loc.Offset(fit_tree.Location);
-
-            // Make balloon point to upper right corner of the node.
-            loc.Offset(fitnode.Bounds.Width, 0);
+           
+            if (show_Btn.Visible == true)
+            {
+                // Make balloon point to upper left corner of the node.
+                loc.Offset(0, fitnode.Bounds.Height+10);
+            }
+            else
+            {
+                // Make balloon point to upper right corner of the node.
+                loc.Offset(fitnode.Bounds.Width, 0);
+            }
 
             toolTip_fit.Show(tool_text, fit_tree, loc);
            
@@ -4238,7 +4246,7 @@ namespace Isotope_fitting
         }
         private void export_chartImage(object sender, EventArgs e)
         {
-            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White };
+            var pngExporter = new PngExporter { Width = iso_plot.Width, Height = iso_plot.Height, Background = OxyColors.White ,Resolution=200};
 
             if ((sender as MenuItem).Text == "Copy image")
             {
@@ -4549,17 +4557,29 @@ namespace Isotope_fitting
             export_copy_plot(true,iso_plot);
         }
         private void export_copy_plot(bool copy,PlotView plot)
-        {
-            var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Height, Background = OxyColors.White };
+        {                        
             if (copy)
             {
+                var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Height, Background = OxyColors.White, Resolution = 200 };
                 var bitmap = pngExporter.ExportToBitmap(plot.Model);
                 Clipboard.SetImage(bitmap);
             }
             else
             {
-                SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
-                if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(plot.Model, save.FileName); }
+                DialogResult dialogResult = MessageBox.Show("The default image format is png. Do you want svg format?", "File Format", MessageBoxButtons.YesNoCancel);
+                if (dialogResult == DialogResult.Cancel) return;
+                else if (dialogResult == DialogResult.Yes)
+                {
+                    SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.svg|all files|*.*", OverwritePrompt = true, AddExtension = true };
+                    var svgExporter = new OxyPlot.WindowsForms.SvgExporter { Width = plot.Width, Height = plot.Height };
+                    if (save.ShowDialog() == DialogResult.OK) { svgExporter.ExportToFile(plot.Model, save.FileName); }
+                }
+                else
+                {
+                    SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
+                    var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Height, Background = OxyColors.White, Resolution = 200 };
+                    if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(plot.Model, save.FileName); }
+                }
             }
         }
         private void saveListBtn11_Click(object sender, EventArgs e)
@@ -8719,7 +8739,7 @@ namespace Isotope_fitting
             int width = pnl.Size.Width;
             int height = pnl.Size.Height;
             Bitmap bm = new Bitmap(width, height);
-            pnl.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
+            pnl.DrawToBitmap(bm, new Rectangle(0, 0, width, height));            
             if (copy)
             {
                 Clipboard.SetImage(bm);
@@ -8727,7 +8747,7 @@ namespace Isotope_fitting
             else
             {
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
-                if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName); }
+                if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
             }
         }
 
