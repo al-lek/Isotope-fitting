@@ -28,6 +28,7 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
+        
 
         #region PARAMETER SET TAB FIT
 
@@ -9059,6 +9060,12 @@ namespace Isotope_fitting
 
         #endregion
 
+
+
+
+        /// <summary>
+        /// TreeView class that disables double click in checkboxes
+        /// </summary>
         class MyTreeView : TreeView
         {
             protected override void WndProc(ref Message m)
@@ -9073,5 +9080,6 @@ namespace Isotope_fitting
                 }
             }
         }
+
     }
 }

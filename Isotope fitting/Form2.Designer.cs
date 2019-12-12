@@ -122,7 +122,7 @@ namespace Isotope_fitting
             this.fragCalc_Btn = new System.Windows.Forms.ToolStripButton();
             this.factor_panel = new System.Windows.Forms.Panel();
             this.fragTypes_tree = new System.Windows.Forms.TreeView();
-            this.frag_tree = new Form2.MyTreeView();
+            this.frag_tree = new MyTreeView();
             this.remPlot_Btn = new System.Windows.Forms.Button();
             this.plot_Btn = new System.Windows.Forms.Button();
             this.frag_listView = new System.Windows.Forms.ListView();
@@ -3274,7 +3274,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel panel1_tab2;
         private System.Windows.Forms.Panel factor_panel;
         private System.Windows.Forms.TreeView fragTypes_tree;
-        private Form2.MyTreeView frag_tree;
+        private MyTreeView frag_tree;
         private System.Windows.Forms.TabPage tabPrimary;
         private System.Windows.Forms.Panel plots_grpBox;
         private System.Windows.Forms.ToolStrip toolStrip_plot;
