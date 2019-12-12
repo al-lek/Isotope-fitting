@@ -2793,8 +2793,8 @@ namespace Isotope_fitting
                             }
                         }
                     }
+                    fit_tree.Cursor = System.Windows.Forms.Cursors.No;
                 }
-                fit_tree.Cursor = System.Windows.Forms.Cursors.No;
                 block_plot_refresh = false; block_fit_refresh = false;
                 fit_tree.EndUpdate(); frag_tree.EndUpdate();
                 refresh_iso_plot();
