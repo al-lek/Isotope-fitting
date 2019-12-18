@@ -301,5 +301,10 @@ namespace Isotope_fitting
         }
 
         #endregion
+
+        private void Form10_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            frm2.save_preferences();
+        }
     }
 }
