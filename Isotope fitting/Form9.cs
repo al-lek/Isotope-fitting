@@ -610,37 +610,5 @@ namespace Isotope_fitting
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
         }
-
-        private void check_all_boxes_Btn_Click(object sender, EventArgs e)
-        {
-                       
-        }
-
-        private void uncheck_all_boxes_Btn_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void check_all_boxBtn_Click(object sender, EventArgs e)
-        {
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
-            {
-                for (int i = 0; i < lstBox.Items.Count; i++)
-                {
-                    lstBox.SetItemCheckState(i, CheckState.Checked);
-                }
-            }
-        }
-
-        private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
-        {
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
-            {
-                foreach (int i in lstBox.CheckedIndices)
-                {
-                    lstBox.SetItemCheckState(i, CheckState.Unchecked);
-                }
-            }
-        }
     }
 }

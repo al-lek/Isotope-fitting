@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.ColumnHeader z_clmn;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
             this.panel_calc = new System.Windows.Forms.Panel();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.insert_Btn = new System.Windows.Forms.Button();
@@ -83,14 +82,10 @@
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.check_all_boxBtn = new System.Windows.Forms.ToolStripButton();
-            this.uncheck_all_boxBtn = new System.Windows.Forms.ToolStripButton();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.statusStrpFrm9.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // z_clmn
@@ -104,7 +99,6 @@
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel_calc.Controls.Add(this.toolStrip1);
             this.panel_calc.Controls.Add(this.dvw_lstBox);
             this.panel_calc.Controls.Add(this.insert_Btn);
             this.panel_calc.Controls.Add(this.calc_param9Lbl);
@@ -742,38 +736,6 @@
             // 
             this.ppm_clmn.Text = "ppm";
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.check_all_boxBtn,
-            this.uncheck_all_boxBtn});
-            this.toolStrip1.Location = new System.Drawing.Point(81, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(171, 27);
-            this.toolStrip1.TabIndex = 56;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // check_all_boxBtn
-            // 
-            this.check_all_boxBtn.Image = ((System.Drawing.Image)(resources.GetObject("check_all_boxBtn.Image")));
-            this.check_all_boxBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.check_all_boxBtn.Name = "check_all_boxBtn";
-            this.check_all_boxBtn.Size = new System.Drawing.Size(77, 24);
-            this.check_all_boxBtn.Text = "check all";
-            this.check_all_boxBtn.Click += new System.EventHandler(this.check_all_boxBtn_Click);
-            // 
-            // uncheck_all_boxBtn
-            // 
-            this.uncheck_all_boxBtn.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_boxBtn.Image")));
-            this.uncheck_all_boxBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.uncheck_all_boxBtn.Name = "uncheck_all_boxBtn";
-            this.uncheck_all_boxBtn.Size = new System.Drawing.Size(91, 24);
-            this.uncheck_all_boxBtn.Text = "uncheck all";
-            this.uncheck_all_boxBtn.Click += new System.EventHandler(this.uncheck_all_boxBtn_Click);
-            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -792,8 +754,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -854,8 +814,5 @@
         private System.Windows.Forms.ColumnHeader seq_clmn;
         private System.Windows.Forms.ColumnHeader code_clmn;
         private System.Windows.Forms.ColumnHeader ppm_clmn;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton check_all_boxBtn;
-        private System.Windows.Forms.ToolStripButton uncheck_all_boxBtn;
     }
 }
