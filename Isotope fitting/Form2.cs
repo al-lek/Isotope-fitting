@@ -215,7 +215,6 @@ namespace Isotope_fitting
         List<string> labels_checked = new List<string>();
         #endregion
 
-
         #region  Constants for the SendMessage() method.
         private const int WM_HSCROLL = 276;
         private const int SB_LEFT = 6;
@@ -306,6 +305,7 @@ namespace Isotope_fitting
 
 
         #region PARAMETER SET TAB DIAGRAMS
+        int seq_counter = 0;
         List<ion> IonDraw = new List<ion>();
         List<ion> IonDrawIndex = new List<ion>();
         List<ion> IonDrawIndexTo = new List<ion>();
@@ -8409,6 +8409,25 @@ namespace Isotope_fitting
 
 
         #region sequence
+        private void create_sepuence_panel(int counter)
+        {
+            Panel temp_panel = new Panel() { Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Name = "draw_sequence_panel" + counter.ToString(),
+                Size = new System.Drawing.Size(801, 330),
+                TabIndex = 10+ counter
+            };
+            Button tmp_add = new Button() { Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left),
+                FlatStyle = System.Windows.Forms.FlatStyle.Flat , Text="Add" ,
+                Location = new System.Drawing.Point(10, 279),
+                Name = "add_seq_Pnl_Btn" + counter.ToString(),
+                Size = new System.Drawing.Size(32, 32),
+                TabIndex = 9
+            };
+            draw_sequence_panel.SuspendLayout();
+            panel1_tab2.Controls.Add(this.draw_sequence_panel);
+        }
+
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
             if (ax_chBx.Checked)
@@ -9558,6 +9577,9 @@ namespace Isotope_fitting
             }
         }
 
-        
+        private void panel1_tab2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
