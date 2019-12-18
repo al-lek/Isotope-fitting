@@ -3207,7 +3207,7 @@ namespace Isotope_fitting
                 LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
                 if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
                 iso_plot.Model.Series.Add(tmp);
-            }
+            }            
             for (int i = 1; i < all_data.Count; i++)
             {
                 if (Form9.now == true && i==all_data.Count-1 )
@@ -4254,30 +4254,29 @@ namespace Isotope_fitting
         }
         private void clearList()
         {
-            loaded_lists = ""; show_files_Btn.ToolTipText = "";
+            plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragProf_chkBox.Checked = false; plotFragCent_chkBox.Checked = false;
+             loaded_lists = ""; show_files_Btn.ToolTipText = "";
             if (Fragments2.Count == 0 || all_data.Count<2) return;
             if (IonDraw.Count > 0) IonDraw.Clear();
             selectedFragments.Clear();
             Fragments2.Clear();
             plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
-            custom_colors.Clear();
-            custom_colors.Add(exp_color);
+            custom_colors.Clear();custom_colors.Add(exp_color);
             aligned_intensities.Clear();
             all_data_aligned.Clear();
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            powerSet.Clear();
-            powerSet_distroIdx.Clear();
-            summation.Clear();
-            residual.Clear();
+            powerSet.Clear();powerSet_distroIdx.Clear();
+            summation.Clear();residual.Clear();
             all_data.RemoveRange(1, all_data.Count - 1);
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
-            fit_sel_Btn.Enabled = fit_Btn.Enabled =  false;            
+            fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false;            
             Initialize_Oxy();
             initialize_tabs();
             factor_panel.Controls.Clear();
+            recalculate_all_data_aligned();
         }
         private void saveListBtn1_Click(object sender, EventArgs e)
         {
@@ -8514,7 +8513,7 @@ namespace Isotope_fitting
             int x1, x2, x3, y1, y2, y3;            
             Pen mypen = new Pen(color_draw,2F);
             if (inter){ x1 = pf.X +18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2;}
-            else if (up) { x1 = pf.X +18; x2 = x1; y1 = pf.Y - step-2; y2 =y1 - 5 ; y3 = y2; x3 = x2 - 10;  }
+            else if (up) { x1 = pf.X +18; x2 = x1; y1 = pf.Y - step+3; y2 =y1 - 5 ; y3 = y2; x3 = x2 - 10;  }
             else { x1 = pf.X + 18; x2 = x1; y1 = pf.Y+14 + step+2; y2 =y1 +5; y3 = y2; x3 = x2 + 10;}
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen,points);

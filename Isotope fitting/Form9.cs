@@ -609,17 +609,7 @@ namespace Isotope_fitting
             //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
-        }
-
-        private void check_all_boxes_Btn_Click(object sender, EventArgs e)
-        {
-                       
-        }
-
-        private void uncheck_all_boxes_Btn_Click(object sender, EventArgs e)
-        {
-            
-        }
+        }               
 
         private void check_all_boxBtn_Click(object sender, EventArgs e)
         {
