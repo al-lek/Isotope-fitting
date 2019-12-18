@@ -16,8 +16,7 @@ namespace Isotope_fitting
         private int sort_idx;
         private int charge;
         private double ppm_error;
-
-
+        private string mz;
         private double max_intensity;
 
         public Color Color
@@ -54,6 +53,11 @@ namespace Isotope_fitting
         {
             get { return this.charge; }
             set { this.charge = value; }
+        }
+        public string Mz
+        {
+            get { return this.mz; }
+            set { this.mz = value; }
         }
         public double PPM_Error
         {

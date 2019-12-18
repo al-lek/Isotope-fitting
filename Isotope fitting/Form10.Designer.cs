@@ -997,6 +997,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Format Plot Area : Style";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form10_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.fit_grpBx.ResumeLayout(false);
