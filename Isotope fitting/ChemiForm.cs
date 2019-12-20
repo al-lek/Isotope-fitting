@@ -3257,10 +3257,19 @@ namespace Isotope_fitting
                     length = endIndex - startIndex + 1;
                     number1.Add(Int32.Parse(initial_formula.Substring(startIndex, length)));
                 }
+                if (element1.Count>number1.Count+1)
+                {
+                    //add 1 where missing
+                    number1.Add(1);
+                }
                 i++;
             } while (i < initial_formula.Length);
             //end while loop
-
+            if (element1.Count== number1.Count + 1)
+            {
+                //add 1 where missing
+                number1.Add(1);
+            }
             if (!number1.Any() || !element1.Any())
             {
                 MessageBox.Show("Please enter the formula as so:element1 number1 element2 number2 etc ");
@@ -3274,9 +3283,13 @@ namespace Isotope_fitting
                     number1[index] = number1[index] * factor;
                 }
                 //Rewrite the formula
-
+                
                 foreach (string p in element1)
                 {
+                    if (element1.Count != number1.Count)
+                    {
+                        continue;
+                    }
                     final_formula = final_formula + p + number1[counter];
                     counter++;
                 }

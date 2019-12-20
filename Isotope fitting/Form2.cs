@@ -302,7 +302,13 @@ namespace Isotope_fitting
         #endregion
 
         #region Fragments File aka FF parameters
-
+        /// <summary>
+        /// max ppm error for Fragments File Calculation (Form 14)
+        /// </summary>
+        public double ppmErrorFF = 100.0;
+        public bool calc_FF = false;
+        public bool ignore_ppm = false;
+        public bool calc_form14 = false;
         #endregion
 
         #endregion
@@ -917,7 +923,8 @@ namespace Isotope_fitting
                 Combinations4 = new List<Combination_4>(),
                 FinalFormula = string.Empty, 
                 Factor=1.0,
-                Fixed=false
+                Fixed=false,
+                PrintFormula= frag_info[4]
             });
 
             int i = ChemFormulas.Count - 1;
@@ -930,7 +937,7 @@ namespace Isotope_fitting
             // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
-            ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
+            if(!calc_FF)ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
             ChemFormulas[i].Charge = Int32.Parse(frag_info[3]);
 
             // all ions have as many H in Adduct as their charge
@@ -1013,7 +1020,7 @@ namespace Isotope_fitting
         private void post_import_fragments()
         {
             // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
-            generate_x();
+            if(!calc_FF)generate_x();
             ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
 
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
@@ -1067,9 +1074,19 @@ namespace Isotope_fitting
             calc_Btn.Enabled = false;
             try
             {
-                clearList();                
-                fragments_and_calculations_sequence_A();
-               
+                try
+                {
+                    clearList();
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    fragments_and_calculations_sequence_A();
+                }
+
             }
             catch
             {
@@ -1107,6 +1124,7 @@ namespace Isotope_fitting
 
         public void fragments_and_calculations_sequence_B()
         {
+            calc_FF = false;
             GC.Collect();
             if (all_data.Count > 1)
             {
@@ -1270,14 +1288,12 @@ namespace Isotope_fitting
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
             sw1.Reset(); sw1.Start();
             int progress = 0;
-            progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");
-
+            progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");            
             try
             {
                 Parallel.For(0, selected_fragments.Count, (i, state) =>
                 {
-                    Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
-
+                    Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);                    
                     // safelly keep track of progress
                     Interlocked.Increment(ref progress);
                     if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
@@ -1295,12 +1311,11 @@ namespace Isotope_fitting
 
             progress_display_stop();
             is_calc = false;
-
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
-            if (selected_fragments.Count>0 && !selected_fragments[0].Fixed)
+            if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
             {
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");               
+                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
             }
             else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");
             // thread safely fire event to continue calculations
@@ -1344,18 +1359,38 @@ namespace Isotope_fitting
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
-            if (!insert_exp|| chem.Fixed) { add_fragment_to_Fragments2(chem, cen); return; }
-
+            if (!insert_exp|| chem.Fixed ) { add_fragment_to_Fragments2(chem, cen); return; }
             // MAIN decesion algorithm
-            bool fragment_is_canditate = decision_algorithm(chem, cen);
-
-            // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-            if (fragment_is_canditate)
+            bool fragment_is_canditate = true;
+            if (calc_FF)
             {
-                chem.Profile.Clear();
-                ChemiForm.Envelope(chem);
-                add_fragment_to_Fragments2(chem, cen);
+                fragment_is_canditate = decision_algorithmFF(chem, cen);
+                if (ignore_ppm)
+                {
+                    chem.Profile.Clear();
+                    // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                    ChemiForm.Envelope(chem);
+                    add_fragment_to_Fragments2(chem, cen);
+                }
+                else if (fragment_is_canditate)
+                {
+                    chem.Profile.Clear();
+                    // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                    ChemiForm.Envelope(chem);
+                    add_fragment_to_Fragments2(chem, cen);
+                }                
             }
+            else
+            {
+                fragment_is_canditate = decision_algorithm(chem, cen);
+                if (fragment_is_canditate)
+                {
+                    chem.Profile.Clear();
+                    // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                    ChemiForm.Envelope(chem);
+                    add_fragment_to_Fragments2(chem, cen);
+                }
+            }                  
         }
 
         private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen)
@@ -1740,7 +1775,10 @@ namespace Isotope_fitting
                 double[] tmp = ppm_calculator(cen[i].X);
 
                 if (tmp[0] < ppmError) results.Add(tmp);
-                else { fragment_is_canditate = false; break; }
+                else
+                {
+                    fragment_is_canditate = false; break;
+                }
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
@@ -3596,17 +3634,16 @@ namespace Isotope_fitting
         {
             prg_lbl.Invoke(new Action(() => prg_lbl.Visible = true));   //thread safe call
             prg_lbl.Invoke(new Action(() => prg_lbl.Text = info));   //thread safe call
-            //Blink();
-
+            //Blink
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Maximum = barMax));   //thread safe call
             tlPrgBr.Invoke(new Action(() => tlPrgBr.Value = 0));   //thread safe call
-            tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = true));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = true));   //thread safe call         
         }
 
         private void progress_display_stop()
         {
             prg_lbl.Invoke(new Action(() => prg_lbl.Visible = false));   //thread safe call
-            tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = false));   //thread safe call
+            tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = false));   //thread safe call          
         }
 
         private void progress_display_update(int idx)
@@ -4334,7 +4371,6 @@ namespace Isotope_fitting
             Initialize_Oxy();
             initialize_tabs();
             factor_panel.Controls.Clear();
-            recalculate_all_data_aligned();
         }
         private void saveListBtn1_Click(object sender, EventArgs e)
         {
@@ -9630,5 +9666,87 @@ namespace Isotope_fitting
                 }
             }
         }
+
+        private void loadFF_Btn_Click(object sender, EventArgs e)
+        {
+            loadFF_Btn.Enabled = false;
+            try
+            {
+                calc_FF =true;
+                clearList();
+                import_fragments();
+                if (ChemFormulas.Count>0)
+                {
+                    Form14 frm14 = new Form14(this);
+                    frm14.Show();
+                    frm14.FormClosed += (s, f) => { if (calc_form14) { calc_form14 = false; FF_sequence_a(); } };
+                }               
+            }
+            catch
+            {
+                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments");
+            }
+
+            finally
+            {
+                loadFF_Btn.Enabled = true;
+            }           
+        }
+      
+        public void FF_sequence_a()
+        {            
+            // this the main sequence after loadind data
+            // 1. select fragments according to UI
+            Fragments2.Clear();
+            selectedFragments.Clear();
+            custom_colors.Clear();
+            custom_colors.Add(exp_color);
+            sw1.Reset(); sw1.Start();
+            List<ChemiForm> selected_fragments = new List<ChemiForm>();
+            foreach (ChemiForm chem in ChemFormulas)
+            {
+                selected_fragments.Add(chem.DeepCopy());
+            }
+            if (selected_fragments == null) return;
+            sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Reset(); sw1.Start();
+            // 2. calculate fragments resolution
+            calculate_fragments_resolution(selected_fragments);
+            sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
+            // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
+            Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
+            envipat_properties.Start();
+            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
+        }
+        private bool decision_algorithmFF(ChemiForm chem, List<PointPlot> cen)
+        {
+            // all the decisions if a fragment is canidate for fitting
+            bool fragment_is_canditate = true;
+
+            // deceide how many peaks will be involved in the selection process
+            // results = {[resol1, ppm1], [resol2, ppm2], ....}
+            List<double[]> results = new List<double[]>();
+
+            int total_peaks = cen.Count;
+          
+            double[] tmp = ppm_calculator(cen[0].X);
+
+            if (tmp[0] < ppmErrorFF) results.Add(tmp);
+            else
+            {
+                results.Add(tmp);
+                fragment_is_canditate = false;
+            }
+            
+
+            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
+            if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
+
+            chem.PPM_Error = results.Average(p => p[0]);
+            chem.Resolution = (double)results.Average(p => p[1]);
+
+            return fragment_is_canditate;
+        }
+
     }
 }
