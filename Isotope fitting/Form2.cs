@@ -1512,6 +1512,7 @@ namespace Isotope_fitting
             if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (Fragments2.Count > 0)
             {
+                factor_panel.Visible = false;
                 Fragments2.RemoveAt(idx); // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             }
