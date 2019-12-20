@@ -315,7 +315,6 @@ namespace Isotope_fitting
 
 
         #region PARAMETER SET TAB DIAGRAMS
-        int seq_counter = 0;
         List<ion> IonDraw = new List<ion>();
         List<ion> IonDrawIndex = new List<ion>();
         List<ion> IonDrawIndexTo = new List<ion>();
@@ -4539,7 +4538,88 @@ namespace Isotope_fitting
         }
         #endregion
 
+        #region load MS/MS file
+        private void loadFF_Btn_Click(object sender, EventArgs e)
+        {
+            loadFF_Btn.Enabled = false;
+            try
+            {
+                calc_FF = true;
+                clearList();
+                import_fragments();
+                if (ChemFormulas.Count > 0)
+                {
+                    Form14 frm14 = new Form14(this);
+                    frm14.Show();
+                    frm14.FormClosed += (s, f) => { if (calc_form14) { calc_form14 = false; FF_sequence_a(); } };
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments");
+            }
 
+            finally
+            {
+                loadFF_Btn.Enabled = true;
+            }
+        }
+
+        public void FF_sequence_a()
+        {
+            // this the main sequence after loadind data
+            // 1. select fragments according to UI
+            Fragments2.Clear();
+            selectedFragments.Clear();
+            custom_colors.Clear();
+            custom_colors.Add(exp_color);
+            sw1.Reset(); sw1.Start();
+            List<ChemiForm> selected_fragments = new List<ChemiForm>();
+            foreach (ChemiForm chem in ChemFormulas)
+            {
+                selected_fragments.Add(chem.DeepCopy());
+            }
+            if (selected_fragments == null) return;
+            sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
+            sw1.Reset(); sw1.Start();
+            // 2. calculate fragments resolution
+            calculate_fragments_resolution(selected_fragments);
+            sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
+            // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
+            Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
+            envipat_properties.Start();
+            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
+        }
+        private bool decision_algorithmFF(ChemiForm chem, List<PointPlot> cen)
+        {
+            // all the decisions if a fragment is canidate for fitting
+            bool fragment_is_canditate = true;
+
+            // deceide how many peaks will be involved in the selection process
+            // results = {[resol1, ppm1], [resol2, ppm2], ....}
+            List<double[]> results = new List<double[]>();
+
+            int total_peaks = cen.Count;
+
+            double[] tmp = ppm_calculator(cen[0].X);
+
+            if (tmp[0] < ppmErrorFF) results.Add(tmp);
+            else
+            {
+                results.Add(tmp);
+                fragment_is_canditate = false;
+            }
+
+
+            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
+            if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
+
+            chem.PPM_Error = results.Average(p => p[0]);
+            chem.Resolution = (double)results.Average(p => p[1]);
+
+            return fragment_is_canditate;
+        }
+        #endregion
 
 
         #region UI
@@ -8500,24 +8580,7 @@ namespace Isotope_fitting
 
 
         #region sequence
-        private void create_sepuence_panel(int counter)
-        {
-            Panel temp_panel = new Panel() { Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Name = "draw_sequence_panel" + counter.ToString(),
-                Size = new System.Drawing.Size(801, 330),
-                TabIndex = 10+ counter
-            };
-            Button tmp_add = new Button() { Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left),
-                FlatStyle = System.Windows.Forms.FlatStyle.Flat , Text="Add" ,
-                Location = new System.Drawing.Point(10, 279),
-                Name = "add_seq_Pnl_Btn" + counter.ToString(),
-                Size = new System.Drawing.Size(32, 32),
-                TabIndex = 9
-            };
-            draw_sequence_panel.SuspendLayout();
-            panel1_tab2.Controls.Add(this.draw_sequence_panel);
-        }
+        
 
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
@@ -8562,7 +8625,7 @@ namespace Isotope_fitting
         }
         private void sequence_draw(Graphics g)
         {
-            //g = sequence_Pnl.CreateGraphics();
+            //g = pnl.CreateGraphics();
             Pen p = new Pen(Color.Black);           
             int point_x, point_y;
             point_y =20;
@@ -8570,6 +8633,8 @@ namespace Isotope_fitting
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             Point pp = new Point(point_x, point_y);
+            int grp_num = 25;
+            if (rdBtn50.Checked) grp_num = 50;
             for (int idx = 0; idx < Peptide.Length; idx++)
             {
                 g.DrawString(Peptide[idx].ToString(), sequence_Pnl.Font, sb, pp);                
@@ -8612,8 +8677,8 @@ namespace Isotope_fitting
                     }                    
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y =pp.Y+50; }
-                if ((idx+1)%25==0) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_Pnl.Width){pp.X = 3; pp.Y =pp.Y+50;}
+                if ((idx+1)% grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }           
 
             return;
@@ -8635,8 +8700,18 @@ namespace Isotope_fitting
             /*if (IonDraw.Count > 0) {*/ sequence_draw(e.Graphics); /*}*/
         }
 
+        private void rdBtn25_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh();
+        }
+
+        private void rdBtn50_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh();
+        }
+
         #endregion
-        
+
         #region fragments' diagrams
         private void initialize_tabs()
         {
@@ -8799,8 +8874,15 @@ namespace Isotope_fitting
             y_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
             z_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
 
+            //sequence
             seqSave_Btn.Click += (s, e) => { export_panel(false, sequence_Pnl); };
             seqCopy_Btn.Click += (s, e) => { export_panel(true, sequence_Pnl); };
+            //sequence copy1
+            seqSave_BtnCopy1.Click += (s, e) => { export_panel(false, sequence_PnlCopy1); };
+            seqCopy_BtnCopy1.Click += (s, e) => { export_panel(true, sequence_PnlCopy1); };
+            //sequence copy2
+            seqSave_BtnCopy2.Click += (s, e) => { export_panel(false, sequence_PnlCopy2); };
+            seqCopy_BtnCopy2.Click += (s, e) => { export_panel(true, sequence_PnlCopy2); };
 
             int_IdxCopy_Btn.Click += (s, e) => { export_panel(true, panel1_intIdx); };
             int_IdxSave_Btn.Click += (s, e) => { export_panel(false, panel1_intIdx); };
@@ -9668,86 +9750,270 @@ namespace Isotope_fitting
             }
         }
 
-        private void loadFF_Btn_Click(object sender, EventArgs e)
+        
+
+        
+
+        private void ax_chBxCopy1_CheckedChanged(object sender, EventArgs e)
         {
-            loadFF_Btn.Enabled = false;
-            try
+            if (ax_chBxCopy1.Checked)
             {
-                calc_FF =true;
-                clearList();
-                import_fragments();
-                if (ChemFormulas.Count>0)
-                {
-                    Form14 frm14 = new Form14(this);
-                    frm14.Show();
-                    frm14.FormClosed += (s, f) => { if (calc_form14) { calc_form14 = false; FF_sequence_a(); } };
-                }               
+                ax_chBxCopy1.ForeColor = Color.ForestGreen;
             }
-            catch
-            {
-                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments");
-            }
-
-            finally
-            {
-                loadFF_Btn.Enabled = true;
-            }           
-        }
-      
-        public void FF_sequence_a()
-        {            
-            // this the main sequence after loadind data
-            // 1. select fragments according to UI
-            Fragments2.Clear();
-            selectedFragments.Clear();
-            custom_colors.Clear();
-            custom_colors.Add(exp_color);
-            sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = new List<ChemiForm>();
-            foreach (ChemiForm chem in ChemFormulas)
-            {
-                selected_fragments.Add(chem.DeepCopy());
-            }
-            if (selected_fragments == null) return;
-            sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
-            sw1.Reset(); sw1.Start();
-            // 2. calculate fragments resolution
-            calculate_fragments_resolution(selected_fragments);
-            sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
-            // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
-            Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
-            envipat_properties.Start();
-            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
-        }
-        private bool decision_algorithmFF(ChemiForm chem, List<PointPlot> cen)
-        {
-            // all the decisions if a fragment is canidate for fitting
-            bool fragment_is_canditate = true;
-
-            // deceide how many peaks will be involved in the selection process
-            // results = {[resol1, ppm1], [resol2, ppm2], ....}
-            List<double[]> results = new List<double[]>();
-
-            int total_peaks = cen.Count;
-          
-            double[] tmp = ppm_calculator(cen[0].X);
-
-            if (tmp[0] < ppmErrorFF) results.Add(tmp);
             else
             {
-                results.Add(tmp);
-                fragment_is_canditate = false;
+                ax_chBxCopy1.ForeColor = Control.DefaultForeColor;
             }
-            
-
-            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
-
-            chem.PPM_Error = results.Average(p => p[0]);
-            chem.Resolution = (double)results.Average(p => p[1]);
-
-            return fragment_is_canditate;
         }
 
+        private void ax_chBxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+
+            if (ax_chBxCopy2.Checked)
+            {
+                ax_chBxCopy2.ForeColor = Color.ForestGreen;
+            }
+            else
+            {
+                ax_chBxCopy2.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void by_chBxCopy1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (by_chBxCopy1.Checked)
+            {
+                by_chBxCopy1.ForeColor = Color.Blue;
+            }
+            else
+            {
+                by_chBxCopy1.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void by_chBxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (by_chBxCopy2.Checked)
+            {
+                by_chBxCopy2.ForeColor = Color.Blue;
+            }
+            else
+            {
+                by_chBxCopy2.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void cz_chBxCopy1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cz_chBxCopy1.Checked)
+            {
+                cz_chBxCopy1.ForeColor = Color.Crimson;
+            }
+            else
+            {
+                cz_chBxCopy1.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void cz_chBxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cz_chBxCopy2.Checked)
+            {
+                cz_chBxCopy2.ForeColor = Color.Crimson;
+            }
+            else
+            {
+                cz_chBxCopy2.ForeColor = Control.DefaultForeColor;
+            }
+        }
+
+        private void draw_BtnCopy1_Click(object sender, EventArgs e)
+        {
+            sequence_PnlCopy1.Refresh();
+        }
+
+        private void draw_BtnCopy2_Click(object sender, EventArgs e)
+        {
+            sequence_PnlCopy2.Refresh();
+        }
+
+        private void rdBtn25Copy1_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_PnlCopy1.Refresh();
+        }
+
+        private void rdBtn50Copy1_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_PnlCopy1.Refresh();
+        }
+
+        private void rdBtn25Copy2_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_PnlCopy2.Refresh();
+        }
+
+        private void rdBtn50Copy2_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_PnlCopy2.Refresh();
+        }
+
+        private void sequence_PnlCopy1_Paint(object sender, PaintEventArgs e)
+        {
+            sequence_drawCopy1(e.Graphics);
+        }
+
+        private void sequence_PnlCopy2_Paint(object sender, PaintEventArgs e)
+        {
+            sequence_drawCopy2(e.Graphics);
+        }
+
+        private void sequence_drawCopy1(Graphics g)
+        {
+            //g = pnl.CreateGraphics();
+            Pen p = new Pen(Color.Black);
+            int point_x, point_y;
+            point_y = 20;
+            point_x = 3;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            string s = Peptide;
+            Point pp = new Point(point_x, point_y);
+            int grp_num = 25;
+            if (rdBtn50Copy1.Checked)grp_num = 50;
+            for (int idx = 0; idx < Peptide.Length; idx++)
+            {
+                g.DrawString(Peptide[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
+                foreach (ion nn in IonDraw)
+                {
+                    if (ax_chBxCopy1.Checked && nn.Ion_type.StartsWith("a") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 0, nn.Color, g);
+                    }
+                    else if (by_chBxCopy1.Checked && nn.Ion_type.StartsWith("b") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 4, nn.Color, g);
+                    }
+                    else if (cz_chBxCopy1.Checked && nn.Ion_type.StartsWith("c") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 8, nn.Color, g);
+                    }
+                    else if (ax_chBxCopy1.Checked && nn.Ion_type.StartsWith("x") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 0, nn.Color, g);
+                    }
+                    else if (by_chBxCopy1.Checked && nn.Ion_type.StartsWith("y") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 4, nn.Color, g);
+                    }
+                    else if (cz_chBxCopy1.Checked && nn.Ion_type.StartsWith("z") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 8, nn.Color, g);
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    {
+                        if (intA_chBxCopy1.Checked && !nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false, 0, nn.Color, g, true);
+                        }
+                        else if (intB_chBxCopy1.Checked && nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false, 0, nn.Color, g, true);
+                        }
+                    }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy1.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
+
+            return;
+        }
+        private void sequence_drawCopy2(Graphics g)
+        {
+            //g = pnl.CreateGraphics();
+            Pen p = new Pen(Color.Black);
+            int point_x, point_y;
+            point_y = 20;
+            point_x = 3;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            string s = Peptide;
+            int grp_num = 25;
+            Point pp = new Point(point_x, point_y);
+            if (rdBtn50Copy2.Checked)  grp_num = 50;
+
+            for (int idx = 0; idx < Peptide.Length; idx++)
+            {
+                g.DrawString(Peptide[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
+                foreach (ion nn in IonDraw)
+                {
+                    if (ax_chBxCopy2.Checked && nn.Ion_type.StartsWith("a") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 0, nn.Color, g);
+                    }
+                    else if (by_chBxCopy2.Checked && nn.Ion_type.StartsWith("b") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 4, nn.Color, g);
+                    }
+                    else if (cz_chBxCopy2.Checked && nn.Ion_type.StartsWith("c") && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 8, nn.Color, g);
+                    }
+                    else if (ax_chBxCopy2.Checked && nn.Ion_type.StartsWith("x") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 0, nn.Color, g);
+                    }
+                    else if (by_chBxCopy2.Checked && nn.Ion_type.StartsWith("y") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 4, nn.Color, g);
+                    }
+                    else if (cz_chBxCopy2.Checked && nn.Ion_type.StartsWith("z") && (Peptide.Length - nn.Index == idx + 1))
+                    {
+                        draw_line(pp, false, 8, nn.Color, g);
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    {
+                        if (intA_chBxCopy2.Checked && !nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false, 0, nn.Color, g, true);
+                        }
+                        else if (intB_chBxCopy2.Checked && nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false, 0, nn.Color, g, true);
+                        }
+                    }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy2.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
+
+            return;
+        }
+
+        private void sequence_PnlCopy1_Resize(object sender, EventArgs e)
+        {
+            sequence_PnlCopy1.Refresh();
+        }
+
+        private void sequence_PnlCopy2_Resize(object sender, EventArgs e)
+        {
+            sequence_PnlCopy2.Refresh();
+        }
+
+        
+        private void add_sequencePanel1_Click(object sender, EventArgs e)
+        {
+            if (draw_sequence_panelCopy1.Visible != true) { draw_sequence_panelCopy1.Visible = true; }
+            else { draw_sequence_panelCopy2.Visible = true; }
+        }
+
+        private void delele_sequencePnl1_Click(object sender, EventArgs e)
+        {
+            draw_sequence_panelCopy1.Visible = false;
+        }
+
+        private void delele_sequencePnl2_Click(object sender, EventArgs e)
+        {
+            draw_sequence_panelCopy2.Visible = false;
+        }
     }
 }
