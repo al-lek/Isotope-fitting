@@ -150,8 +150,9 @@
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(327, 669);
+            this.panel_calc.Size = new System.Drawing.Size(327, 690);
             this.panel_calc.TabIndex = 4;
+            this.panel_calc.MouseEnter += new System.EventHandler(this.panel_calc_MouseEnter);
             // 
             // toolStrip1
             // 
@@ -210,9 +211,9 @@
             this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(0, 628);
+            this.insert_Btn.Location = new System.Drawing.Point(0, 641);
             this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(306, 23);
+            this.insert_Btn.Size = new System.Drawing.Size(323, 23);
             this.insert_Btn.TabIndex = 53;
             this.insert_Btn.Text = "Insert";
             this.insert_Btn.UseVisualStyleBackColor = false;
@@ -445,9 +446,9 @@
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(0, 651);
+            this.calc_Btn.Location = new System.Drawing.Point(0, 664);
             this.calc_Btn.Name = "calc_Btn";
-            this.calc_Btn.Size = new System.Drawing.Size(306, 22);
+            this.calc_Btn.Size = new System.Drawing.Size(323, 22);
             this.calc_Btn.TabIndex = 41;
             this.calc_Btn.Text = "Calculate";
             this.calc_Btn.UseVisualStyleBackColor = false;
@@ -743,7 +744,7 @@
             this.fragListView9.Location = new System.Drawing.Point(327, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(458, 632);
+            this.fragListView9.Size = new System.Drawing.Size(458, 653);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;

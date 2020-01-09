@@ -56,6 +56,25 @@ namespace Isotope_fitting
             half_rdBtn.Checked = selection_rule9[3];
             half_minus_rdBtn.Checked = selection_rule9[4];
             half_plus_rdBtn.Checked = selection_rule9[5];
+            internal_lstBox.MouseEnter += (s, e) => { internal_lstBox.Focus(); };
+            addin_lstBox.MouseEnter += (s, e) => { addin_lstBox.Focus(); };
+            a_lstBox.MouseEnter += (s, e) => { a_lstBox.Focus(); };
+            b_lstBox.MouseEnter += (s, e) => { b_lstBox.Focus(); };
+            c_lstBox.MouseEnter += (s, e) => { c_lstBox.Focus(); };
+            dvw_lstBox.MouseEnter += (s, e) => { dvw_lstBox.Focus(); };
+            internal_lstBox.MouseEnter += (s, e) => { internal_lstBox.Focus(); };
+            M_lstBox.MouseEnter += (s, e) => { M_lstBox.Focus(); };
+            x_lstBox.MouseEnter += (s, e) => { x_lstBox.Focus(); };
+            y_lstBox.MouseEnter += (s, e) => { y_lstBox.Focus(); };
+            z_lstBox.MouseEnter += (s, e) => { z_lstBox.Focus(); };
+            ppm9_numUD.MouseEnter += (s, e) => { ppm9_numUD.Focus(); };
+            chargeMax_Box.MouseEnter += (s, e) => { chargeMax_Box.Focus(); };
+            chargeMin_Box.MouseEnter += (s, e) => { chargeMin_Box.Focus(); };
+            idxFrom_Box.MouseEnter += (s, e) => { idxFrom_Box.Focus(); };
+            idxPr_Box.MouseEnter += (s, e) => { idxPr_Box.Focus(); };
+            idxTo_Box.MouseEnter += (s, e) => { idxTo_Box.Focus(); };
+            mzMax_Box.MouseEnter += (s, e) => { mzMax_Box.Focus(); };
+            mzMin_Box.MouseEnter += (s, e) => { mzMin_Box.Focus(); };
         }
 
         private void initialize_data()
@@ -183,7 +202,7 @@ namespace Isotope_fitting
             //ensure that the focus is mainly on numeric up down box in the factor_panel9 
             //that way when the user clicks a fragment from the listview the focus is not on the listview but on the numeric up down
             //and can control height of the fragment instantly from the buttons "up" "down"
-            numUD.Leave += (s, e) => { numUD.Focus(); };
+            numUD.Leave += (s, e) => { if (!panel_calc.Focused) { numUD.Focus(); } };
              factor_panel9.Controls.AddRange(new Control[] { factor_lbl, numUD });
             factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
         }
@@ -631,6 +650,11 @@ namespace Isotope_fitting
                     lstBox.SetItemCheckState(i, CheckState.Unchecked);
                 }
             }
+        }
+
+        private void panel_calc_MouseEnter(object sender, EventArgs e)
+        {
+            panel_calc.Focus();
         }
     }
 }

@@ -1499,10 +1499,12 @@ namespace Isotope_fitting
             {
                 frag_tree.AfterCheck += (s, e) => {  frag_node_checkChanged(e.Node, e.Node.Checked); };
                 frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[4] { new MenuItem("Copy", (s, e) => { copyTree_toClip(frag_tree, false); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[5] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                                                                      new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
-                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }) });
+                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } })
+                });
 
             }
             //frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Remove", (s, e) => { remove_node(frag_tree.SelectedNode.Index); }) });
@@ -1532,7 +1534,7 @@ namespace Isotope_fitting
             int idx = Convert.ToInt32(node.Name);
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
+            if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (Fragments2.Count > 0)
             {
                 factor_panel.Visible = false;
@@ -1677,17 +1679,27 @@ namespace Isotope_fitting
             return tr;
         }
 
-        private void copyTree_toClip(TreeView tree, bool all_nodes)
+        private void copyTree_toClip(TreeView tree, bool all_nodes,bool only_selected=false)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (TreeNode baseNode in tree.Nodes)
+            if (only_selected && tree.SelectedNode !=null)
             {
-                foreach (TreeNode subNode in baseNode.Nodes)
+                TreeNode subNode = tree.SelectedNode;
+                if (string.IsNullOrEmpty(subNode.Name))
                 {
-                    // determine if all nodes, or only the checked ones will be saved
-                    if(!all_nodes)
-                        if (!subNode.Checked) continue;
-
+                    foreach (TreeNode nn in subNode.Nodes)
+                    {
+                        int i = Convert.ToInt32(nn.Name);
+                        if (Fragments2[i].Name.Contains("intern"))
+                            sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].IndexTo + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                        "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                        else
+                            sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                        "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                    }
+                }
+                else
+                {
                     int i = Convert.ToInt32(subNode.Name);
                     if (Fragments2[i].Name.Contains("intern"))
                         sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].IndexTo + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
@@ -1695,8 +1707,28 @@ namespace Isotope_fitting
                     else
                         sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
                                                     "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
-                }
+                }               
             }
+            else
+            {
+                foreach (TreeNode baseNode in tree.Nodes)
+                {
+                    foreach (TreeNode subNode in baseNode.Nodes)
+                    {
+                        // determine if all nodes, or only the checked ones will be saved
+                        if (!all_nodes)
+                            if (!subNode.Checked) continue;
+
+                        int i = Convert.ToInt32(subNode.Name);
+                        if (Fragments2[i].Name.Contains("intern"))
+                            sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].IndexTo + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                        "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                        else
+                            sb.AppendLine(Fragments2[i].Name + "\t" + Fragments2[i].Index + "\t" + Fragments2[i].Charge.ToString() + "\t" + Fragments2[i].Mz + "\t" + Fragments2[i].FinalFormula +
+                                                        "\t" + Fragments2[i].PPM_Error.ToString("0.##") + "\t" + (Fragments2[i].Factor * Fragments2[i].Max_intensity).ToString("0"));
+                    }
+                }
+            }           
             Clipboard.Clear();
             Clipboard.SetText(sb.ToString());
         }
@@ -2542,7 +2574,7 @@ namespace Isotope_fitting
             sw1.Reset(); sw1.Start();
             // clear panel
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             // init tree view
             fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = false,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
@@ -3022,8 +3054,16 @@ namespace Isotope_fitting
                 iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
                 if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
                 {
-                    double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
-                    iso_plot.Model.Axes[0].Zoom(-100, pt0 *1.2);
+                    try
+                    {
+                        double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
+                        iso_plot.Model.Axes[0].Zoom(-100, pt0 * 1.2);
+                    }
+                    catch
+                    {
+
+                    }
+                    
                 }
                 iso_plot.Refresh();
                 invalidate_all();
@@ -4248,7 +4288,7 @@ namespace Isotope_fitting
         {
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
             string fullPath = "";
@@ -4390,7 +4430,7 @@ namespace Isotope_fitting
             all_data.RemoveRange(1, all_data.Count - 1);
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false;            
             Initialize_Oxy();
             initialize_tabs();
@@ -4514,7 +4554,7 @@ namespace Isotope_fitting
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
 
-            if (fit_tree != null) { fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
         }
         private void styleFormatBtn_Click(object sender, EventArgs e)
         {
@@ -5194,7 +5234,7 @@ namespace Isotope_fitting
                 Form4.active = false;
                 if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
                 if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
-                if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+                if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
                 factor_panel.Controls.Clear();
                 //other tabs
                 if (IonDraw.Count > 0) IonDraw.Clear();
@@ -6304,7 +6344,7 @@ namespace Isotope_fitting
             Form4.active = false;
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             factor_panel.Controls.Clear();
         }
         private void saveFit_Btn_Click(object sender, EventArgs e)
