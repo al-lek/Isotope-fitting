@@ -1328,7 +1328,7 @@ namespace Isotope_fitting
             };
 
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
-            Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+            Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();            
             // also restore indexes to match array position
             for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
 
@@ -1421,49 +1421,72 @@ namespace Isotope_fitting
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
             {
-                Fragments2.Add(new FragForm()
+                if (check_duplicates_Fragments2(chem.Mz, chem.Name, chem.Factor))
                 {
-                    Adduct = chem.Adduct,
-                    Charge = chem.Charge,
-                    FinalFormula = chem.FinalFormula,
-                    Deduct = chem.Deduct,
-                    Error = chem.Error,
-                    PPM_Error = chem.PPM_Error,
-                    Index = chem.Index,
-                    IndexTo = chem.IndexTo,
-                    InputFormula = chem.InputFormula,
-                    Ion = chem.Ion,
-                    Ion_type = chem.Ion_type,
-                    Machine = chem.Machine,
-                    Multiplier = chem.Multiplier,
-                    Mz = chem.Mz,
-                    Radio_label = chem.Radio_label,
-                    Resolution = chem.Resolution,
-                    Factor = chem.Factor,
-                    Counter = 0,
-                    To_plot = false,
-                    Color = chem.Color,
-                    Name = chem.Name,
-                    ListName = new string[4],
-                    Fix = 1.0,
-                    Max_intensity = 0.0,
-                    Fixed=chem.Fixed,                   
-                });
+                    Fragments2.Add(new FragForm()
+                    {
+                        Adduct = chem.Adduct,
+                        Charge = chem.Charge,
+                        FinalFormula = chem.FinalFormula,
+                        Deduct = chem.Deduct,
+                        Error = chem.Error,
+                        PPM_Error = chem.PPM_Error,
+                        Index = chem.Index,
+                        IndexTo = chem.IndexTo,
+                        InputFormula = chem.InputFormula,
+                        Ion = chem.Ion,
+                        Ion_type = chem.Ion_type,
+                        Machine = chem.Machine,
+                        Multiplier = chem.Multiplier,
+                        Mz = chem.Mz,
+                        Radio_label = chem.Radio_label,
+                        Resolution = chem.Resolution,
+                        Factor = chem.Factor,
+                        Counter = 0,
+                        To_plot = false,
+                        Color = chem.Color,
+                        Name = chem.Name,
+                        ListName = new string[4],
+                        Fix = 1.0,
+                        Max_intensity = 0.0,
+                        Fixed = chem.Fixed,
+                    });
 
-                Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
-                Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
-                Fragments2.Last().Counter = Fragments2.Count;
-                Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
-                if(!Fragments2.Last().Fixed && max_exp>0) Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
+                    Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
+                    Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
+                    Fragments2.Last().Counter = Fragments2.Count;
+                    Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
+                    if (!Fragments2.Last().Fixed && max_exp > 0) Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
 
-                if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
-                else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-
-                // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
-                // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
-                chem.Profile.Clear();
-                chem.Points.Clear();
+                    if (chem.Charge > 0) Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
+                    else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
+                    // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
+                    // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
+                    chem.Profile.Clear();
+                    chem.Points.Clear();
+                }
+                else
+                {
+                    // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
+                    // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
+                    chem.Profile.Clear();
+                    chem.Points.Clear();
+                }       
             }
+        }
+        private bool check_duplicates_Fragments2(string mz,string name, double factor)
+        {
+            if (Fragments2.Count>0)
+            {
+                foreach (FragForm fra in Fragments2)
+                {
+                    if (fra.Mz.Equals(mz) && fra.Name.Equals(name) && Math.Round(fra.Factor,3)== Math.Round(factor, 3) )
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private void add_fragments_to_all_data()
