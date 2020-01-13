@@ -9183,6 +9183,7 @@ namespace Isotope_fitting
             linearAxis9.AxisChanged += (s, e) => { linearAxis13.Zoom(linearAxis9.ActualMinimum, linearAxis9.ActualMaximum); indextoIntensity_plot.InvalidatePlot(true); };
             indexto_model.Updated += (s, e) => { indextoIntensity_plot.Model.Axes[0].Zoom(indexto_plot.Model.Axes[0].ActualMinimum, indexto_plot.Model.Axes[0].ActualMaximum); };
 
+
             //PPM plot
             if (ppm_plot != null) ppm_plot.Dispose();
             ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
@@ -10114,9 +10115,82 @@ namespace Isotope_fitting
 
         #endregion
 
+        #region FORM 15
         private void extractPlotToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            internal_panel_plotview_rebuild();
+        }
+        private void internal_panel_plotview_rebuild(bool indexTo=false)
+        {
+            // index plot            
+            PlotView temp_index_plot = new PlotView() { Name = "tempi_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotModel temp_indexModel = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA initial", TitleColor = OxyColors.Teal };
+            temp_index_plot.Model = temp_indexModel;
+            var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Yint_major_grid13, MinorGridlineStyle = Yint_minor_grid13, MajorStep = yINT_majorStep13, MinorStep = yINT_minorStep13, TickStyle = Yint_tick13, FontSize = 10, AxisTitleDistance = 7, MinimumMinorStep = 1.0, TitleFontSize = 11, Title = " # fragments" };
+            temp_indexModel.Axes.Add(linearAxis7);
+            var linearAxis8 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xint_major_grid13, MinorGridlineStyle = Xint_minor_grid13, MajorStep = xINT_majorStep13, MinorStep = xINT_minorStep13, TickStyle = Xint_tick13, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            temp_indexModel.Axes.Add(linearAxis8);
+            temp_index_plot.MouseDoubleClick += (s, e) => { temp_indexModel.ResetAllAxes(); temp_index_plot.InvalidatePlot(true); };
+            // index intensity plot            
+            PlotView tempindex_Intensity_plot = new PlotView() { Name = "tempiIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotModel temp_index_Intensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
+            tempindex_Intensity_plot.Model = temp_index_Intensity_model;
+            var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Yint_major_grid13, MinorGridlineStyle = Yint_minor_grid13, MajorStep = yINT_majorStep13, MinorStep = yINT_minorStep13, TickStyle = Yint_tick13, FontSize = 10, MinimumMinorStep = 1.0, Position = OxyPlot.Axes.AxisPosition.Left };
+            temp_index_Intensity_model.Axes.Add(linearAxis11);
+            var linearAxis12 = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format13 + x_numformat13, MajorGridlineStyle = Xint_major_grid13, MinorGridlineStyle = Xint_minor_grid13, IntervalLength = x_interval13, TickStyle = Xint_tick13, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            temp_index_Intensity_model.Axes.Add(linearAxis12);
+            tempindex_Intensity_plot.MouseDoubleClick += (s, e) => { temp_index_Intensity_model.ResetAllAxes(); tempindex_Intensity_plot.InvalidatePlot(true); };
+            //bind the 2 axes
+            linearAxis7.AxisChanged += (s, e) => { linearAxis11.Zoom(linearAxis7.ActualMinimum, linearAxis7.ActualMaximum); tempindex_Intensity_plot.InvalidatePlot(true); };
+            temp_indexModel.Updated += (s, e) => { tempindex_Intensity_plot.Model.Axes[0].Zoom(temp_index_plot.Model.Axes[0].ActualMinimum, temp_index_plot.Model.Axes[0].ActualMaximum); };
+            if (indexTo)
+            {
+                CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
+                temp_indexModel.Title = "internal  fragments' plot sorted by #AA terminal";
+                temp_index_plot.Model.Axes[1].Zoom(indexto_plot.Model.Axes[1].ActualMinimum, indexto_plot.Model.Axes[1].ActualMaximum);
+                temp_index_plot.Model.Axes[0].Zoom(indexto_plot.Model.Axes[0].ActualMinimum, indexto_plot.Model.Axes[0].ActualMaximum);
+                tempindex_Intensity_plot.Model.Axes[1].Zoom(indextoIntensity_plot.Model.Axes[1].ActualMinimum, indextoIntensity_plot.Model.Axes[1].ActualMaximum);
+                tempindex_Intensity_plot.Model.Axes[0].Zoom(indextoIntensity_plot.Model.Axes[0].ActualMinimum, indextoIntensity_plot.Model.Axes[0].ActualMaximum);
+            }
+            else
+            {
+                CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
+                temp_index_plot.Model.Axes[1].Zoom(index_plot.Model.Axes[1].ActualMinimum, index_plot.Model.Axes[1].ActualMaximum);
+                temp_index_plot.Model.Axes[0].Zoom(index_plot.Model.Axes[0].ActualMinimum, index_plot.Model.Axes[0].ActualMaximum);
+                tempindex_Intensity_plot.Model.Axes[1].Zoom(indexIntensity_plot.Model.Axes[1].ActualMinimum, indexIntensity_plot.Model.Axes[1].ActualMaximum);
+                tempindex_Intensity_plot.Model.Axes[0].Zoom(indexIntensity_plot.Model.Axes[0].ActualMinimum, indexIntensity_plot.Model.Axes[0].ActualMaximum);
+            }
+            
 
+
+            refresh_temp_internal(temp_index_plot, tempindex_Intensity_plot);
+            Form15 frm15 = new Form15(temp_index_plot, tempindex_Intensity_plot);
+            frm15.Show();
+        }
+        private void refresh_temp_internal(PlotView temp_index_plot,PlotView tempindex_Intensity_plot)
+        {
+            if (IonDrawIndexTo.Count() > 0)
+            {
+                int  k = 1;
+                foreach (ion nn in IonDrawIndexTo)
+                {
+                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    tmp.Points.Add(new DataPoint(nn.Index, k)); tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    temp_index_plot.Model.Series.Add(tmp);
+                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    bar.Points.Add(new DataPoint(0, k)); bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    tempindex_Intensity_plot.Model.Series.Add(bar);
+                    k++;
+                }                
+            }
+            tempindex_Intensity_plot.InvalidatePlot(true); temp_index_plot.InvalidatePlot(true);
+        }
+
+        #endregion
+
+        private void extractPlotToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            internal_panel_plotview_rebuild(true);
         }
     }
 }
