@@ -9349,7 +9349,7 @@ namespace Isotope_fitting
             {
                 ion nn = IonDraw[i];
                 ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error,nn.Mz);
-                if (nn.Ion_type.StartsWith("a"))
+                if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
                     if (nn.Max_intensity/10<10){ points_a_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
                     else if (nn.Max_intensity / 100 < 100){ points_a_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
@@ -9368,7 +9368,7 @@ namespace Isotope_fitting
                     if (max_a < merged_a.Last()[1]) { max_a = merged_a.Last()[1]; }
                     if (maxcharge_a< nn.Charge) { maxcharge_a = nn.Charge; }
                 }
-                else if (nn.Ion_type.StartsWith("b"))
+                else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                 {
                     if (nn.Max_intensity/ 10 < 10){ points_b_10.Add(new CustomDataPoint(nn.Index, nn.Charge,nn.Mz));}
                     else if (nn.Max_intensity / 100 < 100){ points_b_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
@@ -9387,7 +9387,7 @@ namespace Isotope_fitting
                     if (max_b < merged_b.Last()[1]) { max_b = merged_b.Last()[1]; }
                     if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
                 }
-                else if (nn.Ion_type.StartsWith("c"))
+                else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                 {
                     if (nn.Max_intensity / 10 < 10){ points_c_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
                     else if (nn.Max_intensity/ 100 < 100){ points_c_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
@@ -9406,7 +9406,7 @@ namespace Isotope_fitting
                     if (max_c < merged_c.Last()[1]) { max_c = merged_c.Last()[1]; }
                     if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
                 }
-                else if (nn.Ion_type.StartsWith("x"))
+                else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                 {
                     if (nn.Max_intensity/ 10 < 10){ points_x_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
                     else if (nn.Max_intensity/ 100 < 100){ points_x_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
@@ -9425,7 +9425,7 @@ namespace Isotope_fitting
                     if (max_a < -merged_x.Last()[1]) { max_a = -merged_x.Last()[1]; }
                     if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
                 }
-                else if (nn.Ion_type.StartsWith("y"))
+                else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                 {
                     if (nn.Max_intensity / 10 < 10){ points_y_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
                     else if (nn.Max_intensity / 100 < 100){ points_y_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
@@ -9444,7 +9444,7 @@ namespace Isotope_fitting
                     if (max_b < -merged_y.Last()[1]) { max_b = -merged_y.Last()[1]; }
                     if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
                 }
-                else if (nn.Ion_type.StartsWith("z"))
+                else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                 {
                     if (nn.Max_intensity / 10 < 10){ points_z_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
                     else if (nn.Max_intensity / 100 < 100){ points_z_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
@@ -9559,7 +9559,57 @@ namespace Isotope_fitting
                 }
             }
             ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
+            ax_plot.Model.Axes[0].AxisChanged += (s, e) => 
+            {
+                s1a.Points.Clear(); s2a.Points.Clear();
+                for (int cc = 0; cc < Peptide.Length; cc++)
+                {
+                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    {
+                        s1a.Points.Add(new ScatterPoint(cc + 1, ax_plot.Model.Axes[0].ActualMinimum)); 
+                    }
+                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    {
+                        s2a.Points.Add(new ScatterPoint(cc + 1, ax_plot.Model.Axes[0].ActualMaximum)); 
+                    }
+                }
+                ax_plot.Model.Series[2] = s1a;ax_plot.Model.Series[3] = s2a;ax_plot.InvalidatePlot(true);
+            };
+            by_plot.Model.Axes[0].AxisChanged += (s, e) =>
+            {
+                s1b.Points.Clear(); s2b.Points.Clear();
+                for (int cc = 0; cc < Peptide.Length; cc++)
+                {
+                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    {
+                        s1b.Points.Add(new ScatterPoint(cc + 1, by_plot.Model.Axes[0].ActualMinimum));
+                    }
+                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    {
+                        s2b.Points.Add(new ScatterPoint(cc + 1, by_plot.Model.Axes[0].ActualMaximum));
+                    }
+                }
+                by_plot.Model.Series[2] = s1b; by_plot.Model.Series[3] = s2b; by_plot.InvalidatePlot(true);
+            };
+            cz_plot.Model.Axes[0].AxisChanged += (s, e) =>
+            {
+                s1c.Points.Clear(); s2c.Points.Clear();
+                for (int cc = 0; cc < Peptide.Length; cc++)
+                {
+                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    {
+                        s1c.Points.Add(new ScatterPoint(cc + 1, cz_plot.Model.Axes[0].ActualMinimum));
+                    }
+                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    {
+                        s2c.Points.Add(new ScatterPoint(cc + 1, cz_plot.Model.Axes[0].ActualMaximum));
+                    }
+                }
+                cz_plot.Model.Series[2] = s1c; cz_plot.Model.Series[3] = s2c; cz_plot.InvalidatePlot(true);
+            };
+            ax_plot.Model.Axes[1].Minimum = by_plot.Model.Axes[1].Minimum = cz_plot.Model.Axes[1].Minimum = 0;
             ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
+            axCharge_plot.Model.Axes[1].Minimum = byCharge_plot.Model.Axes[1].Minimum = czCharge_plot.Model.Axes[1].Minimum = 0;
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
             axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true);
@@ -9596,13 +9646,16 @@ namespace Isotope_fitting
                 }
                 indexIntensity_plot.Model.Axes[1].Maximum =indextoIntensity_plot.Model.Axes[1].Maximum =max_i*1.2;
                 indexIntensity_plot.Model.Axes[0].Minimum =indextoIntensity_plot.Model.Axes[0].Minimum =0;
-                indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count+1;
+                //indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count+1;
+                indexto_plot.Model.Axes[1].Minimum = index_plot.Model.Axes[1].Minimum = 0;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
-                indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + 1;
+                //indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + 1;
                 if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; }
                 else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; }
                 else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; }
                 else if (IonDrawIndexTo.Count >50) { yINT_minorStep13 = 5; yINT_majorStep13 = 10; }
+                indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + yINT_minorStep13/2;
+                indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = indexIntensity_plot.Model.Axes[0].Minimum = indextoIntensity_plot.Model.Axes[0].Minimum = - yINT_minorStep13/2;
             }
             indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
         }
