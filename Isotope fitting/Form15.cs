@@ -21,6 +21,9 @@ namespace Isotope_fitting
             plot = p;  plotInt = pint;
             plot.Dock = DockStyle.Fill;  pint.Dock = DockStyle.Fill;
             splitContainer1.Panel1.Controls.Add(plot);   splitContainer1.Panel2.Controls.Add(pint);
+            x_Box.Text = panel_frm11.Size.Width.ToString();
+            y_Box.Text = panel_frm11.Size.Height.ToString();
+
         }
 
         private void Save_Btn_Click(object sender, EventArgs e)
@@ -46,6 +49,32 @@ namespace Isotope_fitting
             {
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
                 if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
+            }
+        }
+
+        private void x_Box_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+               double size_x = Double.Parse(x_Box.Text);
+                this.Width =(int)size_x+59;                
+            }
+            catch
+            {
+                x_Box.Text = "";
+            }
+        }
+
+        private void y_Box_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                double size_y = Double.Parse(y_Box.Text);
+                this.Height = (int)size_y + 39;
+            }
+            catch
+            {
+                x_Box.Text = "";
             }
         }
     }

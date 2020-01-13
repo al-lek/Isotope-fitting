@@ -4408,7 +4408,7 @@ namespace Isotope_fitting
                                 });
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                 IonDraw.Add(new ion() {Mz= str[5], PPM_Error= dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
-                                if ((str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z"))) IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
+                                if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z")|| str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z")) IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
                                 else IonDraw.Last().SortIdx = IonDraw.Last().Index;
                             }
                         }                       
@@ -8625,13 +8625,15 @@ namespace Isotope_fitting
         {
             public double X { get; set; }
             public double Y { get; set; }
+            public string Xreal { get; set; }
             public string Text { get; set; }
             public ScatterPoint GetScatterPoint() => new ScatterPoint(X, Y);
 
-            public CustomDataPoint(double x, double y, string t)
+            public CustomDataPoint(double x, double y, string xreal, string t)
             {
                 X = x;
                 Y = y;
+                Xreal = xreal;
                 Text = t;
             }
         }
@@ -9349,18 +9351,18 @@ namespace Isotope_fitting
             for (int i=0;i< iondraw_count ; i++)
             {
                 ion nn = IonDraw[i];
-                ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error,nn.Mz);
+                ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error, nn.Index.ToString(), nn.Mz);
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
-                    if (nn.Max_intensity/10<10){ points_a_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_a_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_a_1000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 10000 < 10000){ points_a_10000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 100000 < 100000){ points_a_100000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else{ points_a_1000000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.Index)
+                    if (nn.Max_intensity/10<10){ points_a_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100 < 100){ points_a_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 1000 < 1000){ points_a_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 10000 < 10000){ points_a_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 100000 < 100000){ points_a_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else{ points_a_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.SortIdx)
                     {
-                        merged_a.Add(new double[] { nn.Index, nn.Max_intensity });
+                        merged_a.Add(new double[] { nn.SortIdx, nn.Max_intensity });
                     }
                     else
                     {
@@ -9371,15 +9373,15 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                 {
-                    if (nn.Max_intensity/ 10 < 10){ points_b_10.Add(new CustomDataPoint(nn.Index, nn.Charge,nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_b_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 1000 < 1000){ points_b_1000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_b_10000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_b_100000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else{ points_b_1000000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.Index)
+                    if (nn.Max_intensity/ 10 < 10){ points_b_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100 < 100){ points_b_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 1000 < 1000){ points_b_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 10000 < 10000){ points_b_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100000 < 100000){ points_b_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else{ points_b_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.SortIdx)
                     {
-                        merged_b.Add(new double[] { nn.Index, nn.Max_intensity });
+                        merged_b.Add(new double[] { nn.SortIdx, nn.Max_intensity });
                     }
                     else
                     {
@@ -9390,15 +9392,15 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                 {
-                    if (nn.Max_intensity / 10 < 10){ points_c_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 100 < 100){ points_c_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_c_1000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_c_10000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 100000 < 100000){ points_c_100000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else{ points_c_1000000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.Index)
+                    if (nn.Max_intensity / 10 < 10){ points_c_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 100 < 100){ points_c_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 1000 < 1000){ points_c_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 10000 < 10000){ points_c_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 100000 < 100000){ points_c_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else{ points_c_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.SortIdx)
                     {
-                        merged_c.Add(new double[] { nn.Index, nn.Max_intensity });
+                        merged_c.Add(new double[] { nn.SortIdx, nn.Max_intensity });
                     }
                     else
                     {
@@ -9409,12 +9411,12 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                 {
-                    if (nn.Max_intensity/ 10 < 10){ points_x_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 100 < 100){ points_x_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_x_1000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_x_10000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_x_100000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else{ points_x_1000000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
+                    if (nn.Max_intensity/ 10 < 10){ points_x_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 100 < 100){ points_x_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 1000 < 1000){ points_x_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 10000 < 10000){ points_x_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100000 < 100000){ points_x_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else{ points_x_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
                     if (merged_x.Count == 0 || (int)merged_x.Last()[0] != nn.SortIdx)
                     {
                         merged_x.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
@@ -9428,12 +9430,12 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                 {
-                    if (nn.Max_intensity / 10 < 10){ points_y_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_y_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_y_1000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_y_10000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_y_100000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else{ points_y_1000000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
+                    if (nn.Max_intensity / 10 < 10){ points_y_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100 < 100){ points_y_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 1000 < 1000){ points_y_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity/ 10000 < 10000){ points_y_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100000 < 100000){ points_y_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else{ points_y_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
                     if (merged_y.Count == 0 || (int)merged_y.Last()[0] != nn.SortIdx)
                     {
                         merged_y.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
@@ -9447,12 +9449,12 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                 {
-                    if (nn.Max_intensity / 10 < 10){ points_z_10.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_z_100.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_z_1000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 10000 < 10000){ points_z_10000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_z_100000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz)); }
-                    else{ points_z_1000000.Add(new CustomDataPoint(nn.Index, nn.Charge, nn.Mz));}
+                    if (nn.Max_intensity / 10 < 10){ points_z_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100 < 100){ points_z_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 1000 < 1000){ points_z_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 10000 < 10000){ points_z_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
+                    else if (nn.Max_intensity / 100000 < 100000){ points_z_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                    else{ points_z_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
                     if (merged_z.Count == 0 || (int)merged_z.Last()[0] != nn.SortIdx)
                     {
                         merged_z.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
@@ -9481,12 +9483,12 @@ namespace Isotope_fitting
             x_10.ItemsSource = points_x_10;x_100.ItemsSource = points_x_100;x_1000.ItemsSource = points_x_1000;x_10000.ItemsSource = points_x_10000;x_100000.ItemsSource = points_x_100000;x_1000000.ItemsSource = points_x_1000000;
             y_10.ItemsSource = points_y_10;y_100.ItemsSource = points_y_100;y_1000.ItemsSource = points_y_1000;y_10000.ItemsSource = points_y_10000;y_100000.ItemsSource = points_y_100000;y_1000000.ItemsSource = points_y_1000000;
             z_10.ItemsSource = points_z_10;z_100.ItemsSource = points_z_100;z_1000.ItemsSource = points_z_1000;z_10000.ItemsSource = points_z_10000;z_100000.ItemsSource = points_z_100000;z_1000000.ItemsSource = points_z_1000000;
-            a_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
+            a_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; a_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";a_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
             b_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";b_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";b_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";b_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";b_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";b_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
             c_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";c_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";c_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";c_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";c_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";c_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
-            x_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";x_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";x_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";x_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";x_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";x_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
-            y_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";y_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";y_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";y_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";y_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";y_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
-            z_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";z_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";z_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";z_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";z_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";z_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
+            x_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; x_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; x_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; x_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; x_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; x_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
+            y_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; y_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; y_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; y_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; y_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; y_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
+            z_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; z_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; z_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; z_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; z_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; z_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
 
             if (a_Btn.Checked && x_Btn.Checked)
             {
