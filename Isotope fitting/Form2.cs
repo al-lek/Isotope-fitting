@@ -9599,6 +9599,10 @@ namespace Isotope_fitting
                 indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count+1;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
                 indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + 1;
+                if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; }
+                else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; }
+                else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; }
+                else if (IonDrawIndexTo.Count >50) { yINT_minorStep13 = 5; yINT_majorStep13 = 10; }
             }
             indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
         }
@@ -10056,5 +10060,10 @@ namespace Isotope_fitting
         }
 
         #endregion
+
+        private void extractPlotToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -18,6 +18,13 @@ namespace Isotope_fitting
         {
             InitializeComponent();
             frm2 = f;
+            xstepminor_UD13.Value= (decimal)frm2.xINT_minorStep13;
+            xstepmajor_UD13.Value= (decimal)frm2.xINT_majorStep13 ;
+           ystepminor_UD13.Value = (decimal)frm2.yINT_minorStep13;
+            ystepmajor_UD13.Value = (decimal)frm2.yINT_majorStep13 ;
+           xInterval_UD13.Value = (decimal)frm2.x_interval13;
+            intLine_numUD13.Value = (decimal)frm2.int_width;
+            formatY_numUD13.Value= Decimal.Parse(frm2.x_numformat13);
         }
 
         private void xtickUD13_SelectedItemChanged(object sender, EventArgs e)
