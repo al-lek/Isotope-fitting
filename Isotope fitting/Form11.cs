@@ -17,6 +17,7 @@ namespace Isotope_fitting
 {
     public partial class Form11 : Form
     {
+        bool text = false;
         PlotView plot = new PlotView();
         public Form11(PlotView p)
         {
@@ -24,6 +25,8 @@ namespace Isotope_fitting
             plot = p;
             plot.Dock = DockStyle.Fill;
             panel_frm11.Controls.Add(plot);
+            x_Box.Text = panel_frm11.Size.Width.ToString();
+            y_Box.Text = panel_frm11.Size.Height.ToString();
         }
 
         private void Save_Btn_Click(object sender, EventArgs e)
@@ -47,6 +50,47 @@ namespace Isotope_fitting
             {
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save plot image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
                 if (save.ShowDialog() == DialogResult.OK) { pngExporter.ExportToFile(plot.Model, save.FileName); }
+            }
+        }
+
+        private void Form11_Resize(object sender, EventArgs e)
+        {
+            if (!text)
+            {
+                x_Box.Text = panel_frm11.Size.Width.ToString();
+                y_Box.Text = panel_frm11.Size.Height.ToString();
+            }
+            else
+            {
+                text = false;
+            }
+        }
+
+        private void y_Box_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                double size_y = Double.Parse(y_Box.Text);
+                this.Height = (int)size_y + 39; text = true;
+
+            }
+            catch
+            {
+                x_Box.Text = "";
+            }
+        }
+
+        private void x_Box_TextChanged(object sender, EventArgs e)
+        {
+
+            try
+            {
+                double size_x = Double.Parse(x_Box.Text);
+                this.Width = (int)size_x + 59; text = true;
+            }
+            catch
+            {
+                x_Box.Text = "";
             }
         }
     }

@@ -149,7 +149,6 @@
             this.Name = "Form15";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form15";
-            this.ResizeEnd += new System.EventHandler(this.Form15_ResizeEnd);
             this.Resize += new System.EventHandler(this.Form15_Resize);
             this.panel_frm11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

@@ -9612,8 +9612,7 @@ namespace Isotope_fitting
             };
             ax_plot.Model.Axes[1].Minimum = by_plot.Model.Axes[1].Minimum = cz_plot.Model.Axes[1].Minimum = 0;            
             axCharge_plot.Model.Axes[1].Minimum = byCharge_plot.Model.Axes[1].Minimum = czCharge_plot.Model.Axes[1].Minimum = 0;
-            index_plot.Model.Axes[1].Maximum = indexto_plot.Model.Axes[1].Maximum = ax_plot.Model.Axes[1].Maximum = by_plot.Model.Axes[1].Maximum = cz_plot.Model.Axes[1].Maximum =axCharge_plot.Model.Axes[1].Maximum = byCharge_plot.Model.Axes[1].Maximum = czCharge_plot.Model.Axes[1].Maximum = Peptide.Length+2;
-
+            ax_plot.Model.Axes[1].Maximum = by_plot.Model.Axes[1].Maximum = cz_plot.Model.Axes[1].Maximum =axCharge_plot.Model.Axes[1].Maximum = byCharge_plot.Model.Axes[1].Maximum = czCharge_plot.Model.Axes[1].Maximum = Peptide.Length+2;
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
             axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true); ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
@@ -9652,6 +9651,7 @@ namespace Isotope_fitting
                 indexIntensity_plot.Model.Axes[0].Minimum =indextoIntensity_plot.Model.Axes[0].Minimum =0;
                 //indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count+1;
                 indexto_plot.Model.Axes[1].Minimum = index_plot.Model.Axes[1].Minimum = 0;
+                indexto_plot.Model.Axes[1].Maximum = index_plot.Model.Axes[1].Maximum = Peptide.Length + 2;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
                 //indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + 1;
                 if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; }

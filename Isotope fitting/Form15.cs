@@ -81,11 +81,6 @@ namespace Isotope_fitting
             }
         }
 
-        private void Form15_ResizeEnd(object sender, EventArgs e)
-        {
-            //x_Box.Text = panel_frm11.Size.Width.ToString();
-            //y_Box.Text = panel_frm11.Size.Height.ToString();
-        }
 
         private void Form15_Resize(object sender, EventArgs e)
         {
