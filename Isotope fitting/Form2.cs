@@ -8805,12 +8805,10 @@ namespace Isotope_fitting
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
                                 draw_line(pp, false, 4, Color.DodgerBlue, g);
-
                             }
                             else
                             {
                                 draw_line(pp, false, 0, Color.Blue, g);
-
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
@@ -9045,12 +9043,10 @@ namespace Isotope_fitting
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
                                 draw_line(pp, false, 4, Color.DodgerBlue, g);
-
                             }
                             else
                             {
                                 draw_line(pp, false, 0, Color.Blue, g);
-
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
@@ -9532,7 +9528,6 @@ namespace Isotope_fitting
             ppmSave_Btn.Click += (s, e) => { export_copy_plot(false, ppm_plot); }; ppmCopy_Btn.Click += (s, e) => { export_copy_plot(true, ppm_plot); };
             #endregion
 
-
         }
 
         private void initialize_ions_todraw()
@@ -9652,6 +9647,7 @@ namespace Isotope_fitting
                 ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error, nn.Index.ToString(), nn.Mz);
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
+                    //search_primary("a", nn.SortIdx);
                     if (nn.Max_intensity/10<10){ points_a_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
                     else if (nn.Max_intensity / 100 < 100){ points_a_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
                     else if (nn.Max_intensity / 1000 < 1000){ points_a_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
@@ -9947,11 +9943,9 @@ namespace Isotope_fitting
                 }
                 indexIntensity_plot.Model.Axes[1].Maximum =indextoIntensity_plot.Model.Axes[1].Maximum =max_i*1.2;
                 indexIntensity_plot.Model.Axes[0].Minimum =indextoIntensity_plot.Model.Axes[0].Minimum =0;
-                //indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count+1;
                 indexto_plot.Model.Axes[1].Minimum = index_plot.Model.Axes[1].Minimum = 0;
                 indexto_plot.Model.Axes[1].Maximum = index_plot.Model.Axes[1].Maximum = Peptide.Length + 2;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
-                //indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + 1;
                 if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; }
                 else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; }
                 else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; }
@@ -9960,6 +9954,13 @@ namespace Isotope_fitting
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = indexIntensity_plot.Model.Axes[0].Minimum = indextoIntensity_plot.Model.Axes[0].Minimum = - yINT_minorStep13/2;
             }
             indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
+        }
+        private void search_primary(string type, int idx)
+        {
+            foreach (ion nn in IonDraw)
+            {
+
+            }
         }
 
         private void check_duplicate_ions()
