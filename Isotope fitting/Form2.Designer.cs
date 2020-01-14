@@ -3782,7 +3782,7 @@ namespace Isotope_fitting
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1450, 850);
             this.Name = "Form2";
-            this.Text = "Peak Finder v13.3";
+            this.Text = "Peak Finder v13.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Resize += new System.EventHandler(this.Form2_Resize);
             this.tabControl1.ResumeLayout(false);

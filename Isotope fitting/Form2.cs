@@ -9647,118 +9647,135 @@ namespace Isotope_fitting
                 ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error, nn.Index.ToString(), nn.Mz);
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
-                    //search_primary("a", nn.SortIdx);
-                    if (nn.Max_intensity/10<10){ points_a_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_a_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_a_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 10000 < 10000){ points_a_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 100000 < 100000){ points_a_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else{ points_a_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.SortIdx)
+                    if((!nn.Ion_type.Contains("H2O")&& !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
                     {
-                        merged_a.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                    }
-                    else
-                    {
-                        merged_a.Last()[1] += nn.Max_intensity;
-                    }
-                    if (max_a < merged_a.Last()[1]) { max_a = merged_a.Last()[1]; }
-                    if (maxcharge_a< nn.Charge) { maxcharge_a = nn.Charge; }
+                        if (nn.Max_intensity / 10 < 10) { points_a_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100 < 100) { points_a_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 1000 < 1000) { points_a_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 10000 < 10000) { points_a_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100000 < 100000) { points_a_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else { points_a_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.SortIdx)
+                        {
+                            merged_a.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_a.Last()[1] += nn.Max_intensity;
+                        }
+                        if (max_a < merged_a.Last()[1]) { max_a = merged_a.Last()[1]; }
+                        if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
+                    }                    
                 }
                 else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                 {
-                    if (nn.Max_intensity/ 10 < 10){ points_b_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_b_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 1000 < 1000){ points_b_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_b_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_b_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else{ points_b_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.SortIdx)
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
                     {
-                        merged_b.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                    }
-                    else
-                    {
-                        merged_b.Last()[1] += nn.Max_intensity;
-                    }
-                    if (max_b < merged_b.Last()[1]) { max_b = merged_b.Last()[1]; }
-                    if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
+                        if (nn.Max_intensity / 10 < 10) { points_b_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100 < 100) { points_b_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 1000 < 1000) { points_b_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 10000 < 10000) { points_b_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100000 < 100000) { points_b_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else { points_b_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.SortIdx)
+                        {
+                            merged_b.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_b.Last()[1] += nn.Max_intensity;
+                        }
+                        if (max_b < merged_b.Last()[1]) { max_b = merged_b.Last()[1]; }
+                        if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
+                    }                    
                 }
                 else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                 {
-                    if (nn.Max_intensity / 10 < 10){ points_c_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 100 < 100){ points_c_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_c_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_c_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 100000 < 100000){ points_c_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else{ points_c_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.SortIdx)
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
                     {
-                        merged_c.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                    }
-                    else
-                    {
-                        merged_c.Last()[1] += nn.Max_intensity;
-                    }
-                    if (max_c < merged_c.Last()[1]) { max_c = merged_c.Last()[1]; }
-                    if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
+                        if (nn.Max_intensity / 10 < 10) { points_c_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100 < 100) { points_c_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 1000 < 1000) { points_c_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 10000 < 10000) { points_c_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100000 < 100000) { points_c_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else { points_c_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.SortIdx)
+                        {
+                            merged_c.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_c.Last()[1] += nn.Max_intensity;
+                        }
+                        if (max_c < merged_c.Last()[1]) { max_c = merged_c.Last()[1]; }
+                        if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
+                    }                    
                 }
                 else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                 {
-                    if (nn.Max_intensity/ 10 < 10){ points_x_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 100 < 100){ points_x_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_x_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_x_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_x_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else{ points_x_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    if (merged_x.Count == 0 || (int)merged_x.Last()[0] != nn.SortIdx)
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
                     {
-                        merged_x.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
-                    }
-                    else
-                    {
-                        merged_x.Last()[1] -= nn.Max_intensity;
-                    }
-                    if (max_a < -merged_x.Last()[1]) { max_a = -merged_x.Last()[1]; }
-                    if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
+                        if (nn.Max_intensity / 10 < 10) { points_x_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100 < 100) { points_x_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 1000 < 1000) { points_x_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 10000 < 10000) { points_x_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100000 < 100000) { points_x_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else { points_x_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        if (merged_x.Count == 0 || (int)merged_x.Last()[0] != nn.SortIdx)
+                        {
+                            merged_x.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_x.Last()[1] -= nn.Max_intensity;
+                        }
+                        if (max_a < -merged_x.Last()[1]) { max_a = -merged_x.Last()[1]; }
+                        if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
+                    }                    
                 }
                 else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                 {
-                    if (nn.Max_intensity / 10 < 10){ points_y_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_y_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_y_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity/ 10000 < 10000){ points_y_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_y_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else{ points_y_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    if (merged_y.Count == 0 || (int)merged_y.Last()[0] != nn.SortIdx)
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
                     {
-                        merged_y.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
-                    }
-                    else
-                    {
-                        merged_y.Last()[1] -= nn.Max_intensity;
-                    }
-                    if (max_b < -merged_y.Last()[1]) { max_b = -merged_y.Last()[1]; }
-                    if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
+                        if (nn.Max_intensity / 10 < 10) { points_y_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100 < 100) { points_y_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 1000 < 1000) { points_y_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 10000 < 10000) { points_y_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100000 < 100000) { points_y_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else { points_y_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        if (merged_y.Count == 0 || (int)merged_y.Last()[0] != nn.SortIdx)
+                        {
+                            merged_y.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_y.Last()[1] -= nn.Max_intensity;
+                        }
+                        if (max_b < -merged_y.Last()[1]) { max_b = -merged_y.Last()[1]; }
+                        if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
+                    }                    
                 }
                 else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                 {
-                    if (nn.Max_intensity / 10 < 10){ points_z_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100 < 100){ points_z_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 1000 < 1000){ points_z_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 10000 < 10000){ points_z_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    else if (nn.Max_intensity / 100000 < 100000){ points_z_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
-                    else{ points_z_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz));}
-                    if (merged_z.Count == 0 || (int)merged_z.Last()[0] != nn.SortIdx)
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx))
                     {
-                        merged_z.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
-                    }
-                    else
-                    {
-                        merged_z.Last()[1] -= nn.Max_intensity;
-                    }
-                    if (max_c < -merged_z.Last()[1]) { max_c = -merged_z.Last()[1]; }
-                    if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
+                        if (nn.Max_intensity / 10 < 10) { points_z_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100 < 100) { points_z_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 1000 < 1000) { points_z_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 10000 < 10000) { points_z_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else if (nn.Max_intensity / 100000 < 100000) { points_z_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        else { points_z_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz)); }
+                        if (merged_z.Count == 0 || (int)merged_z.Last()[0] != nn.SortIdx)
+                        {
+                            merged_z.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_z.Last()[1] -= nn.Max_intensity;
+                        }
+                        if (max_c < -merged_z.Last()[1]) { max_c = -merged_z.Last()[1]; }
+                        if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
+                    }                   
                 }
                 else if (nn.Ion_type.StartsWith("inter"))
                 {
@@ -9955,12 +9972,14 @@ namespace Isotope_fitting
             }
             indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
         }
-        private void search_primary(string type, int idx)
-        {
+        private bool search_primary(string type, int idx)
+        {            
             foreach (ion nn in IonDraw)
             {
-
+                if (nn.SortIdx > idx) break;
+                else if (nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;                
             }
+            return false;
         }
 
         private void check_duplicate_ions()
