@@ -4299,7 +4299,7 @@ namespace Isotope_fitting
                     Form2.Fragments2[indexS - 1].Fixed = true;
                     file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);
                     IonDraw.Add(new ion() {Mz= Form2.Fragments2[indexS - 1].Mz, PPM_Error= Fragments2[indexS - 1].PPM_Error, Charge =Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
-                    if ((IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z"))||(IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z")))
+                    if (IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z")||IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
                     {
                         IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
                     }
@@ -10518,10 +10518,45 @@ namespace Isotope_fitting
         }
 
 
+
+
+
         #endregion
 
-       
+        private void ax_Pnl_Resize(object sender, EventArgs e)
+        {
+            ax_X_Box.Text = ax_Pnl.Size.Width.ToString();
+            ax_Y_Box.Text = ax_Pnl.Size.Height.ToString();
+        }
 
-        
+        private void by_Pnl_Resize(object sender, EventArgs e)
+        {
+            by_X_Box.Text = by_Pnl.Size.Width.ToString();
+            by_Y_Box.Text = by_Pnl.Size.Height.ToString();
+        }
+
+        private void cz_Pnl_Resize(object sender, EventArgs e)
+        {
+            cz_X_Box.Text = cz_Pnl.Size.Width.ToString();
+            cz_Y_Box.Text = cz_Pnl.Size.Height.ToString();
+        }
+
+        private void axCharge_Pnl_Resize(object sender, EventArgs e)
+        {
+            axcharge_X_Box.Text = axCharge_Pnl.Size.Width.ToString();
+            axcharge_Y_Box.Text = axCharge_Pnl.Size.Height.ToString();
+        }
+
+        private void byCharge_Pnl_Resize(object sender, EventArgs e)
+        {
+            bycharge_X_Box.Text = byCharge_Pnl.Size.Width.ToString();
+            bycharge_Y_Box.Text = byCharge_Pnl.Size.Height.ToString();
+        }
+
+        private void czCharge_Pnl_Resize(object sender, EventArgs e)
+        {
+            czcharge_X_Box.Text = czCharge_Pnl.Size.Width.ToString();
+            czcharge_Y_Box.Text = czCharge_Pnl.Size.Height.ToString();
+        }
     }
 }

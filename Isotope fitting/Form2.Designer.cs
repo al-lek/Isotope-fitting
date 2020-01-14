@@ -293,12 +293,12 @@ namespace Isotope_fitting
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.ax_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.ax_Y_Box = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton7 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton9 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton10 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton11 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton17 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton16 = new System.Windows.Forms.ToolStripTextBox();
+            this.by_X_Box = new System.Windows.Forms.ToolStripTextBox();
+            this.by_Y_Box = new System.Windows.Forms.ToolStripTextBox();
+            this.cz_X_Box = new System.Windows.Forms.ToolStripTextBox();
+            this.cz_Y_Box = new System.Windows.Forms.ToolStripTextBox();
+            this.czcharge_Y_Box = new System.Windows.Forms.ToolStripTextBox();
+            this.czcharge_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.bycharge_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.bycharge_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.axcharge_X_Box = new System.Windows.Forms.ToolStripTextBox();
@@ -3007,8 +3007,8 @@ namespace Isotope_fitting
             this.czChargeCopy_Btn,
             this.c_Btn,
             this.z_Btn,
-            this.toolStripButton16,
-            this.toolStripButton17});
+            this.czcharge_X_Box,
+            this.czcharge_Y_Box});
             this.czCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.czCharge_toolStrip.Location = new System.Drawing.Point(703, 531);
             this.czCharge_toolStrip.Name = "czCharge_toolStrip";
@@ -3221,6 +3221,7 @@ namespace Isotope_fitting
             this.czCharge_Pnl.Name = "czCharge_Pnl";
             this.czCharge_Pnl.Size = new System.Drawing.Size(694, 251);
             this.czCharge_Pnl.TabIndex = 29;
+            this.czCharge_Pnl.Resize += new System.EventHandler(this.czCharge_Pnl_Resize);
             // 
             // byCharge_Pnl
             // 
@@ -3230,6 +3231,7 @@ namespace Isotope_fitting
             this.byCharge_Pnl.Name = "byCharge_Pnl";
             this.byCharge_Pnl.Size = new System.Drawing.Size(694, 251);
             this.byCharge_Pnl.TabIndex = 28;
+            this.byCharge_Pnl.Resize += new System.EventHandler(this.byCharge_Pnl_Resize);
             // 
             // axCharge_Pnl
             // 
@@ -3239,6 +3241,7 @@ namespace Isotope_fitting
             this.axCharge_Pnl.Name = "axCharge_Pnl";
             this.axCharge_Pnl.Size = new System.Drawing.Size(694, 251);
             this.axCharge_Pnl.TabIndex = 27;
+            this.axCharge_Pnl.Resize += new System.EventHandler(this.axCharge_Pnl_Resize);
             // 
             // splitter1
             // 
@@ -3271,8 +3274,8 @@ namespace Isotope_fitting
             this.by_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bySave_Btn,
             this.byCopy_Btn,
-            this.toolStripButton7,
-            this.toolStripButton9});
+            this.by_X_Box,
+            this.by_Y_Box});
             this.by_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.by_toolStrip.Location = new System.Drawing.Point(2, 269);
             this.by_toolStrip.Name = "by_toolStrip";
@@ -3305,8 +3308,8 @@ namespace Isotope_fitting
             this.cz_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.czSave_Btn,
             this.czCopy_Btn,
-            this.toolStripButton10,
-            this.toolStripButton11});
+            this.cz_X_Box,
+            this.cz_Y_Box});
             this.cz_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.cz_toolStrip.Location = new System.Drawing.Point(2, 531);
             this.cz_toolStrip.Name = "cz_toolStrip";
@@ -3396,6 +3399,7 @@ namespace Isotope_fitting
             this.ax_Pnl.Name = "ax_Pnl";
             this.ax_Pnl.Size = new System.Drawing.Size(689, 251);
             this.ax_Pnl.TabIndex = 21;
+            this.ax_Pnl.Resize += new System.EventHandler(this.ax_Pnl_Resize);
             // 
             // by_Pnl
             // 
@@ -3407,6 +3411,7 @@ namespace Isotope_fitting
             this.by_Pnl.Name = "by_Pnl";
             this.by_Pnl.Size = new System.Drawing.Size(689, 251);
             this.by_Pnl.TabIndex = 22;
+            this.by_Pnl.Resize += new System.EventHandler(this.by_Pnl_Resize);
             // 
             // cz_Pnl
             // 
@@ -3418,6 +3423,7 @@ namespace Isotope_fitting
             this.cz_Pnl.Name = "cz_Pnl";
             this.cz_Pnl.Size = new System.Drawing.Size(689, 251);
             this.cz_Pnl.TabIndex = 23;
+            this.cz_Pnl.Resize += new System.EventHandler(this.cz_Pnl_Resize);
             // 
             // tabInternal
             // 
@@ -3671,72 +3677,84 @@ namespace Isotope_fitting
             // 
             this.ax_X_Box.AutoSize = false;
             this.ax_X_Box.Name = "ax_X_Box";
+            this.ax_X_Box.ReadOnly = true;
             this.ax_X_Box.Size = new System.Drawing.Size(40, 22);
             // 
             // ax_Y_Box
             // 
             this.ax_Y_Box.AutoSize = false;
             this.ax_Y_Box.Name = "ax_Y_Box";
+            this.ax_Y_Box.ReadOnly = true;
             this.ax_Y_Box.Size = new System.Drawing.Size(40, 22);
             // 
-            // toolStripButton7
+            // by_X_Box
             // 
-            this.toolStripButton7.AutoSize = false;
-            this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(40, 22);
+            this.by_X_Box.AutoSize = false;
+            this.by_X_Box.Name = "by_X_Box";
+            this.by_X_Box.ReadOnly = true;
+            this.by_X_Box.Size = new System.Drawing.Size(40, 22);
             // 
-            // toolStripButton9
+            // by_Y_Box
             // 
-            this.toolStripButton9.AutoSize = false;
-            this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(40, 22);
+            this.by_Y_Box.AutoSize = false;
+            this.by_Y_Box.Name = "by_Y_Box";
+            this.by_Y_Box.ReadOnly = true;
+            this.by_Y_Box.Size = new System.Drawing.Size(40, 22);
             // 
-            // toolStripButton10
+            // cz_X_Box
             // 
-            this.toolStripButton10.AutoSize = false;
-            this.toolStripButton10.Name = "toolStripButton10";
-            this.toolStripButton10.Size = new System.Drawing.Size(40, 22);
+            this.cz_X_Box.AutoSize = false;
+            this.cz_X_Box.Name = "cz_X_Box";
+            this.cz_X_Box.ReadOnly = true;
+            this.cz_X_Box.Size = new System.Drawing.Size(40, 22);
             // 
-            // toolStripButton11
+            // cz_Y_Box
             // 
-            this.toolStripButton11.AutoSize = false;
-            this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(40, 22);
+            this.cz_Y_Box.AutoSize = false;
+            this.cz_Y_Box.Name = "cz_Y_Box";
+            this.cz_Y_Box.ReadOnly = true;
+            this.cz_Y_Box.Size = new System.Drawing.Size(40, 22);
             // 
-            // toolStripButton17
+            // czcharge_Y_Box
             // 
-            this.toolStripButton17.AutoSize = false;
-            this.toolStripButton17.Name = "toolStripButton17";
-            this.toolStripButton17.Size = new System.Drawing.Size(40, 22);
+            this.czcharge_Y_Box.AutoSize = false;
+            this.czcharge_Y_Box.Name = "czcharge_Y_Box";
+            this.czcharge_Y_Box.ReadOnly = true;
+            this.czcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
             // 
-            // toolStripButton16
+            // czcharge_X_Box
             // 
-            this.toolStripButton16.AutoSize = false;
-            this.toolStripButton16.Name = "toolStripButton16";
-            this.toolStripButton16.Size = new System.Drawing.Size(40, 22);
+            this.czcharge_X_Box.AutoSize = false;
+            this.czcharge_X_Box.Name = "czcharge_X_Box";
+            this.czcharge_X_Box.ReadOnly = true;
+            this.czcharge_X_Box.Size = new System.Drawing.Size(40, 22);
             // 
             // bycharge_X_Box
             // 
             this.bycharge_X_Box.AutoSize = false;
             this.bycharge_X_Box.Name = "bycharge_X_Box";
+            this.bycharge_X_Box.ReadOnly = true;
             this.bycharge_X_Box.Size = new System.Drawing.Size(40, 22);
             // 
             // bycharge_Y_Box
             // 
             this.bycharge_Y_Box.AutoSize = false;
             this.bycharge_Y_Box.Name = "bycharge_Y_Box";
+            this.bycharge_Y_Box.ReadOnly = true;
             this.bycharge_Y_Box.Size = new System.Drawing.Size(40, 22);
             // 
             // axcharge_X_Box
             // 
             this.axcharge_X_Box.AutoSize = false;
             this.axcharge_X_Box.Name = "axcharge_X_Box";
+            this.axcharge_X_Box.ReadOnly = true;
             this.axcharge_X_Box.Size = new System.Drawing.Size(40, 22);
             // 
             // axcharge_Y_Box
             // 
             this.axcharge_Y_Box.AutoSize = false;
             this.axcharge_Y_Box.Name = "axcharge_Y_Box";
+            this.axcharge_Y_Box.ReadOnly = true;
             this.axcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
             // 
             // los_chkBox
@@ -3782,7 +3800,7 @@ namespace Isotope_fitting
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1450, 850);
             this.Name = "Form2";
-            this.Text = "Peak Finder v13.4";
+            this.Text = "Peak Finder v13.5";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Resize += new System.EventHandler(this.Form2_Resize);
             this.tabControl1.ResumeLayout(false);
@@ -4127,16 +4145,16 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button delele_sequencePnl2;
         private System.Windows.Forms.Button delele_sequencePnl1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripTextBox toolStripButton16;
-        private System.Windows.Forms.ToolStripTextBox toolStripButton17;
+        private System.Windows.Forms.ToolStripTextBox czcharge_X_Box;
+        private System.Windows.Forms.ToolStripTextBox czcharge_Y_Box;
         private System.Windows.Forms.ToolStripTextBox bycharge_X_Box;
         private System.Windows.Forms.ToolStripTextBox bycharge_Y_Box;
         private System.Windows.Forms.ToolStripTextBox axcharge_X_Box;
         private System.Windows.Forms.ToolStripTextBox axcharge_Y_Box;
-        private System.Windows.Forms.ToolStripTextBox toolStripButton7;
-        private System.Windows.Forms.ToolStripTextBox toolStripButton9;
-        private System.Windows.Forms.ToolStripTextBox toolStripButton10;
-        private System.Windows.Forms.ToolStripTextBox toolStripButton11;
+        private System.Windows.Forms.ToolStripTextBox by_X_Box;
+        private System.Windows.Forms.ToolStripTextBox by_Y_Box;
+        private System.Windows.Forms.ToolStripTextBox cz_X_Box;
+        private System.Windows.Forms.ToolStripTextBox cz_Y_Box;
         private System.Windows.Forms.ToolStripTextBox ax_X_Box;
         private System.Windows.Forms.ToolStripTextBox ax_Y_Box;
         private System.Windows.Forms.CheckBox los_chkBoxCopy2;
