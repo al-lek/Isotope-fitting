@@ -2462,9 +2462,9 @@ namespace Isotope_fitting
             this.seqSave_BtnCopy2,
             this.seqCopy_BtnCopy2});
             this.sequence_toolStripCopy2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.sequence_toolStripCopy2.Location = new System.Drawing.Point(728, 27);
+            this.sequence_toolStripCopy2.Location = new System.Drawing.Point(720, 27);
             this.sequence_toolStripCopy2.Name = "sequence_toolStripCopy2";
-            this.sequence_toolStripCopy2.Size = new System.Drawing.Size(24, 52);
+            this.sequence_toolStripCopy2.Size = new System.Drawing.Size(32, 71);
             this.sequence_toolStripCopy2.TabIndex = 8;
             // 
             // seqSave_BtnCopy2

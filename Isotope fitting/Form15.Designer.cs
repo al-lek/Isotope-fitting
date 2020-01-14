@@ -35,8 +35,8 @@
             this.Save_Btn = new System.Windows.Forms.ToolStripButton();
             this.Copy_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.x_Box = new System.Windows.Forms.ToolStripTextBox();
+            this.y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.panel_frm11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
@@ -117,14 +117,6 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(40, 6);
             // 
-            // y_Box
-            // 
-            this.y_Box.AutoSize = false;
-            this.y_Box.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.y_Box.Name = "y_Box";
-            this.y_Box.Size = new System.Drawing.Size(40, 22);
-            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
-            // 
             // x_Box
             // 
             this.x_Box.AutoSize = false;
@@ -132,6 +124,14 @@
             this.x_Box.Name = "x_Box";
             this.x_Box.Size = new System.Drawing.Size(40, 22);
             this.x_Box.TextChanged += new System.EventHandler(this.x_Box_TextChanged);
+            // 
+            // y_Box
+            // 
+            this.y_Box.AutoSize = false;
+            this.y_Box.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.y_Box.Name = "y_Box";
+            this.y_Box.Size = new System.Drawing.Size(40, 22);
+            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
             // 
             // Form15
             // 
@@ -145,9 +145,12 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "Form15";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form15";
+            this.ResizeEnd += new System.EventHandler(this.Form15_ResizeEnd);
+            this.Resize += new System.EventHandler(this.Form15_Resize);
             this.panel_frm11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);

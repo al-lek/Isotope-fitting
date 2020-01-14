@@ -15,6 +15,8 @@ namespace Isotope_fitting
     {
         PlotView plot = new PlotView();
         PlotView plotInt = new PlotView();
+        bool text = false;
+
         public Form15(PlotView p,PlotView pint)
         {
             InitializeComponent();
@@ -56,8 +58,8 @@ namespace Isotope_fitting
         {
             try
             {
-               double size_x = Double.Parse(x_Box.Text);
-                this.Width =(int)size_x+59;                
+               double size_x = Double.Parse(x_Box.Text);                
+                this.Width =(int)size_x+59;      text = true;          
             }
             catch
             {
@@ -70,11 +72,31 @@ namespace Isotope_fitting
             try
             {
                 double size_y = Double.Parse(y_Box.Text);
-                this.Height = (int)size_y + 39;
+                this.Height = (int)size_y + 39; text = true;
+
             }
             catch
             {
                 x_Box.Text = "";
+            }
+        }
+
+        private void Form15_ResizeEnd(object sender, EventArgs e)
+        {
+            //x_Box.Text = panel_frm11.Size.Width.ToString();
+            //y_Box.Text = panel_frm11.Size.Height.ToString();
+        }
+
+        private void Form15_Resize(object sender, EventArgs e)
+        {
+            if (!text)
+            {
+                x_Box.Text = panel_frm11.Size.Width.ToString();
+                y_Box.Text = panel_frm11.Size.Height.ToString();
+            }
+            else
+            {
+                text = false;
             }
         }
     }
