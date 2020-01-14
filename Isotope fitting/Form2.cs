@@ -9610,12 +9610,13 @@ namespace Isotope_fitting
                 }
                 cz_plot.Model.Series[2] = s1c; cz_plot.Model.Series[3] = s2c; cz_plot.InvalidatePlot(true);
             };
-            ax_plot.Model.Axes[1].Minimum = by_plot.Model.Axes[1].Minimum = cz_plot.Model.Axes[1].Minimum = 0;
-            ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
+            ax_plot.Model.Axes[1].Minimum = by_plot.Model.Axes[1].Minimum = cz_plot.Model.Axes[1].Minimum = 0;            
             axCharge_plot.Model.Axes[1].Minimum = byCharge_plot.Model.Axes[1].Minimum = czCharge_plot.Model.Axes[1].Minimum = 0;
+            index_plot.Model.Axes[1].Maximum = indexto_plot.Model.Axes[1].Maximum = ax_plot.Model.Axes[1].Maximum = by_plot.Model.Axes[1].Maximum = cz_plot.Model.Axes[1].Maximum =axCharge_plot.Model.Axes[1].Maximum = byCharge_plot.Model.Axes[1].Maximum = czCharge_plot.Model.Axes[1].Maximum = Peptide.Length+2;
+
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
             axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
-            axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true);
+            axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true); ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
             ppm_plot.Model.Axes[1].Maximum = iondraw_count + 1; ppm_plot.Model.Axes[1].Minimum = 0;
             ppm_plot.InvalidatePlot(true);
 
