@@ -112,7 +112,7 @@
             this.MinimumSize = new System.Drawing.Size(200, 200);
             this.Name = "Form11";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Form11";
+            this.Text = "Extract Plot";
             this.TopMost = true;
             this.Resize += new System.EventHandler(this.Form11_Resize);
             this.toolStrip_frm11.ResumeLayout(false);
