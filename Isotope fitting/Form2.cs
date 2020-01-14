@@ -3480,7 +3480,7 @@ namespace Isotope_fitting
             // isotopes plot
             if (iso_plot != null) iso_plot.Dispose();
 
-            iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
+            iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.White, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             fit_grpBox.Controls.Add(iso_plot);
             iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked && !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
             PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
@@ -3532,7 +3532,7 @@ namespace Isotope_fitting
 
             // residual plot
             if (res_plot != null) res_plot.Dispose();
-            res_plot = new OxyPlot.WindowsForms.PlotView() { Name = "res_plot", Location = new Point(5, 760), Size = new Size(1310, 150), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left, Dock = System.Windows.Forms.DockStyle.Fill };
+            res_plot = new OxyPlot.WindowsForms.PlotView() { Name = "res_plot", Location = new Point(5, 760), Size = new Size(1310, 150), BackColor = Color.White, Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left, Dock = System.Windows.Forms.DockStyle.Fill };
             res_grpBox.Controls.Add(res_plot);
 
             //(M)create a view model--> res_model
@@ -9059,7 +9059,7 @@ namespace Isotope_fitting
             #region plotview initilization
             // ax plot
             if (ax_plot != null) ax_plot.Dispose();
-            ax_plot = new PlotView() { Name = "ax_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            ax_plot = new PlotView() { Name = "ax_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             ax_Pnl.Controls.Add(ax_plot);
             PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green};
             ax_plot.Model = ax_model;
@@ -9072,7 +9072,7 @@ namespace Isotope_fitting
 
             // by plot
             if (by_plot != null) by_plot.Dispose();
-            by_plot = new PlotView() { Name = "by_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            by_plot = new PlotView() { Name = "by_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             by_Pnl.Controls.Add(by_plot);
             PlotModel by_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             by_plot.Model = by_model;
@@ -9085,7 +9085,7 @@ namespace Isotope_fitting
 
             // cz plot
             if (cz_plot != null) cz_plot.Dispose();
-            cz_plot = new PlotView() { Name = "cz_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            cz_plot = new PlotView() { Name = "cz_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             cz_Pnl.Controls.Add(cz_plot);
             PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "c - z  fragments", TitleColor = OxyColors.Red };
             cz_plot.Model = cz_model;
@@ -9098,7 +9098,7 @@ namespace Isotope_fitting
 
             // ax charge plot
             if (axCharge_plot != null) axCharge_plot.Dispose();
-            axCharge_plot = new PlotView() { Name = "axCharge_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            axCharge_plot = new PlotView() { Name = "axCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             axCharge_Pnl.Controls.Add(axCharge_plot);
             PlotModel axCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
             axCharge_plot.Model = axCharge_model;
@@ -9110,7 +9110,7 @@ namespace Isotope_fitting
 
             // by charge plot
             if (byCharge_plot != null) byCharge_plot.Dispose();
-            byCharge_plot = new PlotView() { Name = "byCharge_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            byCharge_plot = new PlotView() { Name = "byCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             byCharge_Pnl.Controls.Add(byCharge_plot);
             PlotModel byCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             byCharge_plot.Model = byCharge_model;
@@ -9122,7 +9122,7 @@ namespace Isotope_fitting
 
             // cz charge plot
             if (czCharge_plot != null) czCharge_plot.Dispose();
-            czCharge_plot = new PlotView() { Name = "czCharge_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            czCharge_plot = new PlotView() { Name = "czCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             czCharge_Pnl.Controls.Add(czCharge_plot);
             PlotModel czCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "c - z  fragments", TitleColor = OxyColors.Red };
             czCharge_plot.Model = czCharge_model;
@@ -9135,7 +9135,7 @@ namespace Isotope_fitting
             //internal fragments plots
             // index plot
             if (index_plot != null) index_plot.Dispose();
-            index_plot = new PlotView() { Name = "index_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            index_plot = new PlotView() { Name = "index_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             idxPnl1.Controls.Add(index_plot);
             PlotModel index_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA initial", TitleColor = OxyColors.Teal };
             index_plot.Model = index_model;
@@ -9146,7 +9146,7 @@ namespace Isotope_fitting
             index_plot.MouseDoubleClick += (s, e) => { index_model.ResetAllAxes(); index_plot.InvalidatePlot(true); };
             // index intensity plot
             if (indexIntensity_plot != null) indexIntensity_plot.Dispose();
-            indexIntensity_plot = new PlotView() { Name = "indexIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            indexIntensity_plot = new PlotView() { Name = "indexIntensity_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             idxInt_Pnl1.Controls.Add(indexIntensity_plot);
             PlotModel indexIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial",  IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indexIntensity_plot.Model = indexIntensity_model;
@@ -9161,7 +9161,7 @@ namespace Isotope_fitting
 
             // indexTo plot
             if (indexto_plot != null) indexto_plot.Dispose();
-            indexto_plot = new PlotView() { Name = "indexto_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            indexto_plot = new PlotView() { Name = "indexto_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             idxPnl2.Controls.Add(indexto_plot);
             PlotModel indexto_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA terminal", TitleColor = OxyColors.Teal };
             indexto_plot.Model = indexto_model;
@@ -9172,7 +9172,7 @@ namespace Isotope_fitting
             indexto_plot.MouseDoubleClick += (s, e) => { indexto_model.ResetAllAxes(); indexto_plot.InvalidatePlot(true); };
             // indexTo intensity plot
             if (indextoIntensity_plot != null) indextoIntensity_plot.Dispose();
-            indextoIntensity_plot = new PlotView() { Name = "indextoIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            indextoIntensity_plot = new PlotView() { Name = "indextoIntensity_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             idxInt_Pnl2.Controls.Add(indextoIntensity_plot);
             PlotModel indextoIntensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             indextoIntensity_plot.Model = indextoIntensity_model;
@@ -9188,7 +9188,7 @@ namespace Isotope_fitting
 
             //PPM plot
             if (ppm_plot != null) ppm_plot.Dispose();
-            ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             ppm_panel.Controls.Add(ppm_plot);
             PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal };
             ppm_plot.Model = ppm_model;
@@ -9271,41 +9271,41 @@ namespace Isotope_fitting
              
             //
             ScatterSeries a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
-            ScatterSeries a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000 = new ScatterSeries() { MarkerSize = 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.Green).ToOxyColor() };
-            ScatterSeries a_100000 = new ScatterSeries() { MarkerSize =6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.Green).ToOxyColor() };
+            ScatterSeries a_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
+            ScatterSeries a_1000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
+            ScatterSeries a_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
+            ScatterSeries a_100000 = new ScatterSeries() { MarkerSize =8, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
+            ScatterSeries a_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
             ScatterSeries b_10 = new ScatterSeries() { MarkerSize = 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100 = new ScatterSeries() { MarkerSize = 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000 = new ScatterSeries() { MarkerSize = 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000 = new ScatterSeries() { MarkerSize = 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100000 = new ScatterSeries() { MarkerSize = 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.Blue).ToOxyColor() };
+            ScatterSeries b_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
+            ScatterSeries b_1000 = new ScatterSeries() { MarkerSize =5, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
+            ScatterSeries b_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
+            ScatterSeries b_100000 = new ScatterSeries() { MarkerSize = 8, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
+            ScatterSeries b_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
             ScatterSeries c_10 = new ScatterSeries() { MarkerSize = 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100 = new ScatterSeries() { MarkerSize = 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000 = new ScatterSeries() { MarkerSize = 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000 = new ScatterSeries() { MarkerSize =5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100000 = new ScatterSeries() { MarkerSize =6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_1000 = new ScatterSeries() { MarkerSize = 5, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_10000 = new ScatterSeries() { MarkerSize =6.5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_100000 = new ScatterSeries() { MarkerSize =8, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
             ScatterSeries x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize =6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize =8, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize =9.5, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
             ScatterSeries y_10 = new ScatterSeries() { MarkerSize = 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100 = new ScatterSeries() { MarkerSize =3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000 = new ScatterSeries() { MarkerSize =4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000 = new ScatterSeries() { MarkerSize = 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100000 = new ScatterSeries() { MarkerSize = 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_100 = new ScatterSeries() { MarkerSize =3.5, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_1000 = new ScatterSeries() { MarkerSize =5, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_10000 = new ScatterSeries() { MarkerSize =6.5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_100000 = new ScatterSeries() { MarkerSize = 8, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
             ScatterSeries z_10 = new ScatterSeries() { MarkerSize = 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100 = new ScatterSeries() { MarkerSize = 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(200, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000 = new ScatterSeries() { MarkerSize =4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(150, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000 = new ScatterSeries() { MarkerSize = 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(100, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100000 = new ScatterSeries() { MarkerSize = 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(50, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(25, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_1000 = new ScatterSeries() { MarkerSize =5, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_100000 = new ScatterSeries() { MarkerSize = 8, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
              #endregion
 
             if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
@@ -9875,7 +9875,7 @@ namespace Isotope_fitting
         #region FORM 11 extract plot
         public void plotview_rebuild()
         {
-            PlotView temp_plot = new PlotView() { Name = "temp_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.WhiteSmoke, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotView temp_plot = new PlotView() { Name = "temp_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.White, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
             PlotModel temp_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; 
             temp_plot.Model = temp_model;
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid, MinorGridlineStyle = Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
@@ -10117,7 +10117,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region FORM 15
+        #region FORM 15 extract internal fragments plot
         private void extractPlotToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             internal_panel_plotview_rebuild();
@@ -10125,7 +10125,7 @@ namespace Isotope_fitting
         private void internal_panel_plotview_rebuild(bool indexTo=false)
         {
             // index plot            
-            PlotView temp_index_plot = new PlotView() { Name = "tempi_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotView temp_index_plot = new PlotView() { Name = "tempi_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             PlotModel temp_indexModel = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "internal  fragments' plot sorted by #AA initial", TitleColor = OxyColors.Teal };
             temp_index_plot.Model = temp_indexModel;
             var linearAxis7 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Yint_major_grid13, MinorGridlineStyle = Yint_minor_grid13, MajorStep = yINT_majorStep13, MinorStep = yINT_minorStep13, TickStyle = Yint_tick13, FontSize = 10, AxisTitleDistance = 7, MinimumMinorStep = 1.0, TitleFontSize = 11, Title = " # fragments" };
@@ -10134,7 +10134,7 @@ namespace Isotope_fitting
             temp_indexModel.Axes.Add(linearAxis8);
             temp_index_plot.MouseDoubleClick += (s, e) => { temp_indexModel.ResetAllAxes(); temp_index_plot.InvalidatePlot(true); };
             // index intensity plot            
-            PlotView tempindex_Intensity_plot = new PlotView() { Name = "tempiIntensity_plot", BackColor = Color.WhiteSmoke, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotView tempindex_Intensity_plot = new PlotView() { Name = "tempiIntensity_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             PlotModel temp_index_Intensity_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "intensity plot", TitleColor = OxyColors.Teal };
             tempindex_Intensity_plot.Model = temp_index_Intensity_model;
             var linearAxis11 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Yint_major_grid13, MinorGridlineStyle = Yint_minor_grid13, MajorStep = yINT_majorStep13, MinorStep = yINT_minorStep13, TickStyle = Yint_tick13, FontSize = 10, MinimumMinorStep = 1.0, Position = OxyPlot.Axes.AxisPosition.Left };
@@ -10187,12 +10187,12 @@ namespace Isotope_fitting
             }
             tempindex_Intensity_plot.InvalidatePlot(true); temp_index_plot.InvalidatePlot(true);
         }
-
-        #endregion
-
         private void extractPlotToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             internal_panel_plotview_rebuild(true);
         }
+
+        #endregion
+
     }
 }
