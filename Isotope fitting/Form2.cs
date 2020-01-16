@@ -3364,7 +3364,7 @@ namespace Isotope_fitting
 
             // 6. fragment annotations
             frag_annotation(to_plot);
-
+            
             invalidate_all();
         }
         private void reset_iso_plot()
@@ -3493,7 +3493,8 @@ namespace Isotope_fitting
             };
             iso_model.TrackerChanged += (s, e) =>
             {
-                iso_plot.HideTracker();
+                if (count_distance || cursor_chkBx.Checked) iso_plot.HideTracker();  
+                
             };
              //////iso_model.TrackerChanged += (s, e) => { e.HitResult.Position.X };
              //////iso_model.MouseDown += (s, e) =>
@@ -3512,9 +3513,9 @@ namespace Isotope_fitting
             ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
             
             //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
-            iso_model.MouseDown += (s, e) => { iso_plot.HideTracker(); if (e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
-            iso_model.MouseMove += (s, e) => { iso_plot.HideTracker(); if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
-            iso_model.MouseUp += (s, e) => { iso_plot.HideTracker(); count_distance = false;};
+            iso_model.MouseDown += (s, e) => { /*iso_plot.HideTracker();*/ if (cursor_chkBx.Checked && e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
+            iso_model.MouseMove += (s, e) => {/* iso_plot.HideTracker();*/ if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
+            iso_model.MouseUp += (s, e) => { /*iso_plot.HideTracker();*/ count_distance = false;};
 
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
@@ -3590,8 +3591,9 @@ namespace Isotope_fitting
                 double h_a = iso_plot.Model.DefaultYAxis.InverseTransform(a.Y);               
                 if (count_distance)
                 {
+
                     double mz_b = iso_plot.Model.DefaultXAxis.InverseTransform(b.X);
-                    point_distance =mz_a - mz_b;
+                    point_distance = mz_a - mz_b;
                     iso_plot.Model.Annotations.Add(new PointAnnotation()
                     {
                         X = mz_a,
@@ -3605,11 +3607,11 @@ namespace Isotope_fitting
                     });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
-                    
+
                     //iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = min_border, MaximumX = min_border+ point_distance, Fill = OxyColor.FromAColor(99, OxyColors.Gainsboro) });
-                    if (point_distance<0)iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = mz_a, MaximumX = mz_a + Math.Abs(point_distance), Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });                    
-                    else iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = mz_a - point_distance, MaximumX = mz_a , Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
-                    
+                    if (point_distance < 0) iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = mz_a, MaximumX = mz_a + Math.Abs(point_distance), Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
+                    else iso_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = mz_a - point_distance, MaximumX = mz_a, Fill = OxyColor.FromAColor(99, OxyColors.LightSalmon) });
+
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a - point_distance, Type = LineAnnotationType.Vertical });
                 }
                 else
@@ -3627,16 +3629,17 @@ namespace Isotope_fitting
                     //    TextColor=OxyColors.Crimson,
                     //    TextVerticalAlignment = VerticalAlignment.Bottom
                     //});
+
                     iso_plot.Model.Annotations.Add(new TextAnnotation()
                     {
                         TextPosition = new DataPoint(mz_a, h_a),
                         TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Right,
                         Background = OxyColors.Gainsboro,
                         Text = "I:" + Math.Round(h_a, 0).ToString() + " , m/z:" + Math.Round(mz_a, 4).ToString(),
-                        Layer= AnnotationLayer.AboveSeries,    
-                        Stroke=OxyColors.Black,
+                        Layer = AnnotationLayer.AboveSeries,
+                        Stroke = OxyColors.Black,
                         TextColor = OxyColors.Black,
-                        FontWeight=100
+                        FontWeight = 100
                     });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { X = mz_a, Type = LineAnnotationType.Vertical });
                     iso_plot.Model.Annotations.Add(new LineAnnotation { Y = h_a, Type = LineAnnotationType.Horizontal });
@@ -9487,9 +9490,9 @@ namespace Isotope_fitting
 
             //PPM plot
             if (ppm_plot != null) ppm_plot.Dispose();
-            ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
+            ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.White, Dock=DockStyle.Fill};
             ppm_panel.Controls.Add(ppm_plot);
-            PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal };
+            PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal,SubtitleFontSize=10,SubtitleFont = "Arial" };
             ppm_plot.Model = ppm_model;
             var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
             ppm_model.Axes.Add(linearAxis21);
@@ -9611,42 +9614,12 @@ namespace Isotope_fitting
             double max_a = 5000, max_b = 5000, max_c = 5000;
             double maxcharge_a = 0, maxcharge_b = 0, maxcharge_c = 0;
             var ppmpoints =new CustomDataPoint[iondraw_count];
-            List<CustomDataPoint> points_a_10 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_a_100 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_a_1000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_a_10000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_a_100000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_a_1000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_10 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_100 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_1000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_10000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_100000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_1000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_10 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_100 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_1000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_10000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_100000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_1000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_10 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_100 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_1000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_10000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_100000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_1000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_10 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_100 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_1000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_10000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_100000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_1000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_10 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_100 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_1000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_10000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_100000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_1000000 = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_a_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_1000000 = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_b_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_1000000 = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_c_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_1000000 = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_x_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_1000000 = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_y_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000000 = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_z_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000000 = new List<CustomDataPoint>();
             for (int i=0;i< iondraw_count ; i++)
             {
                 ion nn = IonDraw[i];
@@ -9790,10 +9763,15 @@ namespace Isotope_fitting
                 }
             }
             ppm_series.ItemsSource = ppmpoints;
-            //defaul tTrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
-            // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value
+            //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
+            // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
             ppm_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}"; 
             ppm_plot.Model.Series.Add(ppm_series);
+            ppm_plot.Model.TrackerChanged += (s, e) =>
+            {                
+                ppm_plot.Model.Subtitle = e.HitResult != null ?  e.HitResult.Text : null;
+                ppm_plot.Model.InvalidatePlot(false);
+            };
             a_10.ItemsSource = points_a_10;a_100.ItemsSource = points_a_100;a_1000.ItemsSource = points_a_1000;a_10000.ItemsSource = points_a_10000;a_100000.ItemsSource = points_a_100000;a_1000000.ItemsSource = points_a_1000000;
             b_10.ItemsSource = points_b_10;b_100.ItemsSource = points_b_100;b_1000.ItemsSource = points_b_1000;b_10000.ItemsSource = points_b_10000;b_100000.ItemsSource = points_b_100000;b_1000000.ItemsSource = points_b_1000000;
             c_10.ItemsSource = points_c_10;c_100.ItemsSource = points_c_100;c_1000.ItemsSource = points_c_1000;c_10000.ItemsSource = points_c_10000;c_100000.ItemsSource = points_c_100000;c_1000000.ItemsSource = points_c_1000000;
@@ -10049,6 +10027,42 @@ namespace Isotope_fitting
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
                 if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
             }
+        }
+
+        private void ax_Pnl_Resize(object sender, EventArgs e)
+        {
+            ax_X_Box.Text = ax_Pnl.Size.Width.ToString();
+            ax_Y_Box.Text = ax_Pnl.Size.Height.ToString();
+        }
+
+        private void by_Pnl_Resize(object sender, EventArgs e)
+        {
+            by_X_Box.Text = by_Pnl.Size.Width.ToString();
+            by_Y_Box.Text = by_Pnl.Size.Height.ToString();
+        }
+
+        private void cz_Pnl_Resize(object sender, EventArgs e)
+        {
+            cz_X_Box.Text = cz_Pnl.Size.Width.ToString();
+            cz_Y_Box.Text = cz_Pnl.Size.Height.ToString();
+        }
+
+        private void axCharge_Pnl_Resize(object sender, EventArgs e)
+        {
+            axcharge_X_Box.Text = axCharge_Pnl.Size.Width.ToString();
+            axcharge_Y_Box.Text = axCharge_Pnl.Size.Height.ToString();
+        }
+
+        private void byCharge_Pnl_Resize(object sender, EventArgs e)
+        {
+            bycharge_X_Box.Text = byCharge_Pnl.Size.Width.ToString();
+            bycharge_Y_Box.Text = byCharge_Pnl.Size.Height.ToString();
+        }
+
+        private void czCharge_Pnl_Resize(object sender, EventArgs e)
+        {
+            czcharge_X_Box.Text = czCharge_Pnl.Size.Width.ToString();
+            czcharge_Y_Box.Text = czCharge_Pnl.Size.Height.ToString();
         }
 
 
@@ -10523,40 +10537,6 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void ax_Pnl_Resize(object sender, EventArgs e)
-        {
-            ax_X_Box.Text = ax_Pnl.Size.Width.ToString();
-            ax_Y_Box.Text = ax_Pnl.Size.Height.ToString();
-        }
-
-        private void by_Pnl_Resize(object sender, EventArgs e)
-        {
-            by_X_Box.Text = by_Pnl.Size.Width.ToString();
-            by_Y_Box.Text = by_Pnl.Size.Height.ToString();
-        }
-
-        private void cz_Pnl_Resize(object sender, EventArgs e)
-        {
-            cz_X_Box.Text = cz_Pnl.Size.Width.ToString();
-            cz_Y_Box.Text = cz_Pnl.Size.Height.ToString();
-        }
-
-        private void axCharge_Pnl_Resize(object sender, EventArgs e)
-        {
-            axcharge_X_Box.Text = axCharge_Pnl.Size.Width.ToString();
-            axcharge_Y_Box.Text = axCharge_Pnl.Size.Height.ToString();
-        }
-
-        private void byCharge_Pnl_Resize(object sender, EventArgs e)
-        {
-            bycharge_X_Box.Text = byCharge_Pnl.Size.Width.ToString();
-            bycharge_Y_Box.Text = byCharge_Pnl.Size.Height.ToString();
-        }
-
-        private void czCharge_Pnl_Resize(object sender, EventArgs e)
-        {
-            czcharge_X_Box.Text = czCharge_Pnl.Size.Width.ToString();
-            czcharge_Y_Box.Text = czCharge_Pnl.Size.Height.ToString();
-        }
+       
     }
 }
