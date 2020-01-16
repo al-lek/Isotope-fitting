@@ -1808,11 +1808,7 @@ namespace Isotope_fitting
                     // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
                     if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
                     frag_tree.EndUpdate();                    
-                }
-                if (Fragments2[idx].To_plot != is_checked)
-                {
-                    return;
-                }
+                }              
             }
             this.Cursor = System.Windows.Forms.Cursors.Default;
         }
@@ -2607,7 +2603,7 @@ namespace Isotope_fitting
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
             fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };     
             fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); }  };
-            fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {uncheckall_Frag();refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
+            fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
             fit_tree.NodeMouseHover += (s, e) => {toolTip_fit.Hide(fit_tree); fit_tree_tooltip(e.Node); };
             fit_tree.MouseLeave += (s, e) => {toolTip_fit.Hide(fit_tree);};
             fit_tree.MouseHover += (s, e) => { toolTip_fit.Hide(fit_tree); };
@@ -2898,7 +2894,7 @@ namespace Isotope_fitting
                 string[] idx_str_arr = idx_str.Split(' ');
                 int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
                 int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
-                labels_checked[set_idx] = idx_str;
+                //labels_checked[set_idx] = idx_str;
                 // find respective fragments in frag_tree and check or uncheck them
                 // also pass the fitted height o both Fragments2 and the node on the UI
                 List<TreeNode> all_nodes = get_all_nodes(frag_tree);
@@ -3016,14 +3012,47 @@ namespace Isotope_fitting
         {
             int node_index = node.Index;
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            foreach (TreeNode tnn in fit_tree.Nodes[node_index].Nodes)
+            {
+                if (tnn.Checked) tnn.Checked = false;
+            }
             if (all_fitted_results != null && string.IsNullOrEmpty(node.Name))
             {
                 frag_tree.BeginUpdate();
-                generate_fit_results();
-                best_checked(true, node.Index);
-                checked_labels();
+                //generate_fit_results();
+                //best_checked(true, node.Index);
+                //checked_labels();
+                fit_tree.BeginUpdate();
+                if(fit_tree.Nodes[node_index].Nodes.Count>0) fit_tree.Nodes[node_index].Nodes.Clear();
+                for (int j = 0; j < all_fitted_results[node_index].Count; j++)
+                {
+                    if (all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 2] < tab_thres[node_index][0] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 1] < tab_thres[node_index][1] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 4] < tab_thres[node_index][2] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 5] < tab_thres[node_index][3] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 6] < tab_thres[node_index][4])
+                    {
+                        bool print = true;
+                        for (int k = 0; k < all_fitted_sets[node_index][j].Length; k++)
+                        {
+                            if (all_fitted_results[node_index][j][k + all_fitted_sets[node_index][j].Length] > tab_thres[node_index][2] || all_fitted_results[node_index][j][k + 3 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][3] || all_fitted_results[node_index][j][k + 4 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][4]) { print = false; }
+                        }
+                        if (print)
+                        {
+                            StringBuilder sb = new StringBuilder();
+
+                            string tmp = "";
+                            tmp += "SSE:" + all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 3].ToString("0.###e0" + " ");
+                            tmp += "di:" + Math.Round(all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 4], 3).ToString() + "% ";
+
+                            TreeNode tr = new TreeNode
+                            {
+                                Text = tmp,
+                                Name = node_index.ToString() + " " + j.ToString()                                
+                            };
+                            fit_tree.Nodes[node_index].Nodes.Add(tr);
+                        }
+                    }
+                }
                 fit_tree.Nodes[node_index].Expand();
                 refresh_iso_plot();
+                fit_tree.EndUpdate();
                 frag_tree.EndUpdate();
             }
             else
@@ -3039,7 +3068,14 @@ namespace Isotope_fitting
             {
                 TreeNode tx = x as TreeNode;
                 TreeNode ty = y as TreeNode;
-                if (string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(ty.Name)) return 0;
+                if (string.IsNullOrEmpty(tx.Name) || string.IsNullOrEmpty(ty.Name))
+                {
+                    string[] mz_x = tx.Text.Split(' ');
+                    string[] mz_y = ty.Text.Split(' ');
+                    decimal mz1 = Convert.ToDecimal(mz_x[0]);
+                    decimal mz2 = Convert.ToDecimal(mz_y[0]);
+                    return Decimal.Compare(mz1, mz2); 
+                }
                 string[] tx_idx_str_arr = tx.Name.Split(' ');
                 int tx_set_idx = Convert.ToInt32(tx_idx_str_arr[0]);      // identifies the set or group of ions
                 int tx_set_pos_idx = Convert.ToInt32(tx_idx_str_arr[1]);
@@ -3182,6 +3218,98 @@ namespace Isotope_fitting
             Form7 fit_settings = new Form7();
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
+        }
+
+        private void fit_checked_groups()
+        {
+            if (fit_tree != null)
+            {
+                List<int> grp_nodes = new List<int>();
+                List<int> frgmts = new List<int>();
+                List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+                foreach (TreeNode t in fit_tree.Nodes)
+                {
+                    if (t.Checked)
+                    {
+                        grp_nodes.Add(t.Index);
+                        foreach (TreeNode tnn in t.Nodes)
+                        {
+                            if (tnn.Checked) tnn.Checked = false;
+                        }
+                        int[] all = all_fitted_sets[t.Index].OrderBy(x => x.Length).Last();                        
+                        foreach (int idx in all)
+                        {
+                            if (!frgmts.Contains(idx)) frgmts.Add(idx);
+                            TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (idx-1).ToString());
+                            curr_node.Checked = false;
+                        }
+                    }
+                }
+                if (grp_nodes.Count == 0 || frgmts.Count == 0) return;
+                if (frgmts.Count > 12) { MessageBox.Show("The maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups."); return; }
+                (List<double[]> res, List<int[]> set) = fit_distros_parallel2(frgmts);
+                grp_nodes.OrderBy(g => g); frgmts.OrderBy(f => f);
+                int d = 0;
+                all_fitted_results.RemoveRange(grp_nodes[0], grp_nodes.Count());
+                all_fitted_sets.RemoveRange(grp_nodes[0], grp_nodes.Count());
+                all_fitted_sets.Insert(grp_nodes[0], set);
+                all_fitted_results.Insert(grp_nodes[0], res);
+                tab_node.RemoveRange(grp_nodes[0], grp_nodes.Count());
+                tab_thres.RemoveRange(grp_nodes[0], grp_nodes.Count());
+                tab_coef.RemoveRange(grp_nodes[0], grp_nodes.Count());
+                labels_checked.RemoveRange(grp_nodes[0], grp_nodes.Count());
+                tab_node.Insert(grp_nodes[0], new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3], fit_sort[4], fit_sort[5] });
+                tab_thres.Insert(grp_nodes[0], new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4] });
+                tab_coef.Insert(grp_nodes[0], new double[] { a_coef[0], a_coef[1], a_coef[2], a_coef[3], a_coef[4], a_coef[5] });
+                labels_checked.Insert(grp_nodes[0], "");
+                int counter = 0;
+                foreach (int g in grp_nodes)
+                {
+                    fit_tree.Nodes.RemoveAt(g - counter); counter++;
+                }
+                fit_tree.BeginUpdate();
+                TreeNode node_new = new TreeNode();
+                int[] longest =set.OrderBy(x => x.Length).Last();
+                node_new.Text = Fragments2[longest.First() - 1].Mz + " - " + Fragments2[longest.Last() - 1].Mz;
+                
+                for (int j = 0; j < res.Count; j++)
+                {
+                    if (res[j][res[j].Length - 2] <fit_thres[0] && res[j][res[j].Length - 1] < fit_thres[1] && res[j][res[j].Length - 4] < fit_thres[2] && res[j][res[j].Length - 5] < fit_thres[3] && res[j][res[j].Length - 6] < fit_thres[4])
+                    {
+                        bool print = true;
+                        for (int k = 0; k < set[j].Length; k++)
+                        {
+                            if (res[j][k + set[j].Length] > fit_thres[2] || res[j][k + 3 * set[j].Length] > fit_thres[3] || res[j][k + 4 * set[j].Length] > fit_thres[4]) { print = false; }
+                        }
+                        if (print)
+                        {
+                            StringBuilder sb = new StringBuilder();
+
+                            string tmp = "";
+                            tmp += "SSE:" + res[j][res[j].Length - 3].ToString("0.###e0" + " ");
+                            tmp += "di:" + Math.Round(res[j][res[j].Length - 4], 3).ToString() + "% ";
+                            TreeNode tr = new TreeNode
+                            {
+                                Text = tmp,
+                                Name = grp_nodes[0].ToString() + " " + j.ToString()                             
+                            };
+                           node_new.Nodes.Add(tr);
+                        }
+                    }
+                }
+                fit_tree.Nodes.Insert(grp_nodes[0], node_new);
+                for (int k= grp_nodes[0]+1;k< fit_tree.Nodes.Count; k++)
+                {
+                    foreach (TreeNode nn in fit_tree.Nodes[k].Nodes )
+                    {
+                        string[] idx_str_arr = nn.Name.Split(' ');
+                        int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+                        nn.Name = (set_idx- grp_nodes.Count()+1).ToString()+ " " + idx_str_arr[1];
+                    }
+                }
+                fit_tree.EndUpdate();
+                remove_child_nodes();                
+            }
         }
        
         #endregion
@@ -8735,6 +8863,9 @@ namespace Isotope_fitting
                 g.DrawString(Peptide[idx].ToString(), sequence_Pnl.Font, sb, pp);                
                 foreach (ion nn in IonDraw)
                 {
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3-18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3-18; temp_p.Y = temp_p.Y + 50; }
                     if (ax_chBx.Checked && (nn.Ion_type.StartsWith("a")|| nn.Ion_type.StartsWith("(a")) && nn.Index== idx + 1 )
                     {
                         if (los_chkBox.Checked)
@@ -8795,16 +8926,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.LimeGreen, g);
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Green, g);
+                                draw_line(temp_p, false, 0, Color.Green, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 0, nn.Color, g);
+                            draw_line(temp_p, false, 0, nn.Color, g);
                         }
                     }
                     else if (by_chBx.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (Peptide.Length - nn.Index == idx + 1))
@@ -8813,16 +8944,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Blue, g);
+                                draw_line(temp_p, false, 0, Color.Blue, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 4, nn.Color, g);
+                            draw_line(temp_p, false, 4, nn.Color, g);
                         }
                     }
                     else if (cz_chBx.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (Peptide.Length - nn.Index == idx + 1))
@@ -8831,16 +8962,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.Tomato, g);
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Firebrick, g);
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 8, nn.Color, g);
+                            draw_line(temp_p, false, 8, nn.Color, g);
                         }
                     }
                     else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
@@ -8973,6 +9104,9 @@ namespace Isotope_fitting
                 g.DrawString(Peptide[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18;  temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18;  temp_p.Y = temp_p.Y + 50; }
                     if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBoxCopy1.Checked)
@@ -9033,16 +9167,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.LimeGreen, g);
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Green, g);
+                                draw_line(temp_p, false, 0, Color.Green, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 0, nn.Color, g);
+                            draw_line(temp_p, false, 0, nn.Color, g);
                         }
                     }
                     else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (Peptide.Length - nn.Index == idx + 1))
@@ -9051,16 +9185,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Blue, g);
+                                draw_line(temp_p, false, 0, Color.Blue, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 4, nn.Color, g);
+                            draw_line(temp_p, false, 4, nn.Color, g);
                         }
                     }
                     else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (Peptide.Length - nn.Index == idx + 1))
@@ -9069,16 +9203,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.Tomato, g);
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Firebrick, g);
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 8, nn.Color, g);
+                            draw_line(temp_p, false, 8, nn.Color, g);
                         }
                     }
                     else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
@@ -9197,6 +9331,9 @@ namespace Isotope_fitting
                 g.DrawString(Peptide[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
                     if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBoxCopy2.Checked)
@@ -9257,16 +9394,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.LimeGreen, g);
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Green, g);
+                                draw_line(temp_p, false, 0, Color.Green, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 0, nn.Color, g);
+                            draw_line(temp_p, false, 0, nn.Color, g);
                         }
                     }
                     else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (Peptide.Length - nn.Index == idx + 1))
@@ -9275,18 +9412,18 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
 
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Blue, g);
+                                draw_line(temp_p, false, 0, Color.Blue, g);
 
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 4, nn.Color, g);
+                            draw_line(temp_p, false, 4, nn.Color, g);
                         }
                     }
                     else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (Peptide.Length - nn.Index == idx + 1))
@@ -9295,16 +9432,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                draw_line(pp, false, 4, Color.Tomato, g);
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
                             }
                             else
                             {
-                                draw_line(pp, false, 0, Color.Firebrick, g);
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            draw_line(pp, false, 8, nn.Color, g);
+                            draw_line(temp_p, false, 8, nn.Color, g);
                         }
                     }
                     else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
@@ -10535,8 +10672,12 @@ namespace Isotope_fitting
 
 
 
+
         #endregion
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            fit_checked_groups();
+        }
     }
 }
