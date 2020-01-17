@@ -6821,7 +6821,10 @@ namespace Isotope_fitting
 
         private void hide_Btn_Click(object sender, EventArgs e)
         {
-            
+            user_grpBox.SuspendLayout();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             panel_calc.Hide(); splitContainer2.Panel1Collapsed = true;
             Size initial_splitcontSize = splitContainer2.Size;
             splitContainer2.Size = new Size(initial_splitcontSize.Width - panel_calc.Size.Width, initial_splitcontSize.Height);
@@ -6832,12 +6835,22 @@ namespace Isotope_fitting
             Size initial_plot_size = plots_grpBox.Size;
             plots_grpBox.Size = new Size(initial_plot_size.Width + panel_calc.Size.Width, initial_plot_size.Height);
             show_Btn.Visible = true; show_Btn.BringToFront();
+            user_grpBox.ResumeLayout(false);
+            user_grpBox.PerformLayout();
             splitContainer2.Invalidate();
+
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
+            splitContainer2.ResumeLayout(false);
 
         }
 
         private void show_Btn_Click(object sender, EventArgs e)
         {
+            user_grpBox.SuspendLayout();
+            
+            splitContainer2.SuspendLayout();
             panel_calc.Show(); splitContainer2.Panel1Collapsed = false;
             Size initial_splitcontSize = splitContainer2.Size;
             splitContainer2.Size = new Size(initial_splitcontSize.Width + panel_calc.Size.Width, initial_splitcontSize.Height);
@@ -6849,6 +6862,12 @@ namespace Isotope_fitting
             plots_grpBox.Size = new Size(initial_plot_size.Width - panel_calc.Size.Width, initial_plot_size.Height);
             splitContainer2.SplitterDistance = 302;
             splitContainer2.Invalidate();
+            user_grpBox.ResumeLayout(false);
+            user_grpBox.PerformLayout();
+            
+            
+            splitContainer2.ResumeLayout(false);
+
             hide_Btn.Visible = true; hide_Btn.BringToFront();
             show_Btn.Visible = false;
         }
