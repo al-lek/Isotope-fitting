@@ -10679,5 +10679,10 @@ namespace Isotope_fitting
         {
             fit_checked_groups();
         }
+
+        private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
+        {
+            fit_checked_groups();
+        }
     }
 }
