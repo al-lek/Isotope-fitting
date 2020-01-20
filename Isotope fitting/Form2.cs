@@ -2590,6 +2590,7 @@ namespace Isotope_fitting
                 //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
         }
+        //**
         private void generate_fit_results()
         {
             sw1.Reset(); sw1.Start();
@@ -2606,12 +2607,27 @@ namespace Isotope_fitting
             fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { toolTip_fit.Hide(fit_tree); fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };
             ContextMenu ctxMn_fit_grp = new ContextMenu(new MenuItem[2] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }) });
             ContextMenu ctxMn_fit_grp_solution = new ContextMenu(new MenuItem[1] { new MenuItem("error", (s, e) => { show_error(_currentNode); }) });
-            fit_tree.NodeMouseClick += (s, e) => { if (e.Button == MouseButtons.Right) {  if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; ContextMenu = ctxMn_fit_grp; } else {_currentNode = e.Node; ContextMenu = ctxMn_fit_grp_solution; } } else { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } } };           
+            fit_tree.NodeMouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Right && fit_tree != null && fit_tree.Focused==true)
+                {
+                    if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp; }
+                    else {_currentNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp_solution; }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(e.Node.Name))
+                    { fit_set_graph_zoomed(e.Node); }
+                }
+            };           
             
 
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
             fit_tree.NodeMouseHover += (s, e) => {toolTip_fit.Hide(fit_tree); fit_tree_tooltip(e.Node); };
-            fit_tree.MouseLeave += (s, e) => {toolTip_fit.Hide(fit_tree);};
+            fit_tree.MouseLeave += (s, e) => 
+            {
+                toolTip_fit.Hide(fit_tree); _currentNode = null; fit_tree.SelectedNode = null; iso_plot.Focus();
+            };
             fit_tree.MouseHover += (s, e) => { toolTip_fit.Hide(fit_tree); };
 
             // interpret fitted results
@@ -3015,9 +3031,9 @@ namespace Isotope_fitting
             sort_node.ShowDialog();           
         }
         private void refresh_fitnode_sorting(TreeNode node)
-        {
-            int node_index = node.Index;
+        {            
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            int node_index = node.Index;
             foreach (TreeNode tnn in fit_tree.Nodes[node_index].Nodes)
             {
                 if (tnn.Checked) tnn.Checked = false;
@@ -3657,17 +3673,31 @@ namespace Isotope_fitting
              //////};
 
              iso_plot.Controller = new CustomPlotController();
-            ContextMenu ctxMn = new ContextMenu() { };
-            MenuItem showPoints = new MenuItem("Show charge ruler", manage_charge_points);
-            MenuItem clearPoints = new MenuItem("Clear charge ruler", manage_charge_points);
-            MenuItem copyImage = new MenuItem("Copy image", export_chartImage);
-            MenuItem exportImage = new MenuItem("Export image to file", export_chartImage);
-            ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
+            //ContextMenu ctxMn = new ContextMenu() { };
+            //MenuItem showPoints = new MenuItem("Show charge ruler", manage_charge_points);
+            //MenuItem clearPoints = new MenuItem("Clear charge ruler", manage_charge_points);
+            //MenuItem copyImage = new MenuItem("Copy image", export_chartImage);
+            //MenuItem exportImage = new MenuItem("Export image to file", export_chartImage);
+            //ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
             
             //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
-            iso_model.MouseDown += (s, e) => { /*iso_plot.HideTracker();*/ if (cursor_chkBx.Checked && e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true) { if (count_distance) { cersor_distance(previous_point, e.Position); } else{ previous_point = e.Position; count_distance = true; } } else if(e.ChangedButton == OxyMouseButton.Left ){ count_distance = false;/* cersor_distance(e.Position, e.Position);*/ } };
-            iso_model.MouseMove += (s, e) => {/* iso_plot.HideTracker();*/ if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
-            iso_model.MouseUp += (s, e) => { /*iso_plot.HideTracker();*/ count_distance = false;};
+            iso_model.MouseDown += (s, e) => 
+            { /*iso_plot.HideTracker();*/
+                if (cursor_chkBx.Checked && e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true)
+                {
+                    if (count_distance) { cersor_distance(previous_point, e.Position); }
+                    else { previous_point = e.Position; count_distance = true; }
+                }
+                else if (e.ChangedButton == OxyMouseButton.Left)
+                {
+                    count_distance = false;/* cersor_distance(e.Position, e.Position);*/
+                }               
+            };
+            iso_model.MouseMove += (s, e) => {/* iso_plot.HideTracker();*/if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
+            iso_model.MouseUp += (s, e) => 
+            { /*iso_plot.HideTracker();*/
+                count_distance = false;
+            };
 
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
