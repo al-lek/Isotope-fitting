@@ -3330,7 +3330,7 @@ namespace Isotope_fitting
                 }
                 fit_tree.EndUpdate();
                 remove_child_nodes();                
-                if (fit_tree.Nodes[grp_nodes[0]].Nodes.Count>0){ fit_tree.Nodes[grp_nodes[0]].EnsureVisible(); fit_tree.Nodes[grp_nodes[0]].Nodes[0].Checked = true;}
+                if (fit_tree.Nodes[grp_nodes[0]].Nodes.Count>0){ fit_tree.Nodes[grp_nodes[0]].Nodes[0].EnsureVisible(); fit_tree.Nodes[grp_nodes[0]].Nodes[0].Checked = true;}
             }
         }
        
