@@ -181,6 +181,8 @@ namespace Isotope_fitting
         /// max ppm error used in di and ei calculation during fitting
         /// </summary>
         static public double ppmDi = 8.0;
+
+        private TreeNode _currentNode = new TreeNode();
         #endregion
 
         #region fit results sorting parameteres
@@ -2595,15 +2597,19 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             // init tree view
-            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width-10, bigPanel.Size.Height -10), ShowNodeToolTips = false,HideSelection=false ,TreeViewNodeSorter=new NodeSorter()};
+            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 10, bigPanel.Size.Height - 10), ShowNodeToolTips = false, HideSelection = false, TreeViewNodeSorter = new NodeSorter() };
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
-            fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
-            fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
-            fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { toolTip_fit.Hide(fit_tree); fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };     
-            fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); }  };
-            fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
+            fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s, e); };
+            fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
+            fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { toolTip_fit.Hide(fit_tree); fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };
+            ContextMenu ctxMn_fit_grp = new ContextMenu(new MenuItem[2] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }) });
+            ContextMenu ctxMn_fit_grp_solution = new ContextMenu(new MenuItem[1] { new MenuItem("error", (s, e) => { show_error(_currentNode); }) });
+            fit_tree.NodeMouseClick += (s, e) => { if (e.Button == MouseButtons.Right) {  if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; ContextMenu = ctxMn_fit_grp; } else {_currentNode = e.Node; ContextMenu = ctxMn_fit_grp_solution; } } else { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } } };           
+            
+
+            //fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
             fit_tree.NodeMouseHover += (s, e) => {toolTip_fit.Hide(fit_tree); fit_tree_tooltip(e.Node); };
             fit_tree.MouseLeave += (s, e) => {toolTip_fit.Hide(fit_tree);};
             fit_tree.MouseHover += (s, e) => { toolTip_fit.Hide(fit_tree); };
