@@ -2601,7 +2601,7 @@ namespace Isotope_fitting
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
             fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s,e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };            
-            fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };     
+            fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { toolTip_fit.Hide(fit_tree); fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };     
             fit_tree.NodeMouseClick += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { fit_set_graph_zoomed(e.Node); }  };
             fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
             fit_tree.NodeMouseHover += (s, e) => {toolTip_fit.Hide(fit_tree); fit_tree_tooltip(e.Node); };
@@ -3094,8 +3094,8 @@ namespace Isotope_fitting
         }
         private void select_check(TreeNode node)
         {
-            if(node.Checked) node.Checked = false;
-            else node.Checked = true;
+            if (node.Checked) {  node.Checked = false; }
+            else { node.Checked = true; toolTip_fit.Hide(fit_tree); fit_tree_tooltip(node); }
         }
         /// <summary>
         /// zoom at the graph region the selected fit tree node is about
@@ -3220,7 +3220,7 @@ namespace Isotope_fitting
             fit_settings.ShowDialog();
         }
 
-        private void fit_checked_groups()
+        private void fit_checked_groups(bool all_frag=true)
         {
             if (fit_tree != null)
             {
@@ -3231,25 +3231,40 @@ namespace Isotope_fitting
                 {
                     if (t.Checked)
                     {
-                        grp_nodes.Add(t.Index);
-                        foreach (TreeNode tnn in t.Nodes)
+                        grp_nodes.Add(t.Index);                        
+                        int[] all = all_fitted_sets[t.Index].OrderBy(x => x.Length).Last();
+                        if (all_frag)
                         {
-                            if (tnn.Checked) tnn.Checked = false;
+                            foreach (TreeNode tnn in t.Nodes)
+                            {
+                                if (tnn.Checked) tnn.Checked = false;
+                            }
+                            foreach (int idx in all)
+                            {
+                                if (!frgmts.Contains(idx)) frgmts.Add(idx);
+                                TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (idx - 1).ToString());
+                                if (curr_node.Checked) { curr_node.Checked = false; }
+                            }                           
                         }
-                        int[] all = all_fitted_sets[t.Index].OrderBy(x => x.Length).Last();                        
-                        foreach (int idx in all)
+                        else
                         {
-                            if (!frgmts.Contains(idx)) frgmts.Add(idx);
-                            TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (idx-1).ToString());
-                            curr_node.Checked = false;
+                            foreach (int idx in all)
+                            {                                
+                                TreeNode curr_node = all_nodes.FirstOrDefault(n => n.Name == (idx - 1).ToString());
+                                if (curr_node.Checked) { if (!frgmts.Contains(idx)) { frgmts.Add(idx); } curr_node.Checked = false; }
+                            }
+                            foreach (TreeNode tnn in t.Nodes)
+                            {
+                                if (tnn.Checked) tnn.Checked = false;
+                            }
                         }
+                        
                     }
                 }
                 if (grp_nodes.Count == 0 || frgmts.Count == 0) return;
                 if (frgmts.Count > 12) { MessageBox.Show("The maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups."); return; }
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(frgmts);
                 grp_nodes.OrderBy(g => g); frgmts.OrderBy(f => f);
-                int d = 0;
                 all_fitted_results.RemoveRange(grp_nodes[0], grp_nodes.Count());
                 all_fitted_sets.RemoveRange(grp_nodes[0], grp_nodes.Count());
                 all_fitted_sets.Insert(grp_nodes[0], set);
@@ -3309,6 +3324,7 @@ namespace Isotope_fitting
                 }
                 fit_tree.EndUpdate();
                 remove_child_nodes();                
+                if (fit_tree.Nodes[grp_nodes[0]].Nodes.Count>0){ fit_tree.Nodes[grp_nodes[0]].EnsureVisible(); fit_tree.Nodes[grp_nodes[0]].Nodes[0].Checked = true;}
             }
         }
        
@@ -10683,6 +10699,11 @@ namespace Isotope_fitting
         private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
         {
             fit_checked_groups();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            fit_checked_groups(false);
         }
     }
 }

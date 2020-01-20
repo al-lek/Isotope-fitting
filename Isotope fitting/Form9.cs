@@ -56,25 +56,25 @@ namespace Isotope_fitting
             half_rdBtn.Checked = selection_rule9[3];
             half_minus_rdBtn.Checked = selection_rule9[4];
             half_plus_rdBtn.Checked = selection_rule9[5];
-            internal_lstBox.MouseEnter += (s, e) => { internal_lstBox.Focus(); };
-            addin_lstBox.MouseEnter += (s, e) => { addin_lstBox.Focus(); };
-            a_lstBox.MouseEnter += (s, e) => { a_lstBox.Focus(); };
-            b_lstBox.MouseEnter += (s, e) => { b_lstBox.Focus(); };
-            c_lstBox.MouseEnter += (s, e) => { c_lstBox.Focus(); };
-            dvw_lstBox.MouseEnter += (s, e) => { dvw_lstBox.Focus(); };
-            internal_lstBox.MouseEnter += (s, e) => { internal_lstBox.Focus(); };
-            M_lstBox.MouseEnter += (s, e) => { M_lstBox.Focus(); };
-            x_lstBox.MouseEnter += (s, e) => { x_lstBox.Focus(); };
-            y_lstBox.MouseEnter += (s, e) => { y_lstBox.Focus(); };
-            z_lstBox.MouseEnter += (s, e) => { z_lstBox.Focus(); };
-            ppm9_numUD.MouseEnter += (s, e) => { ppm9_numUD.Focus(); };
-            chargeMax_Box.MouseEnter += (s, e) => { chargeMax_Box.Focus(); };
-            chargeMin_Box.MouseEnter += (s, e) => { chargeMin_Box.Focus(); };
-            idxFrom_Box.MouseEnter += (s, e) => { idxFrom_Box.Focus(); };
-            idxPr_Box.MouseEnter += (s, e) => { idxPr_Box.Focus(); };
-            idxTo_Box.MouseEnter += (s, e) => { idxTo_Box.Focus(); };
-            mzMax_Box.MouseEnter += (s, e) => { mzMax_Box.Focus(); };
-            mzMin_Box.MouseEnter += (s, e) => { mzMin_Box.Focus(); };
+            internal_lstBox.MouseClick += (s, e) => { internal_lstBox.Focus(); };
+            addin_lstBox.MouseClick += (s, e) => { addin_lstBox.Focus(); };
+            a_lstBox.MouseClick += (s, e) => { a_lstBox.Focus(); };
+            b_lstBox.MouseClick += (s, e) => { b_lstBox.Focus(); };
+            c_lstBox.MouseClick += (s, e) => { c_lstBox.Focus(); };
+            dvw_lstBox.MouseClick += (s, e) => { dvw_lstBox.Focus(); };
+            internal_lstBox.MouseClick += (s, e) => { internal_lstBox.Focus(); };
+            M_lstBox.MouseClick += (s, e) => { M_lstBox.Focus(); };
+            x_lstBox.MouseClick += (s, e) => { x_lstBox.Focus(); };
+            y_lstBox.MouseClick += (s, e) => { y_lstBox.Focus(); };
+            z_lstBox.MouseClick += (s, e) => { z_lstBox.Focus(); };
+            ppm9_numUD.MouseClick += (s, e) => { ppm9_numUD.Focus(); };
+            chargeMax_Box.MouseClick += (s, e) => { chargeMax_Box.Focus(); };
+            chargeMin_Box.MouseClick += (s, e) => { chargeMin_Box.Focus(); };
+            idxFrom_Box.MouseClick += (s, e) => { idxFrom_Box.Focus(); };
+            idxPr_Box.MouseClick += (s, e) => { idxPr_Box.Focus(); };
+            idxTo_Box.MouseClick += (s, e) => { idxTo_Box.Focus(); };
+            mzMax_Box.MouseClick += (s, e) => { mzMax_Box.Focus(); };
+            mzMin_Box.MouseClick += (s, e) => { mzMin_Box.Focus(); };
         }
 
         private void initialize_data()
