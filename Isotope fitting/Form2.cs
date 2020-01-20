@@ -3269,6 +3269,8 @@ namespace Isotope_fitting
                 }
                 if (grp_nodes.Count == 0 || frgmts.Count == 0) return;
                 if (frgmts.Count > 12) { MessageBox.Show("The maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups."); return; }
+                if (frgmts.Count > 11) { DialogResult dialogResult= MessageBox.Show("Τhe process takes about 8 minutes to complete. Are you sure you would like to continue?","Attention", MessageBoxButtons.YesNo);if (dialogResult == DialogResult.No) { return; } }
+                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Τhe process takes about 4 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo); if (dialogResult == DialogResult.No) { return; } }
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(frgmts);
                 grp_nodes.OrderBy(g => g); frgmts.OrderBy(f => f);
                 all_fitted_results.RemoveRange(grp_nodes[0], grp_nodes.Count());
