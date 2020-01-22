@@ -2236,6 +2236,9 @@ namespace Isotope_fitting
                 counter++;
             }
         }
+        /// <summary>
+        /// Calculate di score and ei score
+        /// </summary>
         private void centroid_LSE(int[] set_array, double[] tmp)
         {
             double lse = 0.0;           
@@ -2309,6 +2312,9 @@ namespace Isotope_fitting
             tmp[6 * set_array.Length+2] = lse;
             return;
         }
+        /// <summary>
+        /// Calculate di' or dinew score
+        /// </summary>
         private void di_aligned(int[] set_array, double[] tmp)
         {                      
             List<double[]> lse_fragments = new List<double[]>();
@@ -2406,6 +2412,9 @@ namespace Isotope_fitting
             
             return;
         }
+        /// <summary>
+        /// Find fit groups' boundaries 
+        /// </summary>
         private int[] find_set_boundaries(int[] set)
         {
             int[] set_index = new int[2];
@@ -2691,6 +2700,9 @@ namespace Isotope_fitting
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
             uncheckall_Frag();
         }
+        /// <summary>
+        /// Custom tooltip for each fit group solution node
+        /// </summary>
         private void fit_tree_tooltip(TreeNode fitnode)
         {
             string idx_str = fitnode.Name;
@@ -2736,6 +2748,9 @@ namespace Isotope_fitting
             toolTip_fit.Show(tool_text, fit_tree, loc);
            
         }
+        /// <summary>
+        /// removes the nodes of each fit group that are not within the score thresholds set by the user
+        /// </summary>
         private void remove_child_nodes()
         {
             if (fit_tree != null)
@@ -2753,6 +2768,9 @@ namespace Isotope_fitting
                 }
             }
         }
+        /// <summary>
+        /// shows the scores(A,Ai,di,ei,di') of  each fragment in the right clicked solution node in a fit group solution
+        /// </summary>
         private void show_error(TreeNode node)
         {
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
@@ -2946,6 +2964,9 @@ namespace Isotope_fitting
             // it will be called once, now that all coresponding fragments are checked
             if(!block_fit_refresh)refresh_iso_plot();
         }
+        /// <summary>
+        /// It was used to recheck the nodes as the user has left them before altering a specific node. Its is currently not used
+        /// </summary>
         private void checked_labels()
         {
             if (fit_tree != null && fit_tree.Nodes.Count==labels_checked.Count)
@@ -2997,6 +3018,9 @@ namespace Isotope_fitting
             uncheckall_Frag();
             refresh_fit_tree_sorting();
         }
+        /// <summary>
+        /// Command to refresh the node sorting in all fit groups in the fit tree
+        /// </summary>
         private void refresh_fit_tree_sorting()
         {           
             if (all_fitted_results != null)
@@ -3008,8 +3032,10 @@ namespace Isotope_fitting
                 frag_tree.EndUpdate();
                 refresh_iso_plot();
             }
-        }        
-       
+        }
+        /// <summary>
+        /// Command to Refresh the node sorting in a specific fit group in the fit tree
+        /// </summary>
         private void fitnode_Re_Sort(TreeNode node)
         {
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
@@ -3022,23 +3048,11 @@ namespace Isotope_fitting
                 MessageBox.Show("'Sort & Filter node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.");
             }
         }
-        private void update_sorting_parameters_lists()
-        {
-            if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); tab_thres.Clear(); labels_checked.Clear(); }
-            for (int n = 0; n < all_fitted_results.Count; n++)
-            {
-                tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3], fit_sort[4], fit_sort[5] }); tab_coef.Add(new double[] { a_coef[0], a_coef[1], a_coef[2], a_coef[3], a_coef[4], a_coef[5] } );
-                tab_thres.Add(new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4] });labels_checked.Add("");
-            }
-            return;
-        }
-        private void form_sort_fitnode(int index)
-        {
-            Form6 sort_node = new Form6(true,index);            
-            sort_node.ShowDialog();           
-        }
+        /// <summary>
+        /// Refresh the node sorting in a specific fit group in the fit tree
+        /// </summary>
         private void refresh_fitnode_sorting(TreeNode node)
-        {            
+        {
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
             int node_index = node.Index;
             foreach (TreeNode tnn in fit_tree.Nodes[node_index].Nodes)
@@ -3052,7 +3066,7 @@ namespace Isotope_fitting
                 //best_checked(true, node.Index);
                 //checked_labels();
                 fit_tree.BeginUpdate();
-                if(fit_tree.Nodes[node_index].Nodes.Count>0) fit_tree.Nodes[node_index].Nodes.Clear();
+                if (fit_tree.Nodes[node_index].Nodes.Count > 0) fit_tree.Nodes[node_index].Nodes.Clear();
                 for (int j = 0; j < all_fitted_results[node_index].Count; j++)
                 {
                     if (all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 2] < tab_thres[node_index][0] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 1] < tab_thres[node_index][1] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 4] < tab_thres[node_index][2] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 5] < tab_thres[node_index][3] && all_fitted_results[node_index][j][all_fitted_results[node_index][j].Length - 6] < tab_thres[node_index][4])
@@ -3073,7 +3087,7 @@ namespace Isotope_fitting
                             TreeNode tr = new TreeNode
                             {
                                 Text = tmp,
-                                Name = node_index.ToString() + " " + j.ToString()                                
+                                Name = node_index.ToString() + " " + j.ToString()
                             };
                             fit_tree.Nodes[node_index].Nodes.Add(tr);
                         }
@@ -3088,7 +3102,26 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("'Refresh node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.");
             }
-        }        
+        }
+        /// <summary>
+        /// Updated the user preferences for each node sorting and score thresholds
+        /// </summary>
+        private void update_sorting_parameters_lists()
+        {
+            if (tab_node != null) { tab_node.Clear(); tab_coef.Clear(); tab_thres.Clear(); labels_checked.Clear(); }
+            for (int n = 0; n < all_fitted_results.Count; n++)
+            {
+                tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3], fit_sort[4], fit_sort[5] }); tab_coef.Add(new double[] { a_coef[0], a_coef[1], a_coef[2], a_coef[3], a_coef[4], a_coef[5] } );
+                tab_thres.Add(new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4] });labels_checked.Add("");
+            }
+            return;
+        }
+        private void form_sort_fitnode(int index)
+        {
+            Form6 sort_node = new Form6(true,index);            
+            sort_node.ShowDialog();           
+        }
+        
         public class NodeSorter : IComparer
         {
             // Compare the length of the strings, or the strings
@@ -3127,7 +3160,7 @@ namespace Isotope_fitting
             else { node.Checked = true; toolTip_fit.Hide(fit_tree); fit_tree_tooltip(node); }
         }
         /// <summary>
-        /// zoom at the graph region the selected fit tree node is about
+        /// ZOOM at the graph region the selected fit tree node is about
         /// </summary>
         private void fit_set_graph_zoomed(TreeNode node)
         {
@@ -3157,14 +3190,23 @@ namespace Isotope_fitting
                 invalidate_all();
             }                     
         }
+        /// <summary>
+        /// BUTTON unckeck all fit nodes 
+        /// </summary>
         private void uncheckFit_Btn_Click(object sender, EventArgs e)
         {
             uncheck_all(fit_tree, false);
         }
+        /// <summary>
+        /// BUTTON select best fit solution in each fit group 
+        /// </summary>
         private void check_bestBtn_Click(object sender, EventArgs e)
         {
             best_checked();
         }
+        /// <summary>
+        /// unckeck all fit nodes 
+        /// </summary>
         private void uncheck_all(TreeView tree, bool check)
         {
             if (tree != null)
@@ -3186,6 +3228,9 @@ namespace Isotope_fitting
                 refresh_iso_plot();
             }
         }
+        /// <summary>
+        /// select best fit solution in each fit group(individual=false) or in a specific group only(individual=true)
+        /// </summary>
         private void best_checked(bool individual = false, int node_index = 1)
         {            
             if (fit_tree != null)
@@ -3248,7 +3293,10 @@ namespace Isotope_fitting
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
         }
-
+        //FIT CHECKED GROUPS
+        /// <summary>
+        /// fit checked groups' fragments in a common fit group, the new fit group can contain either all the fragments in the checked fit groups(all_frag=true) or only the checked fragments in the checked fit groups(all_frag=false)
+        /// </summary>
         private void fit_checked_groups(bool all_frag=true)
         {
             if (fit_tree != null)
@@ -3358,7 +3406,15 @@ namespace Isotope_fitting
                 if (fit_tree.Nodes[grp_nodes[0]].Nodes.Count>0){ fit_tree.Nodes[grp_nodes[0]].Nodes[0].EnsureVisible(); fit_tree.Nodes[grp_nodes[0]].Nodes[0].Checked = true;}
             }
         }
-       
+        private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
+        {
+            fit_checked_groups();
+        }
+        private void fit_chkGrpsChkFragBtn_Click_1(object sender, EventArgs e)
+        {
+            fit_checked_groups(false);
+        }
+
         #endregion
 
         #region UI control
@@ -10742,14 +10798,6 @@ namespace Isotope_fitting
 
         
 
-        private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
-        {
-            fit_checked_groups();
-        }
-
-        private void fit_chkGrpsChkFragBtn_Click_1(object sender, EventArgs e)
-        {
-            fit_checked_groups(false);
-        }
+       
     }
 }
