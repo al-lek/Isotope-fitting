@@ -2617,7 +2617,7 @@ namespace Isotope_fitting
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
             fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { toolTip_fit.Hide(fit_tree); fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };
             ContextMenu ctxMn_fit_grp = new ContextMenu(new MenuItem[2] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }) });
-            ContextMenu ctxMn_fit_grp_solution = new ContextMenu(new MenuItem[1] { new MenuItem("error", (s, e) => { show_error(_currentNode); }) });
+            ContextMenu ctxMn_fit_grp_solution = new ContextMenu(new MenuItem[3] { new MenuItem("Error", (s, e) => { show_error(_currentNode); }), new MenuItem("Copy Solution's Scores", (s, e) => { copy_solution_scorestoClipBoard(_currentNode); }), new MenuItem("Copy Solution Fragments' Scores", (s, e) => { copy_solution_fragments_toClipBoard(_currentNode); }) });
             fit_tree.NodeMouseClick += (s, e) =>
             {
                 if(fit_tree != null)
@@ -2631,7 +2631,8 @@ namespace Isotope_fitting
                     {
                         if (string.IsNullOrEmpty(e.Node.Name))
                         { fit_set_graph_zoomed(e.Node); }
-                    }               }
+                    }
+                }
                
             };           
             
@@ -2882,6 +2883,54 @@ namespace Isotope_fitting
             {
                 node.Nodes[(int)tree_index[n]].ForeColor = Color.SteelBlue;
             }            
+        }
+        private void copy_solution_fragments_toClipBoard(TreeNode node)
+        {
+            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo);
+            bool header = true;
+            if (dialogResult == DialogResult.No) { header = false; }
+            StringBuilder sb = new StringBuilder();
+            string idx_str = node.Name;
+            string[] idx_str_arr = idx_str.Split(' ');
+            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
+            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+            if (header) sb.AppendLine("Fragments" + "\t" + "m/z" + "\t" + "di" + "\t" + "ei" + "\t" + "di'" + "\t" + "ppm" + "\t" + "Intensity");
+            for (int i = 0; i < all_fitted_sets[set_idx][set_pos_idx].Length; i++)
+            {
+                int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;               
+                double factor = all_fitted_results[set_idx][set_pos_idx][i];
+                string intensity = (factor * Fragments2[curr_idx].Max_intensity).ToString("#######");
+                sb.AppendLine(Fragments2[curr_idx].Name + "\t" + Fragments2[curr_idx].Mz + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%" + "\t"+ Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%" + "\t"+ Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%" + "\t"+ Fragments2[curr_idx].PPM_Error.ToString()+ "\t" +intensity);               
+            }
+            Clipboard.Clear();
+            Clipboard.SetText(sb.ToString());
+        }
+        private void copy_solution_scorestoClipBoard(TreeNode node)
+        {
+            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task."); return; }
+            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo);
+            bool header = true;
+            if (dialogResult==DialogResult.No) { header = false; }            
+            StringBuilder sb = new StringBuilder();
+            string idx_str = node.Name;
+            string[] idx_str_arr = idx_str.Split(' ');
+            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
+            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+            string Name = "";
+            for (int i = 0; i < all_fitted_sets[set_idx][set_pos_idx].Length; i++)
+            {
+                int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;
+                Name+=Fragments2[curr_idx].Name +"   ";      
+            }
+            if(header)sb.AppendLine("Fragments" + "\t" + "A" + "\t" + "Ai"  + "\t" + "di" + "\t" + "ei" +  "\t" + "di'" +  "\t" + "SSE");
+            sb.AppendLine(Name + "\t"+Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 1], 2).ToString() + "%" + "\t"+  Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 2], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 4], 3).ToString() + "% " + "\t" +  Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 5], 2).ToString() + "%" + "\t" +  Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 6], 3).ToString() + "%" + "\t"+  all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 3].ToString("0.###e0" + " "));
+            Clipboard.Clear();
+            Clipboard.SetText(sb.ToString());
         }
         private void copy_fitTree_toClipBoard()
         {
