@@ -1904,6 +1904,7 @@ namespace Isotope_fitting
             // method can be called with no fragments, for some fragments, and some new additional fragments
             // when single threaded we could add only the new fragments. In multi thread Fragments have to be resorted every time by mass, so their relative position (idxs) changes on every new addition
             //int start = 1; bool add = false; if (all_data_aligned.Count > 0 && (all_data_aligned[0].Count() < Fragments2.Count + 1)) { start = all_data_aligned[0].Count(); add = true; }
+            //fix_experimental_gaps2020();
 
             List<int> idxs = new List<int>();
             for (int i = 1; i < all_data.Count; i++) { idxs.Add(i); }
@@ -2024,6 +2025,57 @@ namespace Isotope_fitting
         {
             // linear interpolation
             return ((x_inter - x1) * y2 + (x2 - x_inter) * y1) / (x2 - x1);
+        }
+
+        private void fix_experimental_gaps2020()
+        {
+            List<double> all_cen = new List<double>();
+            foreach (FragForm fra in Fragments2)
+            {
+                foreach (PointPlot p in fra.Centroid)
+                {
+                    if (p.Y>min_intes)
+                    {
+                        all_cen.Add(p.X);
+                    }
+                }
+            }
+            if (all_cen.Count>0)
+            {
+                all_cen.OrderBy(p => p);
+                List<double[]> new_exp = new List<double[]>();
+                double step = experimental[1][0] - experimental[0][0];
+                int last_int = 0;
+                new_exp.Add(new double[] { experimental[0][0], experimental[0][1] });
+                for (int i = 1; i < experimental.Count; i++)
+                {
+                    if (experimental[i][0] - new_exp.Last()[0] > step + 0.0001 && experimental[i][1]<1 && new_exp.Last()[0] < 1)
+                    {
+                        for (int k = last_int; k < all_cen.Count; k++)
+                        {
+                            if (all_cen[k] > experimental[i][0] - step - 0.0001) { last_int =k; break; }
+                            if (all_cen[k] > new_exp.Last()[0] + step + 0.0001)
+                            {                               
+                                double step_in =  0.05;
+                                while (all_cen[k] > new_exp.Last()[0] + step_in)
+                                {
+                                    new_exp.Add(new double[] { new_exp.Last()[0]+step_in, 0.0 });
+                                }
+                                new_exp.Add(new double[] { all_cen[k], 0.0 });                              
+                               
+                                while (experimental[i][0] - new_exp.Last()[0] > step_in)
+                                {
+                                    new_exp.Add(new double[] { new_exp.Last()[0] + step_in, 0.0 }); 
+                                }                                
+                            }
+                        }
+                    }
+                    new_exp.Add(new double[] { experimental[i][0], experimental[i][1] });
+                }
+                new_exp.OrderBy(p => p[0]);
+                current_experimental.Clear();                
+                all_data[0] = new_exp;
+            }            
         }
 
         #endregion
@@ -2434,7 +2486,10 @@ namespace Isotope_fitting
                 {                    
                     if (all_data_aligned[i][set[k]] != 0.0) zero_point = zero_point & false;
                 }
-                if (!zero_point) end=i;
+                if (!zero_point)
+                {
+                    end = i;
+                }
             }
             set_index[0]=start;set_index[1]=end;
             return set_index;
@@ -2750,7 +2805,7 @@ namespace Isotope_fitting
            
         }
         /// <summary>
-        /// removes the nodes of each fit group that are not within the score thresholds set by the user
+        /// removes the nodes of each fit group that are not within the user results bound
         /// </summary>
         private void remove_child_nodes()
         {
@@ -10837,11 +10892,6 @@ namespace Isotope_fitting
         {
             internal_panel_plotview_rebuild(true);
         }
-
-
-
-
-
 
         #endregion
 
