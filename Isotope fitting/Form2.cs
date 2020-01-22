@@ -1559,6 +1559,7 @@ namespace Isotope_fitting
             int idx = Convert.ToInt32(node.Name);
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
             if (Fragments2.Count > 0)
             {
@@ -2043,7 +2044,8 @@ namespace Isotope_fitting
 
                 fit.Start();
 
-                saveFit_Btn.Enabled = true;                
+                saveFit_Btn.Enabled = true;
+                fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = true;
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -2609,25 +2611,25 @@ namespace Isotope_fitting
             ContextMenu ctxMn_fit_grp_solution = new ContextMenu(new MenuItem[1] { new MenuItem("error", (s, e) => { show_error(_currentNode); }) });
             fit_tree.NodeMouseClick += (s, e) =>
             {
-                if (e.Button == MouseButtons.Right && fit_tree != null && fit_tree.Focused==true)
+                if(fit_tree != null)
                 {
-                    if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp; }
-                    else {_currentNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp_solution; }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(e.Node.Name))
-                    { fit_set_graph_zoomed(e.Node); }
-                }
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp; }
+                        else { _currentNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp_solution; }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(e.Node.Name))
+                        { fit_set_graph_zoomed(e.Node); }
+                    }               }
+               
             };           
             
 
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }), new MenuItem("error", (s, e) => { show_error(fit_tree.SelectedNode); }) });
             fit_tree.NodeMouseHover += (s, e) => {toolTip_fit.Hide(fit_tree); fit_tree_tooltip(e.Node); };
-            fit_tree.MouseLeave += (s, e) => 
-            {
-                toolTip_fit.Hide(fit_tree); _currentNode = null; fit_tree.SelectedNode = null; iso_plot.Focus();
-            };
+            fit_tree.MouseLeave += (s, e) =>{toolTip_fit.Hide(fit_tree);};
             fit_tree.MouseHover += (s, e) => { toolTip_fit.Hide(fit_tree); };
 
             // interpret fitted results
@@ -2908,7 +2910,12 @@ namespace Isotope_fitting
             block_plot_refresh = true;
             string idx_str = fitnode.Name;
             bool is_checked = fitnode.Checked;
-            if (string.IsNullOrEmpty(idx_str)) return;
+            if (string.IsNullOrEmpty(idx_str))
+            {
+                if (is_checked) { fitnode.ForeColor = Color.DarkRed; }
+                else { fitnode.ForeColor = Color.Black; }
+                return;
+            }
 
             else
             {
@@ -2929,7 +2936,7 @@ namespace Isotope_fitting
 
                     Fragments2[curr_idx].Factor = factor;
                     curr_node.Checked = is_checked;
-                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");                    
+                    curr_node.Text = curr_node.Text.Remove(curr_node.Text.LastIndexOf(' ')) + " " + (Fragments2[curr_idx].Factor * Fragments2[curr_idx].Max_intensity).ToString("#######");
                 }
                 if (!block_fit_refresh) frag_tree.EndUpdate();
             }
@@ -3682,7 +3689,7 @@ namespace Isotope_fitting
             
             //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
             iso_model.MouseDown += (s, e) => 
-            { /*iso_plot.HideTracker();*/
+            { 
                 if (cursor_chkBx.Checked && e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true)
                 {
                     if (count_distance) { cersor_distance(previous_point, e.Position); }
@@ -3693,11 +3700,8 @@ namespace Isotope_fitting
                     count_distance = false;/* cersor_distance(e.Position, e.Position);*/
                 }               
             };
-            iso_model.MouseMove += (s, e) => {/* iso_plot.HideTracker();*/if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
-            iso_model.MouseUp += (s, e) => 
-            { /*iso_plot.HideTracker();*/
-                count_distance = false;
-            };
+            iso_model.MouseMove += (s, e) => {if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
+            iso_model.MouseUp += (s, e) =>{ count_distance = false;};
 
             //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
             //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
@@ -3723,7 +3727,6 @@ namespace Isotope_fitting
             res_plot.Model = res_model;
 
             var linearAxis1r = new OxyPlot.Axes.LinearAxis() { StringFormat =y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid, MinorGridlineStyle = Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
-            //linearAxis1r.MajorStep = linearAxis1r.ActualMaximum / 2.0;
             res_model.Axes.Add(linearAxis1r);
             var linearAxis2r = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format + x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle = Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
             res_model.Axes.Add(linearAxis2r);
@@ -3759,8 +3762,6 @@ namespace Isotope_fitting
 
             };
             iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
-            //iso_plot.MouseHover += (s, e) => { iso_plot.Focus(); };
-            //res_plot.MouseHover += (s, e) => { res_plot.Focus(); };
         }
         
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
@@ -4499,10 +4500,7 @@ namespace Isotope_fitting
             }
         }
         private void loadList()
-        {
-            fitted_results.Clear();
-            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
+        {            
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
             string fullPath = "";
@@ -4611,7 +4609,11 @@ namespace Isotope_fitting
                 Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
                 envipat_fitted.Start();               
                 refresh_iso_plot();
-                is_loading = false;                            
+                is_loading = false;
+                fitted_results.Clear();
+                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
+                fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             }
         }
         private int[] check_for_duplicates(string name,double factor)
@@ -4639,13 +4641,14 @@ namespace Isotope_fitting
             all_data_aligned.Clear();
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             powerSet.Clear();powerSet_distroIdx.Clear();
             summation.Clear();residual.Clear();
             all_data.RemoveRange(1, all_data.Count - 1);
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-            fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false;            
+            fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false; fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             Initialize_Oxy();
             initialize_tabs();
             factor_panel.Controls.Clear();
@@ -4683,10 +4686,17 @@ namespace Isotope_fitting
                 // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             }
-            fitted_results.Clear();
-            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            if (initial_count> Fragments2.Count && fit_tree != null){selectedFragments.Clear();fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
-            if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); }
+            if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); return; }
+            else
+            {
+                fitted_results.Clear();
+                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                if (fit_tree != null)
+                {
+                    selectedFragments.Clear(); fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed.");                    
+                }
+                fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+            }                  
         }
         private bool decision_algorithm2(FragForm fra)
         {
@@ -5520,6 +5530,7 @@ namespace Isotope_fitting
             all_data.Clear();
             file_name = "";
             if (all_fitted_results!=null) {all_fitted_results.Clear(); all_fitted_sets.Clear();}
+            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
             fit_style = LineStyle.Dot;exper_style = LineStyle.Solid;frag_style = LineStyle.Solid;
             exp_width = 1;frag_width = 2;fit_width = 1;
@@ -10729,17 +10740,14 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            fit_checked_groups();
-        }
+        
 
         private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
         {
             fit_checked_groups();
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void fit_chkGrpsChkFragBtn_Click_1(object sender, EventArgs e)
         {
             fit_checked_groups(false);
         }
