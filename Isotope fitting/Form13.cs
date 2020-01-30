@@ -20,9 +20,9 @@ namespace Isotope_fitting
             frm2 = f;
             xstepminor_UD13.Value= (decimal)frm2.xINT_minorStep13;
             xstepmajor_UD13.Value= (decimal)frm2.xINT_majorStep13 ;
-           ystepminor_UD13.Value = (decimal)frm2.yINT_minorStep13;
+            ystepminor_UD13.Value = (decimal)frm2.yINT_minorStep13;
             ystepmajor_UD13.Value = (decimal)frm2.yINT_majorStep13 ;
-           xInterval_UD13.Value = (decimal)frm2.x_interval13;
+            xInterval_UD13.Value = (decimal)frm2.x_interval13;
             intLine_numUD13.Value = (decimal)frm2.int_width;
             formatY_numUD13.Value= Decimal.Parse(frm2.x_numformat13);
         }
@@ -170,7 +170,7 @@ namespace Isotope_fitting
 
         private void intLine_numUD13_ValueChanged(object sender, EventArgs e)
         {
-            frm2.int_width = (double)intLine_numUD13.Value;frm2.internal_plots_refresh();
+            frm2.int_width = (double)intLine_numUD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
         }
     }
 }

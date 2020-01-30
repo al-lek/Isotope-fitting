@@ -23,6 +23,7 @@ namespace Isotope_fitting
             xstepmajor_UD12.Value = (decimal)frm2.x_majorStep12;
             x_charge_stepminor_UD12.Value = (decimal)frm2.x_charge_minorStep12;
             x_charge_stepmajor_UD12.Value = (decimal)frm2.x_charge_majorStep12;
+            bar_numUD.Value = (decimal)frm2.bar_width;
         }
 
         #region tab format intensity plot
@@ -162,7 +163,7 @@ namespace Isotope_fitting
 
         private void bar_numUD_ValueChanged(object sender, EventArgs e)
         {
-            frm2.bar_width = (double)bar_numUD.Value; frm2.primary_plots_refresh(); frm2.primary_plots_replot();
+            frm2.bar_width = (double)bar_numUD.Value; frm2.primary_plots_refresh(); frm2.tabs_plots_replot();
         }
 
         #endregion
