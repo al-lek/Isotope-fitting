@@ -3491,7 +3491,7 @@ namespace Isotope_fitting
             this.ax_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ax_toolStrip.Location = new System.Drawing.Point(2, 5);
             this.ax_toolStrip.Name = "ax_toolStrip";
-            this.ax_toolStrip.Size = new System.Drawing.Size(43, 121);
+            this.ax_toolStrip.Size = new System.Drawing.Size(43, 140);
             this.ax_toolStrip.TabIndex = 24;
             // 
             // axSave_Btn

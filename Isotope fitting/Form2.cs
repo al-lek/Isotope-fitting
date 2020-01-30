@@ -10671,7 +10671,10 @@ namespace Isotope_fitting
             }
            
         }
-
+        public void primary_plots_replot()
+        {
+            initialize_plot_tabs();
+        }
 
         #endregion
 

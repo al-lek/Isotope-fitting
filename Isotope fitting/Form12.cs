@@ -162,7 +162,7 @@ namespace Isotope_fitting
 
         private void bar_numUD_ValueChanged(object sender, EventArgs e)
         {
-            frm2.bar_width = (double)bar_numUD.Value; frm2.primary_plots_refresh();
+            frm2.bar_width = (double)bar_numUD.Value; frm2.primary_plots_refresh(); frm2.primary_plots_replot();
         }
 
         #endregion
