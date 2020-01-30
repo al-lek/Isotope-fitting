@@ -9935,86 +9935,86 @@ namespace Isotope_fitting
              
             //
             ScatterSeries a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
-            ScatterSeries a_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
-            ScatterSeries a_100000 = new ScatterSeries() { MarkerSize =8, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000000 = new ScatterSeries() { MarkerSize = 11, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
-            ScatterSeries a_100000000 = new ScatterSeries() { MarkerSize = 12.5, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000000000 = new ScatterSeries() { MarkerSize = 14, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000000000 = new ScatterSeries() { MarkerSize = 15.5, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
+            ScatterSeries a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
+            ScatterSeries a_1000 = new ScatterSeries() { MarkerSize = 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
+            ScatterSeries a_10000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
+            ScatterSeries a_100000 = new ScatterSeries() { MarkerSize =6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
+            ScatterSeries a_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
+            ScatterSeries a_10000000 = new ScatterSeries() { MarkerSize =8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
+            ScatterSeries a_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
+            ScatterSeries a_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
+            ScatterSeries a_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
            
 
 
 
             ScatterSeries b_10 = new ScatterSeries() { MarkerSize = 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000 = new ScatterSeries() { MarkerSize = 5, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100000 = new ScatterSeries() { MarkerSize = 8, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000000 = new ScatterSeries() { MarkerSize = 11, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100000000 = new ScatterSeries() { MarkerSize = 12.5, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000000000 = new ScatterSeries() { MarkerSize = 14, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000000000 = new ScatterSeries() { MarkerSize = 15.5, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
+            ScatterSeries b_100 = new ScatterSeries() { MarkerSize = 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
+            ScatterSeries b_1000 = new ScatterSeries() { MarkerSize = 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
+            ScatterSeries b_10000 = new ScatterSeries() { MarkerSize = 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
+            ScatterSeries b_100000 = new ScatterSeries() { MarkerSize = 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
+            ScatterSeries b_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
+            ScatterSeries b_10000000 = new ScatterSeries() { MarkerSize =8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
+            ScatterSeries b_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
+            ScatterSeries b_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
+            ScatterSeries b_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
 
 
 
 
             ScatterSeries c_10 = new ScatterSeries() { MarkerSize = 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000 = new ScatterSeries() { MarkerSize = 5, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100000 = new ScatterSeries() { MarkerSize = 8, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000000 = new ScatterSeries() { MarkerSize = 11, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100000000 = new ScatterSeries() { MarkerSize = 12.5, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000000000 = new ScatterSeries() { MarkerSize = 14, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000000000 = new ScatterSeries() { MarkerSize = 15.5, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_100 = new ScatterSeries() { MarkerSize = 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_1000 = new ScatterSeries() { MarkerSize = 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_10000 = new ScatterSeries() { MarkerSize = 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_100000 = new ScatterSeries() { MarkerSize = 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
+            ScatterSeries c_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
 
 
 
 
             ScatterSeries x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize = 8, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000000 = new ScatterSeries() { MarkerSize = 11, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100000000 = new ScatterSeries() { MarkerSize = 12.5, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000000000 = new ScatterSeries() { MarkerSize = 14, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000000000 = new ScatterSeries() { MarkerSize = 15.5, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize =6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_10000000 = new ScatterSeries() { MarkerSize =8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_100000000 = new ScatterSeries() { MarkerSize =9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries x_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
 
 
 
 
 
             ScatterSeries y_10 = new ScatterSeries() { MarkerSize = 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000 = new ScatterSeries() { MarkerSize = 5, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100000 = new ScatterSeries() { MarkerSize = 8, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000000 = new ScatterSeries() { MarkerSize = 11, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100000000 = new ScatterSeries() { MarkerSize = 12.5, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000000000 = new ScatterSeries() { MarkerSize = 14, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000000000 = new ScatterSeries() { MarkerSize = 15.5, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_100 = new ScatterSeries() { MarkerSize = 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_1000 = new ScatterSeries() { MarkerSize = 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_10000 = new ScatterSeries() { MarkerSize = 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_100000 = new ScatterSeries() { MarkerSize = 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries y_10000000000 = new ScatterSeries() { MarkerSize =11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
 
 
 
 
             ScatterSeries z_10 = new ScatterSeries() { MarkerSize = 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100 = new ScatterSeries() { MarkerSize = 3.5, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000 = new ScatterSeries() { MarkerSize = 5, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000 = new ScatterSeries() { MarkerSize = 6.5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100000 = new ScatterSeries() { MarkerSize = 8, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000000 = new ScatterSeries() { MarkerSize = 9.5, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000000 = new ScatterSeries() { MarkerSize = 11, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100000000 = new ScatterSeries() { MarkerSize = 12.5, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000000000 = new ScatterSeries() { MarkerSize = 14, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000000000 = new ScatterSeries() { MarkerSize = 15.5, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_100 = new ScatterSeries() { MarkerSize = 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_1000 = new ScatterSeries() { MarkerSize = 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_10000 = new ScatterSeries() { MarkerSize = 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_100000 = new ScatterSeries() { MarkerSize = 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
+            ScatterSeries z_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
 
 
 
@@ -10227,38 +10227,38 @@ namespace Isotope_fitting
             if (a_Btn.Checked && x_Btn.Checked)
             {
                 axCharge_plot.Model.Title ="a - x  fragments";
-                if(a_1000000.Points.Count>0) axCharge_plot.Model.Series.Add(a_1000000);
-                if (x_1000000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
-                if (a_100000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
-                if (x_100000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
-                if (a_10000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
-                if (x_10000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
-                if (a_1000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_1000);
-                if (x_1000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_1000);
-                if (a_100.Points.Count > 0) axCharge_plot.Model.Series.Add(a_100);
-                if (x_100.Points.Count > 0) axCharge_plot.Model.Series.Add(x_100);
-                if (a_10.Points.Count > 0) axCharge_plot.Model.Series.Add(a_10);
-                if (x_10.Points.Count > 0) axCharge_plot.Model.Series.Add(x_10);
+                if(points_a_1000000.Count>0) axCharge_plot.Model.Series.Add(a_1000000);
+                if (points_x_1000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
+                if (points_a_100000.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
+                if (points_x_100000.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
+                if (points_a_10000.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
+                if (points_x_10000.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
+                if (points_a_1000.Count > 0) axCharge_plot.Model.Series.Add(a_1000);
+                if (points_x_1000.Count > 0) axCharge_plot.Model.Series.Add(x_1000);
+                if (points_a_100.Count > 0) axCharge_plot.Model.Series.Add(a_100);
+                if (points_x_100.Count > 0) axCharge_plot.Model.Series.Add(x_100);
+                if (points_a_10.Count > 0) axCharge_plot.Model.Series.Add(a_10);
+                if (points_x_10.Count > 0) axCharge_plot.Model.Series.Add(x_10);
             }
             else if (a_Btn.Checked)
             {
                 axCharge_plot.Model.Title = "a fragments";
-                if (a_1000000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_1000000);
-                if (a_100000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
-                if (a_10000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
-                if (a_1000.Points.Count > 0) axCharge_plot.Model.Series.Add(a_1000);
-                if (a_100.Points.Count > 0) axCharge_plot.Model.Series.Add(a_100);
-                if (a_10.Points.Count > 0) axCharge_plot.Model.Series.Add(a_10);
+                if (points_a_1000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000);
+                if (points_a_100000.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
+                if (points_a_10000.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
+                if (points_a_1000.Count > 0) axCharge_plot.Model.Series.Add(a_1000);
+                if (points_a_100.Count > 0) axCharge_plot.Model.Series.Add(a_100);
+                if (points_a_10.Count > 0) axCharge_plot.Model.Series.Add(a_10);
             }
             else if (x_Btn.Checked)
             {
                axCharge_plot.Model.Title = "x fragments";
-                if (x_1000000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
-                if (x_100000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
-                if (x_10000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
-                if (x_1000.Points.Count > 0) axCharge_plot.Model.Series.Add(x_1000);
-                if (x_100.Points.Count > 0) axCharge_plot.Model.Series.Add(x_100);
-                if (x_10.Points.Count > 0) axCharge_plot.Model.Series.Add(x_10);
+                if (points_x_1000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
+                if (points_x_100000.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
+                if (points_x_10000.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
+                if (points_x_1000.Count > 0) axCharge_plot.Model.Series.Add(x_1000);
+                if (points_x_100.Count > 0) axCharge_plot.Model.Series.Add(x_100);
+                if (points_x_10.Count > 0) axCharge_plot.Model.Series.Add(x_10);
             }
             else
             {
@@ -10267,38 +10267,38 @@ namespace Isotope_fitting
             if (b_Btn.Checked && y_Btn.Checked)
             {
                 byCharge_plot.Model.Title = "b - y  fragments";
-                if (b_1000000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
-                if (y_1000000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
-                if (b_100000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
-                if (y_100000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
-                if (b_10000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
-                if (y_10000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
-                if (b_1000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_1000);
-                if (y_1000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_1000);
-                if (b_100.Points.Count > 0) byCharge_plot.Model.Series.Add(b_100);
-                if (y_100.Points.Count > 0) byCharge_plot.Model.Series.Add(y_100);
-                if (b_10.Points.Count > 0) byCharge_plot.Model.Series.Add(b_10);
-                if (y_10.Points.Count > 0) byCharge_plot.Model.Series.Add(y_10);
+                if (points_b_1000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
+                if (points_y_1000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
+                if (points_b_100000.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
+                if (points_y_100000.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
+                if (points_b_10000.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
+                if (points_y_10000.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
+                if (points_b_1000.Count > 0) byCharge_plot.Model.Series.Add(b_1000);
+                if (points_y_1000.Count > 0) byCharge_plot.Model.Series.Add(y_1000);
+                if (points_b_100.Count > 0) byCharge_plot.Model.Series.Add(b_100);
+                if (points_y_100.Count > 0) byCharge_plot.Model.Series.Add(y_100);
+                if (points_b_10.Count > 0) byCharge_plot.Model.Series.Add(b_10);
+                if (points_y_10.Count > 0) byCharge_plot.Model.Series.Add(y_10);
             }
             else if (b_Btn.Checked)
             {
                 byCharge_plot.Model.Title = "b  fragments";
-                if (b_1000000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
-                if (b_100000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
-                if (b_10000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
-                if (b_1000.Points.Count > 0) byCharge_plot.Model.Series.Add(b_1000);
-                if (b_100.Points.Count > 0) byCharge_plot.Model.Series.Add(b_100);
-                if (b_10.Points.Count > 0) byCharge_plot.Model.Series.Add(b_10);
+                if (points_b_1000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
+                if (points_b_100000.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
+                if (points_b_10000.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
+                if (points_b_1000.Count > 0) byCharge_plot.Model.Series.Add(b_1000);
+                if (points_b_100.Count > 0) byCharge_plot.Model.Series.Add(b_100);
+                if (points_b_10.Count > 0) byCharge_plot.Model.Series.Add(b_10);
             }
             else if (y_Btn.Checked)
             {
                 byCharge_plot.Model.Title = "y  fragments";
-                if (y_1000000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
-                if (y_100000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
-                if (y_10000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
-                if (y_1000.Points.Count > 0) byCharge_plot.Model.Series.Add(y_1000);
-                if (y_100.Points.Count > 0) byCharge_plot.Model.Series.Add(y_100);
-                if (y_10.Points.Count > 0) byCharge_plot.Model.Series.Add(y_10);
+                if (points_y_1000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
+                if (points_y_100000.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
+                if (points_y_10000.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
+                if (points_y_1000.Count > 0) byCharge_plot.Model.Series.Add(y_1000);
+                if (points_y_100.Count > 0) byCharge_plot.Model.Series.Add(y_100);
+                if (points_y_10.Count > 0) byCharge_plot.Model.Series.Add(y_10);
             }
             else
             {
@@ -10307,38 +10307,38 @@ namespace Isotope_fitting
             if (c_Btn.Checked && z_Btn.Checked)
             {
                 czCharge_plot.Model.Title = "c - z  fragments";
-                if (c_1000000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
-                if (z_1000000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
-                if (c_100000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
-                if (z_100000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
-                if (c_10000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
-                if (z_10000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
-                if (c_1000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_1000);
-                if (z_1000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_1000);
-                if (c_100.Points.Count > 0) czCharge_plot.Model.Series.Add(c_100);
-                if (z_100.Points.Count > 0) czCharge_plot.Model.Series.Add(z_100);
-                if (c_10.Points.Count > 0) czCharge_plot.Model.Series.Add(c_10);
-                if (z_10.Points.Count > 0) czCharge_plot.Model.Series.Add(z_10);
+                if (points_c_1000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
+                if (points_z_1000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
+                if (points_c_100000.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
+                if (points_z_100000.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
+                if (points_c_10000.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
+                if (points_z_10000.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
+                if (points_c_1000.Count > 0) czCharge_plot.Model.Series.Add(c_1000);
+                if (points_z_1000.Count > 0) czCharge_plot.Model.Series.Add(z_1000);
+                if (points_c_100.Count > 0) czCharge_plot.Model.Series.Add(c_100);
+                if (points_z_100.Count > 0) czCharge_plot.Model.Series.Add(z_100);
+                if (points_c_10.Count > 0) czCharge_plot.Model.Series.Add(c_10);
+                if (points_z_10.Count > 0) czCharge_plot.Model.Series.Add(z_10);
             }
             else if (c_Btn.Checked)
             {
                 czCharge_plot.Model.Title = "c fragments";
-                if (c_1000000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
-                if (c_100000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
-                if (c_10000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
-                if (c_1000.Points.Count > 0) czCharge_plot.Model.Series.Add(c_1000);
-                if (c_100.Points.Count > 0) czCharge_plot.Model.Series.Add(c_100);
-                if (c_10.Points.Count > 0) czCharge_plot.Model.Series.Add(c_10);
+                if (points_c_1000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
+                if (points_c_100000.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
+                if (points_c_10000.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
+                if (points_c_1000.Count > 0) czCharge_plot.Model.Series.Add(c_1000);
+                if (points_c_100.Count > 0) czCharge_plot.Model.Series.Add(c_100);
+                if (points_c_10.Count > 0) czCharge_plot.Model.Series.Add(c_10);
             }
             else if (z_Btn.Checked)
             {
                 czCharge_plot.Model.Title = "z fragments";
-                if (z_1000000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
-                if (z_100000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
-                if (z_10000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
-                if (z_1000.Points.Count > 0) czCharge_plot.Model.Series.Add(z_1000);
-                if (z_100.Points.Count > 0) czCharge_plot.Model.Series.Add(z_100);
-                if (z_10.Points.Count > 0) czCharge_plot.Model.Series.Add(z_10);
+                if (points_z_1000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
+                if (points_z_100000.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
+                if (points_z_10000.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
+                if (points_z_1000.Count > 0) czCharge_plot.Model.Series.Add(z_1000);
+                if (points_z_100.Count > 0) czCharge_plot.Model.Series.Add(z_100);
+                if (points_z_10.Count > 0) czCharge_plot.Model.Series.Add(z_10);
             }
             else
             {
