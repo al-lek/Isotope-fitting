@@ -4041,7 +4041,7 @@ namespace Isotope_fitting
 
                 //this.BindMouseDown(OxyMouseButton.Left, OxyModifierKeys.Control | OxyModifierKeys.Alt, PlotCommands.ZoomRectangle);                
                 this.BindMouseDown(OxyMouseButton.Left, PlotCommands.ZoomRectangle);
-                //this.BindMouseWheel(OxyModifierKeys.Control, PlotCommands.ZoomIn);
+                this.BindMouseWheel(OxyModifierKeys.Control, PlotCommands.ZoomWheel);
             }
         }
 
@@ -4640,6 +4640,7 @@ namespace Isotope_fitting
                 //file.WriteLine("Name:\tExp");
                 //foreach (double[] p in Form2.selected_all_data[0]) file.WriteLine(p[0] + "\t" + p[1]);
                 //file.WriteLine();
+                if(IonDraw.Count>0) IonDraw.Clear();
                 foreach (int indexS in fragToSave)
                 {
                     Form2.Fragments2[indexS - 1].Fixed = true;
@@ -10752,23 +10753,25 @@ namespace Isotope_fitting
             temp_model.Axes.Add(linearAxis2);
             temp_plot.Controller = new CustomPlotController();
             temp_model.Updated += (s, e) =>
-            {     
-                double max_iso = 200;
-                if (temp_plot.Model.Series.Count > 0 && plotExp_chkBox.Checked)
+            {
+                if (autoscale_Btn.Checked)
                 {
-                    if ((temp_plot.Model.Series[0] as LineSeries).Points.Count > 0)
+                    double max_iso = 200;
+                    if (temp_plot.Model.Series.Count > 0 && plotExp_chkBox.Checked)
                     {
-                        double iso_1 = (temp_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= temp_plot.Model.Axes[1].ActualMinimum && x.X < temp_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
-                        if (iso_1 > max_iso) max_iso = iso_1;
+                        if ((temp_plot.Model.Series[0] as LineSeries).Points.Count > 0)
+                        {
+                            double iso_1 = (temp_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= temp_plot.Model.Axes[1].ActualMinimum && x.X < temp_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+                            if (iso_1 > max_iso) max_iso = iso_1;
+                        }
+                        if (all_data.Count > 0 && (temp_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
+                        {
+                            double iso_1 = (temp_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.FindAll(x => (x.X >= temp_plot.Model.Axes[1].ActualMinimum && x.X < temp_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+                            if (iso_1 > max_iso) max_iso = iso_1;
+                        }
+                        temp_plot.Model.Axes[0].Zoom(-100, max_iso * 1.2);
                     }
-                    if (all_data.Count > 0 && (temp_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
-                    {
-                        double iso_1 = (temp_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.FindAll(x => (x.X >= temp_plot.Model.Axes[1].ActualMinimum && x.X < temp_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
-                        if (iso_1 > max_iso) max_iso = iso_1;
-                    }
-                    temp_plot.Model.Axes[0].Zoom(-100, max_iso * 1.2);
-                }
-
+                }                
             };
             temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
             refresh_temp_plot(temp_plot);
