@@ -8991,7 +8991,6 @@ namespace Isotope_fitting
             public string Xreal { get; set; }
             public string Text { get; set; }
             public ScatterPoint GetScatterPoint() => new ScatterPoint(X, Y);
-
             public CustomDataPoint(double x, double y, string xreal, string t)
             {
                 X = x;
@@ -9000,6 +8999,28 @@ namespace Isotope_fitting
                 Text = t;
             }
         }
+        public class CustomDataPointIndex : IDataPointProvider
+        {
+            public double X { get; set; }
+            public double Y { get; set; }
+            public string Ion { get; set; }
+            public string Index { get; set; }
+            public string Charge { get; set; }
+            public string Intensity { get; set; }
+
+
+            public DataPoint GetDataPoint() => new DataPoint(X, Y);
+            public CustomDataPointIndex(double x, double y, string ionreal, string t,string c,string i)
+            {
+                X = x;
+                Y = y;
+                Ion = ionreal;
+                Index = t;
+                Charge = c;
+                Intensity = i;
+            }
+        }
+
         private void tabFit_Leave(object sender, EventArgs e)
         {
             initialize_ions_todraw(); initialize_plot_tabs();
@@ -9910,14 +9931,7 @@ namespace Isotope_fitting
         }
 
         private void initialize_plot_tabs()
-        {
-            int iondraw_count = IonDraw.Count;
-            List<double[]> merged_a = new List<double[]>();
-            List<double[]> merged_b = new List<double[]>();
-            List<double[]> merged_c = new List<double[]>();
-            List<double[]> merged_x = new List<double[]>();
-            List<double[]> merged_y = new List<double[]>();
-            List<double[]> merged_z = new List<double[]>();
+        {           
 
             #region initialize graphics
             if (ax_plot.Model.Series != null) { ppm_plot.Model.Series.Clear(); ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); axCharge_plot.Model.Series.Clear(); byCharge_plot.Model.Series.Clear(); czCharge_plot.Model.Series.Clear(); }
@@ -10023,6 +10037,16 @@ namespace Isotope_fitting
 
             #endregion
 
+            int iondraw_count = IonDraw.Count;
+            double max_i = 0.0;
+            List<CustomDataPoint> points_index = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_indexTo = new List<CustomDataPoint>();
+            List<double[]> merged_a = new List<double[]>();
+            List<double[]> merged_b = new List<double[]>();
+            List<double[]> merged_c = new List<double[]>();
+            List<double[]> merged_x = new List<double[]>();
+            List<double[]> merged_y = new List<double[]>();
+            List<double[]> merged_z = new List<double[]>();
             if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
             double max_a = 5000, max_b = 5000, max_c = 5000;
             double maxcharge_a = 0, maxcharge_b = 0, maxcharge_c = 0;
@@ -10033,6 +10057,7 @@ namespace Isotope_fitting
             List<CustomDataPoint> points_x_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_x_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> points_y_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> points_z_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000000000 = new List<CustomDataPoint>();
+            //fill the list with the correct ions
             for (int i=0;i< iondraw_count ; i++)
             {
                 ion nn = IonDraw[i];
@@ -10196,8 +10221,8 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("inter"))
                 {
-                    if (nn.Ion_type.Contains("b")) { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Blue, Max_intensity = nn.Max_intensity }); }
-                    else { IonDrawIndexTo.Add(new ion() { Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Green, Max_intensity = nn.Max_intensity }); }
+                    if (nn.Ion_type.Contains("b")) { IonDrawIndexTo.Add(new ion() { Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo,Charge=nn.Charge, Color = Color.Blue, Max_intensity = nn.Max_intensity }); }
+                    else { IonDrawIndexTo.Add(new ion() { Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Green, Charge = nn.Charge, Max_intensity = nn.Max_intensity }); }
                 }
             }
             ppm_series.ItemsSource = ppmpoints;
@@ -10223,7 +10248,6 @@ namespace Isotope_fitting
             x_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            x_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
             y_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            y_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
             z_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";            z_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
-
 
             if (a_Btn.Checked && x_Btn.Checked)
             {
@@ -10356,7 +10380,6 @@ namespace Isotope_fitting
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, };var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red }; var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            double max_i = 0.0;
             for (int cc = 0; cc < Peptide.Length; cc++)
             {
                 if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
@@ -10427,42 +10450,93 @@ namespace Isotope_fitting
             ppm_plot.InvalidatePlot(true);
 
             if (IonDrawIndexTo.Count() > 0)
-            {
-               
+            {               
                 CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
                 int k = 1;
                 foreach (ion nn in IonDrawIndexTo)
                 {
-                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    tmp.Points.Add(new DataPoint(nn.Index, k));tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
+                    List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
+                    if (nn.Charge > 0)
+                    {
+                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                    }
+                    else
+                    {
+                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                    }
+                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    tmp.ItemsSource = custom_Index;
+                    tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
+
                     indexto_plot.Model.Series.Add(tmp);
-                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    bar.Points.Add(new DataPoint(0, k));bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+
+                    custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type,"["+ nn.Index.ToString() + "-"+ nn.IndexTo.ToString() + "]", nn.Charge.ToString(),nn.Max_intensity.ToString("0.###")));
+                    custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type , "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(),nn.Max_intensity.ToString("0.###")));
+                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    bar.ItemsSource = custom_IndIntensity;
+                    bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
                     indextoIntensity_plot.Model.Series.Add(bar);
                     k++;
                     if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
+                    //LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    //tmp.Points.Add(new DataPoint(nn.Index, k));tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    //indexto_plot.Model.Series.Add(tmp);
+                    //LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    //bar.Points.Add(new DataPoint(0, k));bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    //indextoIntensity_plot.Model.Series.Add(bar);
+                    //k++;
+                    //if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
                 }
                 CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
                 k = 1;
                 foreach (ion nn in IonDrawIndexTo)
                 {
-                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    tmp.Points.Add(new DataPoint(nn.Index, k)); tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
+                    List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
+                    if (nn.Charge>0)
+                    {
+                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                    }
+                    else
+                    {
+                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                    }
+                    
+                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    tmp.ItemsSource = custom_Index;
+                    tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
+
                     index_plot.Model.Series.Add(tmp);
-                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
-                    bar.Points.Add(new DataPoint(0, k)); bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+
+                    custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                    custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    bar.ItemsSource = custom_IndIntensity;
+                    bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
                     indexIntensity_plot.Model.Series.Add(bar);
                     k++;
+                    //LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    //tmp.Points.Add(new DataPoint(nn.Index, k)); tmp.Points.Add(new DataPoint(nn.IndexTo, k));
+                    //index_plot.Model.Series.Add(tmp);
+                    //LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, Color = nn.Color.ToOxyColor() };
+                    //bar.Points.Add(new DataPoint(0, k)); bar.Points.Add(new DataPoint(nn.Max_intensity, k));
+                    //indexIntensity_plot.Model.Series.Add(bar);
+                    //k++;
                 }
                 indexIntensity_plot.Model.Axes[1].Maximum =indextoIntensity_plot.Model.Axes[1].Maximum =max_i*1.2;
                 indexIntensity_plot.Model.Axes[0].Minimum =indextoIntensity_plot.Model.Axes[0].Minimum =0;
                 indexto_plot.Model.Axes[1].Minimum = index_plot.Model.Axes[1].Minimum = 0;
                 indexto_plot.Model.Axes[1].Maximum = index_plot.Model.Axes[1].Maximum = Peptide.Length + 2;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
-                if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; }
-                else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; }
-                else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; }
-                else if (IonDrawIndexTo.Count >50) { yINT_minorStep13 = 5; yINT_majorStep13 = 10; }
+                if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; internal_plots_refresh(); }
+                else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; internal_plots_refresh(); }
+                else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; internal_plots_refresh(); }
+                else if (IonDrawIndexTo.Count >50) { yINT_minorStep13 = 5; yINT_majorStep13 = 10; internal_plots_refresh(); }
                 indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + yINT_minorStep13/2;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = indexIntensity_plot.Model.Axes[0].Minimum = indextoIntensity_plot.Model.Axes[0].Minimum = - yINT_minorStep13/2;
             }
