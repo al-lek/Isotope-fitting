@@ -142,7 +142,7 @@ namespace Isotope_fitting
             HideSelection = false,
             Location = new System.Drawing.Point(2, 76),
             Name = "frag_tree",
-            Size = new System.Drawing.Size(352, 391),
+            Size = new System.Drawing.Size(354, 391),
             TabIndex = 10000011,
             Visible = false ,ShowNodeToolTips=false};
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
@@ -11154,10 +11154,14 @@ namespace Isotope_fitting
             internal_panel_plotview_rebuild(true);
         }
 
+
+
+
         #endregion
 
-        
+        private void splitter4_SplitterMoved(object sender, SplitterEventArgs e)
+        {
 
-       
+        }
     }
 }
