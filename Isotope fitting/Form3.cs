@@ -103,7 +103,7 @@ namespace Isotope_fitting
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
                     file.WriteLine("Mode:\texternal data");
-                    file.WriteLine("AA Sequence:\t" + Form2.Peptide);
+                    file.WriteLine("AA Sequence:\t" );
                     file.WriteLine("Fitted isotopes:\t" + Form2.candidate_fragments.ToString());
                     file.WriteLine("m/z[Da]\tIntensity");
                     file.WriteLine();
@@ -141,7 +141,7 @@ namespace Isotope_fitting
                 System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
                 file.WriteLine("Mode:\texternal data");
-                file.WriteLine("AA Sequence:\t" + Form2.Peptide);
+                file.WriteLine("AA Sequence:\t" );
                 file.WriteLine("Fitted isotopes:\t" + Form2.candidate_fragments.ToString());
                 file.WriteLine("m/z[Da]\tIntensity");
                 file.WriteLine();

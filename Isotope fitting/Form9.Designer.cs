@@ -152,7 +152,6 @@
             this.panel_calc.Name = "panel_calc";
             this.panel_calc.Size = new System.Drawing.Size(327, 690);
             this.panel_calc.TabIndex = 4;
-            this.panel_calc.MouseEnter += new System.EventHandler(this.panel_calc_MouseEnter);
             // 
             // toolStrip1
             // 

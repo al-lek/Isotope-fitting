@@ -130,7 +130,7 @@ namespace Isotope_fitting
                 else { listviewitem.SubItems.Add(fra.Index); }
                 listviewitem.SubItems.Add(fra.Mz);
                 listviewitem.SubItems.Add(fra.Charge.ToString());
-                listviewitem.SubItems.Add(fra.FinalFormula.ToString());
+                listviewitem.SubItems.Add(fra.InputFormula.ToString());
                 listviewitem.SubItems.Add(fra.Counter.ToString());
                 listviewitem.SubItems.Add(fra.PPM_Error.ToString("0.##"));
 
@@ -654,7 +654,7 @@ namespace Isotope_fitting
 
         private void panel_calc_MouseEnter(object sender, EventArgs e)
         {
-            panel_calc.Focus();
+           
         }
     }
 }
