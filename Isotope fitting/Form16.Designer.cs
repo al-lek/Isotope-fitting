@@ -59,6 +59,7 @@
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
             this.seq_BoxFrm16.Size = new System.Drawing.Size(553, 180);
             this.seq_BoxFrm16.TabIndex = 2;
+            this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
             // 
             // Form16
             // 
