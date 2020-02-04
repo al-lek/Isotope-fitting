@@ -10446,7 +10446,15 @@ namespace Isotope_fitting
             if (a_Btn.Checked && x_Btn.Checked)
             {
                 axCharge_plot.Model.Title ="a - x  fragments";
-                if(points_a_1000000.Count>0) axCharge_plot.Model.Series.Add(a_1000000);
+                if (points_a_10000000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000000);
+                if (points_x_10000000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000000);
+                if (points_a_1000000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000000);
+                if (points_x_1000000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000000);
+                if (points_a_100000000.Count > 0) axCharge_plot.Model.Series.Add(a_100000000);
+                if (points_x_100000000.Count > 0) axCharge_plot.Model.Series.Add(x_100000000);
+                if (points_a_10000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000);
+                if (points_x_10000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000);
+                if (points_a_1000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000);
                 if (points_x_1000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
                 if (points_a_100000.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
                 if (points_x_100000.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
@@ -10462,6 +10470,10 @@ namespace Isotope_fitting
             else if (a_Btn.Checked)
             {
                 axCharge_plot.Model.Title = "a fragments";
+                if (points_a_10000000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000000);
+                if (points_a_1000000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000000);
+                if (points_a_100000000.Count > 0) axCharge_plot.Model.Series.Add(a_100000000);
+                if (points_a_10000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000);
                 if (points_a_1000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000);
                 if (points_a_100000.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
                 if (points_a_10000.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
@@ -10472,6 +10484,10 @@ namespace Isotope_fitting
             else if (x_Btn.Checked)
             {
                axCharge_plot.Model.Title = "x fragments";
+                if (points_x_10000000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000000);
+                if (points_x_1000000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000000);
+                if (points_x_100000000.Count > 0) axCharge_plot.Model.Series.Add(x_100000000);
+                if (points_x_10000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000);
                 if (points_x_1000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
                 if (points_x_100000.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
                 if (points_x_10000.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
@@ -10486,6 +10502,14 @@ namespace Isotope_fitting
             if (b_Btn.Checked && y_Btn.Checked)
             {
                 byCharge_plot.Model.Title = "b - y  fragments";
+                if (points_b_10000000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000000);
+                if (points_y_10000000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000000);
+                if (points_b_1000000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000000);
+                if (points_y_1000000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000000);
+                if (points_b_100000000.Count > 0) byCharge_plot.Model.Series.Add(b_100000000);
+                if (points_y_100000000.Count > 0) byCharge_plot.Model.Series.Add(y_100000000);
+                if (points_b_10000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000);
+                if (points_y_10000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000);
                 if (points_b_1000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
                 if (points_y_1000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
                 if (points_b_100000.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
@@ -10502,6 +10526,10 @@ namespace Isotope_fitting
             else if (b_Btn.Checked)
             {
                 byCharge_plot.Model.Title = "b  fragments";
+                if (points_b_10000000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000000);
+                if (points_b_1000000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000000);
+                if (points_b_100000000.Count > 0) byCharge_plot.Model.Series.Add(b_100000000);
+                if (points_b_10000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000);
                 if (points_b_1000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
                 if (points_b_100000.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
                 if (points_b_10000.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
@@ -10512,6 +10540,10 @@ namespace Isotope_fitting
             else if (y_Btn.Checked)
             {
                 byCharge_plot.Model.Title = "y  fragments";
+                if (points_y_10000000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000000);
+                if (points_y_1000000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000000);
+                if (points_y_100000000.Count > 0) byCharge_plot.Model.Series.Add(y_100000000);
+                if (points_y_10000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000);
                 if (points_y_1000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
                 if (points_y_100000.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
                 if (points_y_10000.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
@@ -10526,6 +10558,14 @@ namespace Isotope_fitting
             if (c_Btn.Checked && z_Btn.Checked)
             {
                 czCharge_plot.Model.Title = "c - z  fragments";
+                if (points_c_10000000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000000);
+                if (points_z_10000000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000000);
+                if (points_c_1000000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000000);
+                if (points_z_1000000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000000);
+                if (points_c_100000000.Count > 0) czCharge_plot.Model.Series.Add(c_100000000);
+                if (points_z_100000000.Count > 0) czCharge_plot.Model.Series.Add(z_100000000);
+                if (points_c_10000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000);
+                if (points_z_10000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000);
                 if (points_c_1000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
                 if (points_z_1000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
                 if (points_c_100000.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
@@ -10542,6 +10582,10 @@ namespace Isotope_fitting
             else if (c_Btn.Checked)
             {
                 czCharge_plot.Model.Title = "c fragments";
+                if (points_c_10000000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000000);
+                if (points_c_1000000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000000);
+                if (points_c_100000000.Count > 0) czCharge_plot.Model.Series.Add(c_100000000);
+                if (points_c_10000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000);
                 if (points_c_1000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
                 if (points_c_100000.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
                 if (points_c_10000.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
@@ -10552,6 +10596,10 @@ namespace Isotope_fitting
             else if (z_Btn.Checked)
             {
                 czCharge_plot.Model.Title = "z fragments";
+                if (points_z_10000000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000000);
+                if (points_z_1000000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000000);
+                if (points_z_100000000.Count > 0) czCharge_plot.Model.Series.Add(z_100000000);
+                if (points_z_10000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000);
                 if (points_z_1000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
                 if (points_z_100000.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
                 if (points_z_10000.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
@@ -11399,6 +11447,8 @@ namespace Isotope_fitting
         public void refresh_temp_primary_plots(PlotView temp_plot, int fplot_type)
         {
             int iondraw_count = IonDraw.Count;
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
             double max_i = 0.0; 
             double max_int = 5000;
             double maxcharge = 0;
@@ -11596,28 +11646,28 @@ namespace Isotope_fitting
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
                             {
-                                if (charge_merged_up.Count == 0 || (charge_merged_up.Last().SortIdx != nn.SortIdx && charge_merged_up.Last().Charge!=nn.Charge))
+                                if (charge_merged_up.Count != 0 && charge_merged_up.Last().SortIdx == nn.SortIdx && charge_merged_up.Last().Charge == nn.Charge)
                                 {
-                                    charge_merged_up.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                    charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz;
                                 }
                                 else
                                 {
-                                    charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz;
-                                }                                
+                                    charge_merged_up.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                }
                                 if (maxcharge < nn.Charge) { maxcharge = nn.Charge; }
                             }
                         }
                         else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
-                            {    
-                                if (charge_merged_down.Count == 0 || (charge_merged_down.Last().SortIdx != nn.SortIdx && charge_merged_down.Last().Charge != nn.Charge))
+                            {
+                                if (charge_merged_down.Count != 0 && charge_merged_down.Last().SortIdx == nn.SortIdx && charge_merged_down.Last().Charge == nn.Charge)
                                 {
-                                    charge_merged_down.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                    charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz;
                                 }
                                 else
                                 {
-                                    charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz;
+                                    charge_merged_down.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
                                 }
                                 if (maxcharge < nn.Charge) { maxcharge = nn.Charge; }
                             }
@@ -11656,6 +11706,14 @@ namespace Isotope_fitting
                     if (a_Btn.Checked && x_Btn.Checked)
                     {
                         temp_plot.Model.Title = "a - x  fragments";
+                        if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
+                        if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
+                        if (points_up_1000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000000);
+                        if (points_down_1000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000000);
+                        if (points_up_100000000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000000);
+                        if (points_down_100000000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000000);
+                        if (points_up_10000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000);
+                        if (points_down_10000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000);
                         if (points_up_1000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000);
                         if (points_down_1000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000);
                         if (points_up_100000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000);
@@ -11672,6 +11730,11 @@ namespace Isotope_fitting
                     else if (a_Btn.Checked)
                     {
                         temp_plot.Model.Title = "a fragments";
+                        if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
+                        if (points_up_1000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000000);
+                        if (points_up_100000000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000000);
+                        if (points_up_10000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000);
+
                         if (points_up_1000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000);
                         if (points_up_100000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000);
                         if (points_up_10000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000);
@@ -11682,6 +11745,11 @@ namespace Isotope_fitting
                     else if (x_Btn.Checked)
                     {
                         temp_plot.Model.Title = "x fragments";
+                        if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
+                        if (points_down_1000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000000);
+                        if (points_down_100000000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000000);
+                        if (points_down_10000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000);
+
                         if (points_down_1000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000);
                         if (points_down_100000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000);
                         if (points_down_10000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000);
@@ -11723,15 +11791,15 @@ namespace Isotope_fitting
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
                             {
-                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
+                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
                                 {
-                                    if (charge_merged_up.Count == 0 || (charge_merged_up.Last().SortIdx != nn.SortIdx && charge_merged_up.Last().Charge != nn.Charge))
+                                    if(charge_merged_up.Count != 0 && charge_merged_up.Last().SortIdx == nn.SortIdx && charge_merged_up.Last().Charge == nn.Charge)
                                     {
-                                        charge_merged_up.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                        charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz;
                                     }
                                     else
                                     {
-                                        charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz;
+                                        charge_merged_up.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
                                     }
                                     if (maxcharge < nn.Charge) { maxcharge = nn.Charge; }
                                 }
@@ -11741,15 +11809,15 @@ namespace Isotope_fitting
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
                             {
-                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
+                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
                                 {
-                                    if (charge_merged_down.Count == 0 || (charge_merged_down.Last().SortIdx != nn.SortIdx && charge_merged_down.Last().Charge != nn.Charge))
+                                    if (charge_merged_down.Count != 0 && charge_merged_down.Last().SortIdx == nn.SortIdx && charge_merged_down.Last().Charge == nn.Charge)
                                     {
-                                        charge_merged_down.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                        charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz;
                                     }
                                     else
                                     {
-                                        charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz;
+                                        charge_merged_down.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
                                     }
                                     if (maxcharge < nn.Charge) { maxcharge = nn.Charge; }
                                 }
@@ -11789,6 +11857,15 @@ namespace Isotope_fitting
                     if (b_Btn.Checked && y_Btn.Checked)
                     {
                         temp_plot.Model.Title = "b - y  fragments";
+                        if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
+                        if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
+                        if (points_up_1000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000000);
+                        if (points_down_1000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000000);
+                        if (points_up_100000000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000000);
+                        if (points_down_100000000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000000);
+                        if (points_up_10000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000);
+                        if (points_down_10000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000);
+
                         if (points_up_1000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000);
                         if (points_down_1000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000);
                         if (points_up_100000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000);
@@ -11805,6 +11882,11 @@ namespace Isotope_fitting
                     else if (b_Btn.Checked)
                     {
                         temp_plot.Model.Title = "b  fragments";
+                        if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
+                        if (points_up_1000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000000);
+                        if (points_up_100000000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000000);
+                        if (points_up_10000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000);
+
                         if (points_up_1000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000);
                         if (points_up_100000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000);
                         if (points_up_10000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000);
@@ -11815,6 +11897,10 @@ namespace Isotope_fitting
                     else if (y_Btn.Checked)
                     {
                         temp_plot.Model.Title = "y  fragments";
+                        if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
+                        if (points_down_1000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000000);
+                        if (points_down_100000000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000000);
+                        if (points_down_10000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000);
                         if (points_down_1000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000);
                         if (points_down_100000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000);
                         if (points_down_10000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000);
@@ -11857,15 +11943,15 @@ namespace Isotope_fitting
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
                             {
-                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
+                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
                                 {
-                                    if (charge_merged_up.Count == 0 || (charge_merged_up.Last().SortIdx != nn.SortIdx && charge_merged_up.Last().Charge != nn.Charge))
+                                    if (charge_merged_up.Count != 0 && charge_merged_up.Last().SortIdx == nn.SortIdx && charge_merged_up.Last().Charge == nn.Charge)
                                     {
-                                        charge_merged_up.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                        charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz;
                                     }
                                     else
                                     {
-                                        charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz;
+                                        charge_merged_up.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
                                     }
                                     if (maxcharge < nn.Charge) { maxcharge = nn.Charge; }
                                 }
@@ -11873,15 +11959,15 @@ namespace Isotope_fitting
                         }
                         else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx))
                             {
-                                if (charge_merged_down.Count == 0 || (charge_merged_down.Last().SortIdx != nn.SortIdx && charge_merged_down.Last().Charge != nn.Charge))
+                                if (charge_merged_down.Count != 0 && charge_merged_down.Last().SortIdx == nn.SortIdx && charge_merged_down.Last().Charge == nn.Charge)
                                 {
-                                    charge_merged_down.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
+                                    charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz;
                                 }
                                 else
                                 {
-                                    charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz;
+                                    charge_merged_down.Add(new ion { SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity });
                                 }
                                 if (maxcharge < nn.Charge) { maxcharge = nn.Charge; }
                             }
@@ -11920,6 +12006,14 @@ namespace Isotope_fitting
                     if (c_Btn.Checked && z_Btn.Checked)
                     {
                         temp_plot.Model.Title = "c - z  fragments";
+                        if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
+                        if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
+                        if (points_up_1000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000000);
+                        if (points_down_1000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000000);
+                        if (points_up_100000000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000000);
+                        if (points_down_100000000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000000);
+                        if (points_up_10000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000);
+                        if (points_down_10000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000);
                         if (points_up_1000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000);
                         if (points_down_1000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000);
                         if (points_up_100000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000);
@@ -11936,6 +12030,11 @@ namespace Isotope_fitting
                     else if (c_Btn.Checked)
                     {
                         temp_plot.Model.Title = "c fragments";
+                        if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
+                        if (points_up_1000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000000);
+                        if (points_up_100000000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000000);
+                        if (points_up_10000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000);
+
                         if (points_up_1000000.Count > 0) temp_plot.Model.Series.Add(tempUp_1000000);
                         if (points_up_100000.Count > 0) temp_plot.Model.Series.Add(tempUp_100000);
                         if (points_up_10000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000);
@@ -11946,6 +12045,10 @@ namespace Isotope_fitting
                     else if (z_Btn.Checked)
                     {
                         temp_plot.Model.Title = "z fragments";
+                        if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
+                        if (points_down_1000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000000);
+                        if (points_down_100000000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000000);
+                        if (points_down_10000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000);
                         if (points_down_1000000.Count > 0) temp_plot.Model.Series.Add(tempDown_1000000);
                         if (points_down_100000.Count > 0) temp_plot.Model.Series.Add(tempDown_100000);
                         if (points_down_10000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000);
