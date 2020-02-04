@@ -3213,7 +3213,7 @@ namespace Isotope_fitting
             this.byCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.byCharge_toolStrip.Location = new System.Drawing.Point(703, 269);
             this.byCharge_toolStrip.Name = "byCharge_toolStrip";
-            this.byCharge_toolStrip.Size = new System.Drawing.Size(43, 194);
+            this.byCharge_toolStrip.Size = new System.Drawing.Size(43, 175);
             this.byCharge_toolStrip.TabIndex = 25;
             // 
             // byChargeSave_Btn
@@ -3961,7 +3961,7 @@ namespace Isotope_fitting
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1450, 850);
             this.Name = "Form2";
-            this.Text = "Peak Finder v15.1";
+            this.Text = "Peak Finder v15.2";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Resize += new System.EventHandler(this.Form2_Resize);
             this.tabControl1.ResumeLayout(false);
