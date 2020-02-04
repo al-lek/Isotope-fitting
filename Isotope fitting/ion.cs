@@ -18,6 +18,8 @@ namespace Isotope_fitting
         private double ppm_error;
         private string mz;
         private double max_intensity;
+        private string name;
+
 
         public Color Color
         {
@@ -58,6 +60,11 @@ namespace Isotope_fitting
         {
             get { return this.mz; }
             set { this.mz = value; }
+        }
+        public string Name
+        {
+            get { return this.name; }
+            set { this.name = value; }
         }
         public double PPM_Error
         {
