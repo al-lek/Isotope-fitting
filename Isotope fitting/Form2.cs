@@ -27,7 +27,9 @@ using System.Runtime.InteropServices;
 namespace Isotope_fitting
 {
     public partial class Form2 : Form
-    {  
+    {
+        int iiiiiiii = 0;
+
         #region PARAMETER SET TAB FIT
 
         #region old new calculations
@@ -1092,7 +1094,7 @@ namespace Isotope_fitting
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
             ChemFormulas[i].Charge = Int32.Parse(frag_info[4]);
-            if (frag_info.Length==7) { ChemFormulas[i].Max_man_int = dParser(frag_info[6]); }            
+            if (frag_info.Length>6) { ChemFormulas[i].Max_man_int = dParser(frag_info[6]); }            
             // all ions have as many H in Adduct as their charge
             ChemFormulas[i].Adduct = "H" + ChemFormulas[i].Charge.ToString();
 
@@ -1488,15 +1490,14 @@ namespace Isotope_fitting
             }
             catch (Exception ex) 
             {
-                Debug.WriteLine(ex);
+                Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File.");
             };
-
+            progress_display_stop();            
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();            
             // also restore indexes to match array position
             for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
 
-            progress_display_stop();
             is_calc = false;
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
@@ -1558,6 +1559,7 @@ namespace Isotope_fitting
                     // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
                     ChemiForm.Envelope(chem);
                     add_fragment_to_Fragments2(chem, cen);
+                    iiiiiiii++;
                 }
                 else if (fragment_is_canditate)
                 {
