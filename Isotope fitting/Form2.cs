@@ -921,6 +921,7 @@ namespace Isotope_fitting
                 post_import_fragments();
                 sw1.Stop(); Debug.WriteLine("Import frags and generate X: " + sw1.ElapsedMilliseconds.ToString());
             }
+            
         }
 
 
@@ -5176,6 +5177,10 @@ namespace Isotope_fitting
                     Form14 frm14 = new Form14(this);
                     frm14.Show();
                     frm14.FormClosed += (s, f) => { if (calc_form14) { calc_form14 = false; FF_sequence_a(); } };
+                }
+                else
+                {
+                    calc_FF = false;
                 }
             }
             catch
