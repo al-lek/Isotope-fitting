@@ -2878,12 +2878,15 @@ namespace Isotope_fitting
                             
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
-                    if (all_fitted_results[i][j][all_fitted_results[i][j].Length - 2] <tab_thres[i][0] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 1] < tab_thres[i][1] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 4]< tab_thres[i][2] && all_fitted_results[i][j][all_fitted_results[i][j].Length -5] < tab_thres[i][3] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 6] < tab_thres[i][4])
+                    if (all_fitted_results[i][j][all_fitted_results[i][j].Length - 2] <tab_thres[i][0] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 1] < tab_thres[i][1] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 4]< tab_thres[i][2] && all_fitted_results[i][j][all_fitted_results[i][j].Length -5] < tab_thres[i][3] && (all_fitted_results[i][j][all_fitted_results[i][j].Length - 6] < tab_thres[i][4] /*|| all_fitted_sets[i][j].Length== 1*/))
                     {
                         bool print = true;
                         for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
                         {
-                            if (all_fitted_results[i][j][k + all_fitted_sets[i][j].Length]> tab_thres[i][2] || all_fitted_results[i][j][k + 3 * all_fitted_sets[i][j].Length] > tab_thres[i][3] || all_fitted_results[i][j][k + 4 * all_fitted_sets[i][j].Length] > tab_thres[i][4] || Fragments2[all_fitted_sets[i][j][k] - 1].Max_intensity * all_fitted_results[i][j][k]< min_intes+0.1) { print = false; }
+                            if (all_fitted_results[i][j][k + all_fitted_sets[i][j].Length]> tab_thres[i][2] || all_fitted_results[i][j][k + 3 * all_fitted_sets[i][j].Length] > tab_thres[i][3] || (all_fitted_results[i][j][k + 4 * all_fitted_sets[i][j].Length] > tab_thres[i][4]/* && all_fitted_sets[i][j].Length>1*/) || Fragments2[all_fitted_sets[i][j][k] - 1].Max_intensity * all_fitted_results[i][j][k]< min_intes+0.1)
+                            {
+                                print = false;
+                            }
                         }
                         if (print)
                         {
