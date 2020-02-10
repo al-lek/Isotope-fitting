@@ -3129,7 +3129,7 @@ namespace Isotope_fitting
                 int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;               
                 double factor = all_fitted_results[set_idx][set_pos_idx][i];
                 string intensity = (factor * Fragments2[curr_idx].Max_intensity).ToString("#######");
-                sb.AppendLine(Fragments2[curr_idx].Name + "\t" + Fragments2[curr_idx].Mz + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%" + "\t"+ Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%" + "\t"+ Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%" + "\t"+ Fragments2[curr_idx].PPM_Error.ToString()+ "\t" +intensity);               
+                sb.AppendLine(Fragments2[curr_idx].Name + "\t" + Fragments2[curr_idx].Mz + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%" + "\t"+ Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%" + "\t"+ Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%" + "\t"+ Math.Round(Fragments2[curr_idx].PPM_Error,2).ToString()+ "\t" +intensity);               
             }
             Clipboard.Clear();
             Clipboard.SetText(sb.ToString());
