@@ -1169,8 +1169,8 @@ namespace Isotope_fitting
                         }
                         value += v;
                     }
-                    if (filter == 0)
-                    {
+                    //if (filter == 0)
+                    //{
                         if (c > 0)
                         {
                             if (value > 0.0 || (value == 0.0 && chem.Profile[c - 1].Y > 0.0))
@@ -1187,12 +1187,12 @@ namespace Isotope_fitting
                                 c++;
                             }
                         }
-                    }
-                    else
-                    {
-                        chem.Profile.Add(new PointPlot { X = tr, Y = value });
-                        c++;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    chem.Profile.Add(new PointPlot { X = tr, Y = value });
+                    //    c++;
+                    //}
                 }               
             }
 
