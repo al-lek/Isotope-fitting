@@ -7199,13 +7199,35 @@ namespace Isotope_fitting
             var aStringBuilder = new StringBuilder(theString);
             if (Char.IsNumber(input[idx + 2]))
             {
-                if (Char.IsNumber(input[idx + 3]))
+                if (input.Length> idx + 3 && Char.IsNumber(input[idx + 3]))
                 {
-                    Int32.TryParse(theString.Substring(idx + 1, 3), out int result);
-                    aStringBuilder.Remove(idx + 1, 3);
-                    aStringBuilder.Insert(idx + 1, (result + amount).ToString());
-                    theString = aStringBuilder.ToString();
-                    input = theString;
+                    if (input.Length > idx + 4 &&  Char.IsNumber(input[idx + 4]))
+                    {
+                        if (input.Length > idx + 5 && Char.IsNumber(input[idx + 5]))
+                        {
+                            Int32.TryParse(theString.Substring(idx + 1, 5), out int result);
+                            aStringBuilder.Remove(idx + 1, 5);
+                            aStringBuilder.Insert(idx + 1, (result + amount).ToString());
+                            theString = aStringBuilder.ToString();
+                            input = theString;
+                        }
+                        else
+                        {
+                            Int32.TryParse(theString.Substring(idx + 1, 4), out int result);
+                            aStringBuilder.Remove(idx + 1, 4);
+                            aStringBuilder.Insert(idx + 1, (result + amount).ToString());
+                            theString = aStringBuilder.ToString();
+                            input = theString;
+                        }
+                    }
+                    else
+                    {
+                        Int32.TryParse(theString.Substring(idx + 1, 3), out int result);
+                        aStringBuilder.Remove(idx + 1, 3);
+                        aStringBuilder.Insert(idx + 1, (result + amount).ToString());
+                        theString = aStringBuilder.ToString();
+                        input = theString;
+                    }
                 }
                 else
                 {
