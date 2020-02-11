@@ -52,7 +52,6 @@
             // seq_BoxFrm16
             // 
             this.seq_BoxFrm16.AllowDrop = true;
-            this.seq_BoxFrm16.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.seq_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.seq_BoxFrm16.Location = new System.Drawing.Point(0, 0);
             this.seq_BoxFrm16.Multiline = true;
