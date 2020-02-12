@@ -19,9 +19,9 @@ namespace Isotope_fitting
         /// </summary>
         bool[] sort = new bool[6] { false, false, false, false,false,false };
         /// <summary>
-        /// [Ai thres,A thres,di thres,ei thres,dinew thres](5)
+        /// [Ai thres,A thres,di thres,ei thres,dinew thres, sd, sdnew](7)
         /// </summary>
-        double[] thres = new double[5] { 100,100,100,100,100};
+        double[] thres = new double[7] { 100,100,100,100,100, 100, 100 };
         double[] coeff_matrix=new double[6] {0.0,0.0,0.0,0.0,0.0,0.0 };
         int vis_res;
         int best_num;
@@ -61,7 +61,8 @@ namespace Isotope_fitting
                 di_numUD.Value = (decimal)Form2.tab_thres[idx][2];
                 ei_numUD.Value = (decimal)Form2.tab_thres[idx][3];
                 dinew_numUD.Value = (decimal)Form2.tab_thres[idx][4];
-               
+                sd_numUD.Value = (decimal)Form2.tab_thres[idx][5];
+                sdnew_numUD.Value = (decimal)Form2.tab_thres[idx][6];
 
 
                 coeff_matrix[0]= Form2.tab_coef[idx][0];
@@ -84,6 +85,9 @@ namespace Isotope_fitting
                 thres[2] = Form2.tab_thres[idx][2];
                 thres[3] = Form2.tab_thres[idx][3];
                 thres[4] = Form2.tab_thres[idx][4];
+                thres[5] = Form2.tab_thres[idx][5];
+                thres[6] = Form2.tab_thres[idx][6];
+
 
 
             }
@@ -109,6 +113,9 @@ namespace Isotope_fitting
                 di_numUD.Value =  (decimal)Form2.fit_thres[2];
                 ei_numUD.Value = (decimal)Form2.fit_thres[3];
                 dinew_numUD.Value = (decimal)Form2.fit_thres[4];
+                sd_numUD.Value = (decimal)Form2.fit_thres[5];
+                sdnew_numUD.Value = (decimal)Form2.fit_thres[6];
+
 
 
                 coeff_matrix[0]= Form2.a_coef[0];
@@ -132,7 +139,8 @@ namespace Isotope_fitting
                 thres[2] = Form2.fit_thres[2];
                 thres[3] = Form2.fit_thres[3];
                 thres[4] = Form2.fit_thres[4];
-
+                thres[5] = Form2.fit_thres[5];
+                thres[6] = Form2.fit_thres[6];
 
             }
             vital_refresh();
@@ -245,7 +253,8 @@ namespace Isotope_fitting
                 Form2.tab_thres[idx][2] = thres[2];  
                 Form2.tab_thres[idx][3] = thres[3];
                 Form2.tab_thres[idx][4] = thres[4];
-
+                Form2.tab_thres[idx][5] = thres[5];
+                Form2.tab_thres[idx][6] = thres[6];
 
                 Form2.visible_results = vis_res;
                 Form2.best_num_results = best_num;
@@ -266,11 +275,11 @@ namespace Isotope_fitting
                 Form2.fit_thres[2]= thres[2];
                 Form2.fit_thres[3] = thres[3];
                 Form2.fit_thres[4] = thres[4];
-
+                Form2.fit_thres[5] = thres[5];
+                Form2.fit_thres[6] = thres[6];
 
                 Form2.visible_results = vis_res;
                 Form2.best_num_results = best_num;
-
             }
         }
 
@@ -284,6 +293,17 @@ namespace Isotope_fitting
         private void best_num_UD_ValueChanged(object sender, EventArgs e)
         {
             best_num = (int)best_num_UD.Value;
+        }
+
+        private void sd_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            thres[5] = (double)sd_numUD.Value;
+        }
+
+        private void sdnew_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            thres[6] = (double)sdnew_numUD.Value;
+
         }
     }
 }

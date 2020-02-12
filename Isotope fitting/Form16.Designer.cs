@@ -31,6 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form16));
             this.seq_Btn = new System.Windows.Forms.Button();
             this.seq_BoxFrm16 = new System.Windows.Forms.TextBox();
+            this.seq_tabControl = new System.Windows.Forms.TabControl();
+            this.seq_tab = new System.Windows.Forms.TabPage();
+            this.heavy_chain_tab = new System.Windows.Forms.TabPage();
+            this.heavy_BoxFrm16 = new System.Windows.Forms.TextBox();
+            this.heavy_Btn = new System.Windows.Forms.Button();
+            this.light_chain_tab = new System.Windows.Forms.TabPage();
+            this.light_BoxFrm16 = new System.Windows.Forms.TextBox();
+            this.light_Btn = new System.Windows.Forms.Button();
+            this.seq_tabControl.SuspendLayout();
+            this.seq_tab.SuspendLayout();
+            this.heavy_chain_tab.SuspendLayout();
+            this.light_chain_tab.SuspendLayout();
             this.SuspendLayout();
             // 
             // seq_Btn
@@ -41,9 +53,9 @@
             this.seq_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.seq_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seq_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.seq_Btn.Location = new System.Drawing.Point(0, 180);
+            this.seq_Btn.Location = new System.Drawing.Point(3, 504);
             this.seq_Btn.Name = "seq_Btn";
-            this.seq_Btn.Size = new System.Drawing.Size(553, 32);
+            this.seq_Btn.Size = new System.Drawing.Size(1184, 32);
             this.seq_Btn.TabIndex = 1;
             this.seq_Btn.Text = "Save Sequence ";
             this.seq_Btn.UseVisualStyleBackColor = false;
@@ -52,28 +64,146 @@
             // seq_BoxFrm16
             // 
             this.seq_BoxFrm16.AllowDrop = true;
-            this.seq_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.seq_BoxFrm16.Location = new System.Drawing.Point(0, 0);
+            this.seq_BoxFrm16.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.seq_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.seq_BoxFrm16.Multiline = true;
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
-            this.seq_BoxFrm16.Size = new System.Drawing.Size(553, 180);
+            this.seq_BoxFrm16.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.seq_BoxFrm16.Size = new System.Drawing.Size(1184, 495);
             this.seq_BoxFrm16.TabIndex = 2;
             this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
+            // 
+            // seq_tabControl
+            // 
+            this.seq_tabControl.Controls.Add(this.seq_tab);
+            this.seq_tabControl.Controls.Add(this.heavy_chain_tab);
+            this.seq_tabControl.Controls.Add(this.light_chain_tab);
+            this.seq_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.seq_tabControl.Location = new System.Drawing.Point(0, 0);
+            this.seq_tabControl.Name = "seq_tabControl";
+            this.seq_tabControl.SelectedIndex = 0;
+            this.seq_tabControl.Size = new System.Drawing.Size(1198, 565);
+            this.seq_tabControl.TabIndex = 3;
+            // 
+            // seq_tab
+            // 
+            this.seq_tab.Controls.Add(this.seq_Btn);
+            this.seq_tab.Controls.Add(this.seq_BoxFrm16);
+            this.seq_tab.Location = new System.Drawing.Point(4, 22);
+            this.seq_tab.Name = "seq_tab";
+            this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.seq_tab.Size = new System.Drawing.Size(1190, 539);
+            this.seq_tab.TabIndex = 0;
+            this.seq_tab.Text = "General Sequence";
+            this.seq_tab.UseVisualStyleBackColor = true;
+            this.seq_tab.Click += new System.EventHandler(this.seq_tab_Click);
+            // 
+            // heavy_chain_tab
+            // 
+            this.heavy_chain_tab.Controls.Add(this.heavy_BoxFrm16);
+            this.heavy_chain_tab.Controls.Add(this.heavy_Btn);
+            this.heavy_chain_tab.Location = new System.Drawing.Point(4, 22);
+            this.heavy_chain_tab.Name = "heavy_chain_tab";
+            this.heavy_chain_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.heavy_chain_tab.Size = new System.Drawing.Size(1190, 539);
+            this.heavy_chain_tab.TabIndex = 1;
+            this.heavy_chain_tab.Text = "Heavy Chain";
+            this.heavy_chain_tab.UseVisualStyleBackColor = true;
+            this.heavy_chain_tab.Click += new System.EventHandler(this.tabPage2_Click);
+            // 
+            // heavy_BoxFrm16
+            // 
+            this.heavy_BoxFrm16.AllowDrop = true;
+            this.heavy_BoxFrm16.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.heavy_BoxFrm16.Location = new System.Drawing.Point(3, 3);
+            this.heavy_BoxFrm16.Multiline = true;
+            this.heavy_BoxFrm16.Name = "heavy_BoxFrm16";
+            this.heavy_BoxFrm16.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.heavy_BoxFrm16.Size = new System.Drawing.Size(1184, 495);
+            this.heavy_BoxFrm16.TabIndex = 3;
+            this.heavy_BoxFrm16.TextChanged += new System.EventHandler(this.heavy_BoxFrm16_TextChanged);
+            // 
+            // heavy_Btn
+            // 
+            this.heavy_Btn.BackColor = System.Drawing.Color.ForestGreen;
+            this.heavy_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.heavy_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.heavy_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.heavy_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.heavy_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.heavy_Btn.Location = new System.Drawing.Point(3, 504);
+            this.heavy_Btn.Name = "heavy_Btn";
+            this.heavy_Btn.Size = new System.Drawing.Size(1184, 32);
+            this.heavy_Btn.TabIndex = 2;
+            this.heavy_Btn.Text = "Save Heavy Chain Sequence ";
+            this.heavy_Btn.UseVisualStyleBackColor = false;
+            this.heavy_Btn.Click += new System.EventHandler(this.heavy_Btn_Click);
+            // 
+            // light_chain_tab
+            // 
+            this.light_chain_tab.Controls.Add(this.light_BoxFrm16);
+            this.light_chain_tab.Controls.Add(this.light_Btn);
+            this.light_chain_tab.Location = new System.Drawing.Point(4, 22);
+            this.light_chain_tab.Name = "light_chain_tab";
+            this.light_chain_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.light_chain_tab.Size = new System.Drawing.Size(1190, 539);
+            this.light_chain_tab.TabIndex = 2;
+            this.light_chain_tab.Text = "Light Chain";
+            this.light_chain_tab.UseVisualStyleBackColor = true;
+            // 
+            // light_BoxFrm16
+            // 
+            this.light_BoxFrm16.AllowDrop = true;
+            this.light_BoxFrm16.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.light_BoxFrm16.Location = new System.Drawing.Point(3, 3);
+            this.light_BoxFrm16.Multiline = true;
+            this.light_BoxFrm16.Name = "light_BoxFrm16";
+            this.light_BoxFrm16.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.light_BoxFrm16.Size = new System.Drawing.Size(1184, 495);
+            this.light_BoxFrm16.TabIndex = 3;
+            this.light_BoxFrm16.TextChanged += new System.EventHandler(this.light_BoxFrm16_TextChanged);
+            // 
+            // light_Btn
+            // 
+            this.light_Btn.BackColor = System.Drawing.Color.ForestGreen;
+            this.light_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.light_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.light_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.light_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.light_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.light_Btn.Location = new System.Drawing.Point(3, 504);
+            this.light_Btn.Name = "light_Btn";
+            this.light_Btn.Size = new System.Drawing.Size(1184, 32);
+            this.light_Btn.TabIndex = 2;
+            this.light_Btn.Text = "Save Light Chain Sequence ";
+            this.light_Btn.UseVisualStyleBackColor = false;
+            this.light_Btn.Click += new System.EventHandler(this.light_Btn_Click);
             // 
             // Form16
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 212);
-            this.Controls.Add(this.seq_BoxFrm16);
-            this.Controls.Add(this.seq_Btn);
+            this.ClientSize = new System.Drawing.Size(1198, 565);
+            this.Controls.Add(this.seq_tabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form16";
-            this.Text = "Sequence Editor";
+            this.Text = "AA amino acid sequence Editor";
+            this.seq_tabControl.ResumeLayout(false);
+            this.seq_tab.ResumeLayout(false);
+            this.seq_tab.PerformLayout();
+            this.heavy_chain_tab.ResumeLayout(false);
+            this.heavy_chain_tab.PerformLayout();
+            this.light_chain_tab.ResumeLayout(false);
+            this.light_chain_tab.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -81,5 +211,13 @@
 
         private System.Windows.Forms.Button seq_Btn;
         private System.Windows.Forms.TextBox seq_BoxFrm16;
+        private System.Windows.Forms.TabControl seq_tabControl;
+        private System.Windows.Forms.TabPage seq_tab;
+        private System.Windows.Forms.TabPage heavy_chain_tab;
+        private System.Windows.Forms.TabPage light_chain_tab;
+        private System.Windows.Forms.Button heavy_Btn;
+        private System.Windows.Forms.Button light_Btn;
+        private System.Windows.Forms.TextBox heavy_BoxFrm16;
+        private System.Windows.Forms.TextBox light_BoxFrm16;
     }
 }

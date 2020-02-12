@@ -22,7 +22,8 @@ namespace Isotope_fitting
             frm2 =f;
             InitializeComponent();
             if (!String.IsNullOrEmpty(frm2.Peptide)) { seq_BoxFrm16.Text = frm2.Peptide.ToString(); }
-
+            if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
+            if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
         }
 
         private void seq_Btn_Click(object sender, EventArgs e)
@@ -49,6 +50,73 @@ namespace Isotope_fitting
 
             }
             active_txt = false;
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void seq_tab_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void heavy_BoxFrm16_TextChanged(object sender, EventArgs e)
+        {
+            if (heavy_BoxFrm16.Text.Length > 10 && !active_txt)
+            {
+                active_txt = true;
+                user_txt = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                user_txt = user_txt.Replace("\t", "");
+                user_txt = user_txt.Replace(" ", "");
+                output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
+
+                heavy_BoxFrm16.Text = output_txt;
+                heavy_BoxFrm16.SelectionStart = heavy_BoxFrm16.Text.Length;
+                heavy_BoxFrm16.SelectionLength = 0;
+
+            }
+            active_txt = false;
+        }
+
+        private void heavy_Btn_Click(object sender, EventArgs e)
+        {
+            frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
+            frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
+            if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
+            else { frm2.heavy_present = true; }
+            this.Close();
+        }
+
+        private void light_BoxFrm16_TextChanged(object sender, EventArgs e)
+        {
+
+            if (light_BoxFrm16.Text.Length > 10 && !active_txt)
+            {
+                active_txt = true;
+                user_txt = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                user_txt = user_txt.Replace("\t", "");
+                user_txt = user_txt.Replace(" ", "");
+                output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
+
+                light_BoxFrm16.Text = output_txt;
+                light_BoxFrm16.SelectionStart = light_BoxFrm16.Text.Length;
+                light_BoxFrm16.SelectionLength = 0;
+
+            }
+            active_txt = false;
+        }
+
+        private void light_Btn_Click(object sender, EventArgs e)
+        {
+            frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            frm2.light_chain = frm2.light_chain.Replace("\t", "");
+            frm2.light_chain = frm2.light_chain.Replace(" ", "");
+            if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
+            else { frm2.light_present = true; }
+            this.Close();
         }
     }
 }

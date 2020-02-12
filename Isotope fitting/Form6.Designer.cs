@@ -66,6 +66,10 @@
             this.best_num_UD = new System.Windows.Forms.NumericUpDown();
             this.best_num_Lbl = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.sd_numUD = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.sdnew_numUD = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Ai_coef_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.A_coef_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -79,6 +83,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dinew_coef_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dinew_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.best_num_UD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sd_numUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sdnew_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // di_checkBox
@@ -669,12 +675,82 @@
             this.best_num_Lbl.Text = "Number of  best results:";
             this.toolTip1.SetToolTip(this.best_num_Lbl, "Filter applies to all fit groups");
             // 
+            // sd_numUD
+            // 
+            this.sd_numUD.BackColor = System.Drawing.Color.Teal;
+            this.sd_numUD.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.sd_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sd_numUD.ForeColor = System.Drawing.Color.Transparent;
+            this.sd_numUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.sd_numUD.Location = new System.Drawing.Point(319, 150);
+            this.sd_numUD.Name = "sd_numUD";
+            this.sd_numUD.Size = new System.Drawing.Size(39, 16);
+            this.sd_numUD.TabIndex = 37;
+            this.sd_numUD.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.sd_numUD.ValueChanged += new System.EventHandler(this.sd_numUD_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label10.Location = new System.Drawing.Point(273, 149);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(34, 15);
+            this.label10.TabIndex = 36;
+            this.label10.Text = "sd <";
+            // 
+            // sdnew_numUD
+            // 
+            this.sdnew_numUD.BackColor = System.Drawing.Color.Teal;
+            this.sdnew_numUD.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.sdnew_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sdnew_numUD.ForeColor = System.Drawing.Color.Transparent;
+            this.sdnew_numUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.sdnew_numUD.Location = new System.Drawing.Point(319, 198);
+            this.sdnew_numUD.Name = "sdnew_numUD";
+            this.sdnew_numUD.Size = new System.Drawing.Size(39, 16);
+            this.sdnew_numUD.TabIndex = 39;
+            this.sdnew_numUD.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.sdnew_numUD.ValueChanged += new System.EventHandler(this.sdnew_numUD_ValueChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label11.Location = new System.Drawing.Point(273, 197);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(38, 15);
+            this.label11.TabIndex = 38;
+            this.label11.Text = "sd\' <";
+            // 
             // Form6
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(361, 431);
+            this.Controls.Add(this.sdnew_numUD);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.sd_numUD);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.best_num_UD);
             this.Controls.Add(this.best_num_Lbl);
             this.Controls.Add(this.dinew_numUD);
@@ -732,6 +808,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dinew_coef_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dinew_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.best_num_UD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sd_numUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sdnew_numUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -775,5 +853,9 @@
         private System.Windows.Forms.NumericUpDown best_num_UD;
         private System.Windows.Forms.Label best_num_Lbl;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.NumericUpDown sd_numUD;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown sdnew_numUD;
+        private System.Windows.Forms.Label label11;
     }
 }

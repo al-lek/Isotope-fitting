@@ -29,6 +29,7 @@ namespace Isotope_fitting
     public partial class Form2 : Form
     {
         int iiiiiiii = 0;
+        public string error_string = String.Empty;
 
         #region PARAMETER SET TAB FIT
 
@@ -47,6 +48,11 @@ namespace Isotope_fitting
 
         public static List<ChemiForm> ChemFormulas = new List<ChemiForm>();
         public string Peptide =String.Empty;
+        public string heavy_chain = String.Empty;
+        public string light_chain = String.Empty;
+        public bool heavy_present = false;
+        public bool light_present = false;
+
         //List<string> ionItems = new List<string>();
         //List<string> selectedFrag = new List<string>();
         List<ChemiForm> selectedIons = new List<ChemiForm>();
@@ -193,9 +199,9 @@ namespace Isotope_fitting
         /// </summary>
         public static bool[] fit_sort = new bool[] { true,false,false ,false, false, false };
         /// <summary>
-        /// [Ai thres,A thres,di thres,ei thres,dinew thres](5)
+        /// [Ai thres,A thres,di thres,ei thres,dinew thres,sd,sdnew](7)
         /// </summary>
-        public static double[] fit_thres = new double[] {100.0,100.0,100.0,100.0, 100.0 };
+        public static double[] fit_thres = new double[] {100.0,100.0,100.0,100.0, 100.0 ,100.0,100.0};
         /// <summary>
         /// [Ai coef,A coef,di coef,sse coef,ei coef,dinew coef](6)
         /// </summary>
@@ -212,7 +218,7 @@ namespace Isotope_fitting
         /// </summary>
         public static List<double[]> tab_coef = new List<double[]>();
         /// <summary>
-        ///list [Ai thres,A thres,di thres,ei thres,dinew thres](5)
+        ///list [Ai thres,A thres,di thres,ei thres,dinew thres,sd, sdnew](7)
         /// </summary>
         public static List<double[]> tab_thres = new List<double[]>();
         List<string> labels_checked = new List<string>();
@@ -573,19 +579,22 @@ namespace Isotope_fitting
                     yINT_majorStep13 = Convert.ToDouble(preferences[72].Split(':')[1]);
                     yINT_minorStep13 = Convert.ToDouble(preferences[73].Split(':')[1]);
                     int_width = Convert.ToDouble(preferences[74].Split(':')[1]);
+
+                    fit_thres[5] = Convert.ToDouble(preferences[75].Split(':')[1]);
+                    fit_thres[6] = Convert.ToDouble(preferences[76].Split(':')[1]);
                 }
                 catch
                 {
                     MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!");
                     ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2;selection_rule = new bool[] { false, true, false, false, false, false };
-                    fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+                    fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0 ,100.0,100.0}; ppmDi = 8.0;
                     fit_color = OxyColors.Black;exp_color = OxyColors.Black.ToColor().ToArgb();peak_color = OxyColors.Crimson;fit_style = LineStyle.Dot;exper_style = LineStyle.Solid;frag_style = LineStyle.Solid;exp_width = 1;frag_width = 2;fit_width = 1;
                     peak_width = 1;cen_width = 1;Xmajor_grid = LineStyle.Solid;Xminor_grid = LineStyle.None;Ymajor_grid = LineStyle.Solid;Yminor_grid = LineStyle.None;X_tick = OxyPlot.Axes.TickStyle.Outside;Y_tick = OxyPlot.Axes.TickStyle.Outside;x_interval = 50;
                     y_interval = 50;x_format = "G";y_format = "G";x_numformat = "0";y_numformat = "0";Xmajor_grid12 = LineStyle.Solid;Xminor_grid12 = LineStyle.None;Ymajor_grid12 = LineStyle.Solid;Yminor_grid12 = LineStyle.None;y_interval12 = 50;
                     X_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_tick12 = OxyPlot.Axes.TickStyle.Outside;y_format12 = "G";y_numformat12 = "0";x_majorStep12 = 5;x_minorStep12 = 1;bar_width = 1;Xmajor_charge_grid12 = LineStyle.Solid;Xminor_charge_grid12 = LineStyle.None;
                     Ymajor_charge_grid12 = LineStyle.Solid;Yminor_charge_grid12 = LineStyle.None;X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;y_charge_majorStep12 = 2;y_charge_minorStep12 = 1;x_charge_majorStep12 = 5;
                     x_charge_minorStep12 = 1;Xint_major_grid13 = LineStyle.Solid;Xint_minor_grid13 = LineStyle.None;Yint_major_grid13 = LineStyle.Solid;Yint_minor_grid13 = LineStyle.None;x_format13 = "G";x_numformat13 = "0";x_interval13 = 50;Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
-                    Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;xINT_majorStep13 = 5;xINT_minorStep13 = 1;yINT_majorStep13 = 5;yINT_minorStep13 = 1;int_width = 1;
+                    Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;xINT_majorStep13 = 5;xINT_minorStep13 = 1;yINT_majorStep13 = 5;yINT_minorStep13 = 1;int_width = 1; 
                 }
             }           
         }
@@ -714,6 +723,10 @@ namespace Isotope_fitting
             preferences[0] += "y major step in internal  plot: " + yINT_majorStep13.ToString() + "\r\n";
             preferences[0] += "y minor step in internal  plot: " + yINT_minorStep13.ToString() + "\r\n";
             preferences[0] += "line width in internal  plot: " + int_width.ToString() + "\r\n";
+
+            //sd sdnew thresholds
+            preferences[0] += "sd score threshold: " + fit_thres[5].ToString() + "\r\n";
+            preferences[0] += "sd' score threshold: " + fit_thres[6].ToString() + "\r\n";
 
 
             // save to default file
@@ -864,7 +877,7 @@ namespace Isotope_fitting
         {
             loadMS_Btn.Enabled = false;
             if (String.IsNullOrEmpty(Peptide)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadMS_Btn.Enabled = true;return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have first inserted the correct sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
             if (dialogResult==DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
@@ -2386,8 +2399,7 @@ namespace Isotope_fitting
             double experimental_sum = 0.0;
             int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());
             for (int i = exp_boundaries[0]; i < exp_boundaries[1] + 1; i++) { experimental_sum += experimental[i][1]; }
-            
-            
+           
             Parallel.For(0, set.Count, (i, state) =>
             {
                 // generate a new list containing only the fragments intensities of the subSet, and the experimental
@@ -2414,8 +2426,6 @@ namespace Isotope_fitting
                     Debug.WriteLine(ex);
                 }
             });
-            
-           
             
             // sort res and powerSet by least SSE
             // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE,centroid LSE,%of total area,%of fragment's area]. 
@@ -2886,7 +2896,7 @@ namespace Isotope_fitting
                         bool print = true;
                         for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
                         {
-                            if (all_fitted_results[i][j][k + all_fitted_sets[i][j].Length]> tab_thres[i][2] || all_fitted_results[i][j][k + 3 * all_fitted_sets[i][j].Length] > tab_thres[i][3] || (all_fitted_results[i][j][k + 4 * all_fitted_sets[i][j].Length] > tab_thres[i][4]/* && all_fitted_sets[i][j].Length>1*/) || Fragments2[all_fitted_sets[i][j][k] - 1].Max_intensity * all_fitted_results[i][j][k]< min_intes+0.1)
+                            if (all_fitted_results[i][j][k + all_fitted_sets[i][j].Length]> tab_thres[i][2] || all_fitted_results[i][j][k + 3 * all_fitted_sets[i][j].Length] > tab_thres[i][3] || (all_fitted_results[i][j][k + 4 * all_fitted_sets[i][j].Length] > tab_thres[i][4]/* && all_fitted_sets[i][j].Length>1*/) || all_fitted_results[i][j][k + 2 * all_fitted_sets[i][j].Length] > tab_thres[i][5] || all_fitted_results[i][j][k + 5 * all_fitted_sets[i][j].Length] > tab_thres[i][6] || Fragments2[all_fitted_sets[i][j][k] - 1].Max_intensity * all_fitted_results[i][j][k]< min_intes+0.1)
                             {
                                 print = false;
                             }
@@ -3084,7 +3094,9 @@ namespace Isotope_fitting
                     sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString() + "% of the centroids were absent |with ei= "+ Math.Round(absent_factor, 4).ToString()  + " | the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString()+ " | sd: " + Math.Round(sd, 4).ToString());
                     sb.AppendLine();
                 }
-                MessageBox.Show(sb.ToString());
+                error_string = sb.ToString();
+                Form17 frm17 = new Form17(this);
+                frm17.ShowDialog();
             }
            
         }
@@ -3352,7 +3364,7 @@ namespace Isotope_fitting
                         bool print = true;
                         for (int k = 0; k < all_fitted_sets[node_index][j].Length; k++)
                         {
-                            if (all_fitted_results[node_index][j][k + all_fitted_sets[node_index][j].Length] > tab_thres[node_index][2] || all_fitted_results[node_index][j][k + 3 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][3] || all_fitted_results[node_index][j][k + 4 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][4]) { print = false; }
+                            if (all_fitted_results[node_index][j][k + all_fitted_sets[node_index][j].Length] > tab_thres[node_index][2] || all_fitted_results[node_index][j][k + 3 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][3] || all_fitted_results[node_index][j][k + 4 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][4] || all_fitted_results[node_index][j][k + 2 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][5] || all_fitted_results[node_index][j][k + 5 * all_fitted_sets[node_index][j].Length] > tab_thres[node_index][6]) { print = false; }
                         }
                         if (print)
                         {
@@ -3390,7 +3402,7 @@ namespace Isotope_fitting
             for (int n = 0; n < all_fitted_results.Count; n++)
             {
                 tab_node.Add(new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3], fit_sort[4], fit_sort[5] }); tab_coef.Add(new double[] { a_coef[0], a_coef[1], a_coef[2], a_coef[3], a_coef[4], a_coef[5] } );
-                tab_thres.Add(new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4] });labels_checked.Add("");
+                tab_thres.Add(new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4], fit_thres[5], fit_thres[6] });labels_checked.Add("");
             }
             return;
         }
@@ -3631,7 +3643,7 @@ namespace Isotope_fitting
                 tab_coef.RemoveRange(grp_nodes[0], grp_nodes.Count());
                 labels_checked.RemoveRange(grp_nodes[0], grp_nodes.Count());
                 tab_node.Insert(grp_nodes[0], new bool[] { fit_sort[0], fit_sort[1], fit_sort[2], fit_sort[3], fit_sort[4], fit_sort[5] });
-                tab_thres.Insert(grp_nodes[0], new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4] });
+                tab_thres.Insert(grp_nodes[0], new double[] { fit_thres[0], fit_thres[1], fit_thres[2], fit_thres[3], fit_thres[4], fit_thres[5], fit_thres[6] });
                 tab_coef.Insert(grp_nodes[0], new double[] { a_coef[0], a_coef[1], a_coef[2], a_coef[3], a_coef[4], a_coef[5] });
                 labels_checked.Insert(grp_nodes[0], "");
                 int counter = 0;
@@ -3651,7 +3663,7 @@ namespace Isotope_fitting
                         bool print = true;
                         for (int k = 0; k < set[j].Length; k++)
                         {
-                            if (res[j][k + set[j].Length] > fit_thres[2] || res[j][k + 3 * set[j].Length] > fit_thres[3] || res[j][k + 4 * set[j].Length] > fit_thres[4]) { print = false; }
+                            if (res[j][k + set[j].Length] > fit_thres[2] || res[j][k + 3 * set[j].Length] > fit_thres[3] || res[j][k + 4 * set[j].Length] > fit_thres[4] || res[j][k + 2 * set[j].Length] > fit_thres[5] || res[j][k + 5 * set[j].Length] > fit_thres[6]) { print = false; }
                         }
                         if (print)
                         {
@@ -4800,13 +4812,18 @@ namespace Isotope_fitting
         private void saveList(List<int> fragToSave)
         {
             SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fragment ", Filter = "Data Files (*.fit)|*.fit", DefaultExt = "fit", OverwritePrompt = true, AddExtension = true };
-
+            if (heavy_present && light_present) { save.DefaultExt ="lhfit"; }
+            else if (light_present) { save.DefaultExt = "lfit"; }
+            else if(heavy_present) { save.DefaultExt = "hfit"; }
             if (save.ShowDialog() == DialogResult.OK)
             {
                 System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
                 file.WriteLine("Mode:\tFitted List");
-                file.WriteLine("AA Sequence:\t" + Peptide);
+                if (heavy_present && light_present) { file.WriteLine("AA Sequence:\t" + heavy_chain + "\t" +light_chain); }
+                else if (light_present) { file.WriteLine("AA Sequence:\t" + light_chain); }
+                else if (heavy_present) { file.WriteLine("AA Sequence:\t" + heavy_chain); }
+                else { file.WriteLine("AA Sequence:\t" + Peptide); }               
                 file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
                 file.WriteLine("[m/z[Da]\tIntensity]");
                 file.WriteLine();
@@ -4822,7 +4839,9 @@ namespace Isotope_fitting
                     IonDraw.Add(new ion() {Name= Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error= Fragments2[indexS - 1].PPM_Error, Charge =Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
                     if (IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z")||IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
                     {
-                        IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
+                        if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
+                        else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
+                        else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }                        
                     }
                     else
                     {
@@ -4835,7 +4854,8 @@ namespace Isotope_fitting
             }
         }
         private void loadList()
-        {            
+        {
+            bool heavy = false; bool light = false; string extension = "";
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
             string fullPath = "";
@@ -4843,18 +4863,21 @@ namespace Isotope_fitting
             // Open dialogue properties
             //loadData.InitialDirectory = Application.StartupPath + "\\Data";
             loadData.Title = "Load fitting data"; loadData.FileName = "";
-            loadData.Filter = "data file|*.fit|All files|*.*";
+            loadData.Filter = "data file|*.lfit;*.hfit;*.fit|All files|*.*";
             List<ChemiForm> fitted_chem = new List<ChemiForm>();
             if (loadData.ShowDialog() != DialogResult.Cancel)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine(loaded_lists);
                 sb.AppendLine(Path.GetFileNameWithoutExtension(loadData.FileName));
+                extension=Path.GetExtension(loadData.FileName);
+                if (extension.Equals(".hfit")) { heavy = true; heavy_present = true; }
+                if (extension.Equals(".lfit")) { light = true; light_present = true; }
                 loaded_lists = sb.ToString();
                 show_files_Btn.ToolTipText = loaded_lists;
                 is_loading = true;  // performance
                 fullPath = loadData.FileName;
-
+                string s_chain = string.Empty;
                 #region UI & data                 
                 fit_Btn.Enabled = true; fit_sel_Btn.Enabled = true;
                 plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
@@ -4881,7 +4904,7 @@ namespace Isotope_fitting
 
                         if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
                         else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                        else if (lista[j].StartsWith("AA")) { Peptide = str[1];  }                        
+                        else if (lista[j].StartsWith("AA")) { s_chain = str[1]; if (heavy) { heavy_chain = str[1]; } else if (light) { light_chain = str[1]; } else { Peptide = str[1]; } }                        
                         else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
                         else if (lista[j].StartsWith("Name")) continue;
                         else
@@ -4932,9 +4955,11 @@ namespace Isotope_fitting
                                     Fixed=true,
                                     Max_man_int = 0
                                 });
+                                if (heavy) { if (!str[0].Last().Equals("H")) { fitted_chem.Last().Name = str[0]+"_H"; } }
+                                else if (light) { if (!str[0].Last().Equals("L")) { fitted_chem.Last().Name = str[0] + "_L"; } }
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                IonDraw.Add(new ion() { Name = str[0], Mz = str[5], PPM_Error= dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
-                                if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z")|| str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z")) IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index;
+                                IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error= dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
+                                if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z")|| str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z")) IonDraw.Last().SortIdx =s_chain.Length - IonDraw.Last().Index;
                                 else IonDraw.Last().SortIdx = IonDraw.Last().Index;
                             }
                         }                       
@@ -5168,7 +5193,7 @@ namespace Isotope_fitting
         {
             loadFF_Btn.Enabled = false;
             if (String.IsNullOrEmpty(Peptide)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadFF_Btn.Enabled = true; return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have first inserted the correct sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
@@ -5778,6 +5803,7 @@ namespace Isotope_fitting
                 loaded_lists = ""; show_files_Btn.ToolTipText = "";                
                 displayPeakList_btn.Enabled = false;
                 Peptide = String.Empty; peptide_textBox1.Text = "";
+                heavy_chain = String.Empty;light_chain = String.Empty;light_present = false; heavy_present = false;
                 insert_exp = false;
                 plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
                 loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
@@ -6872,6 +6898,7 @@ namespace Isotope_fitting
         {
             reset_all();
             Peptide = String.Empty; peptide_textBox1.Text = "";
+            heavy_chain = String.Empty; light_chain = String.Empty; light_present = false; heavy_present = false;
             insert_exp = false;
             plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             saveFit_Btn.Enabled = false;
@@ -9239,6 +9266,8 @@ namespace Isotope_fitting
 
         private void tabFit_Leave(object sender, EventArgs e)
         {
+            if (light_present && !heavy_present)light_chkBox.Checked = true;
+            else if (!light_present && heavy_present)heavy_chkBox.Checked = true;           
             initialize_ions_todraw(); initialize_plot_tabs();
         }
         private void styleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -9302,7 +9331,7 @@ namespace Isotope_fitting
             }
         }
         private void draw_Btn_Click(object sender, EventArgs e)
-        {
+        {           
             sequence_Pnl.Refresh();
         }
         private void sequence_Pnl_Resize(object sender, EventArgs e)
@@ -9310,22 +9339,29 @@ namespace Isotope_fitting
             sequence_Pnl.Refresh();
         }
         private void sequence_draw(Graphics g)
-        {
+        {            
             //g = pnl.CreateGraphics();
             Pen p = new Pen(Color.Black);           
             int point_x, point_y;
             point_y =20;
             point_x = 3;
             SolidBrush sb = new SolidBrush(Color.Black);
-            string s = Peptide;
+            string s = Peptide;           
+            if (heavy_chkBox.Checked) { s = heavy_chain; }
+            else if (light_chkBox.Checked) { s = light_chain; }
+            if (s.Length/25 >=9) { draw_sequence_panel.Height =55 * s.Length / 25; }
+            else if (s.Length / 25>5) { draw_sequence_panel.Height = 55 * s.Length / 25; }
+            else { draw_sequence_panel.Height = 400; }
             Point pp = new Point(point_x, point_y);
             int grp_num = 25;
             if (rdBtn50.Checked) grp_num = 50;
-            for (int idx = 0; idx < Peptide.Length; idx++)
+            for (int idx = 0; idx < s.Length; idx++)
             {
-                g.DrawString(Peptide[idx].ToString(), sequence_Pnl.Font, sb, pp);                
+                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);                
                 foreach (ion nn in IonDraw)
                 {
+                    if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                    else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                     Point temp_p = pp;
                     if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3-18; temp_p.Y = temp_p.Y + 50; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = 3-18; temp_p.Y = temp_p.Y + 50; }
@@ -9383,7 +9419,7 @@ namespace Isotope_fitting
                             draw_line(pp, true, 8, nn.Color, g);
                         }
                     }
-                    else if (ax_chBx.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) &&  (Peptide.Length - nn.Index == idx + 1))
+                    else if (ax_chBx.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) &&  (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBox.Checked)
                         {
@@ -9401,7 +9437,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 0, nn.Color, g);
                         }
                     }
-                    else if (by_chBx.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (by_chBx.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBox.Checked)
                         {
@@ -9419,7 +9455,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 4, nn.Color, g);
                         }
                     }
-                    else if (cz_chBx.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (cz_chBx.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBox.Checked)
                         {
@@ -9491,6 +9527,39 @@ namespace Isotope_fitting
             else { intB_chBx.Enabled = true; intA_chBx.Enabled = true; }
 
         }
+        private void heavy_chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (heavy_chkBox.Checked)
+            {
+                light_chkBox.Checked = false;
+                ax_chBx.Checked = false;
+                by_chBx.Checked = false;
+                cz_chBx.Checked = false;
+                los_chkBox.Checked = false;
+                intA_chBx.Checked = false;
+                intB_chBx.Checked = false;
+
+            }
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_Pnl.Refresh();
+
+        }
+
+        private void light_chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (light_chkBox.Checked)
+            {
+                heavy_chkBox.Checked = false;
+                ax_chBx.Checked = false;
+                by_chBx.Checked = false;
+                cz_chBx.Checked = false;
+                los_chkBox.Checked = false;
+                intA_chBx.Checked = false;
+                intB_chBx.Checked = false;
+            }
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_Pnl.Refresh();
+        }
         #endregion
 
         #region sequence panels copies
@@ -9559,14 +9628,21 @@ namespace Isotope_fitting
             point_x = 3;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
+            if (heavy_chkBoxCopy1.Checked) { s = heavy_chain; }
+            else if (light_chkBoxCopy1.Checked) { s = light_chain; }
+            if (s.Length / 25 >= 9) { draw_sequence_panelCopy1.Height = 55 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panelCopy1.Height = 55 * s.Length / 25; }
+            else { draw_sequence_panelCopy1.Height = 400; }
             Point pp = new Point(point_x, point_y);
             int grp_num = 25;
             if (rdBtn50Copy1.Checked) grp_num = 50;
-            for (int idx = 0; idx < Peptide.Length; idx++)
+            for (int idx = 0; idx < s.Length; idx++)
             {
-                g.DrawString(Peptide[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
+                g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
+                    if (heavy_chkBoxCopy1.Checked && !nn.Name.Contains("_H")) { continue; }
+                    else if (light_chkBoxCopy1.Checked && !nn.Name.Contains("_L")) { continue; }
                     Point temp_p = pp;
                     if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18;  temp_p.Y = temp_p.Y + 50; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18;  temp_p.Y = temp_p.Y + 50; }
@@ -9624,7 +9700,7 @@ namespace Isotope_fitting
                             draw_line(pp, true, 8, nn.Color, g);
                         }
                     }
-                    else if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBoxCopy1.Checked)
                         {
@@ -9642,7 +9718,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 0, nn.Color, g);
                         }
                     }
-                    else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBoxCopy1.Checked)
                         {
@@ -9660,7 +9736,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 4, nn.Color, g);
                         }
                     }
-                    else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBoxCopy1.Checked)
                         {
@@ -9713,7 +9789,38 @@ namespace Isotope_fitting
             if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; intB_chBxCopy1.Enabled = false; intA_chBxCopy1.Enabled = false; }
             else { intB_chBxCopy1.Enabled = true; intA_chBxCopy1.Enabled = true; }
         }
+        private void heavy_chkBoxCopy1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (heavy_chkBoxCopy1.Checked)
+            {
+                light_chkBoxCopy1.Checked = false;
+                ax_chBxCopy1.Checked = false;
+                by_chBxCopy1.Checked = false;
+                cz_chBxCopy1.Checked = false;
+                los_chkBoxCopy1.Checked = false;
+                intA_chBxCopy1.Checked = false;
+                intB_chBxCopy1.Checked = false;
 
+            }
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_PnlCopy1.Refresh();
+        }
+
+        private void light_chkBoxCopy1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (light_chkBoxCopy1.Checked)
+            {
+                heavy_chkBoxCopy1.Checked = false;
+                ax_chBxCopy1.Checked = false;
+                by_chBxCopy1.Checked = false;
+                cz_chBxCopy1.Checked = false;
+                los_chkBoxCopy1.Checked = false;
+                intA_chBxCopy1.Checked = false;
+                intB_chBxCopy1.Checked = false;
+            }
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_PnlCopy1.Refresh();
+        }
         #endregion
 
         #region sequence copy 2
@@ -9785,15 +9892,22 @@ namespace Isotope_fitting
             point_x = 3;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
+            if (heavy_chkBoxCopy2.Checked) { s = heavy_chain; }
+            else if (light_chkBoxCopy2.Checked) { s = light_chain; }
+            if (s.Length / 25 >= 9) { draw_sequence_panelCopy2.Height = 55 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panelCopy2.Height = 55 * s.Length / 25; }
+            else { draw_sequence_panelCopy2.Height = 400; }
             int grp_num = 25;
             Point pp = new Point(point_x, point_y);
             if (rdBtn50Copy2.Checked) grp_num = 50;
 
-            for (int idx = 0; idx < Peptide.Length; idx++)
+            for (int idx = 0; idx < s.Length; idx++)
             {
-                g.DrawString(Peptide[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
+                g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
+                    if (heavy_chkBoxCopy2.Checked && !nn.Name.Contains("_H")) { continue; }
+                    else if (light_chkBoxCopy1.Checked && !nn.Name.Contains("_L")) { continue; }
                     Point temp_p = pp;
                     if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
@@ -9851,7 +9965,7 @@ namespace Isotope_fitting
                             draw_line(pp, true, 8, nn.Color, g);
                         }
                     }
-                    else if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBoxCopy2.Checked)
                         {
@@ -9869,7 +9983,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 0, nn.Color, g);
                         }
                     }
-                    else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBoxCopy2.Checked)
                         {
@@ -9889,7 +10003,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 4, nn.Color, g);
                         }
                     }
-                    else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (Peptide.Length - nn.Index == idx + 1))
+                    else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
                     {
                         if (los_chkBoxCopy1.Checked)
                         {
@@ -9944,6 +10058,38 @@ namespace Isotope_fitting
         {
             if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; intB_chBxCopy2.Enabled = false; intA_chBxCopy2.Enabled = false; }
             else { intB_chBxCopy2.Enabled = true; intA_chBxCopy2.Enabled = true; }
+        }
+        private void heavy_chkBoxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (heavy_chkBoxCopy2.Checked)
+            {
+                light_chkBoxCopy2.Checked = false;
+                ax_chBxCopy2.Checked = false;
+                by_chBxCopy2.Checked = false;
+                cz_chBxCopy2.Checked = false;
+                los_chkBoxCopy2.Checked = false;
+                intA_chBxCopy2.Checked = false;
+                intB_chBxCopy2.Checked = false;
+
+            }
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_PnlCopy2.Refresh();
+        }
+
+        private void light_chkBoxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (light_chkBoxCopy2.Checked)
+            {
+                heavy_chkBoxCopy2.Checked = false;
+                ax_chBxCopy2.Checked = false;
+                by_chBxCopy2.Checked = false;
+                cz_chBxCopy2.Checked = false;
+                los_chkBoxCopy2.Checked = false;
+                intA_chBxCopy2.Checked = false;
+                intB_chBxCopy2.Checked = false;
+            }
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_PnlCopy2.Refresh();
         }
         #endregion
 
@@ -10147,7 +10293,10 @@ namespace Isotope_fitting
         }
 
         private void initialize_plot_tabs()
-        {           
+        {
+            string s_chain = Peptide;
+            if (heavy_chkBox.Checked) { s_chain = heavy_chain; }
+            else if (light_chkBox.Checked) { s_chain = light_chain; }
 
             #region initialize graphics
             if (ax_plot.Model.Series != null) { ppm_plot.Model.Series.Clear(); ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); axCharge_plot.Model.Series.Clear(); byCharge_plot.Model.Series.Clear(); czCharge_plot.Model.Series.Clear(); }
@@ -10257,6 +10406,8 @@ namespace Isotope_fitting
             for (int i=0;i< iondraw_count ; i++)
             {
                 ion nn = IonDraw[i];
+                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                 ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error, nn.Index.ToString(), nn.Mz,nn.Name);
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
@@ -10660,13 +10811,13 @@ namespace Isotope_fitting
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, };var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red };var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red }; var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            for (int cc = 0; cc < Peptide.Length; cc++)
+            for (int cc = 0; cc < s_chain.Length; cc++)
             {
-                if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                 {
                     s1a.Points.Add(new ScatterPoint(cc + 1, -max_a *1.3)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b * 1.3)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c * 1.3));
                 }
-                else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                 {
                     s2a.Points.Add(new ScatterPoint(cc + 1, max_a * 1.3)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b * 1.3)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c * 1.3));
                 }
@@ -10675,13 +10826,13 @@ namespace Isotope_fitting
             ax_plot.Model.Axes[0].AxisChanged += (s, e) => 
             {
                 s1a.Points.Clear(); s2a.Points.Clear();
-                for (int cc = 0; cc < Peptide.Length; cc++)
+                for (int cc = 0; cc < s_chain.Length; cc++)
                 {
-                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                     {
                         s1a.Points.Add(new ScatterPoint(cc + 1, ax_plot.Model.Axes[0].ActualMinimum)); 
                     }
-                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                     {
                         s2a.Points.Add(new ScatterPoint(cc + 1, ax_plot.Model.Axes[0].ActualMaximum)); 
                     }
@@ -10691,13 +10842,13 @@ namespace Isotope_fitting
             by_plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1b.Points.Clear(); s2b.Points.Clear();
-                for (int cc = 0; cc < Peptide.Length; cc++)
+                for (int cc = 0; cc < s_chain.Length; cc++)
                 {
-                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                     {
                         s1b.Points.Add(new ScatterPoint(cc + 1, by_plot.Model.Axes[0].ActualMinimum));
                     }
-                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                     {
                         s2b.Points.Add(new ScatterPoint(cc + 1, by_plot.Model.Axes[0].ActualMaximum));
                     }
@@ -10707,13 +10858,13 @@ namespace Isotope_fitting
             cz_plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1c.Points.Clear(); s2c.Points.Clear();
-                for (int cc = 0; cc < Peptide.Length; cc++)
+                for (int cc = 0; cc < s_chain.Length; cc++)
                 {
-                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                     {
                         s1c.Points.Add(new ScatterPoint(cc + 1, cz_plot.Model.Axes[0].ActualMinimum));
                     }
-                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                     {
                         s2c.Points.Add(new ScatterPoint(cc + 1, cz_plot.Model.Axes[0].ActualMaximum));
                     }
@@ -10722,7 +10873,7 @@ namespace Isotope_fitting
             };
             ax_plot.Model.Axes[1].Minimum = by_plot.Model.Axes[1].Minimum = cz_plot.Model.Axes[1].Minimum = 0;            
             axCharge_plot.Model.Axes[1].Minimum = byCharge_plot.Model.Axes[1].Minimum = czCharge_plot.Model.Axes[1].Minimum = 0;
-            ax_plot.Model.Axes[1].Maximum = by_plot.Model.Axes[1].Maximum = cz_plot.Model.Axes[1].Maximum =axCharge_plot.Model.Axes[1].Maximum = byCharge_plot.Model.Axes[1].Maximum = czCharge_plot.Model.Axes[1].Maximum = Peptide.Length;
+            ax_plot.Model.Axes[1].Maximum = by_plot.Model.Axes[1].Maximum = cz_plot.Model.Axes[1].Maximum =axCharge_plot.Model.Axes[1].Maximum = byCharge_plot.Model.Axes[1].Maximum = czCharge_plot.Model.Axes[1].Maximum = s_chain.Length;
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
             axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true); ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
@@ -10811,7 +10962,7 @@ namespace Isotope_fitting
                 indexIntensity_plot.Model.Axes[1].Maximum =indextoIntensity_plot.Model.Axes[1].Maximum =max_i*1.2;
                 indexIntensity_plot.Model.Axes[0].Minimum =indextoIntensity_plot.Model.Axes[0].Minimum =0;
                 indexto_plot.Model.Axes[1].Minimum = index_plot.Model.Axes[1].Minimum = 0;
-                indexto_plot.Model.Axes[1].Maximum = index_plot.Model.Axes[1].Maximum = Peptide.Length ;
+                indexto_plot.Model.Axes[1].Maximum = index_plot.Model.Axes[1].Maximum = s_chain.Length ;
                 indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
                 if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; internal_plots_refresh(); }
                 else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; internal_plots_refresh(); }
@@ -10826,6 +10977,8 @@ namespace Isotope_fitting
         {            
             foreach (ion nn in IonDraw)
             {
+                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                 if (nn.SortIdx > idx) break;
                 else if (nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;                
             }
@@ -10839,7 +10992,7 @@ namespace Isotope_fitting
                 int jj = i + 1;
                 while (jj < IonDraw.Count)
                 {
-                    if (IonDraw[i].Ion_type == IonDraw[jj].Ion_type && IonDraw[i].Index == IonDraw[jj].Index && IonDraw[i].IndexTo == IonDraw[jj].IndexTo &&  IonDraw[i].Mz == IonDraw[jj].Mz)
+                    if (IonDraw[i].Name == IonDraw[jj].Name && IonDraw[i].Ion_type == IonDraw[jj].Ion_type && IonDraw[i].Index == IonDraw[jj].Index && IonDraw[i].IndexTo == IonDraw[jj].IndexTo &&  IonDraw[i].Mz == IonDraw[jj].Mz)
                     {
                         IonDraw.RemoveAt(jj);
                     }
@@ -11485,6 +11638,9 @@ namespace Isotope_fitting
         public void refresh_temp_primary_plots(PlotView temp_plot, int fplot_type)
         {
             int iondraw_count = IonDraw.Count;
+            string s_chain = Peptide;
+            if (heavy_chkBox.Checked ) { s_chain = heavy_chain; }
+            else if (light_chkBox.Checked ) { s_chain = light_chain; }
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             double max_i = 0.0; 
@@ -11504,6 +11660,8 @@ namespace Isotope_fitting
                     for (int i = 0; i < iondraw_count; i++)
                     {
                         ion nn = IonDraw[i];
+                        if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                        else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                         if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -11544,7 +11702,9 @@ namespace Isotope_fitting
                     tempDown_bar.StrokeColor = OxyColors.DodgerBlue; tempDown_bar.FillColor = OxyColors.DodgerBlue;
                     for (int i = 0; i < iondraw_count; i++)
                     {
-                        ion nn = IonDraw[i];                        
+                        ion nn = IonDraw[i];
+                        if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                        else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                         if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
@@ -11586,7 +11746,9 @@ namespace Isotope_fitting
                     tempDown_bar.StrokeColor = OxyColors.Tomato; tempDown_bar.FillColor = OxyColors.Tomato;
                     for (int i = 0; i < iondraw_count; i++)
                     {
-                        ion nn = IonDraw[i];                       
+                        ion nn = IonDraw[i];
+                        if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                        else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                         if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
@@ -11620,13 +11782,13 @@ namespace Isotope_fitting
                 }
                 foreach (double[] pp in merged_up) { (temp_plot.Model.Series[0] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
                 foreach (double[] pp in merged_down) { (temp_plot.Model.Series[1] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-                for (int cc = 0; cc < Peptide.Length; cc++)
+                for (int cc = 0; cc < s_chain.Length; cc++)
                 {
-                    if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                     {
                         s1a.Points.Add(new ScatterPoint(cc + 1, -max_int * 1.3));
                     }
-                    else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                     {
                         s2a.Points.Add(new ScatterPoint(cc + 1, max_int * 1.3));
                     }
@@ -11635,13 +11797,13 @@ namespace Isotope_fitting
                 temp_plot.Model.Axes[0].AxisChanged += (s, e) =>
                 {
                     s1a.Points.Clear(); s2a.Points.Clear();
-                    for (int cc = 0; cc < Peptide.Length; cc++)
+                    for (int cc = 0; cc < s_chain.Length; cc++)
                     {
-                        if (Peptide.ToArray()[cc].Equals('D') || Peptide[cc].Equals('E'))
+                        if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                         {
                             s1a.Points.Add(new ScatterPoint(cc + 1, temp_plot.Model.Axes[0].ActualMinimum));
                         }
-                        else if (Peptide.ToArray()[cc].Equals('H') || Peptide[cc].Equals('R') || Peptide[cc].Equals('K'))
+                        else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                         {
                             s2a.Points.Add(new ScatterPoint(cc + 1, temp_plot.Model.Axes[0].ActualMaximum));
                         }
@@ -11680,6 +11842,8 @@ namespace Isotope_fitting
                     for (int i = 0; i < iondraw_count; i++)
                     {
                         ion nn = IonDraw[i];
+                        if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                        else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                         if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -11825,6 +11989,8 @@ namespace Isotope_fitting
                     for (int i = 0; i < iondraw_count; i++)
                     {
                         ion nn = IonDraw[i];
+                        if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                        else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                         if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
@@ -11977,6 +12143,8 @@ namespace Isotope_fitting
                     for (int i = 0; i < iondraw_count; i++)
                     {
                         ion nn = IonDraw[i];
+                        if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                        else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
                         if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
@@ -12103,7 +12271,7 @@ namespace Isotope_fitting
                 temp_plot.Model.Axes[0].Maximum = maxcharge + 1; 
             }
             temp_plot.Model.Axes[1].Minimum = 0;
-            temp_plot.Model.Axes[1].Maximum = Peptide.Length;
+            temp_plot.Model.Axes[1].Maximum = s_chain.Length;
             temp_plot.InvalidatePlot(true);
         }
 
@@ -12134,5 +12302,10 @@ namespace Isotope_fitting
 
         #endregion
 
+        
+        private void fit_grpBox_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
