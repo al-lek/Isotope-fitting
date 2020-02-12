@@ -681,6 +681,8 @@ namespace Isotope_fitting
         private double resolution;
         private List<PointPlot> profile = new List<PointPlot>();
         private List<PointPlot> centroid = new List<PointPlot>();
+        private List<PointPlot> intensoid = new List<PointPlot>();
+
         private double max_man_int;
         public string Name
         {
@@ -724,6 +726,17 @@ namespace Isotope_fitting
             set
             {
                 this.centroid = value;
+            }
+        }
+        public List<PointPlot> Intensoid
+        {
+            get
+            {
+                return this.intensoid;
+            }
+            set
+            {
+                this.intensoid = value;
             }
         }
         public int Charge
@@ -1000,7 +1013,7 @@ namespace Isotope_fitting
         {
             ChemiForm deepcopyChemiform = new ChemiForm() { Adduct = this.Adduct, Centroid = this.Centroid.ConvertAll(item => item.DeepCopy()), Charge = this.Charge, Color= this.Color, Combinations= (List<Combination_1>)this.Combinations.ConvertAll(item => item.DeepCopy()), Combinations4 = (List<Combination_4>)this.Combinations4.ConvertAll(item => item.DeepCopy()), Deduct=this.Deduct, Elements_set= (List<Element_set>)this.Elements_set.ConvertAll(item => item.DeepCopy()),
                 Error =this.Error, FinalFormula=this.FinalFormula, Index=this.Index, IndexTo=this.IndexTo, InputFormula=this.InputFormula, Ion=this.Ion, Ion_type=this.Ion_type, Iso_total_amount=this.Iso_total_amount, Machine= this.Machine, Monoisotopic=this.Monoisotopic, Multiplier=this.Multiplier, Mz=this.Mz, Name=this.Name, Points=this.Points.ConvertAll(item => item.DeepCopy()), PrintFormula=this.PrintFormula, Profile=this.Profile.ConvertAll(item => item.DeepCopy()),
-                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,Factor=this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int};
+                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,Factor=this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int,Intensoid=this.Intensoid};
 
             return deepcopyChemiform;
         }
@@ -1029,66 +1042,104 @@ namespace Isotope_fitting
 
             for (int i = step; i < (chem.Profile.Count - step); i++)
             {
-                if (detect == "intensoid")
-                {
+                //if (detect == "intensoid")
+                //{
                     //reminder X stands for mass and Y for abundance
                     if ((chem.Profile[i].Y > chem.Profile[i + step].Y && chem.Profile[i].Y > chem.Profile[i - step].Y) &&
                         (chem.Profile[i - step].X < chem.Profile[i].X && chem.Profile[i].X < chem.Profile[i + step].X))
                     {
-                        chem.centroid.Add(new PointPlot { X = chem.Profile[i].X, Y = chem.Profile[i].Y });
+                        chem.Intensoid.Add(new PointPlot { X = chem.Profile[i].X, Y = chem.Profile[i].Y });
                         //Envipat code :
                         // j++;
                         //due to "index out of range error" "j++;" is added after the if statement
-                        if (chem.centroid[j].Y > max_intensoid)
+                        if (chem.Intensoid[j].Y > max_intensoid)
                         {
-                            max_intensoid = chem.centroid[j].Y;
+                            max_intensoid = chem.intensoid[j].Y;
                         }
                         j++;
                     }
-                }
-                else
-                {
-                    centroid += chem.Profile[i].Y * chem.Profile[i].X;
-                    sum_sticks += chem.Profile[i].Y;
+                //}
+                //else
+                //{
+                //    centroid += chem.Profile[i].Y * chem.Profile[i].X;
+                //    sum_sticks += chem.Profile[i].Y;
 
-                    double diff_mass = chem.Profile[i].X - chem.Profile[i - 1].X;
-                    upper_sum_a += diff_mass * chem.Profile[i].Y;
-                    lower_sum_a += diff_mass * chem.Profile[i - 1].Y;
+                //    double diff_mass = chem.Profile[i].X - chem.Profile[i - 1].X;
+                //    upper_sum_a += diff_mass * chem.Profile[i].Y;
+                //    lower_sum_a += diff_mass * chem.Profile[i - 1].Y;
 
-                    if ((chem.Profile[i].Y <= chem.Profile[i + step].Y && chem.Profile[i].Y < chem.Profile[i - step].Y) || i == chem.Profile.Count - step - 1)
-                    {
-                        double centroid_temp = (upper_sum_a + lower_sum_a) / 2.0;
-                        if (detect == "valley")
-                        {
-                            chem.Centroid.Add(new PointPlot { X = chem.Profile[i].X, Y = chem.Profile[i].Y });
-                            j++;
-                        }
-                        if (max_centroid < centroid_temp)
-                        {
-                            max_centroid = centroid_temp;
-                        }
-                        if (detect == "centroid")
-                        {
-                            if (sum_sticks > 0.0 && centroid_temp > 0.0)
-                            {
-                                chem.Centroid.Add(new PointPlot { X = (centroid / sum_sticks), Y = centroid_temp });
-                                j++;
-                                //centroid_count++;
-                            }
-                        }
-                        centroid = 0.0;
-                        sum_sticks = 0.0;
-                        upper_sum_a = 0.0;
-                        lower_sum_a = 0.0;
-                    }
-                }
+                //    if ((chem.Profile[i].Y <= chem.Profile[i + step].Y && chem.Profile[i].Y < chem.Profile[i - step].Y) || i == chem.Profile.Count - step - 1)
+                //    {
+                //        double centroid_temp = (upper_sum_a + lower_sum_a) / 2.0;
+                //        if (detect == "valley")
+                //        {
+                //            chem.Centroid.Add(new PointPlot { X = chem.Profile[i].X, Y = chem.Profile[i].Y });
+                //            j++;
+                //        }
+                //        if (max_centroid < centroid_temp)
+                //        {
+                //            max_centroid = centroid_temp;
+                //        }
+                //        if (detect == "centroid")
+                //        {
+                //            if (sum_sticks > 0.0 && centroid_temp > 0.0)
+                //            {
+                //                chem.Centroid.Add(new PointPlot { X = (centroid / sum_sticks), Y = centroid_temp });
+                //                j++;
+                //                //centroid_count++;
+                //            }
+                //        }
+                //        centroid = 0.0;
+                //        sum_sticks = 0.0;
+                //        upper_sum_a = 0.0;
+                //        lower_sum_a = 0.0;
+                //    }
+                //}
             }
+            for (int i = step; i < (chem.Profile.Count - step); i++)
+            {
+                
+                centroid += chem.Profile[i].Y * chem.Profile[i].X;
+                sum_sticks += chem.Profile[i].Y;
+
+                double diff_mass = chem.Profile[i].X - chem.Profile[i - 1].X;
+                upper_sum_a += diff_mass * chem.Profile[i].Y;
+                lower_sum_a += diff_mass * chem.Profile[i - 1].Y;
+
+                if ((chem.Profile[i].Y <= chem.Profile[i + step].Y && chem.Profile[i].Y < chem.Profile[i - step].Y) || i == chem.Profile.Count - step - 1)
+                {
+                    double centroid_temp = (upper_sum_a + lower_sum_a) / 2.0;
+                    if (detect == "valley")
+                    {
+                        chem.Centroid.Add(new PointPlot { X = chem.Profile[i].X, Y = chem.Profile[i].Y });
+                        j++;
+                    }
+                    if (max_centroid < centroid_temp)
+                    {
+                        max_centroid = centroid_temp;
+                    }
+                    if (detect == "centroid")
+                    {
+                        if (sum_sticks > 0.0 && centroid_temp > 0.0)
+                        {
+                            chem.Centroid.Add(new PointPlot { X = (centroid / sum_sticks), Y = centroid_temp });
+                            j++;
+                            //centroid_count++;
+                        }
+                    }
+                    centroid = 0.0;
+                    sum_sticks = 0.0;
+                    upper_sum_a = 0.0;
+                    lower_sum_a = 0.0;
+                }
+            
+        }
             if (detect == "centroid")
             {
-                foreach (PointPlot t in chem.Centroid)
+                for (int t = 0; t < chem.Centroid.Count(); t++)
                 {
-                    double temp = t.Y * (100 / max_centroid);
-                    t.Y = temp;
+                    //double temp = chem.Intensoid[t].Y * (100 / max_intensoid);
+                    chem.Centroid[t].Y = chem.Intensoid[t].Y;
                 }
             }
             return;

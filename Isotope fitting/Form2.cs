@@ -956,6 +956,7 @@ namespace Isotope_fitting
                 Combinations = new List<Combination_1>(),
                 Profile = new List<PointPlot>(),
                 Centroid = new List<PointPlot>(),
+                Intensoid = new List<PointPlot>(),
                 Combinations4 = new List<Combination_4>(),
                 FinalFormula = string.Empty, 
                 Factor=1.0,
@@ -1076,6 +1077,7 @@ namespace Isotope_fitting
                 Combinations = new List<Combination_1>(),
                 Profile = new List<PointPlot>(),
                 Centroid = new List<PointPlot>(),
+                Intensoid = new List<PointPlot>(),
                 Combinations4 = new List<Combination_4>(),
                 FinalFormula = string.Empty,
                 Factor = 1.0,
@@ -1545,7 +1547,7 @@ namespace Isotope_fitting
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
 
             ChemiForm.Envelope(chem);            
-            ChemiForm.Vdetect(chem);
+            ChemiForm.Vdetect(chem);            
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
@@ -4916,6 +4918,7 @@ namespace Isotope_fitting
                                     Combinations = new List<Combination_1>(),
                                     Profile = new List<PointPlot>(),
                                     Centroid = new List<PointPlot>(),
+                                    Intensoid = new List<PointPlot>(),
                                     Combinations4 = new List<Combination_4>(),
                                     FinalFormula = string.Empty,
                                     Color=new OxyColor(),
@@ -5023,11 +5026,11 @@ namespace Isotope_fitting
             if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); return; }
             else
             {
-                fitted_results.Clear();
+                fitted_results.Clear(); selectedFragments.Clear();
                 if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
                 if (fit_tree != null)
                 {
-                    selectedFragments.Clear(); fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed.");                    
+                     fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed.");                    
                 }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             }                  

@@ -421,7 +421,8 @@ namespace Isotope_fitting
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
 
             ChemiForm.Envelope(chem);
-            ChemiForm.Vdetect(chem);
+            ChemiForm.Vdetect(chem);           
+
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
 
             // MAIN decesion algorithm
