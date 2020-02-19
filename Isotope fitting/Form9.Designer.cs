@@ -31,11 +31,13 @@
             System.Windows.Forms.ColumnHeader z_clmn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.FragCalc_TabControl = new System.Windows.Forms.TabControl();
+            this.Frag_tab = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.check_all_boxBtn = new System.Windows.Forms.ToolStripButton();
             this.uncheck_all_boxBtn = new System.Windows.Forms.ToolStripButton();
+            this.frag_Label = new System.Windows.Forms.Label();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.insert_Btn = new System.Windows.Forms.Button();
             this.calc_param9Lbl = new System.Windows.Forms.Label();
             this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
             this.half_plus_rdBtn = new System.Windows.Forms.RadioButton();
@@ -49,11 +51,9 @@
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
             this.addin_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.frag_Label = new System.Windows.Forms.Label();
             this.charge_Label = new System.Windows.Forms.Label();
             this.z_lstBox = new System.Windows.Forms.CheckedListBox();
             this.chargeAll_Btn = new System.Windows.Forms.Button();
-            this.calc_Btn = new System.Windows.Forms.Button();
             this.y_lstBox = new System.Windows.Forms.CheckedListBox();
             this.mz_Label = new System.Windows.Forms.Label();
             this.c_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -75,6 +75,23 @@
             this.idxPr_Box = new System.Windows.Forms.TextBox();
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
+            this.chemForm_tab = new System.Windows.Forms.TabPage();
+            this.ion_txtBox = new System.Windows.Forms.TextBox();
+            this.chem_ion_Lbl = new System.Windows.Forms.Label();
+            this.internal_txtBox = new System.Windows.Forms.TextBox();
+            this.chem_index_Lbl = new System.Windows.Forms.Label();
+            this.primary_txtBox = new System.Windows.Forms.TextBox();
+            this.chem_prim_Lbl = new System.Windows.Forms.Label();
+            this.chem_internal_Lbl = new System.Windows.Forms.Label();
+            this.maxCharge_txtBox = new System.Windows.Forms.TextBox();
+            this.chem_charge_Lbl = new System.Windows.Forms.Label();
+            this.chem_chargeMax_Lbl = new System.Windows.Forms.Label();
+            this.chem_chargeMin_Lbl = new System.Windows.Forms.Label();
+            this.minCharge_txtBox = new System.Windows.Forms.TextBox();
+            this.chemForm_txtBox = new System.Windows.Forms.TextBox();
+            this.chemForm_Lbl = new System.Windows.Forms.Label();
+            this.insert_Btn = new System.Windows.Forms.Button();
+            this.calc_Btn = new System.Windows.Forms.Button();
             this.statusStrpFrm9 = new System.Windows.Forms.StatusStrip();
             this.progressLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
@@ -86,10 +103,15 @@
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.heavy_ChkBox = new System.Windows.Forms.CheckBox();
+            this.Light_chkBox = new System.Windows.Forms.CheckBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
+            this.FragCalc_TabControl.SuspendLayout();
+            this.Frag_tab.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
+            this.chemForm_tab.SuspendLayout();
             this.statusStrpFrm9.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,54 +126,78 @@
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel_calc.Controls.Add(this.toolStrip1);
-            this.panel_calc.Controls.Add(this.dvw_lstBox);
+            this.panel_calc.Controls.Add(this.FragCalc_TabControl);
             this.panel_calc.Controls.Add(this.insert_Btn);
-            this.panel_calc.Controls.Add(this.calc_param9Lbl);
-            this.panel_calc.Controls.Add(this.half_minus_rdBtn);
-            this.panel_calc.Controls.Add(this.half_plus_rdBtn);
-            this.panel_calc.Controls.Add(this.half_rdBtn);
-            this.panel_calc.Controls.Add(this.three_rdBtn);
-            this.panel_calc.Controls.Add(this.two_rdBtn);
-            this.panel_calc.Controls.Add(this.one_rdBtn9);
-            this.panel_calc.Controls.Add(this.ppm9_numUD);
-            this.panel_calc.Controls.Add(this.ppm9_Lbl);
-            this.panel_calc.Controls.Add(this.M_lstBox);
-            this.panel_calc.Controls.Add(this.chargeMax_Box);
-            this.panel_calc.Controls.Add(this.internal_lstBox);
-            this.panel_calc.Controls.Add(this.addin_lstBox);
-            this.panel_calc.Controls.Add(this.frag_Label);
-            this.panel_calc.Controls.Add(this.charge_Label);
-            this.panel_calc.Controls.Add(this.z_lstBox);
-            this.panel_calc.Controls.Add(this.chargeAll_Btn);
             this.panel_calc.Controls.Add(this.calc_Btn);
-            this.panel_calc.Controls.Add(this.y_lstBox);
-            this.panel_calc.Controls.Add(this.mz_Label);
-            this.panel_calc.Controls.Add(this.c_lstBox);
-            this.panel_calc.Controls.Add(this.mzMax_Label);
-            this.panel_calc.Controls.Add(this.mzMin_Label);
-            this.panel_calc.Controls.Add(this.x_lstBox);
-            this.panel_calc.Controls.Add(this.mzMax_Box);
-            this.panel_calc.Controls.Add(this.mzMin_Box);
-            this.panel_calc.Controls.Add(this.b_lstBox);
-            this.panel_calc.Controls.Add(this.idxTo_Label);
-            this.panel_calc.Controls.Add(this.idxFrom_Label);
-            this.panel_calc.Controls.Add(this.chargeMax_Label);
-            this.panel_calc.Controls.Add(this.a_lstBox);
-            this.panel_calc.Controls.Add(this.chargeMin_Label);
-            this.panel_calc.Controls.Add(this.idxTo_Box);
-            this.panel_calc.Controls.Add(this.chargeMin_Box);
-            this.panel_calc.Controls.Add(this.idxFrom_Box);
-            this.panel_calc.Controls.Add(this.label7);
-            this.panel_calc.Controls.Add(this.idxPr_Box);
-            this.panel_calc.Controls.Add(this.primary_Label);
-            this.panel_calc.Controls.Add(this.internal_Label);
             this.panel_calc.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
+            this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(327, 690);
+            this.panel_calc.Size = new System.Drawing.Size(327, 716);
             this.panel_calc.TabIndex = 4;
+            // 
+            // FragCalc_TabControl
+            // 
+            this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
+            this.FragCalc_TabControl.Controls.Add(this.chemForm_tab);
+            this.FragCalc_TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
+            this.FragCalc_TabControl.Name = "FragCalc_TabControl";
+            this.FragCalc_TabControl.SelectedIndex = 0;
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(323, 667);
+            this.FragCalc_TabControl.TabIndex = 57;
+            // 
+            // Frag_tab
+            // 
+            this.Frag_tab.AutoScroll = true;
+            this.Frag_tab.Controls.Add(this.toolStrip1);
+            this.Frag_tab.Controls.Add(this.frag_Label);
+            this.Frag_tab.Controls.Add(this.dvw_lstBox);
+            this.Frag_tab.Controls.Add(this.calc_param9Lbl);
+            this.Frag_tab.Controls.Add(this.half_minus_rdBtn);
+            this.Frag_tab.Controls.Add(this.half_plus_rdBtn);
+            this.Frag_tab.Controls.Add(this.half_rdBtn);
+            this.Frag_tab.Controls.Add(this.three_rdBtn);
+            this.Frag_tab.Controls.Add(this.two_rdBtn);
+            this.Frag_tab.Controls.Add(this.one_rdBtn9);
+            this.Frag_tab.Controls.Add(this.ppm9_numUD);
+            this.Frag_tab.Controls.Add(this.ppm9_Lbl);
+            this.Frag_tab.Controls.Add(this.M_lstBox);
+            this.Frag_tab.Controls.Add(this.chargeMax_Box);
+            this.Frag_tab.Controls.Add(this.internal_lstBox);
+            this.Frag_tab.Controls.Add(this.addin_lstBox);
+            this.Frag_tab.Controls.Add(this.charge_Label);
+            this.Frag_tab.Controls.Add(this.z_lstBox);
+            this.Frag_tab.Controls.Add(this.chargeAll_Btn);
+            this.Frag_tab.Controls.Add(this.y_lstBox);
+            this.Frag_tab.Controls.Add(this.mz_Label);
+            this.Frag_tab.Controls.Add(this.c_lstBox);
+            this.Frag_tab.Controls.Add(this.mzMax_Label);
+            this.Frag_tab.Controls.Add(this.mzMin_Label);
+            this.Frag_tab.Controls.Add(this.x_lstBox);
+            this.Frag_tab.Controls.Add(this.mzMax_Box);
+            this.Frag_tab.Controls.Add(this.mzMin_Box);
+            this.Frag_tab.Controls.Add(this.b_lstBox);
+            this.Frag_tab.Controls.Add(this.idxTo_Label);
+            this.Frag_tab.Controls.Add(this.idxFrom_Label);
+            this.Frag_tab.Controls.Add(this.chargeMax_Label);
+            this.Frag_tab.Controls.Add(this.a_lstBox);
+            this.Frag_tab.Controls.Add(this.chargeMin_Label);
+            this.Frag_tab.Controls.Add(this.idxTo_Box);
+            this.Frag_tab.Controls.Add(this.chargeMin_Box);
+            this.Frag_tab.Controls.Add(this.idxFrom_Box);
+            this.Frag_tab.Controls.Add(this.label7);
+            this.Frag_tab.Controls.Add(this.idxPr_Box);
+            this.Frag_tab.Controls.Add(this.primary_Label);
+            this.Frag_tab.Controls.Add(this.internal_Label);
+            this.Frag_tab.Location = new System.Drawing.Point(4, 22);
+            this.Frag_tab.Name = "Frag_tab";
+            this.Frag_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.Frag_tab.Size = new System.Drawing.Size(315, 641);
+            this.Frag_tab.TabIndex = 0;
+            this.Frag_tab.Text = "Fragments";
+            this.Frag_tab.UseVisualStyleBackColor = true;
             // 
             // toolStrip1
             // 
@@ -185,6 +231,17 @@
             this.uncheck_all_boxBtn.Text = "uncheck all";
             this.uncheck_all_boxBtn.Click += new System.EventHandler(this.uncheck_all_boxBtn_Click);
             // 
+            // frag_Label
+            // 
+            this.frag_Label.AutoSize = true;
+            this.frag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.frag_Label.ForeColor = System.Drawing.Color.SteelBlue;
+            this.frag_Label.Location = new System.Drawing.Point(3, 3);
+            this.frag_Label.Name = "frag_Label";
+            this.frag_Label.Size = new System.Drawing.Size(75, 17);
+            this.frag_Label.TabIndex = 1;
+            this.frag_Label.Text = "Fragments";
+            // 
             // dvw_lstBox
             // 
             this.dvw_lstBox.CheckOnClick = true;
@@ -202,21 +259,6 @@
             this.dvw_lstBox.Name = "dvw_lstBox";
             this.dvw_lstBox.Size = new System.Drawing.Size(89, 49);
             this.dvw_lstBox.TabIndex = 11;
-            // 
-            // insert_Btn
-            // 
-            this.insert_Btn.BackColor = System.Drawing.Color.CadetBlue;
-            this.insert_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(0, 641);
-            this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(323, 23);
-            this.insert_Btn.TabIndex = 53;
-            this.insert_Btn.Text = "Insert";
-            this.insert_Btn.UseVisualStyleBackColor = false;
-            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
             // 
             // calc_param9Lbl
             // 
@@ -347,6 +389,7 @@
             this.chargeMax_Box.Name = "chargeMax_Box";
             this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMax_Box.TabIndex = 33;
+            this.chargeMax_Box.TextChanged += new System.EventHandler(this.chargeMax_Box_TextChanged);
             // 
             // internal_lstBox
             // 
@@ -388,17 +431,6 @@
             this.addin_lstBox.Size = new System.Drawing.Size(120, 184);
             this.addin_lstBox.TabIndex = 10;
             // 
-            // frag_Label
-            // 
-            this.frag_Label.AutoSize = true;
-            this.frag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.frag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.frag_Label.Location = new System.Drawing.Point(3, 5);
-            this.frag_Label.Name = "frag_Label";
-            this.frag_Label.Size = new System.Drawing.Size(75, 17);
-            this.frag_Label.TabIndex = 1;
-            this.frag_Label.Text = "Fragments";
-            // 
             // charge_Label
             // 
             this.charge_Label.AutoSize = true;
@@ -436,22 +468,6 @@
             this.chargeAll_Btn.TabIndex = 34;
             this.chargeAll_Btn.Text = "All";
             this.chargeAll_Btn.UseVisualStyleBackColor = false;
-            // 
-            // calc_Btn
-            // 
-            this.calc_Btn.BackColor = System.Drawing.Color.SteelBlue;
-            this.calc_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.calc_Btn.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
-            this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(0, 664);
-            this.calc_Btn.Name = "calc_Btn";
-            this.calc_Btn.Size = new System.Drawing.Size(323, 22);
-            this.calc_Btn.TabIndex = 41;
-            this.calc_Btn.Text = "Calculate";
-            this.calc_Btn.UseVisualStyleBackColor = false;
-            this.calc_Btn.Click += new System.EventHandler(this.calc_Btn_Click);
             // 
             // y_lstBox
             // 
@@ -541,6 +557,7 @@
             this.mzMax_Box.Name = "mzMax_Box";
             this.mzMax_Box.Size = new System.Drawing.Size(56, 20);
             this.mzMax_Box.TabIndex = 31;
+            this.mzMax_Box.TextChanged += new System.EventHandler(this.mzMax_Box_TextChanged);
             // 
             // mzMin_Box
             // 
@@ -549,6 +566,7 @@
             this.mzMin_Box.Name = "mzMin_Box";
             this.mzMin_Box.Size = new System.Drawing.Size(56, 20);
             this.mzMin_Box.TabIndex = 30;
+            this.mzMin_Box.TextChanged += new System.EventHandler(this.mzMin_Box_TextChanged);
             // 
             // b_lstBox
             // 
@@ -641,6 +659,7 @@
             this.chargeMin_Box.Name = "chargeMin_Box";
             this.chargeMin_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMin_Box.TabIndex = 32;
+            this.chargeMin_Box.TextChanged += new System.EventHandler(this.chargeMin_Box_TextChanged);
             // 
             // idxFrom_Box
             // 
@@ -691,6 +710,203 @@
             this.internal_Label.TabIndex = 19;
             this.internal_Label.Text = "internal";
             // 
+            // chemForm_tab
+            // 
+            this.chemForm_tab.Controls.Add(this.Light_chkBox);
+            this.chemForm_tab.Controls.Add(this.heavy_ChkBox);
+            this.chemForm_tab.Controls.Add(this.ion_txtBox);
+            this.chemForm_tab.Controls.Add(this.chem_ion_Lbl);
+            this.chemForm_tab.Controls.Add(this.internal_txtBox);
+            this.chemForm_tab.Controls.Add(this.chem_index_Lbl);
+            this.chemForm_tab.Controls.Add(this.primary_txtBox);
+            this.chemForm_tab.Controls.Add(this.chem_prim_Lbl);
+            this.chemForm_tab.Controls.Add(this.chem_internal_Lbl);
+            this.chemForm_tab.Controls.Add(this.maxCharge_txtBox);
+            this.chemForm_tab.Controls.Add(this.chem_charge_Lbl);
+            this.chemForm_tab.Controls.Add(this.chem_chargeMax_Lbl);
+            this.chemForm_tab.Controls.Add(this.chem_chargeMin_Lbl);
+            this.chemForm_tab.Controls.Add(this.minCharge_txtBox);
+            this.chemForm_tab.Controls.Add(this.chemForm_txtBox);
+            this.chemForm_tab.Controls.Add(this.chemForm_Lbl);
+            this.chemForm_tab.Location = new System.Drawing.Point(4, 22);
+            this.chemForm_tab.Name = "chemForm_tab";
+            this.chemForm_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.chemForm_tab.Size = new System.Drawing.Size(315, 641);
+            this.chemForm_tab.TabIndex = 1;
+            this.chemForm_tab.Text = "Chemical formula";
+            this.chemForm_tab.UseVisualStyleBackColor = true;
+            // 
+            // ion_txtBox
+            // 
+            this.ion_txtBox.ForeColor = System.Drawing.Color.Black;
+            this.ion_txtBox.Location = new System.Drawing.Point(6, 135);
+            this.ion_txtBox.Name = "ion_txtBox";
+            this.ion_txtBox.Size = new System.Drawing.Size(87, 20);
+            this.ion_txtBox.TabIndex = 47;
+            this.ion_txtBox.TextChanged += new System.EventHandler(this.ion_txtBox_TextChanged);
+            // 
+            // chem_ion_Lbl
+            // 
+            this.chem_ion_Lbl.AutoSize = true;
+            this.chem_ion_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_ion_Lbl.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chem_ion_Lbl.Location = new System.Drawing.Point(6, 116);
+            this.chem_ion_Lbl.Name = "chem_ion_Lbl";
+            this.chem_ion_Lbl.Size = new System.Drawing.Size(22, 13);
+            this.chem_ion_Lbl.TabIndex = 46;
+            this.chem_ion_Lbl.Text = "Ion";
+            // 
+            // internal_txtBox
+            // 
+            this.internal_txtBox.ForeColor = System.Drawing.Color.Black;
+            this.internal_txtBox.Location = new System.Drawing.Point(55, 199);
+            this.internal_txtBox.Name = "internal_txtBox";
+            this.internal_txtBox.Size = new System.Drawing.Size(38, 20);
+            this.internal_txtBox.TabIndex = 45;
+            this.internal_txtBox.TextChanged += new System.EventHandler(this.internal_txtBox_TextChanged);
+            // 
+            // chem_index_Lbl
+            // 
+            this.chem_index_Lbl.AutoSize = true;
+            this.chem_index_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_index_Lbl.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chem_index_Lbl.Location = new System.Drawing.Point(6, 161);
+            this.chem_index_Lbl.Name = "chem_index_Lbl";
+            this.chem_index_Lbl.Size = new System.Drawing.Size(33, 13);
+            this.chem_index_Lbl.TabIndex = 39;
+            this.chem_index_Lbl.Text = "Index";
+            // 
+            // primary_txtBox
+            // 
+            this.primary_txtBox.ForeColor = System.Drawing.Color.Black;
+            this.primary_txtBox.Location = new System.Drawing.Point(6, 199);
+            this.primary_txtBox.Name = "primary_txtBox";
+            this.primary_txtBox.Size = new System.Drawing.Size(38, 20);
+            this.primary_txtBox.TabIndex = 44;
+            this.primary_txtBox.TextChanged += new System.EventHandler(this.primary_txtBox_TextChanged);
+            // 
+            // chem_prim_Lbl
+            // 
+            this.chem_prim_Lbl.AutoSize = true;
+            this.chem_prim_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_prim_Lbl.ForeColor = System.Drawing.Color.Sienna;
+            this.chem_prim_Lbl.Location = new System.Drawing.Point(6, 180);
+            this.chem_prim_Lbl.Name = "chem_prim_Lbl";
+            this.chem_prim_Lbl.Size = new System.Drawing.Size(43, 13);
+            this.chem_prim_Lbl.TabIndex = 40;
+            this.chem_prim_Lbl.Text = "primary ";
+            // 
+            // chem_internal_Lbl
+            // 
+            this.chem_internal_Lbl.AutoSize = true;
+            this.chem_internal_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_internal_Lbl.ForeColor = System.Drawing.Color.Sienna;
+            this.chem_internal_Lbl.Location = new System.Drawing.Point(55, 180);
+            this.chem_internal_Lbl.Name = "chem_internal_Lbl";
+            this.chem_internal_Lbl.Size = new System.Drawing.Size(41, 13);
+            this.chem_internal_Lbl.TabIndex = 41;
+            this.chem_internal_Lbl.Text = "internal";
+            // 
+            // maxCharge_txtBox
+            // 
+            this.maxCharge_txtBox.ForeColor = System.Drawing.Color.Black;
+            this.maxCharge_txtBox.Location = new System.Drawing.Point(55, 90);
+            this.maxCharge_txtBox.Name = "maxCharge_txtBox";
+            this.maxCharge_txtBox.Size = new System.Drawing.Size(38, 20);
+            this.maxCharge_txtBox.TabIndex = 38;
+            this.maxCharge_txtBox.TextChanged += new System.EventHandler(this.maxCharge_txtBox_TextChanged);
+            // 
+            // chem_charge_Lbl
+            // 
+            this.chem_charge_Lbl.AutoSize = true;
+            this.chem_charge_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_charge_Lbl.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chem_charge_Lbl.Location = new System.Drawing.Point(6, 52);
+            this.chem_charge_Lbl.Name = "chem_charge_Lbl";
+            this.chem_charge_Lbl.Size = new System.Drawing.Size(41, 13);
+            this.chem_charge_Lbl.TabIndex = 34;
+            this.chem_charge_Lbl.Text = "Charge";
+            // 
+            // chem_chargeMax_Lbl
+            // 
+            this.chem_chargeMax_Lbl.AutoSize = true;
+            this.chem_chargeMax_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_chargeMax_Lbl.ForeColor = System.Drawing.Color.Sienna;
+            this.chem_chargeMax_Lbl.Location = new System.Drawing.Point(55, 71);
+            this.chem_chargeMax_Lbl.Name = "chem_chargeMax_Lbl";
+            this.chem_chargeMax_Lbl.Size = new System.Drawing.Size(26, 13);
+            this.chem_chargeMax_Lbl.TabIndex = 36;
+            this.chem_chargeMax_Lbl.Text = "max";
+            // 
+            // chem_chargeMin_Lbl
+            // 
+            this.chem_chargeMin_Lbl.AutoSize = true;
+            this.chem_chargeMin_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_chargeMin_Lbl.ForeColor = System.Drawing.Color.Sienna;
+            this.chem_chargeMin_Lbl.Location = new System.Drawing.Point(6, 71);
+            this.chem_chargeMin_Lbl.Name = "chem_chargeMin_Lbl";
+            this.chem_chargeMin_Lbl.Size = new System.Drawing.Size(23, 13);
+            this.chem_chargeMin_Lbl.TabIndex = 35;
+            this.chem_chargeMin_Lbl.Text = "min";
+            // 
+            // minCharge_txtBox
+            // 
+            this.minCharge_txtBox.ForeColor = System.Drawing.Color.Black;
+            this.minCharge_txtBox.Location = new System.Drawing.Point(6, 90);
+            this.minCharge_txtBox.Name = "minCharge_txtBox";
+            this.minCharge_txtBox.Size = new System.Drawing.Size(38, 20);
+            this.minCharge_txtBox.TabIndex = 37;
+            this.minCharge_txtBox.TextChanged += new System.EventHandler(this.minCharge_txtBox_TextChanged);
+            // 
+            // chemForm_txtBox
+            // 
+            this.chemForm_txtBox.Location = new System.Drawing.Point(6, 26);
+            this.chemForm_txtBox.Name = "chemForm_txtBox";
+            this.chemForm_txtBox.Size = new System.Drawing.Size(302, 20);
+            this.chemForm_txtBox.TabIndex = 3;
+            // 
+            // chemForm_Lbl
+            // 
+            this.chemForm_Lbl.AutoSize = true;
+            this.chemForm_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chemForm_Lbl.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chemForm_Lbl.Location = new System.Drawing.Point(6, 3);
+            this.chemForm_Lbl.Name = "chemForm_Lbl";
+            this.chemForm_Lbl.Size = new System.Drawing.Size(120, 17);
+            this.chemForm_Lbl.TabIndex = 2;
+            this.chemForm_Lbl.Text = "Chemical Formula";
+            // 
+            // insert_Btn
+            // 
+            this.insert_Btn.BackColor = System.Drawing.Color.CadetBlue;
+            this.insert_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.insert_Btn.Location = new System.Drawing.Point(0, 667);
+            this.insert_Btn.Name = "insert_Btn";
+            this.insert_Btn.Size = new System.Drawing.Size(323, 23);
+            this.insert_Btn.TabIndex = 53;
+            this.insert_Btn.Text = "Insert";
+            this.insert_Btn.UseVisualStyleBackColor = false;
+            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
+            // 
+            // calc_Btn
+            // 
+            this.calc_Btn.BackColor = System.Drawing.Color.SteelBlue;
+            this.calc_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.calc_Btn.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
+            this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
+            this.calc_Btn.Location = new System.Drawing.Point(0, 690);
+            this.calc_Btn.Name = "calc_Btn";
+            this.calc_Btn.Size = new System.Drawing.Size(323, 22);
+            this.calc_Btn.TabIndex = 41;
+            this.calc_Btn.Text = "Calculate";
+            this.calc_Btn.UseVisualStyleBackColor = false;
+            this.calc_Btn.Click += new System.EventHandler(this.calc_Btn_Click);
+            // 
             // statusStrpFrm9
             // 
             this.statusStrpFrm9.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -720,7 +936,7 @@
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.factor_panel9.Location = new System.Drawing.Point(327, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(458, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(403, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -743,7 +959,7 @@
             this.fragListView9.Location = new System.Drawing.Point(327, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(458, 653);
+            this.fragListView9.Size = new System.Drawing.Size(403, 679);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -774,24 +990,52 @@
             // 
             this.ppm_clmn.Text = "ppm";
             // 
+            // heavy_ChkBox
+            // 
+            this.heavy_ChkBox.AutoSize = true;
+            this.heavy_ChkBox.Location = new System.Drawing.Point(227, 52);
+            this.heavy_ChkBox.Name = "heavy_ChkBox";
+            this.heavy_ChkBox.Size = new System.Drawing.Size(87, 17);
+            this.heavy_ChkBox.TabIndex = 48;
+            this.heavy_ChkBox.Text = "Heavy Chain";
+            this.heavy_ChkBox.UseVisualStyleBackColor = true;
+            this.heavy_ChkBox.CheckedChanged += new System.EventHandler(this.heavy_ChkBox_CheckedChanged);
+            // 
+            // Light_chkBox
+            // 
+            this.Light_chkBox.AutoSize = true;
+            this.Light_chkBox.Location = new System.Drawing.Point(227, 75);
+            this.Light_chkBox.Name = "Light_chkBox";
+            this.Light_chkBox.Size = new System.Drawing.Size(79, 17);
+            this.Light_chkBox.TabIndex = 49;
+            this.Light_chkBox.Text = "Light Chain";
+            this.Light_chkBox.UseVisualStyleBackColor = true;
+            this.Light_chkBox.CheckedChanged += new System.EventHandler(this.Light_chkBox_CheckedChanged);
+            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(785, 690);
+            this.ClientSize = new System.Drawing.Size(730, 716);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.statusStrpFrm9);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(740, 700);
             this.Name = "Form9";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fragment Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
             this.panel_calc.ResumeLayout(false);
-            this.panel_calc.PerformLayout();
+            this.FragCalc_TabControl.ResumeLayout(false);
+            this.Frag_tab.ResumeLayout(false);
+            this.Frag_tab.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
+            this.chemForm_tab.ResumeLayout(false);
+            this.chemForm_tab.PerformLayout();
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
             this.ResumeLayout(false);
@@ -857,5 +1101,24 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton check_all_boxBtn;
         private System.Windows.Forms.ToolStripButton uncheck_all_boxBtn;
+        private System.Windows.Forms.TabControl FragCalc_TabControl;
+        private System.Windows.Forms.TabPage Frag_tab;
+        private System.Windows.Forms.TabPage chemForm_tab;
+        private System.Windows.Forms.Label chemForm_Lbl;
+        private System.Windows.Forms.TextBox internal_txtBox;
+        private System.Windows.Forms.Label chem_index_Lbl;
+        private System.Windows.Forms.TextBox primary_txtBox;
+        private System.Windows.Forms.Label chem_prim_Lbl;
+        private System.Windows.Forms.Label chem_internal_Lbl;
+        private System.Windows.Forms.TextBox maxCharge_txtBox;
+        private System.Windows.Forms.Label chem_charge_Lbl;
+        private System.Windows.Forms.Label chem_chargeMax_Lbl;
+        private System.Windows.Forms.Label chem_chargeMin_Lbl;
+        private System.Windows.Forms.TextBox minCharge_txtBox;
+        private System.Windows.Forms.TextBox chemForm_txtBox;
+        private System.Windows.Forms.TextBox ion_txtBox;
+        private System.Windows.Forms.Label chem_ion_Lbl;
+        private System.Windows.Forms.CheckBox Light_chkBox;
+        private System.Windows.Forms.CheckBox heavy_ChkBox;
     }
 }

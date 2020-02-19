@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Isotope_fitting.Form2;
+using System.Globalization;
 
 namespace Isotope_fitting
 {
@@ -31,6 +32,7 @@ namespace Isotope_fitting
         delegate void CalcFrag3Completed();
         event CalcFrag3Completed OnCalcFrag3Completed;
         bool first = true;
+        
 
         public Form9(Form2 f)
         {
@@ -217,10 +219,14 @@ namespace Isotope_fitting
         }
         private void fragments_and_calculations_sequence_A_frm9()
         {
-            // this the main sequence after loadind data
+            // this the main sequence after loading data
             // 1. select fragments according to UI            
             sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = select_fragments2_frm9();
+            List<ChemiForm> selected_fragments = new List<ChemiForm>();
+            if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { selected_fragments = select_fragments2_frm9(); }
+            else { selected_fragments = check_chem_inputs(); }
+             
+
             if (selected_fragments == null) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
@@ -230,7 +236,146 @@ namespace Isotope_fitting
             // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments3.
             Thread envipat_properties = new Thread(() => calculate_fragment_properties_frm9(selected_fragments));
             envipat_properties.Start();
+        } 
+        private List<ChemiForm> check_chem_inputs()
+        {
+            string s = frm2.Peptide;
+            List<ChemiForm> res = new List<ChemiForm>();
+            string chem_form = string.Empty;
+            List<int> charge = new List<int>();
+            string ion = string.Empty;
+            string index = string.Empty;
+            string indexTo = string.Empty;
+            if (heavy_ChkBox.Checked)
+            {
+                if (string.IsNullOrEmpty(frm2.heavy_chain)) { MessageBox.Show("Heavy Chain sequence is not loaded"); return res; }
+                s = frm2.heavy_chain;
+            }
+            else if (Light_chkBox.Checked)
+            {
+                if (string.IsNullOrEmpty(frm2.light_chain)) { MessageBox.Show("Light Chain sequence is not loaded"); return res; }
+                s = frm2.light_chain;
+            }            
+
+            if (ion_txtBox.Text.Contains("M")) { index = "0";indexTo = s.Length.ToString(); }
+            else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text) || (string.IsNullOrEmpty(primary_txtBox.Text) && string.IsNullOrEmpty(internal_txtBox.Text))) { return res; }
+            
+            chem_form = chemForm_txtBox.Text.Replace(Environment.NewLine, " ").ToString();
+            chem_form = chem_form.Replace("\t", "");
+            chem_form = chem_form.Replace(" ", "");
+            ion = ion_txtBox.Text.Replace(Environment.NewLine, " ").ToString();
+            ion = ion.Replace("\t", "");
+            ion = ion.Replace(" ", "");
+            if (ion.Contains("internal") && !string.IsNullOrEmpty(primary_txtBox.Text)  )
+            {
+                MessageBox.Show("You have inserted an internal ion type, with a primary type index. For internal ion types insert the index number in the corresponding field.");
+                return res;
+            }          
+            else if (!ion.Contains("internal") && !string.IsNullOrEmpty(internal_txtBox.Text))
+            {
+                MessageBox.Show("You have inserted a primary ion type, with an internal type index. For primary ion types insert the index number in the corresponding field.");
+                return res;
+            }
+            else if (!string.IsNullOrEmpty(primary_txtBox.Text))
+            {
+                index = primary_txtBox.Text.Replace("\t", "");
+                index=index.Replace(" ", "");
+                indexTo =index;
+            }
+            else if (!string.IsNullOrEmpty(internal_txtBox.Text))
+            {
+                try
+                {
+                    string[] int_index = new string[2];
+                    int_index = internal_txtBox.Text.Split('-');
+                    index = int_index[0].Replace("\t", "");
+                    index = index.Replace(" ", "");
+                    indexTo = int_index[1].Replace("\t", "");
+                    indexTo = indexTo.Replace(" ", "");
+                }
+                catch
+                {
+                    MessageBox.Show("Internal indexes are inserted with '-'. Example: 5-9");return res;
+                }               
+            }
+            double qMin = txt_to_d(minCharge_txtBox);
+            if (double.IsNaN(qMin)) qMin =1;
+            double qMax = txt_to_d(maxCharge_txtBox);
+            if (double.IsNaN(qMax)) qMax = 25;
+            
+            for(int c=(int)qMin;c<= qMax; c++ )
+            {
+                res.Add(new ChemiForm
+                {
+                    InputFormula = chem_form,
+                    Adduct = string.Empty,
+                    Deduct = string.Empty,
+                    Multiplier = 1,
+                    Mz = string.Empty,
+                    Ion = ion,
+                    Index = index,
+                    IndexTo = indexTo,
+                    Error = false,
+                    Elements_set = new List<Element_set>(),
+                    Iso_total_amount = 0,
+                    Monoisotopic = new CompoundMulti(),
+                    Points = new List<PointPlot>(),
+                    Machine = string.Empty,
+                    Resolution = new double(),
+                    Combinations = new List<Combination_1>(),
+                    Profile = new List<PointPlot>(),
+                    Centroid = new List<PointPlot>(),
+                    Intensoid = new List<PointPlot>(),
+                    Combinations4 = new List<Combination_4>(),
+                    FinalFormula = string.Empty,
+                    Factor = 1.0,
+                    Fixed = false,
+                    PrintFormula = chem_form,
+                    Max_man_int = 0,
+                    Charge=c,
+                    Ion_type=ion
+                });
+                res.Last().Adduct = "H" + c.ToString();
+                if (res.Last().Ion.StartsWith("d") || res.Last().Ion.StartsWith("w") || res.Last().Ion.StartsWith("v")) res.Last().Color = OxyColors.Turquoise;
+                else if (res.Last().Ion.StartsWith("a")) res.Last().Color = OxyColors.Green;
+                else if (res.Last().Ion.StartsWith("b")) res.Last().Color = OxyColors.Blue;
+                else if (res.Last().Ion.StartsWith("x")) res.Last().Color = OxyColors.LimeGreen;
+                else if (res.Last().Ion.StartsWith("y")) res.Last().Color = OxyColors.DodgerBlue;
+                else if (res.Last().Ion.StartsWith("z")) res.Last().Color = OxyColors.Tomato;
+                else if (res.Last().Ion.StartsWith("c")) res.Last().Color = OxyColors.Firebrick;
+                else if (res.Last().Ion.Contains("internal") && res.Last().Ion.Contains("b")) res.Last().Color = OxyColors.MediumOrchid;
+                else if (res.Last().Ion.Contains("internal") ) res.Last().Color = OxyColors.DarkViolet;
+                else if (res.Last().Ion.StartsWith("M")) res.Last().Color = OxyColors.DarkRed;
+                else res.Last().Color = OxyColors.PaleGoldenrod;
+
+                string lbl = "";
+                if (res.Last().Ion.Contains("internal"))
+                {                   
+                    lbl = res.Last().Ion + "[" + res.Last().Index + "-" + res.Last().IndexTo + "]";
+                    res.Last().Radio_label = lbl;
+                    if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
+                    else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";
+                }
+                else if (res.Last().Ion_type.StartsWith("M"))
+                {
+                    res.Last().Radio_label = lbl;
+                    if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
+                    else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";
+                }
+                else
+                {
+                    if (res.Last().Ion_type.Length == 1) { lbl = res.Last().Ion_type + res.Last().Index; }
+                    else { lbl = "(" + res.Last().Ion_type + ")" + res.Last().Index; }
+                    res.Last().Radio_label = lbl;
+                    if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
+                    else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";                    
+                }
+                if (heavy_ChkBox.Checked) { res.Last().Radio_label += "_H"; res.Last().Name += "_H"; }
+                else if (Light_chkBox.Checked) { res.Last().Radio_label += "_L"; res.Last().Name += "_L"; }
+            }
+            return res;
         }
+        
         private List<ChemiForm> select_fragments2_frm9()
         {
             List<ChemiForm> res = new List<ChemiForm>();
@@ -424,12 +569,12 @@ namespace Isotope_fitting
             ChemiForm.Vdetect(chem);           
 
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-
+            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { chem.Mz = Math.Round(chem.Monoisotopic.Mass / chem.Charge, 4).ToString(); }
             // MAIN decesion algorithm
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
             // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-            if (fragment_is_canditate)
+            if (fragment_is_canditate || !string.IsNullOrEmpty(chemForm_txtBox.Text))
             {
                 chem.Profile.Clear();
                 ChemiForm.Envelope(chem);
@@ -629,8 +774,9 @@ namespace Isotope_fitting
             //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
-        }               
+        }
 
+        #region UI
         private void check_all_boxBtn_Click(object sender, EventArgs e)
         {
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
@@ -652,10 +798,159 @@ namespace Isotope_fitting
                 }
             }
         }
-
-        private void panel_calc_MouseEnter(object sender, EventArgs e)
+             
+        private void minCharge_txtBox_TextChanged(object sender, EventArgs e)
         {
-           
+            if (!string.IsNullOrEmpty(minCharge_txtBox.Text))
+            {
+                if (minCharge_txtBox.Text != "-")
+                {
+                    try
+                    {
+                        double.Parse(minCharge_txtBox.Text, NumberStyles.Integer);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please enter only numbers.");
+                        minCharge_txtBox.Text = minCharge_txtBox.Text.Remove(minCharge_txtBox.Text.Length - 1);
+                        minCharge_txtBox.SelectionStart = minCharge_txtBox.Text.Length;
+                        minCharge_txtBox.SelectionLength = 0;
+                    }
+                }
+            }
+        }
+
+        private void maxCharge_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(maxCharge_txtBox.Text))
+            {
+                if (maxCharge_txtBox.Text != "-")
+                {
+
+                    try
+                    {
+                        double.Parse(maxCharge_txtBox.Text, NumberStyles.Integer);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please enter only numbers.");
+                        maxCharge_txtBox.Text = maxCharge_txtBox.Text.Remove(maxCharge_txtBox.Text.Length - 1);
+                        maxCharge_txtBox.SelectionStart = maxCharge_txtBox.Text.Length;
+                        maxCharge_txtBox.SelectionLength = 0;
+                    }
+                }
+            }
+        }
+
+        private void internal_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            primary_txtBox.Text = null;
+        }
+
+        private void ion_txtBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chargeMin_Box_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(chargeMin_Box.Text))
+            {
+                if (chargeMin_Box.Text != "-")
+                {
+                    try
+                    {
+                        double.Parse(chargeMin_Box.Text, NumberStyles.Integer);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please enter only numbers.");
+                        chargeMin_Box.Text = chargeMin_Box.Text.Remove(chargeMin_Box.Text.Length - 1);
+                        chargeMin_Box.SelectionStart = chargeMin_Box.Text.Length;
+                        chargeMin_Box.SelectionLength = 0;
+                    }
+                }
+            }
+        }
+
+        private void mzMin_Box_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(mzMin_Box.Text))
+            {
+                try
+                {
+                    double.Parse(mzMin_Box.Text, NumberStyles.AllowDecimalPoint);
+                }
+                catch (FormatException ex)
+                {
+                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
+                    mzMin_Box.Text = mzMin_Box.Text.Remove(mzMin_Box.Text.Length - 1);
+                    mzMin_Box.SelectionStart = mzMin_Box.Text.Length;
+                    mzMin_Box.SelectionLength = 0;
+                }
+            }
+
+        }
+
+        private void mzMax_Box_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(mzMax_Box.Text))
+            {
+                try
+                {
+                    double.Parse(mzMax_Box.Text, NumberStyles.AllowDecimalPoint);
+                }
+                catch
+                {
+                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
+                    mzMax_Box.Text = mzMax_Box.Text.Remove(mzMax_Box.Text.Length - 1);
+                    mzMax_Box.SelectionStart = mzMax_Box.Text.Length;
+                    mzMax_Box.SelectionLength = 0;
+                }
+            }
+        }
+
+        private void chargeMax_Box_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(chargeMax_Box.Text))
+            {
+                if (chargeMax_Box.Text != "-")
+                {
+                    try
+                    {
+                        double.Parse(chargeMax_Box.Text, NumberStyles.Integer);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please enter only numbers.");
+                        chargeMax_Box.Text = chargeMax_Box.Text.Remove(chargeMax_Box.Text.Length - 1);
+                        chargeMax_Box.SelectionStart = chargeMax_Box.Text.Length;
+                        chargeMax_Box.SelectionLength = 0;
+                    }
+                }
+            }
+        }
+
+        private void primary_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            internal_txtBox.Text = null;
+        }
+        #endregion
+
+        private void heavy_ChkBox_CheckedChanged(object sender, EventArgs e)
+        {            
+            if (heavy_ChkBox.Checked)
+            {
+                Light_chkBox.Checked = false;
+            }
+        }
+
+        private void Light_chkBox_CheckedChanged(object sender, EventArgs e)
+        {            
+            if (Light_chkBox.Checked)
+            {
+                heavy_ChkBox.Checked = false;
+            }
         }
     }
 }

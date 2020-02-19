@@ -893,11 +893,11 @@ namespace Isotope_fitting
                     frm18.ShowDialog();
                     if (!ms_heavy_chain && !ms_light_chain) return;
                     else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
-                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; return; } }
-                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; return; } }
+                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
                 }
-                else if (String.IsNullOrEmpty(Peptide) &&!String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; return; } }
-                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) &&!String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
 
                 import_fragments();
             }
@@ -1090,7 +1090,6 @@ namespace Isotope_fitting
                         if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + "_L";
                         else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + "_L";
                     }
-
                 }
                 else if (substring[1].Contains("-CO"))
                 {
@@ -1335,7 +1334,7 @@ namespace Isotope_fitting
 
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
             mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
-
+            ms_light_chain = false; ms_heavy_chain = false;
             enable_UIcontrols("post import fragments");
         }
 
@@ -5626,6 +5625,8 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Please enter only numbers.");
                 resolution_Box.Text = resolution_Box.Text.Remove(resolution_Box.Text.Length - 1);
+                resolution_Box.SelectionStart = resolution_Box.Text.Length;
+                resolution_Box.SelectionLength = 0;
             }
         }
         private void Machine_listBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -5644,6 +5645,8 @@ namespace Isotope_fitting
                 {
                     MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
                     mzMin_Box.Text = mzMin_Box.Text.Remove(mzMin_Box.Text.Length - 1);
+                    mzMin_Box.SelectionStart = mzMin_Box.Text.Length;
+                    mzMin_Box.SelectionLength = 0;
                 }
             }
 
@@ -5665,6 +5668,8 @@ namespace Isotope_fitting
                 {
                     MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
                     mzMax_Box.Text = mzMax_Box.Text.Remove(mzMax_Box.Text.Length - 1);
+                    mzMax_Box.SelectionStart = mzMax_Box.Text.Length;
+                    mzMax_Box.SelectionLength = 0;
                 }
             }
             //if (insert_file == false && Regex.IsMatch(mzMax_Box.Text, "[^0-9]"))
@@ -5687,6 +5692,8 @@ namespace Isotope_fitting
                     {
                         MessageBox.Show("Please enter only numbers.");
                         chargeMin_Box.Text = chargeMin_Box.Text.Remove(chargeMin_Box.Text.Length - 1);
+                        chargeMin_Box.SelectionStart = chargeMin_Box.Text.Length;
+                        chargeMin_Box.SelectionLength = 0;
                     }
                 }
             }
@@ -5711,6 +5718,8 @@ namespace Isotope_fitting
                     {
                         MessageBox.Show("Please enter only numbers.");
                         chargeMax_Box.Text = chargeMax_Box.Text.Remove(chargeMax_Box.Text.Length - 1);
+                        chargeMax_Box.SelectionStart = chargeMax_Box.Text.Length;
+                        chargeMax_Box.SelectionLength = 0;
                     }
                 }
             }
@@ -5726,6 +5735,8 @@ namespace Isotope_fitting
             //{
             //    MessageBox.Show("Please enter only numbers.");
             //    idxPr_Box.Text = idxPr_Box.Text.Remove(idxPr_Box.Text.Length - 1);
+            //    idxPr_Box.SelectionStart = idxPr_Box.Text.Length;
+            //    idxPr_Box.SelectionLength = 0;
             //}
         }
         private void IdxFrom_Box_TextChanged(object sender, EventArgs e)
@@ -5734,6 +5745,8 @@ namespace Isotope_fitting
             //{
             //    MessageBox.Show("Please enter only numbers.");
             //    idxFrom_Box.Text = idxFrom_Box.Text.Remove(idxFrom_Box.Text.Length - 1);
+            //    idxFrom_Box.SelectionStart = idxFrom_Box.Text.Length;
+            //    idxFrom_Box.SelectionLength = 0;
             //}
 
         }
@@ -5743,6 +5756,8 @@ namespace Isotope_fitting
             //{
             //    MessageBox.Show("Please enter only numbers.");
             //    idxTo_Box.Text = idxTo_Box.Text.Remove(idxTo_Box.Text.Length - 1);
+            //    idxTo_Box.SelectionStart = idxTo_Box.Text.Length;
+            //    idxTo_Box.SelectionLength = 0;
             //}
         }
         private void step_rangeBox_TextChanged(object sender, EventArgs e)
@@ -9781,8 +9796,8 @@ namespace Isotope_fitting
             string s = Peptide;
             if (heavy_chkBoxCopy1.Checked) { s = heavy_chain; }
             else if (light_chkBoxCopy1.Checked) { s = light_chain; }
-            if (s.Length / 25 >= 9) { draw_sequence_panelCopy1.Height = 55 * s.Length / 25; }
-            else if (s.Length / 25 > 5) { draw_sequence_panelCopy1.Height = 55 * s.Length / 25; }
+            if (s.Length / 25 >= 9) { draw_sequence_panelCopy1.Height = 58 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panelCopy1.Height = 58 * s.Length / 25; }
             else { draw_sequence_panelCopy1.Height = 400; }
             Point pp = new Point(point_x, point_y);
             int grp_num = 25;
@@ -10045,8 +10060,8 @@ namespace Isotope_fitting
             string s = Peptide;
             if (heavy_chkBoxCopy2.Checked) { s = heavy_chain; }
             else if (light_chkBoxCopy2.Checked) { s = light_chain; }
-            if (s.Length / 25 >= 9) { draw_sequence_panelCopy2.Height = 55 * s.Length / 25; }
-            else if (s.Length / 25 > 5) { draw_sequence_panelCopy2.Height = 55 * s.Length / 25; }
+            if (s.Length / 25 >= 9) { draw_sequence_panelCopy2.Height = 58 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panelCopy2.Height = 58 * s.Length / 25; }
             else { draw_sequence_panelCopy2.Height = 400; }
             int grp_num = 25;
             Point pp = new Point(point_x, point_y);
