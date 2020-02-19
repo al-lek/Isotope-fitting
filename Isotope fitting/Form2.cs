@@ -9500,8 +9500,8 @@ namespace Isotope_fitting
             string s = Peptide;           
             if (heavy_chkBox.Checked) { s = heavy_chain; }
             else if (light_chkBox.Checked) { s = light_chain; }
-            if (s.Length/25 >=9) { draw_sequence_panel.Height =55 * s.Length / 25; }
-            else if (s.Length / 25>5) { draw_sequence_panel.Height = 55 * s.Length / 25; }
+            if (s.Length/25 >=9) { draw_sequence_panel.Height =58 * s.Length / 25; }
+            else if (s.Length / 25>5) { draw_sequence_panel.Height = 58 * s.Length / 25; }
             else { draw_sequence_panel.Height = 400; }
             Point pp = new Point(point_x, point_y);
             int grp_num = 25;
