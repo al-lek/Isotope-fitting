@@ -327,6 +327,7 @@ namespace Isotope_fitting
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.statistics_Btn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton10 = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -3039,11 +3040,12 @@ namespace Isotope_fitting
             this.sequence_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.sequence_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.seqSave_Btn,
-            this.seqCopy_Btn});
+            this.seqCopy_Btn,
+            this.toolStripButton10});
             this.sequence_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.sequence_toolStrip.Location = new System.Drawing.Point(728, 27);
             this.sequence_toolStrip.Name = "sequence_toolStrip";
-            this.sequence_toolStrip.Size = new System.Drawing.Size(24, 52);
+            this.sequence_toolStrip.Size = new System.Drawing.Size(24, 77);
             this.sequence_toolStrip.TabIndex = 8;
             // 
             // seqSave_Btn
@@ -4069,6 +4071,15 @@ namespace Isotope_fitting
             this.statistics_Btn.Text = "Statistics";
             this.statistics_Btn.Click += new System.EventHandler(this.statistics_Btn_Click);
             // 
+            // toolStripButton10
+            // 
+            this.toolStripButton10.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton10.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton10.Image")));
+            this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton10.Name = "toolStripButton10";
+            this.toolStripButton10.Size = new System.Drawing.Size(22, 22);
+            this.toolStripButton10.Text = "toolStripButton10";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4462,5 +4473,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton fragCalc_Btn1;
         private System.Windows.Forms.ToolStripButton refresh_frag_Btn1;
         private System.Windows.Forms.ToolStripButton statistics_Btn;
+        private System.Windows.Forms.ToolStripButton toolStripButton10;
     }
 }

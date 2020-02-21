@@ -3050,6 +3050,7 @@ namespace Isotope_fitting
             remove_child_nodes();            
             sw1.Stop(); Debug.WriteLine("Fit treeView populate: " + sw1.ElapsedMilliseconds.ToString());
             uncheckall_Frag();
+            best_checked();
         }
         /// <summary>
         /// Custom tooltip for each fit group solution node
@@ -3428,8 +3429,7 @@ namespace Isotope_fitting
             {
                 frag_tree.BeginUpdate();
                 update_sorting_parameters_lists();
-                generate_fit_results();
-                //best_checked();
+                generate_fit_results();                
                 frag_tree.EndUpdate();
                 refresh_iso_plot();
             }
@@ -5170,6 +5170,7 @@ namespace Isotope_fitting
             fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false; fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             Initialize_Oxy();
             initialize_tabs();
+            recalculate_all_data_aligned();
             factor_panel.Controls.Clear();
         }
         private void saveListBtn1_Click(object sender, EventArgs e)
