@@ -27,8 +27,7 @@ using System.Runtime.InteropServices;
 namespace Isotope_fitting
 {
     public partial class Form2 : Form
-    {
-        int iiiiiiii = 0;
+    {        
         public string error_string = String.Empty;
 
         #region PARAMETER SET TAB FIT
@@ -150,9 +149,9 @@ namespace Isotope_fitting
            BorderStyle = BorderStyle.FixedSingle,
             CheckBoxes = true,
             HideSelection = false,
-            Location = new System.Drawing.Point(2, 76),
+            Location = new System.Drawing.Point(2, 104),
             Name = "frag_tree",
-            Size = new System.Drawing.Size(354, 391),
+            Size = new System.Drawing.Size(360, 304),
             TabIndex = 10000011,
             Visible = false ,ShowNodeToolTips=false};
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
@@ -1679,8 +1678,7 @@ namespace Isotope_fitting
                     chem.Profile.Clear();
                     // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
                     ChemiForm.Envelope(chem);
-                    add_fragment_to_Fragments2(chem, cen);
-                    iiiiiiii++;
+                    add_fragment_to_Fragments2(chem, cen);                    
                 }
                 else if (fragment_is_canditate)
                 {
@@ -3823,7 +3821,7 @@ namespace Isotope_fitting
             {
                 clearCalc_Btn.Enabled = mzMax_Box.Enabled = mzMin_Box.Enabled = mzMax_Label.Enabled = mzMin_Label.Enabled = chargeMax_Box.Enabled = true;
                 chargeMin_Box.Enabled = chargeAll_Btn.Enabled = idxPr_Box.Enabled = idxTo_Box.Enabled = idxFrom_Box.Enabled = resolution_Box.Enabled = true;
-                machine_listBox.Enabled = calc_Btn.Enabled =fragCalc_Btn.Enabled= true;
+                machine_listBox.Enabled = calc_Btn.Enabled =fragCalc_Btn1.Enabled= true;
                 loadFit_Btn.Enabled = false;
             }
             else if (status == "post calculations")
@@ -5180,15 +5178,15 @@ namespace Isotope_fitting
         #endregion
 
         #region FILTER list fragments
-        private void frag_sort_Btn_Click(object sender, EventArgs e)
+        private void frag_sort_Btn1_Click(object sender, EventArgs e)
         {
             params_form();
         }
-        private void refresh_frag_Btn_Click(object sender, EventArgs e)
+        private void refresh_frag_Btn1_Click(object sender, EventArgs e)
         {
-            int initial_count = Fragments2.Count;            
+            int initial_count = Fragments2.Count;
             int rr = 0;
-            if (Fragments2.Count>0)
+            if (Fragments2.Count > 0)
             {
                 while (rr < Fragments2.Count)
                 {
@@ -5205,10 +5203,10 @@ namespace Isotope_fitting
                 if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
                 if (fit_tree != null)
                 {
-                     fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed.");                    
+                    fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed.");
                 }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-            }                  
+            }
         }
         private bool decision_algorithm2(FragForm fra)
         {
@@ -5253,7 +5251,7 @@ namespace Isotope_fitting
 
 
         #region FORM 9 fragment calculator
-        private void fragCalc_Btn_Click(object sender, EventArgs e)
+        private void fragCalc_Btn1_Click(object sender, EventArgs e)
         {
             FormCollection fc = Application.OpenForms;
             bool open = false;
@@ -5431,8 +5429,7 @@ namespace Isotope_fitting
             return fragment_is_canditate;
         }
         #endregion
-
-
+        
         #region UI
         private void Initialize_UI()
         {
@@ -5880,6 +5877,8 @@ namespace Isotope_fitting
         }
         private void saveListBtn11_Click(object sender, EventArgs e)
         {
+            if (selectedFragments.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. ");return; }
+
             saveList(selectedFragments.ToList());
         }
 
@@ -5973,7 +5972,7 @@ namespace Isotope_fitting
                 insert_exp = false;
                 plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
                 loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
-                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false; fragCalc_Btn.Enabled = false; fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
+                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false; fragCalc_Btn1.Enabled = false; fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
                 fitMin_Box.Text = null; fitMax_Box.Text = null; fitStep_Box.Text = null; step_rangeBox.Text = null;
                 Fitting_chkBox.Checked = false;
                 Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
@@ -12466,7 +12465,29 @@ namespace Isotope_fitting
             primary_plotview_rebuild(6, czCharge_plot);
         }
 
+
+
+
+
         #endregion
 
+        private void statistics_Btn_Click(object sender, EventArgs e)
+        {
+            List<int> fragstatistics = selectedFragments.ToList();
+            double sumExp = 0.0;
+            double sumFrag = 0.0;
+            foreach (double[] exp in experimental)
+            {
+                sumExp +=exp[1];
+            }
+            foreach (int indexS in fragstatistics)
+            {
+                foreach (PointPlot f in Fragments2[indexS - 1].Profile)
+                {
+                    sumFrag+=Fragments2[indexS - 1].Factor * f.Y;
+                }
+              
+            }
+        }
     }
 }

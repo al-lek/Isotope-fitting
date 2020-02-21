@@ -767,15 +767,7 @@ namespace Isotope_fitting
             
         }
         #endregion
-
-        private void Form9_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //when closing the form public data from this form are restored in their initial values
-            initialize_data();
-            //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
-            //we don't want to refresh fragment trees in the basic form
-            frm2.ending_frm9();
-        }
+               
 
         #region UI
         private void check_all_boxBtn_Click(object sender, EventArgs e)
@@ -936,10 +928,8 @@ namespace Isotope_fitting
         {
             internal_txtBox.Text = null;
         }
-        #endregion
-
         private void heavy_ChkBox_CheckedChanged(object sender, EventArgs e)
-        {            
+        {
             if (heavy_ChkBox.Checked)
             {
                 Light_chkBox.Checked = false;
@@ -947,11 +937,22 @@ namespace Isotope_fitting
         }
 
         private void Light_chkBox_CheckedChanged(object sender, EventArgs e)
-        {            
+        {
             if (Light_chkBox.Checked)
             {
                 heavy_ChkBox.Checked = false;
             }
+        }
+
+        #endregion
+
+        private void Form9_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //when closing the form public data from this form are restored in their initial values
+            initialize_data();
+            //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
+            //we don't want to refresh fragment trees in the basic form
+            frm2.ending_frm9();
         }
     }
 }
