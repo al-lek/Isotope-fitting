@@ -180,9 +180,9 @@ namespace Isotope_fitting
                 }
                 catch
                 {
-                    //MessageBox.Show("This fragment doesn't belong to the experimental data!");
-                    //first = true; now = false; selected_idx = 0;
-                    //frm2.ending_frm9();
+                    MessageBox.Show("This fragment doesn't belong to the experimental data!");
+                    first = true; now = false; selected_idx = 0;
+                    frm2.ending_frm9();
                 }
 
             }           
@@ -601,6 +601,10 @@ namespace Isotope_fitting
                 return;
 
             }
+            else
+            {
+                chem.Points.Clear(); chem.Profile.Clear();
+            }
         }
 
         private void add_fragment_to_Fragments3(ChemiForm chem, List<PointPlot> cen)
@@ -683,8 +687,7 @@ namespace Isotope_fitting
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
-
+            if (!fragment_is_canditate) {  return false; }
             chem.PPM_Error = results.Average(p => p[0]);
             chem.Resolution = (double)results.Average(p => p[1]);
 

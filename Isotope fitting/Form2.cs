@@ -12510,8 +12510,7 @@ namespace Isotope_fitting
 
 
 
-        #endregion
 
-        
+        #endregion
     }
 }
