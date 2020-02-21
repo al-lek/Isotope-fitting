@@ -2442,7 +2442,8 @@ namespace Isotope_fitting
 
             progress_display_start(total_fragments + 1, "Calculating fragment fit...");
             sw1.Reset(); sw1.Start();
-            if(all_fitted_results!=null) all_fitted_results.Clear();
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
+            if (all_fitted_results!=null) all_fitted_results.Clear();
             if(all_fitted_sets!=null) all_fitted_sets.Clear();
             all_fitted_results = new List<List<double[]>>();
             all_fitted_sets = new List<List<int[]>>();
@@ -5035,7 +5036,7 @@ namespace Isotope_fitting
                         else if (lista[j].StartsWith("Name")) continue;
                         else
                         {
-                            int[] check_mate= check_for_duplicates(str[0], dParser(str[7]));                            
+                            int[] check_mate= check_for_duplicates(str[0], dParser(str[7]), dParser(str[5]));                            
                             if (check_mate[0]!=3)
                             {
                                 // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
@@ -5125,13 +5126,13 @@ namespace Isotope_fitting
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             }
         }
-        private int[] check_for_duplicates(string name,double factor)
+        private int[] check_for_duplicates(string name,double factor,double mz)
         {
             int[] a = new int[] {1,1};
             if(Fragments2.Count<1) return new int[] { 1, 1 };
             foreach (FragForm fra in Fragments2)
             {
-                if (fra.Name==name && fra.Factor==factor) return new int[] { 3, 1 }; 
+                if (fra.Name==name && fra.Factor==factor && dParser(fra.Mz)==mz) return new int[] { 3, 1 }; 
                 if (fra.Name==name) return new int[] { 2, Fragments2.IndexOf(fra) }; 
             }    
             return new int[] { 1, 1 };
@@ -12476,18 +12477,32 @@ namespace Isotope_fitting
             List<int> fragstatistics = selectedFragments.ToList();
             double sumExp = 0.0;
             double sumFrag = 0.0;
-            foreach (double[] exp in experimental)
+            double coverage = 0.0;
+            foreach (double[] metr in all_data_aligned)
             {
-                sumExp +=exp[1];
-            }
-            foreach (int indexS in fragstatistics)
-            {
-                foreach (PointPlot f in Fragments2[indexS - 1].Profile)
+                sumExp += metr[0];
+                foreach (int indexS in fragstatistics)
                 {
-                    sumFrag+=Fragments2[indexS - 1].Factor * f.Y;
+                    if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                    {
+                        sumFrag += Fragments2[indexS - 1].Factor * metr[indexS];
+                    }
                 }
-              
             }
+            //foreach (int indexS in fragstatistics)
+            //{
+                //foreach (PointPlot f in Fragments2[indexS - 1].Profile)
+                //{
+                //    if (Fragments2[indexS - 1].Factor * f.Y>1)
+                //    {
+                //        sumFrag += Fragments2[indexS - 1].Factor * f.Y;
+                //    }
+                //}
+                
+
+            //}
+            coverage = sumFrag/ sumExp;
+            MessageBox.Show("The experimental is covered by "+ Math.Round(coverage*100,2)+"%");
         }
     }
 }

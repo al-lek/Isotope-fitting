@@ -4062,7 +4062,6 @@ namespace Isotope_fitting
             // statistics_Btn
             // 
             this.statistics_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.statistics_Btn.Enabled = false;
             this.statistics_Btn.Image = ((System.Drawing.Image)(resources.GetObject("statistics_Btn.Image")));
             this.statistics_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.statistics_Btn.Name = "statistics_Btn";
