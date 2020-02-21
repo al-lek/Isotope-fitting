@@ -2093,7 +2093,15 @@ namespace Isotope_fitting
                     int k = node.Parent.Text.IndexOf('(');
                     if (k > 0) { node.Parent.Text = node.Parent.Text.Remove(k); }
                     int node_count = Find_selected_subnodes(node.Parent);
-                    node.Parent.Text += "(" + node_count.ToString() + ")";
+                    node.Parent.Text += "(" + node_count.ToString()+" / "+ node.Parent.Nodes.Count.ToString() + ")";
+                    int all_nodes_chk = 0;
+                    foreach (TreeNode mz_n in frag_tree.Nodes)
+                    {
+                        all_nodes_chk += Find_selected_subnodes(mz_n);
+                    }
+                    int k1 = frag_tree.Nodes[0].Text.IndexOf('[');
+                    if (k1 > 0) { frag_tree.Nodes[0].Text = frag_tree.Nodes[0].Text.Remove(k1-1); }
+                    frag_tree.Nodes[0].Text += " [Total: " + all_nodes_chk.ToString() + " / " + Fragments2.Count.ToString() + "]";
                     // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
                     if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
                     frag_tree.EndUpdate();                    
@@ -6042,7 +6050,38 @@ namespace Isotope_fitting
             Form16 frm16 = new Form16(this);
             frm16.ShowDialog();
         }
+        private void statistics_Btn_Click(object sender, EventArgs e)
+        {
+            List<int> fragstatistics = selectedFragments.ToList();
+            double sumExp = 0.0;
+            double sumFrag = 0.0;
+            double coverage = 0.0;
+            foreach (double[] metr in all_data_aligned)
+            {
+                sumExp += metr[0];
+                foreach (int indexS in fragstatistics)
+                {
+                    if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                    {
+                        sumFrag += Fragments2[indexS - 1].Factor * metr[indexS];
+                    }
+                }
+            }
+            //foreach (int indexS in fragstatistics)
+            //{
+            //foreach (PointPlot f in Fragments2[indexS - 1].Profile)
+            //{
+            //    if (Fragments2[indexS - 1].Factor * f.Y>1)
+            //    {
+            //        sumFrag += Fragments2[indexS - 1].Factor * f.Y;
+            //    }
+            //}
 
+
+            //}
+            coverage = sumFrag / sumExp;
+            MessageBox.Show("The experimental is covered by " + Math.Round(coverage * 100, 2) + "%");
+        }
         #endregion
 
         #region Data manipulation
@@ -12472,37 +12511,6 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void statistics_Btn_Click(object sender, EventArgs e)
-        {
-            List<int> fragstatistics = selectedFragments.ToList();
-            double sumExp = 0.0;
-            double sumFrag = 0.0;
-            double coverage = 0.0;
-            foreach (double[] metr in all_data_aligned)
-            {
-                sumExp += metr[0];
-                foreach (int indexS in fragstatistics)
-                {
-                    if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
-                    {
-                        sumFrag += Fragments2[indexS - 1].Factor * metr[indexS];
-                    }
-                }
-            }
-            //foreach (int indexS in fragstatistics)
-            //{
-                //foreach (PointPlot f in Fragments2[indexS - 1].Profile)
-                //{
-                //    if (Fragments2[indexS - 1].Factor * f.Y>1)
-                //    {
-                //        sumFrag += Fragments2[indexS - 1].Factor * f.Y;
-                //    }
-                //}
-                
-
-            //}
-            coverage = sumFrag/ sumExp;
-            MessageBox.Show("The experimental is covered by "+ Math.Round(coverage*100,2)+"%");
-        }
+        
     }
 }

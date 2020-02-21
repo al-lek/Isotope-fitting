@@ -1467,7 +1467,7 @@ namespace Isotope_fitting
             this.selFrag_Label.AutoSize = true;
             this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selFrag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.selFrag_Label.Location = new System.Drawing.Point(3, 52);
+            this.selFrag_Label.Location = new System.Drawing.Point(2, 81);
             this.selFrag_Label.Name = "selFrag_Label";
             this.selFrag_Label.Size = new System.Drawing.Size(89, 17);
             this.selFrag_Label.TabIndex = 38;
@@ -1507,9 +1507,9 @@ namespace Isotope_fitting
             this.show_files_Btn,
             this.statistics_Btn});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(132, 46);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(163, 46);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
-            this.toolStrip_fragList.Size = new System.Drawing.Size(232, 27);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(201, 27);
             this.toolStrip_fragList.TabIndex = 10000014;
             // 
             // saveListBtn11
