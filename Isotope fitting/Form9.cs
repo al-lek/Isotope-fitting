@@ -566,10 +566,11 @@ namespace Isotope_fitting
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
 
             ChemiForm.Envelope(chem);
-            ChemiForm.Vdetect(chem);           
-
+            ChemiForm.Vdetect(chem);
+            double emass = 0.00054858;
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { chem.Mz = Math.Round(chem.Monoisotopic.Mass / chem.Charge, 4).ToString(); }
+            chem.Points= chem.Points.OrderBy(p => p.X).ToList();
+            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString(); }
             // MAIN decesion algorithm
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
