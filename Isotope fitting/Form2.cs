@@ -5285,8 +5285,8 @@ namespace Isotope_fitting
             }
         }
         public void recalc_frm9()
-        {
-            recalculate_all_data_aligned();
+        {         
+             recalculate_all_data_aligned();           
         }
         public void refresh_frm9()
         {

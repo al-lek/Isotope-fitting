@@ -174,8 +174,17 @@ namespace Isotope_fitting
                 }
                 custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
                 first = false; now = true;
-                frm2.recalc_frm9();
-                adjust_height();
+                try
+                {
+                    frm2.recalc_frm9(); adjust_height();
+                }
+                catch
+                {
+                    //MessageBox.Show("This fragment doesn't belong to the experimental data!");
+                    //first = true; now = false; selected_idx = 0;
+                    //frm2.ending_frm9();
+                }
+
             }           
         }
         private void adjust_height()
@@ -531,7 +540,8 @@ namespace Isotope_fitting
             progress_display_stop();
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-            MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results");
+            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { MessageBox.Show("Chemical formulas profile calculation is completed!"); }
+            else { MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results"); }                
             Invoke(new Action(() => OnCalcFrag3Completed()));
         }
         private void Envipat_Calcs_and_filter_byPPM_frm9(ChemiForm chem)
@@ -575,11 +585,21 @@ namespace Isotope_fitting
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
             // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-            if (fragment_is_canditate || !string.IsNullOrEmpty(chemForm_txtBox.Text))
+            
+            if (fragment_is_canditate)
             {
                 chem.Profile.Clear();
                 ChemiForm.Envelope(chem);
-                add_fragment_to_Fragments3(chem,cen);
+                add_fragment_to_Fragments3(chem,cen);return;
+            }
+            else if (!string.IsNullOrEmpty(chemForm_txtBox.Text))
+            {
+                //chem.Profile.Clear();
+                //ChemiForm.Envelope(chem);               
+                MessageBox.Show(chem.Name+ " is out of ppm bounds.");
+                add_fragment_to_Fragments3(chem, cen);
+                return;
+
             }
         }
 

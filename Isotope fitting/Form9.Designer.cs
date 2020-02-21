@@ -76,6 +76,8 @@
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
             this.chemForm_tab = new System.Windows.Forms.TabPage();
+            this.Light_chkBox = new System.Windows.Forms.CheckBox();
+            this.heavy_ChkBox = new System.Windows.Forms.CheckBox();
             this.ion_txtBox = new System.Windows.Forms.TextBox();
             this.chem_ion_Lbl = new System.Windows.Forms.Label();
             this.internal_txtBox = new System.Windows.Forms.TextBox();
@@ -103,8 +105,6 @@
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.heavy_ChkBox = new System.Windows.Forms.CheckBox();
-            this.Light_chkBox = new System.Windows.Forms.CheckBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.FragCalc_TabControl.SuspendLayout();
@@ -129,23 +129,32 @@
             this.panel_calc.Controls.Add(this.FragCalc_TabControl);
             this.panel_calc.Controls.Add(this.insert_Btn);
             this.panel_calc.Controls.Add(this.calc_Btn);
+            this.panel_calc.Controls.Add(this.half_minus_rdBtn);
+            this.panel_calc.Controls.Add(this.calc_param9Lbl);
+            this.panel_calc.Controls.Add(this.ppm9_Lbl);
+            this.panel_calc.Controls.Add(this.ppm9_numUD);
+            this.panel_calc.Controls.Add(this.half_plus_rdBtn);
+            this.panel_calc.Controls.Add(this.one_rdBtn9);
+            this.panel_calc.Controls.Add(this.half_rdBtn);
+            this.panel_calc.Controls.Add(this.two_rdBtn);
+            this.panel_calc.Controls.Add(this.three_rdBtn);
             this.panel_calc.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(327, 716);
+            this.panel_calc.Size = new System.Drawing.Size(327, 731);
             this.panel_calc.TabIndex = 4;
             // 
             // FragCalc_TabControl
             // 
             this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
             this.FragCalc_TabControl.Controls.Add(this.chemForm_tab);
-            this.FragCalc_TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FragCalc_TabControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(323, 667);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(323, 506);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // Frag_tab
@@ -154,15 +163,6 @@
             this.Frag_tab.Controls.Add(this.toolStrip1);
             this.Frag_tab.Controls.Add(this.frag_Label);
             this.Frag_tab.Controls.Add(this.dvw_lstBox);
-            this.Frag_tab.Controls.Add(this.calc_param9Lbl);
-            this.Frag_tab.Controls.Add(this.half_minus_rdBtn);
-            this.Frag_tab.Controls.Add(this.half_plus_rdBtn);
-            this.Frag_tab.Controls.Add(this.half_rdBtn);
-            this.Frag_tab.Controls.Add(this.three_rdBtn);
-            this.Frag_tab.Controls.Add(this.two_rdBtn);
-            this.Frag_tab.Controls.Add(this.one_rdBtn9);
-            this.Frag_tab.Controls.Add(this.ppm9_numUD);
-            this.Frag_tab.Controls.Add(this.ppm9_Lbl);
             this.Frag_tab.Controls.Add(this.M_lstBox);
             this.Frag_tab.Controls.Add(this.chargeMax_Box);
             this.Frag_tab.Controls.Add(this.internal_lstBox);
@@ -194,7 +194,7 @@
             this.Frag_tab.Location = new System.Drawing.Point(4, 22);
             this.Frag_tab.Name = "Frag_tab";
             this.Frag_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.Frag_tab.Size = new System.Drawing.Size(315, 641);
+            this.Frag_tab.Size = new System.Drawing.Size(315, 480);
             this.Frag_tab.TabIndex = 0;
             this.Frag_tab.Text = "Fragments";
             this.Frag_tab.UseVisualStyleBackColor = true;
@@ -265,7 +265,7 @@
             this.calc_param9Lbl.AutoSize = true;
             this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_param9Lbl.ForeColor = System.Drawing.Color.SteelBlue;
-            this.calc_param9Lbl.Location = new System.Drawing.Point(3, 482);
+            this.calc_param9Lbl.Location = new System.Drawing.Point(2, 510);
             this.calc_param9Lbl.Name = "calc_param9Lbl";
             this.calc_param9Lbl.Size = new System.Drawing.Size(153, 17);
             this.calc_param9Lbl.TabIndex = 51;
@@ -274,7 +274,7 @@
             // half_minus_rdBtn
             // 
             this.half_minus_rdBtn.AutoSize = true;
-            this.half_minus_rdBtn.Location = new System.Drawing.Point(151, 581);
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 609);
             this.half_minus_rdBtn.Name = "half_minus_rdBtn";
             this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
             this.half_minus_rdBtn.TabIndex = 43;
@@ -285,7 +285,7 @@
             // half_plus_rdBtn
             // 
             this.half_plus_rdBtn.AutoSize = true;
-            this.half_plus_rdBtn.Location = new System.Drawing.Point(151, 611);
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 639);
             this.half_plus_rdBtn.Name = "half_plus_rdBtn";
             this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
             this.half_plus_rdBtn.TabIndex = 44;
@@ -296,7 +296,7 @@
             // half_rdBtn
             // 
             this.half_rdBtn.AutoSize = true;
-            this.half_rdBtn.Location = new System.Drawing.Point(151, 551);
+            this.half_rdBtn.Location = new System.Drawing.Point(150, 579);
             this.half_rdBtn.Name = "half_rdBtn";
             this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
             this.half_rdBtn.TabIndex = 42;
@@ -307,7 +307,7 @@
             // three_rdBtn
             // 
             this.three_rdBtn.AutoSize = true;
-            this.three_rdBtn.Location = new System.Drawing.Point(6, 611);
+            this.three_rdBtn.Location = new System.Drawing.Point(5, 639);
             this.three_rdBtn.Name = "three_rdBtn";
             this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.three_rdBtn.TabIndex = 41;
@@ -318,7 +318,7 @@
             // two_rdBtn
             // 
             this.two_rdBtn.AutoSize = true;
-            this.two_rdBtn.Location = new System.Drawing.Point(6, 581);
+            this.two_rdBtn.Location = new System.Drawing.Point(5, 609);
             this.two_rdBtn.Name = "two_rdBtn";
             this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.two_rdBtn.TabIndex = 40;
@@ -329,7 +329,7 @@
             // one_rdBtn9
             // 
             this.one_rdBtn9.AutoSize = true;
-            this.one_rdBtn9.Location = new System.Drawing.Point(6, 551);
+            this.one_rdBtn9.Location = new System.Drawing.Point(5, 579);
             this.one_rdBtn9.Name = "one_rdBtn9";
             this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
             this.one_rdBtn9.TabIndex = 39;
@@ -345,9 +345,9 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(85, 518);
+            this.ppm9_numUD.Location = new System.Drawing.Point(84, 546);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
-            50,
+            1000,
             0,
             0,
             0});
@@ -360,7 +360,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.SlateGray;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(3, 519);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 547);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -731,10 +731,32 @@
             this.chemForm_tab.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab.Name = "chemForm_tab";
             this.chemForm_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab.Size = new System.Drawing.Size(315, 641);
+            this.chemForm_tab.Size = new System.Drawing.Size(315, 480);
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
+            // 
+            // Light_chkBox
+            // 
+            this.Light_chkBox.AutoSize = true;
+            this.Light_chkBox.Location = new System.Drawing.Point(227, 75);
+            this.Light_chkBox.Name = "Light_chkBox";
+            this.Light_chkBox.Size = new System.Drawing.Size(79, 17);
+            this.Light_chkBox.TabIndex = 49;
+            this.Light_chkBox.Text = "Light Chain";
+            this.Light_chkBox.UseVisualStyleBackColor = true;
+            this.Light_chkBox.CheckedChanged += new System.EventHandler(this.Light_chkBox_CheckedChanged);
+            // 
+            // heavy_ChkBox
+            // 
+            this.heavy_ChkBox.AutoSize = true;
+            this.heavy_ChkBox.Location = new System.Drawing.Point(227, 52);
+            this.heavy_ChkBox.Name = "heavy_ChkBox";
+            this.heavy_ChkBox.Size = new System.Drawing.Size(87, 17);
+            this.heavy_ChkBox.TabIndex = 48;
+            this.heavy_ChkBox.Text = "Heavy Chain";
+            this.heavy_ChkBox.UseVisualStyleBackColor = true;
+            this.heavy_ChkBox.CheckedChanged += new System.EventHandler(this.heavy_ChkBox_CheckedChanged);
             // 
             // ion_txtBox
             // 
@@ -883,7 +905,7 @@
             this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(0, 667);
+            this.insert_Btn.Location = new System.Drawing.Point(0, 682);
             this.insert_Btn.Name = "insert_Btn";
             this.insert_Btn.Size = new System.Drawing.Size(323, 23);
             this.insert_Btn.TabIndex = 53;
@@ -899,7 +921,7 @@
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(0, 690);
+            this.calc_Btn.Location = new System.Drawing.Point(0, 705);
             this.calc_Btn.Name = "calc_Btn";
             this.calc_Btn.Size = new System.Drawing.Size(323, 22);
             this.calc_Btn.TabIndex = 41;
@@ -936,7 +958,7 @@
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.factor_panel9.Location = new System.Drawing.Point(327, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(403, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(434, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -959,7 +981,7 @@
             this.fragListView9.Location = new System.Drawing.Point(327, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(403, 679);
+            this.fragListView9.Size = new System.Drawing.Size(434, 694);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -990,33 +1012,11 @@
             // 
             this.ppm_clmn.Text = "ppm";
             // 
-            // heavy_ChkBox
-            // 
-            this.heavy_ChkBox.AutoSize = true;
-            this.heavy_ChkBox.Location = new System.Drawing.Point(227, 52);
-            this.heavy_ChkBox.Name = "heavy_ChkBox";
-            this.heavy_ChkBox.Size = new System.Drawing.Size(87, 17);
-            this.heavy_ChkBox.TabIndex = 48;
-            this.heavy_ChkBox.Text = "Heavy Chain";
-            this.heavy_ChkBox.UseVisualStyleBackColor = true;
-            this.heavy_ChkBox.CheckedChanged += new System.EventHandler(this.heavy_ChkBox_CheckedChanged);
-            // 
-            // Light_chkBox
-            // 
-            this.Light_chkBox.AutoSize = true;
-            this.Light_chkBox.Location = new System.Drawing.Point(227, 75);
-            this.Light_chkBox.Name = "Light_chkBox";
-            this.Light_chkBox.Size = new System.Drawing.Size(79, 17);
-            this.Light_chkBox.TabIndex = 49;
-            this.Light_chkBox.Text = "Light Chain";
-            this.Light_chkBox.UseVisualStyleBackColor = true;
-            this.Light_chkBox.CheckedChanged += new System.EventHandler(this.Light_chkBox_CheckedChanged);
-            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(730, 716);
+            this.ClientSize = new System.Drawing.Size(761, 731);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel_calc);
@@ -1028,6 +1028,7 @@
             this.Text = "Fragment Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
             this.panel_calc.ResumeLayout(false);
+            this.panel_calc.PerformLayout();
             this.FragCalc_TabControl.ResumeLayout(false);
             this.Frag_tab.ResumeLayout(false);
             this.Frag_tab.PerformLayout();
