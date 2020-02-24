@@ -184,7 +184,6 @@ namespace Isotope_fitting
                     first = true; now = false; selected_idx = 0;
                     frm2.ending_frm9();
                 }
-
             }           
         }
         private void adjust_height()

@@ -904,12 +904,10 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments");
             }
-
             finally
             {
                 loadMS_Btn.Enabled = true;
-            }
-            
+            }            
         }
 
         private void import_fragments()
@@ -1324,6 +1322,23 @@ namespace Isotope_fitting
                     else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
                 }
             }
+            if (ms_heavy_chain && !ms_light_chain && !String.IsNullOrEmpty(heavy_chain))
+            {
+                if (!ChemFormulas[i].Radio_label.Contains("_H"))
+                {
+                    ChemFormulas[i].Radio_label +=  "_H";
+                    ChemFormulas[i].Name += "_H";
+                }                
+            }
+            else if (ms_light_chain && !ms_heavy_chain && !String.IsNullOrEmpty(light_chain))
+            {
+                if (!ChemFormulas[i].Radio_label.Contains("_L"))
+                {
+                    ChemFormulas[i].Radio_label +=  "_L";
+                    ChemFormulas[i].Name +=  "_L";
+                }            
+            }
+
         }
         private void post_import_fragments()
         {
@@ -5353,7 +5368,7 @@ namespace Isotope_fitting
         private void loadFF_Btn_Click(object sender, EventArgs e)
         {
             loadFF_Btn.Enabled = false;
-            if (String.IsNullOrEmpty(Peptide)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadFF_Btn.Enabled = true; return; }
+            if (String.IsNullOrEmpty(Peptide) && String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadFF_Btn.Enabled = true; return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.No)
             {
@@ -5364,12 +5379,24 @@ namespace Isotope_fitting
             {
                 calc_FF = true;
                 clearList();
+                if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
+                {
+                    Form18 frm18 = new Form18(this);
+                    frm18.ShowDialog();
+                    if (!ms_heavy_chain && !ms_light_chain) return;
+                    else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
+                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+                }
+                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+
                 import_fragments();
                 if (ChemFormulas.Count > 0)
                 {
                     Form14 frm14 = new Form14(this);
                     frm14.Show();
-                    frm14.FormClosed += (s, f) => { if (calc_form14) { calc_form14 = false; FF_sequence_a(); } };
+                    frm14.FormClosed += (s, f) =>{if (calc_form14){calc_form14 = false;FF_sequence_a();}};
                 }
                 else
                 {
