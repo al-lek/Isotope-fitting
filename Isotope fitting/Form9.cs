@@ -688,12 +688,12 @@ namespace Isotope_fitting
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate) {  return false; }           
-            chem.PPM_Error = results.Average(p => Math.Abs(p[0]));
-            foreach (double[] pp in results)
-            {
-                if (Math.Abs(pp[0])>Math.Abs(max_error)) { max_error = pp[0]; }
-            }
-            if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
+            chem.PPM_Error = results.Average(p => p[0]);
+            //foreach (double[] pp in results)
+            //{
+            //    if (Math.Abs(pp[0])>Math.Abs(max_error)) { max_error = pp[0]; }
+            //}
+            //if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;

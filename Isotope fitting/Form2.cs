@@ -5250,6 +5250,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
+            double max_error = 0.0;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -5280,7 +5281,13 @@ namespace Isotope_fitting
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate) { fra.Profile.Clear(); return false; }
 
-            //fra.PPM_Error = results.Average(p => p[0]);
+            fra.PPM_Error = results.Average(p => p[0]);
+            //fra.PPM_Error = results.Average(p => Math.Abs(p[0]));
+            //foreach (double[] pp in results)
+            //{
+            //    if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
+            //}
+            //if (max_error < 0) { fra.PPM_Error = -fra.PPM_Error; }
             //fra.Resolution = (float)results.Average(p => p[1]);
 
             return fragment_is_canditate;
@@ -5476,12 +5483,12 @@ namespace Isotope_fitting
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
 
-            chem.PPM_Error = results.Average(p => Math.Abs(p[0]));
-            foreach (double[] pp in results)
-            {
-                if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
-            }
-            if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
+            chem.PPM_Error = results.Average(p => p[0]);
+            //foreach (double[] pp in results)
+            //{
+            //    if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
+            //}
+            //if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
