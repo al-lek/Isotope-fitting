@@ -5285,13 +5285,14 @@ namespace Isotope_fitting
             }
         }
         public void recalc_frm9()
-        {         
-             recalculate_all_data_aligned();           
+        {
+            if(!plotFragProf_chkBox.Checked) plotFragProf_chkBox.Checked = true;
+            recalculate_all_data_aligned();           
         }
         public void refresh_frm9()
         {
-            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
-            plotFragProf_chkBox.Checked = true; 
+            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
+            if (!plotFragProf_chkBox.Checked) plotFragProf_chkBox.Checked = true; 
             refresh_iso_plot();
         }
         public void add_frag_frm9()
