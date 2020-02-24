@@ -978,5 +978,15 @@ namespace Isotope_fitting
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
         }
+        
+        private void chemForm_tab_Click(object sender, EventArgs e)
+        {
+            panel_calc.Focus();
+        }
+
+        private void Frag_tab_Click(object sender, EventArgs e)
+        {
+            panel_calc.Focus();
+        }
     }
 }

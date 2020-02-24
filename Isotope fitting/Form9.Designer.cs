@@ -38,15 +38,6 @@
             this.uncheck_all_boxBtn = new System.Windows.Forms.ToolStripButton();
             this.frag_Label = new System.Windows.Forms.Label();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.calc_param9Lbl = new System.Windows.Forms.Label();
-            this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
-            this.half_plus_rdBtn = new System.Windows.Forms.RadioButton();
-            this.half_rdBtn = new System.Windows.Forms.RadioButton();
-            this.three_rdBtn = new System.Windows.Forms.RadioButton();
-            this.two_rdBtn = new System.Windows.Forms.RadioButton();
-            this.one_rdBtn9 = new System.Windows.Forms.RadioButton();
-            this.ppm9_numUD = new System.Windows.Forms.NumericUpDown();
-            this.ppm9_Lbl = new System.Windows.Forms.Label();
             this.M_lstBox = new System.Windows.Forms.CheckedListBox();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -94,6 +85,15 @@
             this.chemForm_Lbl = new System.Windows.Forms.Label();
             this.insert_Btn = new System.Windows.Forms.Button();
             this.calc_Btn = new System.Windows.Forms.Button();
+            this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
+            this.calc_param9Lbl = new System.Windows.Forms.Label();
+            this.ppm9_Lbl = new System.Windows.Forms.Label();
+            this.ppm9_numUD = new System.Windows.Forms.NumericUpDown();
+            this.half_plus_rdBtn = new System.Windows.Forms.RadioButton();
+            this.one_rdBtn9 = new System.Windows.Forms.RadioButton();
+            this.half_rdBtn = new System.Windows.Forms.RadioButton();
+            this.two_rdBtn = new System.Windows.Forms.RadioButton();
+            this.three_rdBtn = new System.Windows.Forms.RadioButton();
             this.statusStrpFrm9 = new System.Windows.Forms.StatusStrip();
             this.progressLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
@@ -110,8 +110,8 @@
             this.FragCalc_TabControl.SuspendLayout();
             this.Frag_tab.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.chemForm_tab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.statusStrpFrm9.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -198,6 +198,7 @@
             this.Frag_tab.TabIndex = 0;
             this.Frag_tab.Text = "Fragments";
             this.Frag_tab.UseVisualStyleBackColor = true;
+            this.Frag_tab.Click += new System.EventHandler(this.Frag_tab_Click);
             // 
             // toolStrip1
             // 
@@ -259,112 +260,6 @@
             this.dvw_lstBox.Name = "dvw_lstBox";
             this.dvw_lstBox.Size = new System.Drawing.Size(89, 49);
             this.dvw_lstBox.TabIndex = 11;
-            // 
-            // calc_param9Lbl
-            // 
-            this.calc_param9Lbl.AutoSize = true;
-            this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.calc_param9Lbl.ForeColor = System.Drawing.Color.SteelBlue;
-            this.calc_param9Lbl.Location = new System.Drawing.Point(2, 510);
-            this.calc_param9Lbl.Name = "calc_param9Lbl";
-            this.calc_param9Lbl.Size = new System.Drawing.Size(153, 17);
-            this.calc_param9Lbl.TabIndex = 51;
-            this.calc_param9Lbl.Text = "Calculation parameters";
-            // 
-            // half_minus_rdBtn
-            // 
-            this.half_minus_rdBtn.AutoSize = true;
-            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 609);
-            this.half_minus_rdBtn.Name = "half_minus_rdBtn";
-            this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
-            this.half_minus_rdBtn.TabIndex = 43;
-            this.half_minus_rdBtn.TabStop = true;
-            this.half_minus_rdBtn.Text = "half(-) most intense";
-            this.half_minus_rdBtn.UseVisualStyleBackColor = true;
-            // 
-            // half_plus_rdBtn
-            // 
-            this.half_plus_rdBtn.AutoSize = true;
-            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 639);
-            this.half_plus_rdBtn.Name = "half_plus_rdBtn";
-            this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
-            this.half_plus_rdBtn.TabIndex = 44;
-            this.half_plus_rdBtn.TabStop = true;
-            this.half_plus_rdBtn.Text = "half(+) most intense";
-            this.half_plus_rdBtn.UseVisualStyleBackColor = true;
-            // 
-            // half_rdBtn
-            // 
-            this.half_rdBtn.AutoSize = true;
-            this.half_rdBtn.Location = new System.Drawing.Point(150, 579);
-            this.half_rdBtn.Name = "half_rdBtn";
-            this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
-            this.half_rdBtn.TabIndex = 42;
-            this.half_rdBtn.TabStop = true;
-            this.half_rdBtn.Text = "half most intense";
-            this.half_rdBtn.UseVisualStyleBackColor = true;
-            // 
-            // three_rdBtn
-            // 
-            this.three_rdBtn.AutoSize = true;
-            this.three_rdBtn.Location = new System.Drawing.Point(5, 639);
-            this.three_rdBtn.Name = "three_rdBtn";
-            this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
-            this.three_rdBtn.TabIndex = 41;
-            this.three_rdBtn.TabStop = true;
-            this.three_rdBtn.Text = "3 most intense";
-            this.three_rdBtn.UseVisualStyleBackColor = true;
-            // 
-            // two_rdBtn
-            // 
-            this.two_rdBtn.AutoSize = true;
-            this.two_rdBtn.Location = new System.Drawing.Point(5, 609);
-            this.two_rdBtn.Name = "two_rdBtn";
-            this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
-            this.two_rdBtn.TabIndex = 40;
-            this.two_rdBtn.TabStop = true;
-            this.two_rdBtn.Text = "2 most intense";
-            this.two_rdBtn.UseVisualStyleBackColor = true;
-            // 
-            // one_rdBtn9
-            // 
-            this.one_rdBtn9.AutoSize = true;
-            this.one_rdBtn9.Location = new System.Drawing.Point(5, 579);
-            this.one_rdBtn9.Name = "one_rdBtn9";
-            this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
-            this.one_rdBtn9.TabIndex = 39;
-            this.one_rdBtn9.TabStop = true;
-            this.one_rdBtn9.Text = "1 most intense";
-            this.one_rdBtn9.UseVisualStyleBackColor = true;
-            // 
-            // ppm9_numUD
-            // 
-            this.ppm9_numUD.DecimalPlaces = 1;
-            this.ppm9_numUD.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(84, 546);
-            this.ppm9_numUD.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.ppm9_numUD.Name = "ppm9_numUD";
-            this.ppm9_numUD.Size = new System.Drawing.Size(53, 20);
-            this.ppm9_numUD.TabIndex = 38;
-            // 
-            // ppm9_Lbl
-            // 
-            this.ppm9_Lbl.AutoSize = true;
-            this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ppm9_Lbl.ForeColor = System.Drawing.Color.SlateGray;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 547);
-            this.ppm9_Lbl.Name = "ppm9_Lbl";
-            this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
-            this.ppm9_Lbl.TabIndex = 43;
-            this.ppm9_Lbl.Text = "max ppm error";
             // 
             // M_lstBox
             // 
@@ -735,6 +630,7 @@
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
+            this.chemForm_tab.Click += new System.EventHandler(this.chemForm_tab_Click);
             // 
             // Light_chkBox
             // 
@@ -929,6 +825,112 @@
             this.calc_Btn.UseVisualStyleBackColor = false;
             this.calc_Btn.Click += new System.EventHandler(this.calc_Btn_Click);
             // 
+            // half_minus_rdBtn
+            // 
+            this.half_minus_rdBtn.AutoSize = true;
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 609);
+            this.half_minus_rdBtn.Name = "half_minus_rdBtn";
+            this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
+            this.half_minus_rdBtn.TabIndex = 43;
+            this.half_minus_rdBtn.TabStop = true;
+            this.half_minus_rdBtn.Text = "half(-) most intense";
+            this.half_minus_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // calc_param9Lbl
+            // 
+            this.calc_param9Lbl.AutoSize = true;
+            this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.calc_param9Lbl.ForeColor = System.Drawing.Color.SteelBlue;
+            this.calc_param9Lbl.Location = new System.Drawing.Point(2, 510);
+            this.calc_param9Lbl.Name = "calc_param9Lbl";
+            this.calc_param9Lbl.Size = new System.Drawing.Size(153, 17);
+            this.calc_param9Lbl.TabIndex = 51;
+            this.calc_param9Lbl.Text = "Calculation parameters";
+            // 
+            // ppm9_Lbl
+            // 
+            this.ppm9_Lbl.AutoSize = true;
+            this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm9_Lbl.ForeColor = System.Drawing.Color.SlateGray;
+            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 547);
+            this.ppm9_Lbl.Name = "ppm9_Lbl";
+            this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
+            this.ppm9_Lbl.TabIndex = 43;
+            this.ppm9_Lbl.Text = "max ppm error";
+            // 
+            // ppm9_numUD
+            // 
+            this.ppm9_numUD.DecimalPlaces = 1;
+            this.ppm9_numUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ppm9_numUD.Location = new System.Drawing.Point(84, 546);
+            this.ppm9_numUD.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.ppm9_numUD.Name = "ppm9_numUD";
+            this.ppm9_numUD.Size = new System.Drawing.Size(53, 20);
+            this.ppm9_numUD.TabIndex = 38;
+            // 
+            // half_plus_rdBtn
+            // 
+            this.half_plus_rdBtn.AutoSize = true;
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 639);
+            this.half_plus_rdBtn.Name = "half_plus_rdBtn";
+            this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
+            this.half_plus_rdBtn.TabIndex = 44;
+            this.half_plus_rdBtn.TabStop = true;
+            this.half_plus_rdBtn.Text = "half(+) most intense";
+            this.half_plus_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // one_rdBtn9
+            // 
+            this.one_rdBtn9.AutoSize = true;
+            this.one_rdBtn9.Location = new System.Drawing.Point(5, 579);
+            this.one_rdBtn9.Name = "one_rdBtn9";
+            this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
+            this.one_rdBtn9.TabIndex = 39;
+            this.one_rdBtn9.TabStop = true;
+            this.one_rdBtn9.Text = "1 most intense";
+            this.one_rdBtn9.UseVisualStyleBackColor = true;
+            // 
+            // half_rdBtn
+            // 
+            this.half_rdBtn.AutoSize = true;
+            this.half_rdBtn.Location = new System.Drawing.Point(150, 579);
+            this.half_rdBtn.Name = "half_rdBtn";
+            this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
+            this.half_rdBtn.TabIndex = 42;
+            this.half_rdBtn.TabStop = true;
+            this.half_rdBtn.Text = "half most intense";
+            this.half_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // two_rdBtn
+            // 
+            this.two_rdBtn.AutoSize = true;
+            this.two_rdBtn.Location = new System.Drawing.Point(5, 609);
+            this.two_rdBtn.Name = "two_rdBtn";
+            this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
+            this.two_rdBtn.TabIndex = 40;
+            this.two_rdBtn.TabStop = true;
+            this.two_rdBtn.Text = "2 most intense";
+            this.two_rdBtn.UseVisualStyleBackColor = true;
+            // 
+            // three_rdBtn
+            // 
+            this.three_rdBtn.AutoSize = true;
+            this.three_rdBtn.Location = new System.Drawing.Point(5, 639);
+            this.three_rdBtn.Name = "three_rdBtn";
+            this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
+            this.three_rdBtn.TabIndex = 41;
+            this.three_rdBtn.TabStop = true;
+            this.three_rdBtn.Text = "3 most intense";
+            this.three_rdBtn.UseVisualStyleBackColor = true;
+            // 
             // statusStrpFrm9
             // 
             this.statusStrpFrm9.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1034,9 +1036,9 @@
             this.Frag_tab.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.chemForm_tab.ResumeLayout(false);
             this.chemForm_tab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
             this.ResumeLayout(false);
