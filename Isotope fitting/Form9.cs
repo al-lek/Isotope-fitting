@@ -658,7 +658,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-
+            double max_error = 0.0;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -682,13 +682,18 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(cen[i].X);
 
-                if (tmp[0] < ppmError9) results.Add(tmp);
+                if (Math.Abs(tmp[0])< ppmError9) results.Add(tmp);
                 else { fragment_is_canditate = false; break; }
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate) {  return false; }
-            chem.PPM_Error = results.Average(p => p[0]);
+            if (!fragment_is_canditate) {  return false; }           
+            chem.PPM_Error = results.Average(p => Math.Abs(p[0]));
+            foreach (double[] pp in results)
+            {
+                if (Math.Abs(pp[0])>Math.Abs(max_error)) { max_error = pp[0]; }
+            }
+            if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;

@@ -2144,7 +2144,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-
+            double max_error = 0.0;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -2168,7 +2168,7 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(cen[i].X);
 
-                if (tmp[0] < ppmError) results.Add(tmp);
+                if (Math.Abs(tmp[0]) < ppmError) results.Add(tmp);
                 else
                 {
                     fragment_is_canditate = false; break;
@@ -2178,7 +2178,12 @@ namespace Isotope_fitting
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
 
-            chem.PPM_Error = results.Average(p => p[0]);
+            chem.PPM_Error = results.Average(p => Math.Abs(p[0]));
+            foreach (double[] pp in results)
+            {
+                if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
+            }
+            if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }            
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
@@ -2203,8 +2208,9 @@ namespace Isotope_fitting
             }
 
             exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
-            ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
-
+            //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
+            ppm = (exp_cen - centroid) * 1e6 / (exp_cen);
+            
             return new double[] { ppm, peak_points[closest_idx][3] };
         }
       
@@ -5267,7 +5273,7 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(fra.Centroid[i].X);
 
-                if (tmp[0] < ppmError) results.Add(tmp);
+                if (Math.Abs(tmp[0])< ppmError) results.Add(tmp);
                 else { fragment_is_canditate = false; break; }
             }
 
@@ -5450,7 +5456,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-
+            double max_error = 0.0;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -5459,7 +5465,7 @@ namespace Isotope_fitting
 
             double[] tmp = ppm_calculator(cen[0].X);
 
-            if (tmp[0] < ppmErrorFF) results.Add(tmp);
+            if (Math.Abs(tmp[0]) < ppmErrorFF) results.Add(tmp);
             else
             {
                 results.Add(tmp);
@@ -5470,7 +5476,12 @@ namespace Isotope_fitting
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
 
-            chem.PPM_Error = results.Average(p => p[0]);
+            chem.PPM_Error = results.Average(p => Math.Abs(p[0]));
+            foreach (double[] pp in results)
+            {
+                if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
+            }
+            if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
@@ -7398,7 +7409,7 @@ namespace Isotope_fitting
             if (peak_points[peak_points.Count() - 1][1] - centroid < 0)
             {
                 ppm = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid) * 1000000 / (peak_points[0][1] + peak_points[0][4]);
-                if (ppm < ppmError) { res = (double)peak_points[0][3]; return res; }
+                if (Math.Abs(ppm) < ppmError) { res = (double)peak_points[0][3]; return res; }
                 else return res;
             }
 
@@ -7414,9 +7425,9 @@ namespace Isotope_fitting
                 if (diff >= 0)
                 {
                     ppm = Math.Abs(diff) * 1000000 / (peak_points[d][1] + peak_points[d][4]);
-                    if (ppm < ppmError) { res = (double)peak_points[d][3]; return res; }
+                    if (Math.Abs(ppm) < ppmError) { res = (double)peak_points[d][3]; return res; }
                     ppm = Math.Abs(peak_points[d - 1][1] + peak_points[d - 1][4] - centroid) * 1000000 / (peak_points[d - 1][1] + peak_points[d - 1][4]);
-                    if (ppm < ppmError) { res = (double)peak_points[d - 1][3]; return res; }
+                    if (Math.Abs(ppm) < ppmError) { res = (double)peak_points[d - 1][3]; return res; }
                     else return res;
                 }
 
