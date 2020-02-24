@@ -232,7 +232,7 @@ namespace Isotope_fitting
             // 1. select fragments according to UI            
             sw1.Reset(); sw1.Start();
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
-            if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { selected_fragments = select_fragments2_frm9(); }
+            if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; } selected_fragments = select_fragments2_frm9(); }
             else { selected_fragments = check_chem_inputs(); }
              
 
@@ -388,7 +388,7 @@ namespace Isotope_fitting
         
         private List<ChemiForm> select_fragments2_frm9()
         {
-            List<ChemiForm> res = new List<ChemiForm>();
+            List<ChemiForm> res = new List<ChemiForm>();            
             List<string> primary = new List<string> { "a", "b", "c", "x", "y", "z" };
             List<string> side_chain = new List<string> { "d", "w", "v" };
 

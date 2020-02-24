@@ -3824,7 +3824,7 @@ namespace Isotope_fitting
             if (status == "post load")
             {
                 fitMin_Box.Enabled = fitMax_Box.Enabled = fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
-                Fitting_chkBox.Checked = loadFit_Btn.Enabled = false;
+                Fitting_chkBox.Checked = loadFit_Btn.Enabled = false; fragCalc_Btn1.Enabled = true;
             }
             else if (status == "post import fragments")
             {
@@ -5290,6 +5290,8 @@ namespace Isotope_fitting
         }
         public void refresh_frm9()
         {
+            plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
+            plotFragProf_chkBox.Checked = true; 
             refresh_iso_plot();
         }
         public void add_frag_frm9()
