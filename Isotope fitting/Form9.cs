@@ -367,6 +367,7 @@ namespace Isotope_fitting
                 }
                 else if (res.Last().Ion_type.StartsWith("M"))
                 {
+                    lbl =ion;
                     res.Last().Radio_label = lbl;
                     if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
                     else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";
