@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿
+using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
@@ -767,7 +768,9 @@ namespace Isotope_fitting
 
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
             peak_detection.Start();
-            plotCentr_chkBox.Enabled = true;
+            //plotCentr_chkBox.Enabled = true;
+            //plotExp_chkBox.Checked = true;
+
         }
 
         private bool load_experimental()
@@ -804,7 +807,7 @@ namespace Isotope_fitting
                     }
                     sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
                     progress_display_stop();
-                    plotExp_chkBox.Enabled = true;
+                    //plotExp_chkBox.Enabled = true;
                     filename_txtBx.Text = file_name;
                     return true;
                 }
@@ -850,6 +853,10 @@ namespace Isotope_fitting
                 if (peak_points.Count() > 0)
                 {
                     displayPeakList_btn.Invoke(new Action(() => displayPeakList_btn.Enabled = true));   //thread safe call
+                    plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
+                    plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = true));   //thread safe call
+                    plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Checked = true));   //thread safe call
+
                     exp_res++;
                     //plot_peak(); 
                     List<double> tmp1 = new List<double>();
@@ -6089,13 +6096,21 @@ namespace Isotope_fitting
             double coverage = 0.0;
             foreach (double[] metr in all_data_aligned)
             {
-                sumExp += metr[0];
+                double temp = 0.0;
                 foreach (int indexS in fragstatistics)
                 {
                     if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
                     {
-                        sumFrag += Fragments2[indexS - 1].Factor * metr[indexS];
+                        temp += Fragments2[indexS - 1].Factor * metr[indexS];
                     }
+                }
+                if (temp>1.0)
+                {
+                    sumFrag += temp; sumExp += metr[0];
+                }
+                else if (metr[0]>50.0)
+                {
+                    sumExp += metr[0];
                 }
             }
             //foreach (int indexS in fragstatistics)

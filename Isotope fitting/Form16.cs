@@ -31,6 +31,16 @@ namespace Isotope_fitting
             frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
             frm2.Peptide= frm2.Peptide.Replace("\t", "");
             frm2.Peptide = frm2.Peptide.Replace(" ", "");
+            frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
+            frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
+            if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
+            else { frm2.heavy_present = true; }
+            frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            frm2.light_chain = frm2.light_chain.Replace("\t", "");
+            frm2.light_chain = frm2.light_chain.Replace(" ", "");
+            if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
+            else { frm2.light_present = true; }
             this.Close();
         }
 
@@ -47,19 +57,8 @@ namespace Isotope_fitting
                 seq_BoxFrm16.Text= output_txt;
                 seq_BoxFrm16.SelectionStart = seq_BoxFrm16.Text.Length;
                 seq_BoxFrm16.SelectionLength = 0;
-
             }
             active_txt = false;
-        }
-
-        private void tabPage2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void seq_tab_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void heavy_BoxFrm16_TextChanged(object sender, EventArgs e)
@@ -75,7 +74,6 @@ namespace Isotope_fitting
                 heavy_BoxFrm16.Text = output_txt;
                 heavy_BoxFrm16.SelectionStart = heavy_BoxFrm16.Text.Length;
                 heavy_BoxFrm16.SelectionLength = 0;
-
             }
             active_txt = false;
         }
@@ -104,7 +102,6 @@ namespace Isotope_fitting
                 light_BoxFrm16.Text = output_txt;
                 light_BoxFrm16.SelectionStart = light_BoxFrm16.Text.Length;
                 light_BoxFrm16.SelectionLength = 0;
-
             }
             active_txt = false;
         }
