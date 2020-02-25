@@ -644,11 +644,22 @@ namespace Isotope_fitting
                 Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
-                Fragments3.Last().Factor = 0.1 * Form2.max_exp / Fragments3.Last().Max_intensity;        // start all fragments at 10% of the main experimental peak (one order of mag. less)
-
+                
                 if (chem.Charge > 0) Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-                
+                double pt0 = 0.1*Form2.max_exp;
+                if (all_data[0].Count > 0 && all_data[0][0][0] < Fragments3.Last().Profile[0].X && all_data[0].Last()[0] > Fragments3.Last().Profile.Last().X)
+                {
+                    try
+                    {
+                        pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X-2 && x[0] < Fragments3.Last().Centroid[0].X+2)).Max(k => k[1]);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
                 // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                 // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                 chem.Profile.Clear();

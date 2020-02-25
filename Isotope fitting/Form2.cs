@@ -5342,8 +5342,7 @@ namespace Isotope_fitting
             if(!plotFragProf_chkBox.Checked) plotFragProf_chkBox.Checked = true;
             recalculate_all_data_aligned();
             if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
-            {
-                
+            {                
                 if (max_border> iso_plot.Model.Axes[1].ActualMaximum || min_border < iso_plot.Model.Axes[1].ActualMinimum || (iso_plot.Model.Axes[1].ActualMaximum- iso_plot.Model.Axes[1].ActualMinimum)/100> (max_border-min_border))           
                 {
                     iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
