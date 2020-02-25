@@ -176,7 +176,7 @@ namespace Isotope_fitting
                 first = false; now = true;
                 try
                 {
-                    frm2.recalc_frm9(); adjust_height();
+                    frm2.recalc_frm9(Fragments3[selected_idx].Profile[0].X, Fragments3[selected_idx].Profile.Last().X); adjust_height();
                 }
                 catch
                 {
@@ -192,7 +192,6 @@ namespace Isotope_fitting
             factor_panel9.Visible = true;
             factor_panel9.Controls.Clear();
             Label factor_lbl = new Label { Text = Fragments3[selected_idx].Name, Location = new Point(5, 10), AutoSize = true };
-
             NumericUpDown numUD = new NumericUpDown
             {
                 Minimum = 0,
@@ -208,7 +207,7 @@ namespace Isotope_fitting
                 Fragments3[selected_idx].Factor = Convert.ToDouble(numUD.Value) / Fragments3[selected_idx].Max_intensity;
                 frm2.refresh_frm9();
             };
-            numUD.Focus();
+            numUD.Focus();           
             //ensure that the focus is mainly on numeric up down box in the factor_panel9 
             //that way when the user clicks a fragment from the listview the focus is not on the listview but on the numeric up down
             //and can control height of the fragment instantly from the buttons "up" "down"

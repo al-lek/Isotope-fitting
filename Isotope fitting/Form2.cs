@@ -1891,7 +1891,7 @@ namespace Isotope_fitting
                                                         Location = new Point(275, 7), Size = new Size(60, 20) };
             btn_solo.Click += (s, e) => 
             {
-                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!"); return; }
+                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to adjust fragment's height!"); return; }
                 // run solo fit. Fit calls refresh plot.
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(new List<int> { frag_idx + 1 }); // selected fragments have +1 index comparing to Fragments2
 
@@ -2923,7 +2923,6 @@ namespace Isotope_fitting
             return newarr.Max();
         }
         #endregion
-
         private (double,double) per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients,double exp_sum)
         {
             double exp_frag_sum = 0.0, frag_sum = 0.0;
@@ -5313,8 +5312,7 @@ namespace Isotope_fitting
             return fragment_is_canditate;
         }
         #endregion
-
-
+        
         #region FORM 9 fragment calculator
         private void fragCalc_Btn1_Click(object sender, EventArgs e)
         {
@@ -5339,10 +5337,29 @@ namespace Isotope_fitting
                 return;
             }
         }
-        public void recalc_frm9()
+        public void recalc_frm9(double min_border,double  max_border)
         {
             if(!plotFragProf_chkBox.Checked) plotFragProf_chkBox.Checked = true;
-            recalculate_all_data_aligned();           
+            recalculate_all_data_aligned();
+            if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
+            {
+                
+                if (max_border> iso_plot.Model.Axes[1].ActualMaximum || min_border < iso_plot.Model.Axes[1].ActualMinimum || (iso_plot.Model.Axes[1].ActualMaximum- iso_plot.Model.Axes[1].ActualMinimum)/100> (max_border-min_border))           
+                {
+                    iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
+                    if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+                    {
+                        try
+                        {
+                            double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border - 3 && x.X < max_border + 10)).Max(k => k.Y);
+                            iso_plot.Model.Axes[0].Zoom(-10, pt0 * 1.2);
+                        }
+                        catch{}
+                    }
+                    iso_plot.Refresh();
+                    invalidate_all();
+                }                
+            }
         }
         public void refresh_frm9()
         {
@@ -11545,6 +11562,7 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
+
 
 
         #region FORM 11 extract plot isoplot
