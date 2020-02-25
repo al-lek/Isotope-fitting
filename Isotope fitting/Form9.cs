@@ -656,7 +656,7 @@ namespace Isotope_fitting
                     }
                     catch
                     {
-
+                        pt0 = 0.1 * Form2.max_exp;
                     }
                 }
                 Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
