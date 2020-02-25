@@ -34,6 +34,8 @@ namespace Isotope_fitting
         private double fix;
         private double max_intensity;
         private bool fixed_;
+        private double maxppm_error;
+        private double minppm_error;
 
 
         public OxyColor Color
@@ -171,7 +173,16 @@ namespace Isotope_fitting
             get { return this.ppm_error; }
             set { this.ppm_error = value; }
         }
-
+        public double maxPPM_Error
+        {
+            get { return this.maxppm_error; }
+            set { this.maxppm_error = value; }
+        }
+        public double minPPM_Error
+        {
+            get { return this.minppm_error; }
+            set { this.minppm_error = value; }
+        }
 
 
     }

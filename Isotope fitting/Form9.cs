@@ -639,6 +639,8 @@ namespace Isotope_fitting
                     Fix = 1.0,
                     Max_intensity = 0.0,
                     Fixed = chem.Fixed,
+                    maxPPM_Error=chem.maxPPM_Error,
+                    minPPM_Error=chem.minPPM_Error
                 });               
                 Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
@@ -763,6 +765,8 @@ namespace Isotope_fitting
                     Fix = 1.0,
                     Max_intensity = 0.0,
                     Fixed = false,
+                    maxPPM_Error= Fragments3[selected_idx].maxPPM_Error,
+                    minPPM_Error= Fragments3[selected_idx].minPPM_Error
                 });
 
                 Fragments2.Last().Centroid = Fragments3[selected_idx].Centroid.Select(point => point.DeepCopy()).ToList();

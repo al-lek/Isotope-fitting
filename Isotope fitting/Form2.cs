@@ -1757,6 +1757,8 @@ namespace Isotope_fitting
                         Fix = 1.0,
                         Max_intensity = 0.0,
                         Fixed = chem.Fixed,
+                        maxPPM_Error = chem.maxPPM_Error,
+                        minPPM_Error = chem.minPPM_Error
                     });
 
                     Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
@@ -2178,12 +2180,16 @@ namespace Isotope_fitting
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
 
-            chem.PPM_Error = results.Average(p => Math.Abs(p[0]));
-            foreach (double[] pp in results)
+            chem.PPM_Error = results.Average(p => p[0]);
+            if (results.Count > 1)
             {
-                if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
+                chem.maxPPM_Error = results.Max(p => p[0]);
+                chem.minPPM_Error = results.Min(p => p[0]);
             }
-            if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }            
+            else
+            {
+                chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0;
+            }
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
@@ -4966,7 +4972,7 @@ namespace Isotope_fitting
                 file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
                 file.WriteLine("[m/z[Da]\tIntensity]");
                 file.WriteLine();
-                file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution");
+                file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution\tminPPMerror\tmaxPPMerror");
                 //file.WriteLine("Name:\tExp");
                 //foreach (double[] p in Form2.selected_all_data[0]) file.WriteLine(p[0] + "\t" + p[1]);
                 //file.WriteLine();
@@ -4974,8 +4980,8 @@ namespace Isotope_fitting
                 foreach (int indexS in fragToSave)
                 {
                     Form2.Fragments2[indexS - 1].Fixed = true;
-                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution);
-                    IonDraw.Add(new ion() {Name= Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error= Fragments2[indexS - 1].PPM_Error, Charge =Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
+                    file.WriteLine(Form2.Fragments2[indexS - 1].Name+ "\t" + Form2.Fragments2[indexS - 1].Ion_type+"\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t"+ Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t"+ Form2.Fragments2[indexS - 1].Factor + "\t"+ Form2.Fragments2[indexS - 1].PPM_Error + "\t"+ Form2.Fragments2[indexS - 1].InputFormula + "\t"+ Form2.Fragments2[indexS - 1].Adduct + "\t"+ Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error);
+                    IonDraw.Add(new ion() {Name= Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error= Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge =Fragments2[indexS - 1].Charge, Index=Int32.Parse( Fragments2[indexS - 1].Index),IndexTo=Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type= Fragments2[indexS - 1].Ion_type,Max_intensity= Fragments2[indexS - 1].Max_intensity* Fragments2[indexS - 1].Factor, Color= Fragments2[indexS - 1].Color.ToColor()});
                     if (IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z")||IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
                     {
                         if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
@@ -5040,10 +5046,10 @@ namespace Isotope_fitting
                 
                 for (int j = 0; j != (lista.Count); j++)
                 {
-                    string[] str = new string[15];
+                    //string[] str = new string[15];
                     try
                     {
-                        str = lista[j].Split('\t');
+                        string[] str = lista[j].Split('\t');
 
                         if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
                         else if (lista[j].StartsWith("Mode")) continue; // to be implemented
@@ -5116,12 +5122,14 @@ namespace Isotope_fitting
                                     Radio_label= string.Empty,         
                                     Factor= dParser(str[7]),
                                     Fixed=true,
-                                    Max_man_int = 0
+                                    Max_man_int = 0,
+                                    maxPPM_Error=0,
+                                    minPPM_Error=0
                                 });
                                 if (heavy) { if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0]+"_H"; } }
                                 else if (light) { if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; } }
                                 if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error= dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor() });
+                                IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error= dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity =dParser(str[6])* dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error=0,minPPM_Error=0 });
                                 if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
                                 {
                                     if (HEAVY_LIGHT_BOTH)
@@ -5145,6 +5153,14 @@ namespace Isotope_fitting
                                     }
                                 }
                                 else IonDraw.Last().SortIdx = IonDraw.Last().Index;
+
+                                if (str.Length == 16)
+                                {
+                                    fitted_chem.Last().maxPPM_Error = dParser(str[15]);
+                                    fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                    IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                    IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                }
                             }
                         }                       
                     }
@@ -5222,6 +5238,7 @@ namespace Isotope_fitting
         }
         private void refresh_frag_Btn1_Click(object sender, EventArgs e)
         {
+            if(experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!"); return; }
             int initial_count = Fragments2.Count;
             int rr = 0;
             if (Fragments2.Count > 0)
@@ -5282,12 +5299,15 @@ namespace Isotope_fitting
             if (!fragment_is_canditate) { fra.Profile.Clear(); return false; }
 
             fra.PPM_Error = results.Average(p => p[0]);
-            //fra.PPM_Error = results.Average(p => Math.Abs(p[0]));
-            //foreach (double[] pp in results)
-            //{
-            //    if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
-            //}
-            //if (max_error < 0) { fra.PPM_Error = -fra.PPM_Error; }
+            if (results.Count > 1)
+            {
+                fra.maxPPM_Error = results.Max(p => p[0]);
+                fra.minPPM_Error = results.Min(p => p[0]);
+            }
+            else
+            {
+                fra.maxPPM_Error = 0.0; fra.minPPM_Error = 0.0;
+            }
             //fra.Resolution = (float)results.Average(p => p[1]);
 
             return fragment_is_canditate;
@@ -5484,11 +5504,16 @@ namespace Isotope_fitting
             if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear(); return false; }
 
             chem.PPM_Error = results.Average(p => p[0]);
-            //foreach (double[] pp in results)
-            //{
-            //    if (Math.Abs(pp[0]) > Math.Abs(max_error)) { max_error = pp[0]; }
-            //}
-            //if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
+            if (results.Count > 1)
+            {
+                chem.maxPPM_Error = results.Max(p => p[0]);
+                chem.minPPM_Error = results.Min(p => p[0]);
+            }
+            else
+            {
+                chem.maxPPM_Error = 0.0;chem.minPPM_Error = 0.0;
+            }
+         
             chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
@@ -10562,7 +10587,7 @@ namespace Isotope_fitting
         }
 
         private void initialize_plot_tabs()
-        {
+        {            
             string s_chain = Peptide;
             if (heavy_chkBox.Checked) { s_chain = heavy_chain; }
             else if (light_chkBox.Checked) { s_chain = light_chain; }
@@ -10677,7 +10702,8 @@ namespace Isotope_fitting
                 ion nn = IonDraw[i];
                 if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
                 else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
-                ppmpoints[i]=new CustomDataPoint(i+1, nn.PPM_Error, nn.Index.ToString(), nn.Mz,nn.Name);
+                if (nn.minPPM_Error==0 && nn.maxPPM_Error==0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
+                else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }                
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
                     if((!nn.Ion_type.Contains("H2O")&& !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -10880,7 +10906,7 @@ namespace Isotope_fitting
             ppm_series.ItemsSource = ppmpoints;
             //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
             // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
-            ppm_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nName:{Name}"; 
+            ppm_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}"+ "\nName:{Name}"; 
             ppm_plot.Model.Series.Add(ppm_series);
             ppm_plot.Model.TrackerChanged += (s, e) =>
             {                
