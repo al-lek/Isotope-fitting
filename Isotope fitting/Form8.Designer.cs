@@ -58,7 +58,6 @@
             0,
             0,
             0});
-            this.minIntensity_numUD.ValueChanged += new System.EventHandler(this.minIntensity_numUD_ValueChanged);
             // 
             // Form8
             // 

@@ -860,6 +860,7 @@
             // 
             // ppm9_numUD
             // 
+            this.ppm9_numUD.AllowDrop = true;
             this.ppm9_numUD.DecimalPlaces = 1;
             this.ppm9_numUD.Increment = new decimal(new int[] {
             1,

@@ -60,7 +60,6 @@
             0,
             0,
             0});
-            this.fitCover_numUD.ValueChanged += new System.EventHandler(this.fitCover_numUD_ValueChanged);
             // 
             // fitBunch_numUD
             // 
@@ -87,7 +86,6 @@
             0,
             0,
             0});
-            this.fitBunch_numUD.ValueChanged += new System.EventHandler(this.fitBunch_numUD_ValueChanged);
             // 
             // fitCover_lbl
             // 
@@ -148,7 +146,6 @@
             0,
             0,
             0});
-            this.ppmDi_numUD.ValueChanged += new System.EventHandler(this.ppmDi_numUD_ValueChanged);
             // 
             // label2
             // 

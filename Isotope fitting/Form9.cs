@@ -39,11 +39,14 @@ namespace Isotope_fitting
             frm2 = f;
             InitializeComponent();
             OnCalcFrag3Completed += () => { Fragments3_to_listview(); };
-
+            ppm9_numUD.TextChanged += new EventHandler(ppm9_numUD_TextChanged);
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
 
-            ppm9_numUD.ValueChanged += (s, e) => { ppmError9 = (double)ppm9_numUD.Value; };
+            //ppm9_numUD.ValueChanged += (s, e) => 
+            //{
+            //    ppmError9 = (double)ppm9_numUD.Value;
+            //};
             ppm9_numUD.Value =(decimal)ppmError9;
 
             one_rdBtn9.CheckedChanged += (s, e) => { selection_rule9[0]=one_rdBtn9.Checked; };
@@ -1005,6 +1008,14 @@ namespace Isotope_fitting
         private void Frag_tab_Click(object sender, EventArgs e)
         {
             panel_calc.Focus();
+        }
+
+        void ppm9_numUD_TextChanged(object sender, EventArgs e)
+        {
+            if (ppm9_numUD.ActiveControl!=null && !string.IsNullOrEmpty(ppm9_numUD.ActiveControl.Text))
+            {
+                ppmError9 = double.Parse(ppm9_numUD.ActiveControl.Text);
+            }
         }
     }
 }

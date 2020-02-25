@@ -30,6 +30,22 @@ namespace Isotope_fitting
         public Form6(bool node,int node_idx)
         {
             InitializeComponent();
+            numericUpDown1.TextChanged += new EventHandler(numericUpDown1_TextChanged);
+            best_num_UD.TextChanged += new EventHandler(best_num_UD_TextChanged);
+            Ai_coef_numUD.TextChanged += new EventHandler(Ai_coef_numUD_TextChanged);
+            A_coef_numUD.TextChanged += new EventHandler(A_coef_numUD_TextChanged);
+            di_coef_numUD.TextChanged += new EventHandler(di_coef_numUD_TextChanged);
+            sse_coef_numUD.TextChanged += new EventHandler(sse_coef_numUD_TextChanged);
+            ei_coef_numUD.TextChanged += new EventHandler(ei_coef_numUD_TextChanged);
+            dinew_coef_numUD.TextChanged += new EventHandler(dinew_coef_numUD_TextChanged);
+            Ai_numUD.TextChanged += new EventHandler(Ai_numUD_TextChanged);
+            A_numUD.TextChanged += new EventHandler(A_numUD_TextChanged);
+            di_numUD.TextChanged += new EventHandler(di_numUD_TextChanged);
+            ei_numUD.TextChanged += new EventHandler(ei_numUD_TextChanged);
+            dinew_numUD.TextChanged += new EventHandler(dinew_numUD_TextChanged);
+            sd_numUD.TextChanged += new EventHandler(sd_numUD_TextChanged);
+            sdnew_numUD.TextChanged += new EventHandler(sdnew_numUD_TextChanged);
+
             numericUpDown1.Value = (decimal)Form2.visible_results;
             best_num_UD.Value = (decimal)Form2.best_num_results;
 
@@ -178,53 +194,102 @@ namespace Isotope_fitting
             else { labelei.Enabled = false; ei_coef_numUD.Enabled = false; ei_coef_numUD.BackColor = DefaultBackColor; ObjLbl.Enabled = false; ei_coef_numUD.Value = 0; }
             sort[4] = ei_checkBox.Checked;
         }
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown1_TextChanged(object sender, EventArgs e)
         {
-            vis_res = (int)numericUpDown1.Value;
+            //vis_res = (int)numericUpDown1.Value;
+            if (numericUpDown1.ActiveControl != null && !string.IsNullOrEmpty(numericUpDown1.ActiveControl.Text))
+            {
+                if (string.IsNullOrEmpty(numericUpDown1.ActiveControl.Text)) vis_res = 0;
+                vis_res = int.Parse(numericUpDown1.ActiveControl.Text);
+            }
         }
-        private void Ai_coef_numUD_ValueChanged(object sender, EventArgs e)
+        private void Ai_coef_numUD_TextChanged(object sender, EventArgs e)
         {
-            coeff_matrix[0] = (double)Ai_coef_numUD.Value;
+            //coeff_matrix[0] = (double)Ai_coef_numUD.Value;
+            if (Ai_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(Ai_coef_numUD.ActiveControl.Text))
+            {                
+                coeff_matrix[0] = double.Parse(Ai_coef_numUD.ActiveControl.Text);
+            }
         }
-        private void A_coef_numUD_ValueChanged(object sender, EventArgs e)
+        private void A_coef_numUD_TextChanged(object sender, EventArgs e)
         {
-            coeff_matrix[1] = (double)A_coef_numUD.Value;
+            //coeff_matrix[1] = (double)A_coef_numUD.Value;
+            if (A_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(A_coef_numUD.ActiveControl.Text))
+            {               
+                coeff_matrix[1] = double.Parse(A_coef_numUD.ActiveControl.Text);
+            }
         }
-        private void di_coef_numUD_ValueChanged(object sender, EventArgs e)
+        private void di_coef_numUD_TextChanged(object sender, EventArgs e)
         {
-            coeff_matrix[2] = (double)di_coef_numUD.Value;
+            //coeff_matrix[2] = (double)di_coef_numUD.Value;
+            if (di_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(di_coef_numUD.ActiveControl.Text))
+            {                
+                coeff_matrix[2] = double.Parse(di_coef_numUD.ActiveControl.Text);
+            }
         }
-        private void sse_coef_numUD_ValueChanged(object sender, EventArgs e)
+        private void sse_coef_numUD_TextChanged(object sender, EventArgs e)
         {
-            coeff_matrix[3] = (double)sse_coef_numUD.Value;
+            //coeff_matrix[3] = (double)sse_coef_numUD.Value;
+            if (sse_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(sse_coef_numUD.ActiveControl.Text))
+            {                
+                coeff_matrix[3] = double.Parse(sse_coef_numUD.ActiveControl.Text);
+            }
         }
-        private void ei_coef_numUD_ValueChanged(object sender, EventArgs e)
+        private void ei_coef_numUD_TextChanged(object sender, EventArgs e)
         {
-            coeff_matrix[4] = (double)ei_coef_numUD.Value;
+            //coeff_matrix[4] = (double)ei_coef_numUD.Value;
+            if (ei_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(ei_coef_numUD.ActiveControl.Text))
+            {               
+                coeff_matrix[4] = double.Parse(ei_coef_numUD.ActiveControl.Text);
+            }
         }
-        private void dinew_coef_numUD_ValueChanged(object sender, EventArgs e)
+        private void dinew_coef_numUD_TextChanged(object sender, EventArgs e)
         {
-            coeff_matrix[5] = (double)dinew_coef_numUD.Value;
+            //coeff_matrix[5] = (double)dinew_coef_numUD.Value;
+            if (dinew_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(dinew_coef_numUD.ActiveControl.Text))
+            {                
+                coeff_matrix[5] = double.Parse(dinew_coef_numUD.ActiveControl.Text);
+            }
         }
-        private void Ai_numUD_ValueChanged(object sender, EventArgs e)
+        private void Ai_numUD_TextChanged(object sender, EventArgs e)
         {
-            thres[0] = (double)Ai_numUD.Value;
+            //thres[0] = (double)Ai_numUD.Value;
+            if (Ai_numUD.ActiveControl != null && !string.IsNullOrEmpty(Ai_numUD.ActiveControl.Text))
+            {               
+                thres[0] = double.Parse(Ai_numUD.ActiveControl.Text);
+            }
         }
-        private void A_numUD_ValueChanged(object sender, EventArgs e)
+        private void A_numUD_TextChanged(object sender, EventArgs e)
         {
-            thres[1] = (double)A_numUD.Value;
+            //thres[1] = (double)A_numUD.Value;
+            if (A_numUD.ActiveControl != null && !string.IsNullOrEmpty(A_numUD.ActiveControl.Text))
+            {                
+                thres[1] = double.Parse(A_numUD.ActiveControl.Text);
+            }
         }
-        private void di_numUD_ValueChanged(object sender, EventArgs e)
+        private void di_numUD_TextChanged(object sender, EventArgs e)
         {
-           thres[2] = (double)di_numUD.Value;
+           //thres[2] = (double)di_numUD.Value;
+            if (di_numUD.ActiveControl != null && !string.IsNullOrEmpty(di_numUD.ActiveControl.Text))
+            {               
+                thres[2] = double.Parse(di_numUD.ActiveControl.Text);
+            }
         }
-        private void ei_numUD_ValueChanged(object sender, EventArgs e)
+        private void ei_numUD_TextChanged(object sender, EventArgs e)
         {
-            thres[3] = (double)ei_numUD.Value;
+            //thres[3] = (double)ei_numUD.Value;
+            if (ei_numUD.ActiveControl != null && !string.IsNullOrEmpty(ei_numUD.ActiveControl.Text))
+            {                
+                thres[3] = double.Parse(ei_numUD.ActiveControl.Text);
+            }
         }
-        private void dinew_numUD_ValueChanged(object sender, EventArgs e)
+        private void dinew_numUD_TextChanged(object sender, EventArgs e)
         {
-            thres[4] = (double)dinew_numUD.Value;
+            //thres[4] = (double)dinew_numUD.Value;
+            if (dinew_numUD.ActiveControl != null && !string.IsNullOrEmpty(dinew_numUD.ActiveControl.Text))
+            {
+                thres[4] = double.Parse(dinew_numUD.ActiveControl.Text);
+            }
         }
         private void vital_refresh()
         {
@@ -290,20 +355,31 @@ namespace Isotope_fitting
             sort[5] = dinew_checkBox.Checked;
         }
 
-        private void best_num_UD_ValueChanged(object sender, EventArgs e)
+        private void best_num_UD_TextChanged(object sender, EventArgs e)
         {
-            best_num = (int)best_num_UD.Value;
+            //best_num = (int)best_num_UD.Value;
+            if (best_num_UD.ActiveControl != null && !string.IsNullOrEmpty(best_num_UD.ActiveControl.Text))
+            {
+                best_num = int.Parse(best_num_UD.ActiveControl.Text);
+            }
         }
 
-        private void sd_numUD_ValueChanged(object sender, EventArgs e)
+        private void sd_numUD_TextChanged(object sender, EventArgs e)
         {
-            thres[5] = (double)sd_numUD.Value;
+            //thres[5] = (double)sd_numUD.Value;
+            if (sd_numUD.ActiveControl != null && !string.IsNullOrEmpty(sd_numUD.ActiveControl.Text))
+            {
+                thres[5] = double.Parse(sd_numUD.ActiveControl.Text);
+            }
         }
 
-        private void sdnew_numUD_ValueChanged(object sender, EventArgs e)
+        private void sdnew_numUD_TextChanged(object sender, EventArgs e)
         {
-            thres[6] = (double)sdnew_numUD.Value;
-
+            //thres[6] = (double)sdnew_numUD.Value;
+            if (sdnew_numUD.ActiveControl != null && !string.IsNullOrEmpty(sdnew_numUD.ActiveControl.Text))
+            {
+                thres[6] = double.Parse(sdnew_numUD.ActiveControl.Text);
+            }
         }
     }
 }

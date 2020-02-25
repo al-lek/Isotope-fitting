@@ -177,7 +177,6 @@
             0,
             0,
             65536});
-            this.Ai_coef_numUD.ValueChanged += new System.EventHandler(this.Ai_coef_numUD_ValueChanged);
             // 
             // A_coef_numUD
             // 
@@ -206,7 +205,6 @@
             0,
             0,
             65536});
-            this.A_coef_numUD.ValueChanged += new System.EventHandler(this.A_coef_numUD_ValueChanged);
             // 
             // label1
             // 
@@ -267,7 +265,6 @@
             this.numericUpDown1.Size = new System.Drawing.Size(39, 16);
             this.numericUpDown1.TabIndex = 11;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Filter applies to all fit groups");
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label4
             // 
@@ -333,7 +330,6 @@
             0,
             0,
             0});
-            this.Ai_numUD.ValueChanged += new System.EventHandler(this.Ai_numUD_ValueChanged);
             // 
             // di_numUD
             // 
@@ -355,7 +351,6 @@
             0,
             0,
             0});
-            this.di_numUD.ValueChanged += new System.EventHandler(this.di_numUD_ValueChanged);
             // 
             // A_numUD
             // 
@@ -377,7 +372,6 @@
             0,
             0,
             0});
-            this.A_numUD.ValueChanged += new System.EventHandler(this.A_numUD_ValueChanged);
             // 
             // sse_checkBox
             // 
@@ -443,7 +437,6 @@
             0,
             0,
             65536});
-            this.sse_coef_numUD.ValueChanged += new System.EventHandler(this.sse_coef_numUD_ValueChanged);
             // 
             // di_coef_numUD
             // 
@@ -472,7 +465,6 @@
             0,
             0,
             65536});
-            this.di_coef_numUD.ValueChanged += new System.EventHandler(this.di_coef_numUD_ValueChanged);
             // 
             // ei_numUD
             // 
@@ -494,7 +486,6 @@
             0,
             0,
             0});
-            this.ei_numUD.ValueChanged += new System.EventHandler(this.ei_numUD_ValueChanged);
             // 
             // label8
             // 
@@ -546,7 +537,6 @@
             0,
             0,
             65536});
-            this.ei_coef_numUD.ValueChanged += new System.EventHandler(this.ei_coef_numUD_ValueChanged);
             // 
             // ei_checkBox
             // 
@@ -600,7 +590,6 @@
             0,
             0,
             65536});
-            this.dinew_coef_numUD.ValueChanged += new System.EventHandler(this.dinew_coef_numUD_ValueChanged);
             // 
             // dinew_checkBox
             // 
@@ -635,7 +624,6 @@
             0,
             0,
             0});
-            this.dinew_numUD.ValueChanged += new System.EventHandler(this.dinew_numUD_ValueChanged);
             // 
             // label9
             // 
@@ -660,7 +648,6 @@
             this.best_num_UD.Size = new System.Drawing.Size(39, 16);
             this.best_num_UD.TabIndex = 35;
             this.toolTip1.SetToolTip(this.best_num_UD, "Filter applies to all fit groups");
-            this.best_num_UD.ValueChanged += new System.EventHandler(this.best_num_UD_ValueChanged);
             // 
             // best_num_Lbl
             // 
@@ -695,7 +682,6 @@
             0,
             0,
             0});
-            this.sd_numUD.ValueChanged += new System.EventHandler(this.sd_numUD_ValueChanged);
             // 
             // label10
             // 
@@ -728,7 +714,6 @@
             0,
             0,
             0});
-            this.sdnew_numUD.ValueChanged += new System.EventHandler(this.sdnew_numUD_ValueChanged);
             // 
             // label11
             // 
