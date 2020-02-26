@@ -30,6 +30,7 @@ namespace Isotope_fitting
     public partial class Form2 : Form
     {        
         public string error_string = String.Empty;
+        bool x_charged = false;
 
         #region PARAMETER SET TAB FIT
 
@@ -342,7 +343,7 @@ namespace Isotope_fitting
         PlotView indexIntensity_plot;
         PlotView indextoIntensity_plot;
         PlotView ppm_plot;
-
+                
 
         #endregion
 
@@ -899,11 +900,11 @@ namespace Isotope_fitting
                     frm18.ShowDialog();
                     if (!ms_heavy_chain && !ms_light_chain) return;
                     else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
-                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
-                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
                 }
-                else if (String.IsNullOrEmpty(Peptide) &&!String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
-                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) &&!String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
 
                 import_fragments();
             }
@@ -921,7 +922,7 @@ namespace Isotope_fitting
         {
             OpenFileDialog fragment_import = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Filter = "txt files (*.txt)|*.txt", FilterIndex = 2, RestoreDirectory = true, CheckFileExists = true, CheckPathExists = true };
             List<string> lista = new List<string>();
-
+            x_charged = false;
             if (fragment_import.ShowDialog() != DialogResult.Cancel)
             {
                 sw1.Reset(); sw1.Start();
@@ -995,7 +996,6 @@ namespace Isotope_fitting
                 PrintFormula= frag_info[4],
                 Max_man_int = 0
             });
-
             int i = ChemFormulas.Count - 1;
 
             // Note on formulas
@@ -1006,11 +1006,15 @@ namespace Isotope_fitting
             // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
-            if(!calc_FF)ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
+            if (!calc_FF)ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
             ChemFormulas[i].Charge = Int32.Parse(frag_info[3]);
 
             // all ions have as many H in Adduct as their charge
             ChemFormulas[i].Adduct = "H" + ChemFormulas[i].Charge.ToString();
+
+            //check if there are charged x ions
+            if (!x_charged && ChemFormulas[i].Ion.Contains("x") && ChemFormulas[i].Charge>1) { x_charged = true; }
+
 
             if (char.IsLower(frag_info[1][0]))
             {
@@ -1373,10 +1377,12 @@ namespace Isotope_fitting
                     bool adduct = ChemFormulas[i].Ion.Contains("-");
                     int charge = ChemFormulas[i].Charge;
 
-                    if (adduct || (!adduct && charge > 1))
+                    if (adduct || (!adduct && !x_charged && charge > 1))
                     {
                         // x have +CO -2H compared to y. BUT!!!! we have to build the inputFormula as if it was from MSProduct (that has +1H) so we will remove only 1H!!!!
-                        string mz = Math.Round(Convert.ToDouble(ChemFormulas[i].Mz) + (11.99945142 + 15.99436604 - 2 * 1.007276452) / Convert.ToDouble(charge), 4).ToString();
+                        //string mz = Math.Round(Convert.ToDouble(ChemFormulas[i].Mz) + (11.99945142 + 15.99436604 - 2 * 1.007276452) / Convert.ToDouble(charge), 4).ToString();
+                        string mz = Math.Round(Convert.ToDouble(ChemFormulas[i].Mz) + (12.000000 + 15.994915 - 2 * 1.007825) / Convert.ToDouble(charge), 4).ToString();
+
                         string ion = ChemFormulas[i].Ion.Replace('y', 'x');
                         string index = ChemFormulas[i].Index;
                         string charges = ChemFormulas[i].Charge.ToString();
@@ -1391,11 +1397,14 @@ namespace Isotope_fitting
                         string inputFormula = string.Join(" ", tmp);
 
                         string[] frag_info = new string[] { mz, ion, index, charges, inputFormula };
+
                         assign_resolve_fragment(frag_info);
                     }
                 }
             }
         }
+
+        
         #endregion
 
         #region 2.a Select fragments and calculate their envelopes
@@ -1687,7 +1696,8 @@ namespace Isotope_fitting
             ChemiForm.Envelope(chem);            
             ChemiForm.Vdetect(chem);            
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-
+            double emass = 0.00054858;
+            chem.Mz = Math.Round((chem.Monoisotopic.Mass - emass * chem.Charge) / chem.Charge, 4).ToString();
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
             if (!insert_exp|| chem.Fixed ) { add_fragment_to_Fragments2(chem, cen); return; }
             // MAIN decesion algorithm
@@ -1700,7 +1710,7 @@ namespace Isotope_fitting
                     chem.Profile.Clear();
                     // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
                     ChemiForm.Envelope(chem);
-                    add_fragment_to_Fragments2(chem, cen);                    
+                    add_fragment_to_Fragments2(chem, cen);
                 }
                 else if (fragment_is_canditate)
                 {
@@ -1728,7 +1738,7 @@ namespace Isotope_fitting
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
             {
-                if (check_duplicates_Fragments2(chem.Mz, chem.Name, chem.Factor))
+                if (check_duplicates_Fragments2(chem.Mz, chem.Name, chem.Factor,chem.Profile.Max(p => p.Y)))
                 {
                     Fragments2.Add(new FragForm()
                     {
@@ -1786,16 +1796,23 @@ namespace Isotope_fitting
                 }       
             }
         }
-        private bool check_duplicates_Fragments2(string mz,string name, double factor)
+        private bool check_duplicates_Fragments2(string mz,string name, double factor,double max_int)
         {
             if (Fragments2.Count>0)
             {
                 foreach (FragForm fra in Fragments2)
-                {
-                    if (fra.Mz.Equals(mz) && fra.Name.Equals(name) && Math.Round(fra.Factor,3)== Math.Round(factor, 3) )
+                {                    
+                    if (fra.Mz.Equals(mz) && fra.Name.Equals(name))
                     {
-                        return false;
-                    }
+                        if (factor==1 && max_exp > 0 && Math.Round(fra.Factor, 3) == Math.Round(0.1 * max_exp / max_int, 3))
+                        {
+                            return false;
+                        }
+                        else if (Math.Round(fra.Factor, 3) == Math.Round(factor, 3))
+                        {
+                            return false;
+                        }
+                    }                   
                 }
             }
             return true;
@@ -2215,7 +2232,7 @@ namespace Isotope_fitting
 
             exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
             //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
-            ppm = (exp_cen - centroid) * 1e6 / (exp_cen);
+            ppm = (exp_cen - centroid) * 1e6 / (centroid);
             
             return new double[] { ppm, peak_points[closest_idx][3] };
         }
@@ -5441,11 +5458,11 @@ namespace Isotope_fitting
                     frm18.ShowDialog();
                     if (!ms_heavy_chain && !ms_light_chain) return;
                     else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
-                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
-                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
                 }
-                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
-                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
+                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
 
                 import_fragments();
                 if (ChemFormulas.Count > 0)
@@ -9601,7 +9618,6 @@ namespace Isotope_fitting
 
         #region sequence
         
-
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
             if (ax_chBx.Checked)
@@ -9801,8 +9817,7 @@ namespace Isotope_fitting
                 pp.X = pp.X + 20;
                 if (pp.X + 20 >= sequence_Pnl.Width){pp.X = 3; pp.Y =pp.Y+50;}
                 if ((idx+1)% grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
-            }           
-
+            }   
             return;
         }        
         private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false)
@@ -12618,5 +12633,236 @@ namespace Isotope_fitting
 
 
         #endregion
+
+        private void seq_coverageBtn_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();            
+            List<int> a_cov1 = new List<int>();List<int> b_cov1 = new List<int>();List<int> c_cov1 = new List<int>();List<int> x_cov1 = new List<int>();List<int> y_cov1 = new List<int>();List<int> z_cov1 = new List<int>();
+            List<int> a_cov2 = new List<int>();List<int> b_cov2 = new List<int>();List<int> c_cov2 = new List<int>();List<int> x_cov2 = new List<int>();List<int> y_cov2 = new List<int>();List<int> z_cov2 = new List<int>();
+            List<int> total_1 = new List<int>();List<int> total_2 = new List<int>();
+            double a1 ,b1,c1 ,x1 ,y1,z1, a2, b2, c2, x2, y2, z2;
+            if (!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain) && !String.IsNullOrEmpty(Peptide)) { MessageBox.Show("Yoou can't have 'General'sequence and 'Heavy' or 'Light' chain sequence simultaneously"); return; }
+            else if(!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
+            {
+                foreach (ion nn in IonDraw)
+                {
+                    if (nn.Name.Contains("_H"))
+                    {
+                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (a_cov1.Count != 0 && a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
+                                if (total_1.Count != 0 && total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (b_cov1.Count != 0 && b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
+                                if (total_1.Count != 0 && total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (c_cov1.Count != 0 && c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
+                                if (total_1.Count != 0 && total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (x_cov1.Count != 0 && x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
+                                if (total_1.Count != 0 && total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (y_cov1.Count != 0 && y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
+                                if (total_1.Count != 0 && total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (z_cov1.Count != 0 && z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
+                                if (total_1.Count != 0 && total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                            }
+                        }
+                    }
+                    else if (nn.Name.Contains("_L"))
+                    {
+                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (a_cov2.Count != 0 && a_cov2.Contains(nn.Index)) { a_cov2.Add(nn.Index); }
+                                if (total_2.Count != 0 && total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (b_cov2.Count != 0 && b_cov2.Contains(nn.Index)) { b_cov2.Add(nn.Index); }
+                                if (total_2.Count != 0 && total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (c_cov2.Count != 0 && c_cov2.Contains(nn.Index)) { c_cov2.Add(nn.Index); }
+                                if (total_2.Count != 0 && total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (x_cov2.Count != 0 && x_cov2.Contains(nn.SortIdx)) { x_cov2.Add(nn.SortIdx); }
+                                if (total_2.Count != 0 && total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (y_cov2.Count != 0 && y_cov2.Contains(nn.SortIdx)) { y_cov2.Add(nn.SortIdx); }
+                                if (total_2.Count != 0 && total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (z_cov2.Count != 0 && z_cov2.Contains(nn.SortIdx)) { z_cov2.Add(nn.SortIdx); }
+                                if (total_2.Count != 0 && total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
+                            }
+                        }
+                    }                                   
+                }
+                a1 = 100 * a_cov1.Count / heavy_chain.Length;
+                b1 = 100 * b_cov1.Count / heavy_chain.Length;
+                c1 = 100 * c_cov1.Count / heavy_chain.Length;
+                x1 = 100 * x_cov1.Count / heavy_chain.Length;
+                y1 = 100 * y_cov1.Count / heavy_chain.Length;
+                z1 = 100 * z_cov1.Count / heavy_chain.Length;
+                a2 = 100 * a_cov2.Count / light_chain.Length;
+                b2 = 100 * b_cov2.Count / light_chain.Length;
+                c2 = 100 * c_cov2.Count / light_chain.Length;
+                x2 = 100 * x_cov2.Count / light_chain.Length;
+                y2 = 100 * y_cov2.Count / light_chain.Length;
+                z2 = 100 * z_cov2.Count / light_chain.Length;
+            }
+            else
+            {
+                foreach (ion nn in IonDraw)
+                {
+                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (a_cov1.Count != 0 && a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
+                            if (total_1.Count != 0 && total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (b_cov1.Count != 0 && b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
+                            if (total_1.Count != 0 && total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (c_cov1.Count != 0 && c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
+                            if (total_1.Count != 0 && total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (x_cov1.Count != 0 && x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count != 0 && total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (y_cov1.Count != 0 && y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count != 0 && total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (z_cov1.Count != 0 && z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count != 0 && total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                        }
+                    }
+                }
+                if (!String.IsNullOrEmpty(Peptide))
+                {
+                    a1 = 100 * a_cov1.Count / Peptide.Length;
+                    b1 = 100 * b_cov1.Count / Peptide.Length;
+                    c1 = 100 * c_cov1.Count / Peptide.Length;
+                    x1 = 100 * x_cov1.Count / Peptide.Length;
+                    y1 = 100 * y_cov1.Count / Peptide.Length;
+                    z1 = 100 * z_cov1.Count / Peptide.Length;
+                }
+                else if (!String.IsNullOrEmpty(heavy_chain))
+                {
+                    a1 = 100 * a_cov1.Count / heavy_chain.Length;
+                    b1 = 100 * b_cov1.Count / heavy_chain.Length;
+                    c1 = 100 * c_cov1.Count / heavy_chain.Length;
+                    x1 = 100 * x_cov1.Count / heavy_chain.Length;
+                    y1 = 100 * y_cov1.Count / heavy_chain.Length;
+                    z1 = 100 * z_cov1.Count / heavy_chain.Length;
+                }
+                else if (!String.IsNullOrEmpty(light_chain))
+                {
+                    a1 = 100 * a_cov1.Count / light_chain.Length;
+                    b1 = 100 * b_cov1.Count / light_chain.Length;
+                    c1 = 100 * c_cov1.Count / light_chain.Length;
+                    x1 = 100 * x_cov1.Count / light_chain.Length;
+                    y1 = 100 * y_cov1.Count / light_chain.Length;
+                    z1 = 100 * z_cov1.Count / light_chain.Length;
+                }
+            }
+                     
+                       
+            sb.AppendLine("a");
+            sb.AppendLine();
+            sb.AppendLine("b");
+            sb.AppendLine();
+            sb.AppendLine("c");
+            sb.AppendLine();
+            sb.AppendLine("x");
+            sb.AppendLine();
+            sb.AppendLine("y");
+            sb.AppendLine();
+            sb.AppendLine("z");
+            sb.AppendLine();
+            sb.AppendLine("total");
+            sb.AppendLine();
+            error_string = sb.ToString();
+            Form17 frm17 = new Form17(this);
+            frm17.Text = "Sequence coverage";
+            frm17.ShowDialog();
+        }
     }
 }

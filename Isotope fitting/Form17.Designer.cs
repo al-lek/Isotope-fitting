@@ -41,14 +41,14 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(703, 460);
+            this.textBox1.Size = new System.Drawing.Size(538, 441);
             this.textBox1.TabIndex = 0;
             // 
             // Form17
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(708, 475);
+            this.ClientSize = new System.Drawing.Size(543, 456);
             this.Controls.Add(this.textBox1);
             this.Name = "Form17";
             this.ShowIcon = false;

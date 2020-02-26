@@ -236,7 +236,6 @@ namespace Isotope_fitting
             if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; } selected_fragments = select_fragments2_frm9(); }
             else { selected_fragments = check_chem_inputs(); }
              
-
             if (selected_fragments == null) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
@@ -582,7 +581,7 @@ namespace Isotope_fitting
             double emass = 0.00054858;
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
             chem.Points= chem.Points.OrderBy(p => p.X).ToList();
-            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString(); }
+            chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString(); 
             // MAIN decesion algorithm
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
