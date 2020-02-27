@@ -163,10 +163,8 @@ namespace Isotope_fitting
 
         #region parameters
 
-        public List<double> ppmErrorList = new List<double>();
-        public List<double[]> ppmErrorMzRange = new List<double[]>();
-        public List<int> ppmErrorSelectionRule = new List<int>();
-
+        public bool entire_spectrum = true;
+        public List<ppm_area> ppm_regions = new List<ppm_area>();
         /// <summary>
         /// max ppm error
         /// </summary>
@@ -366,6 +364,7 @@ namespace Isotope_fitting
 
             OnRecalculate_completed += () => { refresh_iso_plot(); };
 
+            
             frag_listView.Visible = frag_listView.Enabled = false;            
             load_preferences();
             reset_all();
@@ -593,6 +592,13 @@ namespace Isotope_fitting
 
                     fit_thres[5] = Convert.ToDouble(preferences[75].Split(':')[1]);
                     fit_thres[6] = Convert.ToDouble(preferences[76].Split(':')[1]);
+                    //ppm regions
+                    for (int a = 0; a < 6; a++)
+                    {
+                        string[] temp = preferences[77+a].Split(':')[1].Split('\t');
+                        ppm_regions.Add(new ppm_area { Chk = string_to_bool(temp[0]), Max = Convert.ToDouble(temp[2]), Min = Convert.ToDouble(temp[1]), Max_ppm = Convert.ToDouble(temp[3]), Rule = Convert.ToInt32(temp[4]) });
+                    }
+                    entire_spectrum = string_to_bool(preferences[83].Split(':')[1]);
                 }
                 catch
                 {
@@ -605,7 +611,12 @@ namespace Isotope_fitting
                     X_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_tick12 = OxyPlot.Axes.TickStyle.Outside;y_format12 = "G";y_numformat12 = "0";x_majorStep12 = 5;x_minorStep12 = 1;bar_width = 1;Xmajor_charge_grid12 = LineStyle.Solid;Xminor_charge_grid12 = LineStyle.None;
                     Ymajor_charge_grid12 = LineStyle.Solid;Yminor_charge_grid12 = LineStyle.None;X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;y_charge_majorStep12 = 2;y_charge_minorStep12 = 1;x_charge_majorStep12 = 5;
                     x_charge_minorStep12 = 1;Xint_major_grid13 = LineStyle.Solid;Xint_minor_grid13 = LineStyle.None;Yint_major_grid13 = LineStyle.Solid;Yint_minor_grid13 = LineStyle.None;x_format13 = "G";x_numformat13 = "0";x_interval13 = 50;Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
-                    Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;xINT_majorStep13 = 5;xINT_minorStep13 = 1;yINT_majorStep13 = 5;yINT_minorStep13 = 1;int_width = 1; 
+                    Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;xINT_majorStep13 = 5;xINT_minorStep13 = 1;yINT_majorStep13 = 5;yINT_minorStep13 = 1;int_width = 1;
+                    for (int a = 0; a < 6; a++)
+                    {
+                        ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
+                    }
+                    entire_spectrum = true;
                 }
             }           
         }
@@ -738,7 +749,12 @@ namespace Isotope_fitting
             //sd sdnew thresholds
             preferences[0] += "sd score threshold: " + fit_thres[5].ToString() + "\r\n";
             preferences[0] += "sd' score threshold: " + fit_thres[6].ToString() + "\r\n";
-
+            //ppm regions
+            for (int a = 0; a < 6; a++)
+            {
+                preferences[0] += "region "+ (a+1).ToString()+ "(checked,min,max,ppm,rule): " +ppm_regions[a].Chk.ToString()+ "\t"+ ppm_regions[a].Min.ToString() + "\t"+ ppm_regions[a].Max.ToString() + "\t"+ ppm_regions[a].Max_ppm.ToString() + "\t" + ppm_regions[a].Rule.ToString() + "\r\n";
+            }
+            preferences[0] += "entire spectum: " + entire_spectrum.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -2174,10 +2190,28 @@ namespace Isotope_fitting
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
+            double temp_pp = ppmError;
+
 
             int total_peaks = cen.Count;
             int contrib_peaks = 0;
             int rule_idx = Array.IndexOf(selection_rule, true);
+            if (!entire_spectrum)
+            {
+                double mz = dParser(chem.Mz);
+                foreach (ppm_area area in ppm_regions)
+                {
+                    if (area.Chk)
+                    {                        
+                        if (mz> area.Min && mz<area.Max)
+                        {
+                            temp_pp = area.Max_ppm;
+                            rule_idx = area.Rule;
+                        }
+                    }
+                }
+            }
+
 
             if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
             else
@@ -2194,7 +2228,7 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(cen[i].X);
 
-                if (Math.Abs(tmp[0]) < ppmError) results.Add(tmp);
+                if (Math.Abs(tmp[0]) < temp_pp) results.Add(tmp);
                 else
                 {
                     fragment_is_canditate = false; break;
@@ -5260,7 +5294,10 @@ namespace Isotope_fitting
         #region FILTER list fragments
         private void frag_sort_Btn1_Click(object sender, EventArgs e)
         {
-            params_form();
+            Form19 frm19 = new Form19(this);
+            frm19.FormClosed += (s, f) => { save_preferences(); };
+            frm19.ShowDialog();
+            //params_form();
         }
         private void refresh_frag_Btn1_Click(object sender, EventArgs e)
         {
@@ -5294,6 +5331,7 @@ namespace Isotope_fitting
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
             double max_error = 0.0;
+            double temp_pp = ppmError;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -5301,6 +5339,22 @@ namespace Isotope_fitting
             int total_peaks = fra.Centroid.Count;
             int contrib_peaks = 0;
             int rule_idx = Array.IndexOf(selection_rule, true);
+
+            if (!entire_spectrum)
+            {
+                double mz = dParser(fra.Mz);
+                foreach (ppm_area area in ppm_regions)
+                {
+                    if (area.Chk)
+                    {
+                        if (mz > area.Min && mz < area.Max)
+                        {
+                            temp_pp = area.Max_ppm;
+                            rule_idx = area.Rule;
+                        }
+                    }
+                }
+            }
 
             if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
             else
@@ -5317,7 +5371,7 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(fra.Centroid[i].X);
 
-                if (Math.Abs(tmp[0])< ppmError) results.Add(tmp);
+                if (Math.Abs(tmp[0])< temp_pp) results.Add(tmp);
                 else { fragment_is_canditate = false; break; }
             }
 

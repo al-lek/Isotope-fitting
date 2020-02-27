@@ -44,34 +44,34 @@
             this.entire_grpBx = new System.Windows.Forms.GroupBox();
             this.region_grpBox = new System.Windows.Forms.GroupBox();
             this.chkBx_6 = new System.Windows.Forms.CheckBox();
-            this.selection_list_6 = new System.Windows.Forms.ListBox();
+            this.selection_list_6 = new System.Windows.Forms.ComboBox();
             this.num_max_6 = new System.Windows.Forms.NumericUpDown();
             this.num_min_6 = new System.Windows.Forms.NumericUpDown();
             this.ppm_6 = new System.Windows.Forms.NumericUpDown();
             this.chkBx_5 = new System.Windows.Forms.CheckBox();
-            this.selection_list_5 = new System.Windows.Forms.ListBox();
+            this.selection_list_5 = new System.Windows.Forms.ComboBox();
             this.num_max_5 = new System.Windows.Forms.NumericUpDown();
             this.num_min_5 = new System.Windows.Forms.NumericUpDown();
             this.ppm_5 = new System.Windows.Forms.NumericUpDown();
             this.chkBx_4 = new System.Windows.Forms.CheckBox();
-            this.selection_list_4 = new System.Windows.Forms.ListBox();
+            this.selection_list_4 = new System.Windows.Forms.ComboBox();
             this.num_max_4 = new System.Windows.Forms.NumericUpDown();
             this.num_min_4 = new System.Windows.Forms.NumericUpDown();
             this.ppm_4 = new System.Windows.Forms.NumericUpDown();
             this.chkBx_3 = new System.Windows.Forms.CheckBox();
-            this.selection_list_3 = new System.Windows.Forms.ListBox();
+            this.selection_list_3 = new System.Windows.Forms.ComboBox();
             this.num_max_3 = new System.Windows.Forms.NumericUpDown();
             this.num_min_3 = new System.Windows.Forms.NumericUpDown();
             this.ppm_3 = new System.Windows.Forms.NumericUpDown();
             this.chkBx_2 = new System.Windows.Forms.CheckBox();
-            this.selection_list_2 = new System.Windows.Forms.ListBox();
+            this.selection_list_2 = new System.Windows.Forms.ComboBox();
             this.num_max_2 = new System.Windows.Forms.NumericUpDown();
             this.num_min_2 = new System.Windows.Forms.NumericUpDown();
             this.ppm_2 = new System.Windows.Forms.NumericUpDown();
             this.selection_label = new System.Windows.Forms.Label();
             this.chkBx_1 = new System.Windows.Forms.CheckBox();
             this.mz_region_label = new System.Windows.Forms.Label();
-            this.selection_list_1 = new System.Windows.Forms.ListBox();
+            this.selection_list_1 = new System.Windows.Forms.ComboBox();
             this.num_max_1 = new System.Windows.Forms.NumericUpDown();
             this.num_min_1 = new System.Windows.Forms.NumericUpDown();
             this.max_ppm_label = new System.Windows.Forms.Label();
@@ -245,6 +245,7 @@
             this.entire_chkBx.TabIndex = 0;
             this.entire_chkBx.Text = "entire spectrum";
             this.entire_chkBx.UseVisualStyleBackColor = true;
+            this.entire_chkBx.CheckedChanged += new System.EventHandler(this.entire_chkBx_CheckedChanged);
             // 
             // regions_chkBx
             // 
@@ -256,7 +257,7 @@
             this.regions_chkBx.TabIndex = 1;
             this.regions_chkBx.Text = "specific regions";
             this.regions_chkBx.UseVisualStyleBackColor = true;
-            this.regions_chkBx.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.regions_chkBx.CheckedChanged += new System.EventHandler(this.regions_chkBx_CheckedChanged);
             // 
             // entire_grpBx
             // 
@@ -330,6 +331,7 @@
             // 
             // selection_list_6
             // 
+            this.selection_list_6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selection_list_6.Enabled = false;
             this.selection_list_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_6.FormattingEnabled = true;
@@ -342,14 +344,19 @@
             "half(+) most intense"});
             this.selection_list_6.Location = new System.Drawing.Point(321, 153);
             this.selection_list_6.Name = "selection_list_6";
-            this.selection_list_6.ScrollAlwaysVisible = true;
-            this.selection_list_6.Size = new System.Drawing.Size(122, 17);
+            this.selection_list_6.Size = new System.Drawing.Size(122, 21);
             this.selection_list_6.TabIndex = 29;
+            this.selection_list_6.SelectedIndexChanged += new System.EventHandler(this.selection_list_6_SelectedIndexChanged);
             // 
             // num_max_6
             // 
             this.num_max_6.Enabled = false;
             this.num_max_6.Location = new System.Drawing.Point(119, 151);
+            this.num_max_6.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_max_6.Name = "num_max_6";
             this.num_max_6.Size = new System.Drawing.Size(77, 20);
             this.num_max_6.TabIndex = 27;
@@ -358,6 +365,11 @@
             // 
             this.num_min_6.Enabled = false;
             this.num_min_6.Location = new System.Drawing.Point(36, 151);
+            this.num_min_6.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_min_6.Name = "num_min_6";
             this.num_min_6.Size = new System.Drawing.Size(77, 20);
             this.num_min_6.TabIndex = 26;
@@ -398,6 +410,7 @@
             // 
             // selection_list_5
             // 
+            this.selection_list_5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selection_list_5.Enabled = false;
             this.selection_list_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_5.FormattingEnabled = true;
@@ -410,14 +423,19 @@
             "half(+) most intense"});
             this.selection_list_5.Location = new System.Drawing.Point(321, 131);
             this.selection_list_5.Name = "selection_list_5";
-            this.selection_list_5.ScrollAlwaysVisible = true;
-            this.selection_list_5.Size = new System.Drawing.Size(122, 17);
+            this.selection_list_5.Size = new System.Drawing.Size(122, 21);
             this.selection_list_5.TabIndex = 24;
+            this.selection_list_5.SelectedIndexChanged += new System.EventHandler(this.selection_list_5_SelectedIndexChanged);
             // 
             // num_max_5
             // 
             this.num_max_5.Enabled = false;
             this.num_max_5.Location = new System.Drawing.Point(119, 129);
+            this.num_max_5.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_max_5.Name = "num_max_5";
             this.num_max_5.Size = new System.Drawing.Size(77, 20);
             this.num_max_5.TabIndex = 22;
@@ -426,6 +444,11 @@
             // 
             this.num_min_5.Enabled = false;
             this.num_min_5.Location = new System.Drawing.Point(36, 129);
+            this.num_min_5.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_min_5.Name = "num_min_5";
             this.num_min_5.Size = new System.Drawing.Size(77, 20);
             this.num_min_5.TabIndex = 21;
@@ -466,6 +489,7 @@
             // 
             // selection_list_4
             // 
+            this.selection_list_4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selection_list_4.Enabled = false;
             this.selection_list_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_4.FormattingEnabled = true;
@@ -478,14 +502,19 @@
             "half(+) most intense"});
             this.selection_list_4.Location = new System.Drawing.Point(321, 109);
             this.selection_list_4.Name = "selection_list_4";
-            this.selection_list_4.ScrollAlwaysVisible = true;
-            this.selection_list_4.Size = new System.Drawing.Size(122, 17);
+            this.selection_list_4.Size = new System.Drawing.Size(122, 21);
             this.selection_list_4.TabIndex = 19;
+            this.selection_list_4.SelectedIndexChanged += new System.EventHandler(this.selection_list_4_SelectedIndexChanged);
             // 
             // num_max_4
             // 
             this.num_max_4.Enabled = false;
             this.num_max_4.Location = new System.Drawing.Point(119, 107);
+            this.num_max_4.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_max_4.Name = "num_max_4";
             this.num_max_4.Size = new System.Drawing.Size(77, 20);
             this.num_max_4.TabIndex = 17;
@@ -494,6 +523,11 @@
             // 
             this.num_min_4.Enabled = false;
             this.num_min_4.Location = new System.Drawing.Point(36, 107);
+            this.num_min_4.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_min_4.Name = "num_min_4";
             this.num_min_4.Size = new System.Drawing.Size(77, 20);
             this.num_min_4.TabIndex = 16;
@@ -534,6 +568,7 @@
             // 
             // selection_list_3
             // 
+            this.selection_list_3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selection_list_3.Enabled = false;
             this.selection_list_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_3.FormattingEnabled = true;
@@ -546,14 +581,19 @@
             "half(+) most intense"});
             this.selection_list_3.Location = new System.Drawing.Point(321, 87);
             this.selection_list_3.Name = "selection_list_3";
-            this.selection_list_3.ScrollAlwaysVisible = true;
-            this.selection_list_3.Size = new System.Drawing.Size(122, 17);
+            this.selection_list_3.Size = new System.Drawing.Size(122, 21);
             this.selection_list_3.TabIndex = 14;
+            this.selection_list_3.SelectedIndexChanged += new System.EventHandler(this.selection_list_3_SelectedIndexChanged);
             // 
             // num_max_3
             // 
             this.num_max_3.Enabled = false;
             this.num_max_3.Location = new System.Drawing.Point(119, 85);
+            this.num_max_3.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_max_3.Name = "num_max_3";
             this.num_max_3.Size = new System.Drawing.Size(77, 20);
             this.num_max_3.TabIndex = 12;
@@ -562,6 +602,11 @@
             // 
             this.num_min_3.Enabled = false;
             this.num_min_3.Location = new System.Drawing.Point(36, 85);
+            this.num_min_3.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_min_3.Name = "num_min_3";
             this.num_min_3.Size = new System.Drawing.Size(77, 20);
             this.num_min_3.TabIndex = 11;
@@ -602,6 +647,7 @@
             // 
             // selection_list_2
             // 
+            this.selection_list_2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selection_list_2.Enabled = false;
             this.selection_list_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_2.FormattingEnabled = true;
@@ -614,14 +660,19 @@
             "half(+) most intense"});
             this.selection_list_2.Location = new System.Drawing.Point(321, 65);
             this.selection_list_2.Name = "selection_list_2";
-            this.selection_list_2.ScrollAlwaysVisible = true;
-            this.selection_list_2.Size = new System.Drawing.Size(122, 17);
+            this.selection_list_2.Size = new System.Drawing.Size(122, 21);
             this.selection_list_2.TabIndex = 9;
+            this.selection_list_2.SelectedIndexChanged += new System.EventHandler(this.selection_list_2_SelectedIndexChanged);
             // 
             // num_max_2
             // 
             this.num_max_2.Enabled = false;
             this.num_max_2.Location = new System.Drawing.Point(119, 63);
+            this.num_max_2.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_max_2.Name = "num_max_2";
             this.num_max_2.Size = new System.Drawing.Size(77, 20);
             this.num_max_2.TabIndex = 7;
@@ -630,6 +681,11 @@
             // 
             this.num_min_2.Enabled = false;
             this.num_min_2.Location = new System.Drawing.Point(36, 63);
+            this.num_min_2.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_min_2.Name = "num_min_2";
             this.num_min_2.Size = new System.Drawing.Size(77, 20);
             this.num_min_2.TabIndex = 6;
@@ -688,6 +744,7 @@
             // 
             // selection_list_1
             // 
+            this.selection_list_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selection_list_1.Enabled = false;
             this.selection_list_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_1.FormattingEnabled = true;
@@ -700,14 +757,19 @@
             "half(+) most intense"});
             this.selection_list_1.Location = new System.Drawing.Point(321, 43);
             this.selection_list_1.Name = "selection_list_1";
-            this.selection_list_1.ScrollAlwaysVisible = true;
-            this.selection_list_1.Size = new System.Drawing.Size(122, 17);
+            this.selection_list_1.Size = new System.Drawing.Size(122, 21);
             this.selection_list_1.TabIndex = 4;
+            this.selection_list_1.SelectedIndexChanged += new System.EventHandler(this.selection_list_1_SelectedIndexChanged);
             // 
             // num_max_1
             // 
             this.num_max_1.Enabled = false;
             this.num_max_1.Location = new System.Drawing.Point(119, 41);
+            this.num_max_1.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_max_1.Name = "num_max_1";
             this.num_max_1.Size = new System.Drawing.Size(77, 20);
             this.num_max_1.TabIndex = 2;
@@ -716,10 +778,14 @@
             // 
             this.num_min_1.Enabled = false;
             this.num_min_1.Location = new System.Drawing.Point(36, 41);
+            this.num_min_1.Maximum = new decimal(new int[] {
+            1569325056,
+            23283064,
+            0,
+            0});
             this.num_min_1.Name = "num_min_1";
             this.num_min_1.Size = new System.Drawing.Size(77, 20);
             this.num_min_1.TabIndex = 1;
-            this.num_min_1.ValueChanged += new System.EventHandler(this.num_min_1_ValueChanged);
             // 
             // max_ppm_label
             // 
@@ -835,35 +901,35 @@
         private System.Windows.Forms.GroupBox entire_grpBx;
         private System.Windows.Forms.GroupBox region_grpBox;
         private System.Windows.Forms.CheckBox chkBx_2;
-        private System.Windows.Forms.ListBox selection_list_2;
+        private System.Windows.Forms.ComboBox selection_list_2;
         private System.Windows.Forms.NumericUpDown num_max_2;
         private System.Windows.Forms.NumericUpDown num_min_2;
         private System.Windows.Forms.NumericUpDown ppm_2;
         private System.Windows.Forms.Label selection_label;
         private System.Windows.Forms.CheckBox chkBx_1;
         private System.Windows.Forms.Label mz_region_label;
-        private System.Windows.Forms.ListBox selection_list_1;
+        private System.Windows.Forms.ComboBox selection_list_1;
         private System.Windows.Forms.NumericUpDown num_max_1;
         private System.Windows.Forms.NumericUpDown num_min_1;
         private System.Windows.Forms.Label max_ppm_label;
         private System.Windows.Forms.NumericUpDown ppm_1;
         private System.Windows.Forms.CheckBox chkBx_6;
-        private System.Windows.Forms.ListBox selection_list_6;
+        private System.Windows.Forms.ComboBox selection_list_6;
         private System.Windows.Forms.NumericUpDown num_max_6;
         private System.Windows.Forms.NumericUpDown num_min_6;
         private System.Windows.Forms.NumericUpDown ppm_6;
         private System.Windows.Forms.CheckBox chkBx_5;
-        private System.Windows.Forms.ListBox selection_list_5;
+        private System.Windows.Forms.ComboBox selection_list_5;
         private System.Windows.Forms.NumericUpDown num_max_5;
         private System.Windows.Forms.NumericUpDown num_min_5;
         private System.Windows.Forms.NumericUpDown ppm_5;
         private System.Windows.Forms.CheckBox chkBx_4;
-        private System.Windows.Forms.ListBox selection_list_4;
+        private System.Windows.Forms.ComboBox selection_list_4;
         private System.Windows.Forms.NumericUpDown num_max_4;
         private System.Windows.Forms.NumericUpDown num_min_4;
         private System.Windows.Forms.NumericUpDown ppm_4;
         private System.Windows.Forms.CheckBox chkBx_3;
-        private System.Windows.Forms.ListBox selection_list_3;
+        private System.Windows.Forms.ComboBox selection_list_3;
         private System.Windows.Forms.NumericUpDown num_max_3;
         private System.Windows.Forms.NumericUpDown num_min_3;
         private System.Windows.Forms.NumericUpDown ppm_3;
