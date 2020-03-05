@@ -57,6 +57,53 @@
     <Reference Include="alglibnet2">
       <HintPath>Libs\alglibnet2.dll</HintPath>
     </Reference>
+    <Reference Include="Arction.DirectX, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.DirectX.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.DirectXFiles, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.DirectXFiles.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.DirectXInit, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.DirectXInit.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.Licensing, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.MathCore, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.MathCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.RenderingDefinitions, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.RenderingDefinitions.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.RenderingEngine, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.RenderingEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.RenderingEngine11, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.RenderingEngine11.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.RenderingEngine9, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.RenderingEngine9.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.WinForms.Charting.LightningChartUltimate, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.WinForms.Charting.LightningChartUltimate.dll</HintPath>
+    </Reference>
+    <Reference Include="Arction.WinForms.SignalProcessing.SignalTools, Version=7.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Arction.WinForms.SignalProcessing.SignalTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\OxyPlot.dll</HintPath>
@@ -68,6 +115,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />

@@ -24,6 +24,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using static alglib;
 using System.Runtime.InteropServices;
 
+using Arction.WinForms.Charting;
+using Arction.WinForms.Charting.SeriesXY;
+using Arction.WinForms.Charting.EventMarkers;
+using Arction.WinForms.Charting.Titles;
+using Arction.WinForms.Charting.Views.ViewXY;
 
 namespace Isotope_fitting
 {
@@ -94,7 +99,7 @@ namespace Isotope_fitting
         public static List<List<double[]>> all_data = new List<List<double[]>>();
         public static int candidate_fragments = 1;
         double keyStep = 0.002;
-        double fit_step = 0.0;//m/z step selected in fitting options box 
+        //double fit_step = 0.0;//m/z step selected in fitting options box 
         double min_border = 0.0;//minimum m/z selected in fitting options box
         double max_border = 0.0;//maximum m/z selected in fitting options box 
         double step_range = 0.0;
@@ -250,19 +255,19 @@ namespace Isotope_fitting
         public OxyColor fit_color = OxyColors.Black;
         public int exp_color = OxyColors.Black.ToColor().ToArgb();
         public OxyColor peak_color = OxyColors.Crimson;
-        public LineStyle fit_style = LineStyle.Dot;
-        public LineStyle exper_style = LineStyle.Solid;
-        public LineStyle frag_style = LineStyle.Solid;
+        public OxyPlot.LineStyle fit_style = OxyPlot.LineStyle.Dot;
+        public OxyPlot.LineStyle exper_style = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle frag_style = OxyPlot.LineStyle.Solid;
         public double exp_width = 1;
         public double frag_width = 2;
         public double fit_width = 1;
         public double peak_width = 1;
         public double cen_width = 1;
         // tab2 axis isoplot
-        public LineStyle Xmajor_grid = LineStyle.Solid;
-        public LineStyle Xminor_grid = LineStyle.None;
-        public LineStyle Ymajor_grid = LineStyle.Solid;
-        public LineStyle Yminor_grid = LineStyle.None;
+        public OxyPlot.LineStyle Xmajor_grid = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Xminor_grid = OxyPlot.LineStyle.None;
+        public OxyPlot.LineStyle Ymajor_grid = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Yminor_grid = OxyPlot.LineStyle.None;
         public OxyPlot.Axes.TickStyle X_tick = OxyPlot.Axes.TickStyle.Outside;
         public OxyPlot.Axes.TickStyle Y_tick = OxyPlot.Axes.TickStyle.Outside;
         public double x_interval = 50;
@@ -275,10 +280,10 @@ namespace Isotope_fitting
         //primary tab plots
 
         //intensity
-        public LineStyle Xmajor_grid12 = LineStyle.Solid;
-        public LineStyle Xminor_grid12 = LineStyle.None;
-        public LineStyle Ymajor_grid12 = LineStyle.Solid;
-        public LineStyle Yminor_grid12 = LineStyle.None;
+        public OxyPlot.LineStyle Xmajor_grid12 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Xminor_grid12 = OxyPlot.LineStyle.None;
+        public OxyPlot.LineStyle Ymajor_grid12 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Yminor_grid12 = OxyPlot.LineStyle.None;
         public double y_interval12 = 50;
         public OxyPlot.Axes.TickStyle X_tick12 = OxyPlot.Axes.TickStyle.Outside;
         public OxyPlot.Axes.TickStyle Y_tick12 = OxyPlot.Axes.TickStyle.Outside;
@@ -288,10 +293,10 @@ namespace Isotope_fitting
         public double x_minorStep12 = 1;
         public double bar_width = 1;
         //charge
-        public LineStyle Xmajor_charge_grid12 = LineStyle.Solid;
-        public LineStyle Xminor_charge_grid12 = LineStyle.None;
-        public LineStyle Ymajor_charge_grid12 = LineStyle.Solid;
-        public LineStyle Yminor_charge_grid12 = LineStyle.None;   
+        public OxyPlot.LineStyle Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Xminor_charge_grid12 = OxyPlot.LineStyle.None;
+        public OxyPlot.LineStyle Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Yminor_charge_grid12 = OxyPlot.LineStyle.None;   
         public OxyPlot.Axes.TickStyle X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
         public OxyPlot.Axes.TickStyle Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
         public double y_charge_majorStep12 = 2;
@@ -300,10 +305,10 @@ namespace Isotope_fitting
         public double x_charge_minorStep12 = 1;
 
         //internal tab plots
-        public LineStyle Xint_major_grid13 = LineStyle.Solid;
-        public LineStyle Xint_minor_grid13 = LineStyle.None;
-        public LineStyle Yint_major_grid13 = LineStyle.Solid;
-        public LineStyle Yint_minor_grid13 = LineStyle.None;
+        public OxyPlot.LineStyle Xint_major_grid13 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Xint_minor_grid13 = OxyPlot.LineStyle.None;
+        public OxyPlot.LineStyle Yint_major_grid13 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Yint_minor_grid13 = OxyPlot.LineStyle.None;
         public string x_format13= "G";
         public string x_numformat13 = "0";
         public double x_interval13 = 50;
@@ -517,14 +522,14 @@ namespace Isotope_fitting
                     cen_width = Convert.ToDouble(preferences[34].Split(':')[1]);
 
                     // tab2 axis isoplot
-                    if (string_to_bool(preferences[35].Split(':')[1])) { Xmajor_grid = LineStyle.Solid; }
-                    else { Xmajor_grid = LineStyle.None; }
-                    if (string_to_bool(preferences[36].Split(':')[1])) { Xminor_grid = LineStyle.Solid; }
-                    else { Xminor_grid = LineStyle.None; }
-                    if (string_to_bool(preferences[37].Split(':')[1])) { Ymajor_grid = LineStyle.Solid; }
-                    else { Ymajor_grid = LineStyle.None; }
-                    if (string_to_bool(preferences[38].Split(':')[1])) { Yminor_grid = LineStyle.Solid; }
-                    else { Yminor_grid = LineStyle.None; }
+                    if (string_to_bool(preferences[35].Split(':')[1])) { Xmajor_grid = OxyPlot.LineStyle.Solid; }
+                    else { Xmajor_grid = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[36].Split(':')[1])) { Xminor_grid = OxyPlot.LineStyle.Solid; }
+                    else { Xminor_grid = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[37].Split(':')[1])) { Ymajor_grid = OxyPlot.LineStyle.Solid; }
+                    else { Ymajor_grid = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[38].Split(':')[1])) { Yminor_grid = OxyPlot.LineStyle.Solid; }
+                    else { Yminor_grid = OxyPlot.LineStyle.None; }
                     //preferences[0] += X_tick = OxyPlot.Axes.TickStyle.Outside;
                     //preferences[0] += Y_tick = OxyPlot.Axes.TickStyle.Outside;
                     x_interval = Convert.ToDouble(preferences[39].Split(':')[1]);
@@ -537,14 +542,14 @@ namespace Isotope_fitting
                     //primary tab plots
 
                     //intensity
-                    if (string_to_bool(preferences[45].Split(':')[1])) { Xmajor_grid12 = LineStyle.Solid; }
-                    else { Xmajor_grid12 = LineStyle.None; }
-                    if (string_to_bool(preferences[46].Split(':')[1])) { Xminor_grid12 = LineStyle.Solid; }
-                    else { Xminor_grid12 = LineStyle.None; }
-                    if (string_to_bool(preferences[47].Split(':')[1])) { Ymajor_grid12 = LineStyle.Solid; }
-                    else { Ymajor_grid12 = LineStyle.None; }
-                    if (string_to_bool(preferences[48].Split(':')[1])) { Yminor_grid12 = LineStyle.Solid; }
-                    else { Yminor_grid12 = LineStyle.None; }
+                    if (string_to_bool(preferences[45].Split(':')[1])) { Xmajor_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Xmajor_grid12 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[46].Split(':')[1])) { Xminor_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Xminor_grid12 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[47].Split(':')[1])) { Ymajor_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Ymajor_grid12 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[48].Split(':')[1])) { Yminor_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Yminor_grid12 = OxyPlot.LineStyle.None; }
                     y_interval12 = Convert.ToDouble(preferences[49].Split(':')[1]);
                     //preferences[0] += X_tick12 = OxyPlot.Axes.TickStyle.Outside;
                     //preferences[0] += Y_tick12 = OxyPlot.Axes.TickStyle.Outside;
@@ -555,14 +560,14 @@ namespace Isotope_fitting
                     bar_width = Convert.ToDouble(preferences[54].Split(':')[1]);
 
                     //charge
-                    if (string_to_bool(preferences[55].Split(':')[1])) { Xmajor_charge_grid12 = LineStyle.Solid; }
-                    else { Xmajor_charge_grid12 = LineStyle.None; }
-                    if (string_to_bool(preferences[56].Split(':')[1])) { Xminor_charge_grid12 = LineStyle.Solid; }
-                    else { Xminor_charge_grid12 = LineStyle.None; }
-                    if (string_to_bool(preferences[57].Split(':')[1])) { Ymajor_charge_grid12 = LineStyle.Solid; }
-                    else { Ymajor_charge_grid12 = LineStyle.None; }
-                    if (string_to_bool(preferences[58].Split(':')[1])) { Yminor_charge_grid12 = LineStyle.Solid; }
-                    else { Yminor_charge_grid12 = LineStyle.None; }
+                    if (string_to_bool(preferences[55].Split(':')[1])) { Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Xmajor_charge_grid12 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[56].Split(':')[1])) { Xminor_charge_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Xminor_charge_grid12 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[57].Split(':')[1])) { Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Ymajor_charge_grid12 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[58].Split(':')[1])) { Yminor_charge_grid12 = OxyPlot.LineStyle.Solid; }
+                    else { Yminor_charge_grid12 = OxyPlot.LineStyle.None; }
                     //preferences[0] += X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
                     //preferences[0] += Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
                     y_charge_majorStep12 = Convert.ToDouble(preferences[59].Split(':')[1]);
@@ -571,14 +576,14 @@ namespace Isotope_fitting
                     x_charge_minorStep12 = Convert.ToDouble(preferences[62].Split(':')[1]);
 
                     //internal tab plots
-                    if (string_to_bool(preferences[63].Split(':')[1])) { Xint_major_grid13 = LineStyle.Solid; }
-                    else { Xint_major_grid13 = LineStyle.None; }
-                    if (string_to_bool(preferences[64].Split(':')[1])) { Xint_minor_grid13 = LineStyle.Solid; }
-                    else { Xint_minor_grid13 = LineStyle.None; }
-                    if (string_to_bool(preferences[65].Split(':')[1])) { Yint_major_grid13 = LineStyle.Solid; }
-                    else { Yint_major_grid13 = LineStyle.None; }
-                    if (string_to_bool(preferences[66].Split(':')[1])) { Yint_minor_grid13 = LineStyle.Solid; }
-                    else { Yint_minor_grid13 = LineStyle.None; }
+                    if (string_to_bool(preferences[63].Split(':')[1])) { Xint_major_grid13 = OxyPlot.LineStyle.Solid; }
+                    else { Xint_major_grid13 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[64].Split(':')[1])) { Xint_minor_grid13 = OxyPlot.LineStyle.Solid; }
+                    else { Xint_minor_grid13 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[65].Split(':')[1])) { Yint_major_grid13 = OxyPlot.LineStyle.Solid; }
+                    else { Yint_major_grid13 = OxyPlot.LineStyle.None; }
+                    if (string_to_bool(preferences[66].Split(':')[1])) { Yint_minor_grid13 = OxyPlot.LineStyle.Solid; }
+                    else { Yint_minor_grid13 = OxyPlot.LineStyle.None; }
                     x_format13 = preferences[67].Split(':')[1].ToString();
                     x_numformat13 = preferences[68].Split(':')[1].ToString();
                     x_interval13 = Convert.ToDouble(preferences[69].Split(':')[1]);
@@ -605,12 +610,12 @@ namespace Isotope_fitting
                     MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!");
                     ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2;selection_rule = new bool[] { false, true, false, false, false, false };
                     fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0 ,100.0,100.0}; ppmDi = 8.0;
-                    fit_color = OxyColors.Black;exp_color = OxyColors.Black.ToColor().ToArgb();peak_color = OxyColors.Crimson;fit_style = LineStyle.Dot;exper_style = LineStyle.Solid;frag_style = LineStyle.Solid;exp_width = 1;frag_width = 2;fit_width = 1;
-                    peak_width = 1;cen_width = 1;Xmajor_grid = LineStyle.Solid;Xminor_grid = LineStyle.None;Ymajor_grid = LineStyle.Solid;Yminor_grid = LineStyle.None;X_tick = OxyPlot.Axes.TickStyle.Outside;Y_tick = OxyPlot.Axes.TickStyle.Outside;x_interval = 50;
-                    y_interval = 50;x_format = "G";y_format = "G";x_numformat = "0";y_numformat = "0";Xmajor_grid12 = LineStyle.Solid;Xminor_grid12 = LineStyle.None;Ymajor_grid12 = LineStyle.Solid;Yminor_grid12 = LineStyle.None;y_interval12 = 50;
-                    X_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_tick12 = OxyPlot.Axes.TickStyle.Outside;y_format12 = "G";y_numformat12 = "0";x_majorStep12 = 5;x_minorStep12 = 1;bar_width = 1;Xmajor_charge_grid12 = LineStyle.Solid;Xminor_charge_grid12 = LineStyle.None;
-                    Ymajor_charge_grid12 = LineStyle.Solid;Yminor_charge_grid12 = LineStyle.None;X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;y_charge_majorStep12 = 2;y_charge_minorStep12 = 1;x_charge_majorStep12 = 5;
-                    x_charge_minorStep12 = 1;Xint_major_grid13 = LineStyle.Solid;Xint_minor_grid13 = LineStyle.None;Yint_major_grid13 = LineStyle.Solid;Yint_minor_grid13 = LineStyle.None;x_format13 = "G";x_numformat13 = "0";x_interval13 = 50;Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
+                    fit_color = OxyColors.Black;exp_color = OxyColors.Black.ToColor().ToArgb();peak_color = OxyColors.Crimson;fit_style = OxyPlot.LineStyle.Dot;exper_style = OxyPlot.LineStyle.Solid;frag_style = OxyPlot.LineStyle.Solid;exp_width = 1;frag_width = 2;fit_width = 1;
+                    peak_width = 1;cen_width = 1;Xmajor_grid = OxyPlot.LineStyle.Solid;Xminor_grid = OxyPlot.LineStyle.None;Ymajor_grid = OxyPlot.LineStyle.Solid;Yminor_grid = OxyPlot.LineStyle.None;X_tick = OxyPlot.Axes.TickStyle.Outside;Y_tick = OxyPlot.Axes.TickStyle.Outside;x_interval = 50;
+                    y_interval = 50;x_format = "G";y_format = "G";x_numformat = "0";y_numformat = "0";Xmajor_grid12 = OxyPlot.LineStyle.Solid;Xminor_grid12 = OxyPlot.LineStyle.None;Ymajor_grid12 = OxyPlot.LineStyle.Solid;Yminor_grid12 = OxyPlot.LineStyle.None;y_interval12 = 50;
+                    X_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_tick12 = OxyPlot.Axes.TickStyle.Outside;y_format12 = "G";y_numformat12 = "0";x_majorStep12 = 5;x_minorStep12 = 1;bar_width = 1;Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid;Xminor_charge_grid12 = OxyPlot.LineStyle.None;
+                    Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid;Yminor_charge_grid12 = OxyPlot.LineStyle.None;X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;y_charge_majorStep12 = 2;y_charge_minorStep12 = 1;x_charge_majorStep12 = 5;
+                    x_charge_minorStep12 = 1;Xint_major_grid13 = OxyPlot.LineStyle.Solid;Xint_minor_grid13 = OxyPlot.LineStyle.None;Yint_major_grid13 = OxyPlot.LineStyle.Solid;Yint_minor_grid13 = OxyPlot.LineStyle.None;x_format13 = "G";x_numformat13 = "0";x_interval13 = 50;Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
                     Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;xINT_majorStep13 = 5;xINT_minorStep13 = 1;yINT_majorStep13 = 5;yINT_minorStep13 = 1;int_width = 1;
                     for (int a = 0; a < 6; a++)
                     {
@@ -674,13 +679,13 @@ namespace Isotope_fitting
             preferences[0] += "Experimental peak line width: " + peak_width.ToString() + "\r\n";
             preferences[0] += "Centroid line width: " + cen_width.ToString() + "\r\n";
             // tab2 axis isoplot
-            if (Xmajor_grid == LineStyle.Solid) { preferences[0] += "Xmajor_grid: " + true.ToString() + "\r\n"; }
+            if (Xmajor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Xmajor_grid: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xmajor_grid: " + false + "\r\n"; }
-            if (Xminor_grid == LineStyle.Solid) { preferences[0] += "Xminor_grid: " + true.ToString() + "\r\n"; }
+            if (Xminor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Xminor_grid: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xminor_grid: " + false + "\r\n"; }
-            if (Ymajor_grid == LineStyle.Solid) { preferences[0] += "Ymajor_grid: " + true.ToString() + "\r\n"; }
+            if (Ymajor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Ymajor_grid: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Ymajor_grid: " + false + "\r\n"; }
-            if (Yminor_grid == LineStyle.Solid) { preferences[0] += "Yminor_grid: " + true.ToString() + "\r\n"; }
+            if (Yminor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Yminor_grid: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Yminor_grid: " + false + "\r\n"; }          
             //preferences[0] += X_tick = OxyPlot.Axes.TickStyle.Outside;
             //preferences[0] += Y_tick = OxyPlot.Axes.TickStyle.Outside;
@@ -694,13 +699,13 @@ namespace Isotope_fitting
             //primary tab plots
 
             //intensity
-            if (Xmajor_grid12 == LineStyle.Solid) { preferences[0] += "Xmajor_grid12: " + true.ToString() + "\r\n"; }
+            if (Xmajor_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Xmajor_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xmajor_grid12: " + false + "\r\n"; }
-            if (Xminor_grid12 == LineStyle.Solid) { preferences[0] += "Xminor_grid12: " + true.ToString() + "\r\n"; }
+            if (Xminor_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Xminor_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xminor_grid12: " + false + "\r\n"; }
-            if (Ymajor_grid12 == LineStyle.Solid) { preferences[0] += "Ymajor_grid12: " + true.ToString() + "\r\n"; }
+            if (Ymajor_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Ymajor_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Ymajor_grid12: " + false + "\r\n"; }
-            if (Yminor_grid12 == LineStyle.Solid) { preferences[0] += "Yminor_grid12: " + true.ToString() + "\r\n"; }
+            if (Yminor_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Yminor_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Yminor_grid12: " + false + "\r\n"; }
             preferences[0] += "y interval in primary intensity plot: " + y_interval12.ToString() + "\r\n";
             //preferences[0] += X_tick12 = OxyPlot.Axes.TickStyle.Outside;
@@ -711,13 +716,13 @@ namespace Isotope_fitting
             preferences[0] += "x minor step in primary intensity plot: " + x_minorStep12.ToString() + "\r\n";
             preferences[0] += "bar width in primary intensity plot: " + bar_width.ToString() + "\r\n";
             //charge
-            if (Xmajor_charge_grid12 == LineStyle.Solid) { preferences[0] += "Xmajor_charge_grid12: " + true.ToString() + "\r\n"; }
+            if (Xmajor_charge_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Xmajor_charge_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xmajor_charge_grid12: " + false + "\r\n"; }
-            if (Xminor_charge_grid12 == LineStyle.Solid) { preferences[0] += "Xminor_charge_grid12: " + true.ToString() + "\r\n"; }
+            if (Xminor_charge_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Xminor_charge_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xminor_charge_grid12: " + false + "\r\n"; }
-            if (Ymajor_charge_grid12 == LineStyle.Solid) { preferences[0] += "Ymajor_charge_grid12: " + true.ToString() + "\r\n"; }
+            if (Ymajor_charge_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Ymajor_charge_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Ymajor_charge_grid12: " + false + "\r\n"; }
-            if (Yminor_charge_grid12 == LineStyle.Solid) { preferences[0] += "Yminor_charge_grid12: " + true.ToString() + "\r\n"; }
+            if (Yminor_charge_grid12 == OxyPlot.LineStyle.Solid) { preferences[0] += "Yminor_charge_grid12: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Yminor_charge_grid12: " + false + "\r\n"; }       
             //preferences[0] += X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
             //preferences[0] += Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
@@ -727,13 +732,13 @@ namespace Isotope_fitting
             preferences[0] += "x minor step in primary charge plot: " + x_charge_minorStep12.ToString() + "\r\n";
 
             //internal tab plots
-            if (Xint_major_grid13 == LineStyle.Solid) { preferences[0] += "Xint_major_grid13: " + true.ToString() + "\r\n"; }
+            if (Xint_major_grid13 == OxyPlot.LineStyle.Solid) { preferences[0] += "Xint_major_grid13: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xint_major_grid13: " + false + "\r\n"; }
-            if (Xint_minor_grid13 == LineStyle.Solid) { preferences[0] += "Xint_minor_grid13: " + true.ToString() + "\r\n"; }
+            if (Xint_minor_grid13 == OxyPlot.LineStyle.Solid) { preferences[0] += "Xint_minor_grid13: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Xint_minor_grid13: " + false + "\r\n"; }
-            if (Yint_major_grid13 == LineStyle.Solid) { preferences[0] += "Yint_major_grid13: " + true.ToString() + "\r\n"; }
+            if (Yint_major_grid13 == OxyPlot.LineStyle.Solid) { preferences[0] += "Yint_major_grid13: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Yint_major_grid13: " + false + "\r\n"; }
-            if (Yint_minor_grid13 == LineStyle.Solid) { preferences[0] += "Yint_minor_grid13: " + true.ToString() + "\r\n"; }
+            if (Yint_minor_grid13 == OxyPlot.LineStyle.Solid) { preferences[0] += "Yint_minor_grid13: " + true.ToString() + "\r\n"; }
             else { preferences[0] += "Yint_minor_grid13: " + false + "\r\n"; }
             preferences[0] += "x number1 format in internal intensity plot: " + x_format13.ToString() + "\r\n";
             preferences[0] += "x number2 format in internal intensity plot: " + x_numformat13.ToString() + "\r\n";
@@ -5317,11 +5322,13 @@ namespace Isotope_fitting
             if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); return; }
             else
             {
+                bigPanel.Enabled = false;
+                uncheckall_Frag();
                 fitted_results.Clear(); selectedFragments.Clear();
                 if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
                 if (fit_tree != null)
                 {
-                    fit_tree.Dispose(); MessageBox.Show("Fragment list have changed. Fit results are disposed.");
+                    fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.");
                 }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             }
@@ -5330,7 +5337,6 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-            double max_error = 0.0;
             double temp_pp = ppmError;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
@@ -5580,7 +5586,6 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-            double max_error = 0.0;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -6302,7 +6307,7 @@ namespace Isotope_fitting
             if (all_fitted_results!=null) {all_fitted_results.Clear(); all_fitted_sets.Clear();}
             fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
-            fit_style = LineStyle.Dot;exper_style = LineStyle.Solid;frag_style = LineStyle.Solid;
+            fit_style = OxyPlot.LineStyle.Dot;exper_style = OxyPlot.LineStyle.Solid;frag_style = OxyPlot.LineStyle.Solid;
             exp_width = 1;frag_width = 2;fit_width = 1;
     }
         private List<double> get_UI_intensities2(int[] subSet, double max = 1.0, bool optimizer_default = false, bool window = false, int w = 1)
@@ -10629,9 +10634,9 @@ namespace Isotope_fitting
             ppm_panel.Controls.Add(ppm_plot);
             PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal,SubtitleFontSize=10,SubtitleFont = "Arial" };
             ppm_plot.Model = ppm_model;
-            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
+            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
             ppm_model.Axes.Add(linearAxis21);
-            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
             ppm_model.Axes.Add(linearAxis22);
             ppm_plot.MouseDoubleClick += (s, e) => { ppm_model.ResetAllAxes(); ppm_plot.InvalidatePlot(true); };
 
