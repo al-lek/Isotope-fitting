@@ -571,7 +571,7 @@ namespace Isotope_fitting
 
             // Calculate isoPattern, then the envelope (heavy on cpu!!!) then centroids used for ppm_error.
             // default algorithm for isotopic patern is 1. Switch to 2 if there are more than 100C
-            short algo = 2;
+            short algo = 1;
             int idx = chem.FinalFormula.IndexOf("C");
             if (Char.IsNumber(chem.FinalFormula[idx + 2]) == true && Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
             ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
@@ -585,8 +585,7 @@ namespace Isotope_fitting
             // MAIN decesion algorithm 
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
-            // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-            
+            // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)            
             if (fragment_is_canditate)
             {
                 chem.Profile.Clear();
@@ -600,7 +599,6 @@ namespace Isotope_fitting
                 //MessageBox.Show(chem.Name+ " is out of ppm bounds.");
                 add_fragment_to_Fragments3(chem, cen);
                 return;
-
             }
             else
             {
