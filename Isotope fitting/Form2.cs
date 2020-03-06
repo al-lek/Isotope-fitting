@@ -1010,7 +1010,7 @@ namespace Isotope_fitting
                 Error = false,
                 Elements_set = new List<Element_set>(),
                 Iso_total_amount = 0,
-                Monoisotopic = new CompoundMulti(),
+                Monoisotopic = new CompoundMulti() {Sum=new int[1],Counter= new int[1] },
                 Points = new List<PointPlot>(),
                 Machine = string.Empty,
                 Resolution = new double(),

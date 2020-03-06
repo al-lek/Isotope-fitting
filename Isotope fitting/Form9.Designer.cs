@@ -105,6 +105,7 @@
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.FragCalc_TabControl.SuspendLayout();
@@ -126,6 +127,7 @@
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_calc.Controls.Add(this.ignore_ppm_form9);
             this.panel_calc.Controls.Add(this.FragCalc_TabControl);
             this.panel_calc.Controls.Add(this.insert_Btn);
             this.panel_calc.Controls.Add(this.calc_Btn);
@@ -1015,6 +1017,16 @@
             // 
             this.ppm_clmn.Text = "ppm";
             // 
+            // ignore_ppm_form9
+            // 
+            this.ignore_ppm_form9.AutoSize = true;
+            this.ignore_ppm_form9.Location = new System.Drawing.Point(174, 547);
+            this.ignore_ppm_form9.Name = "ignore_ppm_form9";
+            this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
+            this.ignore_ppm_form9.TabIndex = 58;
+            this.ignore_ppm_form9.Text = "ignore ppm";
+            this.ignore_ppm_form9.UseVisualStyleBackColor = true;
+            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1124,5 +1136,6 @@
         private System.Windows.Forms.Label chem_ion_Lbl;
         private System.Windows.Forms.CheckBox Light_chkBox;
         private System.Windows.Forms.CheckBox heavy_ChkBox;
+        private System.Windows.Forms.CheckBox ignore_ppm_form9;
     }
 }
