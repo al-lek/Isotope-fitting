@@ -31,6 +31,9 @@
             System.Windows.Forms.ColumnHeader z_clmn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.resolution_Box = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
             this.FragCalc_TabControl = new System.Windows.Forms.TabControl();
             this.Frag_tab = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -105,7 +108,6 @@
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.FragCalc_TabControl.SuspendLayout();
@@ -127,6 +129,8 @@
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_calc.Controls.Add(this.resolution_Box);
+            this.panel_calc.Controls.Add(this.label1);
             this.panel_calc.Controls.Add(this.ignore_ppm_form9);
             this.panel_calc.Controls.Add(this.FragCalc_TabControl);
             this.panel_calc.Controls.Add(this.insert_Btn);
@@ -147,6 +151,38 @@
             this.panel_calc.Name = "panel_calc";
             this.panel_calc.Size = new System.Drawing.Size(327, 731);
             this.panel_calc.TabIndex = 4;
+            // 
+            // resolution_Box
+            // 
+            this.resolution_Box.Enabled = false;
+            this.resolution_Box.ForeColor = System.Drawing.Color.Black;
+            this.resolution_Box.Location = new System.Drawing.Point(84, 536);
+            this.resolution_Box.Name = "resolution_Box";
+            this.resolution_Box.Size = new System.Drawing.Size(167, 20);
+            this.resolution_Box.TabIndex = 61;
+            this.resolution_Box.TextChanged += new System.EventHandler(this.resolution_Box_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.SlateGray;
+            this.label1.Location = new System.Drawing.Point(18, 539);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.TabIndex = 60;
+            this.label1.Text = "Resolution";
+            // 
+            // ignore_ppm_form9
+            // 
+            this.ignore_ppm_form9.AutoSize = true;
+            this.ignore_ppm_form9.Location = new System.Drawing.Point(175, 564);
+            this.ignore_ppm_form9.Name = "ignore_ppm_form9";
+            this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
+            this.ignore_ppm_form9.TabIndex = 58;
+            this.ignore_ppm_form9.Text = "ignore ppm";
+            this.ignore_ppm_form9.UseVisualStyleBackColor = true;
+            this.ignore_ppm_form9.CheckedChanged += new System.EventHandler(this.ignore_ppm_form9_CheckedChanged);
             // 
             // FragCalc_TabControl
             // 
@@ -830,7 +866,7 @@
             // half_minus_rdBtn
             // 
             this.half_minus_rdBtn.AutoSize = true;
-            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 609);
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 624);
             this.half_minus_rdBtn.Name = "half_minus_rdBtn";
             this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
             this.half_minus_rdBtn.TabIndex = 43;
@@ -854,7 +890,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.SlateGray;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 547);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 562);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -869,7 +905,7 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(84, 546);
+            this.ppm9_numUD.Location = new System.Drawing.Point(84, 561);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -882,7 +918,7 @@
             // half_plus_rdBtn
             // 
             this.half_plus_rdBtn.AutoSize = true;
-            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 639);
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 654);
             this.half_plus_rdBtn.Name = "half_plus_rdBtn";
             this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
             this.half_plus_rdBtn.TabIndex = 44;
@@ -893,7 +929,7 @@
             // one_rdBtn9
             // 
             this.one_rdBtn9.AutoSize = true;
-            this.one_rdBtn9.Location = new System.Drawing.Point(5, 579);
+            this.one_rdBtn9.Location = new System.Drawing.Point(5, 594);
             this.one_rdBtn9.Name = "one_rdBtn9";
             this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
             this.one_rdBtn9.TabIndex = 39;
@@ -904,7 +940,7 @@
             // half_rdBtn
             // 
             this.half_rdBtn.AutoSize = true;
-            this.half_rdBtn.Location = new System.Drawing.Point(150, 579);
+            this.half_rdBtn.Location = new System.Drawing.Point(150, 594);
             this.half_rdBtn.Name = "half_rdBtn";
             this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
             this.half_rdBtn.TabIndex = 42;
@@ -915,7 +951,7 @@
             // two_rdBtn
             // 
             this.two_rdBtn.AutoSize = true;
-            this.two_rdBtn.Location = new System.Drawing.Point(5, 609);
+            this.two_rdBtn.Location = new System.Drawing.Point(5, 624);
             this.two_rdBtn.Name = "two_rdBtn";
             this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.two_rdBtn.TabIndex = 40;
@@ -926,7 +962,7 @@
             // three_rdBtn
             // 
             this.three_rdBtn.AutoSize = true;
-            this.three_rdBtn.Location = new System.Drawing.Point(5, 639);
+            this.three_rdBtn.Location = new System.Drawing.Point(5, 654);
             this.three_rdBtn.Name = "three_rdBtn";
             this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.three_rdBtn.TabIndex = 41;
@@ -1016,16 +1052,6 @@
             // ppm_clmn
             // 
             this.ppm_clmn.Text = "ppm";
-            // 
-            // ignore_ppm_form9
-            // 
-            this.ignore_ppm_form9.AutoSize = true;
-            this.ignore_ppm_form9.Location = new System.Drawing.Point(174, 547);
-            this.ignore_ppm_form9.Name = "ignore_ppm_form9";
-            this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
-            this.ignore_ppm_form9.TabIndex = 58;
-            this.ignore_ppm_form9.Text = "ignore ppm";
-            this.ignore_ppm_form9.UseVisualStyleBackColor = true;
             // 
             // Form9
             // 
@@ -1137,5 +1163,7 @@
         private System.Windows.Forms.CheckBox Light_chkBox;
         private System.Windows.Forms.CheckBox heavy_ChkBox;
         private System.Windows.Forms.CheckBox ignore_ppm_form9;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox resolution_Box;
     }
 }

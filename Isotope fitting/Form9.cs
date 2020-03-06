@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Isotope_fitting.Form2;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Isotope_fitting
 {
@@ -597,6 +598,8 @@ namespace Isotope_fitting
                 //chem.Profile.Clear();
                 //ChemiForm.Envelope(chem);               
                 //MessageBox.Show(chem.Name+ " is out of ppm bounds.");
+                chem.Profile.Clear();
+                ChemiForm.Envelope(chem);
                 add_fragment_to_Fragments3(chem, cen);
                 return;
             }
@@ -695,7 +698,23 @@ namespace Isotope_fitting
                 double[] tmp = ppm_calculator(cen[i].X);
 
                 if (Math.Abs(tmp[0])< ppmError9) results.Add(tmp);
-                else { fragment_is_canditate = false; break; }
+                else
+                {
+                    fragment_is_canditate = false;
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(resolution_Box.Text) && resolution_Box.Enabled)
+                        {
+                            chem.Resolution = (double)dParser(resolution_Box.Text.ToString());
+                        }
+                        else
+                        {
+                            results.Add(tmp); chem.Resolution = (double)results.Average(p => p[1]);
+                        }
+                    }
+                    catch { }
+                    break;
+                }
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
@@ -1013,6 +1032,22 @@ namespace Isotope_fitting
             {
                 ppmError9 = double.Parse(ppm9_numUD.ActiveControl.Text);
             }
+        }
+
+        private void resolution_Box_TextChanged(object sender, EventArgs e)
+        {
+            if (Regex.IsMatch(resolution_Box.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Please enter only numbers.");
+                resolution_Box.Text = resolution_Box.Text.Remove(resolution_Box.Text.Length - 1);
+                resolution_Box.SelectionStart = resolution_Box.Text.Length;
+                resolution_Box.SelectionLength = 0;
+            }
+        }
+
+        private void ignore_ppm_form9_CheckedChanged(object sender, EventArgs e)
+        {
+            resolution_Box.Enabled = ignore_ppm_form9.Checked;
         }
     }
 }

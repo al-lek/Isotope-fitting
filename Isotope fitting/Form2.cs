@@ -1,5 +1,4 @@
-﻿
-using OxyPlot;
+﻿using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
