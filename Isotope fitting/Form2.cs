@@ -1878,7 +1878,7 @@ namespace Isotope_fitting
             else
             {
                 frag_tree.AfterCheck += (s, e) => {  frag_node_checkChanged(e.Node, e.Node.Checked); };
-                frag_tree.NodeMouseClick += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
+                frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
                 frag_tree.ContextMenu = new ContextMenu(new MenuItem[5] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
@@ -1953,7 +1953,7 @@ namespace Isotope_fitting
                 refresh_iso_plot();
             };            
 
-            factor_panel.Controls.AddRange(new Control[] { factor_lbl, btn_solo, /*btn_ok,*/ numUD });            
+            factor_panel.Controls.AddRange(new Control[] { factor_lbl, btn_solo, numUD });            
         }      
         private void populate_fragtypes_treeView()
         {
