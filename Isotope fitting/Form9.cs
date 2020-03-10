@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using static Isotope_fitting.Form2;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Isotope_fitting
 {
@@ -33,7 +34,8 @@ namespace Isotope_fitting
         delegate void CalcFrag3Completed();
         event CalcFrag3Completed OnCalcFrag3Completed;
         bool first = true;
-        
+        public static List<int> last_plotted = new List<int>();
+        List<ChemiForm> mult_loaded = new List<ChemiForm>();
 
         public Form9(Form2 f)
         {
@@ -96,11 +98,11 @@ namespace Isotope_fitting
         }
         private void fragListView9_ColumnClick_1(object sender, ColumnClickEventArgs e)
         {
-            //ensure that the focus is mainly on numeric up down box in the factor_panel9 
-            if (factor_panel9.Visible)
-            {
-                factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
-            }
+            ////ensure that the focus is mainly on numeric up down box in the factor_panel9 
+            //if (factor_panel9.Visible)
+            //{
+            //    factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
+            //}
             // Determine if clicked column is already the column that is being sorted.
             if (e.Column == _lvwItemComparer.SortColumn)
             {
@@ -156,40 +158,19 @@ namespace Isotope_fitting
         }
         private void fragListView9_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+            if (last_plotted.Count==0) { return; }
             now = true;
             //if (factor_panel9.Controls.Count > 0) { factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus(); }
             if (e.IsSelected)
             {
                 selected_idx = System.Convert.ToInt32(e.Item.SubItems[5].Text);
-                if (first)
-                {
-                    // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
-                    if (all_data.Count == 0) { all_data.Add(new List<double[]>()); Form2.custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
-                    custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
-                }
-                else
-                {
-                    all_data.RemoveAt(all_data.Count - 1); custom_colors.RemoveAt(custom_colors.Count - 1);
-                }
-                all_data.Add(new List<double[]>());
-                for (int p = 0; p < Fragments3[selected_idx].Profile.Count; p++)
-                {
-                    all_data.Last().Add(new double[] { Fragments3[selected_idx].Profile[p].X, Fragments3[selected_idx].Profile[p].Y });
-                }
-                custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
-                first = false; now = true;
-                try
-                {
-                    frm2.recalc_frm9(Fragments3[selected_idx].Profile[0].X, Fragments3[selected_idx].Profile.Last().X); adjust_height();
-                }
-                catch
-                {
-                    MessageBox.Show("This fragment doesn't belong to the experimental data!");
-                    first = true; now = false; selected_idx = 0;
-                    frm2.ending_frm9();
-                }
-            }           
+                now = true;
+                adjust_height();
+
+            }
+
         }
+      
         private void adjust_height()
         {
             double frag_intensity = Fragments3[selected_idx].Factor * Fragments3[selected_idx].Max_intensity;
@@ -215,9 +196,9 @@ namespace Isotope_fitting
             //ensure that the focus is mainly on numeric up down box in the factor_panel9 
             //that way when the user clicks a fragment from the listview the focus is not on the listview but on the numeric up down
             //and can control height of the fragment instantly from the buttons "up" "down"
-            numUD.Leave += (s, e) => { if (!panel_calc.Focused) { numUD.Focus(); } };
+            //numUD.Leave += (s, e) => { if (!panel_calc.Focused) { numUD.Focus(); } };
              factor_panel9.Controls.AddRange(new Control[] { factor_lbl, numUD });
-            factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
+            //factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
         }
         #endregion
 
@@ -542,7 +523,7 @@ namespace Isotope_fitting
             progress_display_stop();
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { MessageBox.Show("Chemical formulas profile calculation is completed!"); }
+            if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { MessageBox.Show("Chemical formulas profile calculation is completed!From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Chemical formula calculation results"); }
             else { MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results"); }                
             Invoke(new Action(() => OnCalcFrag3Completed()));
         }
@@ -1011,16 +992,17 @@ namespace Isotope_fitting
         {
             //when closing the form public data from this form are restored in their initial values
             initialize_data();
+            if (last_plotted.Count!=0)
+            {
+                all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                last_plotted.Clear();
+            }           
             //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
         }
         
-        private void chemForm_tab_Click(object sender, EventArgs e)
-        {
-            panel_calc.Focus();
-        }
-
+        
         private void Frag_tab_Click(object sender, EventArgs e)
         {
             panel_calc.Focus();
@@ -1048,6 +1030,196 @@ namespace Isotope_fitting
         private void ignore_ppm_form9_CheckedChanged(object sender, EventArgs e)
         {
             resolution_Box.Enabled = ignore_ppm_form9.Checked;
+        }
+
+
+
+        private void clear_single_chem_Btn_Click(object sender, EventArgs e)
+        {
+            heavy_ChkBox.Checked = false;
+            Light_chkBox.Checked = false;
+            chemForm_txtBox.Text = string.Empty;
+            maxCharge_txtBox.Text = string.Empty;
+            minCharge_txtBox.Text = string.Empty;
+            ion_txtBox.Text = string.Empty;
+            primary_txtBox.Text = string.Empty;
+            internal_txtBox.Text = string.Empty;
+        }
+
+        private void clear_multiple_chem_Btn_Click(object sender, EventArgs e)
+        {
+            multChem_max_charge.Text = string.Empty;
+            multChem_min_charge.Text = string.Empty;
+            if (mult_loaded.Count != 0) { mult_loaded.Clear(); filename_txtBx.Text = string.Empty;  }
+        }
+
+
+
+
+        private void plot_Btn_Click(object sender, EventArgs e)
+        {
+            if (last_plotted.Count!=0)
+            {
+                all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                last_plotted.Clear();
+            }
+            foreach (int frag_idx in fragListView9.CheckedIndices)
+            {
+                if (first)
+                {
+                    // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
+                    if (all_data.Count == 0) { all_data.Add(new List<double[]>()); Form2.custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
+                    //custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
+                }                
+                all_data.Add(new List<double[]>());
+                for (int p = 0; p < Fragments3[frag_idx].Profile.Count; p++)
+                {
+                    all_data.Last().Add(new double[] { Fragments3[frag_idx].Profile[p].X, Fragments3[frag_idx].Profile[p].Y });
+                }
+                custom_colors.Add(Fragments3[frag_idx].Color.ToColor().ToArgb());
+                first = false; now = true;
+                last_plotted.Add(frag_idx);
+            }
+            if (last_plotted.Count != 0)
+            {
+                //try
+                //{
+                frm2.recalc_frm9(/*Fragments3[frag_idx].Profile[0].X, Fragments3[frag_idx].Profile.Last().X*/);/* adjust_height();*/
+                //}
+                //catch(Exception ex)
+                //{
+                //    MessageBox.Show("Fragments don't belong to the experimental data!"+ex.ToString());
+                //    if (last_plotted.Count != 0)
+                //    {
+                //        all_data.RemoveAt(all_data.Count - last_plotted.Count); custom_colors.RemoveAt(custom_colors.Count - last_plotted.Count);
+                //        last_plotted.Clear();
+                //    }
+                //    first = true; now = false;
+                //    frm2.ending_frm9();
+                //}
+            }           
+        }
+
+        private void rem_Btn_Click(object sender, EventArgs e)
+        {
+            if (last_plotted.Count == 0) return;
+            else
+            {
+                all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                last_plotted.Clear();
+                frm2.recalc_frm9();
+            }
+        }
+
+        private void load_chems_file_Btn_Click(object sender, EventArgs e)
+        {
+            //if (string.IsNullOrEmpty(multChem_min_charge.Text) || string.IsNullOrEmpty(multChem_min_charge.Text)) { MessageBox.Show("You need to set first the charge range and then the "); }
+            
+            //OpenFileDialog multChems = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
+            //List<string> lista = new List<string>();
+            //if (multChems.ShowDialog() != DialogResult.Cancel)
+            //{
+            //    sw1.Reset(); sw1.Start();
+            //    StreamReader objReader = new StreamReader(multChems.FileName);
+            //    filename_txtBx.Text = multChems.SafeFileName.Remove(multChems.SafeFileName.Length - 4).ToString();
+            //    do { lista.Add(objReader.ReadLine()); }
+            //    while (objReader.Peek() != -1);
+            //    objReader.Close();
+
+                
+            //    for (int j = 0; j != (lista.Count); j++)
+            //    {
+            //        try
+            //        {
+            //            string[] tmp_str = lista[j].Split('\t');
+            //            for ()
+            //            {
+
+            //            }
+            //            mult_loaded.Add(new ChemiForm()
+            //            {
+            //                Color=OxyColors.Orange,
+            //                InputFormula= tmp_str[0],
+            //                PrintFormula=tmp_str[0],                            
+            //                Adduct = string.Empty,
+            //                Deduct = string.Empty,
+            //                Multiplier = 1,
+            //                Mz = string.Empty,
+            //                Ion = "extra",
+            //                Index = string.Empty,
+            //                IndexTo = string.Empty,
+            //                Error = false,
+            //                Elements_set = new List<Element_set>(),
+            //                Iso_total_amount = 0,
+            //                Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
+            //                Points = new List<PointPlot>(),
+            //                Machine = string.Empty,
+            //                Resolution = new double(),
+            //                Combinations = new List<Combination_1>(),
+            //                Profile = new List<PointPlot>(),
+            //                Centroid = new List<PointPlot>(),
+            //                Intensoid = new List<PointPlot>(),
+            //                Combinations4 = new List<Combination_4>(),
+            //                FinalFormula = string.Empty,
+            //                Factor = 1.0,
+            //                Fixed = false,                            
+            //                Max_man_int = 0,  
+            //                Ion_type = "extra",
+            //                Name = tmp_str[1],
+            //                Radio_label = string.Empty,                            
+            //                maxPPM_Error = 0,
+            //                minPPM_Error = 0
+            //            });
+            //        }
+            //        catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!");  }
+                    
+            //    }
+               
+            //}
+            
+        }
+
+        private void multChem_min_charge_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(minCharge_txtBox.Text))
+            {
+                if (minCharge_txtBox.Text != "-")
+                {
+                    try
+                    {
+                        double.Parse(minCharge_txtBox.Text, NumberStyles.Integer);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please enter only numbers.");
+                        minCharge_txtBox.Text = minCharge_txtBox.Text.Remove(minCharge_txtBox.Text.Length - 1);
+                        minCharge_txtBox.SelectionStart = minCharge_txtBox.Text.Length;
+                        minCharge_txtBox.SelectionLength = 0;
+                    }
+                }
+            }
+        }
+
+        private void multChem_max_charge_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(maxCharge_txtBox.Text))
+            {
+                if (maxCharge_txtBox.Text != "-")
+                {
+
+                    try
+                    {
+                        double.Parse(maxCharge_txtBox.Text, NumberStyles.Integer);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please enter only numbers.");
+                        maxCharge_txtBox.Text = maxCharge_txtBox.Text.Remove(maxCharge_txtBox.Text.Length - 1);
+                        maxCharge_txtBox.SelectionStart = maxCharge_txtBox.Text.Length;
+                        maxCharge_txtBox.SelectionLength = 0;
+                    }
+                }
+            }
         }
     }
 }

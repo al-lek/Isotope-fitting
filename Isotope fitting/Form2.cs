@@ -1853,6 +1853,8 @@ namespace Isotope_fitting
 
             // !!!needs rework for recalculating
             int existing_fragments = all_data.Count - 1;
+
+
             int new_fragments = Fragments2.Count - existing_fragments;
 
             int all_data_start_idx = all_data.Count;
@@ -4021,10 +4023,14 @@ namespace Isotope_fitting
                 }
                 if (Form9.now)
                 {
-                    string name_str = Form9.Fragments3[Form9.selected_idx].Name;
-                    (iso_plot.Model.Series[Fragments2.Count+1] as LineSeries).Title = name_str;
-                    for (int j = 0; j < all_data.Last().Count; j++)
-                        (iso_plot.Model.Series[Fragments2.Count+1] as LineSeries).Points.Add(new DataPoint(all_data.Last()[j][0], Form9.Fragments3[Form9.selected_idx].Factor * all_data.Last()[j][1]));
+                    for (int f=0; f< Form9.last_plotted.Count; f++ )
+                    {
+                        int frag = Form9.last_plotted[f];
+                        string name_str = Form9.Fragments3[frag].Name;
+                        (iso_plot.Model.Series[Fragments2.Count +f+1] as LineSeries).Title = name_str;
+                        for (int j = 0; j < all_data[Fragments2.Count + f + 1].Count; j++)
+                            (iso_plot.Model.Series[Fragments2.Count + f + 1] as LineSeries).Points.Add(new DataPoint(all_data[Fragments2.Count + f + 1][j][0], Form9.Fragments3[frag].Factor * all_data[Fragments2.Count + f + 1][j][1]));
+                    }                    
                 }
             }
             if (plotFragCent_chkBox.Checked && all_data.Count > 0)
@@ -4049,19 +4055,22 @@ namespace Isotope_fitting
                     }
                 }
                 if (Form9.now)
-                {
-                    int curr_idx = Form9.selected_idx;
-                    if (all_data.Count != 0)
+                {                    
+                    for (int f = 0; f < Form9.last_plotted.Count; f++)
                     {
-                        // get name of each line to be ploted
-                        string name_str = Form9.Fragments3[curr_idx].Name;
-                        (iso_plot.Model.Series[2*Fragments2.Count+2] as LinearBarSeries).Title = name_str;
-
-                        // paint frag envelope
-                        for (int j = 0; j < Form9.Fragments3[curr_idx ].Centroid.Count; j++)
+                        int curr_idx = Form9.last_plotted[f];
+                        if (all_data.Count != 0)
                         {
-                            List<PointPlot> cenn = Form9.Fragments3[curr_idx ].Centroid.OrderBy(p => p.X).ToList();
-                            (iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Form9.Fragments3[curr_idx ].Factor * cenn[j].Y));
+                            // get name of each line to be ploted
+                            string name_str = Form9.Fragments3[curr_idx].Name;
+                            (iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Title = name_str;
+
+                            // paint frag envelope
+                            for (int j = 0; j < Form9.Fragments3[curr_idx].Centroid.Count; j++)
+                            {
+                                List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
+                                (iso_plot.Model.Series[2 * Fragments2.Count+ Form9.last_plotted.Count + f+ 2] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Form9.Fragments3[curr_idx].Factor * cenn[j].Y));
+                            }
                         }
                     }
                 }
@@ -4099,29 +4108,41 @@ namespace Isotope_fitting
         }
         private void reset_iso_plot()
         {
-            iso_plot.Model.Series.Clear();
+            iso_plot.Model.Series.Clear();            
             for (int i = 0; i < all_data.Count; i++)
             {
                 OxyColor cc;
-                if (Form9.now == true && i == all_data.Count - 1)
+                if (Form9.now == true && i== all_data.Count - Form9.last_plotted.Count)
                 {
-                    cc = Form9.Fragments3[Form9.selected_idx].Color;                    
+                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    {
+                        int frag = Form9.last_plotted[f];
+                        cc = Form9.Fragments3[frag].Color;
+                        LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };                       
+                        iso_plot.Model.Series.Add(tmp);
+                    }
+                    break;
                 }
                 else
                 {
                     cc = get_fragment_color(i);
+                    LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
+                    if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
+                    iso_plot.Model.Series.Add(tmp);
                 }
-                LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
-                if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
-                iso_plot.Model.Series.Add(tmp);
+                
             }            
             for (int i = 1; i < all_data.Count; i++)
             {
-                if (Form9.now == true && i==all_data.Count-1 )
+                if (Form9.now == true && i==all_data.Count- Form9.last_plotted.Count)
                 {
-                    OxyColor cc = Form9.Fragments3[Form9.selected_idx].Color;
-                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
-                    iso_plot.Model.Series.Add(bar);
+                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    {
+                        int frag = Form9.last_plotted[f];                       
+                        OxyColor cc = Form9.Fragments3[frag].Color;
+                        LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
+                        iso_plot.Model.Series.Add(bar);
+                    }
                     break;
                 }
                 else
@@ -4163,7 +4184,6 @@ namespace Isotope_fitting
             List<int> plot_idxs = new List<int>(to_plot);
             summation.Clear();
             residual.Clear();
-
             // 1. calculate addition of fragments and residual
             for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
             {
@@ -4171,7 +4191,14 @@ namespace Isotope_fitting
 
                 for (int j = 0; j < plot_idxs.Count; j++)
                     intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
-                if (Form9.now) { intensity += all_data_aligned[i].Last() *Form9.Fragments3[Form9.selected_idx].Factor; }
+                if (Form9.now)
+                {
+                    int count=all_data_aligned[i].Count();
+                    for (int extras=0; extras< Form9.last_plotted.Count() ; extras++)
+                    {
+                        intensity += all_data_aligned[i][count-extras-1] * Form9.Fragments3[Form9.last_plotted[extras]].Factor;
+                    }                   
+                }
                 summation.Add(new double[] { all_data[0][i][0], intensity });
                 if (rel_res_chkBx.Checked)
                 {
@@ -5128,7 +5155,7 @@ namespace Isotope_fitting
                                 s_chain = str[1];
                                 s2_chain = str[2];
                                 heavy_chain = str[1];
-                                light_chain = str[1];
+                                light_chain = str[2];
                             }
                             else
                             {
@@ -5423,28 +5450,29 @@ namespace Isotope_fitting
                 return;
             }
         }
-        public void recalc_frm9(double min_border,double  max_border)
+        public void recalc_frm9(/*double min_border,double  max_border*/)
         {
-            if(!plotFragProf_chkBox.Checked) plotFragProf_chkBox.Checked = true;
+            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
+            //if (!plotFragProf_chkBox.Checked) { plotFragProf_chkBox.Checked = true; }
             recalculate_all_data_aligned();
-            if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
-            {                
-                if (max_border> iso_plot.Model.Axes[1].ActualMaximum || min_border < iso_plot.Model.Axes[1].ActualMinimum || (iso_plot.Model.Axes[1].ActualMaximum- iso_plot.Model.Axes[1].ActualMinimum)/100> (max_border-min_border))           
-                {
-                    iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
-                    if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
-                    {
-                        try
-                        {
-                            double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border - 3 && x.X < max_border + 10)).Max(k => k.Y);
-                            iso_plot.Model.Axes[0].Zoom(-10, pt0 * 1.2);
-                        }
-                        catch{}
-                    }
-                    iso_plot.Refresh();
-                    invalidate_all();
-                }                
-            }
+            //if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
+            //{                
+            //    if (max_border> iso_plot.Model.Axes[1].ActualMaximum || min_border < iso_plot.Model.Axes[1].ActualMinimum || (iso_plot.Model.Axes[1].ActualMaximum- iso_plot.Model.Axes[1].ActualMinimum)/100> (max_border-min_border))           
+            //    {
+            //        iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
+            //        if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+            //        {
+            //            try
+            //            {
+            //                double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border - 3 && x.X < max_border + 10)).Max(k => k.Y);
+            //                iso_plot.Model.Axes[0].Zoom(-10, pt0 * 1.2);
+            //            }
+            //            catch{}
+            //        }
+            //        iso_plot.Refresh();
+            //        invalidate_all();
+            //    }                
+            //}
         }
         public void refresh_frm9()
         {
@@ -5460,14 +5488,9 @@ namespace Isotope_fitting
 
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
         }
-        private void styleFormatBtn_Click(object sender, EventArgs e)
-        {
-            Form10 frm10 = new Form10(this);
-            frm10.ShowDialog();
-        }
+        
         public void ending_frm9()
-        {
-            all_data.RemoveRange(1, all_data.Count - 1); custom_colors.RemoveRange(1, custom_colors.Count - 1);
+        {            
             add_fragments_to_all_data();
             recalculate_all_data_aligned();
         }
@@ -5476,6 +5499,11 @@ namespace Isotope_fitting
         #endregion
 
         #region FORM 10 plot settings
+        private void styleFormatBtn_Click(object sender, EventArgs e)
+        {
+            Form10 frm10 = new Form10(this);
+            frm10.ShowDialog();
+        }
         public void oxy_changes()
         {
             iso_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
