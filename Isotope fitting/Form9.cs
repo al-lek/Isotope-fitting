@@ -215,7 +215,14 @@ namespace Isotope_fitting
             // 1. select fragments according to UI            
             sw1.Reset(); sw1.Start();
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
-            if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; } selected_fragments = select_fragments2_frm9(); }
+            if (mult_loaded.Count>0)
+            {
+                foreach (ChemiForm cc in mult_loaded)
+                {
+                    selected_fragments.Add(cc.DeepCopy());
+                }
+            }
+            else if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; } selected_fragments = select_fragments2_frm9(); }
             else { selected_fragments = check_chem_inputs(); }
              
             if (selected_fragments == null) return;
@@ -1113,70 +1120,72 @@ namespace Isotope_fitting
 
         private void load_chems_file_Btn_Click(object sender, EventArgs e)
         {
-            //if (string.IsNullOrEmpty(multChem_min_charge.Text) || string.IsNullOrEmpty(multChem_min_charge.Text)) { MessageBox.Show("You need to set first the charge range and then the "); }
-            
-            //OpenFileDialog multChems = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
-            //List<string> lista = new List<string>();
-            //if (multChems.ShowDialog() != DialogResult.Cancel)
-            //{
-            //    sw1.Reset(); sw1.Start();
-            //    StreamReader objReader = new StreamReader(multChems.FileName);
-            //    filename_txtBx.Text = multChems.SafeFileName.Remove(multChems.SafeFileName.Length - 4).ToString();
-            //    do { lista.Add(objReader.ReadLine()); }
-            //    while (objReader.Peek() != -1);
-            //    objReader.Close();
+            if (string.IsNullOrEmpty(multChem_min_charge.Text) || string.IsNullOrEmpty(multChem_max_charge.Text)) { MessageBox.Show("You need to set first the charge range and then the "); }
+            double qMin = txt_to_d(multChem_min_charge);
+            if (double.IsNaN(qMin)) qMin = 1;
+            double qMax = txt_to_d(multChem_max_charge);
+            if (double.IsNaN(qMax)) qMax = 25;
+            OpenFileDialog multChems = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
+            List<string> lista = new List<string>();
+            if (multChems.ShowDialog() != DialogResult.Cancel)
+            {
+                sw1.Reset(); sw1.Start();
+                StreamReader objReader = new StreamReader(multChems.FileName);
+                filename_txtBx.Text = multChems.SafeFileName.Remove(multChems.SafeFileName.Length - 4).ToString();
+                do { lista.Add(objReader.ReadLine()); }
+                while (objReader.Peek() != -1);
+                objReader.Close();
 
-                
-            //    for (int j = 0; j != (lista.Count); j++)
-            //    {
-            //        try
-            //        {
-            //            string[] tmp_str = lista[j].Split('\t');
-            //            for ()
-            //            {
+                for (int j = 0; j != (lista.Count); j++)
+                {
+                    try
+                    {
+                        string[] tmp_str = lista[j].Split('\t');
 
-            //            }
-            //            mult_loaded.Add(new ChemiForm()
-            //            {
-            //                Color=OxyColors.Orange,
-            //                InputFormula= tmp_str[0],
-            //                PrintFormula=tmp_str[0],                            
-            //                Adduct = string.Empty,
-            //                Deduct = string.Empty,
-            //                Multiplier = 1,
-            //                Mz = string.Empty,
-            //                Ion = "extra",
-            //                Index = string.Empty,
-            //                IndexTo = string.Empty,
-            //                Error = false,
-            //                Elements_set = new List<Element_set>(),
-            //                Iso_total_amount = 0,
-            //                Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
-            //                Points = new List<PointPlot>(),
-            //                Machine = string.Empty,
-            //                Resolution = new double(),
-            //                Combinations = new List<Combination_1>(),
-            //                Profile = new List<PointPlot>(),
-            //                Centroid = new List<PointPlot>(),
-            //                Intensoid = new List<PointPlot>(),
-            //                Combinations4 = new List<Combination_4>(),
-            //                FinalFormula = string.Empty,
-            //                Factor = 1.0,
-            //                Fixed = false,                            
-            //                Max_man_int = 0,  
-            //                Ion_type = "extra",
-            //                Name = tmp_str[1],
-            //                Radio_label = string.Empty,                            
-            //                maxPPM_Error = 0,
-            //                minPPM_Error = 0
-            //            });
-            //        }
-            //        catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!");  }
-                    
-            //    }
-               
-            //}
-            
+                        for (int c = (int)qMin; c <= qMax; c++)
+                        {
+                            mult_loaded.Add(new ChemiForm()
+                            {
+                                Color = OxyColors.Orange,
+                                InputFormula = tmp_str[0],
+                                PrintFormula = tmp_str[0],
+                                Adduct = string.Empty,
+                                Deduct = string.Empty,
+                                Multiplier = 1,
+                                Mz = string.Empty,
+                                Ion = "extra",
+                                Index = string.Empty,
+                                IndexTo = string.Empty,
+                                Error = false,
+                                Elements_set = new List<Element_set>(),
+                                Iso_total_amount = 0,
+                                Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
+                                Points = new List<PointPlot>(),
+                                Machine = string.Empty,
+                                Resolution = new double(),
+                                Combinations = new List<Combination_1>(),
+                                Profile = new List<PointPlot>(),
+                                Centroid = new List<PointPlot>(),
+                                Intensoid = new List<PointPlot>(),
+                                Combinations4 = new List<Combination_4>(),
+                                FinalFormula = string.Empty,
+                                Factor = 1.0,
+                                Fixed = false,
+                                Max_man_int = 0,
+                                Ion_type = "extra",
+                                Name = tmp_str[1],
+                                Radio_label = string.Empty,
+                                maxPPM_Error = 0,
+                                minPPM_Error = 0,
+                                Charge=c
+                            });
+                        }
+                    }                       
+                    catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); }
+
+                }
+            }
+            MessageBox.Show(mult_loaded.Count().ToString()+ " chemical formulas have been added!");
         }
 
         private void multChem_min_charge_TextChanged(object sender, EventArgs e)
