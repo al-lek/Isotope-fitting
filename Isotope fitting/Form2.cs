@@ -4189,7 +4189,6 @@ namespace Isotope_fitting
             List<int> plot_idxs = new List<int>(to_plot);
             summation.Clear();
             residual.Clear();
-
             // 1. calculate addition of fragments and residual
             for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
             {
@@ -4197,18 +4196,25 @@ namespace Isotope_fitting
 
                 for (int j = 0; j < plot_idxs.Count; j++)
                     intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
-                if (Form9.now) { intensity += all_data_aligned[i].Last() * Form9.Fragments3[Form9.selected_idx].Factor; }
+                if (Form9.now)
+                {
+                    int count=all_data_aligned[i].Count();
+                    for (int extras=0; extras< Form9.last_plotted.Count() ; extras++)
+                    {
+                        intensity += all_data_aligned[i][count-extras-1] * Form9.Fragments3[Form9.last_plotted[extras]].Factor;
+                    }                   
+                }
                 summation.Add(new double[] { all_data[0][i][0], intensity });
                 if (rel_res_chkBx.Checked)
                 {
-                    if (all_data[0][i][1] == 0 || intensity == 0)
+                    if (all_data[0][i][1]==0 || intensity==0)
                     {
                         residual.Add(new double[] { all_data[0][i][0], 1 });
                     }
                     else
                     {
                         residual.Add(new double[] { all_data[0][i][0], (all_data[0][i][1] - intensity) / all_data[0][i][1] });
-                    }
+                    }                    
                 }
                 else
                 {
