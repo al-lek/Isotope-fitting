@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form11
+    partial class Form20
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form11));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form20));
             this.toolStrip_frm11 = new System.Windows.Forms.ToolStrip();
             this.Save_Btn = new System.Windows.Forms.ToolStripButton();
             this.Copy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -52,7 +52,7 @@
             this.toolStrip_frm11.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_frm11.Name = "toolStrip_frm11";
             this.toolStrip_frm11.Size = new System.Drawing.Size(43, 450);
-            this.toolStrip_frm11.TabIndex = 27;
+            this.toolStrip_frm11.TabIndex = 28;
             // 
             // Save_Btn
             // 
@@ -79,14 +79,12 @@
             this.x_Box.AutoSize = false;
             this.x_Box.Name = "x_Box";
             this.x_Box.Size = new System.Drawing.Size(40, 22);
-            this.x_Box.TextChanged += new System.EventHandler(this.x_Box_TextChanged);
             // 
             // y_Box
             // 
             this.y_Box.AutoSize = false;
             this.y_Box.Name = "y_Box";
             this.y_Box.Size = new System.Drawing.Size(40, 22);
-            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
             // 
             // panel_frm11
             // 
@@ -97,9 +95,9 @@
             this.panel_frm11.Location = new System.Drawing.Point(43, 0);
             this.panel_frm11.Name = "panel_frm11";
             this.panel_frm11.Size = new System.Drawing.Size(757, 450);
-            this.panel_frm11.TabIndex = 28;
+            this.panel_frm11.TabIndex = 29;
             // 
-            // Form11
+            // Form20
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -107,14 +105,8 @@
             this.Controls.Add(this.panel_frm11);
             this.Controls.Add(this.toolStrip_frm11);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(200, 200);
-            this.Name = "Form11";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Name = "Form20";
             this.Text = "Extract Plot";
-            this.TopMost = true;
-            this.Resize += new System.EventHandler(this.Form11_Resize);
             this.toolStrip_frm11.ResumeLayout(false);
             this.toolStrip_frm11.PerformLayout();
             this.ResumeLayout(false);
@@ -127,8 +119,8 @@
         private System.Windows.Forms.ToolStrip toolStrip_frm11;
         private System.Windows.Forms.ToolStripButton Save_Btn;
         private System.Windows.Forms.ToolStripButton Copy_Btn;
-        private System.Windows.Forms.Panel panel_frm11;
         private System.Windows.Forms.ToolStripTextBox x_Box;
         private System.Windows.Forms.ToolStripTextBox y_Box;
+        private System.Windows.Forms.Panel panel_frm11;
     }
 }
