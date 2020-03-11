@@ -35,7 +35,9 @@ using Arction.WinForms.Charting.Annotations;
 namespace Isotope_fitting
 {
     public partial class Form2 : Form
-    {        
+    {
+        LightningChartUltimate LC_1 = null;
+        LightningChartUltimate LC_2 = null;
         public string error_string = String.Empty;
         bool x_charged = false;
 
