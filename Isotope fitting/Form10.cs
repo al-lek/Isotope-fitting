@@ -26,7 +26,10 @@ namespace Isotope_fitting
             peakW1_numUD.Value = (decimal)frm2.peak_width;
             xInterval_UD.Value= (decimal)frm2.x_interval;
             yInterval_UD.Value = (decimal)frm2.y_interval;
-
+            x_major_grid.Checked = frm2.Xmajor_grid;
+            x_minor_grid.Checked = frm2.Xminor_grid;
+            y_major_grid.Checked = frm2.Ymajor_grid;
+            y_minor_grid.Checked = frm2.Yminor_grid;
         }
 
         #region tab1 Line Style
@@ -154,65 +157,13 @@ namespace Isotope_fitting
         #endregion
 
         #region tab2 Plot step etc
-        private void x_majorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
-        {
-            switch (x_majorGrid_UD.SelectedIndex)
-            {
-                case 0:
-                    frm2.Xmajor_grid = LineStyle.None;
-                    break;
-                case 1:
-                    frm2.Xmajor_grid = LineStyle.Solid;
-                    break;
-            }
-            frm2.oxy_changes();
-        }
+        
 
-        private void x_minorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
-        {
-            switch (x_minorGrid_UD.SelectedIndex)
-            {
-                case 0:
-                    frm2.Xminor_grid = LineStyle.None;
-                    break;
-                case 1:
-                    frm2.Xminor_grid = LineStyle.Solid;
-                    break;
+        
 
-            }
-            frm2.oxy_changes();
-        }
+        
 
-        private void y_majorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
-        {
-            switch (y_majorGrid_UD.SelectedIndex)
-            {
-                case 0:
-                    frm2.Ymajor_grid = LineStyle.None;
-                    break;
-                case 1:
-                    frm2.Ymajor_grid = LineStyle.Solid;
-                    break;
-
-            }
-            frm2.oxy_changes();
-        }
-
-        private void y_minorGrid_UD_SelectedItemChanged(object sender, EventArgs e)
-        {
-            switch (y_minorGrid_UD.SelectedIndex)
-            {
-                case 0:
-                    frm2.Yminor_grid = LineStyle.None;
-                    break;
-                case 1:
-                    frm2.Yminor_grid = LineStyle.Solid;
-                    break;
-
-            }
-            frm2.oxy_changes();
-        }
-
+       
         private void axisxtickUD_SelectedItemChanged(object sender, EventArgs e)
         {
             switch (xtickUD.SelectedIndex)
@@ -305,6 +256,30 @@ namespace Isotope_fitting
         private void Form10_FormClosing(object sender, FormClosingEventArgs e)
         {
             frm2.save_preferences();
+        }
+
+        private void x_major_grid_CheckedChanged(object sender, EventArgs e)
+        {
+           frm2.Xmajor_grid = x_major_grid.Checked;            
+            frm2.oxy_changes();
+        }
+
+        private void x_minor_grid_CheckedChanged(object sender, EventArgs e)
+        {
+            frm2.Xminor_grid = x_minor_grid.Checked;
+            frm2.oxy_changes();
+        }
+
+        private void y_major_grid_CheckedChanged(object sender, EventArgs e)
+        {
+            frm2.Ymajor_grid = y_major_grid.Checked;
+            frm2.oxy_changes();
+        }
+
+        private void y_minor_grid_CheckedChanged(object sender, EventArgs e)
+        {
+            frm2.Yminor_grid = y_minor_grid.Checked;
+            frm2.oxy_changes();
         }
     }
 }

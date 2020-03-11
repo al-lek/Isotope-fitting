@@ -68,10 +68,6 @@
             this.formatY_Lbl = new System.Windows.Forms.Label();
             this.yInterval_UD = new System.Windows.Forms.NumericUpDown();
             this.intervalY_Lbl = new System.Windows.Forms.Label();
-            this.y_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
-            this.y_minorGrid_Lbl = new System.Windows.Forms.Label();
-            this.y_majorGrid_UD = new System.Windows.Forms.DomainUpDown();
-            this.y_majorGrid_Lbl = new System.Windows.Forms.Label();
             this.ytickUD = new System.Windows.Forms.DomainUpDown();
             this.axisytick_Lbl = new System.Windows.Forms.Label();
             this.tickmark_grpBx = new System.Windows.Forms.GroupBox();
@@ -80,12 +76,12 @@
             this.formatX_Lbl = new System.Windows.Forms.Label();
             this.xInterval_UD = new System.Windows.Forms.NumericUpDown();
             this.intervalX_Lbl = new System.Windows.Forms.Label();
-            this.x_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
-            this.x_minorGrid_Lbl = new System.Windows.Forms.Label();
-            this.x_majorGrid_UD = new System.Windows.Forms.DomainUpDown();
-            this.x_majorGrid_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
+            this.x_major_grid = new System.Windows.Forms.CheckBox();
+            this.x_minor_grid = new System.Windows.Forms.CheckBox();
+            this.y_minor_grid = new System.Windows.Forms.CheckBox();
+            this.y_major_grid = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.fit_grpBx.SuspendLayout();
@@ -645,30 +641,29 @@
             // 
             // units_grpBx
             // 
+            this.units_grpBx.Controls.Add(this.y_minor_grid);
+            this.units_grpBx.Controls.Add(this.y_major_grid);
             this.units_grpBx.Controls.Add(this.formatY_numUD);
             this.units_grpBx.Controls.Add(this.formatY_UD);
             this.units_grpBx.Controls.Add(this.formatY_Lbl);
             this.units_grpBx.Controls.Add(this.yInterval_UD);
             this.units_grpBx.Controls.Add(this.intervalY_Lbl);
-            this.units_grpBx.Controls.Add(this.y_minorGrid_UD);
-            this.units_grpBx.Controls.Add(this.y_minorGrid_Lbl);
-            this.units_grpBx.Controls.Add(this.y_majorGrid_UD);
-            this.units_grpBx.Controls.Add(this.y_majorGrid_Lbl);
             this.units_grpBx.Controls.Add(this.ytickUD);
             this.units_grpBx.Controls.Add(this.axisytick_Lbl);
             this.units_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.units_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
             this.units_grpBx.Location = new System.Drawing.Point(275, 17);
             this.units_grpBx.Name = "units_grpBx";
-            this.units_grpBx.Size = new System.Drawing.Size(252, 226);
+            this.units_grpBx.Size = new System.Drawing.Size(259, 226);
             this.units_grpBx.TabIndex = 1;
             this.units_grpBx.TabStop = false;
             this.units_grpBx.Text = "Axis Y";
             // 
             // formatY_numUD
             // 
+            this.formatY_numUD.Enabled = false;
             this.formatY_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatY_numUD.Location = new System.Drawing.Point(202, 180);
+            this.formatY_numUD.Location = new System.Drawing.Point(218, 104);
             this.formatY_numUD.Maximum = new decimal(new int[] {
             6,
             0,
@@ -686,10 +681,11 @@
             // 
             // formatY_UD
             // 
+            this.formatY_UD.Enabled = false;
             this.formatY_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatY_UD.Items.Add("General");
             this.formatY_UD.Items.Add("Scientific");
-            this.formatY_UD.Location = new System.Drawing.Point(114, 180);
+            this.formatY_UD.Location = new System.Drawing.Point(130, 104);
             this.formatY_UD.Name = "formatY_UD";
             this.formatY_UD.Size = new System.Drawing.Size(85, 20);
             this.formatY_UD.TabIndex = 19;
@@ -698,9 +694,10 @@
             // formatY_Lbl
             // 
             this.formatY_Lbl.AutoSize = true;
+            this.formatY_Lbl.Enabled = false;
             this.formatY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.formatY_Lbl.Location = new System.Drawing.Point(4, 185);
+            this.formatY_Lbl.Location = new System.Drawing.Point(20, 107);
             this.formatY_Lbl.Name = "formatY_Lbl";
             this.formatY_Lbl.Size = new System.Drawing.Size(94, 15);
             this.formatY_Lbl.TabIndex = 18;
@@ -708,13 +705,14 @@
             // 
             // yInterval_UD
             // 
+            this.yInterval_UD.Enabled = false;
             this.yInterval_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.yInterval_UD.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.yInterval_UD.Location = new System.Drawing.Point(114, 71);
+            this.yInterval_UD.Location = new System.Drawing.Point(130, 69);
             this.yInterval_UD.Maximum = new decimal(new int[] {
             200,
             0,
@@ -738,66 +736,24 @@
             // intervalY_Lbl
             // 
             this.intervalY_Lbl.AutoSize = true;
+            this.intervalY_Lbl.Enabled = false;
             this.intervalY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.intervalY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.intervalY_Lbl.Location = new System.Drawing.Point(11, 74);
+            this.intervalY_Lbl.Location = new System.Drawing.Point(27, 72);
             this.intervalY_Lbl.Name = "intervalY_Lbl";
             this.intervalY_Lbl.Size = new System.Drawing.Size(87, 15);
             this.intervalY_Lbl.TabIndex = 16;
             this.intervalY_Lbl.Text = "Interval Length";
             // 
-            // y_minorGrid_UD
-            // 
-            this.y_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_minorGrid_UD.Items.Add("None");
-            this.y_minorGrid_UD.Items.Add("Solid");
-            this.y_minorGrid_UD.Location = new System.Drawing.Point(114, 145);
-            this.y_minorGrid_UD.Name = "y_minorGrid_UD";
-            this.y_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.y_minorGrid_UD.TabIndex = 15;
-            this.y_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_minorGrid_UD_SelectedItemChanged);
-            // 
-            // y_minorGrid_Lbl
-            // 
-            this.y_minorGrid_Lbl.AutoSize = true;
-            this.y_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.y_minorGrid_Lbl.Location = new System.Drawing.Point(13, 148);
-            this.y_minorGrid_Lbl.Name = "y_minorGrid_Lbl";
-            this.y_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.y_minorGrid_Lbl.TabIndex = 14;
-            this.y_minorGrid_Lbl.Text = "Minor Gridline";
-            // 
-            // y_majorGrid_UD
-            // 
-            this.y_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_majorGrid_UD.Items.Add("None");
-            this.y_majorGrid_UD.Items.Add("Solid");
-            this.y_majorGrid_UD.Location = new System.Drawing.Point(114, 108);
-            this.y_majorGrid_UD.Name = "y_majorGrid_UD";
-            this.y_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.y_majorGrid_UD.TabIndex = 13;
-            this.y_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_majorGrid_UD_SelectedItemChanged);
-            // 
-            // y_majorGrid_Lbl
-            // 
-            this.y_majorGrid_Lbl.AutoSize = true;
-            this.y_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.y_majorGrid_Lbl.Location = new System.Drawing.Point(13, 111);
-            this.y_majorGrid_Lbl.Name = "y_majorGrid_Lbl";
-            this.y_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.y_majorGrid_Lbl.TabIndex = 12;
-            this.y_majorGrid_Lbl.Text = "Major Gridline";
-            // 
             // ytickUD
             // 
+            this.ytickUD.Enabled = false;
             this.ytickUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ytickUD.Items.Add("None");
             this.ytickUD.Items.Add("Outside");
             this.ytickUD.Items.Add("Inside");
             this.ytickUD.Items.Add("Cross");
-            this.ytickUD.Location = new System.Drawing.Point(114, 34);
+            this.ytickUD.Location = new System.Drawing.Point(130, 34);
             this.ytickUD.Name = "ytickUD";
             this.ytickUD.Size = new System.Drawing.Size(120, 20);
             this.ytickUD.TabIndex = 3;
@@ -806,9 +762,10 @@
             // axisytick_Lbl
             // 
             this.axisytick_Lbl.AutoSize = true;
+            this.axisytick_Lbl.Enabled = false;
             this.axisytick_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.axisytick_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.axisytick_Lbl.Location = new System.Drawing.Point(32, 37);
+            this.axisytick_Lbl.Location = new System.Drawing.Point(48, 37);
             this.axisytick_Lbl.Name = "axisytick_Lbl";
             this.axisytick_Lbl.Size = new System.Drawing.Size(66, 15);
             this.axisytick_Lbl.TabIndex = 1;
@@ -816,15 +773,13 @@
             // 
             // tickmark_grpBx
             // 
+            this.tickmark_grpBx.Controls.Add(this.x_minor_grid);
+            this.tickmark_grpBx.Controls.Add(this.x_major_grid);
             this.tickmark_grpBx.Controls.Add(this.formatX_numUD);
             this.tickmark_grpBx.Controls.Add(this.formatX_UD);
             this.tickmark_grpBx.Controls.Add(this.formatX_Lbl);
             this.tickmark_grpBx.Controls.Add(this.xInterval_UD);
             this.tickmark_grpBx.Controls.Add(this.intervalX_Lbl);
-            this.tickmark_grpBx.Controls.Add(this.x_minorGrid_UD);
-            this.tickmark_grpBx.Controls.Add(this.x_minorGrid_Lbl);
-            this.tickmark_grpBx.Controls.Add(this.x_majorGrid_UD);
-            this.tickmark_grpBx.Controls.Add(this.x_majorGrid_Lbl);
             this.tickmark_grpBx.Controls.Add(this.xtickUD);
             this.tickmark_grpBx.Controls.Add(this.axisxtick_Lbl);
             this.tickmark_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -838,8 +793,9 @@
             // 
             // formatX_numUD
             // 
+            this.formatX_numUD.Enabled = false;
             this.formatX_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatX_numUD.Location = new System.Drawing.Point(201, 180);
+            this.formatX_numUD.Location = new System.Drawing.Point(210, 104);
             this.formatX_numUD.Maximum = new decimal(new int[] {
             6,
             0,
@@ -857,10 +813,11 @@
             // 
             // formatX_UD
             // 
+            this.formatX_UD.Enabled = false;
             this.formatX_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatX_UD.Items.Add("General");
             this.formatX_UD.Items.Add("Scientific");
-            this.formatX_UD.Location = new System.Drawing.Point(113, 180);
+            this.formatX_UD.Location = new System.Drawing.Point(122, 104);
             this.formatX_UD.Name = "formatX_UD";
             this.formatX_UD.Size = new System.Drawing.Size(85, 20);
             this.formatX_UD.TabIndex = 20;
@@ -869,9 +826,10 @@
             // formatX_Lbl
             // 
             this.formatX_Lbl.AutoSize = true;
+            this.formatX_Lbl.Enabled = false;
             this.formatX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.formatX_Lbl.Location = new System.Drawing.Point(3, 185);
+            this.formatX_Lbl.Location = new System.Drawing.Point(12, 107);
             this.formatX_Lbl.Name = "formatX_Lbl";
             this.formatX_Lbl.Size = new System.Drawing.Size(94, 15);
             this.formatX_Lbl.TabIndex = 14;
@@ -879,13 +837,14 @@
             // 
             // xInterval_UD
             // 
+            this.xInterval_UD.Enabled = false;
             this.xInterval_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.xInterval_UD.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.xInterval_UD.Location = new System.Drawing.Point(113, 71);
+            this.xInterval_UD.Location = new System.Drawing.Point(122, 69);
             this.xInterval_UD.Maximum = new decimal(new int[] {
             200,
             0,
@@ -909,66 +868,24 @@
             // intervalX_Lbl
             // 
             this.intervalX_Lbl.AutoSize = true;
+            this.intervalX_Lbl.Enabled = false;
             this.intervalX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.intervalX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.intervalX_Lbl.Location = new System.Drawing.Point(10, 74);
+            this.intervalX_Lbl.Location = new System.Drawing.Point(19, 72);
             this.intervalX_Lbl.Name = "intervalX_Lbl";
             this.intervalX_Lbl.Size = new System.Drawing.Size(87, 15);
             this.intervalX_Lbl.TabIndex = 12;
             this.intervalX_Lbl.Text = "Interval Length";
             // 
-            // x_minorGrid_UD
-            // 
-            this.x_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_minorGrid_UD.Items.Add("None");
-            this.x_minorGrid_UD.Items.Add("Solid");
-            this.x_minorGrid_UD.Location = new System.Drawing.Point(113, 145);
-            this.x_minorGrid_UD.Name = "x_minorGrid_UD";
-            this.x_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.x_minorGrid_UD.TabIndex = 11;
-            this.x_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_minorGrid_UD_SelectedItemChanged);
-            // 
-            // x_minorGrid_Lbl
-            // 
-            this.x_minorGrid_Lbl.AutoSize = true;
-            this.x_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_minorGrid_Lbl.Location = new System.Drawing.Point(12, 148);
-            this.x_minorGrid_Lbl.Name = "x_minorGrid_Lbl";
-            this.x_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.x_minorGrid_Lbl.TabIndex = 10;
-            this.x_minorGrid_Lbl.Text = "Minor Gridline";
-            // 
-            // x_majorGrid_UD
-            // 
-            this.x_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_majorGrid_UD.Items.Add("None");
-            this.x_majorGrid_UD.Items.Add("Solid");
-            this.x_majorGrid_UD.Location = new System.Drawing.Point(113, 108);
-            this.x_majorGrid_UD.Name = "x_majorGrid_UD";
-            this.x_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
-            this.x_majorGrid_UD.TabIndex = 9;
-            this.x_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_majorGrid_UD_SelectedItemChanged);
-            // 
-            // x_majorGrid_Lbl
-            // 
-            this.x_majorGrid_Lbl.AutoSize = true;
-            this.x_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_majorGrid_Lbl.Location = new System.Drawing.Point(12, 111);
-            this.x_majorGrid_Lbl.Name = "x_majorGrid_Lbl";
-            this.x_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
-            this.x_majorGrid_Lbl.TabIndex = 8;
-            this.x_majorGrid_Lbl.Text = "Major Gridline";
-            // 
             // xtickUD
             // 
+            this.xtickUD.Enabled = false;
             this.xtickUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.xtickUD.Items.Add("None");
             this.xtickUD.Items.Add("Outside");
             this.xtickUD.Items.Add("Inside");
             this.xtickUD.Items.Add("Cross");
-            this.xtickUD.Location = new System.Drawing.Point(113, 34);
+            this.xtickUD.Location = new System.Drawing.Point(122, 34);
             this.xtickUD.Name = "xtickUD";
             this.xtickUD.Size = new System.Drawing.Size(120, 20);
             this.xtickUD.TabIndex = 2;
@@ -977,13 +894,70 @@
             // axisxtick_Lbl
             // 
             this.axisxtick_Lbl.AutoSize = true;
+            this.axisxtick_Lbl.Enabled = false;
             this.axisxtick_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.axisxtick_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.axisxtick_Lbl.Location = new System.Drawing.Point(31, 37);
+            this.axisxtick_Lbl.Location = new System.Drawing.Point(40, 37);
             this.axisxtick_Lbl.Name = "axisxtick_Lbl";
             this.axisxtick_Lbl.Size = new System.Drawing.Size(66, 15);
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
+            // 
+            // x_major_grid
+            // 
+            this.x_major_grid.AutoSize = true;
+            this.x_major_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.x_major_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_major_grid.ForeColor = System.Drawing.Color.Black;
+            this.x_major_grid.Location = new System.Drawing.Point(2, 142);
+            this.x_major_grid.Name = "x_major_grid";
+            this.x_major_grid.Size = new System.Drawing.Size(104, 19);
+            this.x_major_grid.TabIndex = 22;
+            this.x_major_grid.Text = "Major Gridline";
+            this.x_major_grid.UseVisualStyleBackColor = true;
+            this.x_major_grid.CheckedChanged += new System.EventHandler(this.x_major_grid_CheckedChanged);
+            // 
+            // x_minor_grid
+            // 
+            this.x_minor_grid.AutoSize = true;
+            this.x_minor_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.x_minor_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_minor_grid.ForeColor = System.Drawing.Color.Black;
+            this.x_minor_grid.Location = new System.Drawing.Point(122, 142);
+            this.x_minor_grid.Name = "x_minor_grid";
+            this.x_minor_grid.Size = new System.Drawing.Size(104, 19);
+            this.x_minor_grid.TabIndex = 23;
+            this.x_minor_grid.Text = "Minor Gridline";
+            this.x_minor_grid.UseVisualStyleBackColor = true;
+            this.x_minor_grid.CheckedChanged += new System.EventHandler(this.x_minor_grid_CheckedChanged);
+            // 
+            // y_minor_grid
+            // 
+            this.y_minor_grid.AutoSize = true;
+            this.y_minor_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.y_minor_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_minor_grid.ForeColor = System.Drawing.Color.Black;
+            this.y_minor_grid.Location = new System.Drawing.Point(130, 142);
+            this.y_minor_grid.Name = "y_minor_grid";
+            this.y_minor_grid.Size = new System.Drawing.Size(104, 19);
+            this.y_minor_grid.TabIndex = 25;
+            this.y_minor_grid.Text = "Minor Gridline";
+            this.y_minor_grid.UseVisualStyleBackColor = true;
+            this.y_minor_grid.CheckedChanged += new System.EventHandler(this.y_minor_grid_CheckedChanged);
+            // 
+            // y_major_grid
+            // 
+            this.y_major_grid.AutoSize = true;
+            this.y_major_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.y_major_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_major_grid.ForeColor = System.Drawing.Color.Black;
+            this.y_major_grid.Location = new System.Drawing.Point(10, 142);
+            this.y_major_grid.Name = "y_major_grid";
+            this.y_major_grid.Size = new System.Drawing.Size(104, 19);
+            this.y_major_grid.TabIndex = 24;
+            this.y_major_grid.Text = "Major Gridline";
+            this.y_major_grid.UseVisualStyleBackColor = true;
+            this.y_major_grid.CheckedChanged += new System.EventHandler(this.y_major_grid_CheckedChanged);
             // 
             // Form10
             // 
@@ -1066,14 +1040,6 @@
         private System.Windows.Forms.DomainUpDown xtickUD;
         private System.Windows.Forms.Label axisytick_Lbl;
         private System.Windows.Forms.Label axisxtick_Lbl;
-        private System.Windows.Forms.DomainUpDown y_minorGrid_UD;
-        private System.Windows.Forms.Label y_minorGrid_Lbl;
-        private System.Windows.Forms.DomainUpDown y_majorGrid_UD;
-        private System.Windows.Forms.Label y_majorGrid_Lbl;
-        private System.Windows.Forms.DomainUpDown x_minorGrid_UD;
-        private System.Windows.Forms.Label x_minorGrid_Lbl;
-        private System.Windows.Forms.DomainUpDown x_majorGrid_UD;
-        private System.Windows.Forms.Label x_majorGrid_Lbl;
         private System.Windows.Forms.NumericUpDown yInterval_UD;
         private System.Windows.Forms.Label intervalY_Lbl;
         private System.Windows.Forms.NumericUpDown xInterval_UD;
@@ -1084,5 +1050,9 @@
         private System.Windows.Forms.DomainUpDown formatX_UD;
         private System.Windows.Forms.NumericUpDown formatY_numUD;
         private System.Windows.Forms.NumericUpDown formatX_numUD;
+        private System.Windows.Forms.CheckBox y_minor_grid;
+        private System.Windows.Forms.CheckBox y_major_grid;
+        private System.Windows.Forms.CheckBox x_minor_grid;
+        private System.Windows.Forms.CheckBox x_major_grid;
     }
 }

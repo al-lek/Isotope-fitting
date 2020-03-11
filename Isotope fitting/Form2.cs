@@ -268,10 +268,10 @@ namespace Isotope_fitting
         public double peak_width = 1;
         public double cen_width = 1;
         // tab2 axis isoplot
-        public OxyPlot.LineStyle Xmajor_grid = OxyPlot.LineStyle.Solid;
-        public OxyPlot.LineStyle Xminor_grid = OxyPlot.LineStyle.None;
-        public OxyPlot.LineStyle Ymajor_grid = OxyPlot.LineStyle.Solid;
-        public OxyPlot.LineStyle Yminor_grid = OxyPlot.LineStyle.None;
+        public bool Xmajor_grid = false;
+        public bool  Xminor_grid = false;
+        public bool Ymajor_grid = false;
+        public bool Yminor_grid = false;
         public OxyPlot.Axes.TickStyle X_tick = OxyPlot.Axes.TickStyle.Outside;
         public OxyPlot.Axes.TickStyle Y_tick = OxyPlot.Axes.TickStyle.Outside;
         public double x_interval = 50;
@@ -526,14 +526,10 @@ namespace Isotope_fitting
                     cen_width = Convert.ToDouble(preferences[34].Split(':')[1]);
 
                     // tab2 axis isoplot
-                    if (string_to_bool(preferences[35].Split(':')[1])) { Xmajor_grid = OxyPlot.LineStyle.Solid; }
-                    else { Xmajor_grid = OxyPlot.LineStyle.None; }
-                    if (string_to_bool(preferences[36].Split(':')[1])) { Xminor_grid = OxyPlot.LineStyle.Solid; }
-                    else { Xminor_grid = OxyPlot.LineStyle.None; }
-                    if (string_to_bool(preferences[37].Split(':')[1])) { Ymajor_grid = OxyPlot.LineStyle.Solid; }
-                    else { Ymajor_grid = OxyPlot.LineStyle.None; }
-                    if (string_to_bool(preferences[38].Split(':')[1])) { Yminor_grid = OxyPlot.LineStyle.Solid; }
-                    else { Yminor_grid = OxyPlot.LineStyle.None; }
+                    Xmajor_grid = string_to_bool(preferences[35].Split(':')[1]);
+                    Xminor_grid = string_to_bool(preferences[36].Split(':')[1]);
+                    Ymajor_grid = string_to_bool(preferences[37].Split(':')[1]);
+                    Yminor_grid = string_to_bool(preferences[37].Split(':')[1]);
                     //preferences[0] += X_tick = OxyPlot.Axes.TickStyle.Outside;
                     //preferences[0] += Y_tick = OxyPlot.Axes.TickStyle.Outside;
                     x_interval = Convert.ToDouble(preferences[39].Split(':')[1]);
@@ -615,7 +611,7 @@ namespace Isotope_fitting
                     ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2;selection_rule = new bool[] { false, true, false, false, false, false };
                     fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0 ,100.0,100.0}; ppmDi = 8.0;
                     fit_color = OxyColors.Black;exp_color = OxyColors.Black.ToColor().ToArgb();peak_color = OxyColors.Crimson;fit_style = OxyPlot.LineStyle.Dot;exper_style = OxyPlot.LineStyle.Solid;frag_style = OxyPlot.LineStyle.Solid;exp_width = 1;frag_width = 2;fit_width = 1;
-                    peak_width = 1;cen_width = 1;Xmajor_grid = OxyPlot.LineStyle.Solid;Xminor_grid = OxyPlot.LineStyle.None;Ymajor_grid = OxyPlot.LineStyle.Solid;Yminor_grid = OxyPlot.LineStyle.None;X_tick = OxyPlot.Axes.TickStyle.Outside;Y_tick = OxyPlot.Axes.TickStyle.Outside;x_interval = 50;
+                    peak_width = 1;cen_width = 1;Xmajor_grid = false;Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside;Y_tick = OxyPlot.Axes.TickStyle.Outside;x_interval = 50;
                     y_interval = 50;x_format = "G";y_format = "G";x_numformat = "0";y_numformat = "0";Xmajor_grid12 = OxyPlot.LineStyle.Solid;Xminor_grid12 = OxyPlot.LineStyle.None;Ymajor_grid12 = OxyPlot.LineStyle.Solid;Yminor_grid12 = OxyPlot.LineStyle.None;y_interval12 = 50;
                     X_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_tick12 = OxyPlot.Axes.TickStyle.Outside;y_format12 = "G";y_numformat12 = "0";x_majorStep12 = 5;x_minorStep12 = 1;bar_width = 1;Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid;Xminor_charge_grid12 = OxyPlot.LineStyle.None;
                     Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid;Yminor_charge_grid12 = OxyPlot.LineStyle.None;X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;y_charge_majorStep12 = 2;y_charge_minorStep12 = 1;x_charge_majorStep12 = 5;
@@ -683,14 +679,10 @@ namespace Isotope_fitting
             preferences[0] += "Experimental peak line width: " + peak_width.ToString() + "\r\n";
             preferences[0] += "Centroid line width: " + cen_width.ToString() + "\r\n";
             // tab2 axis isoplot
-            if (Xmajor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Xmajor_grid: " + true.ToString() + "\r\n"; }
-            else { preferences[0] += "Xmajor_grid: " + false + "\r\n"; }
-            if (Xminor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Xminor_grid: " + true.ToString() + "\r\n"; }
-            else { preferences[0] += "Xminor_grid: " + false + "\r\n"; }
-            if (Ymajor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Ymajor_grid: " + true.ToString() + "\r\n"; }
-            else { preferences[0] += "Ymajor_grid: " + false + "\r\n"; }
-            if (Yminor_grid == OxyPlot.LineStyle.Solid) { preferences[0] += "Yminor_grid: " + true.ToString() + "\r\n"; }
-            else { preferences[0] += "Yminor_grid: " + false + "\r\n"; }          
+            preferences[0] += "Xmajor_grid: " + Xmajor_grid.ToString() + "\r\n";
+            preferences[0] += "Xminor_grid: " + Xminor_grid.ToString() + "\r\n";
+            preferences[0] += "Ymajor_grid: " + Ymajor_grid.ToString() + "\r\n";
+            preferences[0] += "Yminor_grid: " + Yminor_grid.ToString() + "\r\n";
             //preferences[0] += X_tick = OxyPlot.Axes.TickStyle.Outside;
             //preferences[0] += Y_tick = OxyPlot.Axes.TickStyle.Outside;
             preferences[0] += "x interval in iso_plot: " + x_interval.ToString() + "\r\n";
@@ -4240,119 +4232,119 @@ namespace Isotope_fitting
         #endregion
 
         #region OxyPlot
-        private void Initialize_Oxy()
-        {
-            // isotopes plot
-            if (iso_plot != null) iso_plot.Dispose();
+        //private void Initialize_Oxy()
+        //{
+        //    // isotopes plot
+        //    if (iso_plot != null) iso_plot.Dispose();
 
-            iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.White, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
-            fit_grpBox.Controls.Add(iso_plot);
-            iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked && !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
-            PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
-            iso_plot.Model = iso_model;           
-            iso_model.Updating += (s, e) =>
-            {
-                if (iso_model.Series.Count > 15) iso_model.LegendFontSize = 9;
-                else if (iso_model.Series.Count > 40) iso_model.LegendFontSize = 5;
-                else iso_model.LegendFontSize = 13;
-            };
-            iso_model.TrackerChanged += (s, e) =>
-            {
-                if (count_distance || cursor_chkBx.Checked) iso_plot.HideTracker();  
+        //    iso_plot = new PlotView() { Name = "iso_plot", Location = new Point(5, 185), Size = new Size(1310, 570), BackColor = Color.White, Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, Dock = System.Windows.Forms.DockStyle.Fill };
+        //    fit_grpBox.Controls.Add(iso_plot);
+        //    iso_plot.MouseLeave += (s, e) => { if (!fragPlotLbl_chkBx.Checked && !fragPlotLbl_chkBx2.Checked) { iso_plot.Model.Annotations.Clear(); invalidate_all(); } };
+        //    PlotModel iso_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = legend_chkBx.Checked, LegendPosition = LegendPosition.TopRight, LegendFontSize = 13, TitleFontSize = 11 }; // Title = "",
+        //    iso_plot.Model = iso_model;           
+        //    iso_model.Updating += (s, e) =>
+        //    {
+        //        if (iso_model.Series.Count > 15) iso_model.LegendFontSize = 9;
+        //        else if (iso_model.Series.Count > 40) iso_model.LegendFontSize = 5;
+        //        else iso_model.LegendFontSize = 13;
+        //    };
+        //    iso_model.TrackerChanged += (s, e) =>
+        //    {
+        //        if (count_distance || cursor_chkBx.Checked) iso_plot.HideTracker();  
                 
-            };
-             //////iso_model.TrackerChanged += (s, e) => { e.HitResult.Position.X };
-             //////iso_model.MouseDown += (s, e) =>
-             //////{
-             //////    OxyPlot.Axes.Axis x; OxyPlot.Axes.Axis y;
-             //////    iso_model.GetAxesFromPoint(e.Position, out x, out y);
-             //////    DataPoint p = OxyPlot.Axes.Axis.InverseTransform(e.Position, x, y);
-             //////};
+        //    };
+        //     //////iso_model.TrackerChanged += (s, e) => { e.HitResult.Position.X };
+        //     //////iso_model.MouseDown += (s, e) =>
+        //     //////{
+        //     //////    OxyPlot.Axes.Axis x; OxyPlot.Axes.Axis y;
+        //     //////    iso_model.GetAxesFromPoint(e.Position, out x, out y);
+        //     //////    DataPoint p = OxyPlot.Axes.Axis.InverseTransform(e.Position, x, y);
+        //     //////};
 
-             iso_plot.Controller = new CustomPlotController();
-            //ContextMenu ctxMn = new ContextMenu() { };
-            //MenuItem showPoints = new MenuItem("Show charge ruler", manage_charge_points);
-            //MenuItem clearPoints = new MenuItem("Clear charge ruler", manage_charge_points);
-            //MenuItem copyImage = new MenuItem("Copy image", export_chartImage);
-            //MenuItem exportImage = new MenuItem("Export image to file", export_chartImage);
-            //ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
+        //     iso_plot.Controller = new CustomPlotController();
+        //    //ContextMenu ctxMn = new ContextMenu() { };
+        //    //MenuItem showPoints = new MenuItem("Show charge ruler", manage_charge_points);
+        //    //MenuItem clearPoints = new MenuItem("Clear charge ruler", manage_charge_points);
+        //    //MenuItem copyImage = new MenuItem("Copy image", export_chartImage);
+        //    //MenuItem exportImage = new MenuItem("Export image to file", export_chartImage);
+        //    //ctxMn.MenuItems.AddRange(new MenuItem[] { showPoints, clearPoints, copyImage, exportImage });
             
-            //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
-            iso_model.MouseDown += (s, e) => 
-            { 
-                if (cursor_chkBx.Checked && e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true)
-                {
-                    if (count_distance) { cersor_distance(previous_point, e.Position); }
-                    else { previous_point = e.Position; count_distance = true; }
-                }
-                else if (e.ChangedButton == OxyMouseButton.Left)
-                {
-                    count_distance = false;/* cersor_distance(e.Position, e.Position);*/
-                }               
-            };
-            iso_model.MouseMove += (s, e) => {if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
-            iso_model.MouseUp += (s, e) =>{ count_distance = false;};
+        //    //iso_model.MouseDown += (s, e) => { if (e.ChangedButton == OxyMouseButton.Right) { charge_center = e.Position; ContextMenu = ctxMn; } };
+        //    iso_model.MouseDown += (s, e) => 
+        //    { 
+        //        if (cursor_chkBx.Checked && e.ChangedButton == OxyMouseButton.Left && e.IsShiftDown == true)
+        //        {
+        //            if (count_distance) { cersor_distance(previous_point, e.Position); }
+        //            else { previous_point = e.Position; count_distance = true; }
+        //        }
+        //        else if (e.ChangedButton == OxyMouseButton.Left)
+        //        {
+        //            count_distance = false;/* cersor_distance(e.Position, e.Position);*/
+        //        }               
+        //    };
+        //    iso_model.MouseMove += (s, e) => {if (count_distance && e.IsShiftDown == true) { cersor_distance(previous_point, e.Position); } else { cersor_distance(e.Position, e.Position); } };
+        //    iso_model.MouseUp += (s, e) =>{ count_distance = false;};
 
-            //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
-            //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
-            //////var m = new ZoomStepManipulator(this, e.Delta * 0.001, isControlDown);
-            //////iso_plot.MouseWheel += (s, e) =>
-            //////{
-            //////    if (e.Delta > 0) iso_plot.Model.DefaultXAxis.ZoomAtCenter(1);
-            //////};
+        //    //////iso_plot.MouseWheel += (s, e) => { if (e.Delta > 0 && e.ToMouseEventArgs(OxyModifierKeys.Control).IsControlDown) iso_model.DefaultXAxis.ZoomAtCenter(2) ; };
+        //    //////bool isControlDown = System.Windows.Input Keyboard.IsKeyDown(Key.LeftCtrl);
+        //    //////var m = new ZoomStepManipulator(this, e.Delta * 0.001, isControlDown);
+        //    //////iso_plot.MouseWheel += (s, e) =>
+        //    //////{
+        //    //////    if (e.Delta > 0) iso_plot.Model.DefaultXAxis.ZoomAtCenter(1);
+        //    //////};
 
-            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { StringFormat = y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid,MinorGridlineStyle=Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
-            iso_model.Axes.Add(linearAxis1);
+        //    var linearAxis1 = new OxyPlot.Axes.LinearAxis() { StringFormat = y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid,MinorGridlineStyle=Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
+        //    iso_model.Axes.Add(linearAxis1);
 
-            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format+x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle =Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
-            iso_model.Axes.Add(linearAxis2);
+        //    var linearAxis2 = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format+x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle =Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
+        //    iso_model.Axes.Add(linearAxis2);
 
-            // residual plot
-            if (res_plot != null) res_plot.Dispose();
-            res_plot = new OxyPlot.WindowsForms.PlotView() { Name = "res_plot", Location = new Point(5, 760), Size = new Size(1310, 150), BackColor = Color.White, Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left, Dock = System.Windows.Forms.DockStyle.Fill };
-            res_grpBox.Controls.Add(res_plot);
+        //    // residual plot
+        //    if (res_plot != null) res_plot.Dispose();
+        //    res_plot = new OxyPlot.WindowsForms.PlotView() { Name = "res_plot", Location = new Point(5, 760), Size = new Size(1310, 150), BackColor = Color.White, Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left, Dock = System.Windows.Forms.DockStyle.Fill };
+        //    res_grpBox.Controls.Add(res_plot);
 
-            //(M)create a view model--> res_model
-            PlotModel res_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendPosition = LegendPosition.TopRight, LegendFontSize = 11, TitleFontSize = 11 }; // Title = "",
-            res_plot.Model = res_model;
+        //    //(M)create a view model--> res_model
+        //    PlotModel res_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendPosition = LegendPosition.TopRight, LegendFontSize = 11, TitleFontSize = 11 }; // Title = "",
+        //    res_plot.Model = res_model;
 
-            var linearAxis1r = new OxyPlot.Axes.LinearAxis() { StringFormat =y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid, MinorGridlineStyle = Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
-            res_model.Axes.Add(linearAxis1r);
-            var linearAxis2r = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format + x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle = Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
-            res_model.Axes.Add(linearAxis2r);
+        //    var linearAxis1r = new OxyPlot.Axes.LinearAxis() { StringFormat =y_format + y_numformat, IntervalLength = y_interval, TickStyle = Y_tick, MajorGridlineStyle = Ymajor_grid, MinorGridlineStyle = Yminor_grid, FontSize = 10, AxisTitleDistance = 10, TitleFontSize = 11, Title = "Intensity" };
+        //    res_model.Axes.Add(linearAxis1r);
+        //    var linearAxis2r = new OxyPlot.Axes.LinearAxis() { StringFormat = x_format + x_numformat, IntervalLength = x_interval, TickStyle = X_tick, MajorGridlineStyle = Xmajor_grid, MinorGridlineStyle = Xminor_grid, FontSize = 10, AxisTitleDistance =10, TitleFontSize = 11, Title = "m/z", Position = OxyPlot.Axes.AxisPosition.Bottom };
+        //    res_model.Axes.Add(linearAxis2r);
 
-            res_plot.Controller = new CustomPlotController();
+        //    res_plot.Controller = new CustomPlotController();
 
-            // bind the 2 x-axes :D
-            linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum);  res_plot.InvalidatePlot(true); };            
-            iso_model.Updated += (s, e) => 
-            {
-                res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum,  iso_plot.Model.Axes[1].ActualMaximum);
-                if (residual.Count > 0 && (plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
-                {
-                    double pt0 = (res_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
-                    double pt1 = (res_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Min(k => k.Y);
-                    res_plot.Model.Axes[0].Zoom(pt1, pt0);
-                }
-                double max_iso = 200;
-                if (iso_plot.Model.Series.Count>0 && autoscale_Btn.Checked)
-                {
-                    if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0)
-                    {
-                        double iso_1 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
-                        if (iso_1 > max_iso) max_iso = iso_1;
-                    }
-                    if (all_data.Count>1 && (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
-                    {
-                        double iso_1 = (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
-                        if (iso_1 > max_iso) max_iso = iso_1;
-                    }
-                    iso_plot.Model.Axes[0].Zoom(-max_iso * 0.2, max_iso * 1.2);
-                }                
+        //    // bind the 2 x-axes :D
+        //    linearAxis2.AxisChanged += (s, e) => { linearAxis2r.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum);  res_plot.InvalidatePlot(true); };            
+        //    iso_model.Updated += (s, e) => 
+        //    {
+        //        res_plot.Model.Axes[1].Zoom(iso_plot.Model.Axes[1].ActualMinimum,  iso_plot.Model.Axes[1].ActualMaximum);
+        //        if (residual.Count > 0 && (plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
+        //        {
+        //            double pt0 = (res_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+        //            double pt1 = (res_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Min(k => k.Y);
+        //            res_plot.Model.Axes[0].Zoom(pt1, pt0);
+        //        }
+        //        double max_iso = 200;
+        //        if (iso_plot.Model.Series.Count>0 && autoscale_Btn.Checked)
+        //        {
+        //            if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0)
+        //            {
+        //                double iso_1 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+        //                if (iso_1 > max_iso) max_iso = iso_1;
+        //            }
+        //            if (all_data.Count>1 && (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Count > 0)
+        //            {
+        //                double iso_1 = (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.FindAll(x => (x.X >= iso_plot.Model.Axes[1].ActualMinimum && x.X < iso_plot.Model.Axes[1].ActualMaximum)).Max(k => k.Y);
+        //                if (iso_1 > max_iso) max_iso = iso_1;
+        //            }
+        //            iso_plot.Model.Axes[0].Zoom(-max_iso * 0.2, max_iso * 1.2);
+        //        }                
 
-            };
-            iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
-        }
+        //    };
+        //    iso_plot.MouseDoubleClick += (s, e) => { iso_model.ResetAllAxes(); invalidate_all(); };
+        //}
         
         private void cersor_distance(ScreenPoint a, ScreenPoint b)
         {
@@ -4457,19 +4449,22 @@ namespace Isotope_fitting
                 DisposeAllAndClear(LC_1.ViewXY.Annotations);
                 foreach (int p in plot_idxs)
                 {
-                    //Arrow from location to target
-                    AnnotationXY annotAxisValues2 = new AnnotationXY(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]);
-                    annotAxisValues2.Style = AnnotationStyle.Arrow;
-                    annotAxisValues2.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
-                    annotAxisValues2.Text = Fragments2[p - 1].Name.ToString();
-                    annotAxisValues2.TargetAxisValues.X = Fragments2[p - 1].Centroid[0].X;
-                    annotAxisValues2.TargetAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
-                    annotAxisValues2.LocationAxisValues.X = Fragments2[p - 1].Centroid[0].X;
-                    annotAxisValues2.LocationAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
-                    annotAxisValues2.TextStyle = new AnnotationTextStyle() { Color = Fragments2[p - 1].Color.ToColor(), VerticalAlign = AlignmentVertical.Bottom, HorizAlign = AlignmentHorizontal.Right };
-                    annotAxisValues2.ArrowLineStyle = new Arction.WinForms.Charting.LineStyle() { Color = Color.Transparent, Width = (float)0.5 };
-                    annotAxisValues2.RotateAngle = 90;
-                    LC_1.ViewXY.Annotations.Add(annotAxisValues2);
+                    if ((fragPlotLbl_chkBx.Checked && !Fragments2[p - 1].Ion_type.StartsWith("inte")) || (fragPlotLbl_chkBx2.Checked && Fragments2[p - 1].Ion_type.StartsWith("inte")))
+                    {
+                        //Arrow from location to target
+                        AnnotationXY annotAxisValues2 = new AnnotationXY(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]);
+                        annotAxisValues2.Style = AnnotationStyle.Arrow;
+                        annotAxisValues2.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
+                        annotAxisValues2.Text = Fragments2[p - 1].Name.ToString();
+                        annotAxisValues2.TargetAxisValues.X = Fragments2[p - 1].Centroid[0].X;
+                        annotAxisValues2.TargetAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
+                        annotAxisValues2.LocationAxisValues.X = Fragments2[p - 1].Centroid[0].X;
+                        annotAxisValues2.LocationAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
+                        annotAxisValues2.TextStyle = new AnnotationTextStyle() { Color = Fragments2[p - 1].Color.ToColor(), VerticalAlign = AlignmentVertical.Bottom, HorizAlign = AlignmentHorizontal.Right };
+                        annotAxisValues2.ArrowLineStyle = new Arction.WinForms.Charting.LineStyle() { Color = Color.Transparent, Width = (float)0.5 };
+                        annotAxisValues2.RotateAngle = 90;
+                        LC_1.ViewXY.Annotations.Add(annotAxisValues2);
+                    }                     
                 }
             }
         }
@@ -5348,7 +5343,7 @@ namespace Isotope_fitting
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false; fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-            Initialize_Oxy();
+            init_chart();
             initialize_tabs();
             recalculate_all_data_aligned();
             factor_panel.Controls.Clear();
@@ -5521,8 +5516,7 @@ namespace Isotope_fitting
         }
         public void refresh_frm9()
         {
-            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
-            if (!plotFragProf_chkBox.Checked) plotFragProf_chkBox.Checked = true; 
+            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }            
             refresh_iso_plot();
         }
         public void add_frag_frm9()
@@ -5550,31 +5544,36 @@ namespace Isotope_fitting
         }
         public void oxy_changes()
         {
-            iso_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
-            iso_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
-            iso_plot.Model.Axes[0].TickStyle = Y_tick;
-            iso_plot.Model.Axes[0].IntervalLength = y_interval;
-            iso_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
+            LC_1.ViewXY.XAxes[0].MajorGrid.Visible = Xmajor_grid;
+            LC_1.ViewXY.XAxes[0].MinorGrid.Visible = Xminor_grid;
+            LC_1.ViewXY.YAxes[0].MajorGrid.Visible = Ymajor_grid;
+            LC_1.ViewXY.YAxes[0].MinorGrid.Visible = Yminor_grid;
 
-            iso_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
-            iso_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
-            iso_plot.Model.Axes[1].TickStyle = X_tick;
-            iso_plot.Model.Axes[1].IntervalLength = x_interval;
-            iso_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
+            //iso_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
+            //iso_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
+            //iso_plot.Model.Axes[0].TickStyle = Y_tick;
+            //iso_plot.Model.Axes[0].IntervalLength = y_interval;
+            //iso_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
 
-            res_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
-            res_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
-            res_plot.Model.Axes[0].TickStyle = Y_tick;
-            res_plot.Model.Axes[0].IntervalLength = y_interval;
-            res_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
+            //iso_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
+            //iso_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
+            //iso_plot.Model.Axes[1].TickStyle = X_tick;
+            //iso_plot.Model.Axes[1].IntervalLength = x_interval;
+            //iso_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
 
-            res_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
-            res_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
-            res_plot.Model.Axes[1].TickStyle = X_tick;
-            res_plot.Model.Axes[1].IntervalLength = x_interval;
-            res_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
+            //res_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
+            //res_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
+            //res_plot.Model.Axes[0].TickStyle = Y_tick;
+            //res_plot.Model.Axes[0].IntervalLength = y_interval;
+            //res_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
 
-            invalidate_all();
+            //res_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
+            //res_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
+            //res_plot.Model.Axes[1].TickStyle = X_tick;
+            //res_plot.Model.Axes[1].IntervalLength = x_interval;
+            //res_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
+
+            //invalidate_all();
         }
         #endregion
 
@@ -11819,6 +11818,14 @@ namespace Isotope_fitting
             temp_plot.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;
             AxisX axisX_1 = temp_plot.ViewXY.XAxes[0];
             AxisY axisY_1 = temp_plot.ViewXY.YAxes[0];
+            axisX_1.MajorGrid.Visible = Xmajor_grid;
+            axisX_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisX_1.MinorGrid.Visible = Xminor_grid;
+            axisX_1.MinorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MajorGrid.Visible = Ymajor_grid;
+            axisY_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MinorGrid.Visible = Yminor_grid;
+            axisY_1.MinorGrid.Pattern = LinePattern.Solid;
             axisX_1.ScrollMode = XAxisScrollMode.None;
             axisX_1.ValueType = AxisValueType.Number;
             //Add a line series cursor 
@@ -13250,17 +13257,27 @@ namespace Isotope_fitting
             LC_1.Parent = this;
             LC_1.Title.Visible = false;
             LC_1.ViewXY.LegendBox.Visible = false;
-            LC_1.ViewXY.XAxes[0].ValueType = AxisValueType.Number;
-            LC_1.ViewXY.XAxes[0].Title.Text = "m/z"; LC_1.ViewXY.YAxes[0].Title.Text = "Intensity";
-            LC_1.ViewXY.XAxes[0].Title.MouseInteraction = false; LC_1.ViewXY.YAxes[0].Title.MouseInteraction = false;
+            AxisX axisX_1 = LC_1.ViewXY.XAxes[0];
+            AxisY axisY_1 = LC_1.ViewXY.YAxes[0];
+            axisX_1.ValueType = AxisValueType.Number;
+            axisX_1.Title.Text = "m/z"; axisY_1.Title.Text = "Intensity"; 
+            axisX_1.Title.MouseInteraction = false; axisY_1.Title.MouseInteraction = false;
             LC_1.Name = "iso_plot1";
             LC_1.ViewXY.LegendBox.Visible = false;
             LC_1.ViewXY.LegendBox.ShowCheckboxes = true;
             LC_1.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;
-            AxisX axisX_1 = LC_1.ViewXY.XAxes[0];
-            AxisY axisY_1 = LC_1.ViewXY.YAxes[0];
+            
             axisX_1.ScrollMode = XAxisScrollMode.None;
-            axisX_1.ValueType = AxisValueType.Number;
+            axisX_1.MajorGrid.Visible = Xmajor_grid;
+            axisX_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisX_1.MinorGrid.Visible = Xminor_grid;
+            axisX_1.MinorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MajorGrid.Visible = Ymajor_grid;
+            axisY_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MinorGrid.Visible = Yminor_grid;
+            axisY_1.MinorGrid.Pattern = LinePattern.Solid;
+
+            axisY_1.ValueType = AxisValueType.Number;
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(LC_1.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;
