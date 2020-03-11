@@ -6317,7 +6317,8 @@ namespace Isotope_fitting
 
             Initialize_data_struct();
             Initialize_UI();
-            Initialize_Oxy();
+            init_chart();
+            //Initialize_Oxy();
             initialize_tabs();
 
             //this.WindowState = curr_state;
