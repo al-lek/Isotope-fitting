@@ -223,9 +223,10 @@ namespace Isotope_fitting
                 }
             }
             else if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; } selected_fragments = select_fragments2_frm9(); }
+            else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); return; }
             else { selected_fragments = check_chem_inputs(); }
              
-            if (selected_fragments == null) return;
+            if (selected_fragments.Count==0) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution
@@ -235,6 +236,7 @@ namespace Isotope_fitting
             Thread envipat_properties = new Thread(() => calculate_fragment_properties_frm9(selected_fragments));
             envipat_properties.Start();
         } 
+
         private List<ChemiForm> check_chem_inputs()
         {
             string s = frm2.Peptide;
@@ -255,8 +257,7 @@ namespace Isotope_fitting
                 s = frm2.light_chain;
             }            
 
-            if (ion_txtBox.Text.Contains("M")) { index = "0";indexTo = s.Length.ToString(); }
-            else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text) || (string.IsNullOrEmpty(primary_txtBox.Text) && string.IsNullOrEmpty(internal_txtBox.Text))) { return res; }
+            if (ion_txtBox.Text.Contains("M")) { index = "0";indexTo = s.Length.ToString(); }            
             
             chem_form = chemForm_txtBox.Text.Replace(Environment.NewLine, " ").ToString();
             chem_form = chem_form.Replace("\t", "");
@@ -751,74 +752,102 @@ namespace Isotope_fitting
         }
         private void insert_frag_to_Fragments2()
         {
-            if (fragListView9.SelectedItems.Count == 1)
+            if (fragListView9.CheckedIndices.Count == 0) { MessageBox.Show("First check the desired fragments and then press insert!"); return; }
+            foreach (int new_fragin in fragListView9.CheckedIndices)
             {
                 //set now to false in order to let refresh_iso_plot follow the basic algorithm 
                 now = false;
                 Fragments2.Add(new FragForm()
                 {
-                    Adduct = Fragments3[selected_idx].Adduct,
-                    Charge = Fragments3[selected_idx].Charge,
-                    FinalFormula = Fragments3[selected_idx].FinalFormula,
-                    Deduct = Fragments3[selected_idx].Deduct,
-                    Error = Fragments3[selected_idx].Error,
-                    PPM_Error = Fragments3[selected_idx].PPM_Error,
-                    Index = Fragments3[selected_idx].Index,
-                    IndexTo = Fragments3[selected_idx].IndexTo,
-                    InputFormula = Fragments3[selected_idx].InputFormula,
-                    Ion = Fragments3[selected_idx].Ion,
-                    Ion_type = Fragments3[selected_idx].Ion_type,
-                    Machine = Fragments3[selected_idx].Machine,
-                    Multiplier = Fragments3[selected_idx].Multiplier,
-                    Mz = Fragments3[selected_idx].Mz,
-                    Radio_label = Fragments3[selected_idx].Radio_label,
-                    Resolution = Fragments3[selected_idx].Resolution,
-                    Factor = Fragments3[selected_idx].Factor,
+                    Adduct = Fragments3[new_fragin].Adduct,
+                    Charge = Fragments3[new_fragin].Charge,
+                    FinalFormula = Fragments3[new_fragin].FinalFormula,
+                    Deduct = Fragments3[new_fragin].Deduct,
+                    Error = Fragments3[new_fragin].Error,
+                    PPM_Error = Fragments3[new_fragin].PPM_Error,
+                    Index = Fragments3[new_fragin].Index,
+                    IndexTo = Fragments3[new_fragin].IndexTo,
+                    InputFormula = Fragments3[new_fragin].InputFormula,
+                    Ion = Fragments3[new_fragin].Ion,
+                    Ion_type = Fragments3[new_fragin].Ion_type,
+                    Machine = Fragments3[new_fragin].Machine,
+                    Multiplier = Fragments3[new_fragin].Multiplier,
+                    Mz = Fragments3[new_fragin].Mz,
+                    Radio_label = Fragments3[new_fragin].Radio_label,
+                    Resolution = Fragments3[new_fragin].Resolution,
+                    Factor = Fragments3[new_fragin].Factor,
                     Counter = 0,
                     To_plot = true,
-                    Color = Fragments3[selected_idx].Color,
-                    Name = Fragments3[selected_idx].Name,
+                    Color = Fragments3[new_fragin].Color,
+                    Name = Fragments3[new_fragin].Name,
                     ListName = new string[4],
                     Fix = 1.0,
                     Max_intensity = 0.0,
                     Fixed = false,
-                    maxPPM_Error= Fragments3[selected_idx].maxPPM_Error,
-                    minPPM_Error= Fragments3[selected_idx].minPPM_Error
+                    maxPPM_Error= Fragments3[new_fragin].maxPPM_Error,
+                    minPPM_Error= Fragments3[new_fragin].minPPM_Error
                 });
 
-                Fragments2.Last().Centroid = Fragments3[selected_idx].Centroid.Select(point => point.DeepCopy()).ToList();
-                Fragments2.Last().Profile = Fragments3[selected_idx].Profile.Select(point => point.DeepCopy()).ToList();
+                Fragments2.Last().Centroid = Fragments3[new_fragin].Centroid.Select(point => point.DeepCopy()).ToList();
+                Fragments2.Last().Profile = Fragments3[new_fragin].Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Counter = Fragments3.Count;
                 Fragments2.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
-
-                // sort by mz the fragments list (global) 
-                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
-                // also restore indexes to match array position
-                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-                frm2.add_frag_frm9();
-
-                //remove fragment from the current listview
-                Fragments3.RemoveAt(selected_idx);
-                // sort by mz the fragments list 
-                Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
-                // also restore indexes to match array position
-                for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k ; }
-                //refresh listview 
-                Fragments3_to_listview();
-                //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
-                first = true; 
-                factor_panel9.Visible = false;selected_idx = 0;
             }
-            else
+            // sort by mz the fragments list (global) 
+            Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+            // also restore indexes to match array position
+            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+            frm2.add_frag_frm9();
+
+            int count = 0;
+            foreach (int new_fragin in fragListView9.CheckedIndices)
             {
-                MessageBox.Show("There isn't any selected fragment.");
-            }
-            
+                //remove fragment from the current listview
+                Fragments3.RemoveAt(new_fragin- count); count++;
+            }                
+            // sort by mz the fragments list 
+            Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+            // also restore indexes to match array position
+            for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
+            //refresh listview 
+            Fragments3_to_listview();
+            //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
+            first = true;
+            factor_panel9.Visible = false; selected_idx = 0;
         }
         #endregion
-               
+
 
         #region UI
+        private void clear_single_chem_Btn_Click(object sender, EventArgs e)
+        {
+            heavy_ChkBox.Checked = false;
+            Light_chkBox.Checked = false;
+            chemForm_txtBox.Text = string.Empty;
+            maxCharge_txtBox.Text = string.Empty;
+            minCharge_txtBox.Text = string.Empty;
+            ion_txtBox.Text = string.Empty;
+            primary_txtBox.Text = string.Empty;
+            internal_txtBox.Text = string.Empty;
+        }
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
+            {
+                foreach (int i in lstBox.CheckedIndices)
+                {
+                    lstBox.SetItemCheckState(i, CheckState.Unchecked);
+                }
+            }
+            mzMin_Box.Text = string.Empty;
+            mzMax_Box.Text = string.Empty;
+            chargeMin_Box.Text = string.Empty;
+            chargeMax_Box.Text = string.Empty;
+            idxPr_Box.Text = string.Empty;
+            idxFrom_Box.Text = string.Empty;
+            idxTo_Box.Text = string.Empty;
+
+        }
         private void check_all_boxBtn_Click(object sender, EventArgs e)
         {
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
@@ -995,6 +1024,7 @@ namespace Isotope_fitting
 
         #endregion
 
+
         private void Form9_FormClosing(object sender, FormClosingEventArgs e)
         {
             //when closing the form public data from this form are restored in their initial values
@@ -1008,13 +1038,7 @@ namespace Isotope_fitting
             //we don't want to refresh fragment trees in the basic form
             frm2.ending_frm9();
         }
-        
-        
-        private void Frag_tab_Click(object sender, EventArgs e)
-        {
-            panel_calc.Focus();
-        }
-
+                
         void ppm9_numUD_TextChanged(object sender, EventArgs e)
         {
             if (ppm9_numUD.ActiveControl!=null && !string.IsNullOrEmpty(ppm9_numUD.ActiveControl.Text))
@@ -1040,29 +1064,7 @@ namespace Isotope_fitting
         }
 
 
-
-        private void clear_single_chem_Btn_Click(object sender, EventArgs e)
-        {
-            heavy_ChkBox.Checked = false;
-            Light_chkBox.Checked = false;
-            chemForm_txtBox.Text = string.Empty;
-            maxCharge_txtBox.Text = string.Empty;
-            minCharge_txtBox.Text = string.Empty;
-            ion_txtBox.Text = string.Empty;
-            primary_txtBox.Text = string.Empty;
-            internal_txtBox.Text = string.Empty;
-        }
-
-        private void clear_multiple_chem_Btn_Click(object sender, EventArgs e)
-        {
-            multChem_max_charge.Text = string.Empty;
-            multChem_min_charge.Text = string.Empty;
-            if (mult_loaded.Count != 0) { mult_loaded.Clear(); filename_txtBx.Text = string.Empty;  }
-        }
-
-
-
-
+        #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
         {
             if (last_plotted.Count!=0)
@@ -1117,10 +1119,12 @@ namespace Isotope_fitting
                 frm2.recalc_frm9();
             }
         }
+        #endregion
 
+        #region chemical formulas file
         private void load_chems_file_Btn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(multChem_min_charge.Text) || string.IsNullOrEmpty(multChem_max_charge.Text)) { MessageBox.Show("You need to set first the charge range and then the "); }
+            if (string.IsNullOrEmpty(multChem_min_charge.Text) || string.IsNullOrEmpty(multChem_max_charge.Text)) { MessageBox.Show("You need to set first the charge range and then the "); return; }
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;
             double qMax = txt_to_d(multChem_max_charge);
@@ -1177,17 +1181,16 @@ namespace Isotope_fitting
                                 Radio_label = string.Empty,
                                 maxPPM_Error = 0,
                                 minPPM_Error = 0,
-                                Charge=c
+                                Charge = c
                             });
                         }
-                    }                       
+                    }
                     catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); }
 
                 }
             }
-            MessageBox.Show(mult_loaded.Count().ToString()+ " chemical formulas have been added!");
+            MessageBox.Show(mult_loaded.Count().ToString() + " chemical formulas have been added!");
         }
-
         private void multChem_min_charge_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(minCharge_txtBox.Text))
@@ -1230,5 +1233,13 @@ namespace Isotope_fitting
                 }
             }
         }
+
+        private void clear_multiple_chem_Btn_Click(object sender, EventArgs e)
+        {
+            multChem_max_charge.Text = string.Empty;
+            multChem_min_charge.Text = string.Empty;
+            if (mult_loaded.Count != 0) { mult_loaded.Clear(); filename_txtBx.Text = string.Empty; }
+        }
+        #endregion
     }
 }

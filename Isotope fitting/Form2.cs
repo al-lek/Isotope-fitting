@@ -5485,7 +5485,6 @@ namespace Isotope_fitting
             selectedFragments.Clear();
             Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
-
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
         }
         
