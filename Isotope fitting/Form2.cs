@@ -3948,236 +3948,236 @@ namespace Isotope_fitting
         #endregion
 
         #region refresh plot
-        private void refresh_iso_plot()
-        {
-            //// 0.a gather info on which fragments are selected to plot, and their respective intensities
-            //List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
-            List<int> to_plot = new List<int>();
-            //0.a add only the desired fragments to to_plot
-            foreach (int idx in selectedFragments)
-            {
-                string ion = Fragments2[idx - 1].Ion_type;
-                if (ion.StartsWith("a")|| ion.StartsWith("(a"))
-                {
-                    if (disp_a.Checked) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("b")|| ion.StartsWith("(b"))
-                {
-                    if (disp_b.Checked) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("c")|| ion.StartsWith("(c"))
-                {
-                    if (disp_c.Checked) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("x")|| ion.StartsWith("(x"))
-                {
-                    if (disp_x.Checked) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("y")|| ion.StartsWith("(y"))
-                {
-                    if (disp_y.Checked) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("z")|| ion.StartsWith("(z"))
-                {
-                    if (disp_z.Checked) { to_plot.Add(idx); }
-                }
-                else if (ion.Contains("inter"))
-                {
-                    if (disp_internal.Checked) { to_plot.Add(idx); }
-                }
-                else
-                {
-                    to_plot.Add(idx);
-                }
+        //private void refresh_iso_plot()
+        //{
+        //    //// 0.a gather info on which fragments are selected to plot, and their respective intensities
+        //    //List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
+        //    List<int> to_plot = new List<int>();
+        //    //0.a add only the desired fragments to to_plot
+        //    foreach (int idx in selectedFragments)
+        //    {
+        //        string ion = Fragments2[idx - 1].Ion_type;
+        //        if (ion.StartsWith("a")|| ion.StartsWith("(a"))
+        //        {
+        //            if (disp_a.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else if (ion.StartsWith("b")|| ion.StartsWith("(b"))
+        //        {
+        //            if (disp_b.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else if (ion.StartsWith("c")|| ion.StartsWith("(c"))
+        //        {
+        //            if (disp_c.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else if (ion.StartsWith("x")|| ion.StartsWith("(x"))
+        //        {
+        //            if (disp_x.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else if (ion.StartsWith("y")|| ion.StartsWith("(y"))
+        //        {
+        //            if (disp_y.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else if (ion.StartsWith("z")|| ion.StartsWith("(z"))
+        //        {
+        //            if (disp_z.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else if (ion.Contains("inter"))
+        //        {
+        //            if (disp_internal.Checked) { to_plot.Add(idx); }
+        //        }
+        //        else
+        //        {
+        //            to_plot.Add(idx);
+        //        }
 
-            }
-            // 0.b. reset iso plot
-            reset_iso_plot();
+        //    }
+        //    // 0.b. reset iso plot
+        //    reset_iso_plot();
 
-            // 1.a rerun calculations for fit and residual
-            recalculate_fitted_residual(to_plot);
+        //    // 1.a rerun calculations for fit and residual
+        //    recalculate_fitted_residual(to_plot);
 
-            // 1.b Add the experimental to plot if selected
-            if (plotExp_chkBox.Checked && all_data.Count>0)
-            {
-                (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
-                for (int j = 0; j < all_data[0].Count; j++)
-                    (iso_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]));
-            }
+        //    // 1.b Add the experimental to plot if selected
+        //    if (plotExp_chkBox.Checked && all_data.Count>0)
+        //    {
+        //        (iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
+        //        for (int j = 0; j < all_data[0].Count; j++)
+        //            (iso_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]));
+        //    }
 
-            // 2. replot all isotopes
-            if (plotFragProf_chkBox.Checked && all_data.Count > 0)
-            {
-                for (int i = 0; i < to_plot.Count; i++)
-                {
-                    int curr_idx = to_plot[i];
-                    if (all_data.Count != 0)
-                    {
-                        // get name of each line to be ploted
-                        string name_str = Fragments2[curr_idx - 1].Name;
-                        (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+        //    // 2. replot all isotopes
+        //    if (plotFragProf_chkBox.Checked && all_data.Count > 0)
+        //    {
+        //        for (int i = 0; i < to_plot.Count; i++)
+        //        {
+        //            int curr_idx = to_plot[i];
+        //            if (all_data.Count != 0)
+        //            {
+        //                // get name of each line to be ploted
+        //                string name_str = Fragments2[curr_idx - 1].Name;
+        //                (iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
 
-                        // paint frag aligned
-                        //for (int j = 0; j < all_data[0].Count; j++)
-                        //(iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
+        //                // paint frag aligned
+        //                //for (int j = 0; j < all_data[0].Count; j++)
+        //                //(iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
 
-                        // paint frag envelope
-                        for (int j = 0; j < all_data[curr_idx].Count; j++)
-                            (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
-                    }
-                }
-                if (Form9.now)
-                {
-                    for (int f=0; f< Form9.last_plotted.Count; f++ )
-                    {
-                        int frag = Form9.last_plotted[f];
-                        string name_str = Form9.Fragments3[frag].Name;
-                        (iso_plot.Model.Series[Fragments2.Count +f+1] as LineSeries).Title = name_str;
-                        for (int j = 0; j < all_data[Fragments2.Count + f + 1].Count; j++)
-                            (iso_plot.Model.Series[Fragments2.Count + f + 1] as LineSeries).Points.Add(new DataPoint(all_data[Fragments2.Count + f + 1][j][0], Form9.Fragments3[frag].Factor * all_data[Fragments2.Count + f + 1][j][1]));
-                    }                    
-                }
-            }
-            if (plotFragCent_chkBox.Checked && all_data.Count > 0)
-            {
-                int help=Convert.ToInt32(Form9.now);
-                for (int i = 0; i < to_plot.Count; i++)
-                {
-                    int curr_idx = to_plot[i];
-                    if (all_data.Count != 0)
-                    {
-                        // get name of each line to be ploted
-                        string name_str = Fragments2[curr_idx - 1].Name;
-                        (iso_plot.Model.Series[curr_idx + Fragments2.Count+help] as LinearBarSeries).Title = name_str;
+        //                // paint frag envelope
+        //                for (int j = 0; j < all_data[curr_idx].Count; j++)
+        //                    (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
+        //            }
+        //        }
+        //        if (Form9.now)
+        //        {
+        //            for (int f=0; f< Form9.last_plotted.Count; f++ )
+        //            {
+        //                int frag = Form9.last_plotted[f];
+        //                string name_str = Form9.Fragments3[frag].Name;
+        //                (iso_plot.Model.Series[Fragments2.Count +f+1] as LineSeries).Title = name_str;
+        //                for (int j = 0; j < all_data[Fragments2.Count + f + 1].Count; j++)
+        //                    (iso_plot.Model.Series[Fragments2.Count + f + 1] as LineSeries).Points.Add(new DataPoint(all_data[Fragments2.Count + f + 1][j][0], Form9.Fragments3[frag].Factor * all_data[Fragments2.Count + f + 1][j][1]));
+        //            }                    
+        //        }
+        //    }
+        //    if (plotFragCent_chkBox.Checked && all_data.Count > 0)
+        //    {
+        //        int help=Convert.ToInt32(Form9.now);
+        //        for (int i = 0; i < to_plot.Count; i++)
+        //        {
+        //            int curr_idx = to_plot[i];
+        //            if (all_data.Count != 0)
+        //            {
+        //                // get name of each line to be ploted
+        //                string name_str = Fragments2[curr_idx - 1].Name;
+        //                (iso_plot.Model.Series[curr_idx + Fragments2.Count+help] as LinearBarSeries).Title = name_str;
 
-                        // paint frag envelope
-                        for (int j = 0; j < Fragments2[curr_idx - 1].Centroid.Count; j++)
-                        {
-                            List<PointPlot> cenn = Fragments2[curr_idx - 1].Centroid.OrderBy(p => p.X).ToList();
-                            (iso_plot.Model.Series[curr_idx + Fragments2.Count + help] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Fragments2[curr_idx - 1].Factor * cenn[j].Y));
+        //                // paint frag envelope
+        //                for (int j = 0; j < Fragments2[curr_idx - 1].Centroid.Count; j++)
+        //                {
+        //                    List<PointPlot> cenn = Fragments2[curr_idx - 1].Centroid.OrderBy(p => p.X).ToList();
+        //                    (iso_plot.Model.Series[curr_idx + Fragments2.Count + help] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Fragments2[curr_idx - 1].Factor * cenn[j].Y));
 
-                        }
-                    }
-                }
-                if (Form9.now)
-                {                    
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
-                    {
-                        int curr_idx = Form9.last_plotted[f];
-                        if (all_data.Count != 0)
-                        {
-                            // get name of each line to be ploted
-                            string name_str = Form9.Fragments3[curr_idx].Name;
-                            (iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Title = name_str;
+        //                }
+        //            }
+        //        }
+        //        if (Form9.now)
+        //        {                    
+        //            for (int f = 0; f < Form9.last_plotted.Count; f++)
+        //            {
+        //                int curr_idx = Form9.last_plotted[f];
+        //                if (all_data.Count != 0)
+        //                {
+        //                    // get name of each line to be ploted
+        //                    string name_str = Form9.Fragments3[curr_idx].Name;
+        //                    (iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Title = name_str;
 
-                            // paint frag envelope
-                            for (int j = 0; j < Form9.Fragments3[curr_idx].Centroid.Count; j++)
-                            {
-                                List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
-                                (iso_plot.Model.Series[2 * Fragments2.Count+ Form9.last_plotted.Count + f+ 2] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Form9.Fragments3[curr_idx].Factor * cenn[j].Y));
-                            }
-                        }
-                    }
-                }
-            }          
-            // 3. fitted plot
-            if (summation.Count > 0 )
-                if (Fitting_chkBox.Checked)
-                    for (int j = 0; j < summation.Count; j++)
-                        (iso_plot.Model.Series[(all_data.Count*2)-1] as LineSeries).Points.Add(new DataPoint(summation[j][0], summation[j][1]));
+        //                    // paint frag envelope
+        //                    for (int j = 0; j < Form9.Fragments3[curr_idx].Centroid.Count; j++)
+        //                    {
+        //                        List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
+        //                        (iso_plot.Model.Series[2 * Fragments2.Count+ Form9.last_plotted.Count + f+ 2] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Form9.Fragments3[curr_idx].Factor * cenn[j].Y));
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }          
+        //    // 3. fitted plot
+        //    if (summation.Count > 0 )
+        //        if (Fitting_chkBox.Checked)
+        //            for (int j = 0; j < summation.Count; j++)
+        //                (iso_plot.Model.Series[(all_data.Count*2)-1] as LineSeries).Points.Add(new DataPoint(summation[j][0], summation[j][1]));
 
-            // 4. residual plot
-            if (residual.Count > 0)
-            {
-                for (int j = 0; j < residual.Count; j++)
-                    (res_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(residual[j][0], residual[j][1]));
+        //    // 4. residual plot
+        //    if (residual.Count > 0)
+        //    {
+        //        for (int j = 0; j < residual.Count; j++)
+        //            (res_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(residual[j][0], residual[j][1]));
                 
-            }                         
+        //    }                         
 
-            // 5. centroid (bar)
-            if (plotCentr_chkBox.Checked)
-            {
-                foreach (double[] peak in peak_points)
-                {
-                    double mz = peak[1] + peak[4];
-                    double inten = peak[5];
-                    //(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
-                    (iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));
-                }
-            }
+        //    // 5. centroid (bar)
+        //    if (plotCentr_chkBox.Checked)
+        //    {
+        //        foreach (double[] peak in peak_points)
+        //        {
+        //            double mz = peak[1] + peak[4];
+        //            double inten = peak[5];
+        //            //(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
+        //            (iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));
+        //        }
+        //    }
 
-            // 6. fragment annotations
-            frag_annotation(to_plot);
+        //    // 6. fragment annotations
+        //    frag_annotation(to_plot);
             
-            invalidate_all();
-        }
-        private void reset_iso_plot()
-        {
-            iso_plot.Model.Series.Clear();            
-            for (int i = 0; i < all_data.Count; i++)
-            {
-                OxyColor cc;
-                if (Form9.now == true && i== all_data.Count - Form9.last_plotted.Count)
-                {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
-                    {
-                        int frag = Form9.last_plotted[f];
-                        cc = Form9.Fragments3[frag].Color;
-                        LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };                       
-                        iso_plot.Model.Series.Add(tmp);
-                    }
-                    break;
-                }
-                else
-                {
-                    cc = get_fragment_color(i);
-                    LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
-                    if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
-                    iso_plot.Model.Series.Add(tmp);
-                }
+        //    invalidate_all();
+        //}
+        //private void reset_iso_plot()
+        //{
+        //    iso_plot.Model.Series.Clear();            
+        //    for (int i = 0; i < all_data.Count; i++)
+        //    {
+        //        OxyColor cc;
+        //        if (Form9.now == true && i== all_data.Count - Form9.last_plotted.Count)
+        //        {
+        //            for (int f = 0; f < Form9.last_plotted.Count; f++)
+        //            {
+        //                int frag = Form9.last_plotted[f];
+        //                cc = Form9.Fragments3[frag].Color;
+        //                LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };                       
+        //                iso_plot.Model.Series.Add(tmp);
+        //            }
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            cc = get_fragment_color(i);
+        //            LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
+        //            if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
+        //            iso_plot.Model.Series.Add(tmp);
+        //        }
                 
-            }            
-            for (int i = 1; i < all_data.Count; i++)
-            {
-                if (Form9.now == true && i==all_data.Count- Form9.last_plotted.Count)
-                {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
-                    {
-                        int frag = Form9.last_plotted[f];                       
-                        OxyColor cc = Form9.Fragments3[frag].Color;
-                        LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
-                        iso_plot.Model.Series.Add(bar);
-                    }
-                    break;
-                }
-                else
-                {
-                    OxyColor cc = get_fragment_color(i);
-                    LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
-                    iso_plot.Model.Series.Add(bar);
-                }
+        //    }            
+        //    for (int i = 1; i < all_data.Count; i++)
+        //    {
+        //        if (Form9.now == true && i==all_data.Count- Form9.last_plotted.Count)
+        //        {
+        //            for (int f = 0; f < Form9.last_plotted.Count; f++)
+        //            {
+        //                int frag = Form9.last_plotted[f];                       
+        //                OxyColor cc = Form9.Fragments3[frag].Color;
+        //                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
+        //                iso_plot.Model.Series.Add(bar);
+        //            }
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            OxyColor cc = get_fragment_color(i);
+        //            LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
+        //            iso_plot.Model.Series.Add(bar);
+        //        }
                
-            }
-            if (insert_exp == true)
-            {
-                LineSeries fit = new LineSeries() { StrokeThickness = fit_width, Color = fit_color, LineStyle = fit_style };
-                iso_plot.Model.Series.Add(fit);
-            }
-            res_plot.Model.Series.Clear();
-            if (insert_exp == true)
-            {
-                LineSeries res = new LineSeries() { StrokeThickness = 1, Color = OxyColors.Black };
-                res_plot.Model.Series.Add(res);
-            }
-            if(plotCentr_chkBox.Checked)
-            {
-                //RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson };
-                //iso_plot.Model.Series.Add(bar);
-                LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1,StrokeColor = peak_color, FillColor = peak_color,BarWidth= peak_width };
-                iso_plot.Model.Series.Add(bar);
-            }
+        //    }
+        //    if (insert_exp == true)
+        //    {
+        //        LineSeries fit = new LineSeries() { StrokeThickness = fit_width, Color = fit_color, LineStyle = fit_style };
+        //        iso_plot.Model.Series.Add(fit);
+        //    }
+        //    res_plot.Model.Series.Clear();
+        //    if (insert_exp == true)
+        //    {
+        //        LineSeries res = new LineSeries() { StrokeThickness = 1, Color = OxyColors.Black };
+        //        res_plot.Model.Series.Add(res);
+        //    }
+        //    if(plotCentr_chkBox.Checked)
+        //    {
+        //        //RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson };
+        //        //iso_plot.Model.Series.Add(bar);
+        //        LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1,StrokeColor = peak_color, FillColor = peak_color,BarWidth= peak_width };
+        //        iso_plot.Model.Series.Add(bar);
+        //    }
             
-        }
+        //}
         private void recalculate_fitted_residual(List<int> to_plot)
         {
             // calculate addition of selected fragments, and the respective residual
@@ -13009,6 +13009,521 @@ namespace Isotope_fitting
             Form17 frm17 = new Form17(this);
             frm17.Text = "Sequence coverage";
             frm17.ShowDialog();
+        }
+        private void init_chart()
+        {
+            if (LC_1 != null)
+            {
+                LC_1.Dispose();
+            }
+            LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
+            LC_1.BeginUpdate();
+            ViewXY v = LC_1.ViewXY;
+            LC_1.Parent = this;
+            LC_1.Title.Visible = false;
+            LC_1.ViewXY.LegendBox.Visible = false;
+            LC_1.ViewXY.XAxes[0].ValueType = AxisValueType.Number;
+            LC_1.ViewXY.XAxes[0].Title.Text = "m/z"; LC_1.ViewXY.YAxes[0].Title.Text = "Intensity";
+            LC_1.ViewXY.XAxes[0].Title.MouseInteraction = false; LC_1.ViewXY.YAxes[0].Title.MouseInteraction = false;
+            LC_1.Name = "iso_plot1";
+            LC_1.ViewXY.LegendBox.Visible = false;
+            LC_1.ViewXY.LegendBox.ShowCheckboxes = true;
+            LC_1.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;
+            AxisX axisX_1 = LC_1.ViewXY.XAxes[0];
+            AxisY axisY_1 = LC_1.ViewXY.YAxes[0];
+            axisX_1.ScrollMode = XAxisScrollMode.None;
+            axisX_1.ValueType = AxisValueType.Number;
+            //Add a line series cursor 
+            LineSeriesCursor cursor_1 = new LineSeriesCursor(LC_1.ViewXY, axisX_1);
+            cursor_1.SnapToPoints = false;
+
+            // Create secondary axes, to show cursor intersections on axes by using their CustomAxisTicks with one value only. 
+            //The CustomAxisTick gets intersection value, nothing else, and shows a major tick, label and grid line on that position.
+
+            //Disable automatic axis placement, so that the axes are in same positions (Position = 0 for YAxes, Position = 100 for XAxes); 
+            v.AxisLayout.YAxisAutoPlacement = YAxisAutoPlacement.LeftThenRight;
+            v.AxisLayout.XAxisAutoPlacement = XAxisAutoPlacement.BottomThenTop;
+
+            AxisX secondaryXAxis = new AxisX(v);
+            secondaryXAxis.MouseInteraction = false;
+            secondaryXAxis.AutoFormatLabels = false;
+            secondaryXAxis.CustomTicksEnabled = true;
+            secondaryXAxis.AxisColor = Color.Transparent;
+            secondaryXAxis.MajorGrid.Color = LC_1.Title.Color;
+            secondaryXAxis.LabelsColor = Color.DarkRed;
+            secondaryXAxis.Title.Visible = false;
+            secondaryXAxis.MajorDivTickStyle.Color = Color.DarkRed;
+            secondaryXAxis.LabelsFont = new Font("Segoe UI", 10f, FontStyle.Regular);
+            secondaryXAxis.MouseScaling = false;
+            v.XAxes.Add(secondaryXAxis);
+
+            AxisY secondaryYAxis = new AxisY(v);
+            secondaryYAxis.MouseInteraction = false;
+            secondaryYAxis.AutoFormatLabels = false;
+            secondaryYAxis.CustomTicksEnabled = true;
+            secondaryYAxis.AxisColor = Color.Transparent;
+            secondaryYAxis.MajorGrid.Color = LC_1.Title.Color;
+            secondaryYAxis.LabelsColor = Color.DarkRed;
+            secondaryYAxis.Title.Visible = false;
+            secondaryYAxis.MajorDivTickStyle.Color = Color.DarkRed;
+            secondaryYAxis.LabelsFont = new Font("Segoe UI", 10f, FontStyle.Regular);
+            secondaryYAxis.MouseScaling = false;
+            v.YAxes.Add(secondaryYAxis);
+            LC_1.EndUpdate();
+            fit_grpBox.Controls.Add(LC_1);
+
+            if (LC_2 != null)
+            {
+                LC_2.Dispose();
+            }
+            LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
+            LC_2.BeginUpdate();
+            LC_2.Parent = this;
+            LC_2.Title.Visible = false;
+            LC_2.ViewXY.LegendBox.Visible = false;
+            LC_2.ViewXY.XAxes[0].ValueType = AxisValueType.Number;
+            LC_2.ViewXY.XAxes[0].Title.Text = "m/z"; LC_2.ViewXY.YAxes[0].Title.Text = "Intensity";
+            LC_2.ViewXY.XAxes[0].Title.MouseInteraction = false; LC_2.ViewXY.YAxes[0].Title.MouseInteraction = false;
+            LC_2.Name = "res_plot1";
+            LC_2.ViewXY.LegendBox.Visible = false;
+            LC_2.ViewXY.LegendBox.ShowCheckboxes = true;
+            LC_2.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;
+            AxisX axisX_2 = LC_2.ViewXY.XAxes[0];
+            axisX_2.ScrollMode = XAxisScrollMode.None;
+            axisX_2.ValueType = AxisValueType.Number;
+            LineSeriesCursor cursor_2 = new LineSeriesCursor(LC_2.ViewXY, axisX_2);
+            cursor_2.SnapToPoints = false;
+            LC_2.EndUpdate();
+            res_grpBox.Controls.Add(LC_2);
+
+            axisX_1.RangeChanged += xAxis_RangeChanged;
+            axisY_1.RangeChanged += yAxis_RangeChanged;
+            LC_2.ViewXY.XAxes[0].RangeChanged += LC_2xAxis_RangeChanged;
+            LC_1.MouseMove += new MouseEventHandler(_chart_MouseMove);
+            LC_1.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
+        }
+        private void LC_2xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
+        {
+            //Set the same range for secondary Y axis
+            e.CancelRendering = true;
+            bool scaleChanged;
+            LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+        }
+
+        private void yAxis_RangeChanged(object sender, RangeChangedEventArgs e)
+        {
+            //Set the same range for secondary Y axis
+            e.CancelRendering = true;
+            LC_1.ViewXY.YAxes[1].SetRange(e.NewMin, e.NewMax);
+        }
+
+        private void xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
+        {
+            //Set the same range for secondary X axis
+            e.CancelRendering = true;
+            LC_1.ViewXY.XAxes[1].SetRange(e.NewMin, e.NewMax);
+            LC_2.ViewXY.XAxes[0].SetRange(e.NewMin, e.NewMax);
+            if (autoscale_Btn.Checked)
+            {
+                //Set the same range for secondary Y axis
+                e.CancelRendering = true;
+                bool scaleChanged;
+                LC_1.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+            }
+        }
+        void _chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (cursor_chkBx.Checked)
+            {
+                CreateProjections((int)e.X, (int)e.Y);
+            }
+        }
+
+        private void CreateProjections(int pX, int pY)
+        {
+            double x, y;
+            int nearestIndex = 0;
+
+            AxisX secondaryXAxis = LC_1.ViewXY.XAxes[1];
+            AxisY secondaryYAxis = LC_1.ViewXY.YAxes[1];
+
+            bool solved = LC_1.ViewXY.PointLineSeries[0].SolveNearestDataPointByCoord(pX, pY, out x, out y, out nearestIndex);
+            if (solved)
+            {
+                //Disable rendering
+                LC_1.BeginUpdate();
+
+                //Remove exsisting custom x-axis tickmarks
+                DisposeAllAndClear(secondaryXAxis.CustomTicks);
+                secondaryXAxis.CustomTicks.Add(new CustomAxisTick(secondaryXAxis, x, x.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
+                secondaryXAxis.InvalidateCustomTicks();
+
+                //Remove exsisting custom y-axis tickmarks
+                DisposeAllAndClear(secondaryYAxis.CustomTicks);
+                secondaryYAxis.CustomTicks.Add(new CustomAxisTick(secondaryYAxis, y, y.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
+                secondaryYAxis.InvalidateCustomTicks();
+
+                //Allow rendering
+                LC_1.EndUpdate();
+            }
+            else
+            {
+                //Disable rendering
+                LC_1.BeginUpdate();
+
+                //Remove exsisting custom x-axis tickmarks
+                DisposeAllAndClear(secondaryXAxis.CustomTicks);
+                secondaryXAxis.InvalidateCustomTicks();
+
+                //Remove exsisting custom y-axis tickmarks
+                DisposeAllAndClear(secondaryYAxis.CustomTicks);
+                secondaryYAxis.InvalidateCustomTicks();
+
+                //Allow rendering
+                LC_1.EndUpdate();
+            }
+        }
+
+        public static void DisposeAllAndClear<T>(List<T> list)
+        {
+            if (list == null)
+                return;
+
+            foreach (IDisposable item in list)
+            {
+                if (item != null)
+                    item.Dispose();
+            }
+
+            list.Clear();
+        }
+
+        private void refresh_iso_plot()
+        {
+            //Remove existing series
+            DisposeAllAndClear(LC_1.ViewXY.PointLineSeries);
+            DisposeAllAndClear(LC_1.ViewXY.BarSeries);
+            DisposeAllAndClear(LC_2.ViewXY.PointLineSeries);
+            DisposeAllAndClear(LC_2.ViewXY.BarSeries);
+
+            LC_1.BeginUpdate();
+            LC_2.BeginUpdate();
+            //// 0.a gather info on which fragments are selected to plot, and their respective intensities
+            //List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
+            List<int> to_plot = new List<int>();
+            //0.a add only the desired fragments to to_plot
+            foreach (int idx in selectedFragments)
+            {
+                string ion = Fragments2[idx - 1].Ion_type;
+                if (ion.StartsWith("a") || ion.StartsWith("(a"))
+                {
+                    if (disp_a.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("b") || ion.StartsWith("(b"))
+                {
+                    if (disp_b.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("c") || ion.StartsWith("(c"))
+                {
+                    if (disp_c.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("x") || ion.StartsWith("(x"))
+                {
+                    if (disp_x.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("y") || ion.StartsWith("(y"))
+                {
+                    if (disp_y.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.StartsWith("z") || ion.StartsWith("(z"))
+                {
+                    if (disp_z.Checked) { to_plot.Add(idx); }
+                }
+                else if (ion.Contains("inter"))
+                {
+                    if (disp_internal.Checked) { to_plot.Add(idx); }
+                }
+                else
+                {
+                    to_plot.Add(idx);
+                }
+
+            }
+            // 0.b. reset iso plot
+            reset_iso_plot();
+
+            // 1.a rerun calculations for fit and residual
+            recalculate_fitted_residual(to_plot);
+
+            // 1.b Add the experimental to plot if selected
+            if (plotExp_chkBox.Checked && all_data.Count > 0)
+            {
+                //(iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
+                //for (int j = 0; j < all_data[0].Count; j++)
+                //    (iso_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]));
+                int pointCount = all_data[0].Count;
+                SeriesPoint[] points1 = new SeriesPoint[pointCount];
+                for (int j = 0; j < pointCount; j++)
+                {
+                    points1[j] = new SeriesPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]);
+                }
+                LC_1.ViewXY.PointLineSeries[0].Points = points1;
+            }
+
+            // 2. replot all isotopes
+            if (plotFragProf_chkBox.Checked && all_data.Count > 0)
+            {
+                for (int i = 0; i < to_plot.Count; i++)
+                {
+                    int curr_idx = to_plot[i];
+                    if (all_data.Count != 0)
+                    {
+                        //// get name of each line to be ploted
+                        //string name_str = Fragments2[curr_idx - 1].Name;
+                        //(iso_plot.Model.Series[curr_idx] as LineSeries).Title = name_str;
+
+                        //// paint frag aligned
+                        ////for (int j = 0; j < all_data[0].Count; j++)
+                        ////(iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[0][j][0], Fragments2[curr_idx - 1].Factor * all_data_aligned[j][curr_idx]));
+
+                        //// paint frag envelope
+                        //for (int j = 0; j < all_data[curr_idx].Count; j++)
+                        //    (iso_plot.Model.Series[curr_idx] as LineSeries).Points.Add(new DataPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]));
+
+                        int pointCount = all_data[curr_idx].Count;
+                        SeriesPoint[] points1 = new SeriesPoint[pointCount];
+                        for (int j = 0; j < pointCount; j++)
+                        {
+                            points1[j] = new SeriesPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]);
+                        }
+                        LC_1.ViewXY.PointLineSeries[curr_idx].Points = points1;
+                    }
+                }
+                if (Form9.now)
+                {
+                    //string name_str = Form9.Fragments3[Form9.selected_idx].Name;
+                    //(iso_plot.Model.Series[Fragments2.Count + 1] as LineSeries).Title = name_str;
+                    //for (int j = 0; j < all_data.Last().Count; j++)
+                    //    (iso_plot.Model.Series[Fragments2.Count + 1] as LineSeries).Points.Add(new DataPoint(all_data.Last()[j][0], Form9.Fragments3[Form9.selected_idx].Factor * all_data.Last()[j][1]));
+                    int pointCount = all_data.Last().Count;
+                    SeriesPoint[] points1 = new SeriesPoint[pointCount];
+                    for (int j = 0; j < pointCount; j++)
+                    {
+                        points1[j] = new SeriesPoint(all_data.Last()[j][0], Form9.Fragments3[Form9.selected_idx].Factor * all_data.Last()[j][1]);
+                    }
+                    LC_1.ViewXY.PointLineSeries[Fragments2.Count + 1].Points = points1;
+                }
+            }
+            if (plotFragCent_chkBox.Checked && all_data.Count > 0)
+            {
+                int help = Convert.ToInt32(Form9.now);
+                for (int i = 0; i < to_plot.Count; i++)
+                {
+                    int curr_idx = to_plot[i];
+                    if (all_data.Count != 0)
+                    {
+                        //// get name of each line to be ploted
+                        //string name_str = Fragments2[curr_idx - 1].Name;
+                        //(iso_plot.Model.Series[curr_idx + Fragments2.Count + help] as LinearBarSeries).Title = name_str;
+
+                        //// paint frag envelope
+                        //for (int j = 0; j < Fragments2[curr_idx - 1].Centroid.Count; j++)
+                        //{
+                        //    List<PointPlot> cenn = Fragments2[curr_idx - 1].Centroid.OrderBy(p => p.X).ToList();
+                        //    (iso_plot.Model.Series[curr_idx + Fragments2.Count + help] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Fragments2[curr_idx - 1].Factor * cenn[j].Y));
+                        //}
+
+                        int pointCount = Fragments2[curr_idx - 1].Centroid.Count;
+                        BarSeriesValue[] barData = new BarSeriesValue[pointCount];
+                        List<PointPlot> cenn = Fragments2[curr_idx - 1].Centroid.OrderBy(p => p.X).ToList();
+                        for (int bar = 0; bar < pointCount; bar++)
+                        {
+                            barData[bar].Location = cenn[bar].X;
+                            barData[bar].Value = Fragments2[curr_idx - 1].Factor * cenn[bar].Y;
+                        }
+                        LC_1.ViewXY.BarSeries[curr_idx - 1].Values = barData;
+                    }
+                }
+                if (Form9.now)
+                {
+                    int curr_idx = Form9.selected_idx;
+                    if (all_data.Count != 0)
+                    {
+                        //// get name of each line to be ploted
+                        //string name_str = Form9.Fragments3[curr_idx].Name;
+                        //(iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Title = name_str;
+
+                        //// paint frag envelope
+                        //for (int j = 0; j < Form9.Fragments3[curr_idx].Centroid.Count; j++)
+                        //{
+                        //    List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
+                        //    (iso_plot.Model.Series[2 * Fragments2.Count + 2] as LinearBarSeries).Points.Add(new DataPoint(cenn[j].X, Form9.Fragments3[curr_idx].Factor * cenn[j].Y));
+                        //}
+                        int pointCount = Form9.Fragments3[curr_idx].Centroid.Count;
+                        BarSeriesValue[] barData = new BarSeriesValue[pointCount];
+                        List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
+                        for (int bar = 0; bar < pointCount; bar++)
+                        {
+                            barData[bar].Location = cenn[bar].X;
+                            barData[bar].Value = Form9.Fragments3[curr_idx].Factor * cenn[bar].Y;
+                        }
+                        LC_1.ViewXY.BarSeries[Fragments2.Count].Values = barData;
+                    }
+                }
+            }
+            // 3. fitted plot
+            if (summation.Count > 0)
+                if (Fitting_chkBox.Checked)
+                {
+                    //for (int j = 0; j < summation.Count; j++)
+                    //    (iso_plot.Model.Series[(all_data.Count * 2) - 1] as LineSeries).Points.Add(new DataPoint(summation[j][0], summation[j][1]));
+                    int pointCount = summation.Count;
+                    SeriesPoint[] points1 = new SeriesPoint[pointCount];
+                    for (int j = 0; j < pointCount; j++)
+                    {
+                        points1[j] = new SeriesPoint(summation[j][0], summation[j][1]);
+                    }
+                    LC_1.ViewXY.PointLineSeries[all_data.Count].Points = points1;
+                }
+
+            // 4. residual plot
+            if (residual.Count > 0)
+            {
+                //for (int j = 0; j < residual.Count; j++)
+                //    (res_plot.Model.Series[0] as LineSeries).Points.Add(new DataPoint(residual[j][0], residual[j][1]));
+                int pointCount = residual.Count;
+                SeriesPoint[] points1 = new SeriesPoint[pointCount];
+                for (int j = 0; j < pointCount; j++)
+                {
+                    points1[j] = new SeriesPoint(residual[j][0], residual[j][1]);
+                }
+                LC_2.ViewXY.PointLineSeries[0].Points = points1;
+            }
+
+            // 5. centroid (bar)
+            if (plotCentr_chkBox.Checked)
+            {
+                int pointCount = peak_points.Count;
+                BarSeriesValue[] barData = new BarSeriesValue[pointCount];
+                for (int bar = 0; bar < pointCount; bar++)
+                {
+                    double[] peak = peak_points[bar];
+                    double mz = peak[1] + peak[4];
+                    double inten = peak[5];
+                    ////(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
+                    //(iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));                                       
+                    barData[bar].Location = mz;
+                    barData[bar].Value = inten;
+                    LC_1.ViewXY.BarSeries.Last().Values = barData;
+                }
+            }
+            LC_1.EndUpdate();
+            LC_2.EndUpdate();
+
+            // 6. fragment annotations
+            frag_annotation(to_plot);
+
+            //invalidate_all();
+            //LC_1.ViewXY.ZoomToFit();
+            //bool scaleChanged;
+            //LC_1.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);           
+
+        }
+
+        private void reset_iso_plot()
+        {
+            //iso_plot.Model.Series.Clear();
+            for (int i = 0; i < all_data.Count; i++)
+            {
+                Color cc;
+                string name;
+                if (Form9.now == true && i == all_data.Count - 1)
+                {
+                    cc = Form9.Fragments3[Form9.selected_idx].Color.ToColor();
+                    name = Form9.Fragments3[Form9.selected_idx].Name;
+                }
+                else if (i == 0)
+                {
+                    cc = get_fragment_color1(i);
+                    name = "exp";
+                }
+                else
+                {
+                    cc = get_fragment_color1(i);
+                    name = Fragments2[i - 1].Name;
+                }
+                //LineSeries tmp = new LineSeries() { StrokeThickness = frag_width, Color = cc, LineStyle = frag_style };
+                //if (i == 0) { tmp.StrokeThickness = exp_width; tmp.LineStyle = exper_style; }
+                //iso_plot.Model.Series.Add(tmp);
+
+                //Add point line series 
+                PointLineSeries pls = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0])
+                {
+                    PointsVisible = false,
+                    IndividualPointColoring = PointColoringTarget.Off,
+                    Title = new SeriesTitle() { Text = "exp" },
+                    LineStyle = new Arction.WinForms.Charting.LineStyle() { Pattern = LinePattern.Solid, Color = cc, Width = (float)frag_width, AntiAliasing = LineAntialias.None },
+                    MouseHighlight = MouseOverHighlight.None
+                };
+                if (i == 0) { pls.LineStyle.Width = (float)exp_width; }
+                //Add the created point line series into PointLineSeries list 
+                LC_1.ViewXY.PointLineSeries.Add(pls);
+            }
+            for (int i = 1; i < all_data.Count; i++)
+            {
+                if (Form9.now == true && i == all_data.Count - 1)
+                {
+                    Color cc = Form9.Fragments3[Form9.selected_idx].Color.ToColor();
+                    //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
+                    //iso_plot.Model.Series.Add(bar);
+                    Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseHighlight = MouseOverHighlight.None };
+                    bs.Title.Text = Form9.Fragments3[Form9.selected_idx].Name; bs.BorderWidth = 1; bs.BorderColor = cc; bs.BarThickness = (int)cen_width;
+                    LC_1.ViewXY.BarSeries.Add(bs); LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+                    break;
+                }
+                else
+                {
+                    Color cc = get_fragment_color1(i);
+                    //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
+                    //iso_plot.Model.Series.Add(bar);
+                    Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseHighlight = MouseOverHighlight.None };
+                    bs.Title.Text = Fragments2[i - 1].Name; bs.BorderWidth = 1; bs.BorderColor = cc; bs.BarThickness = (int)cen_width;
+                    LC_1.ViewXY.BarSeries.Add(bs); LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+                }
+            }
+            if (insert_exp == true)
+            {
+                //LineSeries fit = new LineSeries() { StrokeThickness = fit_width, Color = fit_color, LineStyle = fit_style };
+                //iso_plot.Model.Series.Add(fit);
+                PointLineSeries fit = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { PointsVisible = false, IndividualPointColoring = PointColoringTarget.Off, Title = new SeriesTitle() { Text = "fit" }, LineStyle = new Arction.WinForms.Charting.LineStyle() { Pattern = LinePattern.SmallDot, Color = fit_color.ToColor(), Width = (float)fit_width, AntiAliasing = LineAntialias.None }, MouseHighlight = MouseOverHighlight.None };
+                LC_1.ViewXY.PointLineSeries.Add(fit);
+            }
+            //res_plot.Model.Series.Clear();
+            if (insert_exp == true)
+            {
+                //LineSeries res = new LineSeries() { StrokeThickness = 1, Color = OxyColors.Black };
+                //res_plot.Model.Series.Add(res);
+                PointLineSeries res = new PointLineSeries(LC_2.ViewXY, LC_2.ViewXY.XAxes[0], LC_2.ViewXY.YAxes[0]) { PointsVisible = false, IndividualPointColoring = PointColoringTarget.Off, Title = new SeriesTitle() { Text = "res" }, LineStyle = new Arction.WinForms.Charting.LineStyle() { Pattern = LinePattern.Solid, Color = Color.Black, Width = (float)1, AntiAliasing = LineAntialias.None }, MouseHighlight = MouseOverHighlight.None };
+                LC_2.ViewXY.PointLineSeries.Add(res);
+            }
+            if (plotCentr_chkBox.Checked)
+            {
+                ////RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson };
+                ////iso_plot.Model.Series.Add(bar);
+                //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = peak_color, FillColor = peak_color, BarWidth = peak_width };
+                //iso_plot.Model.Series.Add(bar);
+                Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseHighlight = MouseOverHighlight.None };
+                bs.Title.Text = "Exp"; bs.BorderWidth = 1; bs.BorderColor = peak_color.ToColor(); bs.BarThickness = (int)peak_width;
+                LC_1.ViewXY.BarSeries.Add(bs);
+                LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+            }
+        }
+
+        private Color get_fragment_color1(int idx)
+        {
+            //idx is the all_data structure index not the Fragments2 index
+            Color clr = Color.FromArgb(custom_colors[idx]);
+            return clr;
         }
     }
 }
