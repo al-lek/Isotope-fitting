@@ -24,10 +24,13 @@ using static alglib;
 using System.Runtime.InteropServices;
 
 using Arction.WinForms.Charting;
+using Arction.WinForms.Charting.Axes;
 using Arction.WinForms.Charting.SeriesXY;
 using Arction.WinForms.Charting.EventMarkers;
 using Arction.WinForms.Charting.Titles;
 using Arction.WinForms.Charting.Views.ViewXY;
+using Arction.WinForms.Charting.Annotations;
+
 
 namespace Isotope_fitting
 {
