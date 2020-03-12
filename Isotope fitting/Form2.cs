@@ -4446,6 +4446,7 @@ namespace Isotope_fitting
                 //        });
                 //    }                    
                 //}
+                LC_1.BeginUpdate();
                 DisposeAllAndClear(LC_1.ViewXY.Annotations);
                 foreach (int p in plot_idxs)
                 {
@@ -4466,6 +4467,7 @@ namespace Isotope_fitting
                         LC_1.ViewXY.Annotations.Add(annotAxisValues2);
                     }                     
                 }
+                LC_1.EndUpdate();
             }
         }
 
@@ -13265,23 +13267,25 @@ namespace Isotope_fitting
             LC_1.Name = "iso_plot1";
             LC_1.ViewXY.LegendBox.Visible = false;
             LC_1.ViewXY.LegendBox.ShowCheckboxes = true;
-            LC_1.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;
-            
+            LC_1.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;            
             axisX_1.ScrollMode = XAxisScrollMode.None;
-            axisX_1.MajorGrid.Visible = Xmajor_grid;
-            axisX_1.MajorGrid.Pattern = LinePattern.Solid;
-            axisX_1.MinorGrid.Visible = Xminor_grid;
-            axisX_1.MinorGrid.Pattern = LinePattern.Solid;
-            axisY_1.MajorGrid.Visible = Ymajor_grid;
-            axisY_1.MajorGrid.Pattern = LinePattern.Solid;
-            axisY_1.MinorGrid.Visible = Yminor_grid;
-            axisY_1.MinorGrid.Pattern = LinePattern.Solid;
-
+            axisX_1.MajorGrid.Visible = Xmajor_grid;            axisX_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisX_1.MinorGrid.Visible = Xminor_grid;            axisX_1.MinorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MajorGrid.Visible = Ymajor_grid;            axisY_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MinorGrid.Visible = Yminor_grid;            axisY_1.MinorGrid.Pattern = LinePattern.Solid;
             axisY_1.ValueType = AxisValueType.Number;
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(LC_1.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;
-
+            //Create annotation for showing the nearest point info
+            AnnotationXY annot = new AnnotationXY(v, axisX_1, axisY_1);
+            annot.TargetCoordinateSystem = AnnotationTargetCoordinates.AxisValues;
+            annot.Visible = false; //Don't show before the data point has been found
+            annot.MouseInteraction = false;
+            annot.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
+            annot.LocationRelativeOffset.X = 0; // 30;
+            LC_1.ViewXY.Annotations.Add(annot);
+            
             // Create secondary axes, to show cursor intersections on axes by using their CustomAxisTicks with one value only. 
             //The CustomAxisTick gets intersection value, nothing else, and shows a major tick, label and grid line on that position.
 
@@ -13376,57 +13380,43 @@ namespace Isotope_fitting
                 LC_1.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
             }
         }
-        void _chart_MouseMove(object sender, MouseEventArgs e)
+        void _chart_MouseMove1(object sender, MouseEventArgs e)
         {
             if (cursor_chkBx.Checked)
             {
                 CreateProjections((int)e.X, (int)e.Y);
             }
         }
-
+        private void _chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ( cursor_chkBx.Checked)
+            {
+                CreateProjections((int)e.X, (int)e.Y);
+            }           
+        }
         private void CreateProjections(int pX, int pY)
         {
             double x, y;
-            int nearestIndex = 0;
-
+            LC_1.ViewXY.XAxes[0].CoordToValue(pX, out x, false);
+            LC_1.ViewXY.YAxes[0].CoordToValue(pY, out y);
             AxisX secondaryXAxis = LC_1.ViewXY.XAxes[1];
             AxisY secondaryYAxis = LC_1.ViewXY.YAxes[1];
+            //Disable rendering
+            LC_1.BeginUpdate();
 
-            bool solved = LC_1.ViewXY.PointLineSeries[0].SolveNearestDataPointByCoord(pX, pY, out x, out y, out nearestIndex);
-            if (solved)
-            {
-                //Disable rendering
-                LC_1.BeginUpdate();
+            //Remove exsisting custom x-axis tickmarks
+            DisposeAllAndClear(secondaryXAxis.CustomTicks);
+            secondaryXAxis.CustomTicks.Add(new CustomAxisTick(secondaryXAxis, x, x.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
+            secondaryXAxis.InvalidateCustomTicks();
 
-                //Remove exsisting custom x-axis tickmarks
-                DisposeAllAndClear(secondaryXAxis.CustomTicks);
-                secondaryXAxis.CustomTicks.Add(new CustomAxisTick(secondaryXAxis, x, x.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
-                secondaryXAxis.InvalidateCustomTicks();
+            //Remove exsisting custom y-axis tickmarks
+            DisposeAllAndClear(secondaryYAxis.CustomTicks);
+            secondaryYAxis.CustomTicks.Add(new CustomAxisTick(secondaryYAxis, y, y.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
+            secondaryYAxis.InvalidateCustomTicks();
 
-                //Remove exsisting custom y-axis tickmarks
-                DisposeAllAndClear(secondaryYAxis.CustomTicks);
-                secondaryYAxis.CustomTicks.Add(new CustomAxisTick(secondaryYAxis, y, y.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
-                secondaryYAxis.InvalidateCustomTicks();
-
-                //Allow rendering
-                LC_1.EndUpdate();
-            }
-            else
-            {
-                //Disable rendering
-                LC_1.BeginUpdate();
-
-                //Remove exsisting custom x-axis tickmarks
-                DisposeAllAndClear(secondaryXAxis.CustomTicks);
-                secondaryXAxis.InvalidateCustomTicks();
-
-                //Remove exsisting custom y-axis tickmarks
-                DisposeAllAndClear(secondaryYAxis.CustomTicks);
-                secondaryYAxis.InvalidateCustomTicks();
-
-                //Allow rendering
-                LC_1.EndUpdate();
-            }
+            //Allow rendering
+            LC_1.EndUpdate();
+           
         }
 
         public static void DisposeAllAndClear<T>(List<T> list)
