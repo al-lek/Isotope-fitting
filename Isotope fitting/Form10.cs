@@ -157,13 +157,7 @@ namespace Isotope_fitting
         #endregion
 
         #region tab2 Plot step etc
-        
-
-        
-
-        
-
-       
+               
         private void axisxtickUD_SelectedItemChanged(object sender, EventArgs e)
         {
             switch (xtickUD.SelectedIndex)

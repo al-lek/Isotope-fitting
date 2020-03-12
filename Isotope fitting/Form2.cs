@@ -160,9 +160,9 @@ namespace Isotope_fitting
            BorderStyle = BorderStyle.FixedSingle,
             CheckBoxes = true,
             HideSelection = false,
-            Location = new System.Drawing.Point(2, 104),
+            Location = new System.Drawing.Point(1, 104),
             Name = "frag_tree",
-            Size = new System.Drawing.Size(360, 304),
+            Size = new System.Drawing.Size(355, 304),
             TabIndex = 10000011,
             Visible = false ,ShowNodeToolTips=false};
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
@@ -3664,31 +3664,31 @@ namespace Isotope_fitting
         /// </summary>
         private void fit_set_graph_zoomed(TreeNode node)
         {
-            if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
-            {
-                string[] idx_str_arr = new string[2];
-                string idx_str = node.Name;
-                if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
-                else idx_str_arr = node.Parent.Text.Split('-');
-                double min_border = dParser(idx_str_arr[0]);
-                double max_border = dParser(idx_str_arr[1]);
-                iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
-                if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
-                {
-                    try
-                    {
-                        double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
-                        iso_plot.Model.Axes[0].Zoom(-100, pt0 * 1.2);
-                    }
-                    catch
-                    {
+            //if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
+            //{
+            //    string[] idx_str_arr = new string[2];
+            //    string idx_str = node.Name;
+            //    if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
+            //    else idx_str_arr = node.Parent.Text.Split('-');
+            //    double min_border = dParser(idx_str_arr[0]);
+            //    double max_border = dParser(idx_str_arr[1]);
+            //    iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
+            //    if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+            //    {
+            //        try
+            //        {
+            //            double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
+            //            iso_plot.Model.Axes[0].Zoom(-100, pt0 * 1.2);
+            //        }
+            //        catch
+            //        {
 
-                    }
+            //        }
                     
-                }
-                iso_plot.Refresh();
-                invalidate_all();
-            }                     
+            //    }
+            //    iso_plot.Refresh();
+            //    invalidate_all();
+            //}                     
         }
         /// <summary>
         /// BUTTON unckeck all fit nodes 

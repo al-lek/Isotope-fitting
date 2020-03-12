@@ -128,13 +128,18 @@
             0,
             65536});
             this.ppm_numUD.Location = new System.Drawing.Point(143, 18);
+            this.ppm_numUD.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.ppm_numUD.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.ppm_numUD.Name = "ppm_numUD";
-            this.ppm_numUD.Size = new System.Drawing.Size(40, 20);
+            this.ppm_numUD.Size = new System.Drawing.Size(80, 20);
             this.ppm_numUD.TabIndex = 7;
             this.ppm_numUD.Value = new decimal(new int[] {
             1,
