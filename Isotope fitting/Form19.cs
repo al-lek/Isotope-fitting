@@ -19,13 +19,14 @@ namespace Isotope_fitting
             frm2 = f;
             ppm_numUD.TextChanged += new EventHandler(ppm_numUD_TextChanged);
             fragGrps_numUD.TextChanged += new EventHandler(fragGrps_numUD_TextChanged);
+            thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
             ppm_numUD.Value = (decimal)frm2.ppmError;
             fragGrps_numUD.Value = (decimal)frm2.frag_mzGroups;
             update_peakSelection_rule(true);
             foreach (RadioButton rdBtn in entire_grpBx.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(); };
             entire_chkBx.Checked = frm2.entire_spectrum;
             regions_chkBx.Checked = !frm2.entire_spectrum;
-
+            thre_numUD.Value = (decimal)frm2.threshold;
             //ppm region controls
             num_min_1.TextChanged += new EventHandler(num_min_1_TextChanged);
             num_min_2.TextChanged += new EventHandler(num_min_2_TextChanged);
@@ -47,7 +48,13 @@ namespace Isotope_fitting
             ppm_6.TextChanged += new EventHandler(ppm_6_TextChanged);
             update_specific_region();
         }
-
+        void thre_numUD_TextChanged(object sender, EventArgs e)
+        {
+            if (thre_numUD.ActiveControl != null && !string.IsNullOrEmpty(thre_numUD.ActiveControl.Text))
+            {
+                frm2.threshold = double.Parse(thre_numUD.ActiveControl.Text);
+            }
+        }
         private void save_Btn_Click(object sender, EventArgs e)
         {
             this.Close();

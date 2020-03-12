@@ -32,6 +32,8 @@
             System.Windows.Forms.ColumnHeader z_clmn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.thre_numUD = new System.Windows.Forms.NumericUpDown();
             this.resolution_Box = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
@@ -40,6 +42,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.check_all_boxBtn = new System.Windows.Forms.ToolStripButton();
             this.uncheck_all_boxBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.frag_Label = new System.Windows.Forms.Label();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.M_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -124,9 +127,9 @@
             this.plot_Btn = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
             this.FragCalc_TabControl.SuspendLayout();
             this.Frag_tab.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -146,6 +149,8 @@
             this.panel_calc.AutoScroll = true;
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.White;
+            this.panel_calc.Controls.Add(this.label8);
+            this.panel_calc.Controls.Add(this.thre_numUD);
             this.panel_calc.Controls.Add(this.resolution_Box);
             this.panel_calc.Controls.Add(this.label1);
             this.panel_calc.Controls.Add(this.ignore_ppm_form9);
@@ -165,8 +170,47 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(331, 709);
+            this.panel_calc.Size = new System.Drawing.Size(331, 728);
             this.panel_calc.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label8.Location = new System.Drawing.Point(3, 683);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(152, 13);
+            this.label8.TabIndex = 64;
+            this.label8.Text = "Relative abundance threshold:";
+            // 
+            // thre_numUD
+            // 
+            this.thre_numUD.DecimalPlaces = 1;
+            this.thre_numUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.thre_numUD.Location = new System.Drawing.Point(165, 681);
+            this.thre_numUD.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.thre_numUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.thre_numUD.Name = "thre_numUD";
+            this.thre_numUD.Size = new System.Drawing.Size(80, 20);
+            this.thre_numUD.TabIndex = 63;
+            this.thre_numUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // resolution_Box
             // 
@@ -290,6 +334,18 @@
             this.uncheck_all_boxBtn.Size = new System.Drawing.Size(91, 24);
             this.uncheck_all_boxBtn.Text = "uncheck all";
             this.uncheck_all_boxBtn.Click += new System.EventHandler(this.uncheck_all_boxBtn_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.BackColor = System.Drawing.Color.SteelBlue;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(65, 24);
+            this.toolStripButton1.Text = "Clear Data";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // frag_Label
             // 
@@ -1001,7 +1057,7 @@
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(0, 685);
+            this.calc_Btn.Location = new System.Drawing.Point(0, 704);
             this.calc_Btn.Name = "calc_Btn";
             this.calc_Btn.Size = new System.Drawing.Size(331, 24);
             this.calc_Btn.TabIndex = 41;
@@ -1133,7 +1189,7 @@
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.insert_Btn.Location = new System.Drawing.Point(0, 0);
             this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(171, 24);
+            this.insert_Btn.Size = new System.Drawing.Size(168, 24);
             this.insert_Btn.TabIndex = 53;
             this.insert_Btn.Text = "Insert in Frag.List";
             this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
@@ -1170,7 +1226,7 @@
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.factor_panel9.Location = new System.Drawing.Point(331, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(409, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(406, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -1194,7 +1250,7 @@
             this.fragListView9.Location = new System.Drawing.Point(331, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(409, 648);
+            this.fragListView9.Size = new System.Drawing.Size(406, 667);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -1232,9 +1288,9 @@
             this.panel1.Controls.Add(this.rem_Btn);
             this.panel1.Controls.Add(this.plot_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(331, 685);
+            this.panel1.Location = new System.Drawing.Point(331, 704);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(409, 24);
+            this.panel1.Size = new System.Drawing.Size(406, 24);
             this.panel1.TabIndex = 56;
             // 
             // rem_Btn
@@ -1244,7 +1300,7 @@
             this.rem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.rem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rem_Btn.Location = new System.Drawing.Point(171, 0);
+            this.rem_Btn.Location = new System.Drawing.Point(168, 0);
             this.rem_Btn.Name = "rem_Btn";
             this.rem_Btn.Size = new System.Drawing.Size(119, 24);
             this.rem_Btn.TabIndex = 55;
@@ -1260,7 +1316,7 @@
             this.plot_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plot_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plot_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.plot_Btn.Location = new System.Drawing.Point(290, 0);
+            this.plot_Btn.Location = new System.Drawing.Point(287, 0);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(119, 24);
             this.plot_Btn.TabIndex = 54;
@@ -1269,23 +1325,11 @@
             this.plot_Btn.UseVisualStyleBackColor = false;
             this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
             // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.BackColor = System.Drawing.Color.SteelBlue;
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(65, 24);
-            this.toolStripButton1.Text = "Clear Data";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(740, 709);
+            this.ClientSize = new System.Drawing.Size(737, 728);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel1);
@@ -1299,6 +1343,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).EndInit();
             this.FragCalc_TabControl.ResumeLayout(false);
             this.Frag_tab.ResumeLayout(false);
             this.Frag_tab.PerformLayout();
@@ -1411,5 +1456,7 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.TextBox filename_txtBx;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown thre_numUD;
     }
 }

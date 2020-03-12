@@ -22,7 +22,8 @@ namespace Isotope_fitting
     public partial class Form9 : Form
     {
         Form2 frm2;
-        private double ppmError9=8.0;        
+        private double ppmError9=8.0;
+        private double thres9 = 0.01;
         private bool[] selection_rule9 = new bool[] { true, false, false, false, false, false };
         private ListViewItemComparer _lvwItemComparer;
         Stopwatch sw1 = new Stopwatch();
@@ -51,7 +52,7 @@ namespace Isotope_fitting
             //    ppmError9 = (double)ppm9_numUD.Value;
             //};
             ppm9_numUD.Value =(decimal)ppmError9;
-
+            thre_numUD.Value = (decimal)thres9;
             one_rdBtn9.CheckedChanged += (s, e) => { selection_rule9[0]=one_rdBtn9.Checked; };
             two_rdBtn.CheckedChanged += (s, e) => { selection_rule9[1] =two_rdBtn.Checked; };
             three_rdBtn.CheckedChanged += (s, e) => { selection_rule9[2] =three_rdBtn.Checked; };
@@ -83,8 +84,15 @@ namespace Isotope_fitting
             idxTo_Box.MouseClick += (s, e) => { idxTo_Box.Focus(); };
             mzMax_Box.MouseClick += (s, e) => { mzMax_Box.Focus(); };
             mzMin_Box.MouseClick += (s, e) => { mzMin_Box.Focus(); };
+            thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
         }
-
+        void thre_numUD_TextChanged(object sender, EventArgs e)
+        {
+            if (thre_numUD.ActiveControl != null && !string.IsNullOrEmpty(thre_numUD.ActiveControl.Text))
+            {
+                thres9 = Double.Parse(thre_numUD.ActiveControl.Text);
+            }
+        }
         private void initialize_data()
         {
             if (Fragments3.Count > 0) Fragments3.Clear();
@@ -564,7 +572,7 @@ namespace Isotope_fitting
             short algo = 1;
             int idx = chem.FinalFormula.IndexOf("C");
             if (Char.IsNumber(chem.FinalFormula[idx + 2]) == true && Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
-            ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
+            ChemiForm.Isopattern(chem, 1000000, algo, 0, thres9);
 
             ChemiForm.Envelope(chem);
             ChemiForm.Vdetect(chem);

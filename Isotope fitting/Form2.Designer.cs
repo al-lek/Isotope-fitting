@@ -1402,7 +1402,7 @@ namespace Isotope_fitting
             this.frag_sort_Btn1,
             this.refresh_frag_Btn1,
             this.fragCalc_Btn1});
-            this.fragList_toolStrip.Location = new System.Drawing.Point(155, 49);
+            this.fragList_toolStrip.Location = new System.Drawing.Point(166, 49);
             this.fragList_toolStrip.Name = "fragList_toolStrip";
             this.fragList_toolStrip.Size = new System.Drawing.Size(186, 25);
             this.fragList_toolStrip.TabIndex = 10000018;
@@ -1513,7 +1513,7 @@ namespace Isotope_fitting
             this.show_files_Btn,
             this.statistics_Btn});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(138, 74);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(149, 74);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Size = new System.Drawing.Size(201, 27);
             this.toolStrip_fragList.TabIndex = 10000014;

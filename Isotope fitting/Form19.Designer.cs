@@ -77,6 +77,8 @@
             this.max_ppm_label = new System.Windows.Forms.Label();
             this.ppm_1 = new System.Windows.Forms.NumericUpDown();
             this.save_Btn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.thre_numUD = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fragGrps_numUD)).BeginInit();
             this.entire_grpBx.SuspendLayout();
@@ -99,6 +101,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.num_max_1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_min_1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // ppm_lbl
@@ -832,20 +835,60 @@
             this.save_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.save_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.save_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_Btn.Location = new System.Drawing.Point(0, 232);
+            this.save_Btn.Location = new System.Drawing.Point(0, 251);
             this.save_Btn.Name = "save_Btn";
-            this.save_Btn.Size = new System.Drawing.Size(763, 23);
+            this.save_Btn.Size = new System.Drawing.Size(759, 23);
             this.save_Btn.TabIndex = 4;
             this.save_Btn.Text = "Save";
             this.save_Btn.UseVisualStyleBackColor = false;
             this.save_Btn.Click += new System.EventHandler(this.save_Btn_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(13, 203);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(173, 15);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Relative abundance threshold:";
+            // 
+            // thre_numUD
+            // 
+            this.thre_numUD.DecimalPlaces = 1;
+            this.thre_numUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.thre_numUD.Location = new System.Drawing.Point(187, 200);
+            this.thre_numUD.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.thre_numUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.thre_numUD.Name = "thre_numUD";
+            this.thre_numUD.Size = new System.Drawing.Size(80, 20);
+            this.thre_numUD.TabIndex = 8;
+            this.thre_numUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // Form19
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(763, 255);
+            this.ClientSize = new System.Drawing.Size(759, 274);
             this.ControlBox = false;
+            this.Controls.Add(this.thre_numUD);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.save_Btn);
             this.Controls.Add(this.region_grpBox);
             this.Controls.Add(this.entire_grpBx);
@@ -883,6 +926,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.num_max_1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_min_1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -939,5 +983,7 @@
         private System.Windows.Forms.NumericUpDown num_min_3;
         private System.Windows.Forms.NumericUpDown ppm_3;
         private System.Windows.Forms.Button save_Btn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown thre_numUD;
     }
 }

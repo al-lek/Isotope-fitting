@@ -1406,7 +1406,7 @@ namespace Isotope_fitting
                 }
                 else if (algo == 2)
                 {
-                    Calc_pattern_algo4(chem, threshold, rtm, peak_limit);
+                    Calc_pattern_algo4(chem, threshold, rtm, 100000000000);
                 }
                 else
                 {

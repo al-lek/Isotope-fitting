@@ -40,7 +40,7 @@ namespace Isotope_fitting
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
         public string error_string = String.Empty;
         bool x_charged = false;
-
+        public double threshold = 0.01;
         #region PARAMETER SET TAB FIT
 
         #region old new calculations
@@ -604,6 +604,8 @@ namespace Isotope_fitting
                         ppm_regions.Add(new ppm_area { Chk = string_to_bool(temp[0]), Max = Convert.ToDouble(temp[2]), Min = Convert.ToDouble(temp[1]), Max_ppm = Convert.ToDouble(temp[3]), Rule = Convert.ToInt32(temp[4]) });
                     }
                     entire_spectrum = string_to_bool(preferences[83].Split(':')[1]);
+
+                    threshold = Convert.ToDouble(preferences[84].Split(':')[1]);
                 }
                 catch
                 {
@@ -621,7 +623,7 @@ namespace Isotope_fitting
                     {
                         ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
                     }
-                    entire_spectrum = true;
+                    entire_spectrum = true; threshold = 0.01;
                 }
             }           
         }
@@ -756,6 +758,7 @@ namespace Isotope_fitting
                 preferences[0] += "region "+ (a+1).ToString()+ "(checked,min,max,ppm,rule): " +ppm_regions[a].Chk.ToString()+ "\t"+ ppm_regions[a].Min.ToString() + "\t"+ ppm_regions[a].Max.ToString() + "\t"+ ppm_regions[a].Max_ppm.ToString() + "\t" + ppm_regions[a].Rule.ToString() + "\r\n";
             }
             preferences[0] += "entire spectum: " + entire_spectrum.ToString() + "\r\n";
+            preferences[0] += "threshold: " + threshold.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -1532,7 +1535,7 @@ namespace Isotope_fitting
             if (double.IsNaN(qMin)) qMin = 0.0;
 
             double qMax = txt_to_d(chargeMax_Box);
-            if (double.IsNaN(qMax)) qMax = 25.0;
+            if (double.IsNaN(qMax)) qMax =100.0;
 
             // 2. get checked types
             List<string> types = new List<string>();            
@@ -1718,7 +1721,7 @@ namespace Isotope_fitting
             short algo = 1;
             int idx = chem.FinalFormula.IndexOf("C");
             if (Char.IsNumber(chem.FinalFormula[idx + 2]) == true && Char.IsNumber(chem.FinalFormula[idx + 3]) == true) algo = 2;
-            ChemiForm.Isopattern(chem, 1000000, algo, 0, 0.01);
+            ChemiForm.Isopattern(chem, 1000000, algo, 0,threshold);
 
             ChemiForm.Envelope(chem);            
             ChemiForm.Vdetect(chem);            
