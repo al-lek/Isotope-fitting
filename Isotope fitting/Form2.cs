@@ -13276,15 +13276,7 @@ namespace Isotope_fitting
             axisY_1.ValueType = AxisValueType.Number;
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(LC_1.ViewXY, axisX_1);
-            cursor_1.SnapToPoints = false;
-            //Create annotation for showing the nearest point info
-            AnnotationXY annot = new AnnotationXY(v, axisX_1, axisY_1);
-            annot.TargetCoordinateSystem = AnnotationTargetCoordinates.AxisValues;
-            annot.Visible = false; //Don't show before the data point has been found
-            annot.MouseInteraction = false;
-            annot.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
-            annot.LocationRelativeOffset.X = 0; // 30;
-            LC_1.ViewXY.Annotations.Add(annot);
+            cursor_1.SnapToPoints = false;           
             
             // Create secondary axes, to show cursor intersections on axes by using their CustomAxisTicks with one value only. 
             //The CustomAxisTick gets intersection value, nothing else, and shows a major tick, label and grid line on that position.
