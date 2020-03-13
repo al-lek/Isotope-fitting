@@ -1737,16 +1737,20 @@ namespace Isotope_fitting
                 fragment_is_canditate = decision_algorithmFF(chem, cen);
                 if (ignore_ppm)
                 {
-                    chem.Profile.Clear();
+                    chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                     // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                    ChemiForm.Envelope(chem);
+                    ChemiForm.Envelope(chem); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                    ChemiForm.Vdetect(chem);
+                    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
                     add_fragment_to_Fragments2(chem, cen);
                 }
                 else if (fragment_is_canditate)
                 {
-                    chem.Profile.Clear();
+                    chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                     // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                    ChemiForm.Envelope(chem);
+                    ChemiForm.Envelope(chem); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                    ChemiForm.Vdetect(chem);
+                    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
                     add_fragment_to_Fragments2(chem, cen);
                 }                
             }
@@ -1755,9 +1759,11 @@ namespace Isotope_fitting
                 fragment_is_canditate = decision_algorithm(chem, cen);
                 if (fragment_is_canditate)
                 {
-                    chem.Profile.Clear();
+                    chem.Profile.Clear();chem.Centroid.Clear(); chem.Intensoid.Clear();
                     // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                    ChemiForm.Envelope(chem);
+                    ChemiForm.Envelope(chem); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                    ChemiForm.Vdetect(chem);
+                    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
                     add_fragment_to_Fragments2(chem, cen);
                 }
             }                  
@@ -2922,7 +2928,7 @@ namespace Isotope_fitting
             for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i] * 1e2; }
 
             double epsx = 0.000001;
-            int maxits = 10000;
+            int maxits = 1000000;
             alglib.minlmstate state;
             alglib.minlmreport rep;
 

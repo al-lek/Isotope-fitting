@@ -586,8 +586,10 @@ namespace Isotope_fitting
             // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)            
             if (fragment_is_canditate)
             {
-                chem.Profile.Clear();
+                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                 ChemiForm.Envelope(chem);
+                ChemiForm.Vdetect(chem);
+                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
                 add_fragment_to_Fragments3(chem,cen);return;
             }
             else if (ignore_ppm_form9.Checked)
@@ -595,8 +597,10 @@ namespace Isotope_fitting
                 //chem.Profile.Clear();
                 //ChemiForm.Envelope(chem);               
                 //MessageBox.Show(chem.Name+ " is out of ppm bounds.");
-                chem.Profile.Clear();
+                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                 ChemiForm.Envelope(chem);
+                ChemiForm.Vdetect(chem);
+                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
                 add_fragment_to_Fragments3(chem, cen);
                 return;
             }
