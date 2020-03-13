@@ -86,8 +86,8 @@
             // 
             // Form3
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(266, 144);
             this.Controls.Add(this.sw_txtBox);
             this.Controls.Add(this.sw_Btn);
@@ -103,6 +103,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Saving options";
             this.TopMost = true;
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form3_DpiChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -125,6 +125,11 @@ namespace Isotope_fitting
                 x_Box.Text = "";
             }
         }
+
+        private void Form20_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }
 

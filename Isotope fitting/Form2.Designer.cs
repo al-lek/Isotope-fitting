@@ -328,6 +328,8 @@ namespace Isotope_fitting
             this.idxInt_Pnl2 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_extract_btn = new System.Windows.Forms.ToolStripDropDownButton();
+            this.extractPlotToolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -443,6 +445,7 @@ namespace Isotope_fitting
             // 
             // toolStrip_plot
             // 
+            this.toolStrip_plot.AutoSize = false;
             this.toolStrip_plot.BackColor = System.Drawing.Color.Lavender;
             this.toolStrip_plot.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_plot.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1460,7 +1463,7 @@ namespace Isotope_fitting
             this.factor_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.factor_label.AutoSize = true;
             this.factor_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.factor_label.Location = new System.Drawing.Point(39, 6);
+            this.factor_label.Location = new System.Drawing.Point(37, 6);
             this.factor_label.Name = "factor_label";
             this.factor_label.Size = new System.Drawing.Size(37, 13);
             this.factor_label.TabIndex = 36;
@@ -1487,7 +1490,7 @@ namespace Isotope_fitting
             this.fragStorage_Lbl.AutoSize = true;
             this.fragStorage_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fragStorage_Lbl.ForeColor = System.Drawing.Color.SteelBlue;
-            this.fragStorage_Lbl.Location = new System.Drawing.Point(2, 456);
+            this.fragStorage_Lbl.Location = new System.Drawing.Point(2, 480);
             this.fragStorage_Lbl.Name = "fragStorage_Lbl";
             this.fragStorage_Lbl.Size = new System.Drawing.Size(122, 17);
             this.fragStorage_Lbl.TabIndex = 10000017;
@@ -1513,7 +1516,7 @@ namespace Isotope_fitting
             this.show_files_Btn,
             this.statistics_Btn});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(148, 74);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(146, 74);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Size = new System.Drawing.Size(201, 27);
             this.toolStrip_fragList.TabIndex = 10000014;
@@ -1615,9 +1618,9 @@ namespace Isotope_fitting
             this.factor_panel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.factor_panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.factor_panel.Location = new System.Drawing.Point(2, 414);
+            this.factor_panel.Location = new System.Drawing.Point(2, 438);
             this.factor_panel.Name = "factor_panel";
-            this.factor_panel.Size = new System.Drawing.Size(353, 39);
+            this.factor_panel.Size = new System.Drawing.Size(351, 39);
             this.factor_panel.TabIndex = 10000013;
             // 
             // fragTypes_tree
@@ -1626,16 +1629,16 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fragTypes_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fragTypes_tree.CheckBoxes = true;
-            this.fragTypes_tree.Location = new System.Drawing.Point(2, 477);
+            this.fragTypes_tree.Location = new System.Drawing.Point(2, 500);
             this.fragTypes_tree.Name = "fragTypes_tree";
-            this.fragTypes_tree.Size = new System.Drawing.Size(353, 299);
+            this.fragTypes_tree.Size = new System.Drawing.Size(351, 276);
             this.fragTypes_tree.TabIndex = 10000012;
             this.fragTypes_tree.Visible = false;
             // 
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(129, 726);
+            this.remPlot_Btn.Location = new System.Drawing.Point(127, 726);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1647,7 +1650,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(219, 726);
+            this.plot_Btn.Location = new System.Drawing.Point(217, 726);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -1675,9 +1678,9 @@ namespace Isotope_fitting
             this.frag_listView.GridLines = true;
             this.frag_listView.HideSelection = false;
             this.frag_listView.LabelEdit = true;
-            this.frag_listView.Location = new System.Drawing.Point(0, 104);
+            this.frag_listView.Location = new System.Drawing.Point(1, 104);
             this.frag_listView.Name = "frag_listView";
-            this.frag_listView.Size = new System.Drawing.Size(355, 304);
+            this.frag_listView.Size = new System.Drawing.Size(352, 328);
             this.frag_listView.TabIndex = 41;
             this.frag_listView.UseCompatibleStateImageBehavior = false;
             this.frag_listView.View = System.Windows.Forms.View.Details;
@@ -1757,7 +1760,7 @@ namespace Isotope_fitting
             this.saveListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.saveListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveListBtn1.ForeColor = System.Drawing.Color.White;
-            this.saveListBtn1.Location = new System.Drawing.Point(104, 3);
+            this.saveListBtn1.Location = new System.Drawing.Point(102, 3);
             this.saveListBtn1.Name = "saveListBtn1";
             this.saveListBtn1.Size = new System.Drawing.Size(60, 22);
             this.saveListBtn1.TabIndex = 10000004;
@@ -1775,7 +1778,7 @@ namespace Isotope_fitting
             this.loadListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadListBtn1.ForeColor = System.Drawing.Color.White;
-            this.loadListBtn1.Location = new System.Drawing.Point(170, 3);
+            this.loadListBtn1.Location = new System.Drawing.Point(168, 3);
             this.loadListBtn1.Name = "loadListBtn1";
             this.loadListBtn1.Size = new System.Drawing.Size(60, 22);
             this.loadListBtn1.TabIndex = 10000005;
@@ -1793,7 +1796,7 @@ namespace Isotope_fitting
             this.clearListBtn1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.clearListBtn1.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clearListBtn1.ForeColor = System.Drawing.Color.White;
-            this.clearListBtn1.Location = new System.Drawing.Point(236, 3);
+            this.clearListBtn1.Location = new System.Drawing.Point(234, 3);
             this.clearListBtn1.Name = "clearListBtn1";
             this.clearListBtn1.Size = new System.Drawing.Size(60, 22);
             this.clearListBtn1.TabIndex = 10000006;
@@ -1807,7 +1810,7 @@ namespace Isotope_fitting
             // 
             this.factor_Box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.factor_Box.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.factor_Box.Location = new System.Drawing.Point(39, 23);
+            this.factor_Box.Location = new System.Drawing.Point(37, 23);
             this.factor_Box.Name = "factor_Box";
             this.factor_Box.Size = new System.Drawing.Size(59, 21);
             this.factor_Box.TabIndex = 35;
@@ -2455,11 +2458,12 @@ namespace Isotope_fitting
             this.ppm_toolStrip.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.ppm_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppmSave_Btn,
-            this.ppmCopy_Btn});
+            this.ppmCopy_Btn,
+            this.ppm_extract_btn});
             this.ppm_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.ppm_toolStrip.Location = new System.Drawing.Point(695, 30);
+            this.ppm_toolStrip.Location = new System.Drawing.Point(687, 30);
             this.ppm_toolStrip.Name = "ppm_toolStrip";
-            this.ppm_toolStrip.Size = new System.Drawing.Size(24, 52);
+            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 77);
             this.ppm_toolStrip.TabIndex = 1;
             // 
             // ppmSave_Btn
@@ -2468,7 +2472,7 @@ namespace Isotope_fitting
             this.ppmSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppmSave_Btn.Image")));
             this.ppmSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppmSave_Btn.Name = "ppmSave_Btn";
-            this.ppmSave_Btn.Size = new System.Drawing.Size(22, 22);
+            this.ppmSave_Btn.Size = new System.Drawing.Size(30, 22);
             this.ppmSave_Btn.Text = "Save";
             // 
             // ppmCopy_Btn
@@ -2477,7 +2481,7 @@ namespace Isotope_fitting
             this.ppmCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppmCopy_Btn.Image")));
             this.ppmCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppmCopy_Btn.Name = "ppmCopy_Btn";
-            this.ppmCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.ppmCopy_Btn.Size = new System.Drawing.Size(30, 22);
             this.ppmCopy_Btn.Text = "Copy";
             // 
             // ppm_panel
@@ -3226,7 +3230,7 @@ namespace Isotope_fitting
             this.czcharge_X_Box,
             this.czcharge_Y_Box});
             this.czCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.czCharge_toolStrip.Location = new System.Drawing.Point(552, 531);
+            this.czCharge_toolStrip.Location = new System.Drawing.Point(683, 531);
             this.czCharge_toolStrip.Name = "czCharge_toolStrip";
             this.czCharge_toolStrip.Size = new System.Drawing.Size(43, 175);
             this.czCharge_toolStrip.TabIndex = 24;
@@ -3327,7 +3331,7 @@ namespace Isotope_fitting
             this.bycharge_X_Box,
             this.bycharge_Y_Box});
             this.byCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.byCharge_toolStrip.Location = new System.Drawing.Point(552, 269);
+            this.byCharge_toolStrip.Location = new System.Drawing.Point(683, 269);
             this.byCharge_toolStrip.Name = "byCharge_toolStrip";
             this.byCharge_toolStrip.Size = new System.Drawing.Size(43, 175);
             this.byCharge_toolStrip.TabIndex = 25;
@@ -3428,7 +3432,7 @@ namespace Isotope_fitting
             this.axcharge_X_Box,
             this.axcharge_Y_Box});
             this.axCharge_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.axCharge_toolStrip.Location = new System.Drawing.Point(552, 5);
+            this.axCharge_toolStrip.Location = new System.Drawing.Point(683, 5);
             this.axCharge_toolStrip.Name = "axCharge_toolStrip";
             this.axCharge_toolStrip.Size = new System.Drawing.Size(43, 175);
             this.axCharge_toolStrip.TabIndex = 26;
@@ -3532,7 +3536,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.czCharge_Pnl.Location = new System.Drawing.Point(6, 530);
             this.czCharge_Pnl.Name = "czCharge_Pnl";
-            this.czCharge_Pnl.Size = new System.Drawing.Size(543, 251);
+            this.czCharge_Pnl.Size = new System.Drawing.Size(674, 251);
             this.czCharge_Pnl.TabIndex = 29;
             this.czCharge_Pnl.Resize += new System.EventHandler(this.czCharge_Pnl_Resize);
             // 
@@ -3542,7 +3546,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.byCharge_Pnl.Location = new System.Drawing.Point(6, 267);
             this.byCharge_Pnl.Name = "byCharge_Pnl";
-            this.byCharge_Pnl.Size = new System.Drawing.Size(543, 251);
+            this.byCharge_Pnl.Size = new System.Drawing.Size(674, 251);
             this.byCharge_Pnl.TabIndex = 28;
             this.byCharge_Pnl.Resize += new System.EventHandler(this.byCharge_Pnl_Resize);
             // 
@@ -3552,7 +3556,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.axCharge_Pnl.Location = new System.Drawing.Point(6, 4);
             this.axCharge_Pnl.Name = "axCharge_Pnl";
-            this.axCharge_Pnl.Size = new System.Drawing.Size(543, 251);
+            this.axCharge_Pnl.Size = new System.Drawing.Size(674, 251);
             this.axCharge_Pnl.TabIndex = 27;
             this.axCharge_Pnl.Resize += new System.EventHandler(this.axCharge_Pnl_Resize);
             // 
@@ -3733,7 +3737,7 @@ namespace Isotope_fitting
             this.ax_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ax_toolStrip.Location = new System.Drawing.Point(2, 5);
             this.ax_toolStrip.Name = "ax_toolStrip";
-            this.ax_toolStrip.Size = new System.Drawing.Size(43, 121);
+            this.ax_toolStrip.Size = new System.Drawing.Size(43, 140);
             this.ax_toolStrip.TabIndex = 24;
             // 
             // axSave_Btn
@@ -3770,7 +3774,7 @@ namespace Isotope_fitting
             // styleToolStripMenuItem
             // 
             this.styleToolStripMenuItem.Name = "styleToolStripMenuItem";
-            this.styleToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.styleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.styleToolStripMenuItem.Text = "Style";
             this.styleToolStripMenuItem.ToolTipText = "Format the style of the plots in this tab";
             this.styleToolStripMenuItem.Click += new System.EventHandler(this.styleToolStripMenuItem_Click);
@@ -3778,7 +3782,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem3
             // 
             this.extractPlotToolStripMenuItem3.Name = "extractPlotToolStripMenuItem3";
-            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
             this.extractPlotToolStripMenuItem3.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem3.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem3.Click += new System.EventHandler(this.extractPlotToolStripMenuItem3_Click);
@@ -3807,7 +3811,7 @@ namespace Isotope_fitting
             this.ax_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ax_Pnl.Location = new System.Drawing.Point(48, 4);
             this.ax_Pnl.Name = "ax_Pnl";
-            this.ax_Pnl.Size = new System.Drawing.Size(524, 251);
+            this.ax_Pnl.Size = new System.Drawing.Size(675, 251);
             this.ax_Pnl.TabIndex = 21;
             this.ax_Pnl.Resize += new System.EventHandler(this.ax_Pnl_Resize);
             // 
@@ -3819,7 +3823,7 @@ namespace Isotope_fitting
             this.by_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.by_Pnl.Location = new System.Drawing.Point(48, 267);
             this.by_Pnl.Name = "by_Pnl";
-            this.by_Pnl.Size = new System.Drawing.Size(524, 251);
+            this.by_Pnl.Size = new System.Drawing.Size(675, 251);
             this.by_Pnl.TabIndex = 22;
             this.by_Pnl.Resize += new System.EventHandler(this.by_Pnl_Resize);
             // 
@@ -3831,7 +3835,7 @@ namespace Isotope_fitting
             this.cz_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cz_Pnl.Location = new System.Drawing.Point(48, 530);
             this.cz_Pnl.Name = "cz_Pnl";
-            this.cz_Pnl.Size = new System.Drawing.Size(524, 251);
+            this.cz_Pnl.Size = new System.Drawing.Size(675, 251);
             this.cz_Pnl.TabIndex = 23;
             this.cz_Pnl.Resize += new System.EventHandler(this.cz_Pnl_Resize);
             // 
@@ -4045,7 +4049,7 @@ namespace Isotope_fitting
             this.panel2_intIdxTo.Controls.Add(this.idxInt_Pnl2);
             this.panel2_intIdxTo.Location = new System.Drawing.Point(31, 3);
             this.panel2_intIdxTo.Name = "panel2_intIdxTo";
-            this.panel2_intIdxTo.Size = new System.Drawing.Size(1467, 327);
+            this.panel2_intIdxTo.Size = new System.Drawing.Size(1467, 325);
             this.panel2_intIdxTo.TabIndex = 28;
             // 
             // idxPnl2
@@ -4055,7 +4059,7 @@ namespace Isotope_fitting
             this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPnl2.Location = new System.Drawing.Point(0, 0);
             this.idxPnl2.Name = "idxPnl2";
-            this.idxPnl2.Size = new System.Drawing.Size(1229, 327);
+            this.idxPnl2.Size = new System.Drawing.Size(1229, 325);
             this.idxPnl2.TabIndex = 29;
             // 
             // splitter3
@@ -4063,7 +4067,7 @@ namespace Isotope_fitting
             this.splitter3.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter3.Location = new System.Drawing.Point(1229, 0);
             this.splitter3.Name = "splitter3";
-            this.splitter3.Size = new System.Drawing.Size(3, 327);
+            this.splitter3.Size = new System.Drawing.Size(3, 325);
             this.splitter3.TabIndex = 28;
             this.splitter3.TabStop = false;
             // 
@@ -4074,7 +4078,7 @@ namespace Isotope_fitting
             this.idxInt_Pnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxInt_Pnl2.Location = new System.Drawing.Point(1232, 0);
             this.idxInt_Pnl2.Name = "idxInt_Pnl2";
-            this.idxInt_Pnl2.Size = new System.Drawing.Size(235, 327);
+            this.idxInt_Pnl2.Size = new System.Drawing.Size(235, 325);
             this.idxInt_Pnl2.TabIndex = 26;
             // 
             // toolStripButton4
@@ -4085,6 +4089,24 @@ namespace Isotope_fitting
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
+            // 
+            // ppm_extract_btn
+            // 
+            this.ppm_extract_btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ppm_extract_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.extractPlotToolStripMenuItem9});
+            this.ppm_extract_btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_extract_btn.Image")));
+            this.ppm_extract_btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_extract_btn.Name = "ppm_extract_btn";
+            this.ppm_extract_btn.Size = new System.Drawing.Size(30, 22);
+            this.ppm_extract_btn.Text = "toolStripButton10";
+            // 
+            // extractPlotToolStripMenuItem9
+            // 
+            this.extractPlotToolStripMenuItem9.Name = "extractPlotToolStripMenuItem9";
+            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(180, 22);
+            this.extractPlotToolStripMenuItem9.Text = "Extract plot";
+            this.extractPlotToolStripMenuItem9.Click += new System.EventHandler(this.extractPlotToolStripMenuItem9_Click);
             // 
             // Form2
             // 
@@ -4098,11 +4120,11 @@ namespace Isotope_fitting
             this.Name = "Form2";
             this.Text = "Peak Finder v21";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
             this.tabControl1.ResumeLayout(false);
             this.tabFit.ResumeLayout(false);
             this.plots_grpBox.ResumeLayout(false);
-            this.plots_grpBox.PerformLayout();
             this.toolStrip_plot.ResumeLayout(false);
             this.toolStrip_plot.PerformLayout();
             this.user_grpBox.ResumeLayout(false);
@@ -4480,5 +4502,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton refresh_frag_Btn1;
         private System.Windows.Forms.ToolStripButton statistics_Btn;
         private System.Windows.Forms.ToolStripButton seq_coverageBtn;
+        private System.Windows.Forms.ToolStripDropDownButton ppm_extract_btn;
+        private System.Windows.Forms.ToolStripMenuItem extractPlotToolStripMenuItem9;
     }
 }

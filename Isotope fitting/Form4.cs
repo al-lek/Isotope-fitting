@@ -288,5 +288,10 @@ namespace Isotope_fitting
             resListView.EndUpdate();
             changed = false;
         }
+
+        private void Form4_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

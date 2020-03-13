@@ -518,8 +518,8 @@
             // 
             // Form13
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(559, 254);
             this.Controls.Add(this.bar_grpBox13);
             this.Controls.Add(this.tickmark_grpBx13);
@@ -531,6 +531,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Internal Fragments\' plot format";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form13_DpiChanged);
             this.bar_grpBox13.ResumeLayout(false);
             this.bar_grpBox13.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.intLine_numUD13)).EndInit();

@@ -142,8 +142,8 @@
             // 
             // Form16
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1198, 565);
             this.Controls.Add(this.seq_tabControl);
             this.Controls.Add(this.seq_Btn);
@@ -152,6 +152,7 @@
             this.MinimizeBox = false;
             this.Name = "Form16";
             this.Text = "AA amino acid sequence Editor";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form16_DpiChanged);
             this.seq_tabControl.ResumeLayout(false);
             this.seq_tab.ResumeLayout(false);
             this.seq_tab.PerformLayout();

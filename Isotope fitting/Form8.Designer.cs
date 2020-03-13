@@ -61,8 +61,8 @@
             // 
             // Form8
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(196, 45);
             this.Controls.Add(this.minIntensity_numUD);
             this.Controls.Add(this.minIntensity_lbl);
@@ -74,6 +74,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Peak Detection Settings";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form8_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

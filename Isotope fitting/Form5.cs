@@ -79,6 +79,11 @@ namespace Isotope_fitting
             }
             Clipboard.SetText(sb.ToString());
         }
+
+        private void Form5_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 
     #region Comparer class

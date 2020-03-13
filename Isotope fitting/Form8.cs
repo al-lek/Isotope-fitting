@@ -30,5 +30,10 @@ namespace Isotope_fitting
                 Form2.min_intes = double.Parse(minIntensity_numUD.ActiveControl.Text);
             }
         }
+
+        private void Form8_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

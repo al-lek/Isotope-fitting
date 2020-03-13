@@ -123,7 +123,7 @@
             this.x_Box.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.x_Box.Name = "x_Box";
             this.x_Box.Size = new System.Drawing.Size(40, 22);
-            this.x_Box.TextChanged += new System.EventHandler(this.x_Box_TextChanged);
+            this.x_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.x_Box_KeyUp);
             // 
             // y_Box
             // 
@@ -131,12 +131,12 @@
             this.y_Box.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.y_Box.Name = "y_Box";
             this.y_Box.Size = new System.Drawing.Size(40, 22);
-            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
+            this.y_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.y_Box_KeyUp);
             // 
             // Form15
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1285, 530);
@@ -149,6 +149,7 @@
             this.Name = "Form15";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Extract Plot";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form15_DpiChanged);
             this.Resize += new System.EventHandler(this.Form15_Resize);
             this.panel_frm11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

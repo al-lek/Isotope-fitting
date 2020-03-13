@@ -322,6 +322,11 @@ namespace Isotope_fitting
         {
             frm2.ppm_regions[5].Rule = selection_list_6.SelectedIndex;
         }
-        #endregion        
+        #endregion
+
+        private void Form19_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

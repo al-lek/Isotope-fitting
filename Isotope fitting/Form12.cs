@@ -289,5 +289,10 @@ namespace Isotope_fitting
             frm2.primary_plots_refresh(true);
         }
         #endregion
+
+        private void Form12_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

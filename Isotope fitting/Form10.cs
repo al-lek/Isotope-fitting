@@ -275,5 +275,10 @@ namespace Isotope_fitting
             frm2.Yminor_grid = y_minor_grid.Checked;
             frm2.oxy_changes();
         }
+
+        private void Form10_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

@@ -728,8 +728,8 @@
             // 
             // Form6
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(361, 431);
             this.Controls.Add(this.sdnew_numUD);
@@ -780,6 +780,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "\'Filter & Sort\' fitting results";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form6_FormClosing);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form6_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.Ai_coef_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.A_coef_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

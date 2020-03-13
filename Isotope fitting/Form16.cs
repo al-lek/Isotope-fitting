@@ -115,5 +115,10 @@ namespace Isotope_fitting
             else { frm2.light_present = true; }
             this.Close();
         }
+
+        private void Form16_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

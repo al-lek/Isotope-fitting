@@ -19,5 +19,10 @@ namespace Isotope_fitting
             frm2 = f;
             textBox1.Text =frm2.error_string;
         }
+
+        private void Form17_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

@@ -381,5 +381,10 @@ namespace Isotope_fitting
                 thres[6] = double.Parse(sdnew_numUD.ActiveControl.Text);
             }
         }
+
+        private void Form6_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

@@ -1254,5 +1254,10 @@ namespace Isotope_fitting
             if (mult_loaded.Count != 0) { mult_loaded.Clear(); filename_txtBx.Text = string.Empty; }
         }
         #endregion
+
+        private void Form9_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

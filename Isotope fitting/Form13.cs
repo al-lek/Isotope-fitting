@@ -172,5 +172,10 @@ namespace Isotope_fitting
         {
             frm2.int_width = (double)intLine_numUD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
         }
+
+        private void Form13_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

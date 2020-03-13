@@ -128,16 +128,21 @@
             this.ppmDi_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppmDi_numUD.ForeColor = System.Drawing.Color.Transparent;
             this.ppmDi_numUD.Increment = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
             65536});
             this.ppmDi_numUD.Location = new System.Drawing.Point(276, 109);
             this.ppmDi_numUD.Maximum = new decimal(new int[] {
-            50,
+            10000000,
             0,
             0,
             0});
+            this.ppmDi_numUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.ppmDi_numUD.Name = "ppmDi_numUD";
             this.ppmDi_numUD.Size = new System.Drawing.Size(39, 16);
             this.ppmDi_numUD.TabIndex = 24;
@@ -160,8 +165,8 @@
             // 
             // Form7
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(334, 139);
             this.Controls.Add(this.ppmDi_numUD);
@@ -177,6 +182,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fitting calculations";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form7_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppmDi_numUD)).EndInit();

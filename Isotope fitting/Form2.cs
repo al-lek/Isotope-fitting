@@ -36,8 +36,8 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
-        LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
-        LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
+        LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Dpi };
+        LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Dpi };
         public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
@@ -160,9 +160,9 @@ namespace Isotope_fitting
            BorderStyle = BorderStyle.FixedSingle,
             CheckBoxes = true,
             HideSelection = false,
-            Location = new System.Drawing.Point(1, 104),
+            Location = new System.Drawing.Point(2, 104),
             Name = "frag_tree",
-            Size = new System.Drawing.Size(355, 304),
+            Size = new System.Drawing.Size(352, 328),
             TabIndex = 10000011,
             Visible = false ,ShowNodeToolTips=false};
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
@@ -13799,6 +13799,70 @@ namespace Isotope_fitting
             //idx is the all_data structure index not the Fragments2 index
             Color clr = Color.FromArgb(custom_colors[idx]);
             return clr;
+        }
+
+        private void Form2_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
+
+
+
+
+
+
+
+
+
+
+        private void extractPlotToolStripMenuItem9_Click(object sender, EventArgs e)
+        {
+            ppm_plotview_rebuild();
+        }
+
+        public void ppm_plotview_rebuild()
+        {
+           PlotView temp_plot = new PlotView() { Name = "temp_plot ", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotModel temp_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal, SubtitleFontSize = 10, SubtitleFont = "Arial" };
+            temp_plot.Model = temp_model;
+            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
+            temp_model.Axes.Add(linearAxis21);
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            temp_model.Axes.Add(linearAxis22);
+            temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
+            refresh_temp_ppm_plot( temp_plot);
+           
+            Form11 frm11 = new Form11(temp_plot);
+            frm11.Show();
+        }
+
+        public void refresh_temp_ppm_plot(PlotView temp_plot)
+        {
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
+            int iondraw_count = IonDraw.Count;
+            var ppmpoints = new CustomDataPoint[iondraw_count];
+            for (int i = 0; i < iondraw_count; i++)
+            {
+                ion nn = IonDraw[i];
+                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
+                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
+                else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }                
+            }
+            temp_series.ItemsSource = ppmpoints;
+            //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
+            // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
+            temp_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}";
+            temp_plot.Model.Series.Add(temp_series);
+            temp_plot.Model.TrackerChanged += (s, e) =>
+            {
+                temp_plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
+                temp_plot.Model.InvalidatePlot(false);
+            };
+            temp_plot.Model.Axes[1].Maximum = iondraw_count + 1; temp_plot.Model.Axes[1].Minimum = 0;
+            temp_plot.InvalidatePlot(true);
         }
     }
 }

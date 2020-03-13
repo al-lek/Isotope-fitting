@@ -126,7 +126,7 @@
             // 
             this.ppm_numUD.DecimalPlaces = 1;
             this.ppm_numUD.Increment = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
             65536});
@@ -140,7 +140,7 @@
             1,
             0,
             0,
-            0});
+            65536});
             this.ppm_numUD.Name = "ppm_numUD";
             this.ppm_numUD.Size = new System.Drawing.Size(80, 20);
             this.ppm_numUD.TabIndex = 7;
@@ -845,6 +845,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(13, 203);
@@ -855,6 +856,7 @@
             // 
             // thre_numUD
             // 
+            this.thre_numUD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.thre_numUD.DecimalPlaces = 2;
             this.thre_numUD.Increment = new decimal(new int[] {
             1,
@@ -883,8 +885,8 @@
             // 
             // Form19
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(759, 274);
             this.ControlBox = false;
             this.Controls.Add(this.thre_numUD);
@@ -902,6 +904,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Fragment selection filters";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form19_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fragGrps_numUD)).EndInit();
             this.entire_grpBx.ResumeLayout(false);

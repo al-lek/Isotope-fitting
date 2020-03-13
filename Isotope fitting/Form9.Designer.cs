@@ -1327,8 +1327,8 @@
             // 
             // Form9
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(737, 728);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
@@ -1341,6 +1341,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fragment Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form9_DpiChanged);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).EndInit();

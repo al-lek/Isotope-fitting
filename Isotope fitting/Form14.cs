@@ -49,5 +49,10 @@ namespace Isotope_fitting
                 frm2.ignore_ppm = false;
             }
         }
+
+        private void Form14_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

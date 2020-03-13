@@ -45,6 +45,7 @@
             this.peak_listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.peak_listView.FullRowSelect = true;
             this.peak_listView.GridLines = true;
+            this.peak_listView.HideSelection = false;
             this.peak_listView.HoverSelection = true;
             this.peak_listView.Location = new System.Drawing.Point(0, 0);
             this.peak_listView.Name = "peak_listView";
@@ -70,8 +71,8 @@
             // 
             // Form5
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(334, 628);
             this.Controls.Add(this.peak_listView);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -82,6 +83,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Peak Detection";
             this.TopMost = true;
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form5_DpiChanged);
             this.ResumeLayout(false);
 
         }

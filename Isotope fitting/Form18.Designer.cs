@@ -71,6 +71,7 @@
             // 
             // button2
             // 
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button2.ForeColor = System.Drawing.Color.Crimson;
             this.button2.Location = new System.Drawing.Point(96, 58);
             this.button2.Name = "button2";
@@ -83,8 +84,8 @@
             // Form18
             // 
             this.AcceptButton = this.button1;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CancelButton = this.button2;
@@ -100,6 +101,7 @@
             this.ShowInTaskbar = false;
             this.Text = "MS file type";
             this.TopMost = true;
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form18_DpiChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

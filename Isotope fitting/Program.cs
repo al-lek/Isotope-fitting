@@ -16,9 +16,9 @@ namespace Isotope_fitting
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main()
         {
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
             Application.EnableVisualStyles();
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);          
             Application.SetCompatibleTextRenderingDefault(false);
 
             Application.Run(new Form2());

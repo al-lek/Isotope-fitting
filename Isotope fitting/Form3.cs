@@ -185,5 +185,10 @@ namespace Isotope_fitting
             Save_selected_windows();
             this.Hide();
         }
+
+        private void Form3_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

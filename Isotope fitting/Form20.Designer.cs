@@ -99,14 +99,15 @@
             // 
             // Form20
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel_frm11);
             this.Controls.Add(this.toolStrip_frm11);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form20";
             this.Text = "Extract Plot";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form20_DpiChanged);
             this.toolStrip_frm11.ResumeLayout(false);
             this.toolStrip_frm11.PerformLayout();
             this.ResumeLayout(false);

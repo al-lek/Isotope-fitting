@@ -63,6 +63,8 @@
             this.refresh10_Btn = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.units_grpBx = new System.Windows.Forms.GroupBox();
+            this.y_minor_grid = new System.Windows.Forms.CheckBox();
+            this.y_major_grid = new System.Windows.Forms.CheckBox();
             this.formatY_numUD = new System.Windows.Forms.NumericUpDown();
             this.formatY_UD = new System.Windows.Forms.DomainUpDown();
             this.formatY_Lbl = new System.Windows.Forms.Label();
@@ -71,6 +73,8 @@
             this.ytickUD = new System.Windows.Forms.DomainUpDown();
             this.axisytick_Lbl = new System.Windows.Forms.Label();
             this.tickmark_grpBx = new System.Windows.Forms.GroupBox();
+            this.x_minor_grid = new System.Windows.Forms.CheckBox();
+            this.x_major_grid = new System.Windows.Forms.CheckBox();
             this.formatX_numUD = new System.Windows.Forms.NumericUpDown();
             this.formatX_UD = new System.Windows.Forms.DomainUpDown();
             this.formatX_Lbl = new System.Windows.Forms.Label();
@@ -78,10 +82,6 @@
             this.intervalX_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
-            this.x_major_grid = new System.Windows.Forms.CheckBox();
-            this.x_minor_grid = new System.Windows.Forms.CheckBox();
-            this.y_minor_grid = new System.Windows.Forms.CheckBox();
-            this.y_major_grid = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.fit_grpBx.SuspendLayout();
@@ -659,6 +659,34 @@
             this.units_grpBx.TabStop = false;
             this.units_grpBx.Text = "Axis Y";
             // 
+            // y_minor_grid
+            // 
+            this.y_minor_grid.AutoSize = true;
+            this.y_minor_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.y_minor_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_minor_grid.ForeColor = System.Drawing.Color.Black;
+            this.y_minor_grid.Location = new System.Drawing.Point(130, 142);
+            this.y_minor_grid.Name = "y_minor_grid";
+            this.y_minor_grid.Size = new System.Drawing.Size(104, 19);
+            this.y_minor_grid.TabIndex = 25;
+            this.y_minor_grid.Text = "Minor Gridline";
+            this.y_minor_grid.UseVisualStyleBackColor = true;
+            this.y_minor_grid.CheckedChanged += new System.EventHandler(this.y_minor_grid_CheckedChanged);
+            // 
+            // y_major_grid
+            // 
+            this.y_major_grid.AutoSize = true;
+            this.y_major_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.y_major_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.y_major_grid.ForeColor = System.Drawing.Color.Black;
+            this.y_major_grid.Location = new System.Drawing.Point(10, 142);
+            this.y_major_grid.Name = "y_major_grid";
+            this.y_major_grid.Size = new System.Drawing.Size(104, 19);
+            this.y_major_grid.TabIndex = 24;
+            this.y_major_grid.Text = "Major Gridline";
+            this.y_major_grid.UseVisualStyleBackColor = true;
+            this.y_major_grid.CheckedChanged += new System.EventHandler(this.y_major_grid_CheckedChanged);
+            // 
             // formatY_numUD
             // 
             this.formatY_numUD.Enabled = false;
@@ -791,6 +819,34 @@
             this.tickmark_grpBx.TabStop = false;
             this.tickmark_grpBx.Text = "Axis X";
             // 
+            // x_minor_grid
+            // 
+            this.x_minor_grid.AutoSize = true;
+            this.x_minor_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.x_minor_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_minor_grid.ForeColor = System.Drawing.Color.Black;
+            this.x_minor_grid.Location = new System.Drawing.Point(122, 142);
+            this.x_minor_grid.Name = "x_minor_grid";
+            this.x_minor_grid.Size = new System.Drawing.Size(104, 19);
+            this.x_minor_grid.TabIndex = 23;
+            this.x_minor_grid.Text = "Minor Gridline";
+            this.x_minor_grid.UseVisualStyleBackColor = true;
+            this.x_minor_grid.CheckedChanged += new System.EventHandler(this.x_minor_grid_CheckedChanged);
+            // 
+            // x_major_grid
+            // 
+            this.x_major_grid.AutoSize = true;
+            this.x_major_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.x_major_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_major_grid.ForeColor = System.Drawing.Color.Black;
+            this.x_major_grid.Location = new System.Drawing.Point(2, 142);
+            this.x_major_grid.Name = "x_major_grid";
+            this.x_major_grid.Size = new System.Drawing.Size(104, 19);
+            this.x_major_grid.TabIndex = 22;
+            this.x_major_grid.Text = "Major Gridline";
+            this.x_major_grid.UseVisualStyleBackColor = true;
+            this.x_major_grid.CheckedChanged += new System.EventHandler(this.x_major_grid_CheckedChanged);
+            // 
             // formatX_numUD
             // 
             this.formatX_numUD.Enabled = false;
@@ -903,66 +959,10 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
-            // x_major_grid
-            // 
-            this.x_major_grid.AutoSize = true;
-            this.x_major_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x_major_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_major_grid.ForeColor = System.Drawing.Color.Black;
-            this.x_major_grid.Location = new System.Drawing.Point(2, 142);
-            this.x_major_grid.Name = "x_major_grid";
-            this.x_major_grid.Size = new System.Drawing.Size(104, 19);
-            this.x_major_grid.TabIndex = 22;
-            this.x_major_grid.Text = "Major Gridline";
-            this.x_major_grid.UseVisualStyleBackColor = true;
-            this.x_major_grid.CheckedChanged += new System.EventHandler(this.x_major_grid_CheckedChanged);
-            // 
-            // x_minor_grid
-            // 
-            this.x_minor_grid.AutoSize = true;
-            this.x_minor_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x_minor_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_minor_grid.ForeColor = System.Drawing.Color.Black;
-            this.x_minor_grid.Location = new System.Drawing.Point(122, 142);
-            this.x_minor_grid.Name = "x_minor_grid";
-            this.x_minor_grid.Size = new System.Drawing.Size(104, 19);
-            this.x_minor_grid.TabIndex = 23;
-            this.x_minor_grid.Text = "Minor Gridline";
-            this.x_minor_grid.UseVisualStyleBackColor = true;
-            this.x_minor_grid.CheckedChanged += new System.EventHandler(this.x_minor_grid_CheckedChanged);
-            // 
-            // y_minor_grid
-            // 
-            this.y_minor_grid.AutoSize = true;
-            this.y_minor_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.y_minor_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_minor_grid.ForeColor = System.Drawing.Color.Black;
-            this.y_minor_grid.Location = new System.Drawing.Point(130, 142);
-            this.y_minor_grid.Name = "y_minor_grid";
-            this.y_minor_grid.Size = new System.Drawing.Size(104, 19);
-            this.y_minor_grid.TabIndex = 25;
-            this.y_minor_grid.Text = "Minor Gridline";
-            this.y_minor_grid.UseVisualStyleBackColor = true;
-            this.y_minor_grid.CheckedChanged += new System.EventHandler(this.y_minor_grid_CheckedChanged);
-            // 
-            // y_major_grid
-            // 
-            this.y_major_grid.AutoSize = true;
-            this.y_major_grid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.y_major_grid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_major_grid.ForeColor = System.Drawing.Color.Black;
-            this.y_major_grid.Location = new System.Drawing.Point(10, 142);
-            this.y_major_grid.Name = "y_major_grid";
-            this.y_major_grid.Size = new System.Drawing.Size(104, 19);
-            this.y_major_grid.TabIndex = 24;
-            this.y_major_grid.Text = "Major Gridline";
-            this.y_major_grid.UseVisualStyleBackColor = true;
-            this.y_major_grid.CheckedChanged += new System.EventHandler(this.y_major_grid_CheckedChanged);
-            // 
             // Form10
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(831, 290);
             this.Controls.Add(this.tabControl1);
@@ -972,6 +972,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Format Plot Area : Style";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form10_FormClosing);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form10_DpiChanged);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.fit_grpBx.ResumeLayout(false);

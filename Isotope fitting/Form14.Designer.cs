@@ -94,8 +94,8 @@
             // 
             // Form14
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.LavenderBlush;
             this.ClientSize = new System.Drawing.Size(173, 101);
             this.Controls.Add(this.ignore_ppm_ChkBx);
@@ -105,6 +105,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form14";
             this.Text = "Load Fragments File ";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form14_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.ppmUD14)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

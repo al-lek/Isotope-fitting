@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form12));
             this.tickmark_grpBx12 = new System.Windows.Forms.GroupBox();
+            this.xstepmajor_UD12 = new System.Windows.Forms.NumericUpDown();
             this.xstepminor_UD12 = new System.Windows.Forms.NumericUpDown();
             this.stepX_Lbl12 = new System.Windows.Forms.Label();
             this.x_minorGrid_UD12 = new System.Windows.Forms.DomainUpDown();
@@ -39,6 +40,9 @@
             this.xtickUD12 = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl12 = new System.Windows.Forms.Label();
             this.units_grpBx12 = new System.Windows.Forms.GroupBox();
+            this.formatY_numUD12 = new System.Windows.Forms.NumericUpDown();
+            this.formatY_UD12 = new System.Windows.Forms.DomainUpDown();
+            this.formatY_Lbl12 = new System.Windows.Forms.Label();
             this.yInterval_UD12 = new System.Windows.Forms.NumericUpDown();
             this.intervalY_Lbl12 = new System.Windows.Forms.Label();
             this.y_minorGrid_UD12 = new System.Windows.Forms.DomainUpDown();
@@ -50,23 +54,9 @@
             this.bar_grpBox = new System.Windows.Forms.GroupBox();
             this.bar_numUD = new System.Windows.Forms.NumericUpDown();
             this.bar_Lbl = new System.Windows.Forms.Label();
-            this.formatY_numUD12 = new System.Windows.Forms.NumericUpDown();
-            this.formatY_UD12 = new System.Windows.Forms.DomainUpDown();
-            this.formatY_Lbl12 = new System.Windows.Forms.Label();
-            this.xstepmajor_UD12 = new System.Windows.Forms.NumericUpDown();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.axisX_Charge_grpBx = new System.Windows.Forms.GroupBox();
-            this.x_charge_stepmajor_UD12 = new System.Windows.Forms.NumericUpDown();
-            this.x_charge_stepminor_UD12 = new System.Windows.Forms.NumericUpDown();
-            this.stepX_charge_Lbl12 = new System.Windows.Forms.Label();
-            this.x_charge_minorGrid_UD12 = new System.Windows.Forms.DomainUpDown();
-            this.x_charge_minorGrid_Lbl12 = new System.Windows.Forms.Label();
-            this.x_charge_majorGrid_UD12 = new System.Windows.Forms.DomainUpDown();
-            this.x_charge_majorGrid_Lbl12 = new System.Windows.Forms.Label();
-            this.x_charge_tickUD12 = new System.Windows.Forms.DomainUpDown();
-            this.axisx_charge_tick_Lbl12 = new System.Windows.Forms.Label();
             this.axisY_Charge_grpBx = new System.Windows.Forms.GroupBox();
             this.y_charge_stepmajor_UD12 = new System.Windows.Forms.NumericUpDown();
             this.y_charge_stepminor_UD12 = new System.Windows.Forms.NumericUpDown();
@@ -77,23 +67,33 @@
             this.y_charge_majorGrid_Lbl12 = new System.Windows.Forms.Label();
             this.y_charge_tickUD12 = new System.Windows.Forms.DomainUpDown();
             this.axisy_charge_tick_Lbl12 = new System.Windows.Forms.Label();
+            this.axisX_Charge_grpBx = new System.Windows.Forms.GroupBox();
+            this.x_charge_stepmajor_UD12 = new System.Windows.Forms.NumericUpDown();
+            this.x_charge_stepminor_UD12 = new System.Windows.Forms.NumericUpDown();
+            this.stepX_charge_Lbl12 = new System.Windows.Forms.Label();
+            this.x_charge_minorGrid_UD12 = new System.Windows.Forms.DomainUpDown();
+            this.x_charge_minorGrid_Lbl12 = new System.Windows.Forms.Label();
+            this.x_charge_majorGrid_UD12 = new System.Windows.Forms.DomainUpDown();
+            this.x_charge_majorGrid_Lbl12 = new System.Windows.Forms.Label();
+            this.x_charge_tickUD12 = new System.Windows.Forms.DomainUpDown();
+            this.axisx_charge_tick_Lbl12 = new System.Windows.Forms.Label();
             this.tickmark_grpBx12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xstepmajor_UD12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xstepminor_UD12)).BeginInit();
             this.units_grpBx12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.formatY_numUD12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yInterval_UD12)).BeginInit();
             this.bar_grpBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bar_numUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.formatY_numUD12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xstepmajor_UD12)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.axisX_Charge_grpBx.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepmajor_UD12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepminor_UD12)).BeginInit();
             this.axisY_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.y_charge_stepmajor_UD12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.y_charge_stepminor_UD12)).BeginInit();
+            this.axisX_Charge_grpBx.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepmajor_UD12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepminor_UD12)).BeginInit();
             this.SuspendLayout();
             // 
             // tickmark_grpBx12
@@ -115,6 +115,30 @@
             this.tickmark_grpBx12.TabIndex = 1;
             this.tickmark_grpBx12.TabStop = false;
             this.tickmark_grpBx12.Text = "Axis X";
+            // 
+            // xstepmajor_UD12
+            // 
+            this.xstepmajor_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xstepmajor_UD12.Location = new System.Drawing.Point(209, 70);
+            this.xstepmajor_UD12.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.xstepmajor_UD12.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.xstepmajor_UD12.Name = "xstepmajor_UD12";
+            this.xstepmajor_UD12.Size = new System.Drawing.Size(48, 20);
+            this.xstepmajor_UD12.TabIndex = 14;
+            this.xstepmajor_UD12.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.xstepmajor_UD12.ValueChanged += new System.EventHandler(this.xstepmajor_UD12_ValueChanged);
             // 
             // xstepminor_UD12
             // 
@@ -240,6 +264,47 @@
             this.units_grpBx12.TabIndex = 2;
             this.units_grpBx12.TabStop = false;
             this.units_grpBx12.Text = "Axis Y";
+            // 
+            // formatY_numUD12
+            // 
+            this.formatY_numUD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_numUD12.Location = new System.Drawing.Point(202, 180);
+            this.formatY_numUD12.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.formatY_numUD12.Name = "formatY_numUD12";
+            this.formatY_numUD12.Size = new System.Drawing.Size(32, 20);
+            this.formatY_numUD12.TabIndex = 22;
+            this.formatY_numUD12.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.formatY_numUD12.ValueChanged += new System.EventHandler(this.formatY_numUD12_ValueChanged);
+            // 
+            // formatY_UD12
+            // 
+            this.formatY_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_UD12.Items.Add("General");
+            this.formatY_UD12.Items.Add("Scientific");
+            this.formatY_UD12.Location = new System.Drawing.Point(114, 180);
+            this.formatY_UD12.Name = "formatY_UD12";
+            this.formatY_UD12.Size = new System.Drawing.Size(85, 20);
+            this.formatY_UD12.TabIndex = 19;
+            this.formatY_UD12.SelectedItemChanged += new System.EventHandler(this.formatY_UD12_SelectedItemChanged);
+            // 
+            // formatY_Lbl12
+            // 
+            this.formatY_Lbl12.AutoSize = true;
+            this.formatY_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.formatY_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.formatY_Lbl12.Location = new System.Drawing.Point(4, 185);
+            this.formatY_Lbl12.Name = "formatY_Lbl12";
+            this.formatY_Lbl12.Size = new System.Drawing.Size(94, 15);
+            this.formatY_Lbl12.TabIndex = 18;
+            this.formatY_Lbl12.Text = "Number Format";
             // 
             // yInterval_UD12
             // 
@@ -405,71 +470,6 @@
             this.bar_Lbl.TabIndex = 27;
             this.bar_Lbl.Text = "\'Intensity\' Bar Width";
             // 
-            // formatY_numUD12
-            // 
-            this.formatY_numUD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatY_numUD12.Location = new System.Drawing.Point(202, 180);
-            this.formatY_numUD12.Maximum = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.formatY_numUD12.Name = "formatY_numUD12";
-            this.formatY_numUD12.Size = new System.Drawing.Size(32, 20);
-            this.formatY_numUD12.TabIndex = 22;
-            this.formatY_numUD12.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.formatY_numUD12.ValueChanged += new System.EventHandler(this.formatY_numUD12_ValueChanged);
-            // 
-            // formatY_UD12
-            // 
-            this.formatY_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatY_UD12.Items.Add("General");
-            this.formatY_UD12.Items.Add("Scientific");
-            this.formatY_UD12.Location = new System.Drawing.Point(114, 180);
-            this.formatY_UD12.Name = "formatY_UD12";
-            this.formatY_UD12.Size = new System.Drawing.Size(85, 20);
-            this.formatY_UD12.TabIndex = 19;
-            this.formatY_UD12.SelectedItemChanged += new System.EventHandler(this.formatY_UD12_SelectedItemChanged);
-            // 
-            // formatY_Lbl12
-            // 
-            this.formatY_Lbl12.AutoSize = true;
-            this.formatY_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.formatY_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.formatY_Lbl12.Location = new System.Drawing.Point(4, 185);
-            this.formatY_Lbl12.Name = "formatY_Lbl12";
-            this.formatY_Lbl12.Size = new System.Drawing.Size(94, 15);
-            this.formatY_Lbl12.TabIndex = 18;
-            this.formatY_Lbl12.Text = "Number Format";
-            // 
-            // xstepmajor_UD12
-            // 
-            this.xstepmajor_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xstepmajor_UD12.Location = new System.Drawing.Point(209, 70);
-            this.xstepmajor_UD12.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.xstepmajor_UD12.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.xstepmajor_UD12.Name = "xstepmajor_UD12";
-            this.xstepmajor_UD12.Size = new System.Drawing.Size(48, 20);
-            this.xstepmajor_UD12.TabIndex = 14;
-            this.xstepmajor_UD12.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.xstepmajor_UD12.ValueChanged += new System.EventHandler(this.xstepmajor_UD12_ValueChanged);
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -505,153 +505,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Charge Plot";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // axisX_Charge_grpBx
-            // 
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_stepmajor_UD12);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_stepminor_UD12);
-            this.axisX_Charge_grpBx.Controls.Add(this.stepX_charge_Lbl12);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_minorGrid_UD12);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_minorGrid_Lbl12);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_majorGrid_UD12);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_majorGrid_Lbl12);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_tickUD12);
-            this.axisX_Charge_grpBx.Controls.Add(this.axisx_charge_tick_Lbl12);
-            this.axisX_Charge_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.axisX_Charge_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
-            this.axisX_Charge_grpBx.Location = new System.Drawing.Point(3, 6);
-            this.axisX_Charge_grpBx.Name = "axisX_Charge_grpBx";
-            this.axisX_Charge_grpBx.Size = new System.Drawing.Size(269, 176);
-            this.axisX_Charge_grpBx.TabIndex = 2;
-            this.axisX_Charge_grpBx.TabStop = false;
-            this.axisX_Charge_grpBx.Text = "Axis X";
-            // 
-            // x_charge_stepmajor_UD12
-            // 
-            this.x_charge_stepmajor_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_stepmajor_UD12.Location = new System.Drawing.Point(209, 70);
-            this.x_charge_stepmajor_UD12.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.x_charge_stepmajor_UD12.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.x_charge_stepmajor_UD12.Name = "x_charge_stepmajor_UD12";
-            this.x_charge_stepmajor_UD12.Size = new System.Drawing.Size(48, 20);
-            this.x_charge_stepmajor_UD12.TabIndex = 14;
-            this.x_charge_stepmajor_UD12.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.x_charge_stepmajor_UD12.ValueChanged += new System.EventHandler(this.x_charge_stepmajor_UD12_ValueChanged);
-            // 
-            // x_charge_stepminor_UD12
-            // 
-            this.x_charge_stepminor_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_stepminor_UD12.Location = new System.Drawing.Point(137, 70);
-            this.x_charge_stepminor_UD12.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.x_charge_stepminor_UD12.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.x_charge_stepminor_UD12.Name = "x_charge_stepminor_UD12";
-            this.x_charge_stepminor_UD12.Size = new System.Drawing.Size(48, 20);
-            this.x_charge_stepminor_UD12.TabIndex = 13;
-            this.x_charge_stepminor_UD12.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.x_charge_stepminor_UD12.ValueChanged += new System.EventHandler(this.x_charge_stepminor_UD12_ValueChanged);
-            // 
-            // stepX_charge_Lbl12
-            // 
-            this.stepX_charge_Lbl12.AutoSize = true;
-            this.stepX_charge_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stepX_charge_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.stepX_charge_Lbl12.Location = new System.Drawing.Point(5, 73);
-            this.stepX_charge_Lbl12.Name = "stepX_charge_Lbl12";
-            this.stepX_charge_Lbl12.Size = new System.Drawing.Size(116, 15);
-            this.stepX_charge_Lbl12.TabIndex = 12;
-            this.stepX_charge_Lbl12.Text = "Step (minor , major)";
-            // 
-            // x_charge_minorGrid_UD12
-            // 
-            this.x_charge_minorGrid_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_minorGrid_UD12.Items.Add("None");
-            this.x_charge_minorGrid_UD12.Items.Add("Solid");
-            this.x_charge_minorGrid_UD12.Location = new System.Drawing.Point(137, 144);
-            this.x_charge_minorGrid_UD12.Name = "x_charge_minorGrid_UD12";
-            this.x_charge_minorGrid_UD12.Size = new System.Drawing.Size(120, 20);
-            this.x_charge_minorGrid_UD12.TabIndex = 11;
-            this.x_charge_minorGrid_UD12.SelectedItemChanged += new System.EventHandler(this.x_charge_minorGrid_UD12_SelectedItemChanged);
-            // 
-            // x_charge_minorGrid_Lbl12
-            // 
-            this.x_charge_minorGrid_Lbl12.AutoSize = true;
-            this.x_charge_minorGrid_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_minorGrid_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_charge_minorGrid_Lbl12.Location = new System.Drawing.Point(36, 147);
-            this.x_charge_minorGrid_Lbl12.Name = "x_charge_minorGrid_Lbl12";
-            this.x_charge_minorGrid_Lbl12.Size = new System.Drawing.Size(85, 15);
-            this.x_charge_minorGrid_Lbl12.TabIndex = 10;
-            this.x_charge_minorGrid_Lbl12.Text = "Minor Gridline";
-            // 
-            // x_charge_majorGrid_UD12
-            // 
-            this.x_charge_majorGrid_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_majorGrid_UD12.Items.Add("None");
-            this.x_charge_majorGrid_UD12.Items.Add("Solid");
-            this.x_charge_majorGrid_UD12.Location = new System.Drawing.Point(137, 107);
-            this.x_charge_majorGrid_UD12.Name = "x_charge_majorGrid_UD12";
-            this.x_charge_majorGrid_UD12.Size = new System.Drawing.Size(120, 20);
-            this.x_charge_majorGrid_UD12.TabIndex = 9;
-            this.x_charge_majorGrid_UD12.SelectedItemChanged += new System.EventHandler(this.x_charge_majorGrid_UD12_SelectedItemChanged);
-            // 
-            // x_charge_majorGrid_Lbl12
-            // 
-            this.x_charge_majorGrid_Lbl12.AutoSize = true;
-            this.x_charge_majorGrid_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_majorGrid_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_charge_majorGrid_Lbl12.Location = new System.Drawing.Point(36, 110);
-            this.x_charge_majorGrid_Lbl12.Name = "x_charge_majorGrid_Lbl12";
-            this.x_charge_majorGrid_Lbl12.Size = new System.Drawing.Size(85, 15);
-            this.x_charge_majorGrid_Lbl12.TabIndex = 8;
-            this.x_charge_majorGrid_Lbl12.Text = "Major Gridline";
-            // 
-            // x_charge_tickUD12
-            // 
-            this.x_charge_tickUD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_charge_tickUD12.Items.Add("None");
-            this.x_charge_tickUD12.Items.Add("Outside");
-            this.x_charge_tickUD12.Items.Add("Inside");
-            this.x_charge_tickUD12.Items.Add("Cross");
-            this.x_charge_tickUD12.Location = new System.Drawing.Point(137, 33);
-            this.x_charge_tickUD12.Name = "x_charge_tickUD12";
-            this.x_charge_tickUD12.Size = new System.Drawing.Size(120, 20);
-            this.x_charge_tickUD12.TabIndex = 2;
-            this.x_charge_tickUD12.SelectedItemChanged += new System.EventHandler(this.x_charge_tickUD12_SelectedItemChanged);
-            // 
-            // axisx_charge_tick_Lbl12
-            // 
-            this.axisx_charge_tick_Lbl12.AutoSize = true;
-            this.axisx_charge_tick_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.axisx_charge_tick_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.axisx_charge_tick_Lbl12.Location = new System.Drawing.Point(55, 36);
-            this.axisx_charge_tick_Lbl12.Name = "axisx_charge_tick_Lbl12";
-            this.axisx_charge_tick_Lbl12.Size = new System.Drawing.Size(66, 15);
-            this.axisx_charge_tick_Lbl12.TabIndex = 0;
-            this.axisx_charge_tick_Lbl12.Text = "Tick Marks";
             // 
             // axisY_Charge_grpBx
             // 
@@ -800,10 +653,157 @@
             this.axisy_charge_tick_Lbl12.TabIndex = 15;
             this.axisy_charge_tick_Lbl12.Text = "Tick Marks";
             // 
+            // axisX_Charge_grpBx
+            // 
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_stepmajor_UD12);
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_stepminor_UD12);
+            this.axisX_Charge_grpBx.Controls.Add(this.stepX_charge_Lbl12);
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_minorGrid_UD12);
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_minorGrid_Lbl12);
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_majorGrid_UD12);
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_majorGrid_Lbl12);
+            this.axisX_Charge_grpBx.Controls.Add(this.x_charge_tickUD12);
+            this.axisX_Charge_grpBx.Controls.Add(this.axisx_charge_tick_Lbl12);
+            this.axisX_Charge_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.axisX_Charge_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
+            this.axisX_Charge_grpBx.Location = new System.Drawing.Point(3, 6);
+            this.axisX_Charge_grpBx.Name = "axisX_Charge_grpBx";
+            this.axisX_Charge_grpBx.Size = new System.Drawing.Size(269, 176);
+            this.axisX_Charge_grpBx.TabIndex = 2;
+            this.axisX_Charge_grpBx.TabStop = false;
+            this.axisX_Charge_grpBx.Text = "Axis X";
+            // 
+            // x_charge_stepmajor_UD12
+            // 
+            this.x_charge_stepmajor_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_stepmajor_UD12.Location = new System.Drawing.Point(209, 70);
+            this.x_charge_stepmajor_UD12.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.x_charge_stepmajor_UD12.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.x_charge_stepmajor_UD12.Name = "x_charge_stepmajor_UD12";
+            this.x_charge_stepmajor_UD12.Size = new System.Drawing.Size(48, 20);
+            this.x_charge_stepmajor_UD12.TabIndex = 14;
+            this.x_charge_stepmajor_UD12.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.x_charge_stepmajor_UD12.ValueChanged += new System.EventHandler(this.x_charge_stepmajor_UD12_ValueChanged);
+            // 
+            // x_charge_stepminor_UD12
+            // 
+            this.x_charge_stepminor_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_stepminor_UD12.Location = new System.Drawing.Point(137, 70);
+            this.x_charge_stepminor_UD12.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.x_charge_stepminor_UD12.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.x_charge_stepminor_UD12.Name = "x_charge_stepminor_UD12";
+            this.x_charge_stepminor_UD12.Size = new System.Drawing.Size(48, 20);
+            this.x_charge_stepminor_UD12.TabIndex = 13;
+            this.x_charge_stepminor_UD12.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.x_charge_stepminor_UD12.ValueChanged += new System.EventHandler(this.x_charge_stepminor_UD12_ValueChanged);
+            // 
+            // stepX_charge_Lbl12
+            // 
+            this.stepX_charge_Lbl12.AutoSize = true;
+            this.stepX_charge_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stepX_charge_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.stepX_charge_Lbl12.Location = new System.Drawing.Point(5, 73);
+            this.stepX_charge_Lbl12.Name = "stepX_charge_Lbl12";
+            this.stepX_charge_Lbl12.Size = new System.Drawing.Size(116, 15);
+            this.stepX_charge_Lbl12.TabIndex = 12;
+            this.stepX_charge_Lbl12.Text = "Step (minor , major)";
+            // 
+            // x_charge_minorGrid_UD12
+            // 
+            this.x_charge_minorGrid_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_minorGrid_UD12.Items.Add("None");
+            this.x_charge_minorGrid_UD12.Items.Add("Solid");
+            this.x_charge_minorGrid_UD12.Location = new System.Drawing.Point(137, 144);
+            this.x_charge_minorGrid_UD12.Name = "x_charge_minorGrid_UD12";
+            this.x_charge_minorGrid_UD12.Size = new System.Drawing.Size(120, 20);
+            this.x_charge_minorGrid_UD12.TabIndex = 11;
+            this.x_charge_minorGrid_UD12.SelectedItemChanged += new System.EventHandler(this.x_charge_minorGrid_UD12_SelectedItemChanged);
+            // 
+            // x_charge_minorGrid_Lbl12
+            // 
+            this.x_charge_minorGrid_Lbl12.AutoSize = true;
+            this.x_charge_minorGrid_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_minorGrid_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.x_charge_minorGrid_Lbl12.Location = new System.Drawing.Point(36, 147);
+            this.x_charge_minorGrid_Lbl12.Name = "x_charge_minorGrid_Lbl12";
+            this.x_charge_minorGrid_Lbl12.Size = new System.Drawing.Size(85, 15);
+            this.x_charge_minorGrid_Lbl12.TabIndex = 10;
+            this.x_charge_minorGrid_Lbl12.Text = "Minor Gridline";
+            // 
+            // x_charge_majorGrid_UD12
+            // 
+            this.x_charge_majorGrid_UD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_majorGrid_UD12.Items.Add("None");
+            this.x_charge_majorGrid_UD12.Items.Add("Solid");
+            this.x_charge_majorGrid_UD12.Location = new System.Drawing.Point(137, 107);
+            this.x_charge_majorGrid_UD12.Name = "x_charge_majorGrid_UD12";
+            this.x_charge_majorGrid_UD12.Size = new System.Drawing.Size(120, 20);
+            this.x_charge_majorGrid_UD12.TabIndex = 9;
+            this.x_charge_majorGrid_UD12.SelectedItemChanged += new System.EventHandler(this.x_charge_majorGrid_UD12_SelectedItemChanged);
+            // 
+            // x_charge_majorGrid_Lbl12
+            // 
+            this.x_charge_majorGrid_Lbl12.AutoSize = true;
+            this.x_charge_majorGrid_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_majorGrid_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.x_charge_majorGrid_Lbl12.Location = new System.Drawing.Point(36, 110);
+            this.x_charge_majorGrid_Lbl12.Name = "x_charge_majorGrid_Lbl12";
+            this.x_charge_majorGrid_Lbl12.Size = new System.Drawing.Size(85, 15);
+            this.x_charge_majorGrid_Lbl12.TabIndex = 8;
+            this.x_charge_majorGrid_Lbl12.Text = "Major Gridline";
+            // 
+            // x_charge_tickUD12
+            // 
+            this.x_charge_tickUD12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x_charge_tickUD12.Items.Add("None");
+            this.x_charge_tickUD12.Items.Add("Outside");
+            this.x_charge_tickUD12.Items.Add("Inside");
+            this.x_charge_tickUD12.Items.Add("Cross");
+            this.x_charge_tickUD12.Location = new System.Drawing.Point(137, 33);
+            this.x_charge_tickUD12.Name = "x_charge_tickUD12";
+            this.x_charge_tickUD12.Size = new System.Drawing.Size(120, 20);
+            this.x_charge_tickUD12.TabIndex = 2;
+            this.x_charge_tickUD12.SelectedItemChanged += new System.EventHandler(this.x_charge_tickUD12_SelectedItemChanged);
+            // 
+            // axisx_charge_tick_Lbl12
+            // 
+            this.axisx_charge_tick_Lbl12.AutoSize = true;
+            this.axisx_charge_tick_Lbl12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.axisx_charge_tick_Lbl12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.axisx_charge_tick_Lbl12.Location = new System.Drawing.Point(55, 36);
+            this.axisx_charge_tick_Lbl12.Name = "axisx_charge_tick_Lbl12";
+            this.axisx_charge_tick_Lbl12.Size = new System.Drawing.Size(66, 15);
+            this.axisx_charge_tick_Lbl12.TabIndex = 0;
+            this.axisx_charge_tick_Lbl12.Text = "Tick Marks";
+            // 
             // Form12
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(566, 266);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -813,28 +813,29 @@
             this.Name = "Form12";
             this.ShowInTaskbar = false;
             this.Text = "Primary Fragments\' plot format";
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form12_DpiChanged);
             this.tickmark_grpBx12.ResumeLayout(false);
             this.tickmark_grpBx12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xstepmajor_UD12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xstepminor_UD12)).EndInit();
             this.units_grpBx12.ResumeLayout(false);
             this.units_grpBx12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.formatY_numUD12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yInterval_UD12)).EndInit();
             this.bar_grpBox.ResumeLayout(false);
             this.bar_grpBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bar_numUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.formatY_numUD12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xstepmajor_UD12)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.axisX_Charge_grpBx.ResumeLayout(false);
-            this.axisX_Charge_grpBx.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepmajor_UD12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepminor_UD12)).EndInit();
             this.axisY_Charge_grpBx.ResumeLayout(false);
             this.axisY_Charge_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.y_charge_stepmajor_UD12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.y_charge_stepminor_UD12)).EndInit();
+            this.axisX_Charge_grpBx.ResumeLayout(false);
+            this.axisX_Charge_grpBx.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepmajor_UD12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.x_charge_stepminor_UD12)).EndInit();
             this.ResumeLayout(false);
 
         }

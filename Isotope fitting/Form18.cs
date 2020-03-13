@@ -44,5 +44,10 @@ namespace Isotope_fitting
         {
             this.Close();
         }
+
+        private void Form18_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

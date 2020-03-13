@@ -142,7 +142,7 @@
             // Form4
             // 
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.loadRes_Btn);
             this.Controls.Add(this.complete_Btn);
             this.Controls.Add(this.centBox);
@@ -159,6 +159,7 @@
             this.MinimizeBox = false;
             this.Name = "Form4";
             this.TopMost = true;
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form4_DpiChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -79,14 +79,14 @@
             this.x_Box.AutoSize = false;
             this.x_Box.Name = "x_Box";
             this.x_Box.Size = new System.Drawing.Size(40, 22);
-            this.x_Box.TextChanged += new System.EventHandler(this.x_Box_TextChanged);
+            this.x_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.x_Box_KeyUp);
             // 
             // y_Box
             // 
             this.y_Box.AutoSize = false;
             this.y_Box.Name = "y_Box";
             this.y_Box.Size = new System.Drawing.Size(40, 22);
-            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
+            this.y_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.y_Box_KeyUp);
             // 
             // panel_frm11
             // 
@@ -101,8 +101,8 @@
             // 
             // Form11
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel_frm11);
             this.Controls.Add(this.toolStrip_frm11);
@@ -114,6 +114,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Extract Plot";
             this.TopMost = true;
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form11_DpiChanged);
             this.Resize += new System.EventHandler(this.Form11_Resize);
             this.toolStrip_frm11.ResumeLayout(false);
             this.toolStrip_frm11.PerformLayout();
