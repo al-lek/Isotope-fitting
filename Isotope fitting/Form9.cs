@@ -44,6 +44,7 @@ namespace Isotope_fitting
             InitializeComponent();
             OnCalcFrag3Completed += () => { Fragments3_to_listview(); };
             ppm9_numUD.TextChanged += new EventHandler(ppm9_numUD_TextChanged);
+            thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
 
@@ -84,7 +85,7 @@ namespace Isotope_fitting
             idxTo_Box.MouseClick += (s, e) => { idxTo_Box.Focus(); };
             mzMax_Box.MouseClick += (s, e) => { mzMax_Box.Focus(); };
             mzMin_Box.MouseClick += (s, e) => { mzMin_Box.Focus(); };
-            thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
+            
         }
         void thre_numUD_TextChanged(object sender, EventArgs e)
         {

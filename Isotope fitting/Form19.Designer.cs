@@ -855,15 +855,15 @@
             // 
             // thre_numUD
             // 
-            this.thre_numUD.DecimalPlaces = 1;
+            this.thre_numUD.DecimalPlaces = 2;
             this.thre_numUD.Increment = new decimal(new int[] {
             1,
             0,
             0,
-            65536});
+            131072});
             this.thre_numUD.Location = new System.Drawing.Point(187, 200);
             this.thre_numUD.Maximum = new decimal(new int[] {
-            10000000,
+            1000,
             0,
             0,
             0});
@@ -871,7 +871,7 @@
             1,
             0,
             0,
-            196608});
+            131072});
             this.thre_numUD.Name = "thre_numUD";
             this.thre_numUD.Size = new System.Drawing.Size(80, 20);
             this.thre_numUD.TabIndex = 8;
@@ -879,7 +879,7 @@
             1,
             0,
             0,
-            0});
+            131072});
             // 
             // Form19
             // 
