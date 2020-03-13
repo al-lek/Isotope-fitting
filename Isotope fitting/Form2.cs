@@ -3508,7 +3508,7 @@ namespace Isotope_fitting
             List<double> UI_intensities = new List<double>();
 
             for (int i = 0; i < subSet.Length; i++)
-                UI_intensities.Add(Fragments2[subSet[i] - 1].Factor * Fragments2[subSet[i] - 1].Max_intensity);
+                UI_intensities.Add(Fragments2[subSet[i] - 1].Factor);
 
             return UI_intensities;
         }
