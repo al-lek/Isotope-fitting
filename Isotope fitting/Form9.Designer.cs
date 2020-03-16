@@ -753,7 +753,7 @@
             this.chemForm_tab.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab.Name = "chemForm_tab";
             this.chemForm_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab.Size = new System.Drawing.Size(323, 480);
+            this.chemForm_tab.Size = new System.Drawing.Size(332, 424);
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
@@ -1038,6 +1038,7 @@
             this.chemForm_txtBox.Name = "chemForm_txtBox";
             this.chemForm_txtBox.Size = new System.Drawing.Size(314, 20);
             this.chemForm_txtBox.TabIndex = 3;
+            this.chemForm_txtBox.TextChanged += new System.EventHandler(this.chemForm_txtBox_TextChanged);
             // 
             // chemForm_Lbl
             // 

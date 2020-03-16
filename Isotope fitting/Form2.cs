@@ -985,7 +985,7 @@ namespace Isotope_fitting
                 ChemFormulas.Clear();               
                 peptide_textBox1.Text = Path.GetFileNameWithoutExtension(fragment_import.FileName);
                 lista.RemoveAt(0);
-                get_precursor_carbons(lista.Last());
+                //get_precursor_carbons(lista.Last());
                 progress_display_start(lista.Count, "Importing fragments list...");
 
                 for (int j = 0; j != (lista.Count); j++)
@@ -1122,7 +1122,7 @@ namespace Isotope_fitting
                 }
                 else substring[0] = ChemFormulas[i].Ion;
 
-                if (substring[0].StartsWith("MH") && ChemFormulas[i].InputFormula.StartsWith(precursor_carbons))  // an internal b could be MHQRP for example, so check also carbons
+                if (substring[0].StartsWith("MH") && c_is_precursor(ChemFormulas[i].InputFormula))  // an internal b could be MHQRP for example, so check also carbons
                 {
                     ChemFormulas[i].Ion_type = "M" + substring[1];
                     ChemFormulas[i].Color = OxyColors.DarkRed;
@@ -1229,6 +1229,78 @@ namespace Isotope_fitting
                     }
                 }
             }
+        }
+        private bool c_is_precursor(string initial_formula)
+        {
+            int amount = 0;
+            bool is_precursor = false;            
+            List<string> element1 = new List<string>();
+            List<int> number1 = new List<int>();
+            int i = 0;
+            string final_formula = "";
+            int counter = 0;
+            do
+            { //check for elements with their atomic number in []
+                int startIndex = 0;
+                int endIndex = 0;
+                int length = 0;
+                if (initial_formula[i] == '[')
+                {
+                    startIndex = i;
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (initial_formula[i] != ']'));
+
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) != true));
+                    endIndex = i - 1;
+                    length = endIndex - startIndex + 1;
+                    element1.Add(initial_formula.Substring(startIndex, length));
+                }
+                if (Char.IsNumber(initial_formula[i]) != true)
+                {
+                    startIndex = i;
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) != true));
+                    i = i - 1;
+                    endIndex = i;
+                    length = endIndex - startIndex + 1;
+                    element1.Add(initial_formula.Substring(startIndex, length));
+                }
+                if (Char.IsNumber(initial_formula[i]))
+                {
+                    startIndex = i;
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) == true));
+                    i = i - 1;
+                    endIndex = i;
+                    length = endIndex - startIndex + 1;
+                    number1.Add(Int32.Parse(initial_formula.Substring(startIndex, length)));
+                }
+                if (element1.Count > 1)
+                {
+                    break;
+                }
+                i++;
+            } while (i < initial_formula.Length);
+            //end while loop
+            if (number1.Count==0)
+            {
+                MessageBox.Show("Couldn't read chemical formula in fragment of ion type 'MH'"); return is_precursor;
+            }
+            if (number1[0]>12)
+            {
+                is_precursor = true;
+            }
+            return is_precursor;
+
         }
         private void assign_manually_pro_fragment(string[] frag_info)
         {
@@ -3103,11 +3175,11 @@ namespace Isotope_fitting
                         if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp; }
                         else { _currentNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp_solution; }
                     }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(e.Node.Name))
-                        { fit_set_graph_zoomed(e.Node); }
-                    }
+                    //else
+                    //{
+                    //    if (string.IsNullOrEmpty(e.Node.Name))
+                    //    { fit_set_graph_zoomed(e.Node); }
+                    //}
                 }
                
             };           
@@ -3694,31 +3766,33 @@ namespace Isotope_fitting
         /// </summary>
         private void fit_set_graph_zoomed(TreeNode node)
         {
-            //if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
-            //{
-            //    string[] idx_str_arr = new string[2];
-            //    string idx_str = node.Name;
-            //    if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
-            //    else idx_str_arr = node.Parent.Text.Split('-');
-            //    double min_border = dParser(idx_str_arr[0]);
-            //    double max_border = dParser(idx_str_arr[1]);
-            //    iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
-            //    if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
-            //    {
-            //        try
-            //        {
-            //            double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
-            //            iso_plot.Model.Axes[0].Zoom(-100, pt0 * 1.2);
-            //        }
-            //        catch
-            //        {
+            if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
+            {
+                string[] idx_str_arr = new string[2];
+                string idx_str = node.Name;
+                if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
+                else idx_str_arr = node.Parent.Text.Split('-');
+                double min_border = dParser(idx_str_arr[0]);
+                double max_border = dParser(idx_str_arr[1]);
+                LC_1.ViewXY.XAxes[0].SetRange(min_border-3, max_border+3);
+                //iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
+                //if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+                //{
+                //    try
+                //    {
+                //        double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
+                //        iso_plot.Model.Axes[0].Zoom(-100, pt0 * 1.2);
+                //    }
+                //    catch
+                //    {
 
-            //        }
-                    
-            //    }
-            //    iso_plot.Refresh();
-            //    invalidate_all();
-            //}                     
+                //    }
+
+                //}
+                //iso_plot.Refresh();
+                //invalidate_all();
+            }
+
         }
         /// <summary>
         /// BUTTON unckeck all fit nodes 
@@ -13261,6 +13335,8 @@ namespace Isotope_fitting
             LC_1.Parent = this;
             LC_1.Title.Visible = false;
             LC_1.ViewXY.LegendBox.Visible = false;
+            LC_1.ViewXY.ZoomPanOptions.RightToLeftZoomAction = RightToLeftZoomActionXY.PopFromZoomStack;
+            LC_1.ViewXY.ZoomPanOptions.AxisMouseWheelAction = AxisMouseWheelAction.PanAll;
             AxisX axisX_1 = LC_1.ViewXY.XAxes[0];
             AxisY axisY_1 = LC_1.ViewXY.YAxes[0];
             axisX_1.ValueType = AxisValueType.Number;
@@ -13271,7 +13347,7 @@ namespace Isotope_fitting
             LC_1.Name = "iso_plot1";
             LC_1.ViewXY.LegendBox.Visible = false;
             LC_1.ViewXY.LegendBox.ShowCheckboxes = true;
-            LC_1.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;            
+            LC_1.ViewXY.LegendBox.Layout = LegendBoxLayout.VerticalColumnSpan;
             axisX_1.ScrollMode = XAxisScrollMode.None;
             axisX_1.MajorGrid.Visible = Xmajor_grid;            axisX_1.MajorGrid.Pattern = LinePattern.Solid;
             axisX_1.MinorGrid.Visible = Xminor_grid;            axisX_1.MinorGrid.Pattern = LinePattern.Solid;
@@ -13510,6 +13586,7 @@ namespace Isotope_fitting
                     points1[j] = new SeriesPoint(all_data[0][j][0], 1.0 * all_data[0][j][1]);
                 }
                 LC_1.ViewXY.PointLineSeries[0].Points = points1;
+                LC_1.ViewXY.PointLineSeries[0].Visible = true;
             }
 
             // 2. replot all isotopes
@@ -13539,6 +13616,9 @@ namespace Isotope_fitting
                             points1[j] = new SeriesPoint(all_data[curr_idx][j][0], Fragments2[curr_idx - 1].Factor * all_data[curr_idx][j][1]);
                         }
                         LC_1.ViewXY.PointLineSeries[curr_idx].Points = points1;
+                        LC_1.ViewXY.PointLineSeries[curr_idx].Visible = true;
+
+
                     }
                 }
                 if (Form9.now)
@@ -13559,6 +13639,7 @@ namespace Isotope_fitting
                             points1[j] = new SeriesPoint(all_data[Fragments2.Count + f + 1][j][0], Form9.Fragments3[frag].Factor * all_data[Fragments2.Count + f + 1][j][1]);
                         }
                         LC_1.ViewXY.PointLineSeries[Fragments2.Count + f + 1].Points = points1;
+                        LC_1.ViewXY.PointLineSeries[Fragments2.Count + f + 1].Visible = true;
                     }
                 }
             }
@@ -13590,6 +13671,8 @@ namespace Isotope_fitting
                             barData[bar].Value = Fragments2[curr_idx - 1].Factor * cenn[bar].Y;
                         }
                         LC_1.ViewXY.BarSeries[curr_idx - 1].Values = barData;
+                        LC_1.ViewXY.BarSeries[curr_idx - 1].Visible=true;
+
                     }
                 }
                 if (Form9.now)
@@ -13610,7 +13693,8 @@ namespace Isotope_fitting
                                 barData[bar].Value = Form9.Fragments3[curr_idx].Factor * cenn[bar].Y;
                             }
                             LC_1.ViewXY.BarSeries[Fragments2.Count + f].Values = barData;
-                          
+                            LC_1.ViewXY.BarSeries[Fragments2.Count + f].Visible=true;
+
                         }
                     }
                 }
@@ -13628,6 +13712,8 @@ namespace Isotope_fitting
                         points1[j] = new SeriesPoint(summation[j][0], summation[j][1]);
                     }
                     LC_1.ViewXY.PointLineSeries[all_data.Count].Points = points1;
+                    LC_1.ViewXY.PointLineSeries[all_data.Count].Visible = true;
+
                 }
 
             // 4. residual plot
@@ -13659,6 +13745,7 @@ namespace Isotope_fitting
                     barData[bar].Location = mz;
                     barData[bar].Value = inten;
                     LC_1.ViewXY.BarSeries.Last().Values = barData;
+                    LC_1.ViewXY.BarSeries.Last().Visible= true;
                 }
             }
             LC_1.EndUpdate();
@@ -13691,6 +13778,7 @@ namespace Isotope_fitting
                         //Add point line series 
                         PointLineSeries pls = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0])
                         {
+                            Visible = false,
                             PointsVisible = false,
                             IndividualPointColoring = PointColoringTarget.Off,
                             Title = new SeriesTitle() { Text = name },
@@ -13709,6 +13797,7 @@ namespace Isotope_fitting
                     //Add point line series 
                     PointLineSeries pls = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0])
                     {
+                        Visible = false,
                         PointsVisible = false,
                         IndividualPointColoring = PointColoringTarget.Off,
                         Title = new SeriesTitle() { Text = name },
@@ -13725,6 +13814,7 @@ namespace Isotope_fitting
                     //Add point line series 
                     PointLineSeries pls = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0])
                     {
+                        Visible = false,
                         PointsVisible = false,
                         IndividualPointColoring = PointColoringTarget.Off,
                         Title = new SeriesTitle() { Text = name },
@@ -13751,7 +13841,7 @@ namespace Isotope_fitting
                         Color cc = Form9.Fragments3[frag].Color.ToColor();
                         //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
                         //iso_plot.Model.Series.Add(bar);
-                        Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseHighlight = MouseOverHighlight.None };
+                        Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None };
                         bs.Title.Text = Form9.Fragments3[frag].Name; bs.BorderWidth = 1; bs.BorderColor = cc; bs.BarThickness = (int)cen_width;
                         LC_1.ViewXY.BarSeries.Add(bs); LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
                     }
@@ -13762,7 +13852,7 @@ namespace Isotope_fitting
                     Color cc = get_fragment_color1(i);
                     //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
                     //iso_plot.Model.Series.Add(bar);
-                    Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseHighlight = MouseOverHighlight.None };
+                    Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None };
                     bs.Title.Text = Fragments2[i - 1].Name; bs.BorderWidth = 1; bs.BorderColor = cc; bs.BarThickness = (int)cen_width;
                     LC_1.ViewXY.BarSeries.Add(bs); LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
                 }
@@ -13771,7 +13861,7 @@ namespace Isotope_fitting
             {
                 //LineSeries fit = new LineSeries() { StrokeThickness = fit_width, Color = fit_color, LineStyle = fit_style };
                 //iso_plot.Model.Series.Add(fit);
-                PointLineSeries fit = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { PointsVisible = false, IndividualPointColoring = PointColoringTarget.Off, Title = new SeriesTitle() { Text = "fit" }, LineStyle = new Arction.WinForms.Charting.LineStyle() { Pattern = LinePattern.SmallDot, Color = fit_color.ToColor(), Width = (float)fit_width, AntiAliasing = LineAntialias.None }, MouseHighlight = MouseOverHighlight.None };
+                PointLineSeries fit = new PointLineSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, PointsVisible = false, IndividualPointColoring = PointColoringTarget.Off, Title = new SeriesTitle() { Text = "fit" }, LineStyle = new Arction.WinForms.Charting.LineStyle() {  Pattern = LinePattern.SmallDot, Color = fit_color.ToColor(), Width = (float)fit_width, AntiAliasing = LineAntialias.None }, MouseHighlight = MouseOverHighlight.None };
                 LC_1.ViewXY.PointLineSeries.Add(fit);
             }
             //res_plot.Model.Series.Clear();
@@ -13779,7 +13869,7 @@ namespace Isotope_fitting
             {
                 //LineSeries res = new LineSeries() { StrokeThickness = 1, Color = OxyColors.Black };
                 //res_plot.Model.Series.Add(res);
-                PointLineSeries res = new PointLineSeries(LC_2.ViewXY, LC_2.ViewXY.XAxes[0], LC_2.ViewXY.YAxes[0]) { PointsVisible = false, IndividualPointColoring = PointColoringTarget.Off, Title = new SeriesTitle() { Text = "res" }, LineStyle = new Arction.WinForms.Charting.LineStyle() { Pattern = LinePattern.Solid, Color = Color.Black, Width = (float)1, AntiAliasing = LineAntialias.None }, MouseHighlight = MouseOverHighlight.None };
+                PointLineSeries res = new PointLineSeries(LC_2.ViewXY, LC_2.ViewXY.XAxes[0], LC_2.ViewXY.YAxes[0]) {  PointsVisible = false, IndividualPointColoring = PointColoringTarget.Off, Title = new SeriesTitle() { Text = "res" }, LineStyle = new Arction.WinForms.Charting.LineStyle() { Pattern = LinePattern.Solid, Color = Color.Black, Width = (float)1, AntiAliasing = LineAntialias.None }, MouseHighlight = MouseOverHighlight.None };
                 LC_2.ViewXY.PointLineSeries.Add(res);
             }
             if (plotCentr_chkBox.Checked)
@@ -13788,7 +13878,7 @@ namespace Isotope_fitting
                 ////iso_plot.Model.Series.Add(bar);
                 //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = peak_color, FillColor = peak_color, BarWidth = peak_width };
                 //iso_plot.Model.Series.Add(bar);
-                Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseHighlight = MouseOverHighlight.None };
+                Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None };
                 bs.Title.Text = "Exp"; bs.BorderWidth = 1; bs.BorderColor = peak_color.ToColor(); bs.BarThickness = (int)peak_width;
                 LC_1.ViewXY.BarSeries.Add(bs);
                 LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;

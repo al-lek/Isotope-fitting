@@ -1263,5 +1263,10 @@ namespace Isotope_fitting
         {
             this.PerformAutoScale();
         }
+
+        private void chemForm_txtBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
