@@ -36,6 +36,7 @@ namespace Isotope_fitting
         private bool fixed_;
         private double maxppm_error;
         private double minppm_error;
+        private bool candidate_;
 
 
         public OxyColor Color
@@ -77,6 +78,11 @@ namespace Isotope_fitting
         {
             get { return this.fixed_; }
             set { this.fixed_ = value; }
+        }
+        public bool Candidate
+        {
+            get { return this.candidate_; }
+            set { this.candidate_ = value; }
         }
         public double Factor
         {

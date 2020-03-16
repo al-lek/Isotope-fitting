@@ -47,7 +47,7 @@ namespace Isotope_fitting
             thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
-
+            
             //ppm9_numUD.ValueChanged += (s, e) => 
             //{
             //    ppmError9 = (double)ppm9_numUD.Value;
@@ -150,7 +150,7 @@ namespace Isotope_fitting
                 listviewitem.SubItems.Add(fra.InputFormula.ToString());
                 listviewitem.SubItems.Add(fra.Counter.ToString());
                 listviewitem.SubItems.Add(fra.PPM_Error.ToString("0.##"));
-
+                if (!fra.Candidate) { listviewitem.ForeColor = Color.Red; }
                 fragListView9.Items.Add(listviewitem);
             }
             fragListView9.EndUpdate();
@@ -309,7 +309,7 @@ namespace Isotope_fitting
             double qMin = txt_to_d(minCharge_txtBox);
             if (double.IsNaN(qMin)) qMin =1;
             double qMax = txt_to_d(maxCharge_txtBox);
-            if (double.IsNaN(qMax)) qMax = 25;
+            if (double.IsNaN(qMax)) qMax = qMin;
             
             for(int c=(int)qMin;c<= qMax; c++ )
             {
@@ -603,7 +603,7 @@ namespace Isotope_fitting
                 ChemiForm.Envelope(chem);
                 ChemiForm.Vdetect(chem);
                 cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                add_fragment_to_Fragments3(chem, cen);
+                add_fragment_to_Fragments3(chem, cen,false);
                 return;
             }
             else
@@ -612,7 +612,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void add_fragment_to_Fragments3(ChemiForm chem, List<PointPlot> cen)
+        private void add_fragment_to_Fragments3(ChemiForm chem, List<PointPlot> cen, bool candidate=true)
         {
             // adds safely a matched fragment to Fragments3, and releases memory
             lock (_locker)
@@ -645,7 +645,9 @@ namespace Isotope_fitting
                     Max_intensity = 0.0,
                     Fixed = chem.Fixed,
                     maxPPM_Error=chem.maxPPM_Error,
-                    minPPM_Error=chem.minPPM_Error
+                    minPPM_Error=chem.minPPM_Error,
+                    Candidate=candidate
+         
                 });               
                 Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
@@ -698,7 +700,7 @@ namespace Isotope_fitting
 
             // sanity check. No matter what, check at least most intense peak!
             if (contrib_peaks == 0) contrib_peaks = 1;
-
+            if (contrib_peaks > cen.Count) { contrib_peaks = cen.Count; }
             for (int i = 0; i < contrib_peaks; i++)
             {
                 double[] tmp = ppm_calculator(cen[i].X);
@@ -724,15 +726,15 @@ namespace Isotope_fitting
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate) {  return false; }           
+            if (!fragment_is_canditate && !ignore_ppm_form9.Checked) { return false; }
             chem.PPM_Error = results.Average(p => p[0]);
             //foreach (double[] pp in results)
             //{
             //    if (Math.Abs(pp[0])>Math.Abs(max_error)) { max_error = pp[0]; }
             //}
             //if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
-            chem.Resolution = (double)results.Average(p => p[1]);
-
+            chem.Resolution = (double)results.Average(p => p[1]); 
+            
             return fragment_is_canditate;
         }
         #endregion

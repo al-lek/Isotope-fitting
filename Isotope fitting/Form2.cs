@@ -2019,12 +2019,6 @@ namespace Isotope_fitting
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
             fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
-            if (Fragments2.Count > 0)
-            {
-                factor_panel.Visible = false;
-                Fragments2.RemoveAt(idx); // thread safely fire event to continue calculations
-                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
-            }
         }
         private void singleFrag_manipulation(TreeNode node)
         {
@@ -2330,6 +2324,7 @@ namespace Isotope_fitting
 
             // sanity check. No matter what, check at least most intense peak!
             if (contrib_peaks == 0) contrib_peaks = 1;
+            if (contrib_peaks>cen.Count) { contrib_peaks = cen.Count; }
 
             for (int i = 0; i < contrib_peaks; i ++)
             {
@@ -5544,7 +5539,7 @@ namespace Isotope_fitting
 
             // sanity check. No matter what, check at least most intense peak!
             if (contrib_peaks == 0) contrib_peaks = 1;
-
+            if (contrib_peaks > fra.Centroid.Count) { contrib_peaks = fra.Centroid.Count; }
             for (int i = 0; i < contrib_peaks; i++)
             {
                 double[] tmp = ppm_calculator(fra.Centroid[i].X);
@@ -13356,6 +13351,7 @@ namespace Isotope_fitting
             axisY_1.ValueType = AxisValueType.Number;
             axisY_1.AutoFormatLabels = false;
             axisY_1.LabelsNumberFormat = y_format + y_numformat;
+
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(LC_1.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;           
@@ -13590,12 +13586,12 @@ namespace Isotope_fitting
             }
 
             // 2. replot all isotopes
-            if (plotFragProf_chkBox.Checked && all_data.Count > 0)
+            if (plotFragProf_chkBox.Checked && all_data.Count > 1)
             {
                 for (int i = 0; i < to_plot.Count; i++)
                 {
                     int curr_idx = to_plot[i];
-                    if (all_data.Count != 0)
+                    if (all_data.Count > curr_idx)
                     {
                         //// get name of each line to be ploted
                         //string name_str = Fragments2[curr_idx - 1].Name;
@@ -13643,13 +13639,13 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (plotFragCent_chkBox.Checked && all_data.Count > 0)
+            if (plotFragCent_chkBox.Checked && all_data.Count > 1)
             {
                 int help = Convert.ToInt32(Form9.now);
                 for (int i = 0; i < to_plot.Count; i++)
                 {
                     int curr_idx = to_plot[i];
-                    if (all_data.Count != 0)
+                    if (all_data.Count > curr_idx)
                     {
                         //// get name of each line to be ploted
                         //string name_str = Fragments2[curr_idx - 1].Name;
@@ -13680,7 +13676,7 @@ namespace Isotope_fitting
                     for (int f = 0; f < Form9.last_plotted.Count; f++)
                     {
                         int curr_idx = Form9.last_plotted[f];
-                        if (all_data.Count != 0)
+                        if (all_data.Count >1)
                         {
                             // get name of each line to be ploted
                             string name_str = Form9.Fragments3[curr_idx].Name;
@@ -13731,7 +13727,7 @@ namespace Isotope_fitting
             }
 
             // 5. centroid (bar)
-            if (plotCentr_chkBox.Checked)
+            if (plotCentr_chkBox.Checked && peak_points.Count>0)
             {
                 int pointCount = peak_points.Count;
                 BarSeriesValue[] barData = new BarSeriesValue[pointCount];
