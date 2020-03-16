@@ -380,7 +380,10 @@ namespace Isotope_fitting
             splitContainer2.Panel2.Controls.Add(frag_tree);
 
         }
-        
+        private void Form2_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
             if (!block_fit_refresh)
@@ -5575,8 +5578,22 @@ namespace Isotope_fitting
         {
             LC_1.ViewXY.XAxes[0].MajorGrid.Visible = Xmajor_grid;
             LC_1.ViewXY.XAxes[0].MinorGrid.Visible = Xminor_grid;
+            LC_1.ViewXY.XAxes[0].LabelsNumberFormat = x_format + x_numformat;
+
             LC_1.ViewXY.YAxes[0].MajorGrid.Visible = Ymajor_grid;
             LC_1.ViewXY.YAxes[0].MinorGrid.Visible = Yminor_grid;
+            LC_1.ViewXY.YAxes[0].LabelsNumberFormat = y_format + y_numformat;
+
+
+            LC_2.ViewXY.XAxes[0].MajorGrid.Visible = Xmajor_grid;
+            LC_2.ViewXY.XAxes[0].MinorGrid.Visible = Xminor_grid;
+            LC_2.ViewXY.XAxes[0].LabelsNumberFormat = x_format + x_numformat;
+
+
+            LC_2.ViewXY.YAxes[0].MajorGrid.Visible = Ymajor_grid;
+            LC_2.ViewXY.YAxes[0].MinorGrid.Visible = Yminor_grid;
+            LC_2.ViewXY.YAxes[0].LabelsNumberFormat = y_format + y_numformat;
+
 
             //iso_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
             //iso_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
@@ -9735,7 +9752,283 @@ namespace Isotope_fitting
 
 
         #region sequence
-        
+        private void seq_coverageBtn_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            List<int> a_cov1 = new List<int>(); List<int> b_cov1 = new List<int>(); List<int> c_cov1 = new List<int>(); List<int> x_cov1 = new List<int>(); List<int> y_cov1 = new List<int>(); List<int> z_cov1 = new List<int>();
+            List<int> a_cov2 = new List<int>(); List<int> b_cov2 = new List<int>(); List<int> c_cov2 = new List<int>(); List<int> x_cov2 = new List<int>(); List<int> y_cov2 = new List<int>(); List<int> z_cov2 = new List<int>();
+            List<int> total_1 = new List<int>(); List<int> total_2 = new List<int>();
+            double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, a2 = 0, b2 = 0, c2 = 0, x2 = 0, y2 = 0, z2 = 0, t1 = 0, t2 = 0;
+            if (String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain) && String.IsNullOrEmpty(Peptide)) { MessageBox.Show("You have to add amino-acid sequence"); return; }
+            else if (IonDraw.Count == 0) { MessageBox.Show("There aren't any saved ions in order to perform the calculations"); return; }
+            else if (!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain) && !String.IsNullOrEmpty(Peptide)) { MessageBox.Show("You can't have 'General'sequence and 'Heavy' or 'Light' chain sequence simultaneously"); return; }
+            else if (!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
+            {
+                foreach (ion nn in IonDraw)
+                {
+                    if (nn.Name.Contains("_H"))
+                    {
+                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (a_cov1.Count == 0 || !a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
+                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (b_cov1.Count == 0 || !b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
+                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (c_cov1.Count == 0 || !c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
+                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (x_cov1.Count == 0 || !x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
+                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (y_cov1.Count == 0 || !y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
+                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (z_cov1.Count == 0 || !z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
+                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                            }
+                        }
+                    }
+                    else if (nn.Name.Contains("_L"))
+                    {
+                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (a_cov2.Count == 0 || !a_cov2.Contains(nn.Index)) { a_cov2.Add(nn.Index); }
+                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (b_cov2.Count == 0 || !b_cov2.Contains(nn.Index)) { b_cov2.Add(nn.Index); }
+                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (c_cov2.Count == 0 || !c_cov2.Contains(nn.Index)) { c_cov2.Add(nn.Index); }
+                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (x_cov2.Count == 0 || !x_cov2.Contains(nn.SortIdx)) { x_cov2.Add(nn.SortIdx); }
+                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (y_cov2.Count == 0 || !y_cov2.Contains(nn.SortIdx)) { y_cov2.Add(nn.SortIdx); }
+                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
+                            }
+                        }
+                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                        {
+                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                            {
+                                if (z_cov2.Count == 0 || !z_cov2.Contains(nn.SortIdx)) { z_cov2.Add(nn.SortIdx); }
+                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
+                            }
+                        }
+                    }
+                }
+                a1 = 100 * (double)a_cov1.Count / heavy_chain.Length;
+                b1 = 100 * (double)b_cov1.Count / heavy_chain.Length;
+                c1 = 100 * (double)c_cov1.Count / heavy_chain.Length;
+                x1 = 100 * (double)x_cov1.Count / heavy_chain.Length;
+                y1 = 100 * (double)y_cov1.Count / heavy_chain.Length;
+                z1 = 100 * (double)z_cov1.Count / heavy_chain.Length;
+                t1 = 100 * (double)total_1.Count / heavy_chain.Length;
+                a2 = 100 * (double)a_cov2.Count / light_chain.Length;
+                b2 = 100 * (double)b_cov2.Count / light_chain.Length;
+                c2 = 100 * (double)c_cov2.Count / light_chain.Length;
+                x2 = 100 * (double)x_cov2.Count / light_chain.Length;
+                y2 = 100 * (double)y_cov2.Count / light_chain.Length;
+                z2 = 100 * (double)z_cov2.Count / light_chain.Length;
+                t2 = 100 * (double)total_2.Count / light_chain.Length;
+
+                sb.AppendLine("Heavy Chain Sequence");
+                sb.AppendLine();
+                sb.AppendLine("a : " + Math.Round(a1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("b : " + Math.Round(b1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("total : " + Math.Round(t1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("Light Chain Sequence");
+                sb.AppendLine();
+                sb.AppendLine("a : " + Math.Round(a2, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("b : " + Math.Round(b2, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("c : " + Math.Round(c2, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("x : " + Math.Round(x2, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("y : " + Math.Round(y2, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("z : " + Math.Round(z2, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("total : " + Math.Round(t2, 1).ToString() + "%");
+                sb.AppendLine();
+            }
+            else
+            {
+                foreach (ion nn in IonDraw)
+                {
+                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (a_cov1.Count == 0 || !a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (b_cov1.Count == 0 || !b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (c_cov1.Count == 0 || !c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (x_cov1.Count == 0 || !x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (y_cov1.Count == 0 || !y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
+                        {
+                            if (z_cov1.Count == 0 || !z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
+                        }
+                    }
+                }
+                if (!String.IsNullOrEmpty(Peptide))
+                {
+                    a1 = 100 * (double)a_cov1.Count / Peptide.Length;
+                    b1 = 100 * (double)b_cov1.Count / Peptide.Length;
+                    c1 = 100 * (double)c_cov1.Count / Peptide.Length;
+                    x1 = 100 * (double)x_cov1.Count / Peptide.Length;
+                    y1 = 100 * (double)y_cov1.Count / Peptide.Length;
+                    z1 = 100 * (double)z_cov1.Count / Peptide.Length;
+                    t1 = 100 * (double)total_1.Count / Peptide.Length;
+                    sb.AppendLine("General Sequence");
+                    sb.AppendLine();
+                }
+                else if (!String.IsNullOrEmpty(heavy_chain))
+                {
+                    a1 = 100 * (double)a_cov1.Count / heavy_chain.Length;
+                    b1 = 100 * (double)b_cov1.Count / heavy_chain.Length;
+                    c1 = 100 * (double)c_cov1.Count / heavy_chain.Length;
+                    x1 = 100 * (double)x_cov1.Count / heavy_chain.Length;
+                    y1 = 100 * (double)y_cov1.Count / heavy_chain.Length;
+                    z1 = 100 * (double)z_cov1.Count / heavy_chain.Length;
+                    t1 = 100 * (double)total_1.Count / heavy_chain.Length;
+                    sb.AppendLine("Heavy Chain Sequence");
+                    sb.AppendLine();
+                }
+                else if (!String.IsNullOrEmpty(light_chain))
+                {
+                    a1 = 100 * (double)a_cov1.Count / light_chain.Length;
+                    b1 = 100 * (double)b_cov1.Count / light_chain.Length;
+                    c1 = 100 * (double)c_cov1.Count / light_chain.Length;
+                    x1 = 100 * (double)x_cov1.Count / light_chain.Length;
+                    y1 = 100 * (double)y_cov1.Count / light_chain.Length;
+                    z1 = 100 * (double)z_cov1.Count / light_chain.Length;
+                    t1 = 100 * (double)total_1.Count / light_chain.Length;
+                    sb.AppendLine("Light Chain Sequence");
+                    sb.AppendLine();
+                }
+
+                sb.AppendLine("a : " + Math.Round(a1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("b : " + Math.Round(b1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
+                sb.AppendLine();
+                sb.AppendLine("total : " + Math.Round(t1, 1).ToString() + "%");
+                sb.AppendLine();
+            }
+
+            error_string = sb.ToString();
+            Form17 frm17 = new Form17(this);
+            frm17.Text = "Sequence coverage";
+            frm17.ShowDialog();
+        }
+
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
             if (ax_chBx.Checked)
@@ -11696,6 +11989,59 @@ namespace Isotope_fitting
         #endregion
 
 
+        #region EXTRACT PLOTS
+        #region extract ppm_plot
+
+        private void extractPlotToolStripMenuItem9_Click(object sender, EventArgs e)
+        {
+            ppm_plotview_rebuild();
+        }
+
+        public void ppm_plotview_rebuild()
+        {
+            PlotView temp_plot = new PlotView() { Name = "temp_plot ", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
+            PlotModel temp_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal, SubtitleFontSize = 10, SubtitleFont = "Arial" };
+            temp_plot.Model = temp_model;
+            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
+            temp_model.Axes.Add(linearAxis21);
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            temp_model.Axes.Add(linearAxis22);
+            temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
+            refresh_temp_ppm_plot(temp_plot);
+
+            Form11 frm11 = new Form11(temp_plot);
+            frm11.Show();
+        }
+
+        public void refresh_temp_ppm_plot(PlotView temp_plot)
+        {
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
+            int iondraw_count = IonDraw.Count;
+            var ppmpoints = new CustomDataPoint[iondraw_count];
+            for (int i = 0; i < iondraw_count; i++)
+            {
+                ion nn = IonDraw[i];
+                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
+                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
+                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
+                else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }
+            }
+            temp_series.ItemsSource = ppmpoints;
+            //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
+            // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
+            temp_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}";
+            temp_plot.Model.Series.Add(temp_series);
+            temp_plot.Model.TrackerChanged += (s, e) =>
+            {
+                temp_plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
+                temp_plot.Model.InvalidatePlot(false);
+            };
+            temp_plot.Model.Axes[1].Maximum = iondraw_count + 1; temp_plot.Model.Axes[1].Minimum = 0;
+            temp_plot.InvalidatePlot(true);
+        }
+        #endregion
 
         #region FORM 11 extract plot isoplot
         public void plotview_rebuild()
@@ -11741,26 +12087,24 @@ namespace Isotope_fitting
             ViewXY v = temp_plot.ViewXY;
             temp_plot.Parent = this;
             temp_plot.Title.Visible = false;
-            temp_plot.ViewXY.LegendBox.Visible = false;
-            temp_plot.ViewXY.XAxes[0].ValueType = AxisValueType.Number;
-            temp_plot.ViewXY.XAxes[0].Title.Text = "m/z"; temp_plot.ViewXY.YAxes[0].Title.Text = "Intensity";
-            temp_plot.ViewXY.XAxes[0].Title.MouseInteraction = false; temp_plot.ViewXY.YAxes[0].Title.MouseInteraction = false;
+            temp_plot.ViewXY.LegendBox.Visible = false;     
             temp_plot.Name = "temp_plot1";
             temp_plot.ViewXY.LegendBox.Visible = false;
             temp_plot.ViewXY.LegendBox.ShowCheckboxes = true;
             temp_plot.ViewXY.LegendBox.Layout = LegendBoxLayout.Vertical;
             AxisX axisX_1 = temp_plot.ViewXY.XAxes[0];
             AxisY axisY_1 = temp_plot.ViewXY.YAxes[0];
-            axisX_1.MajorGrid.Visible = Xmajor_grid;
-            axisX_1.MajorGrid.Pattern = LinePattern.Solid;
-            axisX_1.MinorGrid.Visible = Xminor_grid;
-            axisX_1.MinorGrid.Pattern = LinePattern.Solid;
-            axisY_1.MajorGrid.Visible = Ymajor_grid;
-            axisY_1.MajorGrid.Pattern = LinePattern.Solid;
-            axisY_1.MinorGrid.Visible = Yminor_grid;
-            axisY_1.MinorGrid.Pattern = LinePattern.Solid;
+            axisX_1.Title.Text = "m/z"; axisY_1.Title.Text = "Intensity";
+            axisX_1.MajorGrid.Visible = Xmajor_grid;axisX_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisX_1.MinorGrid.Visible = Xminor_grid;axisX_1.MinorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MajorGrid.Visible = Ymajor_grid;axisY_1.MajorGrid.Pattern = LinePattern.Solid;
+            axisY_1.MinorGrid.Visible = Yminor_grid;axisY_1.MinorGrid.Pattern = LinePattern.Solid;
             axisX_1.ScrollMode = XAxisScrollMode.None;
             axisX_1.ValueType = AxisValueType.Number;
+            axisX_1.Title.MouseInteraction = false;
+            axisX_1.AutoFormatLabels = false;axisX_1.LabelsNumberFormat = x_format + x_numformat;
+            axisY_1.Title.MouseInteraction = false;            
+            axisY_1.AutoFormatLabels = false;axisY_1.LabelsNumberFormat = x_format + x_numformat;
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(temp_plot.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;
@@ -12901,283 +13245,10 @@ namespace Isotope_fitting
 
 
         #endregion
+        #endregion
 
-        private void seq_coverageBtn_Click(object sender, EventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();            
-            List<int> a_cov1 = new List<int>();List<int> b_cov1 = new List<int>();List<int> c_cov1 = new List<int>();List<int> x_cov1 = new List<int>();List<int> y_cov1 = new List<int>();List<int> z_cov1 = new List<int>();
-            List<int> a_cov2 = new List<int>();List<int> b_cov2 = new List<int>();List<int> c_cov2 = new List<int>();List<int> x_cov2 = new List<int>();List<int> y_cov2 = new List<int>();List<int> z_cov2 = new List<int>();
-            List<int> total_1 = new List<int>();List<int> total_2 = new List<int>();
-            double a1=0 ,b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, a2 = 0, b2 = 0, c2 = 0, x2 = 0, y2 = 0, z2 = 0,t1=0,t2=0;
-            if (String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain) && String.IsNullOrEmpty(Peptide)) { MessageBox.Show("You have to add amino-acid sequence"); return; }
-            else if (IonDraw.Count==0) { MessageBox.Show("There aren't any saved ions in order to perform the calculations"); return; }
-            else if (!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain) && !String.IsNullOrEmpty(Peptide)) { MessageBox.Show("You can't have 'General'sequence and 'Heavy' or 'Light' chain sequence simultaneously"); return; }
-            else if(!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
-            {
-                foreach (ion nn in IonDraw)
-                {
-                    if (nn.Name.Contains("_H"))
-                    {
-                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (a_cov1.Count == 0 || !a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (b_cov1.Count == 0 || !b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (c_cov1.Count == 0 || !c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (x_cov1.Count == 0 || !x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (y_cov1.Count == 0 || !y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (z_cov1.Count == 0 || !z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                            }
-                        }
-                    }
-                    else if (nn.Name.Contains("_L"))
-                    {
-                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (a_cov2.Count == 0 || !a_cov2.Contains(nn.Index)) { a_cov2.Add(nn.Index); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (b_cov2.Count == 0 || !b_cov2.Contains(nn.Index)) { b_cov2.Add(nn.Index); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (c_cov2.Count == 0 || !c_cov2.Contains(nn.Index)) { c_cov2.Add(nn.Index); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (x_cov2.Count == 0 || !x_cov2.Contains(nn.SortIdx)) { x_cov2.Add(nn.SortIdx); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (y_cov2.Count == 0 || !y_cov2.Contains(nn.SortIdx)) { y_cov2.Add(nn.SortIdx); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (z_cov2.Count == 0 || !z_cov2.Contains(nn.SortIdx)) { z_cov2.Add(nn.SortIdx); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
-                            }
-                        }
-                    }                                   
-                }
-                a1 = 100 * (double)a_cov1.Count / heavy_chain.Length;
-                b1 = 100 * (double)b_cov1.Count / heavy_chain.Length;
-                c1 = 100 * (double)c_cov1.Count / heavy_chain.Length;
-                x1 = 100 * (double)x_cov1.Count / heavy_chain.Length;
-                y1 = 100 * (double)y_cov1.Count / heavy_chain.Length;
-                z1 = 100 * (double)z_cov1.Count / heavy_chain.Length;
-                t1 = 100 * (double)total_1.Count / heavy_chain.Length;
-                a2 = 100 * (double)a_cov2.Count / light_chain.Length;
-                b2 = 100 * (double)b_cov2.Count / light_chain.Length;
-                c2 = 100 * (double)c_cov2.Count / light_chain.Length;
-                x2 = 100 * (double)x_cov2.Count / light_chain.Length;
-                y2 = 100 * (double)y_cov2.Count / light_chain.Length;
-                z2 = 100 * (double)z_cov2.Count / light_chain.Length;
-                t2 = 100 * (double)total_2.Count / light_chain.Length;
 
-                sb.AppendLine("Heavy Chain Sequence");
-                sb.AppendLine();
-                sb.AppendLine("a : " + Math.Round(a1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("b : " + Math.Round(b1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("total : " + Math.Round(t1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("Light Chain Sequence");
-                sb.AppendLine();
-                sb.AppendLine("a : " + Math.Round(a2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("b : " + Math.Round(b2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("c : " + Math.Round(c2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("x : " + Math.Round(x2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("y : " + Math.Round(y2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("z : " + Math.Round(z2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("total : " + Math.Round(t2, 1).ToString() + "%");
-                sb.AppendLine();
-            }
-            else
-            {
-                foreach (ion nn in IonDraw)
-                {
-                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                    {
-                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                        {
-                            if (a_cov1.Count == 0 || !a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                        }
-                    }
-                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                    {
-                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                        {
-                            if (b_cov1.Count == 0 || !b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                        }
-                    }
-                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                    {
-                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                        {
-                            if (c_cov1.Count == 0 || !c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                        }
-                    }
-                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                    {
-                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                        {
-                            if (x_cov1.Count == 0 || !x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                        }
-                    }
-                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                    {
-                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                        {
-                            if (y_cov1.Count == 0 || !y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                        }
-                    }
-                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                    {
-                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                        {
-                            if (z_cov1.Count == 0 || !z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                        }
-                    }
-                }
-                if (!String.IsNullOrEmpty(Peptide))
-                {
-                    a1 = 100 *(double) a_cov1.Count / Peptide.Length;
-                    b1 = 100 * (double)b_cov1.Count / Peptide.Length;
-                    c1 = 100 * (double)c_cov1.Count / Peptide.Length;
-                    x1 = 100 * (double)x_cov1.Count / Peptide.Length;
-                    y1 = 100 * (double)y_cov1.Count / Peptide.Length;
-                    z1 = 100 * (double)z_cov1.Count / Peptide.Length;
-                    t1 = 100 * (double)total_1.Count / Peptide.Length;
-                    sb.AppendLine("General Sequence");
-                    sb.AppendLine();
-                }
-                else if (!String.IsNullOrEmpty(heavy_chain))
-                {
-                    a1 = 100 * (double)a_cov1.Count / heavy_chain.Length;
-                    b1 = 100 * (double)b_cov1.Count / heavy_chain.Length;
-                    c1 = 100 * (double)c_cov1.Count / heavy_chain.Length;
-                    x1 = 100 * (double)x_cov1.Count / heavy_chain.Length;
-                    y1 = 100 * (double)y_cov1.Count / heavy_chain.Length;
-                    z1 = 100 * (double)z_cov1.Count / heavy_chain.Length;
-                    t1 = 100 * (double)total_1.Count / heavy_chain.Length;
-                    sb.AppendLine("Heavy Chain Sequence");
-                    sb.AppendLine();
-                }
-                else if (!String.IsNullOrEmpty(light_chain))
-                {
-                    a1 = 100 * (double)a_cov1.Count / light_chain.Length;
-                    b1 = 100 * (double)b_cov1.Count / light_chain.Length;
-                    c1 = 100 * (double)c_cov1.Count / light_chain.Length;
-                    x1 = 100 * (double)x_cov1.Count / light_chain.Length;
-                    y1 = 100 * (double)y_cov1.Count / light_chain.Length;
-                    z1 = 100 * (double)z_cov1.Count / light_chain.Length;
-                    t1 = 100 * (double)total_1.Count / light_chain.Length;
-                    sb.AppendLine("Light Chain Sequence");
-                    sb.AppendLine();
-                }
-
-                sb.AppendLine("a : "+ Math.Round(a1,1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("b : "+ Math.Round(b1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("total : " + Math.Round(t1, 1).ToString() + "%");
-                sb.AppendLine();
-            }
-                     
-            error_string = sb.ToString();
-            Form17 frm17 = new Form17(this);
-            frm17.Text = "Sequence coverage";
-            frm17.ShowDialog();
-        }
+        #region LICHTNING CHART
         private void init_chart()
         {
             if (LC_1 != null)
@@ -13193,6 +13264,8 @@ namespace Isotope_fitting
             AxisX axisX_1 = LC_1.ViewXY.XAxes[0];
             AxisY axisY_1 = LC_1.ViewXY.YAxes[0];
             axisX_1.ValueType = AxisValueType.Number;
+            axisX_1.AutoFormatLabels =false;
+            axisX_1.LabelsNumberFormat = x_format+x_numformat;      
             axisX_1.Title.Text = "m/z"; axisY_1.Title.Text = "Intensity"; 
             axisX_1.Title.MouseInteraction = false; axisY_1.Title.MouseInteraction = false;
             LC_1.Name = "iso_plot1";
@@ -13205,6 +13278,8 @@ namespace Isotope_fitting
             axisY_1.MajorGrid.Visible = Ymajor_grid;            axisY_1.MajorGrid.Pattern = LinePattern.Solid;
             axisY_1.MinorGrid.Visible = Yminor_grid;            axisY_1.MinorGrid.Pattern = LinePattern.Solid;
             axisY_1.ValueType = AxisValueType.Number;
+            axisY_1.AutoFormatLabels = false;
+            axisY_1.LabelsNumberFormat = y_format + y_numformat;
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(LC_1.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;           
@@ -13256,6 +13331,8 @@ namespace Isotope_fitting
             AxisX axisX_2 = LC_2.ViewXY.XAxes[0];
             AxisY axisY_2 = LC_2.ViewXY.YAxes[0];
             axisX_2.ValueType = AxisValueType.Number;
+            axisX_2.AutoFormatLabels = false;
+            axisX_2.LabelsNumberFormat = x_format + x_numformat;
             axisX_2.Title.Text = "m/z"; axisY_2.Title.Text = "Intensity";
             axisX_2.Title.MouseInteraction = false; axisY_2.Title.MouseInteraction = false;
             LC_2.Name = "res_plot1";
@@ -13268,6 +13345,8 @@ namespace Isotope_fitting
             axisY_2.MajorGrid.Visible = Ymajor_grid; axisY_2.MajorGrid.Pattern = LinePattern.Solid;
             axisY_2.MinorGrid.Visible = Yminor_grid; axisY_2.MinorGrid.Pattern = LinePattern.Solid;
             axisX_2.ValueType = AxisValueType.Number;
+            axisY_2.AutoFormatLabels = false;
+            axisY_2.LabelsNumberFormat = y_format + y_numformat;
             LineSeriesCursor cursor_2 = new LineSeriesCursor(LC_2.ViewXY, axisX_2);
             cursor_2.SnapToPoints = false;
             LC_2.EndUpdate();
@@ -13722,69 +13801,7 @@ namespace Isotope_fitting
             Color clr = Color.FromArgb(custom_colors[idx]);
             return clr;
         }
+        #endregion
 
-        private void Form2_DpiChanged(object sender, DpiChangedEventArgs e)
-        {
-            this.PerformAutoScale();
-        }
-
-
-
-
-
-
-
-
-
-
-        private void extractPlotToolStripMenuItem9_Click(object sender, EventArgs e)
-        {
-            ppm_plotview_rebuild();
-        }
-
-        public void ppm_plotview_rebuild()
-        {
-           PlotView temp_plot = new PlotView() { Name = "temp_plot ", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            PlotModel temp_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal, SubtitleFontSize = 10, SubtitleFont = "Arial" };
-            temp_plot.Model = temp_model;
-            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
-            temp_model.Axes.Add(linearAxis21);
-            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
-            temp_model.Axes.Add(linearAxis22);
-            temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
-            refresh_temp_ppm_plot( temp_plot);
-           
-            Form11 frm11 = new Form11(temp_plot);
-            frm11.Show();
-        }
-
-        public void refresh_temp_ppm_plot(PlotView temp_plot)
-        {
-            CI ion_comp = new CI();
-            IonDraw.Sort(ion_comp);
-            ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
-            int iondraw_count = IonDraw.Count;
-            var ppmpoints = new CustomDataPoint[iondraw_count];
-            for (int i = 0; i < iondraw_count; i++)
-            {
-                ion nn = IonDraw[i];
-                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
-                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
-                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
-                else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }                
-            }
-            temp_series.ItemsSource = ppmpoints;
-            //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
-            // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
-            temp_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}";
-            temp_plot.Model.Series.Add(temp_series);
-            temp_plot.Model.TrackerChanged += (s, e) =>
-            {
-                temp_plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
-                temp_plot.Model.InvalidatePlot(false);
-            };
-            temp_plot.Model.Axes[1].Maximum = iondraw_count + 1; temp_plot.Model.Axes[1].Minimum = 0;
-            temp_plot.InvalidatePlot(true);
-        }
     }
 }

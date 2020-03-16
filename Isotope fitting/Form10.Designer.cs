@@ -689,7 +689,6 @@
             // 
             // formatY_numUD
             // 
-            this.formatY_numUD.Enabled = false;
             this.formatY_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatY_numUD.Location = new System.Drawing.Point(218, 104);
             this.formatY_numUD.Maximum = new decimal(new int[] {
@@ -709,7 +708,6 @@
             // 
             // formatY_UD
             // 
-            this.formatY_UD.Enabled = false;
             this.formatY_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatY_UD.Items.Add("General");
             this.formatY_UD.Items.Add("Scientific");
@@ -722,7 +720,6 @@
             // formatY_Lbl
             // 
             this.formatY_Lbl.AutoSize = true;
-            this.formatY_Lbl.Enabled = false;
             this.formatY_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatY_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
             this.formatY_Lbl.Location = new System.Drawing.Point(20, 107);
@@ -849,7 +846,6 @@
             // 
             // formatX_numUD
             // 
-            this.formatX_numUD.Enabled = false;
             this.formatX_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatX_numUD.Location = new System.Drawing.Point(210, 104);
             this.formatX_numUD.Maximum = new decimal(new int[] {
@@ -869,7 +865,6 @@
             // 
             // formatX_UD
             // 
-            this.formatX_UD.Enabled = false;
             this.formatX_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatX_UD.Items.Add("General");
             this.formatX_UD.Items.Add("Scientific");
@@ -882,7 +877,6 @@
             // formatX_Lbl
             // 
             this.formatX_Lbl.AutoSize = true;
-            this.formatX_Lbl.Enabled = false;
             this.formatX_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.formatX_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
             this.formatX_Lbl.Location = new System.Drawing.Point(12, 107);
