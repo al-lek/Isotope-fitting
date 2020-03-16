@@ -1147,7 +1147,7 @@ namespace Isotope_fitting
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;
             double qMax = txt_to_d(multChem_max_charge);
-            if (double.IsNaN(qMax)) qMax = 25;
+            if (double.IsNaN(qMax)) qMax = qMin;
             OpenFileDialog multChems = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
             List<string> lista = new List<string>();
             if (multChems.ShowDialog() != DialogResult.Cancel)
