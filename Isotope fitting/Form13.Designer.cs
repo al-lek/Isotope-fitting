@@ -530,6 +530,7 @@
             this.Name = "Form13";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Internal Fragments\' plot format";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form13_DpiChanged);
             this.bar_grpBox13.ResumeLayout(false);

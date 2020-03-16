@@ -53,6 +53,7 @@
             this.Name = "Form17";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Calculation of di score ";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form17_DpiChanged);
             this.ResumeLayout(false);

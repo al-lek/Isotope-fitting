@@ -106,6 +106,7 @@
             this.Controls.Add(this.toolStrip_frm11);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form20";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Extract Plot";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form20_DpiChanged);
             this.toolStrip_frm11.ResumeLayout(false);

@@ -903,6 +903,7 @@
             this.Name = "Form19";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fragment selection filters";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form19_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).EndInit();

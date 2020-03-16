@@ -180,7 +180,7 @@
             this.Name = "Form7";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fitting calculations";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form7_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).EndInit();

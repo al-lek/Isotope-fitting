@@ -812,6 +812,7 @@
             this.MinimizeBox = false;
             this.Name = "Form12";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Primary Fragments\' plot format";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form12_DpiChanged);
             this.tickmark_grpBx12.ResumeLayout(false);

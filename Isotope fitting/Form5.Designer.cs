@@ -80,7 +80,7 @@
             this.MinimumSize = new System.Drawing.Size(350, 500);
             this.Name = "Form5";
             this.Opacity = 0.85D;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Peak Detection";
             this.TopMost = true;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form5_DpiChanged);

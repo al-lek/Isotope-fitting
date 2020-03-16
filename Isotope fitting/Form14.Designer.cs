@@ -104,6 +104,7 @@
             this.Controls.Add(this.ppm_Lbl14);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form14";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Load Fragments File ";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form14_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.ppmUD14)).EndInit();

@@ -111,7 +111,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(200, 200);
             this.Name = "Form11";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Extract Plot";
             this.TopMost = true;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form11_DpiChanged);

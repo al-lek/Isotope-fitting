@@ -969,7 +969,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form10";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Format Plot Area : Style";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form10_FormClosing);
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form10_DpiChanged);

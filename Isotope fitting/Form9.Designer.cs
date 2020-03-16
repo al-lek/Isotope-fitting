@@ -146,7 +146,6 @@
             // 
             // panel_calc
             // 
-            this.panel_calc.AutoScroll = true;
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.White;
             this.panel_calc.Controls.Add(this.label8);
@@ -170,7 +169,7 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(331, 728);
+            this.panel_calc.Size = new System.Drawing.Size(340, 675);
             this.panel_calc.TabIndex = 4;
             // 
             // label8
@@ -178,7 +177,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label8.Location = new System.Drawing.Point(3, 683);
+            this.label8.Location = new System.Drawing.Point(3, 626);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(152, 13);
             this.label8.TabIndex = 64;
@@ -192,7 +191,7 @@
             0,
             0,
             131072});
-            this.thre_numUD.Location = new System.Drawing.Point(165, 681);
+            this.thre_numUD.Location = new System.Drawing.Point(165, 624);
             this.thre_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -216,7 +215,7 @@
             // 
             this.resolution_Box.Enabled = false;
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(84, 536);
+            this.resolution_Box.Location = new System.Drawing.Point(84, 479);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(167, 20);
             this.resolution_Box.TabIndex = 61;
@@ -229,7 +228,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label1.Location = new System.Drawing.Point(18, 539);
+            this.label1.Location = new System.Drawing.Point(18, 482);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 60;
@@ -239,7 +238,7 @@
             // 
             this.ignore_ppm_form9.AutoSize = true;
             this.ignore_ppm_form9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ignore_ppm_form9.Location = new System.Drawing.Point(175, 564);
+            this.ignore_ppm_form9.Location = new System.Drawing.Point(175, 507);
             this.ignore_ppm_form9.Name = "ignore_ppm_form9";
             this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
             this.ignore_ppm_form9.TabIndex = 58;
@@ -250,13 +249,15 @@
             // 
             // FragCalc_TabControl
             // 
+            this.FragCalc_TabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
             this.FragCalc_TabControl.Controls.Add(this.chemForm_tab);
-            this.FragCalc_TabControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(331, 506);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(340, 450);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // Frag_tab
@@ -296,7 +297,7 @@
             this.Frag_tab.Location = new System.Drawing.Point(4, 22);
             this.Frag_tab.Name = "Frag_tab";
             this.Frag_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.Frag_tab.Size = new System.Drawing.Size(323, 480);
+            this.Frag_tab.Size = new System.Drawing.Size(332, 424);
             this.Frag_tab.TabIndex = 0;
             this.Frag_tab.Text = "Fragments";
             this.Frag_tab.UseVisualStyleBackColor = true;
@@ -1057,9 +1058,9 @@
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(0, 704);
+            this.calc_Btn.Location = new System.Drawing.Point(0, 651);
             this.calc_Btn.Name = "calc_Btn";
-            this.calc_Btn.Size = new System.Drawing.Size(331, 24);
+            this.calc_Btn.Size = new System.Drawing.Size(340, 24);
             this.calc_Btn.TabIndex = 41;
             this.calc_Btn.Text = "Calculate";
             this.toolTip1.SetToolTip(this.calc_Btn, "\'Calculate\' removes previously calculated fragments from the \'Fragment Calculator" +
@@ -1071,7 +1072,7 @@
             // 
             this.half_minus_rdBtn.AutoSize = true;
             this.half_minus_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 624);
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(150, 567);
             this.half_minus_rdBtn.Name = "half_minus_rdBtn";
             this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
             this.half_minus_rdBtn.TabIndex = 43;
@@ -1084,7 +1085,7 @@
             this.calc_param9Lbl.AutoSize = true;
             this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_param9Lbl.ForeColor = System.Drawing.Color.DarkBlue;
-            this.calc_param9Lbl.Location = new System.Drawing.Point(2, 510);
+            this.calc_param9Lbl.Location = new System.Drawing.Point(2, 453);
             this.calc_param9Lbl.Name = "calc_param9Lbl";
             this.calc_param9Lbl.Size = new System.Drawing.Size(208, 17);
             this.calc_param9Lbl.TabIndex = 51;
@@ -1095,7 +1096,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 562);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(2, 505);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -1110,7 +1111,7 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(84, 561);
+            this.ppm9_numUD.Location = new System.Drawing.Point(84, 504);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1124,7 +1125,7 @@
             // 
             this.half_plus_rdBtn.AutoSize = true;
             this.half_plus_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 654);
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(150, 597);
             this.half_plus_rdBtn.Name = "half_plus_rdBtn";
             this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
             this.half_plus_rdBtn.TabIndex = 44;
@@ -1136,7 +1137,7 @@
             // 
             this.one_rdBtn9.AutoSize = true;
             this.one_rdBtn9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.one_rdBtn9.Location = new System.Drawing.Point(5, 594);
+            this.one_rdBtn9.Location = new System.Drawing.Point(5, 537);
             this.one_rdBtn9.Name = "one_rdBtn9";
             this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
             this.one_rdBtn9.TabIndex = 39;
@@ -1148,7 +1149,7 @@
             // 
             this.half_rdBtn.AutoSize = true;
             this.half_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_rdBtn.Location = new System.Drawing.Point(150, 594);
+            this.half_rdBtn.Location = new System.Drawing.Point(150, 537);
             this.half_rdBtn.Name = "half_rdBtn";
             this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
             this.half_rdBtn.TabIndex = 42;
@@ -1160,7 +1161,7 @@
             // 
             this.two_rdBtn.AutoSize = true;
             this.two_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.two_rdBtn.Location = new System.Drawing.Point(5, 624);
+            this.two_rdBtn.Location = new System.Drawing.Point(5, 567);
             this.two_rdBtn.Name = "two_rdBtn";
             this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.two_rdBtn.TabIndex = 40;
@@ -1172,7 +1173,7 @@
             // 
             this.three_rdBtn.AutoSize = true;
             this.three_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.three_rdBtn.Location = new System.Drawing.Point(5, 654);
+            this.three_rdBtn.Location = new System.Drawing.Point(5, 597);
             this.three_rdBtn.Name = "three_rdBtn";
             this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.three_rdBtn.TabIndex = 41;
@@ -1189,7 +1190,7 @@
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.insert_Btn.Location = new System.Drawing.Point(0, 0);
             this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(168, 24);
+            this.insert_Btn.Size = new System.Drawing.Size(188, 24);
             this.insert_Btn.TabIndex = 53;
             this.insert_Btn.Text = "Insert in Frag.List";
             this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
@@ -1224,9 +1225,9 @@
             // 
             this.factor_panel9.BackColor = System.Drawing.Color.White;
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
-            this.factor_panel9.Location = new System.Drawing.Point(331, 0);
+            this.factor_panel9.Location = new System.Drawing.Point(340, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(406, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(426, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -1247,10 +1248,10 @@
             this.fragListView9.FullRowSelect = true;
             this.fragListView9.GridLines = true;
             this.fragListView9.HideSelection = false;
-            this.fragListView9.Location = new System.Drawing.Point(331, 37);
+            this.fragListView9.Location = new System.Drawing.Point(340, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(406, 667);
+            this.fragListView9.Size = new System.Drawing.Size(426, 614);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -1288,9 +1289,9 @@
             this.panel1.Controls.Add(this.rem_Btn);
             this.panel1.Controls.Add(this.plot_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(331, 704);
+            this.panel1.Location = new System.Drawing.Point(340, 651);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(406, 24);
+            this.panel1.Size = new System.Drawing.Size(426, 24);
             this.panel1.TabIndex = 56;
             // 
             // rem_Btn
@@ -1300,7 +1301,7 @@
             this.rem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.rem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rem_Btn.Location = new System.Drawing.Point(168, 0);
+            this.rem_Btn.Location = new System.Drawing.Point(188, 0);
             this.rem_Btn.Name = "rem_Btn";
             this.rem_Btn.Size = new System.Drawing.Size(119, 24);
             this.rem_Btn.TabIndex = 55;
@@ -1316,7 +1317,7 @@
             this.plot_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plot_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plot_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.plot_Btn.Location = new System.Drawing.Point(287, 0);
+            this.plot_Btn.Location = new System.Drawing.Point(307, 0);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(119, 24);
             this.plot_Btn.TabIndex = 54;
@@ -1329,7 +1330,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(737, 728);
+            this.ClientSize = new System.Drawing.Size(766, 675);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel1);
@@ -1338,7 +1339,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(740, 700);
             this.Name = "Form9";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fragment Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form9_DpiChanged);

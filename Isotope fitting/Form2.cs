@@ -162,7 +162,7 @@ namespace Isotope_fitting
             HideSelection = false,
             Location = new System.Drawing.Point(2, 104),
             Name = "frag_tree",
-            Size = new System.Drawing.Size(352, 328),
+            Size = new System.Drawing.Size(348, 332),
             TabIndex = 10000011,
             Visible = false ,ShowNodeToolTips=false};
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
@@ -625,7 +625,25 @@ namespace Isotope_fitting
                     }
                     entire_spectrum = true; threshold = 0.01;
                 }
-            }           
+            }
+            else
+            {
+                ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2; selection_rule = new bool[] { false, true, false, false, false, false };
+                fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+                fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb(); peak_color = OxyColors.Crimson; fit_style = OxyPlot.LineStyle.Dot; exper_style = OxyPlot.LineStyle.Solid; frag_style = OxyPlot.LineStyle.Solid; exp_width = 1; frag_width = 2; fit_width = 1;
+                peak_width = 1; cen_width = 1; Xmajor_grid = false; Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside; Y_tick = OxyPlot.Axes.TickStyle.Outside; x_interval = 50;
+                y_interval = 50; x_format = "G"; y_format = "G"; x_numformat = "0"; y_numformat = "0"; Xmajor_grid12 = OxyPlot.LineStyle.Solid; Xminor_grid12 = OxyPlot.LineStyle.None; Ymajor_grid12 = OxyPlot.LineStyle.Solid; Yminor_grid12 = OxyPlot.LineStyle.None; y_interval12 = 50;
+                X_tick12 = OxyPlot.Axes.TickStyle.Outside; Y_tick12 = OxyPlot.Axes.TickStyle.Outside; y_format12 = "G"; y_numformat12 = "0"; x_majorStep12 = 5; x_minorStep12 = 1; bar_width = 1; Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid; Xminor_charge_grid12 = OxyPlot.LineStyle.None;
+                Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid; Yminor_charge_grid12 = OxyPlot.LineStyle.None; X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside; Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside; y_charge_majorStep12 = 2; y_charge_minorStep12 = 1; x_charge_majorStep12 = 5;
+                x_charge_minorStep12 = 1; Xint_major_grid13 = OxyPlot.LineStyle.Solid; Xint_minor_grid13 = OxyPlot.LineStyle.None; Yint_major_grid13 = OxyPlot.LineStyle.Solid; Yint_minor_grid13 = OxyPlot.LineStyle.None; x_format13 = "G"; x_numformat13 = "0"; x_interval13 = 50; Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
+                Yint_tick13 = OxyPlot.Axes.TickStyle.Outside; xINT_majorStep13 = 5; xINT_minorStep13 = 1; yINT_majorStep13 = 5; yINT_minorStep13 = 1; int_width = 1;
+                for (int a = 0; a < 6; a++)
+                {
+                    ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
+                }
+                entire_spectrum = true; threshold = 0.01;
+                save_preferences();
+            }
         }
 
         public void save_preferences()
@@ -3932,13 +3950,13 @@ namespace Isotope_fitting
             if (status == "post load")
             {
                 fitMin_Box.Enabled = fitMax_Box.Enabled = fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
-                Fitting_chkBox.Checked = loadFit_Btn.Enabled = false; fragCalc_Btn1.Enabled = true;
+                Fitting_chkBox.Checked = loadFit_Btn.Enabled = false; 
             }
             else if (status == "post import fragments")
             {
                 clearCalc_Btn.Enabled = mzMax_Box.Enabled = mzMin_Box.Enabled = mzMax_Label.Enabled = mzMin_Label.Enabled = chargeMax_Box.Enabled = true;
                 chargeMin_Box.Enabled = chargeAll_Btn.Enabled = idxPr_Box.Enabled = idxTo_Box.Enabled = idxFrom_Box.Enabled = resolution_Box.Enabled = true;
-                machine_listBox.Enabled = calc_Btn.Enabled = fragCalc_Btn1.Enabled = true;
+                machine_listBox.Enabled = calc_Btn.Enabled =  true;
                 loadFit_Btn.Enabled = false;
             }
             else if (status == "post calculations")
@@ -6289,7 +6307,7 @@ namespace Isotope_fitting
                 insert_exp = false;
                 plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
                 loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
-                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false; fragCalc_Btn1.Enabled = false; fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
+                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false;  fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
                 fitMin_Box.Text = null; fitMax_Box.Text = null; fitStep_Box.Text = null; step_rangeBox.Text = null;
                 Fitting_chkBox.Checked = false;
                 Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
@@ -6302,8 +6320,7 @@ namespace Isotope_fitting
                 machine_listBox.SelectedIndex = 2;
                 loadExp_Btn.Enabled = true;
                 selected_window = 1000000;
-                bigPanel.Controls.Clear();
-                factor_Box.Text = null;
+                bigPanel.Controls.Clear();                
                 candidate_fragments = 1;
                 mzMax_Box.Enabled = false; mzMin_Box.Enabled = false; mzMax_Label.Enabled = false; mzMin_Label.Enabled = false; chargeMax_Box.Enabled = false; chargeMin_Box.Enabled = false; chargeAll_Btn.Enabled = false;
                 idxPr_Box.Enabled = false; idxTo_Box.Enabled = false; idxFrom_Box.Enabled = false; resolution_Box.Enabled= false; machine_listBox.Enabled = false;
@@ -7033,50 +7050,7 @@ namespace Isotope_fitting
                 if (plot_rem_Btns == false) refresh_iso_plot();
             }
         }
-        private void factor_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(factor_Box.Text))
-            {
-                if (factor_Box.Text != "-")
-                {
-                    try
-                    {
-                        double.Parse(factor_Box.Text, NumberStyles.Number);
-                    }
-                    catch (FormatException ex)
-                    {
-                        MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                        factor_Box.Text = null;
-                    }
-                }
-
-            }
-        }
-        private void factor_Box_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                ListView.SelectedListViewItemCollection items = this.frag_listView.SelectedItems;
-                List<int> to_change = new List<int>();
-                if (Fragments2.Count > 0)
-                {
-                    foreach (ListViewItem item in frag_listView.SelectedItems)
-                    {
-                        int item_code = Int32.Parse(item.SubItems[5].Text, NumberStyles.Integer);
-                        Fragments2[item_code - 1].Factor = double.Parse(factor_Box.Text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign);
-                        factor_Box.Text = Fragments2[item_code - 1].Factor.ToString();
-                        item.SubItems[4].Text = Fragments2[item_code - 1].Factor.ToString();
-                        item.SubItems[6].Text = (Fragments2[item_code - 1].Factor * Fragments2[item_code - 1].Fix * Fragments2[item_code - 1].Centroid[0].Y).ToString();
-                    }
-                    if (!is_loading && !is_applying_fit) refresh_iso_plot();
-                }
-                else
-                {
-                    MessageBox.Show("List doesn't contain fragments!");
-                }
-            }
-
-        }
+       
         private void selFrag_Label_Click(object sender, EventArgs e)
         {
             if (Fragments2.Count > 0)
@@ -7136,64 +7110,13 @@ namespace Isotope_fitting
             plot_rem_Btns = false;
         }
 
-        private void factor_Box_KeyDown(object sender, KeyEventArgs e)
-        {
-            ListView.SelectedIndexCollection indexes = this.frag_listView.SelectedIndices;
-            List<int> to_change = new List<int>();
-            if (e.KeyData == Keys.Up || e.KeyData == Keys.Down)
-            {
-                if (Fragments2.Count > 0)
-                {
-                    if (frag_listView.SelectedItems.Count == 1)
-                    {
-                        int item_code = Int32.Parse(frag_listView.SelectedItems[0].SubItems[5].Text, NumberStyles.Integer);
-                        factor_Box.Text = Fragments2[item_code - 1].Factor.ToString();
-                        if (e.KeyData == Keys.Up) { Fragments2[item_code - 1].Factor += keyStep; }
-                        else if (e.KeyData == Keys.Down) { Fragments2[item_code - 1].Factor -= keyStep; }
-                        factor_Box.Text = Fragments2[item_code - 1].Factor.ToString();
-                        frag_listView.SelectedItems[0].SubItems[4].Text = Fragments2[item_code - 1].Factor.ToString();
-                        frag_listView.SelectedItems[0].SubItems[6].Text = (Fragments2[item_code - 1].Factor * Fragments2[item_code - 1].Fix * Fragments2[item_code - 1].Centroid[0].Y).ToString();
-                        if (!is_loading && !is_applying_fit) { refresh_iso_plot(); }
-                    }
-                    else
-                    {
-                        foreach (ListViewItem item in frag_listView.SelectedItems)
-                        {
-                            int item_code = Int32.Parse(item.SubItems[5].Text, NumberStyles.Integer);
-                            if (e.KeyData == Keys.Up)
-                            {
-                                Fragments2[item_code - 1].Factor += keyStep;
-                                factor_Box.Text = "+" + keyStep.ToString();
-                                item.SubItems[4].Text = Fragments2[item_code - 1].Factor.ToString();
-                                item.SubItems[6].Text = (Fragments2[item_code - 1].Factor * Fragments2[item_code - 1].Fix * Fragments2[item_code - 1].Centroid[0].Y).ToString();
-                                if (!is_loading && !is_applying_fit) refresh_iso_plot();
-                            }
-                            else if (e.KeyData == Keys.Down)
-                            {
-                                Fragments2[item_code - 1].Factor -= keyStep;
-                                factor_Box.Text = "-" + keyStep.ToString();
-                                item.SubItems[4].Text = Fragments2[item_code - 1].Factor.ToString();
-                                item.SubItems[6].Text = (Fragments2[item_code - 1].Factor * Fragments2[item_code - 1].Fix * Fragments2[item_code - 1].Centroid[0].Y).ToString();
-                                if (!is_loading && !is_applying_fit) refresh_iso_plot();
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("List doesn't contain fragments!");
-                }
-            }
-        }
-
         private void frag_listView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            factor_Box.Text = null;
+        {           
             ListView.SelectedIndexCollection indexes = this.frag_listView.SelectedIndices;
             if (Fragments2.Count != 0 && indexes.Count == 1)
             {
                 int item_code = Int32.Parse(frag_listView.Items[indexes[0]].SubItems[5].Text, NumberStyles.Integer);
-                factor_Box.Text = Fragments2[item_code - 1].Factor.ToString();
+                //factor_Box.Text = Fragments2[item_code - 1].Factor.ToString();
             }
         }
 
@@ -7449,7 +7372,6 @@ namespace Isotope_fitting
             loadExp_Btn.Enabled = true;
             selected_window = 1000000;
             bigPanel.Controls.Clear();
-            factor_Box.Text = null;
             candidate_fragments = 1;
             mzMax_Box.Enabled = false;
             mzMin_Box.Enabled = false;

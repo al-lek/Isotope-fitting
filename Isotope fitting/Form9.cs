@@ -580,7 +580,8 @@ namespace Isotope_fitting
             double emass = 0.00054858;
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
             chem.Points= chem.Points.OrderBy(p => p.X).ToList();
-            chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString(); 
+            chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString();
+            if (!insert_exp ) { add_fragment_to_Fragments3(chem, cen); return; }
             // MAIN decesion algorithm 
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
@@ -652,19 +653,22 @@ namespace Isotope_fitting
                 
                 if (chem.Charge > 0) Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
                 else Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-                double pt0 = 0.1*Form2.max_exp;
-                if (all_data[0].Count > 0 && all_data[0][0][0] < Fragments3.Last().Profile[0].X && all_data[0].Last()[0] > Fragments3.Last().Profile.Last().X)
+                if (insert_exp)
                 {
-                    try
+                    double pt0 = 0.1 * Form2.max_exp;
+                    if (all_data[0].Count > 0 && all_data[0][0][0] < Fragments3.Last().Profile[0].X && all_data[0].Last()[0] > Fragments3.Last().Profile.Last().X)
                     {
-                        pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X-2 && x[0] < Fragments3.Last().Centroid[0].X+2)).Max(k => k[1]);
+                        try
+                        {
+                            pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X - 2 && x[0] < Fragments3.Last().Centroid[0].X + 2)).Max(k => k[1]);
+                        }
+                        catch
+                        {
+                            pt0 = 0.1 * Form2.max_exp;
+                        }
                     }
-                    catch
-                    {
-                        pt0 = 0.1 * Form2.max_exp;
-                    }
-                }
-                Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
+                    Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
+                }               
                 // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                 // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                 chem.Profile.Clear();

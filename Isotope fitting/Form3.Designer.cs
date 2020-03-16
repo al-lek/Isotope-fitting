@@ -100,7 +100,7 @@
             this.MinimizeBox = false;
             this.Name = "Form3";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Saving options";
             this.TopMost = true;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form3_DpiChanged);

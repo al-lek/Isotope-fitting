@@ -72,7 +72,7 @@
             this.Name = "Form8";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Peak Detection Settings";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form8_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).EndInit();

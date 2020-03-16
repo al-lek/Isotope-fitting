@@ -151,6 +151,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form16";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AA amino acid sequence Editor";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form16_DpiChanged);
             this.seq_tabControl.ResumeLayout(false);

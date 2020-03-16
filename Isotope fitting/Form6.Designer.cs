@@ -777,7 +777,7 @@
             this.Name = "Form6";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "\'Filter & Sort\' fitting results";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form6_FormClosing);
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form6_DpiChanged);

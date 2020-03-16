@@ -99,6 +99,7 @@
             this.Name = "Form18";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MS file type";
             this.TopMost = true;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form18_DpiChanged);
