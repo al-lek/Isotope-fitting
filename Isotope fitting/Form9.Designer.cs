@@ -32,6 +32,7 @@
             System.Windows.Forms.ColumnHeader z_clmn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.insert_Btn = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.thre_numUD = new System.Windows.Forms.NumericUpDown();
             this.resolution_Box = new System.Windows.Forms.TextBox();
@@ -110,7 +111,6 @@
             this.half_rdBtn = new System.Windows.Forms.RadioButton();
             this.two_rdBtn = new System.Windows.Forms.RadioButton();
             this.three_rdBtn = new System.Windows.Forms.RadioButton();
-            this.insert_Btn = new System.Windows.Forms.Button();
             this.statusStrpFrm9 = new System.Windows.Forms.StatusStrip();
             this.progressLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
@@ -173,6 +173,21 @@
             this.panel_calc.Size = new System.Drawing.Size(363, 675);
             this.panel_calc.TabIndex = 4;
             // 
+            // insert_Btn
+            // 
+            this.insert_Btn.BackColor = System.Drawing.Color.Green;
+            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.insert_Btn.Location = new System.Drawing.Point(115, 621);
+            this.insert_Btn.Name = "insert_Btn";
+            this.insert_Btn.Size = new System.Drawing.Size(132, 24);
+            this.insert_Btn.TabIndex = 53;
+            this.insert_Btn.Text = "Insert in Frag.List";
+            this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
+            this.insert_Btn.UseVisualStyleBackColor = false;
+            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -214,7 +229,6 @@
             // 
             // resolution_Box
             // 
-            this.resolution_Box.Enabled = false;
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
             this.resolution_Box.Location = new System.Drawing.Point(86, 442);
             this.resolution_Box.Name = "resolution_Box";
@@ -238,6 +252,8 @@
             // ignore_ppm_form9
             // 
             this.ignore_ppm_form9.AutoSize = true;
+            this.ignore_ppm_form9.Checked = true;
+            this.ignore_ppm_form9.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ignore_ppm_form9.ForeColor = System.Drawing.Color.MidnightBlue;
             this.ignore_ppm_form9.Location = new System.Drawing.Point(177, 470);
             this.ignore_ppm_form9.Name = "ignore_ppm_form9";
@@ -766,7 +782,7 @@
             this.filename_txtBx.BackColor = System.Drawing.Color.WhiteSmoke;
             this.filename_txtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.filename_txtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filename_txtBx.Location = new System.Drawing.Point(3, 266);
+            this.filename_txtBx.Location = new System.Drawing.Point(3, 259);
             this.filename_txtBx.Name = "filename_txtBx";
             this.filename_txtBx.ReadOnly = true;
             this.filename_txtBx.Size = new System.Drawing.Size(332, 11);
@@ -793,7 +809,7 @@
             this.clear_multiple_chem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.clear_multiple_chem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clear_multiple_chem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.clear_multiple_chem_Btn.Location = new System.Drawing.Point(227, 353);
+            this.clear_multiple_chem_Btn.Location = new System.Drawing.Point(227, 346);
             this.clear_multiple_chem_Btn.Name = "clear_multiple_chem_Btn";
             this.clear_multiple_chem_Btn.Size = new System.Drawing.Size(90, 24);
             this.clear_multiple_chem_Btn.TabIndex = 57;
@@ -808,7 +824,7 @@
             this.load_chems_file_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.load_chems_file_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.load_chems_file_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.load_chems_file_Btn.Location = new System.Drawing.Point(3, 353);
+            this.load_chems_file_Btn.Location = new System.Drawing.Point(3, 346);
             this.load_chems_file_Btn.Name = "load_chems_file_Btn";
             this.load_chems_file_Btn.Size = new System.Drawing.Size(90, 24);
             this.load_chems_file_Btn.TabIndex = 56;
@@ -820,7 +836,7 @@
             // multChem_max_charge
             // 
             this.multChem_max_charge.ForeColor = System.Drawing.Color.Black;
-            this.multChem_max_charge.Location = new System.Drawing.Point(55, 324);
+            this.multChem_max_charge.Location = new System.Drawing.Point(55, 317);
             this.multChem_max_charge.Name = "multChem_max_charge";
             this.multChem_max_charge.Size = new System.Drawing.Size(38, 20);
             this.multChem_max_charge.TabIndex = 55;
@@ -831,7 +847,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.MediumSlateBlue;
-            this.label3.Location = new System.Drawing.Point(3, 284);
+            this.label3.Location = new System.Drawing.Point(3, 277);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 13);
             this.label3.TabIndex = 51;
@@ -843,7 +859,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.label4.Location = new System.Drawing.Point(55, 304);
+            this.label4.Location = new System.Drawing.Point(55, 297);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(26, 13);
             this.label4.TabIndex = 53;
@@ -854,7 +870,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.label5.Location = new System.Drawing.Point(3, 304);
+            this.label5.Location = new System.Drawing.Point(3, 297);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(23, 13);
             this.label5.TabIndex = 52;
@@ -863,7 +879,7 @@
             // multChem_min_charge
             // 
             this.multChem_min_charge.ForeColor = System.Drawing.Color.Black;
-            this.multChem_min_charge.Location = new System.Drawing.Point(3, 324);
+            this.multChem_min_charge.Location = new System.Drawing.Point(3, 317);
             this.multChem_min_charge.Name = "multChem_min_charge";
             this.multChem_min_charge.Size = new System.Drawing.Size(38, 20);
             this.multChem_min_charge.TabIndex = 54;
@@ -876,7 +892,7 @@
             this.label2.ForeColor = System.Drawing.Color.MediumSlateBlue;
             this.helpProvider1.SetHelpString(this.label2, "First set the charge range and then load the desired file. The file contains in e" +
         "ach row a chemical formula and a name");
-            this.label2.Location = new System.Drawing.Point(3, 246);
+            this.label2.Location = new System.Drawing.Point(3, 239);
             this.label2.Name = "label2";
             this.helpProvider1.SetShowHelp(this.label2, true);
             this.label2.Size = new System.Drawing.Size(156, 17);
@@ -1088,9 +1104,9 @@
             this.calc_param9Lbl.ForeColor = System.Drawing.Color.DarkBlue;
             this.calc_param9Lbl.Location = new System.Drawing.Point(4, 416);
             this.calc_param9Lbl.Name = "calc_param9Lbl";
-            this.calc_param9Lbl.Size = new System.Drawing.Size(208, 17);
+            this.calc_param9Lbl.Size = new System.Drawing.Size(130, 17);
             this.calc_param9Lbl.TabIndex = 51;
-            this.calc_param9Lbl.Text = "General Calculation parameters";
+            this.calc_param9Lbl.Text = "Calculation settings";
             // 
             // ppm9_Lbl
             // 
@@ -1182,21 +1198,6 @@
             this.three_rdBtn.Text = "3 most intense";
             this.three_rdBtn.UseVisualStyleBackColor = true;
             // 
-            // insert_Btn
-            // 
-            this.insert_Btn.BackColor = System.Drawing.Color.Green;
-            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(115, 621);
-            this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(132, 24);
-            this.insert_Btn.TabIndex = 53;
-            this.insert_Btn.Text = "Insert in Frag.List";
-            this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
-            this.insert_Btn.UseVisualStyleBackColor = false;
-            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
-            // 
             // statusStrpFrm9
             // 
             this.statusStrpFrm9.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1251,7 +1252,7 @@
             this.fragListView9.Location = new System.Drawing.Point(363, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(403, 614);
+            this.fragListView9.Size = new System.Drawing.Size(403, 588);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -1288,9 +1289,9 @@
             this.panel1.Controls.Add(this.rem_Btn);
             this.panel1.Controls.Add(this.plot_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(363, 651);
+            this.panel1.Location = new System.Drawing.Point(363, 625);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(403, 24);
+            this.panel1.Size = new System.Drawing.Size(403, 50);
             this.panel1.TabIndex = 56;
             // 
             // rem_Btn
@@ -1300,7 +1301,7 @@
             this.rem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.rem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rem_Btn.Location = new System.Drawing.Point(171, 0);
+            this.rem_Btn.Location = new System.Drawing.Point(52, 14);
             this.rem_Btn.Name = "rem_Btn";
             this.rem_Btn.Size = new System.Drawing.Size(129, 24);
             this.rem_Btn.TabIndex = 55;
@@ -1316,9 +1317,9 @@
             this.plot_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plot_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plot_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.plot_Btn.Location = new System.Drawing.Point(306, 0);
+            this.plot_Btn.Location = new System.Drawing.Point(219, 14);
             this.plot_Btn.Name = "plot_Btn";
-            this.plot_Btn.Size = new System.Drawing.Size(97, 24);
+            this.plot_Btn.Size = new System.Drawing.Size(129, 24);
             this.plot_Btn.TabIndex = 54;
             this.plot_Btn.Text = "Plot on graph";
             this.toolTip1.SetToolTip(this.plot_Btn, "Plot checked fragments");
@@ -1335,7 +1336,9 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.statusStrpFrm9);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(740, 700);
             this.Name = "Form9";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -830,6 +830,7 @@ namespace Isotope_fitting
             for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
             //refresh listview 
             Fragments3_to_listview();
+            last_plotted.Clear();
             //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
             first = true;
             factor_panel9.Visible = false; selected_idx = 0;
