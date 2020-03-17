@@ -2480,9 +2480,8 @@ namespace Isotope_fitting
             // 
             // rdBtn50Copy2
             // 
-            this.rdBtn50Copy2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rdBtn50Copy2.AutoSize = true;
-            this.rdBtn50Copy2.Location = new System.Drawing.Point(10, 423);
+            this.rdBtn50Copy2.Location = new System.Drawing.Point(7, 293);
             this.rdBtn50Copy2.Name = "rdBtn50Copy2";
             this.rdBtn50Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy2.TabIndex = 10;
@@ -2492,10 +2491,9 @@ namespace Isotope_fitting
             // 
             // rdBtn25Copy2
             // 
-            this.rdBtn25Copy2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rdBtn25Copy2.AutoSize = true;
             this.rdBtn25Copy2.Checked = true;
-            this.rdBtn25Copy2.Location = new System.Drawing.Point(10, 400);
+            this.rdBtn25Copy2.Location = new System.Drawing.Point(7, 270);
             this.rdBtn25Copy2.Name = "rdBtn25Copy2";
             this.rdBtn25Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy2.TabIndex = 9;
@@ -2703,9 +2701,8 @@ namespace Isotope_fitting
             // 
             // rdBtn50Copy1
             // 
-            this.rdBtn50Copy1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rdBtn50Copy1.AutoSize = true;
-            this.rdBtn50Copy1.Location = new System.Drawing.Point(10, 423);
+            this.rdBtn50Copy1.Location = new System.Drawing.Point(7, 291);
             this.rdBtn50Copy1.Name = "rdBtn50Copy1";
             this.rdBtn50Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy1.TabIndex = 10;
@@ -2715,10 +2712,9 @@ namespace Isotope_fitting
             // 
             // rdBtn25Copy1
             // 
-            this.rdBtn25Copy1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rdBtn25Copy1.AutoSize = true;
             this.rdBtn25Copy1.Checked = true;
-            this.rdBtn25Copy1.Location = new System.Drawing.Point(10, 400);
+            this.rdBtn25Copy1.Location = new System.Drawing.Point(7, 268);
             this.rdBtn25Copy1.Name = "rdBtn25Copy1";
             this.rdBtn25Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy1.TabIndex = 9;
@@ -2912,11 +2908,10 @@ namespace Isotope_fitting
             // 
             // add_sequencePanel1
             // 
-            this.add_sequencePanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.add_sequencePanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("add_sequencePanel1.BackgroundImage")));
             this.add_sequencePanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.add_sequencePanel1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.add_sequencePanel1.Location = new System.Drawing.Point(3, 469);
+            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 310);
             this.add_sequencePanel1.Name = "add_sequencePanel1";
             this.add_sequencePanel1.Size = new System.Drawing.Size(29, 28);
             this.add_sequencePanel1.TabIndex = 11;
@@ -2925,9 +2920,8 @@ namespace Isotope_fitting
             // 
             // rdBtn50
             // 
-            this.rdBtn50.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rdBtn50.AutoSize = true;
-            this.rdBtn50.Location = new System.Drawing.Point(10, 423);
+            this.rdBtn50.Location = new System.Drawing.Point(7, 276);
             this.rdBtn50.Name = "rdBtn50";
             this.rdBtn50.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50.TabIndex = 10;
@@ -2937,10 +2931,9 @@ namespace Isotope_fitting
             // 
             // rdBtn25
             // 
-            this.rdBtn25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rdBtn25.AutoSize = true;
             this.rdBtn25.Checked = true;
-            this.rdBtn25.Location = new System.Drawing.Point(10, 400);
+            this.rdBtn25.Location = new System.Drawing.Point(7, 253);
             this.rdBtn25.Name = "rdBtn25";
             this.rdBtn25.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25.TabIndex = 9;
@@ -3999,7 +3992,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v22.3";
+            this.Text = "Peak Finder v22.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);

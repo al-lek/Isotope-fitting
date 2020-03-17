@@ -47,11 +47,6 @@ namespace Isotope_fitting
             thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
-            
-            //ppm9_numUD.ValueChanged += (s, e) => 
-            //{
-            //    ppmError9 = (double)ppm9_numUD.Value;
-            //};
             ppm9_numUD.Value =(decimal)ppmError9;
             thre_numUD.Value = (decimal)thres9;
             one_rdBtn9.CheckedChanged += (s, e) => { selection_rule9[0]=one_rdBtn9.Checked; };
@@ -85,7 +80,22 @@ namespace Isotope_fitting
             idxTo_Box.MouseClick += (s, e) => { idxTo_Box.Focus(); };
             mzMax_Box.MouseClick += (s, e) => { mzMax_Box.Focus(); };
             mzMin_Box.MouseClick += (s, e) => { mzMin_Box.Focus(); };
-            
+            ContextMenu ctxMn1 = new ContextMenu() { };            
+            MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
+            ctxMn1.MenuItems.AddRange(new MenuItem[] {colorSelection });
+            fragListView9.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
+        }
+        private void colorSelectionList(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
+            if ((sender as MenuItem).Text == "Fragment color" && selectedItems.Count > 0)
+            {
+                foreach (int item in fragListView9.SelectedIndices)
+                {
+                    ColorDialog clrDlg = new ColorDialog();
+                    if (clrDlg.ShowDialog() == DialogResult.OK) {  Fragments3[item].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
+                }
+            }
         }
         void thre_numUD_TextChanged(object sender, EventArgs e)
         {
