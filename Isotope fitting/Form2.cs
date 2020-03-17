@@ -36,8 +36,8 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
-        LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Dpi };
-        LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Dpi };
+        LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Inherit };
+        LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
@@ -156,14 +156,17 @@ namespace Isotope_fitting
         public static List<List<double[]>> all_fitted_results;
         List<List<int[]>> all_fitted_sets;
         MyTreeView fit_tree;
-        MyTreeView frag_tree = new MyTreeView() { Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+        MyTreeView frag_tree = new MyTreeView()
+        {
+            Dock = DockStyle.Fill
+            /*Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right*/,
            BorderStyle = BorderStyle.FixedSingle,
             CheckBoxes = true,
             HideSelection = false,
-            Location = new System.Drawing.Point(2, 104),
+            Location = new System.Drawing.Point(2, 134),
             Name = "frag_tree",
-            Size = new System.Drawing.Size(348, 332),
-            TabIndex = 10000011,
+            Size = new System.Drawing.Size(341, 323),
+            TabIndex = 1000000,
             Visible = false ,ShowNodeToolTips=false};
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
@@ -377,8 +380,7 @@ namespace Isotope_fitting
             frag_listView.Visible = frag_listView.Enabled = false;            
             load_preferences();
             reset_all();
-            splitContainer2.Panel2.Controls.Add(frag_tree);
-
+            panel2.Controls.Add(frag_tree);
         }
         private void Form2_DpiChanged(object sender, DpiChangedEventArgs e)
         {
@@ -4630,9 +4632,9 @@ namespace Isotope_fitting
         /// </summary>
         private void progress_display_init()
         {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(599, 20), Style = 0, Minimum = 0, Value = 0, Size = new Size(292, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
-            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(608,3), AutoSize = true, Visible = false, Anchor = AnchorStyles.Right | AnchorStyles.Top };
-            user_grpBox.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(40, 20), Style = 0, Minimum = 0, Value = 0, Size = new Size(292, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
+            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(40,3), AutoSize = true, Visible = false, Anchor = AnchorStyles.Right | AnchorStyles.Top };
+            panel1.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
             prg_lbl.BringToFront(); tlPrgBr.BringToFront();
 
         }
@@ -14155,6 +14157,11 @@ namespace Isotope_fitting
         #endregion
 
         private void plotFragProf_chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void draw_sequence_panelCopy1_DpiChangedAfterParent(object sender, EventArgs e)
         {
 
         }
