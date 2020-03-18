@@ -261,6 +261,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolution_List.cs" />
+    <Compile Include="SequenceTab.cs" />
     <Compile Include="TriDiagonalMatrixF.cs" />
     <Compile Include="WindowSet.cs" />
     <EmbeddedResource Include="Form1.resx">
