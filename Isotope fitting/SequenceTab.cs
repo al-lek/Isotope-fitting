@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Isotope_fitting
 {
-    class SequenceTab
+    public class SequenceTab
     {
         private string sequence;
         private string extension;

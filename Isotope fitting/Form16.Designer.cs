@@ -38,6 +38,8 @@
             this.light_chain_tab = new System.Windows.Forms.TabPage();
             this.light_BoxFrm16 = new System.Windows.Forms.RichTextBox();
             this.add_tab_page = new System.Windows.Forms.TabPage();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.seq_tabControl.SuspendLayout();
             this.seq_tab.SuspendLayout();
             this.heavy_chain_tab.SuspendLayout();
@@ -68,7 +70,7 @@
             this.seq_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
             this.seq_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.seq_BoxFrm16.Size = new System.Drawing.Size(692, 168);
+            this.seq_BoxFrm16.Size = new System.Drawing.Size(692, 297);
             this.seq_BoxFrm16.TabIndex = 2;
             this.seq_BoxFrm16.Text = "";
             this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
@@ -83,8 +85,10 @@
             this.seq_tabControl.Location = new System.Drawing.Point(0, 0);
             this.seq_tabControl.Name = "seq_tabControl";
             this.seq_tabControl.SelectedIndex = 0;
-            this.seq_tabControl.Size = new System.Drawing.Size(706, 200);
+            this.seq_tabControl.Size = new System.Drawing.Size(706, 329);
             this.seq_tabControl.TabIndex = 3;
+            this.seq_tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.seq_tabControl_Selecting);
+            this.seq_tabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.seq_tabControl_MouseDown);
             // 
             // seq_tab
             // 
@@ -92,18 +96,20 @@
             this.seq_tab.Location = new System.Drawing.Point(4, 22);
             this.seq_tab.Name = "seq_tab";
             this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.seq_tab.Size = new System.Drawing.Size(698, 174);
+            this.seq_tab.Size = new System.Drawing.Size(698, 303);
             this.seq_tab.TabIndex = 0;
             this.seq_tab.Text = "General Sequence";
             this.seq_tab.UseVisualStyleBackColor = true;
             // 
             // heavy_chain_tab
             // 
+            this.heavy_chain_tab.Controls.Add(this.radioButton2);
+            this.heavy_chain_tab.Controls.Add(this.radioButton1);
             this.heavy_chain_tab.Controls.Add(this.heavy_BoxFrm16);
             this.heavy_chain_tab.Location = new System.Drawing.Point(4, 22);
             this.heavy_chain_tab.Name = "heavy_chain_tab";
             this.heavy_chain_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.heavy_chain_tab.Size = new System.Drawing.Size(698, 174);
+            this.heavy_chain_tab.Size = new System.Drawing.Size(698, 303);
             this.heavy_chain_tab.TabIndex = 1;
             this.heavy_chain_tab.Text = "Heavy Chain";
             this.heavy_chain_tab.UseVisualStyleBackColor = true;
@@ -112,11 +118,11 @@
             // 
             this.heavy_BoxFrm16.AllowDrop = true;
             this.heavy_BoxFrm16.DetectUrls = false;
-            this.heavy_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.heavy_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Top;
             this.heavy_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.heavy_BoxFrm16.Name = "heavy_BoxFrm16";
             this.heavy_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.heavy_BoxFrm16.Size = new System.Drawing.Size(692, 168);
+            this.heavy_BoxFrm16.Size = new System.Drawing.Size(692, 271);
             this.heavy_BoxFrm16.TabIndex = 3;
             this.heavy_BoxFrm16.Text = "";
             this.heavy_BoxFrm16.TextChanged += new System.EventHandler(this.heavy_BoxFrm16_TextChanged);
@@ -127,7 +133,7 @@
             this.light_chain_tab.Location = new System.Drawing.Point(4, 22);
             this.light_chain_tab.Name = "light_chain_tab";
             this.light_chain_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.light_chain_tab.Size = new System.Drawing.Size(698, 174);
+            this.light_chain_tab.Size = new System.Drawing.Size(698, 303);
             this.light_chain_tab.TabIndex = 2;
             this.light_chain_tab.Text = "Light Chain";
             this.light_chain_tab.UseVisualStyleBackColor = true;
@@ -136,11 +142,11 @@
             // 
             this.light_BoxFrm16.AllowDrop = true;
             this.light_BoxFrm16.DetectUrls = false;
-            this.light_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.light_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Top;
             this.light_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.light_BoxFrm16.Name = "light_BoxFrm16";
             this.light_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.light_BoxFrm16.Size = new System.Drawing.Size(692, 168);
+            this.light_BoxFrm16.Size = new System.Drawing.Size(692, 267);
             this.light_BoxFrm16.TabIndex = 3;
             this.light_BoxFrm16.Text = "";
             this.light_BoxFrm16.TextChanged += new System.EventHandler(this.light_BoxFrm16_TextChanged);
@@ -150,10 +156,32 @@
             this.add_tab_page.Location = new System.Drawing.Point(4, 22);
             this.add_tab_page.Name = "add_tab_page";
             this.add_tab_page.Padding = new System.Windows.Forms.Padding(3);
-            this.add_tab_page.Size = new System.Drawing.Size(698, 174);
+            this.add_tab_page.Size = new System.Drawing.Size(698, 303);
             this.add_tab_page.TabIndex = 3;
             this.add_tab_page.Text = "+";
             this.add_tab_page.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(2, 280);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(85, 17);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "radioButton1";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(94, 280);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(85, 17);
+            this.radioButton2.TabIndex = 5;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "radioButton2";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // Form16
             // 
@@ -172,6 +200,7 @@
             this.seq_tabControl.ResumeLayout(false);
             this.seq_tab.ResumeLayout(false);
             this.heavy_chain_tab.ResumeLayout(false);
+            this.heavy_chain_tab.PerformLayout();
             this.light_chain_tab.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -188,5 +217,7 @@
         private System.Windows.Forms.RichTextBox heavy_BoxFrm16;
         private System.Windows.Forms.RichTextBox light_BoxFrm16;
         private System.Windows.Forms.TabPage add_tab_page;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }

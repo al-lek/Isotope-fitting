@@ -41,6 +41,7 @@ namespace Isotope_fitting
         public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
+        public List<SequenceTab> sequenceList = new List<SequenceTab>();
         #region PARAMETER SET TAB FIT
 
         #region old new calculations
