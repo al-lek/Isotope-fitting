@@ -127,6 +127,7 @@
             this.plot_Btn = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
@@ -137,6 +138,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.statusStrpFrm9.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // z_clmn
@@ -148,7 +150,6 @@
             // 
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.White;
-            this.panel_calc.Controls.Add(this.insert_Btn);
             this.panel_calc.Controls.Add(this.label8);
             this.panel_calc.Controls.Add(this.thre_numUD);
             this.panel_calc.Controls.Add(this.resolution_Box);
@@ -170,20 +171,21 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(363, 675);
+            this.panel_calc.Size = new System.Drawing.Size(363, 677);
             this.panel_calc.TabIndex = 4;
             // 
             // insert_Btn
             // 
+            this.insert_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.insert_Btn.BackColor = System.Drawing.Color.Green;
             this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(115, 621);
+            this.insert_Btn.Location = new System.Drawing.Point(240, 23);
             this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(132, 24);
+            this.insert_Btn.Size = new System.Drawing.Size(138, 30);
             this.insert_Btn.TabIndex = 53;
-            this.insert_Btn.Text = "Insert in Frag.List";
+            this.insert_Btn.Text = "Insert to Frag.List";
             this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
             this.insert_Btn.UseVisualStyleBackColor = false;
             this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
@@ -269,12 +271,12 @@
             this.FragCalc_TabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
             this.FragCalc_TabControl.Controls.Add(this.chemForm_tab);
+            this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(363, 413);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(363, 415);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // Frag_tab
@@ -770,7 +772,7 @@
             this.chemForm_tab.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab.Name = "chemForm_tab";
             this.chemForm_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab.Size = new System.Drawing.Size(355, 387);
+            this.chemForm_tab.Size = new System.Drawing.Size(355, 389);
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
@@ -1055,7 +1057,6 @@
             this.chemForm_txtBox.Name = "chemForm_txtBox";
             this.chemForm_txtBox.Size = new System.Drawing.Size(314, 20);
             this.chemForm_txtBox.TabIndex = 3;
-            this.chemForm_txtBox.TextChanged += new System.EventHandler(this.chemForm_txtBox_TextChanged);
             // 
             // chemForm_Lbl
             // 
@@ -1228,7 +1229,7 @@
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.factor_panel9.Location = new System.Drawing.Point(363, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(403, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(406, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -1252,7 +1253,7 @@
             this.fragListView9.Location = new System.Drawing.Point(363, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(403, 588);
+            this.fragListView9.Size = new System.Drawing.Size(406, 569);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -1286,51 +1287,62 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.rem_Btn);
-            this.panel1.Controls.Add(this.plot_Btn);
+            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Controls.Add(this.insert_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(363, 625);
+            this.panel1.Location = new System.Drawing.Point(363, 606);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(403, 50);
+            this.panel1.Size = new System.Drawing.Size(406, 71);
             this.panel1.TabIndex = 56;
             // 
             // rem_Btn
             // 
-            this.rem_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.rem_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rem_Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.rem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.rem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rem_Btn.Location = new System.Drawing.Point(52, 14);
+            this.rem_Btn.Location = new System.Drawing.Point(90, 17);
             this.rem_Btn.Name = "rem_Btn";
-            this.rem_Btn.Size = new System.Drawing.Size(129, 24);
+            this.rem_Btn.Size = new System.Drawing.Size(73, 24);
             this.rem_Btn.TabIndex = 55;
-            this.rem_Btn.Text = "Remove from graph";
+            this.rem_Btn.Text = "Remove";
             this.toolTip1.SetToolTip(this.rem_Btn, "Remove the last group of plotted fragments from the central plot");
             this.rem_Btn.UseVisualStyleBackColor = false;
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
             // plot_Btn
             // 
-            this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.plot_Btn.BackColor = System.Drawing.Color.Blue;
             this.plot_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plot_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plot_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.plot_Btn.Location = new System.Drawing.Point(219, 14);
+            this.plot_Btn.Location = new System.Drawing.Point(11, 17);
             this.plot_Btn.Name = "plot_Btn";
-            this.plot_Btn.Size = new System.Drawing.Size(129, 24);
+            this.plot_Btn.Size = new System.Drawing.Size(73, 24);
             this.plot_Btn.TabIndex = 54;
-            this.plot_Btn.Text = "Plot on graph";
+            this.plot_Btn.Text = "Plot";
             this.toolTip1.SetToolTip(this.plot_Btn, "Plot checked fragments");
             this.plot_Btn.UseVisualStyleBackColor = false;
             this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.plot_Btn);
+            this.groupBox1.Controls.Add(this.rem_Btn);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(173, 53);
+            this.groupBox1.TabIndex = 56;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Graph";
             // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(766, 675);
+            this.ClientSize = new System.Drawing.Size(769, 677);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel1);
@@ -1359,6 +1371,7 @@
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1462,5 +1475,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown thre_numUD;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

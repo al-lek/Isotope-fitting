@@ -82,8 +82,72 @@ namespace Isotope_fitting
             mzMin_Box.MouseClick += (s, e) => { mzMin_Box.Focus(); };
             ContextMenu ctxMn1 = new ContextMenu() { };            
             MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
-            ctxMn1.MenuItems.AddRange(new MenuItem[] {colorSelection });
+            MenuItem remFrag = new MenuItem("Delete fragment", delete_frag);
+            MenuItem clearall = new MenuItem("Clear all", delete_all);
+
+
+            ctxMn1.MenuItems.AddRange(new MenuItem[] {colorSelection, remFrag, clearall });
             fragListView9.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
+        }
+        private void Form9_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
+
+        private void delete_all(object sender, EventArgs e)
+        {
+            fragListView9.Enabled=false;
+            if ((sender as MenuItem).Text == "Clear all" )
+            {
+                //when closing the form public data from this form are restored in their initial values
+                initialize_data();
+                fragListView9.BeginUpdate();
+                fragListView9.Items.Clear();               
+                fragListView9.EndUpdate();
+                if (last_plotted.Count != 0)
+                {
+                    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                    last_plotted.Clear();
+                }
+                //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
+                //we don't want to refresh fragment trees in the basic form
+                frm2.ending_frm9();
+
+            }
+            fragListView9.Enabled = true;
+        }
+        private void delete_frag(object sender, EventArgs e)
+        {
+            if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
+            fragListView9.Enabled = false;
+            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
+            if ((sender as MenuItem).Text == "Delete fragment" && selectedItems.Count > 0)
+            {
+                now = false;
+                int count = 0;
+                foreach (int item in fragListView9.SelectedIndices)
+                {
+                    //remove fragment from the current listview
+                    Fragments3.RemoveAt(item - count); count++;                   
+                }
+                // sort by mz the fragments list 
+                Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+                // also restore indexes to match array position
+                for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
+                //refresh listview 
+                Fragments3_to_listview();
+                if (last_plotted.Count != 0)
+                {
+                    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                    last_plotted.Clear();
+                }
+                //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
+                first = true;
+                factor_panel9.Visible = false; selected_idx = 0;
+                frm2.ending_frm9();                
+            }
+            fragListView9.Enabled = true;
+            plot_checked();
         }
         private void colorSelectionList(object sender, EventArgs e)
         {
@@ -224,7 +288,11 @@ namespace Isotope_fitting
         #region isotopic distributions calculations
         private void calc_Btn_Click(object sender, EventArgs e)
         {
-            if (Fragments3.Count > 0) Fragments3.Clear();
+            if (Fragments3.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show("Clear List before proceeding with calculation?", "Fragment Calculator", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes) Fragments3.Clear();
+            }            
             //the basic algorithm with small changes for the specific form9
             fragments_and_calculations_sequence_A_frm9();
         }
@@ -236,10 +304,7 @@ namespace Isotope_fitting
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
             if (mult_loaded.Count>0)
             {
-                foreach (ChemiForm cc in mult_loaded)
-                {
-                    selected_fragments.Add(cc.DeepCopy());
-                }
+                selected_fragments = mult_loaded;
             }
             else if (string.IsNullOrEmpty(chemForm_txtBox.Text.ToString())) { if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; } selected_fragments = select_fragments2_frm9(); }
             else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); return; }
@@ -1097,7 +1162,11 @@ namespace Isotope_fitting
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
         {
-            if (last_plotted.Count!=0)
+            plot_checked();
+        }
+        private void plot_checked()
+        {
+            if (last_plotted.Count != 0)
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
@@ -1109,7 +1178,7 @@ namespace Isotope_fitting
                     // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
                     if (all_data.Count == 0) { all_data.Add(new List<double[]>()); Form2.custom_colors.Clear(); custom_colors.Add(OxyColors.Black.ToColor().ToArgb()); }
                     //custom_colors.Add(Fragments3[selected_idx].Color.ToColor().ToArgb());
-                }                
+                }
                 all_data.Add(new List<double[]>());
                 for (int p = 0; p < Fragments3[frag_idx].Profile.Count; p++)
                 {
@@ -1136,9 +1205,8 @@ namespace Isotope_fitting
                 //    first = true; now = false;
                 //    frm2.ending_frm9();
                 //}
-            }           
+            }
         }
-
         private void rem_Btn_Click(object sender, EventArgs e)
         {
             if (last_plotted.Count == 0) return;
@@ -1154,7 +1222,7 @@ namespace Isotope_fitting
         #region chemical formulas file
         private void load_chems_file_Btn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(multChem_min_charge.Text) || string.IsNullOrEmpty(multChem_max_charge.Text)) { MessageBox.Show("You need to set first the charge range and then the "); return; }
+            if (string.IsNullOrEmpty(multChem_min_charge.Text) ) { MessageBox.Show("You need to set first the charge range and then the "); return; }
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;
             double qMax = txt_to_d(multChem_max_charge);
@@ -1193,7 +1261,7 @@ namespace Isotope_fitting
                                 Error = false,
                                 Elements_set = new List<Element_set>(),
                                 Iso_total_amount = 0,
-                                Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
+                                Monoisotopic = new CompoundMulti(),
                                 Points = new List<PointPlot>(),
                                 Machine = string.Empty,
                                 Resolution = new double(),
@@ -1213,6 +1281,7 @@ namespace Isotope_fitting
                                 minPPM_Error = 0,
                                 Charge = c
                             });
+                            mult_loaded.Last().Adduct = "H" + c.ToString();
                         }
                     }
                     catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); }
@@ -1272,14 +1341,5 @@ namespace Isotope_fitting
         }
         #endregion
 
-        private void Form9_DpiChanged(object sender, DpiChangedEventArgs e)
-        {
-            this.PerformAutoScale();
-        }
-
-        private void chemForm_txtBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
