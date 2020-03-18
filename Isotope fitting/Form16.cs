@@ -120,5 +120,6 @@ namespace Isotope_fitting
         {
             this.PerformAutoScale();
         }
+
     }
 }

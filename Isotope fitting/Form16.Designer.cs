@@ -51,9 +51,9 @@
             this.seq_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.seq_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seq_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.seq_Btn.Location = new System.Drawing.Point(0, 329);
+            this.seq_Btn.Location = new System.Drawing.Point(0, 304);
             this.seq_Btn.Name = "seq_Btn";
-            this.seq_Btn.Size = new System.Drawing.Size(784, 32);
+            this.seq_Btn.Size = new System.Drawing.Size(687, 32);
             this.seq_Btn.TabIndex = 1;
             this.seq_Btn.Text = "Save Sequence ";
             this.seq_Btn.UseVisualStyleBackColor = false;
@@ -67,7 +67,7 @@
             this.seq_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
             this.seq_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.seq_BoxFrm16.Size = new System.Drawing.Size(770, 297);
+            this.seq_BoxFrm16.Size = new System.Drawing.Size(673, 272);
             this.seq_BoxFrm16.TabIndex = 2;
             this.seq_BoxFrm16.Text = "";
             this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
@@ -81,7 +81,7 @@
             this.seq_tabControl.Location = new System.Drawing.Point(0, 0);
             this.seq_tabControl.Name = "seq_tabControl";
             this.seq_tabControl.SelectedIndex = 0;
-            this.seq_tabControl.Size = new System.Drawing.Size(784, 329);
+            this.seq_tabControl.Size = new System.Drawing.Size(687, 304);
             this.seq_tabControl.TabIndex = 3;
             // 
             // seq_tab
@@ -90,7 +90,7 @@
             this.seq_tab.Location = new System.Drawing.Point(4, 22);
             this.seq_tab.Name = "seq_tab";
             this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.seq_tab.Size = new System.Drawing.Size(776, 303);
+            this.seq_tab.Size = new System.Drawing.Size(679, 278);
             this.seq_tab.TabIndex = 0;
             this.seq_tab.Text = "General Sequence";
             this.seq_tab.UseVisualStyleBackColor = true;
@@ -147,7 +147,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(784, 361);
+            this.ClientSize = new System.Drawing.Size(687, 336);
             this.Controls.Add(this.seq_tabControl);
             this.Controls.Add(this.seq_Btn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
