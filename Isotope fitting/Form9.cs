@@ -302,7 +302,7 @@ namespace Isotope_fitting
             // 1. select fragments according to UI            
             sw1.Reset(); sw1.Start();
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
-            if (mult_loaded.Count>0)
+            if (mult_loaded!=null && mult_loaded.Count>0)
             {
                 selected_fragments = mult_loaded;
             }
@@ -477,7 +477,7 @@ namespace Isotope_fitting
             if (double.IsNaN(qMin)) qMin = 0.0;
 
             double qMax = txt_to_d(chargeMax_Box);
-            if (double.IsNaN(qMax)) qMax = 25.0;
+            if (double.IsNaN(qMax)) qMax = 100.0;
 
             // 2. get checked types
             List<string> types = new List<string>();

@@ -1870,7 +1870,7 @@ namespace Isotope_fitting
             // adds safely a matched fragment to Fragments2, and releases memory
             lock (_locker)
             {
-                if (check_duplicates_Fragments2(chem.Mz, chem.Name, chem.Factor,chem.Profile.Max(p => p.Y)))
+                if (check_duplicates_Fragments2(chem))
                 {
                     Fragments2.Add(new FragForm()
                     {
@@ -1928,23 +1928,16 @@ namespace Isotope_fitting
                 }       
             }
         }
-        private bool check_duplicates_Fragments2(string mz,string name, double factor,double max_int)
+        private bool check_duplicates_Fragments2(ChemiForm chem1)
         {
             if (Fragments2.Count>0)
             {
                 foreach (FragForm fra in Fragments2)
                 {                    
-                    if (fra.Mz.Equals(mz) && fra.Name.Equals(name))
+                    if (fra.Mz.Equals(chem1.Mz) && fra.Name.Equals(chem1.Name) && fra.Charge.Equals(chem1.Charge))
                     {
-                        if (factor==1 && max_exp > 0 && Math.Round(fra.Factor, 3) == Math.Round(0.1 * max_exp / max_int, 3))
-                        {
-                            return false;
-                        }
-                        else if (Math.Round(fra.Factor, 3) == Math.Round(factor, 3))
-                        {
-                            return false;
-                        }
-                    }                   
+                        return false;
+                    }
                 }
             }
             return true;
@@ -5680,8 +5673,7 @@ namespace Isotope_fitting
             if(Fragments2.Count<1) return new int[] { 1, 1 };
             foreach (FragForm fra in Fragments2)
             {
-                if (fra.Name==name && fra.Factor==factor && dParser(fra.Mz)==mz) return new int[] { 3, 1 }; 
-                if (fra.Name==name) return new int[] { 2, Fragments2.IndexOf(fra) }; 
+                if (fra.Name.Equals(name) && dParser(fra.Mz)==mz) return new int[] { 3, 1 };                
             }    
             return new int[] { 1, 1 };
         }
@@ -12062,7 +12054,7 @@ namespace Isotope_fitting
                 int jj = i + 1;
                 while (jj < IonDraw.Count)
                 {
-                    if (IonDraw[i].Name == IonDraw[jj].Name && IonDraw[i].Ion_type == IonDraw[jj].Ion_type && IonDraw[i].Index == IonDraw[jj].Index && IonDraw[i].IndexTo == IonDraw[jj].IndexTo &&  IonDraw[i].Mz == IonDraw[jj].Mz)
+                    if (IonDraw[i].Name == IonDraw[jj].Name && IonDraw[i].Ion_type == IonDraw[jj].Ion_type && IonDraw[i].Index == IonDraw[jj].Index && IonDraw[i].IndexTo == IonDraw[jj].IndexTo &&  IonDraw[i].Mz == IonDraw[jj].Mz && IonDraw[i].Charge == IonDraw[jj].Charge)
                     {
                         IonDraw.RemoveAt(jj);
                     }
