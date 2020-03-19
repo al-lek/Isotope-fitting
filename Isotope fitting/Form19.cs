@@ -47,6 +47,8 @@ namespace Isotope_fitting
             ppm_5.TextChanged += new EventHandler(ppm_5_TextChanged);
             ppm_6.TextChanged += new EventHandler(ppm_6_TextChanged);
             update_specific_region();
+
+            FormClosed += (s, e) => { f.save_preferences(); };
         }
         void thre_numUD_TextChanged(object sender, EventArgs e)
         {

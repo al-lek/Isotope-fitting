@@ -1757,7 +1757,7 @@ namespace Isotope_fitting
             progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");            
             try
             {
-                Parallel.For(0, selected_fragments.Count, (i, state) =>
+                Parallel.For(0, selected_fragments.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
                 {
                     Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);                    
                     // safelly keep track of progress
@@ -2425,7 +2425,7 @@ namespace Isotope_fitting
             // generate alligned (in m/z) isotope distributions at the same step as the experimental
             // pickup each point in experimental and find (interpolate) the intensity of each fragment
             int progress = 0;
-            Parallel.For(0, all_data[0].Count, (i, state) =>
+            Parallel.For(0, all_data[0].Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
             {
                 // one by one for all points
                 List<double> one_aligned_point = new List<double>();
@@ -2717,7 +2717,7 @@ namespace Isotope_fitting
             int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());
             for (int i = exp_boundaries[0]; i < exp_boundaries[1] + 1; i++) { experimental_sum += experimental[i][1]; }
            
-            Parallel.For(0, set.Count, (i, state) =>
+            Parallel.For(0, set.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
             {
                 // generate a new list containing only the fragments intensities of the subSet, and the experimental
                 // intensities are fixed in alligned_intensities for all. Fragments height is regulated by each one's Factor
@@ -4562,7 +4562,7 @@ namespace Isotope_fitting
                     if ((fragPlotLbl_chkBx.Checked && !Fragments2[p - 1].Ion_type.StartsWith("inte")) || (fragPlotLbl_chkBx2.Checked && Fragments2[p - 1].Ion_type.StartsWith("inte")))
                     {
                         //Arrow from location to target
-                        AnnotationXY annotAxisValues2 = new AnnotationXY(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]);
+                        AnnotationXY annotAxisValues2 = new AnnotationXY(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseInteraction = false };
                         annotAxisValues2.Style = AnnotationStyle.Arrow;
                         annotAxisValues2.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
                         annotAxisValues2.Text = Fragments2[p - 1].Name.ToString();
@@ -4720,7 +4720,7 @@ namespace Isotope_fitting
 
             int starting_points_to_omit = 0;
             int progress = 0;
-            Parallel.For(starting_points_to_omit, len - peak_width - 1, (i, state) =>
+            Parallel.For(starting_points_to_omit, len - peak_width - 1, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
             {
                 // safelly keep track of progress
                 lock (_locker) { Interlocked.Increment(ref progress); }
@@ -14167,26 +14167,34 @@ namespace Isotope_fitting
 
         private void fragCalc_Btn2_Click(object sender, EventArgs e)
         {
-            FormCollection fc = Application.OpenForms;
-            bool open = false;
-            foreach (Form frm in fc)
-            {
-                //iterate through
+            //FormCollection fc = Application.OpenForms;
+            //bool open = false;
+            //foreach (Form frm in fc)
+            //{
+            //    //iterate through
+            //    if (frm.Name == "Form9")
+            //    {
+            //        open = true; frm.BringToFront(); break;
+            //    }
+            //}
+            //if (!open)
+            //{
+            //    Form9 frag_Calc_form = new Form9(this);
+            //    frag_Calc_form.Show();
+            //}
+            //else
+            //{
+
+            //    return;
+            //}
+            foreach (Form frm in Application.OpenForms)
                 if (frm.Name == "Form9")
                 {
-                    open = true; frm.BringToFront(); break;
+                    frm.BringToFront(); return;
                 }
-            }
-            if (!open)
-            {
-                Form9 frag_Calc_form = new Form9(this);
-                frag_Calc_form.Show();
-            }
-            else
-            {
 
-                return;
-            }
+            Form9 frag_Calc_form = new Form9(this);
+            frag_Calc_form.Show();
         }
 
         private void refresh_frag_Btn2_Click(object sender, EventArgs e)
@@ -14222,7 +14230,7 @@ namespace Isotope_fitting
         private void frag_sort_Btn2_Click(object sender, EventArgs e)
         {
             Form19 frm19 = new Form19(this);
-            frm19.FormClosed += (s, f) => { save_preferences(); };
+            //frm19.FormClosed += (s, f) => { save_preferences(); };        //this is a property that the object (Form 19) will always have. It should be declared within the object itself
             frm19.ShowDialog();
             //params_form();
         }
