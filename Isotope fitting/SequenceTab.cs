@@ -11,6 +11,7 @@ namespace Isotope_fitting
         private string sequence;
         private string extension;
         private int type;
+        private string rtf;
         public int Type
         {
             get { return this.type; }
@@ -20,6 +21,11 @@ namespace Isotope_fitting
         {
             get { return this.extension; }
             set { this.extension = value; }
+        }
+        public string Rtf
+        {
+            get { return this.rtf; }
+            set { this.rtf = value; }
         }
         public string Sequence
         {

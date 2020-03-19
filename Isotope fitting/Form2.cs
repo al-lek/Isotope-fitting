@@ -42,6 +42,7 @@ namespace Isotope_fitting
         bool x_charged = false;
         public double threshold = 0.01;
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
+        public bool tab_mode = false;
         #region PARAMETER SET TAB FIT
 
         #region old new calculations
@@ -940,11 +941,15 @@ namespace Isotope_fitting
         {
             loadMS_Btn.Enabled = false;
             if (String.IsNullOrEmpty(Peptide) && String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadMS_Btn.Enabled = true;return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel);
             if (dialogResult==DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
                 frm16.ShowDialog();
+            }
+            if (dialogResult == DialogResult.Cancel)
+            {
+                return;
             }
             try
             {
