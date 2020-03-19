@@ -5502,6 +5502,10 @@ namespace Isotope_fitting
                                         MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return;
                                     }
                                 }
+                                else
+                                {
+                                    j = j + 2 ;
+                                }
                             }
                         }
                         catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
