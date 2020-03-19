@@ -38,6 +38,7 @@
             this.light_chain_tab = new System.Windows.Forms.TabPage();
             this.light_BoxFrm16 = new System.Windows.Forms.RichTextBox();
             this.add_tab_page = new System.Windows.Forms.TabPage();
+            this.tab_mode_checkBox1 = new System.Windows.Forms.CheckBox();
             this.seq_tabControl.SuspendLayout();
             this.seq_tab.SuspendLayout();
             this.heavy_chain_tab.SuspendLayout();
@@ -157,11 +158,23 @@
             this.add_tab_page.Text = "+";
             this.add_tab_page.UseVisualStyleBackColor = true;
             // 
+            // tab_mode_checkBox1
+            // 
+            this.tab_mode_checkBox1.AutoSize = true;
+            this.tab_mode_checkBox1.Location = new System.Drawing.Point(12, 350);
+            this.tab_mode_checkBox1.Name = "tab_mode_checkBox1";
+            this.tab_mode_checkBox1.Size = new System.Drawing.Size(70, 17);
+            this.tab_mode_checkBox1.TabIndex = 4;
+            this.tab_mode_checkBox1.Text = "tab mode";
+            this.tab_mode_checkBox1.UseVisualStyleBackColor = true;
+            this.tab_mode_checkBox1.Visible = false;
+            // 
             // Form16
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(706, 379);
+            this.Controls.Add(this.tab_mode_checkBox1);
             this.Controls.Add(this.seq_tabControl);
             this.Controls.Add(this.seq_Btn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -176,6 +189,7 @@
             this.heavy_chain_tab.ResumeLayout(false);
             this.light_chain_tab.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -190,5 +204,6 @@
         private System.Windows.Forms.RichTextBox heavy_BoxFrm16;
         private System.Windows.Forms.RichTextBox light_BoxFrm16;
         private System.Windows.Forms.TabPage add_tab_page;
+        private System.Windows.Forms.CheckBox tab_mode_checkBox1;
     }
 }

@@ -21,8 +21,7 @@ namespace Isotope_fitting
         public Form16(Form2 f)
         {
             frm2 =f;
-            InitializeComponent();
-            
+            InitializeComponent();            
             if (!String.IsNullOrEmpty(frm2.Peptide)) { seq_BoxFrm16.Text = frm2.Peptide.ToString(); }
             if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
             if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
@@ -35,23 +34,64 @@ namespace Isotope_fitting
             SendMessage(this.seq_tabControl.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr)16);
         }
         private void seq_Btn_Click(object sender, EventArgs e)
-        {
-            frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            frm2.Peptide= frm2.Peptide.Replace("\t", "");
-            frm2.Peptide = frm2.Peptide.Replace(" ", "");
-            frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
-            frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
-            if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
-            else { frm2.heavy_present = true; }
-            frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            frm2.light_chain = frm2.light_chain.Replace("\t", "");
-            frm2.light_chain = frm2.light_chain.Replace(" ", "");
-            if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
-            else { frm2.light_present = true; }
-
-
-
+        {  
+            if (tab_mode_checkBox1.Checked && seq_tabControl.TabPages.Count>1)
+            {
+                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                frm2.Peptide = frm2.Peptide.Replace("\t", "");
+                frm2.Peptide = frm2.Peptide.Replace(" ", "");
+                for (int k=1;k< seq_tabControl.TabPages.Count; k++)
+                {
+                    RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+                    string s = txtbox.Text.Replace(Environment.NewLine, " ").ToString();
+                    s = s.Replace("\t", "");
+                    s = s.Replace(" ", "");
+                    if (string.IsNullOrEmpty(s))
+                    {
+                        MessageBox.Show("You have to insert the aminoacid sequence for each extra tab you add.");return;
+                    }
+                }
+                frm2.heavy_present = false; frm2.light_present = false;
+                for (int k = 1; k < seq_tabControl.TabPages.Count; k++)
+                {
+                    RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+                    string s = txtbox.Text.Replace(Environment.NewLine, " ").ToString();
+                    s = s.Replace("\t", "");
+                    s = s.Replace(" ", "");
+                    frm2.sequenceList.Add(new SequenceTab() {Sequence=s,Extension = seq_tabControl.TabPages[k].Text,Type=0});
+                    foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<RadioButton>())
+                    {
+                        if (rdBtn.Checked)
+                        {
+                            frm2.sequenceList.Last().Type = rdBtn.TabIndex;
+                            if (rdBtn.TabIndex==1) { frm2.heavy_present = true; }
+                            else { frm2.heavy_present = true; }
+                        }
+                    }    
+                }
+            }
+            else if(tab_mode_checkBox1.Checked)
+            {
+                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                frm2.Peptide = frm2.Peptide.Replace("\t", "");
+                frm2.Peptide = frm2.Peptide.Replace(" ", "");
+            }
+            else
+            {
+                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                frm2.Peptide = frm2.Peptide.Replace("\t", "");
+                frm2.Peptide = frm2.Peptide.Replace(" ", "");
+                frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
+                frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
+                if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
+                else { frm2.heavy_present = true; }
+                frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                frm2.light_chain = frm2.light_chain.Replace("\t", "");
+                frm2.light_chain = frm2.light_chain.Replace(" ", "");
+                if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
+                else { frm2.light_present = true; }
+            }
 
             this.Close();
         }
