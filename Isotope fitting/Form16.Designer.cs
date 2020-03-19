@@ -34,8 +34,6 @@
             this.seq_tabControl = new System.Windows.Forms.TabControl();
             this.seq_tab = new System.Windows.Forms.TabPage();
             this.heavy_chain_tab = new System.Windows.Forms.TabPage();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.heavy_BoxFrm16 = new System.Windows.Forms.RichTextBox();
             this.light_chain_tab = new System.Windows.Forms.TabPage();
             this.light_BoxFrm16 = new System.Windows.Forms.RichTextBox();
@@ -103,8 +101,6 @@
             // 
             // heavy_chain_tab
             // 
-            this.heavy_chain_tab.Controls.Add(this.radioButton2);
-            this.heavy_chain_tab.Controls.Add(this.radioButton1);
             this.heavy_chain_tab.Controls.Add(this.heavy_BoxFrm16);
             this.heavy_chain_tab.Location = new System.Drawing.Point(4, 22);
             this.heavy_chain_tab.Name = "heavy_chain_tab";
@@ -114,28 +110,6 @@
             this.heavy_chain_tab.Text = "Heavy Chain";
             this.heavy_chain_tab.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(94, 280);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(85, 17);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "radioButton2";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(2, 280);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(85, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
             // heavy_BoxFrm16
             // 
             this.heavy_BoxFrm16.AllowDrop = true;
@@ -144,7 +118,7 @@
             this.heavy_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.heavy_BoxFrm16.Name = "heavy_BoxFrm16";
             this.heavy_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.heavy_BoxFrm16.Size = new System.Drawing.Size(692, 271);
+            this.heavy_BoxFrm16.Size = new System.Drawing.Size(692, 294);
             this.heavy_BoxFrm16.TabIndex = 3;
             this.heavy_BoxFrm16.Text = "";
             this.heavy_BoxFrm16.TextChanged += new System.EventHandler(this.heavy_BoxFrm16_TextChanged);
@@ -168,7 +142,7 @@
             this.light_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.light_BoxFrm16.Name = "light_BoxFrm16";
             this.light_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.light_BoxFrm16.Size = new System.Drawing.Size(692, 267);
+            this.light_BoxFrm16.Size = new System.Drawing.Size(692, 297);
             this.light_BoxFrm16.TabIndex = 3;
             this.light_BoxFrm16.Text = "";
             this.light_BoxFrm16.TextChanged += new System.EventHandler(this.light_BoxFrm16_TextChanged);
@@ -200,7 +174,6 @@
             this.seq_tabControl.ResumeLayout(false);
             this.seq_tab.ResumeLayout(false);
             this.heavy_chain_tab.ResumeLayout(false);
-            this.heavy_chain_tab.PerformLayout();
             this.light_chain_tab.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -217,7 +190,5 @@
         private System.Windows.Forms.RichTextBox heavy_BoxFrm16;
         private System.Windows.Forms.RichTextBox light_BoxFrm16;
         private System.Windows.Forms.TabPage add_tab_page;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
     }
 }

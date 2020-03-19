@@ -259,7 +259,7 @@
             // 
             this.regions_chkBx.AutoSize = true;
             this.regions_chkBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.regions_chkBx.Location = new System.Drawing.Point(291, 13);
+            this.regions_chkBx.Location = new System.Drawing.Point(299, 13);
             this.regions_chkBx.Name = "regions_chkBx";
             this.regions_chkBx.Size = new System.Drawing.Size(111, 19);
             this.regions_chkBx.TabIndex = 1;
@@ -321,7 +321,7 @@
             this.region_grpBox.Controls.Add(this.max_ppm_label);
             this.region_grpBox.Controls.Add(this.ppm_1);
             this.region_grpBox.Enabled = false;
-            this.region_grpBox.Location = new System.Drawing.Point(291, 36);
+            this.region_grpBox.Location = new System.Drawing.Point(299, 36);
             this.region_grpBox.Name = "region_grpBox";
             this.region_grpBox.Size = new System.Drawing.Size(460, 190);
             this.region_grpBox.TabIndex = 3;
@@ -835,9 +835,9 @@
             this.save_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.save_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.save_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_Btn.Location = new System.Drawing.Point(0, 251);
+            this.save_Btn.Location = new System.Drawing.Point(0, 275);
             this.save_Btn.Name = "save_Btn";
-            this.save_Btn.Size = new System.Drawing.Size(759, 23);
+            this.save_Btn.Size = new System.Drawing.Size(772, 23);
             this.save_Btn.TabIndex = 4;
             this.save_Btn.Text = "Save";
             this.save_Btn.UseVisualStyleBackColor = false;
@@ -848,7 +848,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 203);
+            this.label1.Location = new System.Drawing.Point(16, 213);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(173, 15);
             this.label1.TabIndex = 5;
@@ -863,7 +863,7 @@
             0,
             0,
             131072});
-            this.thre_numUD.Location = new System.Drawing.Point(187, 200);
+            this.thre_numUD.Location = new System.Drawing.Point(190, 210);
             this.thre_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -887,7 +887,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(759, 274);
+            this.ClientSize = new System.Drawing.Size(772, 298);
             this.ControlBox = false;
             this.Controls.Add(this.thre_numUD);
             this.Controls.Add(this.label1);

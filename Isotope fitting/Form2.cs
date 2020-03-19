@@ -14168,5 +14168,67 @@ namespace Isotope_fitting
         {
 
         }
+
+        private void fragCalc_Btn2_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+            bool open = false;
+            foreach (Form frm in fc)
+            {
+                //iterate through
+                if (frm.Name == "Form9")
+                {
+                    open = true; frm.BringToFront(); break;
+                }
+            }
+            if (!open)
+            {
+                Form9 frag_Calc_form = new Form9(this);
+                frag_Calc_form.Show();
+            }
+            else
+            {
+
+                return;
+            }
+        }
+
+        private void refresh_frag_Btn2_Click(object sender, EventArgs e)
+        {
+            if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!"); return; }
+            int initial_count = Fragments2.Count;
+            int rr = 0;
+            if (Fragments2.Count > 0)
+            {
+                while (rr < Fragments2.Count)
+                {
+                    if (!decision_algorithm2(Fragments2[rr])) { Fragments2.RemoveAt(rr); }
+                    else { rr++; }
+                }
+                // thread safely fire event to continue calculations
+                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            }
+            if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); return; }
+            else
+            {
+                bigPanel.Enabled = false;
+                uncheckall_Frag();
+                fitted_results.Clear(); selectedFragments.Clear();
+                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                if (fit_tree != null)
+                {
+                    fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.");
+                }
+                fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+            }
+        }
+
+        private void frag_sort_Btn2_Click(object sender, EventArgs e)
+        {
+            Form19 frm19 = new Form19(this);
+            frm19.FormClosed += (s, f) => { save_preferences(); };
+            frm19.ShowDialog();
+            //params_form();
+        }
     }
 }

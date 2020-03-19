@@ -163,7 +163,7 @@ namespace Isotope_fitting
                         {
                             seq_tabControl.ContextMenu.MenuItems.Clear();
                         }
-                        if (i == 0) {  return; }
+                        if (i == 0 || i ==1|| i ==2 ) {  return; }
                         this.seq_tabControl.SelectedIndex = i;
                         ContextMenu cm = new ContextMenu();
                         cm.MenuItems.Add("Remove", new EventHandler(rmv_click));
