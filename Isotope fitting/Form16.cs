@@ -22,10 +22,7 @@ namespace Isotope_fitting
         {
             frm2 =f;
             InitializeComponent();
-            ContextMenu cm = new ContextMenu();
-            cm.MenuItems.Add("Remove", new EventHandler(rmv_click));
-            cm.MenuItems.Add("Rename", new EventHandler(rename_click));
-            seq_tabControl.ContextMenu = cm;
+            
             if (!String.IsNullOrEmpty(frm2.Peptide)) { seq_BoxFrm16.Text = frm2.Peptide.ToString(); }
             if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
             if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
@@ -153,7 +150,7 @@ namespace Isotope_fitting
                 RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101,280), TabIndex = 2, AutoSize = true };
                 RichTextBox box = new RichTextBox() { TabIndex =3,Dock=DockStyle.Top, Size=new Size(692,271)};
                 this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL , box });
-                foreach (RadioButton rdBtn in seq_tabControl.TabPages[lastIndex].Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e1) => { if (rdBtn.Checked) frm2.sequenceList[lastIndex-1].Type= rdBtn.TabIndex; };
+                //foreach (RadioButton rdBtn in seq_tabControl.TabPages[lastIndex].Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e1) => { if (rdBtn.Checked) frm2.sequenceList[lastIndex-1].Type= rdBtn.TabIndex; };
 
             }
             else if (e.Button == MouseButtons.Right)
@@ -162,7 +159,16 @@ namespace Isotope_fitting
                 {
                     if (this.seq_tabControl.GetTabRect(i).Contains(new Point(e.X, e.Y)))
                     {
+                        if (seq_tabControl.ContextMenu!=null && seq_tabControl.ContextMenu.MenuItems.Count>0)
+                        {
+                            seq_tabControl.ContextMenu.MenuItems.Clear();
+                        }
+                        if (i == 0) {  return; }
                         this.seq_tabControl.SelectedIndex = i;
+                        ContextMenu cm = new ContextMenu();
+                        cm.MenuItems.Add("Remove", new EventHandler(rmv_click));
+                        cm.MenuItems.Add("Rename", new EventHandler(rename_click));
+                        seq_tabControl.ContextMenu = cm;
                         break;
                     }
                 }
@@ -171,8 +177,8 @@ namespace Isotope_fitting
         //remove selected tab
         private void rmv_click(object sender, System.EventArgs e)
         {
-            if (seq_tabControl.SelectedIndex == 0) return;
-            frm2.sequenceList.RemoveAt(seq_tabControl.SelectedIndex-0);
+            if (seq_tabControl.SelectedIndex == 0) { MessageBox.Show("You can't remove the first tab"); return; }
+            //frm2.sequenceList.RemoveAt(seq_tabControl.SelectedIndex-0);
             seq_tabControl.TabPages.Remove(seq_tabControl.SelectedTab);
         }
 
@@ -182,7 +188,7 @@ namespace Isotope_fitting
             if (seq_tabControl.SelectedIndex==0) return;
             var showDialog = this.ShowDialog("Tab Name", "Rename the selected tab");
             seq_tabControl.SelectedTab.Text = showDialog;
-            frm2.sequenceList[seq_tabControl.SelectedIndex - 0].Extension="."+ seq_tabControl.SelectedTab.Text.ToString();
+            //frm2.sequenceList[seq_tabControl.SelectedIndex - 0].Extension="."+ seq_tabControl.SelectedTab.Text.ToString();
         }
 
         public string ShowDialog(string text, string caption)
@@ -191,9 +197,9 @@ namespace Isotope_fitting
             prompt.Width = 500;
             prompt.Height = 150;
             prompt.Text = caption;
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
-            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70 };
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = text,AutoSize=true,BackColor=Color.Transparent };
+            TextBox textBox = new TextBox() { Left = 50, Top =40, Width = 400 };
+            Button confirmation = new Button() { Text = "Done", Left = 350, Width = 100, Top = 70 };
             confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(confirmation);
             prompt.Controls.Add(textLabel);

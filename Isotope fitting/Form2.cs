@@ -262,7 +262,7 @@ namespace Isotope_fitting
         // tab1 line isoplot
         public OxyColor fit_color = OxyColors.Black;
         public int exp_color = OxyColors.Black.ToColor().ToArgb();
-        public OxyColor peak_color = OxyColors.Crimson;
+        public OxyColor peak_color = OxyColors.Black;
         public OxyPlot.LineStyle fit_style = OxyPlot.LineStyle.Dot;
         public OxyPlot.LineStyle exper_style = OxyPlot.LineStyle.Solid;
         public OxyPlot.LineStyle frag_style = OxyPlot.LineStyle.Solid;
@@ -4577,9 +4577,11 @@ namespace Isotope_fitting
                         annotAxisValues2.TargetAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
                         annotAxisValues2.LocationAxisValues.X = Fragments2[p - 1].Centroid[0].X;
                         annotAxisValues2.LocationAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
-                        annotAxisValues2.TextStyle = new AnnotationTextStyle() { Color = Fragments2[p - 1].Color.ToColor(), VerticalAlign = AlignmentVertical.Bottom, HorizAlign = AlignmentHorizontal.Right };
+                        annotAxisValues2.TextStyle = new AnnotationTextStyle() { Color = Fragments2[p - 1].Color.ToColor(), VerticalAlign = AlignmentVertical.Bottom, HorizAlign = AlignmentHorizontal.Right  };
                         annotAxisValues2.ArrowLineStyle = new Arction.WinForms.Charting.LineStyle() { Color = Color.Transparent, Width = (float)0.5 };
                         annotAxisValues2.RotateAngle = 90;
+                        annotAxisValues2.TextStyle.Font= new Font(DefaultFont, FontStyle.Regular);
+
                         LC_1.ViewXY.Annotations.Add(annotAxisValues2);
                     }                     
                 }
@@ -4589,7 +4591,7 @@ namespace Isotope_fitting
 
         private void cursor_chkBx_Click(object sender, EventArgs e)
         {
-            if (insert_exp && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
+            if (/*insert_exp &&*/ (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
             {
                 // Remove exsisting custom x - axis tickmarks
                 DisposeAllAndClear(LC_1.ViewXY.XAxes[1].CustomTicks);
