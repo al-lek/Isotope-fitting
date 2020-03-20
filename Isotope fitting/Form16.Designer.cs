@@ -70,7 +70,7 @@
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
             this.seq_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.seq_BoxFrm16.ShowSelectionMargin = true;
-            this.seq_BoxFrm16.Size = new System.Drawing.Size(693, 297);
+            this.seq_BoxFrm16.Size = new System.Drawing.Size(692, 297);
             this.seq_BoxFrm16.TabIndex = 2;
             this.seq_BoxFrm16.Text = "";
             this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
@@ -96,7 +96,7 @@
             this.seq_tab.Location = new System.Drawing.Point(4, 22);
             this.seq_tab.Name = "seq_tab";
             this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.seq_tab.Size = new System.Drawing.Size(699, 303);
+            this.seq_tab.Size = new System.Drawing.Size(698, 303);
             this.seq_tab.TabIndex = 0;
             this.seq_tab.Text = "General Sequence";
             this.seq_tab.UseVisualStyleBackColor = true;
@@ -107,9 +107,9 @@
             this.heavy_chain_tab.Location = new System.Drawing.Point(4, 22);
             this.heavy_chain_tab.Name = "heavy_chain_tab";
             this.heavy_chain_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.heavy_chain_tab.Size = new System.Drawing.Size(699, 303);
+            this.heavy_chain_tab.Size = new System.Drawing.Size(698, 303);
             this.heavy_chain_tab.TabIndex = 1;
-            this.heavy_chain_tab.Text = "Heavy Chain";
+            this.heavy_chain_tab.Text = "H";
             this.heavy_chain_tab.UseVisualStyleBackColor = true;
             // 
             // heavy_BoxFrm16
@@ -121,7 +121,7 @@
             this.heavy_BoxFrm16.Name = "heavy_BoxFrm16";
             this.heavy_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.heavy_BoxFrm16.ShowSelectionMargin = true;
-            this.heavy_BoxFrm16.Size = new System.Drawing.Size(693, 294);
+            this.heavy_BoxFrm16.Size = new System.Drawing.Size(692, 294);
             this.heavy_BoxFrm16.TabIndex = 3;
             this.heavy_BoxFrm16.Text = "";
             this.heavy_BoxFrm16.TextChanged += new System.EventHandler(this.heavy_BoxFrm16_TextChanged);
@@ -134,7 +134,7 @@
             this.light_chain_tab.Padding = new System.Windows.Forms.Padding(3);
             this.light_chain_tab.Size = new System.Drawing.Size(698, 303);
             this.light_chain_tab.TabIndex = 2;
-            this.light_chain_tab.Text = "Light Chain";
+            this.light_chain_tab.Text = "L";
             this.light_chain_tab.UseVisualStyleBackColor = true;
             // 
             // light_BoxFrm16
@@ -156,7 +156,7 @@
             this.add_tab_page.Location = new System.Drawing.Point(4, 22);
             this.add_tab_page.Name = "add_tab_page";
             this.add_tab_page.Padding = new System.Windows.Forms.Padding(3);
-            this.add_tab_page.Size = new System.Drawing.Size(699, 303);
+            this.add_tab_page.Size = new System.Drawing.Size(698, 303);
             this.add_tab_page.TabIndex = 3;
             this.add_tab_page.Text = "+";
             this.add_tab_page.UseVisualStyleBackColor = true;

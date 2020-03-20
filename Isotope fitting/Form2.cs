@@ -14207,11 +14207,16 @@ namespace Isotope_fitting
             if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!"); return; }
             int initial_count = Fragments2.Count;
             int rr = 0;
+            bool first = true;
             if (Fragments2.Count > 0)
             {
                 while (rr < Fragments2.Count)
                 {
-                    if (!decision_algorithm2(Fragments2[rr])) { Fragments2.RemoveAt(rr); }
+                    if (!decision_algorithm2(Fragments2[rr]))
+                    {
+                        Fragments2.RemoveAt(rr);
+                        if (first && selectedFragments!=null && selectedFragments.Count>0) { first = false; selectedFragments.Clear(); }
+                    }
                     else { rr++; }
                 }
                 // thread safely fire event to continue calculations
@@ -14229,6 +14234,7 @@ namespace Isotope_fitting
                     fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.");
                 }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                
             }
         }
 
