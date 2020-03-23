@@ -327,24 +327,26 @@ namespace Isotope_fitting
         private void rename_click(object sender, System.EventArgs e)
         {
             if (seq_tabControl.SelectedIndex==0) return;
-            var showDialog = this.ShowRenameDialog("Tab Name", "Rename the selected tab");
+            var showDialog = this.ShowRenameDialog();
             seq_tabControl.SelectedTab.Text = showDialog;
             //frm2.sequenceList[seq_tabControl.SelectedIndex - 0].Extension="."+ seq_tabControl.SelectedTab.Text.ToString();
         }
 
-        public string ShowRenameDialog(string text, string caption)
+        public string ShowRenameDialog()
         {
-            Form prompt = new Form() { ShowIcon=false,ShowInTaskbar=false,ControlBox=false};
+            Point loc =MousePosition ;
+            Form prompt = new Form() { ShowIcon=false,ShowInTaskbar=false,ControlBox=false,StartPosition=FormStartPosition.Manual,DesktopLocation=loc};
             prompt.Width =275;
             prompt.Height = 150;
-            prompt.Text = caption;
-            Label textLabel = new Label() { Left = 25, Top = 20, Text = text,AutoSize=true,BackColor=Color.Transparent };
-            TextBox textBox = new TextBox() { Left =25, Top =40, Width =200};
+            prompt.Text = "Rename the selected tab";
+            Label textLabel = new Label() { Left = 25, Top = 20, Text = "Tab Name", AutoSize =true,BackColor=Color.Transparent };
+            TextBox textBox = new TextBox() { Left =25, Top =40, Width =200};            
             Button confirmation = new Button() { Text = "Done", Left = 175, Width = 50, Top = 70 };
+            textBox.KeyDown += (sender, e) => {if(e.KeyCode==Keys.Enter) confirmation.Focus(); };
             confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(textBox);
             prompt.Controls.Add(confirmation);
             prompt.Controls.Add(textLabel);
-            prompt.Controls.Add(textBox);
             prompt.ShowDialog();
             return textBox.Text;
         }

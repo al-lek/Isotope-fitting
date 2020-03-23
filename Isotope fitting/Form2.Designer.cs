@@ -4134,6 +4134,7 @@ namespace Isotope_fitting
             this.seq_extensionBox.Name = "seq_extensionBox";
             this.seq_extensionBox.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBox.TabIndex = 15;
+            this.seq_extensionBox.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBox_SelectionChangeCommitted);
             // 
             // seq_extensionBoxCopy1
             // 
@@ -4144,6 +4145,7 @@ namespace Isotope_fitting
             this.seq_extensionBoxCopy1.Name = "seq_extensionBoxCopy1";
             this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy1.TabIndex = 18;
+            this.seq_extensionBoxCopy1.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy1_SelectionChangeCommitted);
             // 
             // seq_extensionBoxCopy2
             // 
@@ -4154,6 +4156,7 @@ namespace Isotope_fitting
             this.seq_extensionBoxCopy2.Name = "seq_extensionBoxCopy2";
             this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy2.TabIndex = 19;
+            this.seq_extensionBoxCopy2.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy2_SelectionChangeCommitted);
             // 
             // Form2
             // 
