@@ -921,6 +921,7 @@ namespace Isotope_fitting
             chemForm_txtBox.Text = string.Empty;
             maxCharge_txtBox.Text = string.Empty;
             minCharge_txtBox.Text = string.Empty;
+            extensionBox1.Text = string.Empty;
             ion_txtBox.Text = string.Empty;
             primary_txtBox.Text = string.Empty;
             internal_txtBox.Text = string.Empty;
@@ -1101,20 +1102,14 @@ namespace Isotope_fitting
         {
             internal_txtBox.Text = null;
         }
-        private void heavy_ChkBox_CheckedChanged(object sender, EventArgs e)
+        private void heavy_ChkBox_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (heavy_ChkBox.Checked)
-            {
-                Light_chkBox.Checked = false;
-            }
+
         }
 
-        private void Light_chkBox_CheckedChanged(object sender, EventArgs e)
+        private void Light_chkBox_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (Light_chkBox.Checked)
-            {
-                heavy_ChkBox.Checked = false;
-            }
+
         }
 
         #endregion
@@ -1336,10 +1331,19 @@ namespace Isotope_fitting
         private void clear_multiple_chem_Btn_Click(object sender, EventArgs e)
         {
             multChem_max_charge.Text = string.Empty;
+            extensionBox2.Text = string.Empty;
             multChem_min_charge.Text = string.Empty;
+            mult_heavy_ChkBox.Checked = false;
+            mult_Light_chkBox.Checked = false;
             if (mult_loaded.Count != 0) { mult_loaded.Clear(); filename_txtBx.Text = string.Empty; }
         }
+
+
         #endregion
 
+        private void Light_chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

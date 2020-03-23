@@ -10397,10 +10397,46 @@ namespace Isotope_fitting
 
         private void tabFit_Leave(object sender, EventArgs e)
         {
-            if (light_present && !heavy_present)light_chkBox.Checked = true;
-            else if (!light_present && heavy_present)heavy_chkBox.Checked = true;           
+            if (sequenceList!=null && sequenceList.Count>0)
+            {
+                seq_extensionBox.Enabled = seq_extensionBoxCopy1.Enabled = seq_extensionBoxCopy2.Enabled = true;
+                if (seq_extensionBox.Items == null || seq_extensionBox.Items.Count==0)
+                {
+                    foreach (SequenceTab seq in sequenceList)
+                    {
+                        seq_extensionBox.Items.Add(seq.Extension);
+                    }
+                }
+                else
+                {
+                    foreach (SequenceTab seq in sequenceList)
+                    {
+                        if (!seq_extensionBox.Items.Contains(seq.Extension))
+                        {
+                            seq_extensionBox.Items.Add(seq.Extension);
+                        }                        
+                    }
+                    int k = 0;
+                    while (k<seq_extensionBox.Items.Count)
+                    {
+                        if (!sequenceList.Any(p => p.Extension.Equals(seq_extensionBox.Items[k].ToString())))
+                        {
+                            seq_extensionBox.Items.RemoveAt(k);
+                        }
+                        else k++;
+                    }
+                }
+                
+            }
+            else
+            {
+                seq_extensionBox.Enabled = seq_extensionBoxCopy1.Enabled = seq_extensionBoxCopy2.Enabled = false;
+                if (light_present && !heavy_present) light_chkBox.Checked = true;
+                else if (!light_present && heavy_present) heavy_chkBox.Checked = true;
+            }            
             initialize_ions_todraw(); initialize_plot_tabs();
         }
+      
         private void styleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form12 frm12 = new Form12(this);
@@ -14496,6 +14532,5 @@ namespace Isotope_fitting
             return clr;
         }
         #endregion
-               
     }
 }

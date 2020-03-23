@@ -336,6 +336,9 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.seq_extensionBox = new System.Windows.Forms.ComboBox();
+            this.seq_extensionBoxCopy1 = new System.Windows.Forms.ComboBox();
+            this.seq_extensionBoxCopy2 = new System.Windows.Forms.ComboBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -2500,6 +2503,7 @@ namespace Isotope_fitting
             // 
             this.draw_sequence_panelCopy2.AutoScroll = true;
             this.draw_sequence_panelCopy2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.draw_sequence_panelCopy2.Controls.Add(this.seq_extensionBoxCopy2);
             this.draw_sequence_panelCopy2.Controls.Add(this.light_chkBoxCopy2);
             this.draw_sequence_panelCopy2.Controls.Add(this.heavy_chkBoxCopy2);
             this.draw_sequence_panelCopy2.Controls.Add(this.los_chkBoxCopy2);
@@ -2525,7 +2529,7 @@ namespace Isotope_fitting
             // light_chkBoxCopy2
             // 
             this.light_chkBoxCopy2.AutoSize = true;
-            this.light_chkBoxCopy2.Location = new System.Drawing.Point(10, 234);
+            this.light_chkBoxCopy2.Location = new System.Drawing.Point(4, 236);
             this.light_chkBoxCopy2.Name = "light_chkBoxCopy2";
             this.light_chkBoxCopy2.Size = new System.Drawing.Size(79, 17);
             this.light_chkBoxCopy2.TabIndex = 18;
@@ -2536,7 +2540,7 @@ namespace Isotope_fitting
             // heavy_chkBoxCopy2
             // 
             this.heavy_chkBoxCopy2.AutoSize = true;
-            this.heavy_chkBoxCopy2.Location = new System.Drawing.Point(10, 211);
+            this.heavy_chkBoxCopy2.Location = new System.Drawing.Point(4, 211);
             this.heavy_chkBoxCopy2.Name = "heavy_chkBoxCopy2";
             this.heavy_chkBoxCopy2.Size = new System.Drawing.Size(87, 17);
             this.heavy_chkBoxCopy2.TabIndex = 17;
@@ -2571,7 +2575,7 @@ namespace Isotope_fitting
             // rdBtn50Copy2
             // 
             this.rdBtn50Copy2.AutoSize = true;
-            this.rdBtn50Copy2.Location = new System.Drawing.Point(7, 318);
+            this.rdBtn50Copy2.Location = new System.Drawing.Point(10, 334);
             this.rdBtn50Copy2.Name = "rdBtn50Copy2";
             this.rdBtn50Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy2.TabIndex = 10;
@@ -2583,7 +2587,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25Copy2.AutoSize = true;
             this.rdBtn25Copy2.Checked = true;
-            this.rdBtn25Copy2.Location = new System.Drawing.Point(7, 295);
+            this.rdBtn25Copy2.Location = new System.Drawing.Point(10, 309);
             this.rdBtn25Copy2.Name = "rdBtn25Copy2";
             this.rdBtn25Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy2.TabIndex = 9;
@@ -2721,6 +2725,7 @@ namespace Isotope_fitting
             // 
             this.draw_sequence_panelCopy1.AutoScroll = true;
             this.draw_sequence_panelCopy1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.draw_sequence_panelCopy1.Controls.Add(this.seq_extensionBoxCopy1);
             this.draw_sequence_panelCopy1.Controls.Add(this.light_chkBoxCopy1);
             this.draw_sequence_panelCopy1.Controls.Add(this.heavy_chkBoxCopy1);
             this.draw_sequence_panelCopy1.Controls.Add(this.los_chkBoxCopy1);
@@ -2746,7 +2751,7 @@ namespace Isotope_fitting
             // light_chkBoxCopy1
             // 
             this.light_chkBoxCopy1.AutoSize = true;
-            this.light_chkBoxCopy1.Location = new System.Drawing.Point(10, 232);
+            this.light_chkBoxCopy1.Location = new System.Drawing.Point(4, 234);
             this.light_chkBoxCopy1.Name = "light_chkBoxCopy1";
             this.light_chkBoxCopy1.Size = new System.Drawing.Size(79, 17);
             this.light_chkBoxCopy1.TabIndex = 17;
@@ -2757,7 +2762,7 @@ namespace Isotope_fitting
             // heavy_chkBoxCopy1
             // 
             this.heavy_chkBoxCopy1.AutoSize = true;
-            this.heavy_chkBoxCopy1.Location = new System.Drawing.Point(10, 209);
+            this.heavy_chkBoxCopy1.Location = new System.Drawing.Point(4, 209);
             this.heavy_chkBoxCopy1.Name = "heavy_chkBoxCopy1";
             this.heavy_chkBoxCopy1.Size = new System.Drawing.Size(87, 17);
             this.heavy_chkBoxCopy1.TabIndex = 16;
@@ -2792,7 +2797,7 @@ namespace Isotope_fitting
             // rdBtn50Copy1
             // 
             this.rdBtn50Copy1.AutoSize = true;
-            this.rdBtn50Copy1.Location = new System.Drawing.Point(7, 305);
+            this.rdBtn50Copy1.Location = new System.Drawing.Point(10, 331);
             this.rdBtn50Copy1.Name = "rdBtn50Copy1";
             this.rdBtn50Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy1.TabIndex = 10;
@@ -2804,7 +2809,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25Copy1.AutoSize = true;
             this.rdBtn25Copy1.Checked = true;
-            this.rdBtn25Copy1.Location = new System.Drawing.Point(7, 282);
+            this.rdBtn25Copy1.Location = new System.Drawing.Point(10, 306);
             this.rdBtn25Copy1.Name = "rdBtn25Copy1";
             this.rdBtn25Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy1.TabIndex = 9;
@@ -2942,6 +2947,7 @@ namespace Isotope_fitting
             // 
             this.draw_sequence_panel.AutoScroll = true;
             this.draw_sequence_panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.draw_sequence_panel.Controls.Add(this.seq_extensionBox);
             this.draw_sequence_panel.Controls.Add(this.light_chkBox);
             this.draw_sequence_panel.Controls.Add(this.heavy_chkBox);
             this.draw_sequence_panel.Controls.Add(this.los_chkBox);
@@ -2966,7 +2972,7 @@ namespace Isotope_fitting
             // light_chkBox
             // 
             this.light_chkBox.AutoSize = true;
-            this.light_chkBox.Location = new System.Drawing.Point(10, 227);
+            this.light_chkBox.Location = new System.Drawing.Point(4, 235);
             this.light_chkBox.Name = "light_chkBox";
             this.light_chkBox.Size = new System.Drawing.Size(79, 17);
             this.light_chkBox.TabIndex = 14;
@@ -2977,7 +2983,7 @@ namespace Isotope_fitting
             // heavy_chkBox
             // 
             this.heavy_chkBox.AutoSize = true;
-            this.heavy_chkBox.Location = new System.Drawing.Point(10, 204);
+            this.heavy_chkBox.Location = new System.Drawing.Point(4, 209);
             this.heavy_chkBox.Name = "heavy_chkBox";
             this.heavy_chkBox.Size = new System.Drawing.Size(87, 17);
             this.heavy_chkBox.TabIndex = 13;
@@ -3001,7 +3007,7 @@ namespace Isotope_fitting
             this.add_sequencePanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("add_sequencePanel1.BackgroundImage")));
             this.add_sequencePanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.add_sequencePanel1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 343);
+            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 367);
             this.add_sequencePanel1.Name = "add_sequencePanel1";
             this.add_sequencePanel1.Size = new System.Drawing.Size(29, 28);
             this.add_sequencePanel1.TabIndex = 11;
@@ -3011,7 +3017,7 @@ namespace Isotope_fitting
             // rdBtn50
             // 
             this.rdBtn50.AutoSize = true;
-            this.rdBtn50.Location = new System.Drawing.Point(7, 309);
+            this.rdBtn50.Location = new System.Drawing.Point(4, 332);
             this.rdBtn50.Name = "rdBtn50";
             this.rdBtn50.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50.TabIndex = 10;
@@ -3023,7 +3029,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25.AutoSize = true;
             this.rdBtn25.Checked = true;
-            this.rdBtn25.Location = new System.Drawing.Point(7, 286);
+            this.rdBtn25.Location = new System.Drawing.Point(4, 312);
             this.rdBtn25.Name = "rdBtn25";
             this.rdBtn25.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25.TabIndex = 9;
@@ -4119,6 +4125,36 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
+            // seq_extensionBox
+            // 
+            this.seq_extensionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seq_extensionBox.Enabled = false;
+            this.seq_extensionBox.FormattingEnabled = true;
+            this.seq_extensionBox.Location = new System.Drawing.Point(4, 266);
+            this.seq_extensionBox.Name = "seq_extensionBox";
+            this.seq_extensionBox.Size = new System.Drawing.Size(87, 21);
+            this.seq_extensionBox.TabIndex = 15;
+            // 
+            // seq_extensionBoxCopy1
+            // 
+            this.seq_extensionBoxCopy1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seq_extensionBoxCopy1.Enabled = false;
+            this.seq_extensionBoxCopy1.FormattingEnabled = true;
+            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(4, 259);
+            this.seq_extensionBoxCopy1.Name = "seq_extensionBoxCopy1";
+            this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
+            this.seq_extensionBoxCopy1.TabIndex = 18;
+            // 
+            // seq_extensionBoxCopy2
+            // 
+            this.seq_extensionBoxCopy2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seq_extensionBoxCopy2.Enabled = false;
+            this.seq_extensionBoxCopy2.FormattingEnabled = true;
+            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(4, 261);
+            this.seq_extensionBoxCopy2.Name = "seq_extensionBoxCopy2";
+            this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
+            this.seq_extensionBoxCopy2.TabIndex = 19;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -4535,5 +4571,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.ComboBox seq_extensionBox;
+        private System.Windows.Forms.ComboBox seq_extensionBoxCopy2;
+        private System.Windows.Forms.ComboBox seq_extensionBoxCopy1;
     }
 }
