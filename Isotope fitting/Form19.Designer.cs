@@ -830,14 +830,14 @@
             // 
             // save_Btn
             // 
+            this.save_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.save_Btn.BackColor = System.Drawing.Color.Green;
-            this.save_Btn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.save_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.save_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.save_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_Btn.Location = new System.Drawing.Point(0, 258);
+            this.save_Btn.Location = new System.Drawing.Point(666, 246);
             this.save_Btn.Name = "save_Btn";
-            this.save_Btn.Size = new System.Drawing.Size(791, 23);
+            this.save_Btn.Size = new System.Drawing.Size(105, 23);
             this.save_Btn.TabIndex = 4;
             this.save_Btn.Text = "Save";
             this.save_Btn.UseVisualStyleBackColor = false;

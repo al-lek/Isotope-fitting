@@ -327,20 +327,20 @@ namespace Isotope_fitting
         private void rename_click(object sender, System.EventArgs e)
         {
             if (seq_tabControl.SelectedIndex==0) return;
-            var showDialog = this.ShowDialog("Tab Name", "Rename the selected tab");
+            var showDialog = this.ShowRenameDialog("Tab Name", "Rename the selected tab");
             seq_tabControl.SelectedTab.Text = showDialog;
             //frm2.sequenceList[seq_tabControl.SelectedIndex - 0].Extension="."+ seq_tabControl.SelectedTab.Text.ToString();
         }
 
-        public string ShowDialog(string text, string caption)
+        public string ShowRenameDialog(string text, string caption)
         {
-            Form prompt = new Form();
-            prompt.Width = 500;
+            Form prompt = new Form() { ShowIcon=false,ShowInTaskbar=false,ControlBox=false};
+            prompt.Width =275;
             prompt.Height = 150;
             prompt.Text = caption;
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text,AutoSize=true,BackColor=Color.Transparent };
-            TextBox textBox = new TextBox() { Left = 50, Top =40, Width = 400 };
-            Button confirmation = new Button() { Text = "Done", Left = 350, Width = 100, Top = 70 };
+            Label textLabel = new Label() { Left = 25, Top = 20, Text = text,AutoSize=true,BackColor=Color.Transparent };
+            TextBox textBox = new TextBox() { Left =25, Top =40, Width =200};
+            Button confirmation = new Button() { Text = "Done", Left = 175, Width = 50, Top = 70 };
             confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(confirmation);
             prompt.Controls.Add(textLabel);

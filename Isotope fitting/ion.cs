@@ -21,6 +21,7 @@ namespace Isotope_fitting
         private string name;
         private double maxppm_error;
         private double minppm_error;
+        private string extension;
 
         public Color Color
         {
@@ -61,6 +62,11 @@ namespace Isotope_fitting
         {
             get { return this.mz; }
             set { this.mz = value; }
+        }
+        public string Extension
+        {
+            get { return this.extension; }
+            set { this.extension = value; }
         }
         public string Name
         {

@@ -15,6 +15,7 @@ namespace Isotope_fitting
         private string index;
         private string radio_label;
         private string indexTo;
+        private int sortIdx;
         private string ion;
         private string ion_type;
         private string adduct;
@@ -37,7 +38,7 @@ namespace Isotope_fitting
         private double maxppm_error;
         private double minppm_error;
         private bool candidate_;
-
+        private string extension;
 
         public OxyColor Color
         {
@@ -58,6 +59,11 @@ namespace Isotope_fitting
         {
             get { return this.name; }
             set { this.name = value; }
+        }
+        public string Extension
+        {
+            get { return this.extension; }
+            set { this.extension = value; }
         }
         public int Counter
         {
@@ -143,6 +149,11 @@ namespace Isotope_fitting
         {
             get { return this.indexTo; }
             set { this.indexTo = value; }
+        }
+        public int SortIdx
+        {
+            get { return this.sortIdx; }
+            set { this.sortIdx = value; }
         }
         public string Machine
         {

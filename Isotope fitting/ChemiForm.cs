@@ -662,6 +662,7 @@ namespace Isotope_fitting
         private string index;
         private string radio_label;
         private string indexTo;
+        private int sortIdx;
         private string ion;
         private string ion_type;
         private string adduct;
@@ -684,8 +685,21 @@ namespace Isotope_fitting
         private List<PointPlot> intensoid = new List<PointPlot>();
         private double maxppm_error;
         private double minppm_error;
+        private string extension;
+
 
         private double max_man_int;
+        public string Extension
+        {
+            get
+            {
+                return this.extension;
+            }
+            set
+            {
+                this.extension = value;
+            }
+        }
         public string Name
         {
             get
@@ -861,7 +875,18 @@ namespace Isotope_fitting
             {
                 this.indexTo = value;
             }
-        }        
+        }
+        public int SortIdx
+        {
+            get
+            {
+                return this.sortIdx;
+            }
+            set
+            {
+                this.sortIdx = value;
+            }
+        }
         public int Multiplier
         {
             get
@@ -1025,7 +1050,7 @@ namespace Isotope_fitting
         {
             ChemiForm deepcopyChemiform = new ChemiForm() { Adduct = this.Adduct, Centroid = this.Centroid.ConvertAll(item => item.DeepCopy()), Charge = this.Charge, Color= this.Color, Combinations= (List<Combination_1>)this.Combinations.ConvertAll(item => item.DeepCopy()), Combinations4 = (List<Combination_4>)this.Combinations4.ConvertAll(item => item.DeepCopy()), Deduct=this.Deduct, Elements_set= (List<Element_set>)this.Elements_set.ConvertAll(item => item.DeepCopy()),
                 Error =this.Error, FinalFormula=this.FinalFormula, Index=this.Index, IndexTo=this.IndexTo, InputFormula=this.InputFormula, Ion=this.Ion, Ion_type=this.Ion_type, Iso_total_amount=this.Iso_total_amount, Machine= this.Machine, Monoisotopic=this.Monoisotopic.DeepCopy(), Multiplier=this.Multiplier, Mz=this.Mz, Name=this.Name, Points=this.Points.ConvertAll(item => item.DeepCopy()), PrintFormula=this.PrintFormula, Profile=this.Profile.ConvertAll(item => item.DeepCopy()),
-                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,maxPPM_Error = this.maxPPM_Error,minPPM_Error = this.minPPM_Error,Factor = this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int,Intensoid=this.Intensoid};
+                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,maxPPM_Error = this.maxPPM_Error,minPPM_Error = this.minPPM_Error,Factor = this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int,Intensoid=this.Intensoid, Extension=this.Extension,SortIdx=this.SortIdx};
 
             return deepcopyChemiform;
         }
