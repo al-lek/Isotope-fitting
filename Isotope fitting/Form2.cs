@@ -944,6 +944,7 @@ namespace Isotope_fitting
         private void LoadMS_Btn_Click(object sender, EventArgs e)
         {
             loadMS_Btn.Enabled = false;
+            ms_light_chain = false; ms_heavy_chain = false; ms_tab_mode = false; ms_extension = string.Empty; ms_sequence = string.Empty;
             if (!tab_mode && String.IsNullOrEmpty(Peptide) && String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadMS_Btn.Enabled = true;return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel);
             if (dialogResult==DialogResult.No)
@@ -1110,8 +1111,11 @@ namespace Isotope_fitting
                 PrintFormula= frag_info[4],
                 Max_man_int = 0,
                 Extension=ms_extension,                
-            });
+            });            
             int i = ChemFormulas.Count - 1;
+            if (ms_heavy_chain) ChemFormulas[i].Chain_type = 1;
+            else if (ms_light_chain) ChemFormulas[i].Chain_type = 2;
+            else ChemFormulas[i].Chain_type = 0;
             if (ChemFormulas[i].Ion.StartsWith("x")|| ChemFormulas[i].Ion.StartsWith("y")|| ChemFormulas[i].Ion.StartsWith("z"))
             {
                 ChemFormulas[i].SortIdx = ms_sequence.Length - Int32.Parse(ChemFormulas[i].Index);
@@ -1137,7 +1141,6 @@ namespace Isotope_fitting
             //check if there are charged x ions
             if (!x_charged && ChemFormulas[i].Ion.Contains("x") && ChemFormulas[i].Charge>1) { x_charged = true; }
 
-
             if (char.IsLower(frag_info[1][0]))
             {
                 // normal fragment
@@ -1153,13 +1156,25 @@ namespace Isotope_fitting
 
                 string lbl = "";
                 
-                if (tab_mode)
+                if (ms_tab_mode)
                 {
-                    if (ChemFormulas[i].Ion_type.Length == 1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
-                    else { lbl = "(" + ChemFormulas[i].Ion_type + ")" + ChemFormulas[i].Index; }
-                    ChemFormulas[i].Radio_label = lbl + "_" + ms_extension;
-                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + "_" + ms_extension;
-                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + "_" + ms_extension;
+                    if (string.IsNullOrEmpty(ms_extension))
+                    {
+                        if (ChemFormulas[i].Ion_type.Length == 1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
+                        else { lbl = "(" + ChemFormulas[i].Ion_type + ")" + ChemFormulas[i].Index; }
+                        ChemFormulas[i].Radio_label = lbl;
+                        if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
+                        else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
+                    }
+                    else
+                    {
+                        if (ChemFormulas[i].Ion_type.Length == 1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
+                        else { lbl = "(" + ChemFormulas[i].Ion_type + ")" + ChemFormulas[i].Index; }
+                        ChemFormulas[i].Radio_label = lbl + "_" + ms_extension;
+                        if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + "_" + ms_extension;
+                        else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + "_" + ms_extension;
+                    }
+                    
                 }
                 else
                 {
@@ -1212,7 +1227,7 @@ namespace Isotope_fitting
                     ChemFormulas[i].IndexTo = (Peptide.Length - 1).ToString();
 
                     string lbl = ChemFormulas[i].Ion_type;
-                    if (tab_mode)
+                    if (ms_tab_mode)
                     {
                         ChemFormulas[i].Radio_label = lbl + "_" + ms_extension;
                         if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + "_" + ms_extension;
@@ -1248,7 +1263,7 @@ namespace Isotope_fitting
                     ChemFormulas[i].Ion_type = "internal a" + substring[1];
                     ChemFormulas[i].Color = OxyColors.DarkViolet;
                     string lbl=String.Empty;
-                    if (tab_mode)
+                    if (ms_tab_mode)
                     {
                         ChemFormulas[i].Index = (ms_sequence.IndexOf(substring[0]) + 1).ToString();
                         ChemFormulas[i].IndexTo = (ms_sequence.IndexOf(substring[0]) + substring[0].Length).ToString();
@@ -1294,7 +1309,7 @@ namespace Isotope_fitting
                 }
                 else
                 {
-                    if (tab_mode)
+                    if (ms_tab_mode)
                     {
                         ChemFormulas[i].Ion_type = "internal b" + substring[1];
                         ChemFormulas[i].Color = OxyColors.MediumOrchid;
