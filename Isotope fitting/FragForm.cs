@@ -39,7 +39,7 @@ namespace Isotope_fitting
         private double minppm_error;
         private bool candidate_;
         private string extension;
-
+        private int chain_type;
         public OxyColor Color
         {
             get { return this.color; }
@@ -74,6 +74,11 @@ namespace Isotope_fitting
         {
             get { return this.charge; }
             set { this.charge = value; }
+        }
+        public int Chain_type
+        {
+            get { return this.chain_type; }
+            set { this.chain_type = value; }
         }
         public bool To_plot
         {

@@ -5324,6 +5324,8 @@ namespace Isotope_fitting
         
         private void saveList(List<int> fragToSave)
         {
+            bool mult_extension = false;
+            if (tab_mode && sequenceList!=null && sequenceList.Count>0) { mult_extension = true; }
             DialogResult dialogResult = MessageBox.Show("By default 'EnviPat' Calculations are not saved. 'EnviPat' Calculations storage is recommended in cases of large compounds. Do you want to save 'EnviPat' Calculations ?", "'Save' settings", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.No)
             {
@@ -5336,6 +5338,14 @@ namespace Isotope_fitting
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
                     file.WriteLine("Mode:\tFitted List");
+                    file.WriteLine("Multiple extensions:\t"+mult_extension.ToString());
+                    if (mult_extension)
+                    {
+                        foreach (SequenceTab seq in sequenceList)
+                        {
+                            file.WriteLine("Extension:\t" + seq.Extension + "\t"+seq.Type.ToString()+ "\t" +seq.Sequence + "\t" + seq.Rtf);
+                        }
+                    }
                     if (heavy_present && light_present) { file.WriteLine("AA Sequence:\t" + heavy_chain + "\t" + light_chain); }
                     else if (light_present) { file.WriteLine("AA Sequence:\t" + light_chain); }
                     else if (heavy_present) { file.WriteLine("AA Sequence:\t" + heavy_chain); }
@@ -5343,7 +5353,7 @@ namespace Isotope_fitting
                     file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
                     file.WriteLine("[m/z[Da]\tIntensity]");
                     file.WriteLine();
-                    file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution\tminPPMerror\tmaxPPMerror");
+                    file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution\tminPPMerror\tmaxPPMerror\tsortIndex\tchainType\textension");
                     //file.WriteLine("Name:\tExp");
                     //foreach (double[] p in Form2.selected_all_data[0]) file.WriteLine(p[0] + "\t" + p[1]);
                     //file.WriteLine();
@@ -5351,39 +5361,39 @@ namespace Isotope_fitting
                     foreach (int indexS in fragToSave)
                     {
                         Form2.Fragments2[indexS - 1].Fixed = true;
-                        file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error);
-                        IonDraw.Add(new ion() {Extension= Form2.Fragments2[indexS - 1].Extension, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor() });
-                        if (!tab_mode && IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
-                        {
-                            if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
-                            else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
-                            else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
-                        }
-                        else if (tab_mode && IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
-                        {
-                            if (string.IsNullOrEmpty(IonDraw.Last().Extension))
-                            {
-                                if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
-                                else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
-                                else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
-                            }
-                            else
-                            {
-                                bool found = false;
-                                foreach (SequenceTab seq in sequenceList)
-                                {
-                                    if (IonDraw.Last().Extension.Contains(seq.Extension))
-                                    {
-                                        IonDraw.Last().SortIdx = seq.Sequence.Length - IonDraw.Last().Index; found = true;
-                                    }
-                                }
-                                if (!found) { MessageBox.Show("Save procedure encountered an error. A fragment's extension ("+ IonDraw.Last().Extension.ToString()+ ") doesn't match with the saved extensions.");return; }
-                            }                           
-                        }
-                        else
-                        {
-                            IonDraw.Last().SortIdx = IonDraw.Last().Index;
-                        }
+                        file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx+"\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension);
+                        IonDraw.Add(new ion() {Extension= Form2.Fragments2[indexS - 1].Extension,SortIdx= Form2.Fragments2[indexS - 1].SortIdx , Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(),Chain_type= Fragments2[indexS - 1].Chain_type });
+                        //if (!tab_mode && IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
+                        //{
+                        //    if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
+                        //    else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
+                        //    else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
+                        //}
+                        //else if (tab_mode && IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
+                        //{
+                        //    if (string.IsNullOrEmpty(IonDraw.Last().Extension))
+                        //    {
+                        //        if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
+                        //        else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
+                        //        else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
+                        //    }
+                        //    else
+                        //    {
+                        //        bool found = false;
+                        //        foreach (SequenceTab seq in sequenceList)
+                        //        {
+                        //            if (IonDraw.Last().Extension.Contains(seq.Extension))
+                        //            {
+                        //                IonDraw.Last().SortIdx = seq.Sequence.Length - IonDraw.Last().Index; found = true;
+                        //            }
+                        //        }
+                        //        if (!found) { MessageBox.Show("Save procedure encountered an error. A fragment's extension ("+ IonDraw.Last().Extension.ToString()+ ") doesn't match with the saved extensions.");return; }
+                        //    }                           
+                        //}
+                        //else
+                        //{
+                        //    IonDraw.Last().SortIdx = IonDraw.Last().Index;
+                        //}
                     }
                     populate_fragtypes_treeView();
                     file.Flush(); file.Close(); file.Dispose();
@@ -5401,6 +5411,14 @@ namespace Isotope_fitting
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
                     file.WriteLine("Mode:\tFitted List");
+                    file.WriteLine("Multiple extensions:\t" + mult_extension.ToString());
+                    if (mult_extension)
+                    {
+                        foreach (SequenceTab seq in sequenceList)
+                        {
+                            file.WriteLine("Extension:\t" + seq.Extension + "\t" + seq.Type.ToString() + "\t" + seq.Sequence + "\t" + seq.Rtf);
+                        }
+                    }
                     if (heavy_present && light_present) { file.WriteLine("AA Sequence:\t" + heavy_chain + "\t" + light_chain); }
                     else if (light_present) { file.WriteLine("AA Sequence:\t" + light_chain); }
                     else if (heavy_present) { file.WriteLine("AA Sequence:\t" + heavy_chain); }
@@ -5408,15 +5426,14 @@ namespace Isotope_fitting
                     file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
                     file.WriteLine("[m/z[Da]\tIntensity]");
                     file.WriteLine();
-                    file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution\tminPPMerror\tmaxPPMerror");
-                    //file.WriteLine("Name:\tExp");
+                    file.WriteLine("Name\tIon Type\tIndex\t->to Index\tCharge\tm/z\tMax Intensity\tFactor\tPPM Error\tInput Formula\tAdduct\tDeduct\tColor\tResolution\tminPPMerror\tmaxPPMerror\tsortIndex\tchainType\textension");
                     //foreach (double[] p in Form2.selected_all_data[0]) file.WriteLine(p[0] + "\t" + p[1]);
                     //file.WriteLine();
                     if (IonDraw.Count > 0) IonDraw.Clear();
                     foreach (int indexS in fragToSave)
                     {
                         Form2.Fragments2[indexS - 1].Fixed = true;
-                        file.WriteLine(Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error);
+                        file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension);
                         string profile_string = "Prof:";
                         string centroid_string = "Centr:";
                         foreach (PointPlot pp in Fragments2[indexS - 1].Profile)
@@ -5429,38 +5446,38 @@ namespace Isotope_fitting
                             centroid_string += "\t" + pp.X + " " + pp.Y;
                         }
                         file.WriteLine(centroid_string);
-                        IonDraw.Add(new ion() {Extension= Form2.Fragments2[indexS - 1].Extension, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor() });
-                        if (IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
-                        {
-                            if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
-                            else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
-                            else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
-                        }
-                        else if (tab_mode && IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
-                        {
-                            if (string.IsNullOrEmpty(IonDraw.Last().Extension))
-                            {
-                                if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
-                                else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
-                                else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
-                            }
-                            else
-                            {
-                                bool found = false;
-                                foreach (SequenceTab seq in sequenceList)
-                                {
-                                    if (IonDraw.Last().Extension.Contains(seq.Extension))
-                                    {
-                                        IonDraw.Last().SortIdx = seq.Sequence.Length - IonDraw.Last().Index; found = true;
-                                    }
-                                }
-                                if (!found) { MessageBox.Show("Save procedure encountered an error. A fragment's extension (" + IonDraw.Last().Extension.ToString() + ") doesn't match with the saved extensions."); return; }
-                            }
-                        }
-                        else
-                        {
-                            IonDraw.Last().SortIdx = IonDraw.Last().Index;
-                        }
+                        IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type });
+                        //if (IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
+                        //{
+                        //    if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
+                        //    else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
+                        //    else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
+                        //}
+                        //else if (tab_mode && IonDraw.Last().Ion_type.StartsWith("x") || IonDraw.Last().Ion_type.StartsWith("y") || IonDraw.Last().Ion_type.StartsWith("z") || IonDraw.Last().Ion_type.StartsWith("(x") || IonDraw.Last().Ion_type.StartsWith("(y") || IonDraw.Last().Ion_type.StartsWith("(z"))
+                        //{
+                        //    if (string.IsNullOrEmpty(IonDraw.Last().Extension))
+                        //    {
+                        //        if (IonDraw.Last().Name.Contains("_H")) { IonDraw.Last().SortIdx = heavy_chain.Length - IonDraw.Last().Index; }
+                        //        else if (IonDraw.Last().Name.Contains("_L")) { IonDraw.Last().SortIdx = light_chain.Length - IonDraw.Last().Index; }
+                        //        else { IonDraw.Last().SortIdx = Peptide.Length - IonDraw.Last().Index; }
+                        //    }
+                        //    else
+                        //    {
+                        //        bool found = false;
+                        //        foreach (SequenceTab seq in sequenceList)
+                        //        {
+                        //            if (IonDraw.Last().Extension.Contains(seq.Extension))
+                        //            {
+                        //                IonDraw.Last().SortIdx = seq.Sequence.Length - IonDraw.Last().Index; found = true;
+                        //            }
+                        //        }
+                        //        if (!found) { MessageBox.Show("Save procedure encountered an error. A fragment's extension (" + IonDraw.Last().Extension.ToString() + ") doesn't match with the saved extensions."); return; }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    IonDraw.Last().SortIdx = IonDraw.Last().Index;
+                        //}
                     }
                     populate_fragtypes_treeView();
                     file.Flush(); file.Close(); file.Dispose();
@@ -5472,6 +5489,7 @@ namespace Isotope_fitting
         }
         private void loadList()
         {
+            bool mult_extensions=false; bool new_type = false;
             bool heavy = false; bool light = false; bool HEAVY_LIGHT_BOTH = false; string extension = "";
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
@@ -5529,7 +5547,15 @@ namespace Isotope_fitting
 
                             if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
                             else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                            else if (lista[j].StartsWith("AA"))
+                            else if (lista[j].StartsWith("Multiple"))
+                            {
+                                mult_extensions = string_to_bool(str[1]);new_type = true;
+                            }
+                            else if (lista[j].StartsWith("Extension"))
+                            {
+                                sequenceList.Add(new SequenceTab() {Extension = str[1],Sequence= str[3] ,Rtf= str[4],Type= Convert.ToInt32(str[2])});
+                            }
+                            else if (lista[j].StartsWith("AA") && !new_type)
                             {
                                 if (HEAVY_LIGHT_BOTH)
                                 {
@@ -5551,7 +5577,7 @@ namespace Isotope_fitting
                                 }
                             }
                             else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
-                            else if (lista[j].StartsWith("Name")) continue;                           
+                            else if (lista[j].StartsWith("Name")) continue;
                             else
                             {
                                 int[] check_mate = check_for_duplicates(str[0], dParser(str[7]), dParser(str[5]));
@@ -5602,40 +5628,69 @@ namespace Isotope_fitting
                                         maxPPM_Error = 0,
                                         minPPM_Error = 0
                                     });
-                                    if (heavy) { if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0] + "_H"; } }
-                                    else if (light) { if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; } }
                                     if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                     IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                    if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+
+                                    if (!new_type)
                                     {
-                                        if (HEAVY_LIGHT_BOTH)
+                                        fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
+                                        IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                        if (heavy)
                                         {
-                                            if (str[0].EndsWith("_H"))
+                                            if (!str[0].EndsWith("_H")) fitted_chem.Last().Name = str[0] + "_H";
+                                            fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                            IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                        }
+                                        else if (light)
+                                        {
+                                            if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; }
+                                            fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                            IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type =2;
+                                        }
+                                        if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+                                        {
+                                            if (HEAVY_LIGHT_BOTH)
                                             {
-                                                IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
-                                            }
-                                            else if (str[0].EndsWith("_L"))
-                                            {
-                                                IonDraw.Last().SortIdx = s2_chain.Length - IonDraw.Last().Index;
+                                                if (str[0].EndsWith("_H"))
+                                                {
+                                                    IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                                }
+                                                else if (str[0].EndsWith("_L"))
+                                                {
+                                                    IonDraw.Last().SortIdx = s2_chain.Length - IonDraw.Last().Index;
+                                                }
+                                                else
+                                                {
+                                                    MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                }
                                             }
                                             else
                                             {
-                                                MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
                                             }
                                         }
-                                        else
+                                        else { IonDraw.Last().SortIdx = IonDraw.Last().Index; }
+                                        fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
+                                        if (str.Length == 16)
                                         {
-                                            IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                            fitted_chem.Last().maxPPM_Error = dParser(str[15]);
+                                            fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                            IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                            IonDraw.Last().minPPM_Error = dParser(str[14]);
                                         }
                                     }
-                                    else IonDraw.Last().SortIdx = IonDraw.Last().Index;
-
-                                    if (str.Length == 16)
+                                    else
                                     {
+                                        fitted_chem.Last().Extension = str[18];
+                                        fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
+                                        fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                         fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                         fitted_chem.Last().minPPM_Error = dParser(str[14]);
                                         IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                         IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                        IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                                        IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
+                                        IonDraw.Last().Extension = str[18];
                                     }
                                     arrayPositionIndex++;
                                     j++;
@@ -5670,7 +5725,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    j = j + 2 ;
+                                    j = j + 2;
                                 }
                             }
                         }
@@ -5783,40 +5838,69 @@ namespace Isotope_fitting
                                         maxPPM_Error = 0,
                                         minPPM_Error = 0
                                     });
-                                    if (heavy) { if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0] + "_H"; } }
-                                    else if (light) { if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; } }
                                     if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                     IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                    if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+
+                                    if (!new_type)
                                     {
-                                        if (HEAVY_LIGHT_BOTH)
+                                        fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
+                                        IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                        if (heavy)
                                         {
-                                            if (str[0].EndsWith("_H"))
+                                            if (!str[0].EndsWith("_H")) fitted_chem.Last().Name = str[0] + "_H";
+                                            fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                            IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                        }
+                                        else if (light)
+                                        {
+                                            if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; }
+                                            fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                            IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                        }
+                                        if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+                                        {
+                                            if (HEAVY_LIGHT_BOTH)
                                             {
-                                                IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
-                                            }
-                                            else if (str[0].EndsWith("_L"))
-                                            {
-                                                IonDraw.Last().SortIdx = s2_chain.Length - IonDraw.Last().Index;
+                                                if (str[0].EndsWith("_H"))
+                                                {
+                                                    IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                                }
+                                                else if (str[0].EndsWith("_L"))
+                                                {
+                                                    IonDraw.Last().SortIdx = s2_chain.Length - IonDraw.Last().Index;
+                                                }
+                                                else
+                                                {
+                                                    MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                }
                                             }
                                             else
                                             {
-                                                MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
                                             }
                                         }
-                                        else
+                                        else { IonDraw.Last().SortIdx = IonDraw.Last().Index; }
+                                        fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
+                                        if (str.Length == 16)
                                         {
-                                            IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                            fitted_chem.Last().maxPPM_Error = dParser(str[15]);
+                                            fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                            IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                            IonDraw.Last().minPPM_Error = dParser(str[14]);
                                         }
                                     }
-                                    else IonDraw.Last().SortIdx = IonDraw.Last().Index;
-
-                                    if (str.Length == 16)
+                                    else
                                     {
+                                        fitted_chem.Last().Extension = str[18];
+                                        fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
+                                        fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                         fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                         fitted_chem.Last().minPPM_Error = dParser(str[14]);
                                         IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                         IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                        IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                                        IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
+                                        IonDraw.Last().Extension = str[18];
                                     }
                                 }
                             }

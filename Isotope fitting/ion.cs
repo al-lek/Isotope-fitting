@@ -22,6 +22,7 @@ namespace Isotope_fitting
         private double maxppm_error;
         private double minppm_error;
         private string extension;
+        private int chain_type;
 
         public Color Color
         {
@@ -42,6 +43,11 @@ namespace Isotope_fitting
         {
             get { return this.index; }
             set { this.index = value; }
+        }
+        public int Chain_type
+        {
+            get { return this.chain_type; }
+            set { this.chain_type = value; }
         }
         public int IndexTo
         {
