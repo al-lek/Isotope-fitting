@@ -5576,6 +5576,7 @@ namespace Isotope_fitting
                                     else { Peptide = str[1]; }
                                 }
                             }
+                            else if (lista[j].StartsWith("AA")) { Peptide = str[1]; }
                             else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
                             else if (lista[j].StartsWith("Name")) continue;
                             else
@@ -5765,7 +5766,15 @@ namespace Isotope_fitting
 
                             if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
                             else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                            else if (lista[j].StartsWith("AA"))
+                            else if (lista[j].StartsWith("Multiple"))
+                            {
+                                mult_extensions = string_to_bool(str[1]); new_type = true;
+                            }
+                            else if (lista[j].StartsWith("Extension"))
+                            {
+                                sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) });
+                            }
+                            else if (lista[j].StartsWith("AA") && !new_type)
                             {
                                 if (HEAVY_LIGHT_BOTH)
                                 {
@@ -5786,6 +5795,7 @@ namespace Isotope_fitting
                                     else { Peptide = str[1]; }
                                 }
                             }
+                            else if (lista[j].StartsWith("AA") ) { Peptide = str[1]; }
                             else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
                             else if (lista[j].StartsWith("Name")) continue;
                             else
