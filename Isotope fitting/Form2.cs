@@ -275,8 +275,8 @@ namespace Isotope_fitting
         public double exp_width = 1;
         public double frag_width = 2;
         public double fit_width = 1;
-        public double peak_width = 1;
-        public double cen_width = 1;
+        public double peak_width =0.5;
+        public double cen_width =0.5;
         // tab2 axis isoplot
         public bool Xmajor_grid = false;
         public bool  Xminor_grid = false;
@@ -14860,8 +14860,7 @@ namespace Isotope_fitting
                     int pointCount = experimental.Count;
                     BarSeriesValue[] barData = new BarSeriesValue[pointCount];
                     for (int bar = 0; bar < pointCount; bar++)
-                    {
-                        double[] peak = peak_points[bar];
+                    {                        
                         double mz = experimental[bar][0];
                         double inten = experimental[bar][1];
                         ////(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
@@ -15010,8 +15009,9 @@ namespace Isotope_fitting
                 ////iso_plot.Model.Series.Add(bar);
                 //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = peak_color, FillColor = peak_color, BarWidth = peak_width };
                 //iso_plot.Model.Series.Add(bar);
-                Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None };
-                bs.Title.Text = "Exp"; bs.BorderWidth = 1; bs.BorderColor = peak_color.ToColor(); bs.BarThickness = (int)peak_width;
+                Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None,MouseInteraction=false,Shadow=new Shadow() {Visible=false,Color=Color.Transparent } };
+
+                bs.Title.Text = "Exp"; bs.BorderWidth = 0F;  bs.Fill=new Fill() { Color = peak_color.ToColor(),GradientColor= peak_color.ToColor(), Style=RectFillStyle.ColorOnly }; bs.BorderColor = peak_color.ToColor(); bs.BarThickness = (int)peak_width;
                 LC_1.ViewXY.BarSeries.Add(bs);
                 LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
             }
