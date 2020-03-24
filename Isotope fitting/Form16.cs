@@ -22,19 +22,35 @@ namespace Isotope_fitting
         {
             frm2 =f;
             InitializeComponent();     
-            tab_mode_checkBox1.Checked= frm2.tab_mode;
 
             IntPtr h = this.seq_tabControl.Handle;
-            if (!String.IsNullOrEmpty(frm2.Peptide)) { seq_BoxFrm16.Text = frm2.Peptide.ToString(); }
-            if (!frm2.tab_mode)
+            if (frm2.sequenceList != null && frm2.sequenceList.Count==1)
             {
-                if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
-                if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
+                if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf))
+                {
+                    seq_BoxFrm16.Text = frm2.sequenceList[0].Sequence;
+                }
+                else
+                {
+                    seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;
+                }
             }
-            else /*if(frm2.sequenceList.Count>0)*/
+            else if (frm2.sequenceList != null && frm2.sequenceList.Count >1)
             {
+                seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;
                 create_tabPages();
             }
+
+            //if (!String.IsNullOrEmpty(frm2.Peptide)) { seq_BoxFrm16.Text = frm2.Peptide.ToString(); }
+            //if (!frm2.tab_mode)
+            //{
+            //    if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
+            //    if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
+            //}
+            //else /*if(frm2.sequenceList.Count>0)*/
+            //{
+            //    create_tabPages();
+            //}
         }
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
@@ -45,21 +61,24 @@ namespace Isotope_fitting
             SendMessage(this.seq_tabControl.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr)16);
         }
         private void create_tabPages()
-        {
-            seq_tabControl.TabPages.RemoveAt(1);
-            seq_tabControl.TabPages.RemoveAt(1);
+        {           
             int lastIndex = 0;
-            for (int k = 0; k < frm2.sequenceList.Count; k++)
+            for (int k = 1; k < frm2.sequenceList.Count; k++)
             {
                 SequenceTab seq = frm2.sequenceList[k];
                 lastIndex = seq_tabControl.TabCount - 1;
                 seq_tabControl.TabPages.Insert(lastIndex, seq.Extension.ToString());
                 seq_tabControl.SelectedIndex = lastIndex;
-                RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 280), TabIndex = 1, Checked = true, AutoSize = true };
+                RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 280), TabIndex = 1,  AutoSize = true };
                 RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 280), TabIndex = 2, AutoSize = true };
                 if (seq.Type == 1) { bH.Checked = true; }
-                else { bL.Checked = true; }
+                else { bL.Checked = true; }                
                 RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Top, Size = new Size(692, 271), ShowSelectionMargin = true, Rtf = seq.Rtf ,ScrollBars=RichTextBoxScrollBars.Vertical};
+                if (string.IsNullOrEmpty(seq.Rtf))
+                {
+                    box.Text = seq.Sequence;
+                }
+                
                 box.TextChanged += (s, e1) =>
                 {
                     if (box.Text.Length > 10 && !active_txt)
@@ -91,9 +110,9 @@ namespace Isotope_fitting
         }
         private void seq_Btn_Click(object sender, EventArgs e)
         {  
-            if (tab_mode_checkBox1.Checked && seq_tabControl.TabPages.Count>2)
-            {
-                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            //if (tab_mode_checkBox1.Checked )
+            //{
+                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
                 frm2.Peptide = frm2.Peptide.Replace("\t", "");
                 frm2.Peptide = frm2.Peptide.Replace(" ", "");
                 for (int k=1;k< seq_tabControl.TabPages.Count-1; k++)
@@ -106,47 +125,55 @@ namespace Isotope_fitting
                 }
                 if (frm2.sequenceList.Count>0) { frm2.sequenceList.Clear(); }
                 frm2.heavy_present = false; frm2.light_present = false;
-                for (int k = 1; k < seq_tabControl.TabPages.Count-1; k++)
+                for (int k = 0; k < seq_tabControl.TabPages.Count-1; k++)
                 {
                     RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();                   
-                    string s = txtbox.Text.Replace(Environment.NewLine, " ").ToString();
+                    string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
                     s = s.Replace("\t", "");
                     s = s.Replace(" ", "");
-                    frm2.sequenceList.Add(new SequenceTab() {Sequence=s,Extension = seq_tabControl.TabPages[k].Text,Type=0,Rtf=txtbox.Rtf});
-                    foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<RadioButton>())
+                    if (k == 0) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = txtbox.Rtf });
+                    else
                     {
-                        if (rdBtn.Checked)
+                        frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = txtbox.Rtf });                    
+                        foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<RadioButton>())
                         {
-                            frm2.sequenceList.Last().Type = rdBtn.TabIndex;
-                            if (rdBtn.TabIndex==1) { frm2.heavy_present = true; }
-                            else { frm2.heavy_present = true; }
+                            if (rdBtn.Checked)
+                            {
+                                frm2.sequenceList.Last().Type = rdBtn.TabIndex;
+                                if (rdBtn.TabIndex == 1) { frm2.heavy_present = true; }
+                                else { frm2.heavy_present = true; }
+                            }
                         }
-                    }    
+                    }
+                      
                 }
-            }
-            else if(tab_mode_checkBox1.Checked)
-            {
-                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-                frm2.Peptide = frm2.Peptide.Replace("\t", "");
-                frm2.Peptide = frm2.Peptide.Replace(" ", "");
-            }
-            else
-            {
-                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-                frm2.Peptide = frm2.Peptide.Replace("\t", "");
-                frm2.Peptide = frm2.Peptide.Replace(" ", "");
-                frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-                frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
-                frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
-                if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
-                else { frm2.heavy_present = true; }
-                frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-                frm2.light_chain = frm2.light_chain.Replace("\t", "");
-                frm2.light_chain = frm2.light_chain.Replace(" ", "");
-                if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
-                else { frm2.light_present = true; }
-            }
-
+            //}           
+            //else
+            //{
+            //    frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
+            //    frm2.Peptide = frm2.Peptide.Replace("\t", "");
+            //    frm2.Peptide = frm2.Peptide.Replace(" ", "");
+            //    frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            //    frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
+            //    frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
+            //    if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
+            //    else { frm2.heavy_present = true; }
+            //    frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+            //    frm2.light_chain = frm2.light_chain.Replace("\t", "");
+            //    frm2.light_chain = frm2.light_chain.Replace(" ", "");
+            //    if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
+            //    else { frm2.light_present = true; }
+            //    for (int k = 1; k < seq_tabControl.TabPages.Count - 1; k++)
+            //    {
+            //        RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+            //        string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
+            //        s = s.Replace("\t", "");
+            //        s = s.Replace(" ", "");
+            //        frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = k, Rtf = txtbox.Rtf });                   
+            //    }
+            //}
+            if (frm2.sequenceList.Count == 1) { frm2.tab_mode = false; }
+            else { frm2.tab_mode = true; }        
             this.Close();
         }
 
@@ -167,61 +194,7 @@ namespace Isotope_fitting
             active_txt = false;
         }
 
-        private void heavy_BoxFrm16_TextChanged(object sender, EventArgs e)
-        {
-            if (heavy_BoxFrm16.Text.Length > 10 && !active_txt)
-            {
-                active_txt = true;
-                user_txt = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-                user_txt = user_txt.Replace("\t", "");
-                user_txt = user_txt.Replace(" ", "");
-                output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
-
-                heavy_BoxFrm16.Text = output_txt;
-                heavy_BoxFrm16.SelectionStart = heavy_BoxFrm16.Text.Length;
-                heavy_BoxFrm16.SelectionLength = 0;
-            }
-            active_txt = false;
-        }
-
-        private void heavy_Btn_Click(object sender, EventArgs e)
-        {
-            frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
-            frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
-            if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
-            else { frm2.heavy_present = true; }
-            this.Close();
-        }
-
-        private void light_BoxFrm16_TextChanged(object sender, EventArgs e)
-        {
-
-            if (light_BoxFrm16.Text.Length > 10 && !active_txt)
-            {
-                active_txt = true;
-                user_txt = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-                user_txt = user_txt.Replace("\t", "");
-                user_txt = user_txt.Replace(" ", "");
-                output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
-
-                light_BoxFrm16.Text = output_txt;
-                light_BoxFrm16.SelectionStart = light_BoxFrm16.Text.Length;
-                light_BoxFrm16.SelectionLength = 0;
-            }
-            active_txt = false;
-        }
-
-        private void light_Btn_Click(object sender, EventArgs e)
-        {
-            frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            frm2.light_chain = frm2.light_chain.Replace("\t", "");
-            frm2.light_chain = frm2.light_chain.Replace(" ", "");
-            if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
-            else { frm2.light_present = true; }
-            this.Close();
-        }
-
+        
         private void Form16_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
@@ -250,7 +223,7 @@ namespace Isotope_fitting
                         {
                             seq_tabControl.ContextMenu.MenuItems.Clear();
                         }
-                        if ( i == 0 ||(!tab_mode_checkBox1.Checked && (i == 1 || i == 2))) {  return; }
+                        if ( i == 0 ) {  return; }
                         this.seq_tabControl.SelectedIndex = i;
                         ContextMenu cm = new ContextMenu();
                         cm.MenuItems.Add("Remove", new EventHandler(rmv_click));
@@ -347,20 +320,7 @@ namespace Isotope_fitting
             return textBox.Text;
         }
 
-        private void tab_mode_checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            frm2.tab_mode = tab_mode_checkBox1.Checked;
-            if (tab_mode_checkBox1.Checked)
-            {
-                if (seq_tabControl.TabPages.Contains(light_chain_tab )) { seq_tabControl.TabPages.Remove(light_chain_tab); }
-                if (seq_tabControl.TabPages.Contains(heavy_chain_tab)) { seq_tabControl.TabPages.Remove(heavy_chain_tab); }
-            }
-            else
-            {
-                if (!seq_tabControl.TabPages.Contains(light_chain_tab)) { seq_tabControl.TabPages.Insert(1,light_chain_tab); }
-                if (!seq_tabControl.TabPages.Contains(heavy_chain_tab)) { seq_tabControl.TabPages.Insert(1, heavy_chain_tab); }
-            }
-        }
+       
 
     }
 }

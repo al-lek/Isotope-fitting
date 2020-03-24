@@ -2540,6 +2540,7 @@ namespace Isotope_fitting
             // light_chkBoxCopy2
             // 
             this.light_chkBoxCopy2.AutoSize = true;
+            this.light_chkBoxCopy2.Enabled = false;
             this.light_chkBoxCopy2.Location = new System.Drawing.Point(4, 236);
             this.light_chkBoxCopy2.Name = "light_chkBoxCopy2";
             this.light_chkBoxCopy2.Size = new System.Drawing.Size(79, 17);
@@ -2551,6 +2552,7 @@ namespace Isotope_fitting
             // heavy_chkBoxCopy2
             // 
             this.heavy_chkBoxCopy2.AutoSize = true;
+            this.heavy_chkBoxCopy2.Enabled = false;
             this.heavy_chkBoxCopy2.Location = new System.Drawing.Point(4, 211);
             this.heavy_chkBoxCopy2.Name = "heavy_chkBoxCopy2";
             this.heavy_chkBoxCopy2.Size = new System.Drawing.Size(87, 17);
@@ -2773,6 +2775,7 @@ namespace Isotope_fitting
             // light_chkBoxCopy1
             // 
             this.light_chkBoxCopy1.AutoSize = true;
+            this.light_chkBoxCopy1.Enabled = false;
             this.light_chkBoxCopy1.Location = new System.Drawing.Point(4, 234);
             this.light_chkBoxCopy1.Name = "light_chkBoxCopy1";
             this.light_chkBoxCopy1.Size = new System.Drawing.Size(79, 17);
@@ -2784,6 +2787,7 @@ namespace Isotope_fitting
             // heavy_chkBoxCopy1
             // 
             this.heavy_chkBoxCopy1.AutoSize = true;
+            this.heavy_chkBoxCopy1.Enabled = false;
             this.heavy_chkBoxCopy1.Location = new System.Drawing.Point(4, 209);
             this.heavy_chkBoxCopy1.Name = "heavy_chkBoxCopy1";
             this.heavy_chkBoxCopy1.Size = new System.Drawing.Size(87, 17);
@@ -3005,6 +3009,7 @@ namespace Isotope_fitting
             // light_chkBox
             // 
             this.light_chkBox.AutoSize = true;
+            this.light_chkBox.Enabled = false;
             this.light_chkBox.Location = new System.Drawing.Point(4, 235);
             this.light_chkBox.Name = "light_chkBox";
             this.light_chkBox.Size = new System.Drawing.Size(79, 17);
@@ -3016,6 +3021,7 @@ namespace Isotope_fitting
             // heavy_chkBox
             // 
             this.heavy_chkBox.AutoSize = true;
+            this.heavy_chkBox.Enabled = false;
             this.heavy_chkBox.Location = new System.Drawing.Point(4, 209);
             this.heavy_chkBox.Name = "heavy_chkBox";
             this.heavy_chkBox.Size = new System.Drawing.Size(87, 17);
