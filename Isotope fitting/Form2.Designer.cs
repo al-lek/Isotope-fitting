@@ -192,6 +192,7 @@ namespace Isotope_fitting
             this.ppm_panel = new System.Windows.Forms.Panel();
             this.panel1_tab2 = new System.Windows.Forms.Panel();
             this.draw_sequence_panelCopy2 = new System.Windows.Forms.Panel();
+            this.seq_extensionBoxCopy2 = new System.Windows.Forms.ComboBox();
             this.light_chkBoxCopy2 = new System.Windows.Forms.CheckBox();
             this.heavy_chkBoxCopy2 = new System.Windows.Forms.CheckBox();
             this.los_chkBoxCopy2 = new System.Windows.Forms.CheckBox();
@@ -210,6 +211,7 @@ namespace Isotope_fitting
             this.sequence_PnlCopy2 = new System.Windows.Forms.Panel();
             this.draw_BtnCopy2 = new System.Windows.Forms.Button();
             this.draw_sequence_panelCopy1 = new System.Windows.Forms.Panel();
+            this.seq_extensionBoxCopy1 = new System.Windows.Forms.ComboBox();
             this.light_chkBoxCopy1 = new System.Windows.Forms.CheckBox();
             this.heavy_chkBoxCopy1 = new System.Windows.Forms.CheckBox();
             this.los_chkBoxCopy1 = new System.Windows.Forms.CheckBox();
@@ -228,6 +230,7 @@ namespace Isotope_fitting
             this.sequence_PnlCopy1 = new System.Windows.Forms.Panel();
             this.draw_BtnCopy1 = new System.Windows.Forms.Button();
             this.draw_sequence_panel = new System.Windows.Forms.Panel();
+            this.seq_extensionBox = new System.Windows.Forms.ComboBox();
             this.light_chkBox = new System.Windows.Forms.CheckBox();
             this.heavy_chkBox = new System.Windows.Forms.CheckBox();
             this.los_chkBox = new System.Windows.Forms.CheckBox();
@@ -336,9 +339,6 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.seq_extensionBox = new System.Windows.Forms.ComboBox();
-            this.seq_extensionBoxCopy1 = new System.Windows.Forms.ComboBox();
-            this.seq_extensionBoxCopy2 = new System.Windows.Forms.ComboBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -1852,7 +1852,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(105, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(104, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1864,7 +1864,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(195, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(194, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -2526,6 +2526,17 @@ namespace Isotope_fitting
             this.draw_sequence_panelCopy2.TabIndex = 12;
             this.draw_sequence_panelCopy2.Visible = false;
             // 
+            // seq_extensionBoxCopy2
+            // 
+            this.seq_extensionBoxCopy2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seq_extensionBoxCopy2.Enabled = false;
+            this.seq_extensionBoxCopy2.FormattingEnabled = true;
+            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(4, 261);
+            this.seq_extensionBoxCopy2.Name = "seq_extensionBoxCopy2";
+            this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
+            this.seq_extensionBoxCopy2.TabIndex = 19;
+            this.seq_extensionBoxCopy2.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy2_SelectionChangeCommitted);
+            // 
             // light_chkBoxCopy2
             // 
             this.light_chkBoxCopy2.AutoSize = true;
@@ -2748,6 +2759,17 @@ namespace Isotope_fitting
             this.draw_sequence_panelCopy1.TabIndex = 11;
             this.draw_sequence_panelCopy1.Visible = false;
             // 
+            // seq_extensionBoxCopy1
+            // 
+            this.seq_extensionBoxCopy1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seq_extensionBoxCopy1.Enabled = false;
+            this.seq_extensionBoxCopy1.FormattingEnabled = true;
+            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(4, 259);
+            this.seq_extensionBoxCopy1.Name = "seq_extensionBoxCopy1";
+            this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
+            this.seq_extensionBoxCopy1.TabIndex = 18;
+            this.seq_extensionBoxCopy1.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy1_SelectionChangeCommitted);
+            // 
             // light_chkBoxCopy1
             // 
             this.light_chkBoxCopy1.AutoSize = true;
@@ -2968,6 +2990,17 @@ namespace Isotope_fitting
             this.draw_sequence_panel.Name = "draw_sequence_panel";
             this.draw_sequence_panel.Size = new System.Drawing.Size(760, 500);
             this.draw_sequence_panel.TabIndex = 10;
+            // 
+            // seq_extensionBox
+            // 
+            this.seq_extensionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seq_extensionBox.Enabled = false;
+            this.seq_extensionBox.FormattingEnabled = true;
+            this.seq_extensionBox.Location = new System.Drawing.Point(4, 266);
+            this.seq_extensionBox.Name = "seq_extensionBox";
+            this.seq_extensionBox.Size = new System.Drawing.Size(87, 21);
+            this.seq_extensionBox.TabIndex = 15;
+            this.seq_extensionBox.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBox_SelectionChangeCommitted);
             // 
             // light_chkBox
             // 
@@ -4124,39 +4157,6 @@ namespace Isotope_fitting
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
-            // 
-            // seq_extensionBox
-            // 
-            this.seq_extensionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.seq_extensionBox.Enabled = false;
-            this.seq_extensionBox.FormattingEnabled = true;
-            this.seq_extensionBox.Location = new System.Drawing.Point(4, 266);
-            this.seq_extensionBox.Name = "seq_extensionBox";
-            this.seq_extensionBox.Size = new System.Drawing.Size(87, 21);
-            this.seq_extensionBox.TabIndex = 15;
-            this.seq_extensionBox.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBox_SelectionChangeCommitted);
-            // 
-            // seq_extensionBoxCopy1
-            // 
-            this.seq_extensionBoxCopy1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.seq_extensionBoxCopy1.Enabled = false;
-            this.seq_extensionBoxCopy1.FormattingEnabled = true;
-            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(4, 259);
-            this.seq_extensionBoxCopy1.Name = "seq_extensionBoxCopy1";
-            this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
-            this.seq_extensionBoxCopy1.TabIndex = 18;
-            this.seq_extensionBoxCopy1.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy1_SelectionChangeCommitted);
-            // 
-            // seq_extensionBoxCopy2
-            // 
-            this.seq_extensionBoxCopy2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.seq_extensionBoxCopy2.Enabled = false;
-            this.seq_extensionBoxCopy2.FormattingEnabled = true;
-            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(4, 261);
-            this.seq_extensionBoxCopy2.Name = "seq_extensionBoxCopy2";
-            this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
-            this.seq_extensionBoxCopy2.TabIndex = 19;
-            this.seq_extensionBoxCopy2.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy2_SelectionChangeCommitted);
             // 
             // Form2
             // 

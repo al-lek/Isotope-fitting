@@ -43,6 +43,7 @@ namespace Isotope_fitting
         public double threshold = 0.01;
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
         public bool tab_mode = false;
+        bool exp_deconvoluted = false;
         #region PARAMETER SET TAB FIT
 
         #region old new calculations
@@ -823,22 +824,22 @@ namespace Isotope_fitting
             sw1.Reset(); sw1.Start();
             post_load_actions();
             sw1.Stop(); Debug.WriteLine("post_load_actions: " + sw1.ElapsedMilliseconds.ToString());
-
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
             peak_detection.Start();
             //plotCentr_chkBox.Enabled = true;
             //plotExp_chkBox.Checked = true;
-
         }
 
         private bool load_experimental()
         {
+            double deconv_sum = 0;
             if (!is_loading && !is_calc)
             {
                 OpenFileDialog expData = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Title = "Load experimental data", FileName = "", Filter = "data file|*.txt|All files|*.*" };
                 List<string> lista = new List<string>();                
                 if (expData.ShowDialog() != DialogResult.Cancel)
-                {                    
+                {
+                    exp_deconvoluted = false;
                     sw1.Reset(); sw1.Start();
                     StreamReader objReader = new StreamReader(expData.FileName);
                     file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
@@ -858,9 +859,10 @@ namespace Isotope_fitting
                             string[] tmp_str = lista[j].Split('\t');
                             if (tmp_str.Length == 2) experimental.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]) });
                             if (max_exp < dParser(tmp_str[1])) max_exp = dParser(tmp_str[1]);
+                            if (j<3){deconv_sum += dParser(tmp_str[1]);}
                         }
                         catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); return false; }
-
+                        if (deconv_sum == 0) { exp_deconvoluted = true; }
                         if (j % 10000 == 0 && j > 0) progress_display_update(j);
                     }
                     sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
@@ -906,7 +908,14 @@ namespace Isotope_fitting
             // run peak detection and add new resolution map from experimental
             if (experimental.Count() > 0)
             {
-                peak_detect();
+                if (!exp_deconvoluted) { peak_detect(); }
+                else
+                {
+                    plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
+                    plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Checked = true));   //thread safe call
+                    LC_1.ViewXY.ZoomToFit();
+                    return;
+                }
 
                 if (peak_points.Count() > 0)
                 {
@@ -6909,6 +6918,7 @@ namespace Isotope_fitting
             if (dialogResult == DialogResult.Yes)
             {
                 plotExp_chkBox.Checked = false;plotCentr_chkBox.Checked = false;plotFragCent_chkBox.Checked = false;plotFragProf_chkBox.Checked = false;
+                exp_deconvoluted = false;
                 loaded_lists = ""; show_files_Btn.ToolTipText = "";                
                 displayPeakList_btn.Enabled = false;
                 Peptide = String.Empty; peptide_textBox1.Text = "";
@@ -14841,7 +14851,7 @@ namespace Isotope_fitting
             recalculate_fitted_residual(to_plot);
 
             // 1.b Add the experimental to plot if selected
-            if (plotExp_chkBox.Checked && all_data.Count > 0)
+            if (plotExp_chkBox.Checked && all_data.Count > 0 && !exp_deconvoluted)
             {
                 //(iso_plot.Model.Series[0] as LineSeries).Title = "Exp";
                 //for (int j = 0; j < all_data[0].Count; j++)
@@ -14998,22 +15008,43 @@ namespace Isotope_fitting
             }
 
             // 5. centroid (bar)
-            if (plotCentr_chkBox.Checked && peak_points.Count>0)
+            if (plotCentr_chkBox.Checked && (peak_points.Count>0 || exp_deconvoluted))
             {
-                int pointCount = peak_points.Count;
-                BarSeriesValue[] barData = new BarSeriesValue[pointCount];
-                for (int bar = 0; bar < pointCount; bar++)
+                if (!exp_deconvoluted)
                 {
-                    double[] peak = peak_points[bar];
-                    double mz = peak[1] + peak[4];
-                    double inten = peak[5];
-                    ////(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
-                    //(iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));                                       
-                    barData[bar].Location = mz;
-                    barData[bar].Value = inten;
-                    LC_1.ViewXY.BarSeries.Last().Values = barData;
-                    LC_1.ViewXY.BarSeries.Last().Visible= true;
+                    int pointCount = peak_points.Count;
+                    BarSeriesValue[] barData = new BarSeriesValue[pointCount];
+                    for (int bar = 0; bar < pointCount; bar++)
+                    {
+                        double[] peak = peak_points[bar];
+                        double mz = peak[1] + peak[4];
+                        double inten = peak[5];
+                        ////(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
+                        //(iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));                                       
+                        barData[bar].Location = mz;
+                        barData[bar].Value = inten;
+                        LC_1.ViewXY.BarSeries.Last().Values = barData;
+                        LC_1.ViewXY.BarSeries.Last().Visible = true;
+                    }
                 }
+                else
+                {
+                    int pointCount = experimental.Count;
+                    BarSeriesValue[] barData = new BarSeriesValue[pointCount];
+                    for (int bar = 0; bar < pointCount; bar++)
+                    {
+                        double[] peak = peak_points[bar];
+                        double mz = experimental[bar][0];
+                        double inten = experimental[bar][1];
+                        ////(iso_plot.Model.Series.Last() as RectangleBarSeries).Items.Add(new RectangleBarItem(mz - 1e-4, 0, mz + 1e-4, inten));
+                        //(iso_plot.Model.Series.Last() as LinearBarSeries).Points.Add(new DataPoint(mz, inten));                                       
+                        barData[bar].Location = mz;
+                        barData[bar].Value = inten;
+                        LC_1.ViewXY.BarSeries.Last().Values = barData;
+                        LC_1.ViewXY.BarSeries.Last().Visible = true;
+                    }
+                }
+                
             }
             LC_1.EndUpdate();
             LC_2.EndUpdate();

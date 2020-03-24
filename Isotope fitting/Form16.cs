@@ -31,7 +31,7 @@ namespace Isotope_fitting
                 if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
                 if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
             }
-            else if(frm2.sequenceList.Count>0)
+            else /*if(frm2.sequenceList.Count>0)*/
             {
                 create_tabPages();
             }
@@ -85,10 +85,9 @@ namespace Isotope_fitting
                         box.ContextMenu = cm_box;
                     }
                 };
-                this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL, box });
-                //foreach (RadioButton rdBtn in seq_tabControl.TabPages[lastIndex].Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e1) => { if (rdBtn.Checked) frm2.sequenceList[lastIndex-1].Type= rdBtn.TabIndex; };
-
-            }
+                this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL, box });       
+            }            
+            if (frm2.sequenceList.Count > 0) { seq_tabControl.SelectedIndex = 1; }
         }
         private void seq_Btn_Click(object sender, EventArgs e)
         {  
@@ -103,10 +102,7 @@ namespace Isotope_fitting
                     string s = txtbox.Text.Replace(Environment.NewLine, " ").ToString();
                     s = s.Replace("\t", "");
                     s = s.Replace(" ", "");
-                    if (string.IsNullOrEmpty(s))
-                    {
-                        MessageBox.Show("You have to insert the aminoacid sequence for each extra tab you add.");return;
-                    }
+                    if (string.IsNullOrEmpty(s)){MessageBox.Show("You have to insert the aminoacid sequence for each extra tab you add.");return;}
                 }
                 if (frm2.sequenceList.Count>0) { frm2.sequenceList.Clear(); }
                 frm2.heavy_present = false; frm2.light_present = false;
@@ -354,6 +350,16 @@ namespace Isotope_fitting
         private void tab_mode_checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             frm2.tab_mode = tab_mode_checkBox1.Checked;
+            if (tab_mode_checkBox1.Checked)
+            {
+                if (seq_tabControl.TabPages.Contains(light_chain_tab )) { seq_tabControl.TabPages.Remove(light_chain_tab); }
+                if (seq_tabControl.TabPages.Contains(heavy_chain_tab)) { seq_tabControl.TabPages.Remove(heavy_chain_tab); }
+            }
+            else
+            {
+                if (!seq_tabControl.TabPages.Contains(light_chain_tab)) { seq_tabControl.TabPages.Insert(1,light_chain_tab); }
+                if (!seq_tabControl.TabPages.Contains(heavy_chain_tab)) { seq_tabControl.TabPages.Insert(1, heavy_chain_tab); }
+            }
         }
 
     }
