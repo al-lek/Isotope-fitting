@@ -5262,10 +5262,10 @@ namespace Isotope_fitting
             }
             else
             {
-                SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fragment" + name_extension, Filter = "Data Files (*.pfit)|*.pfit", DefaultExt = "pfit", OverwritePrompt = true, AddExtension = true };
-                if (heavy_present && light_present) { save.Filter = "Data Files (*.hlpfit)|*.hlpfit"; save.DefaultExt = "lhpfit"; }
-                else if (light_present) { save.Filter = "Data Files (*.lpfit)|*.lpfit"; save.DefaultExt = "lpfit"; }
-                else if (heavy_present) { save.Filter = "Data Files (*.hpfit)|*.hpfit"; save.DefaultExt = "hpfit"; }
+                SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fragment" + name_extension, Filter = "Data Files (*.ifit)|*.ifit", DefaultExt = "ifit", OverwritePrompt = true, AddExtension = true };
+                if (heavy_present && light_present) { save.Filter = "Data Files (*.hlifit)|*.hlifit"; save.DefaultExt = "lhifit"; }
+                else if (light_present) { save.Filter = "Data Files (*.lifit)|*.lifit"; save.DefaultExt = "lifit"; }
+                else if (heavy_present) { save.Filter = "Data Files (*.hifit)|*.hifit"; save.DefaultExt = "hifit"; }
                 if (save.ShowDialog() == DialogResult.OK)
                 {
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
@@ -5319,7 +5319,7 @@ namespace Isotope_fitting
             // Open dialogue properties
             //loadData.InitialDirectory = Application.StartupPath + "\\Data";
             loadData.Title = "Load fitting data"; loadData.FileName = "";
-            loadData.Filter = "data file|*.hlfit;*.lfit;*.hfit;*.fit;*.hlpfit;*.lpfit;*.hpfit;*.pfit|All files|*.*";
+            loadData.Filter = "data file|*.hlfit;*.lfit;*.hfit;*.fit;*.hlpfit;*.lpfit;*.hpfit;*.pfit*.hlifit;*.lifit;*.hifit;*.ifit;|All files|*.*";
             List<ChemiForm> fitted_chem = new List<ChemiForm>();
             if (loadData.ShowDialog() != DialogResult.Cancel)
             {
@@ -5330,10 +5330,10 @@ namespace Isotope_fitting
                 if (extension.Equals(".hfit")) { heavy = true; heavy_present = true; }
                 else if (extension.Equals(".lfit")) { light = true; light_present = true; }
                 else if (extension.Equals(".hlfit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; }
-                else if (extension.Equals(".pfit")){envipat = true;}
-                else if (extension.Equals(".hpfit")) { heavy = true; heavy_present = true; envipat = true; }
-                else if (extension.Equals(".lpfit")) { light = true; light_present = true; envipat = true; }
-                else if (extension.Equals(".hlpfit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; envipat = true; }
+                else if (extension.Equals(".pfit")|| extension.Equals(".ifit")) {envipat = true;}
+                else if (extension.Equals(".hpfit")|| extension.Equals(".hifit")) { heavy = true; heavy_present = true; envipat = true; }
+                else if (extension.Equals(".lpfit")|| extension.Equals(".lifit")) { light = true; light_present = true; envipat = true; }
+                else if (extension.Equals(".hlpfit")|| extension.Equals(".hlifit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; envipat = true; }
                 loaded_lists = sb.ToString();
                 show_files_Btn.ToolTipText = loaded_lists;
                 is_loading = true;  // performance
