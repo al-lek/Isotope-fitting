@@ -147,10 +147,11 @@ namespace Isotope_fitting
             this.remPlot_Btn = new System.Windows.Forms.Button();
             this.plot_Btn = new System.Windows.Forms.Button();
             this.theorData_grpBx = new System.Windows.Forms.GroupBox();
+            this.MSproduct_treeView = new System.Windows.Forms.TreeView();
+            this.deleteMSProd_Btn = new System.Windows.Forms.Button();
             this.seqBtn = new System.Windows.Forms.Button();
             this.loadFF_Btn = new System.Windows.Forms.Button();
             this.loadMS_Btn = new System.Windows.Forms.Button();
-            this.peptide_textBox1 = new System.Windows.Forms.TextBox();
             this.plotFragProf_chkBox = new System.Windows.Forms.CheckBox();
             this.plotFragCent_chkBox = new System.Windows.Forms.CheckBox();
             this.expData_grpBx = new System.Windows.Forms.GroupBox();
@@ -792,9 +793,9 @@ namespace Isotope_fitting
             this.Fit_results_groupBox.Controls.Add(this.toolStrip_fit_sort);
             this.Fit_results_groupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Fit_results_groupBox.ForeColor = System.Drawing.Color.SteelBlue;
-            this.Fit_results_groupBox.Location = new System.Drawing.Point(3, 310);
+            this.Fit_results_groupBox.Location = new System.Drawing.Point(3, 367);
             this.Fit_results_groupBox.Name = "Fit_results_groupBox";
-            this.Fit_results_groupBox.Size = new System.Drawing.Size(226, 404);
+            this.Fit_results_groupBox.Size = new System.Drawing.Size(226, 347);
             this.Fit_results_groupBox.TabIndex = 10000019;
             this.Fit_results_groupBox.TabStop = false;
             this.Fit_results_groupBox.Text = "Fit results";
@@ -812,7 +813,7 @@ namespace Isotope_fitting
             this.bigPanel.Location = new System.Drawing.Point(3, 43);
             this.bigPanel.MinimumSize = new System.Drawing.Size(217, 217);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(220, 358);
+            this.bigPanel.Size = new System.Drawing.Size(220, 301);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
             // 
@@ -1852,7 +1853,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(100, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(99, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1864,7 +1865,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(190, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(189, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -1876,20 +1877,48 @@ namespace Isotope_fitting
             // theorData_grpBx
             // 
             this.theorData_grpBx.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.theorData_grpBx.Controls.Add(this.MSproduct_treeView);
+            this.theorData_grpBx.Controls.Add(this.deleteMSProd_Btn);
             this.theorData_grpBx.Controls.Add(this.seqBtn);
             this.theorData_grpBx.Controls.Add(this.loadFF_Btn);
             this.theorData_grpBx.Controls.Add(this.loadMS_Btn);
-            this.theorData_grpBx.Controls.Add(this.peptide_textBox1);
             this.theorData_grpBx.Controls.Add(this.plotFragProf_chkBox);
             this.theorData_grpBx.Controls.Add(this.plotFragCent_chkBox);
             this.theorData_grpBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.theorData_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
             this.theorData_grpBx.Location = new System.Drawing.Point(6, 115);
             this.theorData_grpBx.Name = "theorData_grpBx";
-            this.theorData_grpBx.Size = new System.Drawing.Size(219, 92);
+            this.theorData_grpBx.Size = new System.Drawing.Size(219, 150);
             this.theorData_grpBx.TabIndex = 2;
             this.theorData_grpBx.TabStop = false;
             this.theorData_grpBx.Text = "Theoretical Data";
+            // 
+            // MSproduct_treeView
+            // 
+            this.MSproduct_treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MSproduct_treeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MSproduct_treeView.Location = new System.Drawing.Point(0, 50);
+            this.MSproduct_treeView.Name = "MSproduct_treeView";
+            this.MSproduct_treeView.Size = new System.Drawing.Size(219, 68);
+            this.MSproduct_treeView.TabIndex = 122;
+            // 
+            // deleteMSProd_Btn
+            // 
+            this.deleteMSProd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteMSProd_Btn.BackColor = System.Drawing.Color.White;
+            this.deleteMSProd_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("deleteMSProd_Btn.BackgroundImage")));
+            this.deleteMSProd_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.deleteMSProd_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.deleteMSProd_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.deleteMSProd_Btn.Location = new System.Drawing.Point(191, 120);
+            this.deleteMSProd_Btn.Name = "deleteMSProd_Btn";
+            this.deleteMSProd_Btn.Size = new System.Drawing.Size(25, 25);
+            this.deleteMSProd_Btn.TabIndex = 121;
+            this.toolTip1.SetToolTip(this.deleteMSProd_Btn, "Delete MS Product lists");
+            this.deleteMSProd_Btn.UseVisualStyleBackColor = false;
+            this.deleteMSProd_Btn.Click += new System.EventHandler(this.deleteMSProd_Btn_Click);
             // 
             // seqBtn
             // 
@@ -1940,19 +1969,6 @@ namespace Isotope_fitting
             this.loadMS_Btn.UseVisualStyleBackColor = false;
             this.loadMS_Btn.Click += new System.EventHandler(this.LoadMS_Btn_Click);
             // 
-            // peptide_textBox1
-            // 
-            this.peptide_textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.peptide_textBox1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.peptide_textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.peptide_textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.peptide_textBox1.Location = new System.Drawing.Point(3, 48);
-            this.peptide_textBox1.Name = "peptide_textBox1";
-            this.peptide_textBox1.ReadOnly = true;
-            this.peptide_textBox1.Size = new System.Drawing.Size(213, 11);
-            this.peptide_textBox1.TabIndex = 42;
-            // 
             // plotFragProf_chkBox
             // 
             this.plotFragProf_chkBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1961,7 +1977,7 @@ namespace Isotope_fitting
             this.plotFragProf_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragProf_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragProf_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotFragProf_chkBox.Location = new System.Drawing.Point(3, 66);
+            this.plotFragProf_chkBox.Location = new System.Drawing.Point(3, 124);
             this.plotFragProf_chkBox.Name = "plotFragProf_chkBox";
             this.plotFragProf_chkBox.Size = new System.Drawing.Size(58, 17);
             this.plotFragProf_chkBox.TabIndex = 2;
@@ -1976,7 +1992,7 @@ namespace Isotope_fitting
             this.plotFragCent_chkBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.plotFragCent_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.249999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plotFragCent_chkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.plotFragCent_chkBox.Location = new System.Drawing.Point(75, 66);
+            this.plotFragCent_chkBox.Location = new System.Drawing.Point(75, 124);
             this.plotFragCent_chkBox.Name = "plotFragCent_chkBox";
             this.plotFragCent_chkBox.Size = new System.Drawing.Size(68, 17);
             this.plotFragCent_chkBox.TabIndex = 3;
@@ -2168,7 +2184,7 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.Controls.Add(this.fitStep_Label);
             this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitOptions_grpBox.ForeColor = System.Drawing.Color.SteelBlue;
-            this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 208);
+            this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 264);
             this.fitOptions_grpBox.Name = "fitOptions_grpBox";
             this.fitOptions_grpBox.Size = new System.Drawing.Size(219, 102);
             this.fitOptions_grpBox.TabIndex = 4;
@@ -4436,7 +4452,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton settingsPeak_Btn;
         private System.Windows.Forms.TextBox filename_txtBx;
         private System.Windows.Forms.Panel panel1_intIdx;
-        private System.Windows.Forms.TextBox peptide_textBox1;
         private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx;
         private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx2;
         private System.Windows.Forms.ToolStripSeparator toolStripButton2;
@@ -4584,5 +4599,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ComboBox seq_extensionBox;
         private System.Windows.Forms.ComboBox seq_extensionBoxCopy2;
         private System.Windows.Forms.ComboBox seq_extensionBoxCopy1;
+        private System.Windows.Forms.Button deleteMSProd_Btn;
+        private System.Windows.Forms.TreeView MSproduct_treeView;
     }
 }
