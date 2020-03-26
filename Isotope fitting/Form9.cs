@@ -1257,7 +1257,7 @@ namespace Isotope_fitting
                 DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." +
                     "If you want to stop the calcuations select 'No'. " +
                     "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
-                if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
+                if (dd == DialogResult.No || dd == DialogResult.None) { return; }
             }
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;
