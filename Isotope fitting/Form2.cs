@@ -993,6 +993,8 @@ namespace Isotope_fitting
                 else if (sequenceList.Count == 2)
                 {
                     ms_sequence = sequenceList[1].Sequence; ms_extension = "_" + sequenceList[1].Extension;
+                    if (sequenceList[1].Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
+                    else { ms_light_chain = true; ms_heavy_chain = false; }
                     if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); loadMS_Btn.Enabled = true; return; }
                     import_fragments();
                 }
@@ -1012,7 +1014,7 @@ namespace Isotope_fitting
                     if (dialogResult1 == DialogResult.Cancel) return;
                     foreach (SequenceTab seq in sequenceList)
                     {
-                        if (seq.Extension.Equals(ms_extension))
+                        if (("_"+seq.Extension).Equals(ms_extension))
                         {
                             ms_sequence = seq.Sequence;
                             if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); loadMS_Btn.Enabled = true; return; }
@@ -1070,7 +1072,7 @@ namespace Isotope_fitting
                 while (objReader.Peek() != -1);
                 objReader.Close();
 
-                ChemFormulas.Clear();               
+                //ChemFormulas.Clear();               
                 peptide_textBox1.Text = Path.GetFileNameWithoutExtension(fragment_import.FileName);
                 lista.RemoveAt(0);
                 //get_precursor_carbons(lista.Last());
@@ -1506,7 +1508,7 @@ namespace Isotope_fitting
             int total_fragments_fromFile = ChemFormulas.Count;
             for (int i = 0; i < total_fragments_fromFile; i++)
             {
-                if (ChemFormulas[i].Ion.StartsWith("y"))
+                if (ChemFormulas[i].Extension.Equals(ms_extension) && ChemFormulas[i].Ion.StartsWith("y"))
                 {
                     bool adduct = ChemFormulas[i].Ion.Contains("-");
                     int charge = ChemFormulas[i].Charge;
@@ -1941,10 +1943,41 @@ namespace Isotope_fitting
             {
                 foreach (FragForm fra in Fragments2)
                 {                    
-                    if (fra.Mz.Equals(chem1.Mz) && fra.Name.Equals(chem1.Name) && fra.Charge.Equals(chem1.Charge))
+                    if (fra.Mz.Equals(chem1.Mz) && fra.Index.Equals(chem1.Index) && fra.IndexTo.Equals(chem1.IndexTo) && fra.Ion_type.Equals(chem1.Ion_type) && fra.Chain_type.Equals(chem1.Chain_type) && fra.Charge.Equals(chem1.Charge))
                     {
-                        return false;
-                    }
+                        if (fra.Extension.Equals(chem1.Extension))
+                        {
+                            Debug.WriteLine(fra.Name.ToString()+" is considered duplicate with "+ chem1.Name.ToString());
+                            return false;
+                        }
+                        else if (fra.Extension.Contains(chem1.Extension))
+                        {
+                            Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
+                            return false;
+                        }
+                        else if (chem1.Extension.Contains(fra.Extension))
+                        {
+                            Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
+                            int ext_idx=fra.Name.IndexOf(fra.Extension);
+                            if (ext_idx!=-1)
+                            {
+                                fra.Name.Replace(fra.Extension, chem1.Extension);
+                                fra.Extension = chem1.Extension;
+                                return false;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
+                            fra.Extension += chem1.Extension;
+                            fra.Name += chem1.Extension;
+                            return false;
+                        }
+                    }                    
                 }
             }
             return true;
@@ -5363,7 +5396,7 @@ namespace Isotope_fitting
                                 {
                                     peptide = false;
                                     Peptide = str[1];
-                                    if (sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); }
+                                    if (sequenceList==null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); }
                                     else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; }
                                 }
                                 else
@@ -5413,8 +5446,8 @@ namespace Isotope_fitting
                             else if (lista[j].StartsWith("Name")) continue;
                             else
                             {
-                                int[] check_mate = check_for_duplicates(str[0], dParser(str[7]), dParser(str[5]));
-                                if (check_mate[0] != 3)
+                                bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
+                                if (check_mate)
                                 {
                                     // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                     isotope_count++;
@@ -5656,8 +5689,8 @@ namespace Isotope_fitting
                             else if (lista[j].StartsWith("Name")) continue;
                             else
                             {
-                                int[] check_mate = check_for_duplicates(str[0], dParser(str[7]), dParser(str[5]));
-                                if (check_mate[0] != 3)
+                                bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
+                                if (check_mate)
                                 {
                                     // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                     isotope_count++;
@@ -5786,15 +5819,15 @@ namespace Isotope_fitting
                 }                
             }
         }
-        private int[] check_for_duplicates(string name,double factor,double mz)
+        private bool check_for_duplicates(string name,double mz)
         {
             int[] a = new int[] {1,1};
-            if(Fragments2.Count<1) return new int[] { 1, 1 };
+            if(Fragments2.Count<1) return true;
             foreach (FragForm fra in Fragments2)
             {
-                if (fra.Name.Equals(name) && dParser(fra.Mz)==mz) return new int[] { 3, 1 };                
+                if (fra.Name.Equals(name) && dParser(fra.Mz)==mz) return false;                
             }    
-            return new int[] { 1, 1 };
+            return true;
         }
         private void clearList()
         {
@@ -6766,6 +6799,7 @@ namespace Isotope_fitting
                 displayPeakList_btn.Enabled = false;
                 Peptide = String.Empty; peptide_textBox1.Text = "";
                 heavy_chain = String.Empty;light_chain = String.Empty;light_present = false; heavy_present = false;
+                if (sequenceList != null) { sequenceList.Clear(); }
                 insert_exp = false;
                 plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
                 loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;

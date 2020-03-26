@@ -109,69 +109,47 @@ namespace Isotope_fitting
             if (frm2.sequenceList.Count > 0) { seq_tabControl.SelectedIndex = 1; }
         }
         private void seq_Btn_Click(object sender, EventArgs e)
-        {  
-            //if (tab_mode_checkBox1.Checked )
-            //{
-                frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
-                frm2.Peptide = frm2.Peptide.Replace("\t", "");
-                frm2.Peptide = frm2.Peptide.Replace(" ", "");
-                for (int k=1;k< seq_tabControl.TabPages.Count-1; k++)
+        {
+            frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
+            frm2.Peptide = frm2.Peptide.Replace("\n", "");
+            frm2.Peptide = frm2.Peptide.Replace("\t", "");
+            frm2.Peptide = frm2.Peptide.Replace(" ", "");
+            for (int k = 1; k < seq_tabControl.TabPages.Count - 1; k++)
+            {
+                RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+                string s = txtbox.Text.Replace(Environment.NewLine, " ").ToString();
+                s = s.Replace("\t", "");
+                s = s.Replace("\n", "");
+                s = s.Replace(" ", "");
+                if (string.IsNullOrEmpty(s)) { MessageBox.Show("You have to insert the aminoacid sequence for each extra tab you add."); return; }
+            }
+            if (frm2.sequenceList.Count > 0) { frm2.sequenceList.Clear(); }
+            frm2.heavy_present = false; frm2.light_present = false;
+            for (int k = 0; k < seq_tabControl.TabPages.Count - 1; k++)
+            {
+                RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+                string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
+                s = s.Replace("\t", "");
+                s = s.Replace("\n", "");
+                s = s.Replace(" ", "");
+                string rtf_s = txtbox.Rtf.Replace(Environment.NewLine, "").ToString();
+                rtf_s = rtf_s.Replace("\t", "");
+                if (k == 0) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s });
+                else
                 {
-                    RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
-                    string s = txtbox.Text.Replace(Environment.NewLine, " ").ToString();
-                    s = s.Replace("\t", "");
-                    s = s.Replace(" ", "");
-                    if (string.IsNullOrEmpty(s)){MessageBox.Show("You have to insert the aminoacid sequence for each extra tab you add.");return;}
-                }
-                if (frm2.sequenceList.Count>0) { frm2.sequenceList.Clear(); }
-                frm2.heavy_present = false; frm2.light_present = false;
-                for (int k = 0; k < seq_tabControl.TabPages.Count-1; k++)
-                {
-                    RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();                   
-                    string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
-                    s = s.Replace("\t", "");
-                    s = s.Replace(" ", "");
-                    if (k == 0) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = txtbox.Rtf });
-                    else
+                    frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = rtf_s });
+                    foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<RadioButton>())
                     {
-                        frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = txtbox.Rtf });                    
-                        foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<RadioButton>())
+                        if (rdBtn.Checked)
                         {
-                            if (rdBtn.Checked)
-                            {
-                                frm2.sequenceList.Last().Type = rdBtn.TabIndex;
-                                if (rdBtn.TabIndex == 1) { frm2.heavy_present = true; }
-                                else { frm2.heavy_present = true; }
-                            }
+                            frm2.sequenceList.Last().Type = rdBtn.TabIndex;
+                            if (rdBtn.TabIndex == 1) { frm2.heavy_present = true; }
+                            else { frm2.heavy_present = true; }
                         }
                     }
-                      
                 }
-            //}           
-            //else
-            //{
-            //    frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
-            //    frm2.Peptide = frm2.Peptide.Replace("\t", "");
-            //    frm2.Peptide = frm2.Peptide.Replace(" ", "");
-            //    frm2.heavy_chain = heavy_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            //    frm2.heavy_chain = frm2.heavy_chain.Replace("\t", "");
-            //    frm2.heavy_chain = frm2.heavy_chain.Replace(" ", "");
-            //    if (string.IsNullOrEmpty(frm2.heavy_chain)) { frm2.heavy_present = false; }
-            //    else { frm2.heavy_present = true; }
-            //    frm2.light_chain = light_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
-            //    frm2.light_chain = frm2.light_chain.Replace("\t", "");
-            //    frm2.light_chain = frm2.light_chain.Replace(" ", "");
-            //    if (string.IsNullOrEmpty(frm2.light_chain)) { frm2.light_present = false; }
-            //    else { frm2.light_present = true; }
-            //    for (int k = 1; k < seq_tabControl.TabPages.Count - 1; k++)
-            //    {
-            //        RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
-            //        string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
-            //        s = s.Replace("\t", "");
-            //        s = s.Replace(" ", "");
-            //        frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = k, Rtf = txtbox.Rtf });                   
-            //    }
-            //}
+
+            }
             if (frm2.sequenceList.Count == 1) { frm2.tab_mode = false; }
             else { frm2.tab_mode = true; }        
             this.Close();
@@ -182,8 +160,9 @@ namespace Isotope_fitting
             if (seq_BoxFrm16.Text.Length>10 && !active_txt)
             {
                 active_txt = true;
-                user_txt = seq_BoxFrm16.Text.Replace(Environment.NewLine, " ").ToString();
+                user_txt = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
                 user_txt = user_txt.Replace("\t", "");
+                user_txt = user_txt.Replace("\n", "");
                 user_txt = user_txt.Replace(" ", "");
                 output_txt =Regex.Replace(user_txt, @".{10}(?!$)", "$0  "); 
 
@@ -247,6 +226,7 @@ namespace Isotope_fitting
                 {
                     active_txt = true;
                     user_txt = box.Text.Replace(Environment.NewLine, " ").ToString();
+                    user_txt = user_txt.Replace("\n", "");
                     user_txt = user_txt.Replace("\t", "");
                     user_txt = user_txt.Replace(" ", "");
                     output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
@@ -319,8 +299,6 @@ namespace Isotope_fitting
             prompt.ShowDialog();
             return textBox.Text;
         }
-
-       
 
     }
 }

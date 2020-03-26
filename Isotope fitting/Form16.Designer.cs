@@ -32,15 +32,15 @@
             this.seq_Btn = new System.Windows.Forms.Button();
             this.add_tab_page = new System.Windows.Forms.TabPage();
             this.seq_tabControl = new System.Windows.Forms.TabControl();
-            this.seq_BoxFrm16 = new System.Windows.Forms.RichTextBox();
             this.seq_tab = new System.Windows.Forms.TabPage();
+            this.seq_BoxFrm16 = new System.Windows.Forms.RichTextBox();
             this.seq_tabControl.SuspendLayout();
             this.seq_tab.SuspendLayout();
             this.SuspendLayout();
             // 
             // seq_Btn
             // 
-            this.seq_Btn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.seq_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.seq_Btn.BackColor = System.Drawing.Color.ForestGreen;
             this.seq_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.seq_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -77,6 +77,17 @@
             this.seq_tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.seq_tabControl_Selecting);
             this.seq_tabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.seq_tabControl_MouseDown);
             // 
+            // seq_tab
+            // 
+            this.seq_tab.Controls.Add(this.seq_BoxFrm16);
+            this.seq_tab.Location = new System.Drawing.Point(4, 22);
+            this.seq_tab.Name = "seq_tab";
+            this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.seq_tab.Size = new System.Drawing.Size(698, 303);
+            this.seq_tab.TabIndex = 0;
+            this.seq_tab.Text = "General Sequence";
+            this.seq_tab.UseVisualStyleBackColor = true;
+            // 
             // seq_BoxFrm16
             // 
             this.seq_BoxFrm16.AllowDrop = true;
@@ -90,17 +101,6 @@
             this.seq_BoxFrm16.TabIndex = 2;
             this.seq_BoxFrm16.Text = "";
             this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
-            // 
-            // seq_tab
-            // 
-            this.seq_tab.Controls.Add(this.seq_BoxFrm16);
-            this.seq_tab.Location = new System.Drawing.Point(4, 22);
-            this.seq_tab.Name = "seq_tab";
-            this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.seq_tab.Size = new System.Drawing.Size(698, 303);
-            this.seq_tab.TabIndex = 0;
-            this.seq_tab.Text = "General Sequence";
-            this.seq_tab.UseVisualStyleBackColor = true;
             // 
             // Form16
             // 
