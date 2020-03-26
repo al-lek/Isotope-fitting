@@ -1756,7 +1756,7 @@ namespace Isotope_fitting
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();            
             // also restore indexes to match array position
             for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-
+            change_name_duplicates();
             is_calc = false;
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
@@ -1768,7 +1768,34 @@ namespace Isotope_fitting
             // thread safely fire event to continue calculations
             if (selected_fragments.Count>0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }            
         }
-
+        private void change_name_duplicates()
+        {
+            if (Fragments2.Count == 0 || sequenceList == null || sequenceList.Count < 3) return;
+            int light_chain_count = 0;//the amount of heavy chain sequences
+            int heavy_chain_count = 0;
+            foreach (SequenceTab seq in sequenceList)
+            {
+                if (seq.Type == 1) { heavy_chain_count++; }
+                else if (seq.Type == 2) { light_chain_count++; }
+            }
+            foreach (FragForm fra in Fragments2)
+            {
+                if (fra.Chain_type == 0) continue;
+                string[] extensions = fra.Extension.Split('_');
+                int exte_amount = extensions.Length-1;
+                int exte_max = 0;
+                string rep = "";
+                if (fra.Chain_type == 1) { exte_max = heavy_chain_count;rep = "_H"; }
+                else if (fra.Chain_type == 2) { exte_max = light_chain_count; rep = "_L"; }
+                else { MessageBox.Show("Error in chain type of fragment " + fra.Name + " with m/z " + fra.Mz); continue; }
+                if (exte_amount>exte_max) { MessageBox.Show("Error in chain type of fragment " + fra.Name + " with m/z " + fra.Mz); continue; }
+                else if (exte_amount==exte_max)
+                {
+                    fra.Name=fra.Name.Replace(fra.Extension,rep);
+                }
+            }
+            return;
+        }
         private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
         {
             ChemiForm.CheckChem(chem);      // will also generate chem.FinalFormula
@@ -5590,7 +5617,7 @@ namespace Isotope_fitting
                     Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
                     // also restore indexes to match array position
                     for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-
+                    change_name_duplicates();
                     is_calc = false;
                     MessageBox.Show(fitted_chem.Count.ToString() + " fragments added from file. ", "Fitted fragments file");
                     // thread safely fire event to continue calculations
