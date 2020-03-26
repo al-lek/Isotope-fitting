@@ -345,6 +345,13 @@ namespace Isotope_fitting
                 }
                 extension = "_" + extension;
             }
+            if (!ext_exists)
+            {
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." +                   
+                    "If you want to stop the calcuations select 'No'. " +
+                    "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
+                if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
+            }
             if (ion_txtBox.Text.Contains("M"))
             {
                 if (!ext_exists && string.IsNullOrEmpty(internal_txtBox.Text))
@@ -1232,9 +1239,26 @@ namespace Isotope_fitting
             string extension = extensionBox2.Text.ToString();
             if (!string.IsNullOrEmpty(extension)) { extension ="_"+ extension; }
             int chain_type = 0;
+            bool ext_exists = true;
             if (mult_heavy_ChkBox.Checked && mult_Light_chkBox.Checked){ MessageBox.Show("Both heavy ald light chain are checked. Please select only one chain type."); return; }
             else if(mult_heavy_ChkBox.Checked) { chain_type = 1; }
-            else if (mult_Light_chkBox.Checked) { chain_type = 2; }   
+            else if (mult_Light_chkBox.Checked) { chain_type = 2; }
+            if (!string.IsNullOrEmpty(extension))
+            {
+                ext_exists = false;
+                foreach (SequenceTab seq in frm2.sequenceList)
+                {
+                    if (seq.Extension.Equals(extension)) {ext_exists = true; break; }
+                }
+                extension = "_" + extension;
+            }
+            if (!ext_exists)
+            {
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." +
+                    "If you want to stop the calcuations select 'No'. " +
+                    "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
+                if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
+            }
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;
             double qMax = txt_to_d(multChem_max_charge);
