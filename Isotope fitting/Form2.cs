@@ -291,8 +291,8 @@ namespace Isotope_fitting
         public string x_format = "G";
         public string y_format = "G";
         public string x_numformat = "0";
-        public string y_numformat = "0";        
-
+        public string y_numformat = "0";
+        public double annotation_size = 9.0;
         //primary tab plots
 
         //intensity
@@ -620,6 +620,8 @@ namespace Isotope_fitting
                     entire_spectrum = string_to_bool(preferences[83].Split(':')[1]);
 
                     threshold = Convert.ToDouble(preferences[84].Split(':')[1]);
+
+                    annotation_size = Convert.ToDouble(preferences[85].Split(':')[1]);
                 }
                 catch
                 {
@@ -637,7 +639,7 @@ namespace Isotope_fitting
                     {
                         ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
                     }
-                    entire_spectrum = true; threshold = 0.01;
+                    entire_spectrum = true; threshold = 0.01;annotation_size = 9.0;
                 }
             }
             else
@@ -791,6 +793,8 @@ namespace Isotope_fitting
             }
             preferences[0] += "entire spectum: " + entire_spectrum.ToString() + "\r\n";
             preferences[0] += "threshold: " + threshold.ToString() + "\r\n";
+            //annotations size
+            preferences[0] += "Annotations size: " + annotation_size.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -954,7 +958,7 @@ namespace Isotope_fitting
         #region 1.b Import fragment list
         private void LoadMS_Btn_Click(object sender, EventArgs e)
         {
-            loadMS_Btn.Enabled = false;
+            loadMS_Btn.Enabled = false; calc_FF = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence =Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadMS_Btn.Enabled = true;return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel);
@@ -1323,18 +1327,11 @@ namespace Isotope_fitting
                 Fixed = false,
                 PrintFormula = frag_info[5],
                 Max_man_int=0,
-                Extension = ms_extension
+                Extension = ms_extension,
+                Chain_type=0
             });
 
-            int i = ChemFormulas.Count - 1;
-            if (ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z"))
-            {
-                ChemFormulas[i].SortIdx = ms_sequence.Length - Int32.Parse(ChemFormulas[i].Index);
-            }
-            else
-            {
-                ChemFormulas[i].SortIdx = Int32.Parse(ChemFormulas[i].Index);
-            }
+            int i = ChemFormulas.Count - 1;            
             // Note on formulas
             // InputFormula is the text from MSProduct. It has 1 more H. We remove it, and we store at the same variable ONCE, on loading of the text file.
             // So, we need to add Adduct H. They are exactly the same amount with the charge.
@@ -1416,7 +1413,7 @@ namespace Isotope_fitting
                 }
                 else substring[0] = ChemFormulas[i].Ion;
 
-                if (substring[0].StartsWith("MH")/* && ChemFormulas[i].InputFormula.StartsWith(precursor_carbons)*/)  // an internal b could be MHQRP for example, so check also carbons
+                if (substring[0].StartsWith("MH"))  // an internal b could be MHQRP for example, so check also carbons
                 {
                     ChemFormulas[i].Ion_type = "M" + substring[1];
                     ChemFormulas[i].Color = OxyColors.DarkRed;
@@ -1455,21 +1452,17 @@ namespace Isotope_fitting
                     else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
                 }
             }
-            if (ms_heavy_chain && !ms_light_chain && !String.IsNullOrEmpty(heavy_chain))
+            ChemFormulas[i].Radio_label += ms_extension;
+            ChemFormulas[i].Name += ms_extension;
+            if (ms_heavy_chain) { ChemFormulas[i].Chain_type = 1; }
+            else if (ms_light_chain) { ChemFormulas[i].Chain_type = 2; }
+            if (ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z"))
             {
-                if (!ChemFormulas[i].Radio_label.Contains("_H"))
-                {
-                    ChemFormulas[i].Radio_label +=  "_H";
-                    ChemFormulas[i].Name += "_H";
-                }                
+                ChemFormulas[i].SortIdx = ms_sequence.Length - Int32.Parse(ChemFormulas[i].Index);
             }
-            else if (ms_light_chain && !ms_heavy_chain && !String.IsNullOrEmpty(light_chain))
+            else
             {
-                if (!ChemFormulas[i].Radio_label.Contains("_L"))
-                {
-                    ChemFormulas[i].Radio_label +=  "_L";
-                    ChemFormulas[i].Name +=  "_L";
-                }            
+                ChemFormulas[i].SortIdx = Int32.Parse(ChemFormulas[i].Index);
             }
         }
         private void post_import_fragments()
@@ -4593,11 +4586,10 @@ namespace Isotope_fitting
                         annotAxisValues2.TargetAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
                         annotAxisValues2.LocationAxisValues.X = Fragments2[p - 1].Centroid[0].X;
                         annotAxisValues2.LocationAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
-                        annotAxisValues2.TextStyle = new AnnotationTextStyle() { Color = Fragments2[p - 1].Color.ToColor(), VerticalAlign = AlignmentVertical.Bottom, HorizAlign = AlignmentHorizontal.Right  };
+                        annotAxisValues2.TextStyle = new AnnotationTextStyle() {Shadow=new TextShadow() {Style=TextShadowStyle.Off } ,Color = Fragments2[p - 1].Color.ToColor(), VerticalAlign = AlignmentVertical.Bottom, HorizAlign = AlignmentHorizontal.Right  };
                         annotAxisValues2.ArrowLineStyle = new Arction.WinForms.Charting.LineStyle() { Color = Color.Transparent, Width = (float)0.5 };
                         annotAxisValues2.RotateAngle = 90;
-                        annotAxisValues2.TextStyle.Font= new Font(DefaultFont, FontStyle.Regular);
-
+                        annotAxisValues2.TextStyle.Font= new Font(FontFamily.GenericSansSerif,(float)annotation_size, FontStyle.Regular);
                         LC_1.ViewXY.Annotations.Add(annotAxisValues2);
                     }                     
                 }
@@ -6094,30 +6086,66 @@ namespace Isotope_fitting
         private void loadFF_Btn_Click(object sender, EventArgs e)
         {
             loadFF_Btn.Enabled = false;
-            if (String.IsNullOrEmpty(Peptide) && String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadFF_Btn.Enabled = true; return; }
+            ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); calc_FF = false; loadFF_Btn.Enabled = true; return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
                 frm16.ShowDialog();
             }
+            if (dialogResult == DialogResult.Cancel)
+            {
+                loadFF_Btn.Enabled = true; calc_FF = false; return;
+            }
             try
             {
+                if (ChemFormulas.Count > 0) { ChemFormulas.Clear(); }
+                if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
+                if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
                 calc_FF = true;
                 clearList();
-                if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
+                if (sequenceList.Count == 1)
                 {
-                    Form18 frm18 = new Form18(this);
-                    frm18.ShowDialog();
-                    if (!ms_heavy_chain && !ms_light_chain) return;
-                    else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
-                    else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
-                    else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
+                    ms_sequence = sequenceList[0].Sequence;
+                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); calc_FF = false; loadFF_Btn.Enabled = true; return; }
+                    import_fragments();
                 }
-                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } }
-                else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } }
-
-                import_fragments();
+                else if (sequenceList.Count == 2)
+                {
+                    ms_sequence = sequenceList[1].Sequence; ms_extension = "_" + sequenceList[1].Extension;
+                    if (sequenceList[1].Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
+                    else { ms_light_chain = true; ms_heavy_chain = false; }
+                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); calc_FF = false; loadFF_Btn.Enabled = true; return; }
+                    import_fragments();
+                }
+                else
+                {
+                    var extension_dialog = this.ShowTabModeDialog();
+                    if (string.IsNullOrEmpty(extension_dialog.ToString()) && string.IsNullOrEmpty(sequenceList[0].Sequence))
+                    {
+                        MessageBox.Show("No extension selected!Loading fragments procedure is cancelled.", "Loading Fragments"); loadFF_Btn.Enabled = true; calc_FF = false; return;
+                    }
+                    else
+                    {
+                        ms_extension = "_" + extension_dialog.ToString();
+                    }
+                    //ms_tab_mode = true;
+                    DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel);
+                    if (dialogResult1 == DialogResult.Cancel) { loadFF_Btn.Enabled = true; return; }
+                    foreach (SequenceTab seq in sequenceList)
+                    {
+                        if (("_" + seq.Extension).Equals(ms_extension))
+                        {
+                            ms_sequence = seq.Sequence;
+                            if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); loadFF_Btn.Enabled = true; calc_FF = false; return; }
+                            if (seq.Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
+                            else { ms_light_chain = true; ms_heavy_chain = false; }
+                            import_fragments();
+                            break;
+                        }
+                    }
+                }               
                 if (ChemFormulas.Count > 0)
                 {
                     Form14 frm14 = new Form14(this);
@@ -6131,12 +6159,11 @@ namespace Isotope_fitting
             }
             catch
             {
-                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments");
+                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments"); calc_FF = false;
             }
-
             finally
             {
-                loadFF_Btn.Enabled = true;
+                loadFF_Btn.Enabled = true; calc_FF = false;
             }
         }
 
@@ -6979,7 +7006,13 @@ namespace Isotope_fitting
             frm19.ShowDialog();
             //params_form();
         }
+        private void deleteMSProd_Btn_Click(object sender, EventArgs e)
+        {
+            if (ChemFormulas.Count > 0) { ChemFormulas.Clear(); }
+            if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
+            if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
 
+        }
 
         #endregion
 
@@ -15068,12 +15101,6 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void deleteMSProd_Btn_Click(object sender, EventArgs e)
-        {
-            if (ChemFormulas.Count>0) { ChemFormulas.Clear(); }
-            if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
-            if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
-
-        }
+       
     }
 }

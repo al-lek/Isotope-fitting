@@ -82,6 +82,9 @@
             this.intervalX_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.annotSize_numUD = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.fit_grpBx.SuspendLayout();
@@ -99,6 +102,8 @@
             this.tickmark_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -114,6 +119,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.fit_grpBx);
             this.tabPage1.Controls.Add(this.Theor_grpBx);
             this.tabPage1.Controls.Add(this.exp1_grpBx);
@@ -953,6 +959,62 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.annotSize_numUD);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.groupBox1.Location = new System.Drawing.Point(279, 160);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(257, 55);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Annotations";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(52, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 15);
+            this.label1.TabIndex = 32;
+            this.label1.Text = "Font Size";
+            // 
+            // annotSize_numUD
+            // 
+            this.annotSize_numUD.DecimalPlaces = 1;
+            this.annotSize_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.annotSize_numUD.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.annotSize_numUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.annotSize_numUD.Location = new System.Drawing.Point(116, 21);
+            this.annotSize_numUD.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.annotSize_numUD.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.annotSize_numUD.Name = "annotSize_numUD";
+            this.annotSize_numUD.ReadOnly = true;
+            this.annotSize_numUD.Size = new System.Drawing.Size(41, 20);
+            this.annotSize_numUD.TabIndex = 9;
+            this.annotSize_numUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.annotSize_numUD.ValueChanged += new System.EventHandler(this.annotSize_numUD_ValueChanged);
+            // 
             // Form10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -989,6 +1051,9 @@
             this.tickmark_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1049,5 +1114,8 @@
         private System.Windows.Forms.CheckBox y_major_grid;
         private System.Windows.Forms.CheckBox x_minor_grid;
         private System.Windows.Forms.CheckBox x_major_grid;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown annotSize_numUD;
     }
 }

@@ -23,6 +23,7 @@ namespace Isotope_fitting
             fitW1_numUD.Value = (decimal)frm2.fit_width;
             fragW1_numUD.Value = (decimal)frm2.frag_width;
             cenW1_numUD.Value = (decimal)frm2.cen_width;
+            annotSize_numUD.Value = (decimal)frm2.annotation_size;
             peakW1_numUD.Value = (decimal)frm2.peak_width;
             xInterval_UD.Value= (decimal)frm2.x_interval;
             yInterval_UD.Value = (decimal)frm2.y_interval;
@@ -145,7 +146,7 @@ namespace Isotope_fitting
             frm2.fit_color = OxyColors.Black; frm2.peak_color = OxyColors.Crimson; frm2.exp_color = OxyColors.Black.ToColor().ToArgb(); if (Form2.custom_colors.Count>0) { Form2.custom_colors[0] = OxyColors.Black.ToColor().ToArgb(); }
             frm2.fit_style = LineStyle.Dot; frm2.exper_style = LineStyle.Solid; frm2.frag_style = LineStyle.Solid;
             frm2.exp_width = 1; frm2.frag_width = 2; frm2.fit_width = 1; frm2.peak_width = 1; frm2.cen_width = 1;
-            expW1_numUD.Value = 1;fitW1_numUD.Value = 1;fragW1_numUD.Value = 2;cenW1_numUD.Value = 1;peakW1_numUD.Value = 1;
+            expW1_numUD.Value = 1;fitW1_numUD.Value = 1;fragW1_numUD.Value = 2;cenW1_numUD.Value = 1;peakW1_numUD.Value = 1; annotSize_numUD.Value = 9;
         }
         private void refresh10_Btn_Click(object sender, EventArgs e)
         {
@@ -279,6 +280,11 @@ namespace Isotope_fitting
         private void Form10_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+
+        private void annotSize_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.annotation_size = (double)annotSize_numUD.Value;
         }
     }
 }
