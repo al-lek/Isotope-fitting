@@ -1629,6 +1629,48 @@ namespace Isotope_fitting
             List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();                         // a, b, y.....
             List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && !t.Contains("H") && t.Length > 1).ToList();  // a+1, y-2....
 
+            //4.index primary
+            List<int[]> primary_indexes = new List<int[]>();
+            if (!string.IsNullOrEmpty(idxPr_Box.Text.ToString()))
+            {
+                string text = idxPr_Box.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a=0;a< str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    if (str2.Length == 2) { primary_indexes.Add(new int[] {Int32.Parse(str2[0]), Int32.Parse(str2[1])}); }
+                    if (str2.Length == 1) { primary_indexes.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
+                }
+            }
+            //5. index internal
+            List<int[]> internal_indexesFrom = new List<int[]>();
+            List<int[]> internal_indexesTo = new List<int[]>();
+            if (!string.IsNullOrEmpty(idxFrom_Box.Text.ToString()))
+            {
+                string text = idxFrom_Box.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    if (str2.Length == 2) { internal_indexesFrom.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    if (str2.Length == 1) { internal_indexesFrom.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
+                }
+            }
+            if (!string.IsNullOrEmpty(idxTo_Box.Text.ToString()))
+            {
+                string text = idxTo_Box.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    if (str2.Length == 2) { internal_indexesTo.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    if (str2.Length == 1) { internal_indexesTo.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
+                }
+            }
+            if (internal_indexesTo.Count!= internal_indexesTo.Count)            
+            {
+                MessageBox.Show("Wrong format in interna indexes"); internal_indexesTo.Clear(); internal_indexesTo.Clear();
+            }
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
             {
@@ -1646,6 +1688,34 @@ namespace Isotope_fitting
 
                 // drop frag by mz and charge rules
                 if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+
+                if (is_internal && internal_indexesTo.Count > 0 && internal_indexesTo.Count > 0)
+                {
+                    int index1 = Int32.Parse(chem.Index);
+                    int index2 = Int32.Parse(chem.IndexTo);
+                    bool in_bounds= false;
+                    for (int k=0; k< internal_indexesTo.Count; k++)
+                    {
+                        if (index2>= internal_indexesTo[k][0] && index2 <= internal_indexesTo[k][1] && index1 >= internal_indexesFrom[k][0] && index1 <= internal_indexesFrom[k][1])
+                        {
+                            in_bounds = true;break;
+                        }
+                    }
+                    if (!in_bounds) continue;
+                }
+                else if(!is_precursor && primary_indexes.Count > 0)
+                {
+                    int index1 = Int32.Parse(chem.Index);
+                    bool in_bounds = false;
+                    for (int k = 0; k < primary_indexes.Count; k++)
+                    {
+                        if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
+                        {
+                            in_bounds = true; break;
+                        }
+                    }
+                    if (!in_bounds) continue;
+                }
 
                 //// drop frag if type is not selected, 
                 //if (!types.Contains(curr_type) && !types.Any(t => t.StartsWith(curr_type_first))) continue;
@@ -5841,6 +5911,8 @@ namespace Isotope_fitting
                     fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
                 }                
             }
+            if (sequenceList.Count == 1) { tab_mode = false; }
+            else { tab_mode = true; }
         }
         private bool check_for_duplicates(string name,double mz)
         {
@@ -10772,6 +10844,7 @@ namespace Isotope_fitting
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
                     if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
@@ -11202,6 +11275,7 @@ namespace Isotope_fitting
                     g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
                     foreach (ion nn in IonDraw)
                     {
+                         if (!string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (heavy_chkBoxCopy1.Checked && !nn.Name.Contains("_H")) { continue; }
                         else if (light_chkBoxCopy1.Checked && !nn.Name.Contains("_L")) { continue; }
                         Point temp_p = pp;
@@ -11627,8 +11701,7 @@ namespace Isotope_fitting
                     g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
                     foreach (ion nn in IonDraw)
                     {
-                        if (heavy_chkBoxCopy2.Checked && !nn.Name.Contains("_H")) { continue; }
-                        else if (light_chkBoxCopy1.Checked && !nn.Name.Contains("_L")) { continue; }
+                        if (!string.IsNullOrEmpty(nn.Extension)) { continue; }
                         Point temp_p = pp;
                         if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
                         if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
@@ -12130,7 +12203,7 @@ namespace Isotope_fitting
             if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
             double max_a = 5000, max_b = 5000, max_c = 5000;
             double maxcharge_a = 0, maxcharge_b = 0, maxcharge_c = 0;
-            var ppmpoints =new CustomDataPoint[iondraw_count];
+            List<CustomDataPoint> ppmpoints = new List<CustomDataPoint>();
             List<CustomDataPoint> points_a_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_a_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> points_b_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_b_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> points_c_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_c_10000000000 = new List<CustomDataPoint>();
@@ -12138,14 +12211,15 @@ namespace Isotope_fitting
             List<CustomDataPoint> points_y_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_y_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> points_z_10 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_100000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_1000000000 = new List<CustomDataPoint>();            List<CustomDataPoint> points_z_10000000000 = new List<CustomDataPoint>();
             //fill the list with the correct ions
+            int ppm_points = 0;
             if (!string.IsNullOrEmpty(s_ext))
             {
                 for (int i = 0; i < iondraw_count; i++)
                 {
                     ion nn = IonDraw[i];
-                    if ( !nn.Extension.Contains(s_ext)) { continue; }                   
-                    if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
-                    else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }
+                    if ( !nn.Extension.Contains(s_ext)) { continue; }
+                    if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, " -", nn.Mz, nn.Name)); ppm_points++; }
+                    else { ppmpoints.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name)); ppm_points++; }
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
                         if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -12271,9 +12345,10 @@ namespace Isotope_fitting
             {
                 for (int i = 0; i < iondraw_count; i++)
                 {
-                    ion nn = IonDraw[i];                    
-                    if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
-                    else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }
+                    ion nn = IonDraw[i];
+                    if (!string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, " -", nn.Mz, nn.Name)); ppm_points++; }
+                    else { ppmpoints.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name));ppm_points++; }
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
                         if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -12743,7 +12818,7 @@ namespace Isotope_fitting
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
             axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true); ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
-            ppm_plot.Model.Axes[1].Maximum = iondraw_count + 1; ppm_plot.Model.Axes[1].Minimum = 0;
+            ppm_plot.Model.Axes[1].Maximum = ppmpoints.Count() + 1; ppm_plot.Model.Axes[1].Minimum = 0;
             ppm_plot.InvalidatePlot(true);
 
             if (IonDrawIndexTo.Count() > 0)
@@ -13145,19 +13220,31 @@ namespace Isotope_fitting
 
         public void refresh_temp_ppm_plot(PlotView temp_plot)
         {
+            int iondraw_count = IonDraw.Count;
+            string s_ext = "";
+            string s_chain = Peptide;
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+            {
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    {
+                        s_chain = seq.Sequence; s_ext = seq.Extension; break;
+                    }
+                }
+            }
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
-            int iondraw_count = IonDraw.Count;
-            var ppmpoints = new CustomDataPoint[iondraw_count];
+            List<CustomDataPoint> ppmpoints = new List<CustomDataPoint>();
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = IonDraw[i];
-                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
-                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
-                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name); }
-                else { ppmpoints[i] = new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name); }
-            }
+                if (!String.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
+                else if (String.IsNullOrEmpty(s_ext) && !String.IsNullOrEmpty(nn.Extension)) { continue; }
+                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints.Add( new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name)); }
+                else { ppmpoints.Add(new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name)); }
+            }   
             temp_series.ItemsSource = ppmpoints;
             //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
             // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
@@ -13168,7 +13255,7 @@ namespace Isotope_fitting
                 temp_plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
                 temp_plot.Model.InvalidatePlot(false);
             };
-            temp_plot.Model.Axes[1].Maximum = iondraw_count + 1; temp_plot.Model.Axes[1].Minimum = 0;
+            temp_plot.Model.Axes[1].Maximum = ppmpoints.Count() + 1; temp_plot.Model.Axes[1].Minimum = 0;
             temp_plot.InvalidatePlot(true);
         }
         #endregion
@@ -13739,6 +13826,7 @@ namespace Isotope_fitting
                     {
                         ion nn = IonDraw[i];                        
                         if (!string.IsNullOrEmpty(s_ext) && !nn.Name.Contains(s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -13781,6 +13869,7 @@ namespace Isotope_fitting
                     {
                         ion nn = IonDraw[i];
                         if (!string.IsNullOrEmpty(s_ext) && !nn.Name.Contains(s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
@@ -13824,6 +13913,7 @@ namespace Isotope_fitting
                     {
                         ion nn = IonDraw[i];
                         if (!string.IsNullOrEmpty(s_ext) && !nn.Name.Contains(s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
@@ -13918,6 +14008,7 @@ namespace Isotope_fitting
                     {
                         ion nn = IonDraw[i];
                         if (!string.IsNullOrEmpty(s_ext) && !nn.Name.Contains(s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
@@ -14064,6 +14155,7 @@ namespace Isotope_fitting
                     {
                         ion nn = IonDraw[i];
                         if (!string.IsNullOrEmpty(s_ext) && !nn.Name.Contains(s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
@@ -14217,6 +14309,7 @@ namespace Isotope_fitting
                     {
                         ion nn = IonDraw[i];
                         if (!string.IsNullOrEmpty(s_ext) && !nn.Name.Contains(s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
