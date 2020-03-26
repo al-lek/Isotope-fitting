@@ -69,7 +69,7 @@ namespace Isotope_fitting
         public bool ms_light_chain = false;
         public string ms_extension = String.Empty;
         public string ms_sequence = String.Empty;
-        public bool ms_tab_mode = false;
+        //public bool ms_tab_mode = false;
 
 
         //List<string> ionItems = new List<string>();
@@ -953,8 +953,8 @@ namespace Isotope_fitting
         private void LoadMS_Btn_Click(object sender, EventArgs e)
         {
             loadMS_Btn.Enabled = false;
-            ms_light_chain = false; ms_heavy_chain = false; ms_tab_mode = false; ms_extension = ""; ms_sequence =Peptide;
-            if (!tab_mode && String.IsNullOrEmpty(Peptide) && String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain)) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadMS_Btn.Enabled = true;return; }
+            ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence =Peptide;
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found."); loadMS_Btn.Enabled = true;return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel);
             if (dialogResult==DialogResult.No)
             {
@@ -967,54 +967,69 @@ namespace Isotope_fitting
             }
             try
             {
-                if (!tab_mode || sequenceList==null || sequenceList.Count==0)
+                //if (!tab_mode || sequenceList==null || sequenceList.Count==0)
+                //{
+                //    if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
+                //    {
+                //        Form18 frm18 = new Form18(this);
+                //        frm18.ShowDialog();
+                //        if (!ms_heavy_chain && !ms_light_chain) return;
+                //        else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
+                //        else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } ms_sequence = heavy_chain; ms_extension = "_H"; }
+                //        else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } ms_sequence = light_chain; ms_extension = "_L"; }
+                //    }
+                //    else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } ms_sequence = heavy_chain; ms_extension = "_H"; }
+                //    else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } ms_sequence = light_chain; ms_extension = "_L"; }
+                //    import_fragments();
+                //}
+                //else
+                //{
+                if (sequenceList.Count==1)
                 {
-                    if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
-                    {
-                        Form18 frm18 = new Form18(this);
-                        frm18.ShowDialog();
-                        if (!ms_heavy_chain && !ms_light_chain) return;
-                        else if (ms_heavy_chain && ms_light_chain) { MessageBox.Show("An error occured in chain selection. Please inform the software developer"); return; }
-                        else if (ms_heavy_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } ms_sequence = heavy_chain; ms_extension = "_H"; }
-                        else if (ms_light_chain) { DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } ms_sequence = light_chain; ms_extension = "_L"; }
-                    }
-                    else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(heavy_chain)) { ms_heavy_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an heavy chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_heavy_chain = false; ms_light_chain = false; return; } ms_sequence = heavy_chain; ms_extension = "_H"; }
-                    else if (String.IsNullOrEmpty(Peptide) && !String.IsNullOrEmpty(light_chain)) { ms_light_chain = true; DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for an light chain AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel); if (dialogResult1 == DialogResult.Cancel) { ms_light_chain = false; ms_heavy_chain = false; return; } ms_sequence = light_chain; ms_extension = "_L"; }
+                    ms_sequence = sequenceList[0].Sequence;
+                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments");  loadMS_Btn.Enabled = true; return; }
+                    import_fragments();
+                }
+                else if (sequenceList.Count == 2)
+                {
+                    ms_sequence = sequenceList[1].Sequence; ms_extension = "_" + sequenceList[1].Extension;
+                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); loadMS_Btn.Enabled = true; return; }
                     import_fragments();
                 }
                 else
                 {
-                    var extension_dialog= this.ShowTabModeDialog();
-                    ms_extension ="_"+ extension_dialog.ToString();
-                    if (string.IsNullOrEmpty(ms_extension)) { MessageBox.Show("No extension selected!Loading fragments procedure is cancelled.", "Loading Fragments"); return; }
+                    var extension_dialog = this.ShowTabModeDialog();
+                    if (string.IsNullOrEmpty(extension_dialog.ToString()) && string.IsNullOrEmpty(sequenceList[0].Sequence))
+                    {
+                        MessageBox.Show("No extension selected!Loading fragments procedure is cancelled.", "Loading Fragments"); return;
+                    }
                     else
                     {
-                        ms_tab_mode = true;
-                        DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for "+ ms_extension + " extension AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel);
-                        if (dialogResult1 == DialogResult.Cancel)
+                        ms_extension = "_" + extension_dialog.ToString();
+                    }
+                    //ms_tab_mode = true;
+                    DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel);
+                    if (dialogResult1 == DialogResult.Cancel) return;
+                    foreach (SequenceTab seq in sequenceList)
+                    {
+                        if (seq.Extension.Equals(ms_extension))
                         {
-                            ms_light_chain = false; ms_heavy_chain = false;ms_tab_mode = false; ms_extension = string.Empty;
-                            return;
-                        }
-                        foreach (SequenceTab seq in sequenceList)
-                        {
-                            if (seq.Extension.Equals(ms_extension))
-                            {
-                                ms_sequence =seq.Sequence;
-                                if (string.IsNullOrEmpty(ms_sequence)){ MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); ms_light_chain = false; ms_heavy_chain = false; ms_tab_mode = false; ms_extension = string.Empty; ms_sequence = string.Empty; loadMS_Btn.Enabled = true; return;}
-                                if (seq.Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
-                                else { ms_light_chain = true; ms_heavy_chain = false; }
-                                import_fragments();
-                                break;
-                            }
+                            ms_sequence = seq.Sequence;
+                            if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments"); loadMS_Btn.Enabled = true; return; }
+                            if (seq.Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
+                            else { ms_light_chain = true; ms_heavy_chain = false; }
+                            import_fragments();
+                            break;
                         }
                     }
-                }                               
+                }
+                
+                //}                               
             }
             catch
             {
                 MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments");
-                ms_light_chain = false; ms_heavy_chain = false; ms_tab_mode = false; ms_extension = string.Empty; ms_sequence = string.Empty; loadMS_Btn.Enabled = true; return;
+                loadMS_Btn.Enabled = true; return;
             }
             finally
             {
@@ -1534,7 +1549,7 @@ namespace Isotope_fitting
                 }
                 catch
                 {
-
+                    MessageBox.Show("Please close the program and restart the procedure.", "Error in clear list!");
                 }
                 finally
                 {

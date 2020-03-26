@@ -323,26 +323,40 @@ namespace Isotope_fitting
 
         private List<ChemiForm> check_chem_inputs()
         {
-            string s = frm2.Peptide;
             List<ChemiForm> res = new List<ChemiForm>();
+            bool ext_exists = true;
             string chem_form = string.Empty;
             List<int> charge = new List<int>();
             string ion = string.Empty;
             string index = string.Empty;
             string indexTo = string.Empty;
-            if (heavy_ChkBox.Checked)
+            string s = frm2.Peptide;
+            string extension = extensionBox1.Text.ToString();
+            int chain_type = 0;
+            if (heavy_ChkBox.Checked && Light_chkBox.Checked) { MessageBox.Show("Both heavy ald light chain are checked. Please select only one chain type."); return res; }
+            else if (heavy_ChkBox.Checked) { chain_type = 1; }
+            else if (Light_chkBox.Checked) { chain_type = 2; }
+            if (!string.IsNullOrEmpty(extension))
             {
-                if (string.IsNullOrEmpty(frm2.heavy_chain)) { MessageBox.Show("Heavy Chain sequence is not loaded"); return res; }
-                s = frm2.heavy_chain;
+                ext_exists = false;
+                foreach (SequenceTab seq in frm2.sequenceList)
+                {
+                   if(seq.Extension.Equals(extension)) { s = seq.Sequence; ext_exists = true; break; }
+                }
+                extension = "_" + extension;
             }
-            else if (Light_chkBox.Checked)
+            if (ion_txtBox.Text.Contains("M"))
             {
-                if (string.IsNullOrEmpty(frm2.light_chain)) { MessageBox.Show("Light Chain sequence is not loaded"); return res; }
-                s = frm2.light_chain;
-            }            
-
-            if (ion_txtBox.Text.Contains("M")) { index = "0";indexTo = s.Length.ToString(); }            
-            
+                if (!ext_exists && string.IsNullOrEmpty(internal_txtBox.Text))
+                {
+                    DialogResult dd= MessageBox.Show("There is no sequence for the extension type you have inserted." +
+                        " This will affect the index numbers for the precursor ion you have inserted." +
+                        "If you want to stop the calcuations and insert the correct indexes in the internal indexes section select 'No'. " +
+                        "If you want to proceed with the calculations press 'Yes'","Wrong Input",MessageBoxButtons.YesNo);
+                    if (dd==DialogResult.No || dd == DialogResult.None) { return res; }                   
+                }
+                index = "0";indexTo = s.Length.ToString();
+            }   
             chem_form = chemForm_txtBox.Text.Replace(Environment.NewLine, " ").ToString();
             chem_form = chem_form.Replace("\t", "");
             chem_form = chem_form.Replace(" ", "");
@@ -416,7 +430,9 @@ namespace Isotope_fitting
                     PrintFormula = chem_form,
                     Max_man_int = 0,
                     Charge=c,
-                    Ion_type=ion
+                    Ion_type=ion,
+                    Extension=extension,
+                    Chain_type=chain_type
                 });
                 res.Last().Adduct = "H" + c.ToString();
                 if (res.Last().Ion.StartsWith("d") || res.Last().Ion.StartsWith("w") || res.Last().Ion.StartsWith("v")) res.Last().Color = OxyColors.Turquoise;
@@ -454,8 +470,7 @@ namespace Isotope_fitting
                     if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
                     else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";                    
                 }
-                if (heavy_ChkBox.Checked) { res.Last().Radio_label += "_H"; res.Last().Name += "_H"; }
-                else if (Light_chkBox.Checked) { res.Last().Radio_label += "_L"; res.Last().Name += "_L"; }
+                res.Last().Radio_label += extension; res.Last().Name += extension;
             }
             return res;
         }
@@ -1106,16 +1121,7 @@ namespace Isotope_fitting
         private void primary_txtBox_TextChanged(object sender, EventArgs e)
         {
             internal_txtBox.Text = null;
-        }
-        private void heavy_ChkBox_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Light_chkBox_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
+        }      
 
         #endregion
 
@@ -1222,7 +1228,13 @@ namespace Isotope_fitting
         #region chemical formulas file
         private void load_chems_file_Btn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(multChem_min_charge.Text) ) { MessageBox.Show("You need to set first the charge range and then the "); return; }
+            if (string.IsNullOrEmpty(multChem_min_charge.Text) ) { MessageBox.Show("You need to set first the charge range "); return; }
+            string extension = extensionBox2.Text.ToString();
+            if (!string.IsNullOrEmpty(extension)) { extension ="_"+ extension; }
+            int chain_type = 0;
+            if (mult_heavy_ChkBox.Checked && mult_Light_chkBox.Checked){ MessageBox.Show("Both heavy ald light chain are checked. Please select only one chain type."); return; }
+            else if(mult_heavy_ChkBox.Checked) { chain_type = 1; }
+            else if (mult_Light_chkBox.Checked) { chain_type = 2; }   
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;
             double qMax = txt_to_d(multChem_max_charge);
@@ -1275,11 +1287,13 @@ namespace Isotope_fitting
                                 Fixed = false,
                                 Max_man_int = 0,
                                 Ion_type = "extra",
-                                Name = tmp_str[1],
+                                Name = tmp_str[1]+extension,
                                 Radio_label = string.Empty,
                                 maxPPM_Error = 0,
                                 minPPM_Error = 0,
-                                Charge = c
+                                Charge = c,
+                                Chain_type=chain_type,
+                                Extension=extension
                             });
                             mult_loaded.Last().Adduct = "H" + c.ToString();
                         }

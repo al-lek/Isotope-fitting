@@ -203,7 +203,7 @@
             0,
             0,
             131072});
-            this.thre_numUD.Location = new System.Drawing.Point(167, 587);
+            this.thre_numUD.Location = new System.Drawing.Point(188, 585);
             this.thre_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -226,7 +226,7 @@
             // resolution_Box
             // 
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(86, 442);
+            this.resolution_Box.Location = new System.Drawing.Point(101, 442);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(167, 20);
             this.resolution_Box.TabIndex = 61;
@@ -239,7 +239,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label1.Location = new System.Drawing.Point(20, 445);
+            this.label1.Location = new System.Drawing.Point(25, 445);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 60;
@@ -251,7 +251,7 @@
             this.ignore_ppm_form9.Checked = true;
             this.ignore_ppm_form9.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ignore_ppm_form9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ignore_ppm_form9.Location = new System.Drawing.Point(177, 470);
+            this.ignore_ppm_form9.Location = new System.Drawing.Point(190, 470);
             this.ignore_ppm_form9.Name = "ignore_ppm_form9";
             this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
             this.ignore_ppm_form9.TabIndex = 58;
@@ -1192,7 +1192,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(4, 468);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 468);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -1207,7 +1207,7 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(86, 467);
+            this.ppm9_numUD.Location = new System.Drawing.Point(101, 467);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1284,7 +1284,7 @@
             this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(240, 23);
+            this.insert_Btn.Location = new System.Drawing.Point(240, 17);
             this.insert_Btn.Name = "insert_Btn";
             this.insert_Btn.Size = new System.Drawing.Size(138, 30);
             this.insert_Btn.TabIndex = 53;

@@ -1852,7 +1852,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(104, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(101, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1864,7 +1864,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(194, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(191, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -1912,6 +1912,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadFF_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.loadFF_Btn.BackColor = System.Drawing.Color.PaleVioletRed;
+            this.loadFF_Btn.Enabled = false;
             this.loadFF_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.loadFF_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadFF_Btn.ForeColor = System.Drawing.Color.White;
