@@ -15021,6 +15021,97 @@ namespace Isotope_fitting
 
         #endregion
 
-       
+
+        public void read_rtf_find_color(SequenceTab seq)
+        {
+            string rtf = seq.Rtf;
+            string sequence = seq.Sequence;
+            string color_section = "";
+            string text_section = "";
+            List<Color> color_table = new List<Color>();
+            color_table.Add(Color.Black);
+            int[] char_color = new int[sequence.Length];
+            string[] str= rtf.Split('{');
+            for (int k=0; k<str.Length;k++)
+            {
+                if (str[k].Contains("colortbl"))
+                {
+                    color_section = str[k];
+                }
+                else if (str[k].Contains("\\pard"))
+                {
+                    text_section = str[k];
+                }
+            }
+            if (string.IsNullOrEmpty(color_section)) return;
+            string[] str2 = color_section.Split(';');
+            if (str2.Length<3) return;
+            for (int c = 1; c< str2.Length-1;c++)
+            {
+                string[] str3 = str2[c].Split('\\');
+                if (str3.Length < 4) return;
+                int r =Int32.Parse(str3[1].Substring(3));
+                int g = Int32.Parse(str3[2].Substring(5));
+                int b = Int32.Parse(str3[3].Substring(4));
+                Color color= Color.FromArgb(r, g, b);
+                color_table.Add(color);
+            }
+            string[] str4 = text_section.Split('}');
+            //\viewkind4\uc1 \pard\f0\fs17 MQIFVKTLTG  KTITLEVEPS  \cf1 DTIENVKAKI  \cf0 QDKEGIPPDQ  QRLIFAGKQL  \cf2 EDGRTLSDYN  \cf0 IQKESTLHLV  LRLR\cf3 GG\cf0\par
+            string[] str5 = str4[str4.Length-2].Split('\\');
+            int str_c = 0;
+            foreach (string sub in str5)
+            {
+               
+                if ( sub.StartsWith("f0") || sub.StartsWith("lang") || sub.StartsWith("fs"))
+                {
+                    string[] str6 = sub.Split(' ');
+                    if (str6.Length > 1)
+                    {
+                        for (int i=1; i< str6.Length; i++)
+                        {
+                            for (int h=0;h< str6[i].Length; h++)
+                            {
+                                if (sequence[str_c].Equals(str6[i][h]))
+                                {
+                                    char_color[str_c] =0; str_c++;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Error in sequence rtf.");
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else if(sub.StartsWith("cf"))
+                {
+                    string[] str6 = sub.Split(' ');
+                    if (str6.Length > 1)
+                    {
+                        int color_idx = Int32.Parse(str6[0].Substring(2));
+
+                        for (int i = 1; i < str6.Length; i++)
+                        {
+                            for (int h = 0; h < str6[i].Length; h++)
+                            {
+                                if (sequence[str_c].Equals(str6[i][h]))
+                                {
+                                    char_color[str_c] = color_idx; str_c++;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Error in sequence rtf.");
+                                }
+                            }
+                        }
+                    }
+                    else break;
+                }               
+            }
+            seq.Char_color = char_color;
+            seq.Color_table = color_table;
+        }
     }
 }
