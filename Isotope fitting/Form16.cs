@@ -158,7 +158,7 @@ namespace Isotope_fitting
                         }
                     }
                 }
-
+                frm2.read_rtf_find_color(frm2.sequenceList.Last());
             }
             if (frm2.sequenceList.Count == 1) { frm2.tab_mode = false; }
             else { frm2.tab_mode = true; }        
