@@ -4241,8 +4241,11 @@ namespace Isotope_fitting
             // 
             // toolStripButton11
             // 
+            this.toolStripButton11.Checked = true;
             this.toolStripButton11.CheckOnClick = true;
+            this.toolStripButton11.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton11.ForeColor = System.Drawing.Color.MediumOrchid;
             this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
             this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton11.Name = "toolStripButton11";
@@ -4251,8 +4254,11 @@ namespace Isotope_fitting
             // 
             // toolStripButton12
             // 
+            this.toolStripButton12.Checked = true;
             this.toolStripButton12.CheckOnClick = true;
+            this.toolStripButton12.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton12.ForeColor = System.Drawing.Color.MediumOrchid;
             this.toolStripButton12.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton12.Image")));
             this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton12.Name = "toolStripButton12";
@@ -4261,8 +4267,11 @@ namespace Isotope_fitting
             // 
             // toolStripButton13
             // 
+            this.toolStripButton13.Checked = true;
             this.toolStripButton13.CheckOnClick = true;
+            this.toolStripButton13.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButton13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton13.ForeColor = System.Drawing.Color.MediumOrchid;
             this.toolStripButton13.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton13.Image")));
             this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton13.Name = "toolStripButton13";
@@ -4284,8 +4293,11 @@ namespace Isotope_fitting
             // 
             // toolStripButton21
             // 
+            this.toolStripButton21.Checked = true;
             this.toolStripButton21.CheckOnClick = true;
+            this.toolStripButton21.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButton21.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton21.ForeColor = System.Drawing.Color.DarkViolet;
             this.toolStripButton21.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton21.Image")));
             this.toolStripButton21.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton21.Name = "toolStripButton21";
@@ -4294,8 +4306,11 @@ namespace Isotope_fitting
             // 
             // toolStripButton22
             // 
+            this.toolStripButton22.Checked = true;
             this.toolStripButton22.CheckOnClick = true;
+            this.toolStripButton22.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButton22.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton22.ForeColor = System.Drawing.Color.DarkViolet;
             this.toolStripButton22.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton22.Image")));
             this.toolStripButton22.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton22.Name = "toolStripButton22";
@@ -4304,8 +4319,11 @@ namespace Isotope_fitting
             // 
             // toolStripButton23
             // 
+            this.toolStripButton23.Checked = true;
             this.toolStripButton23.CheckOnClick = true;
+            this.toolStripButton23.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButton23.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton23.ForeColor = System.Drawing.Color.DarkViolet;
             this.toolStripButton23.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton23.Image")));
             this.toolStripButton23.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton23.Name = "toolStripButton23";
@@ -4333,8 +4351,11 @@ namespace Isotope_fitting
             // 
             // ppm_x
             // 
+            this.ppm_x.Checked = true;
             this.ppm_x.CheckOnClick = true;
+            this.ppm_x.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_x.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_x.ForeColor = System.Drawing.Color.Lime;
             this.ppm_x.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x.Image")));
             this.ppm_x.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_x.Name = "ppm_x";
@@ -4343,8 +4364,11 @@ namespace Isotope_fitting
             // 
             // ppm_x_H2O
             // 
+            this.ppm_x_H2O.Checked = true;
             this.ppm_x_H2O.CheckOnClick = true;
+            this.ppm_x_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_x_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_x_H2O.ForeColor = System.Drawing.Color.Lime;
             this.ppm_x_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_H2O.Image")));
             this.ppm_x_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_x_H2O.Name = "ppm_x_H2O";
@@ -4353,8 +4377,11 @@ namespace Isotope_fitting
             // 
             // ppm_x_NH3
             // 
+            this.ppm_x_NH3.Checked = true;
             this.ppm_x_NH3.CheckOnClick = true;
+            this.ppm_x_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_x_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_x_NH3.ForeColor = System.Drawing.Color.Lime;
             this.ppm_x_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_NH3.Image")));
             this.ppm_x_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_x_NH3.Name = "ppm_x_NH3";
@@ -4363,8 +4390,11 @@ namespace Isotope_fitting
             // 
             // ppm_y
             // 
+            this.ppm_y.Checked = true;
             this.ppm_y.CheckOnClick = true;
+            this.ppm_y.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_y.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_y.ForeColor = System.Drawing.Color.DodgerBlue;
             this.ppm_y.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y.Image")));
             this.ppm_y.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_y.Name = "ppm_y";
@@ -4373,8 +4403,11 @@ namespace Isotope_fitting
             // 
             // ppm_y_H2O
             // 
+            this.ppm_y_H2O.Checked = true;
             this.ppm_y_H2O.CheckOnClick = true;
+            this.ppm_y_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_y_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_y_H2O.ForeColor = System.Drawing.Color.DodgerBlue;
             this.ppm_y_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_H2O.Image")));
             this.ppm_y_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_y_H2O.Name = "ppm_y_H2O";
@@ -4383,8 +4416,11 @@ namespace Isotope_fitting
             // 
             // ppm_y_NH3
             // 
+            this.ppm_y_NH3.Checked = true;
             this.ppm_y_NH3.CheckOnClick = true;
+            this.ppm_y_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_y_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_y_NH3.ForeColor = System.Drawing.Color.DodgerBlue;
             this.ppm_y_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_NH3.Image")));
             this.ppm_y_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_y_NH3.Name = "ppm_y_NH3";
@@ -4393,8 +4429,11 @@ namespace Isotope_fitting
             // 
             // ppm_z
             // 
+            this.ppm_z.Checked = true;
             this.ppm_z.CheckOnClick = true;
+            this.ppm_z.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_z.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_z.ForeColor = System.Drawing.Color.Tomato;
             this.ppm_z.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z.Image")));
             this.ppm_z.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_z.Name = "ppm_z";
@@ -4403,8 +4442,11 @@ namespace Isotope_fitting
             // 
             // ppm_z_H2O
             // 
+            this.ppm_z_H2O.Checked = true;
             this.ppm_z_H2O.CheckOnClick = true;
+            this.ppm_z_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_z_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_z_H2O.ForeColor = System.Drawing.Color.Tomato;
             this.ppm_z_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_H2O.Image")));
             this.ppm_z_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_z_H2O.Name = "ppm_z_H2O";
@@ -4413,8 +4455,11 @@ namespace Isotope_fitting
             // 
             // ppm_z_NH3
             // 
+            this.ppm_z_NH3.Checked = true;
             this.ppm_z_NH3.CheckOnClick = true;
+            this.ppm_z_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_z_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_z_NH3.ForeColor = System.Drawing.Color.Tomato;
             this.ppm_z_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_NH3.Image")));
             this.ppm_z_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_z_NH3.Name = "ppm_z_NH3";
@@ -4442,7 +4487,9 @@ namespace Isotope_fitting
             // 
             // ppm_a
             // 
+            this.ppm_a.Checked = true;
             this.ppm_a.CheckOnClick = true;
+            this.ppm_a.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_a.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ppm_a.ForeColor = System.Drawing.Color.Green;
             this.ppm_a.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a.Image")));
@@ -4453,7 +4500,9 @@ namespace Isotope_fitting
             // 
             // ppm_a_H2O
             // 
+            this.ppm_a_H2O.Checked = true;
             this.ppm_a_H2O.CheckOnClick = true;
+            this.ppm_a_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_a_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ppm_a_H2O.ForeColor = System.Drawing.Color.Green;
             this.ppm_a_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_H2O.Image")));
@@ -4464,7 +4513,9 @@ namespace Isotope_fitting
             // 
             // ppm_a_NH3
             // 
+            this.ppm_a_NH3.Checked = true;
             this.ppm_a_NH3.CheckOnClick = true;
+            this.ppm_a_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_a_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ppm_a_NH3.ForeColor = System.Drawing.Color.Green;
             this.ppm_a_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_NH3.Image")));
@@ -4475,8 +4526,11 @@ namespace Isotope_fitting
             // 
             // ppm_b
             // 
+            this.ppm_b.Checked = true;
             this.ppm_b.CheckOnClick = true;
+            this.ppm_b.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_b.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_b.ForeColor = System.Drawing.Color.Blue;
             this.ppm_b.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b.Image")));
             this.ppm_b.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_b.Name = "ppm_b";
@@ -4485,8 +4539,11 @@ namespace Isotope_fitting
             // 
             // ppm_b_H2O
             // 
+            this.ppm_b_H2O.Checked = true;
             this.ppm_b_H2O.CheckOnClick = true;
+            this.ppm_b_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_b_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_b_H2O.ForeColor = System.Drawing.Color.Blue;
             this.ppm_b_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_H2O.Image")));
             this.ppm_b_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_b_H2O.Name = "ppm_b_H2O";
@@ -4495,8 +4552,11 @@ namespace Isotope_fitting
             // 
             // ppm_b_NH3
             // 
+            this.ppm_b_NH3.Checked = true;
             this.ppm_b_NH3.CheckOnClick = true;
+            this.ppm_b_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_b_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_b_NH3.ForeColor = System.Drawing.Color.Blue;
             this.ppm_b_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_NH3.Image")));
             this.ppm_b_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_b_NH3.Name = "ppm_b_NH3";
@@ -4505,8 +4565,11 @@ namespace Isotope_fitting
             // 
             // ppm_c
             // 
+            this.ppm_c.Checked = true;
             this.ppm_c.CheckOnClick = true;
+            this.ppm_c.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_c.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_c.ForeColor = System.Drawing.Color.Firebrick;
             this.ppm_c.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c.Image")));
             this.ppm_c.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_c.Name = "ppm_c";
@@ -4515,8 +4578,11 @@ namespace Isotope_fitting
             // 
             // ppm_c_H2O
             // 
+            this.ppm_c_H2O.Checked = true;
             this.ppm_c_H2O.CheckOnClick = true;
+            this.ppm_c_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_c_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_c_H2O.ForeColor = System.Drawing.Color.Firebrick;
             this.ppm_c_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_H2O.Image")));
             this.ppm_c_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_c_H2O.Name = "ppm_c_H2O";
@@ -4525,8 +4591,11 @@ namespace Isotope_fitting
             // 
             // ppm_c_NH3
             // 
+            this.ppm_c_NH3.Checked = true;
             this.ppm_c_NH3.CheckOnClick = true;
+            this.ppm_c_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ppm_c_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_c_NH3.ForeColor = System.Drawing.Color.Firebrick;
             this.ppm_c_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_NH3.Image")));
             this.ppm_c_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_c_NH3.Name = "ppm_c_NH3";
