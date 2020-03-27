@@ -340,6 +340,7 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -2431,6 +2432,7 @@ namespace Isotope_fitting
             // 
             this.panel2_tab2.AutoScroll = true;
             this.panel2_tab2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel2_tab2.Controls.Add(this.richTextBox1);
             this.panel2_tab2.Controls.Add(this.ppm_toolStrip);
             this.panel2_tab2.Controls.Add(this.ppm_panel);
             this.panel2_tab2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -4180,6 +4182,15 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.Location = new System.Drawing.Point(16, 332);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(531, 297);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -4600,5 +4611,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ComboBox seq_extensionBoxCopy1;
         private System.Windows.Forms.Button deleteMSProd_Btn;
         private System.Windows.Forms.TreeView MSproduct_treeView;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }

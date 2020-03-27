@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -99,9 +100,18 @@ namespace Isotope_fitting
                 {
                     if (e2.Button == MouseButtons.Right)
                     {
-                        ContextMenu cm_box = new ContextMenu();
-                        cm_box.MenuItems.Add("Color", new EventHandler(colorSelection));
-                        box.ContextMenu = cm_box;
+                        try
+                        {
+                            if (!box.Visible) { box.Visible = true; }
+                            ContextMenu cm_box = new ContextMenu();
+                            cm_box.MenuItems.Add("Color", new EventHandler(colorSelection));
+                            box.ContextMenu = cm_box;
+                        }
+                        catch (Exception eee)
+                        {
+                            Debug.WriteLine(eee.ToString());
+                        }
+                        
                     }
                 };
                 this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL, box });       

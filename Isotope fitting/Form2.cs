@@ -10828,7 +10828,7 @@ namespace Isotope_fitting
                 {
                     if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
                     {
-                        s = seq.Sequence; s_ext = seq.Extension; break;
+                        s = seq.Sequence; s_ext = seq.Extension;  break;
                     }
                 }
             }                    
