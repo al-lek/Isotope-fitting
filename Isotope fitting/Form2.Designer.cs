@@ -1752,7 +1752,6 @@ namespace Isotope_fitting
             this.refresh_frag_Btn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.refresh_frag_Btn2.Name = "refresh_frag_Btn2";
             this.refresh_frag_Btn2.Size = new System.Drawing.Size(24, 24);
-            this.refresh_frag_Btn2.Text = "toolStripButton12";
             this.refresh_frag_Btn2.Click += new System.EventHandler(this.refresh_frag_Btn2_Click);
             // 
             // frag_sort_Btn2
@@ -1853,7 +1852,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(98, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(97, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1865,7 +1864,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(188, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(187, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;

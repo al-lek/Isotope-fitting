@@ -13237,13 +13237,15 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
             List<CustomDataPoint> ppmpoints = new List<CustomDataPoint>();
+            int ppm_p = 0;
+
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = IonDraw[i];
                 if (!String.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
                 else if (String.IsNullOrEmpty(s_ext) && !String.IsNullOrEmpty(nn.Extension)) { continue; }
-                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints.Add( new CustomDataPoint(i + 1, nn.PPM_Error, " -", nn.Mz, nn.Name)); }
-                else { ppmpoints.Add(new CustomDataPoint(i + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name)); }
+                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) { ppmpoints.Add( new CustomDataPoint(ppm_p + 1, nn.PPM_Error, " -", nn.Mz, nn.Name)); ppm_p++; }
+                else { ppmpoints.Add(new CustomDataPoint(ppm_p + 1, nn.PPM_Error, "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")", nn.Mz, nn.Name)); ppm_p++; }
             }   
             temp_series.ItemsSource = ppmpoints;
             //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
