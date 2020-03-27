@@ -2452,7 +2452,7 @@ namespace Isotope_fitting
             this.ppm_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ppm_toolStrip.Location = new System.Drawing.Point(542, 30);
             this.ppm_toolStrip.Name = "ppm_toolStrip";
-            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 96);
+            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 77);
             this.ppm_toolStrip.TabIndex = 1;
             // 
             // ppmSave_Btn
@@ -2499,7 +2499,7 @@ namespace Isotope_fitting
             this.ppm_panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ppm_panel.Location = new System.Drawing.Point(16, 30);
             this.ppm_panel.Name = "ppm_panel";
-            this.ppm_panel.Size = new System.Drawing.Size(531, 276);
+            this.ppm_panel.Size = new System.Drawing.Size(523, 276);
             this.ppm_panel.TabIndex = 3;
             // 
             // panel1_tab2
@@ -4191,7 +4191,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v23.4";
+            this.Text = "Peak Finder v23.5";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
