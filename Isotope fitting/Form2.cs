@@ -5475,11 +5475,11 @@ namespace Isotope_fitting
                                 {
                                     peptide = false;
                                     Peptide = str[1];
-                                    if (sequenceList==null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); }
+                                    if (sequenceList==null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
                                     else
                                     {
                                         if (string.IsNullOrEmpty(str[3])) continue;
-                                        else sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 };
+                                        else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; read_rtf_find_color(sequenceList[0]); }
                                     }
                                 }
                                 else
@@ -5494,7 +5494,7 @@ namespace Isotope_fitting
                                             break;
                                         }
                                     }
-                                    if(!found)sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) });
+                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
                                 } 
                             }
                             else if (lista[j].StartsWith("AA"))
@@ -10821,14 +10821,18 @@ namespace Isotope_fitting
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
-
+            
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            SequenceTab curr_ss = sequenceList[0];
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex!=-1)
             {
                 foreach (SequenceTab seq in sequenceList)
                 {
                     if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
                     {
-                        s = seq.Sequence; s_ext = seq.Extension;  break;
+                        curr_ss = seq;
+                        s = seq.Sequence; s_ext = seq.Extension;
+                        break;
                     }
                 }
             }                    
@@ -10840,7 +10844,8 @@ namespace Isotope_fitting
             if (rdBtn50.Checked) grp_num = 50;
             for (int idx = 0; idx < s.Length; idx++)
             {
-                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);
+                if (curr_ss.Char_color != null) sb.Color= curr_ss.Color_table[curr_ss.Char_color[idx]];
+                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);               
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
@@ -15016,6 +15021,6 @@ namespace Isotope_fitting
 
         #endregion
 
-
+       
     }
 }
