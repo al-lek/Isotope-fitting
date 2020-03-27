@@ -10821,14 +10821,18 @@ namespace Isotope_fitting
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
-
+            
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            SequenceTab curr_ss = sequenceList[0];
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex!=-1)
             {
                 foreach (SequenceTab seq in sequenceList)
                 {
                     if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
                     {
-                        s = seq.Sequence; s_ext = seq.Extension;  break;
+                        curr_ss = seq;
+                        s = seq.Sequence; s_ext = seq.Extension;
+                        break;
                     }
                 }
             }                    
@@ -10840,7 +10844,8 @@ namespace Isotope_fitting
             if (rdBtn50.Checked) grp_num = 50;
             for (int idx = 0; idx < s.Length; idx++)
             {
-                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);
+                if (curr_ss.Char_color != null) sb.Color= curr_ss.Color_table[curr_ss.Char_color[idx]];
+                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);               
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
