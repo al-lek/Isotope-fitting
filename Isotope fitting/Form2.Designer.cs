@@ -185,6 +185,36 @@ namespace Isotope_fitting
             this.tabDiagram = new System.Windows.Forms.TabPage();
             this.splitter4 = new System.Windows.Forms.Splitter();
             this.panel2_tab2 = new System.Windows.Forms.Panel();
+            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
+            this.ppm_internal_b = new System.Windows.Forms.ToolStripButton();
+            this.ppm_internal_b_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_internal_b_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip5 = new System.Windows.Forms.ToolStrip();
+            this.ppm_internal_a = new System.Windows.Forms.ToolStripButton();
+            this.ppm_internal_a_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_internal_a_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.ppm_x = new System.Windows.Forms.ToolStripButton();
+            this.ppm_x_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_x_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_y = new System.Windows.Forms.ToolStripButton();
+            this.ppm_y_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_y_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_z = new System.Windows.Forms.ToolStripButton();
+            this.ppm_z_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_z_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.ppm_a = new System.Windows.Forms.ToolStripButton();
+            this.ppm_a_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_a_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_b = new System.Windows.Forms.ToolStripButton();
+            this.ppm_b_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_b_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_c = new System.Windows.Forms.ToolStripButton();
+            this.ppm_c_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_c_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.ppm_panel = new System.Windows.Forms.Panel();
             this.ppm_toolStrip = new System.Windows.Forms.ToolStrip();
             this.ppmSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.ppmCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -339,36 +369,12 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton13 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip5 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton21 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton22 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton23 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.ppm_x = new System.Windows.Forms.ToolStripButton();
-            this.ppm_x_H2O = new System.Windows.Forms.ToolStripButton();
-            this.ppm_x_NH3 = new System.Windows.Forms.ToolStripButton();
-            this.ppm_y = new System.Windows.Forms.ToolStripButton();
-            this.ppm_y_H2O = new System.Windows.Forms.ToolStripButton();
-            this.ppm_y_NH3 = new System.Windows.Forms.ToolStripButton();
-            this.ppm_z = new System.Windows.Forms.ToolStripButton();
-            this.ppm_z_H2O = new System.Windows.Forms.ToolStripButton();
-            this.ppm_z_NH3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.ppm_a = new System.Windows.Forms.ToolStripButton();
-            this.ppm_a_H2O = new System.Windows.Forms.ToolStripButton();
-            this.ppm_a_NH3 = new System.Windows.Forms.ToolStripButton();
-            this.ppm_b = new System.Windows.Forms.ToolStripButton();
-            this.ppm_b_H2O = new System.Windows.Forms.ToolStripButton();
-            this.ppm_b_NH3 = new System.Windows.Forms.ToolStripButton();
-            this.ppm_c = new System.Windows.Forms.ToolStripButton();
-            this.ppm_c_H2O = new System.Windows.Forms.ToolStripButton();
-            this.ppm_c_NH3 = new System.Windows.Forms.ToolStripButton();
-            this.ppm_panel = new System.Windows.Forms.Panel();
+            this.toolStrip6 = new System.Windows.Forms.ToolStrip();
+            this.ppm_M = new System.Windows.Forms.ToolStripButton();
+            this.ppm_M_H2O = new System.Windows.Forms.ToolStripButton();
+            this.ppm_M_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_checkall_Btn = new System.Windows.Forms.ToolStripButton();
+            this.ppm_uncheckBtn = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -392,6 +398,13 @@ namespace Isotope_fitting
             this.fiToolStrip.SuspendLayout();
             this.tabDiagram.SuspendLayout();
             this.panel2_tab2.SuspendLayout();
+            this.toolStrip4.SuspendLayout();
+            this.toolStrip5.SuspendLayout();
+            this.toolStrip3.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.RightToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             this.ppm_toolStrip.SuspendLayout();
             this.panel1_tab2.SuspendLayout();
             this.draw_sequence_panelCopy2.SuspendLayout();
@@ -424,13 +437,7 @@ namespace Isotope_fitting
             this.int_Idx_toolStrip.SuspendLayout();
             this.panel2_intIdxTo.SuspendLayout();
             this.int_IdxTo_toolStrip.SuspendLayout();
-            this.toolStripContainer1.ContentPanel.SuspendLayout();
-            this.toolStripContainer1.RightToolStripPanel.SuspendLayout();
-            this.toolStripContainer1.SuspendLayout();
-            this.toolStrip4.SuspendLayout();
-            this.toolStrip5.SuspendLayout();
-            this.toolStrip3.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
+            this.toolStrip6.SuspendLayout();
             this.SuspendLayout();
             // 
             // customRes_Btn
@@ -1888,7 +1895,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(97, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(96, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1900,7 +1907,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(187, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(186, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -2467,6 +2474,7 @@ namespace Isotope_fitting
             // 
             this.panel2_tab2.AutoScroll = true;
             this.panel2_tab2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel2_tab2.Controls.Add(this.toolStrip6);
             this.panel2_tab2.Controls.Add(this.toolStrip4);
             this.panel2_tab2.Controls.Add(this.toolStrip5);
             this.panel2_tab2.Controls.Add(this.toolStrip3);
@@ -2477,6 +2485,415 @@ namespace Isotope_fitting
             this.panel2_tab2.Name = "panel2_tab2";
             this.panel2_tab2.Size = new System.Drawing.Size(579, 717);
             this.panel2_tab2.TabIndex = 1;
+            // 
+            // toolStrip4
+            // 
+            this.toolStrip4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ppm_internal_b,
+            this.ppm_internal_b_H2O,
+            this.ppm_internal_b_NH3});
+            this.toolStrip4.Location = new System.Drawing.Point(0, 454);
+            this.toolStrip4.Name = "toolStrip4";
+            this.toolStrip4.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+            this.toolStrip4.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip4.Size = new System.Drawing.Size(579, 26);
+            this.toolStrip4.TabIndex = 7;
+            // 
+            // ppm_internal_b
+            // 
+            this.ppm_internal_b.Checked = true;
+            this.ppm_internal_b.CheckOnClick = true;
+            this.ppm_internal_b.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_internal_b.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_internal_b.ForeColor = System.Drawing.Color.MediumOrchid;
+            this.ppm_internal_b.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_b.Image")));
+            this.ppm_internal_b.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_internal_b.Name = "ppm_internal_b";
+            this.ppm_internal_b.Size = new System.Drawing.Size(77, 23);
+            this.ppm_internal_b.Text = "internal b";
+            // 
+            // ppm_internal_b_H2O
+            // 
+            this.ppm_internal_b_H2O.Checked = true;
+            this.ppm_internal_b_H2O.CheckOnClick = true;
+            this.ppm_internal_b_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_internal_b_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_internal_b_H2O.ForeColor = System.Drawing.Color.MediumOrchid;
+            this.ppm_internal_b_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_b_H2O.Image")));
+            this.ppm_internal_b_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_internal_b_H2O.Name = "ppm_internal_b_H2O";
+            this.ppm_internal_b_H2O.Size = new System.Drawing.Size(113, 23);
+            this.ppm_internal_b_H2O.Text = "internal b-H2O";
+            // 
+            // ppm_internal_b_NH3
+            // 
+            this.ppm_internal_b_NH3.Checked = true;
+            this.ppm_internal_b_NH3.CheckOnClick = true;
+            this.ppm_internal_b_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_internal_b_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_internal_b_NH3.ForeColor = System.Drawing.Color.MediumOrchid;
+            this.ppm_internal_b_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_b_NH3.Image")));
+            this.ppm_internal_b_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_internal_b_NH3.Name = "ppm_internal_b_NH3";
+            this.ppm_internal_b_NH3.Size = new System.Drawing.Size(113, 23);
+            this.ppm_internal_b_NH3.Text = "internal b-NH3";
+            // 
+            // toolStrip5
+            // 
+            this.toolStrip5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ppm_internal_a,
+            this.ppm_internal_a_H2O,
+            this.ppm_internal_a_NH3});
+            this.toolStrip5.Location = new System.Drawing.Point(0, 428);
+            this.toolStrip5.Name = "toolStrip5";
+            this.toolStrip5.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+            this.toolStrip5.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip5.Size = new System.Drawing.Size(579, 26);
+            this.toolStrip5.TabIndex = 6;
+            // 
+            // ppm_internal_a
+            // 
+            this.ppm_internal_a.Checked = true;
+            this.ppm_internal_a.CheckOnClick = true;
+            this.ppm_internal_a.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_internal_a.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_internal_a.ForeColor = System.Drawing.Color.DarkViolet;
+            this.ppm_internal_a.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_a.Image")));
+            this.ppm_internal_a.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_internal_a.Name = "ppm_internal_a";
+            this.ppm_internal_a.Size = new System.Drawing.Size(76, 23);
+            this.ppm_internal_a.Text = "internal a";
+            // 
+            // ppm_internal_a_H2O
+            // 
+            this.ppm_internal_a_H2O.Checked = true;
+            this.ppm_internal_a_H2O.CheckOnClick = true;
+            this.ppm_internal_a_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_internal_a_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_internal_a_H2O.ForeColor = System.Drawing.Color.DarkViolet;
+            this.ppm_internal_a_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_a_H2O.Image")));
+            this.ppm_internal_a_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_internal_a_H2O.Name = "ppm_internal_a_H2O";
+            this.ppm_internal_a_H2O.Size = new System.Drawing.Size(112, 23);
+            this.ppm_internal_a_H2O.Text = "internal a-H2O";
+            // 
+            // ppm_internal_a_NH3
+            // 
+            this.ppm_internal_a_NH3.Checked = true;
+            this.ppm_internal_a_NH3.CheckOnClick = true;
+            this.ppm_internal_a_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_internal_a_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_internal_a_NH3.ForeColor = System.Drawing.Color.DarkViolet;
+            this.ppm_internal_a_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_a_NH3.Image")));
+            this.ppm_internal_a_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_internal_a_NH3.Name = "ppm_internal_a_NH3";
+            this.ppm_internal_a_NH3.Size = new System.Drawing.Size(112, 23);
+            this.ppm_internal_a_NH3.Text = "internal a-NH3";
+            // 
+            // toolStrip3
+            // 
+            this.toolStrip3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ppm_x,
+            this.ppm_x_H2O,
+            this.ppm_x_NH3,
+            this.ppm_y,
+            this.ppm_y_H2O,
+            this.ppm_y_NH3,
+            this.ppm_z,
+            this.ppm_z_H2O,
+            this.ppm_z_NH3});
+            this.toolStrip3.Location = new System.Drawing.Point(0, 402);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+            this.toolStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip3.Size = new System.Drawing.Size(579, 26);
+            this.toolStrip3.TabIndex = 5;
+            // 
+            // ppm_x
+            // 
+            this.ppm_x.Checked = true;
+            this.ppm_x.CheckOnClick = true;
+            this.ppm_x.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_x.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_x.ForeColor = System.Drawing.Color.Lime;
+            this.ppm_x.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x.Image")));
+            this.ppm_x.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_x.Name = "ppm_x";
+            this.ppm_x.Size = new System.Drawing.Size(23, 23);
+            this.ppm_x.Text = "x";
+            // 
+            // ppm_x_H2O
+            // 
+            this.ppm_x_H2O.Checked = true;
+            this.ppm_x_H2O.CheckOnClick = true;
+            this.ppm_x_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_x_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_x_H2O.ForeColor = System.Drawing.Color.Lime;
+            this.ppm_x_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_H2O.Image")));
+            this.ppm_x_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_x_H2O.Name = "ppm_x_H2O";
+            this.ppm_x_H2O.Size = new System.Drawing.Size(57, 23);
+            this.ppm_x_H2O.Text = "x-H2O";
+            // 
+            // ppm_x_NH3
+            // 
+            this.ppm_x_NH3.Checked = true;
+            this.ppm_x_NH3.CheckOnClick = true;
+            this.ppm_x_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_x_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_x_NH3.ForeColor = System.Drawing.Color.Lime;
+            this.ppm_x_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_NH3.Image")));
+            this.ppm_x_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_x_NH3.Name = "ppm_x_NH3";
+            this.ppm_x_NH3.Size = new System.Drawing.Size(57, 23);
+            this.ppm_x_NH3.Text = "x-NH3";
+            // 
+            // ppm_y
+            // 
+            this.ppm_y.Checked = true;
+            this.ppm_y.CheckOnClick = true;
+            this.ppm_y.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_y.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_y.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.ppm_y.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y.Image")));
+            this.ppm_y.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_y.Name = "ppm_y";
+            this.ppm_y.Size = new System.Drawing.Size(23, 23);
+            this.ppm_y.Text = "y";
+            // 
+            // ppm_y_H2O
+            // 
+            this.ppm_y_H2O.Checked = true;
+            this.ppm_y_H2O.CheckOnClick = true;
+            this.ppm_y_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_y_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_y_H2O.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.ppm_y_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_H2O.Image")));
+            this.ppm_y_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_y_H2O.Name = "ppm_y_H2O";
+            this.ppm_y_H2O.Size = new System.Drawing.Size(57, 23);
+            this.ppm_y_H2O.Text = "y-H2O";
+            // 
+            // ppm_y_NH3
+            // 
+            this.ppm_y_NH3.Checked = true;
+            this.ppm_y_NH3.CheckOnClick = true;
+            this.ppm_y_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_y_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_y_NH3.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.ppm_y_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_NH3.Image")));
+            this.ppm_y_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_y_NH3.Name = "ppm_y_NH3";
+            this.ppm_y_NH3.Size = new System.Drawing.Size(57, 23);
+            this.ppm_y_NH3.Text = "y-NH3";
+            // 
+            // ppm_z
+            // 
+            this.ppm_z.Checked = true;
+            this.ppm_z.CheckOnClick = true;
+            this.ppm_z.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_z.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_z.ForeColor = System.Drawing.Color.Tomato;
+            this.ppm_z.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z.Image")));
+            this.ppm_z.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_z.Name = "ppm_z";
+            this.ppm_z.Size = new System.Drawing.Size(23, 23);
+            this.ppm_z.Text = "z";
+            // 
+            // ppm_z_H2O
+            // 
+            this.ppm_z_H2O.Checked = true;
+            this.ppm_z_H2O.CheckOnClick = true;
+            this.ppm_z_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_z_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_z_H2O.ForeColor = System.Drawing.Color.Tomato;
+            this.ppm_z_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_H2O.Image")));
+            this.ppm_z_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_z_H2O.Name = "ppm_z_H2O";
+            this.ppm_z_H2O.Size = new System.Drawing.Size(56, 23);
+            this.ppm_z_H2O.Text = "z-H2O";
+            // 
+            // ppm_z_NH3
+            // 
+            this.ppm_z_NH3.Checked = true;
+            this.ppm_z_NH3.CheckOnClick = true;
+            this.ppm_z_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_z_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_z_NH3.ForeColor = System.Drawing.Color.Tomato;
+            this.ppm_z_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_NH3.Image")));
+            this.ppm_z_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_z_NH3.Name = "ppm_z_NH3";
+            this.ppm_z_NH3.Size = new System.Drawing.Size(56, 23);
+            this.ppm_z_NH3.Text = "z-NH3";
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ppm_a,
+            this.ppm_a_H2O,
+            this.ppm_a_NH3,
+            this.ppm_b,
+            this.ppm_b_H2O,
+            this.ppm_b_NH3,
+            this.ppm_c,
+            this.ppm_c_H2O,
+            this.ppm_c_NH3});
+            this.toolStrip2.Location = new System.Drawing.Point(0, 376);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+            this.toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip2.Size = new System.Drawing.Size(579, 26);
+            this.toolStrip2.TabIndex = 4;
+            // 
+            // ppm_a
+            // 
+            this.ppm_a.Checked = true;
+            this.ppm_a.CheckOnClick = true;
+            this.ppm_a.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_a.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_a.ForeColor = System.Drawing.Color.Green;
+            this.ppm_a.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a.Image")));
+            this.ppm_a.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_a.Name = "ppm_a";
+            this.ppm_a.Size = new System.Drawing.Size(23, 23);
+            this.ppm_a.Text = "a";
+            // 
+            // ppm_a_H2O
+            // 
+            this.ppm_a_H2O.Checked = true;
+            this.ppm_a_H2O.CheckOnClick = true;
+            this.ppm_a_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_a_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_a_H2O.ForeColor = System.Drawing.Color.Green;
+            this.ppm_a_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_H2O.Image")));
+            this.ppm_a_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_a_H2O.Name = "ppm_a_H2O";
+            this.ppm_a_H2O.Size = new System.Drawing.Size(57, 23);
+            this.ppm_a_H2O.Text = "a-H2O";
+            // 
+            // ppm_a_NH3
+            // 
+            this.ppm_a_NH3.Checked = true;
+            this.ppm_a_NH3.CheckOnClick = true;
+            this.ppm_a_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_a_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_a_NH3.ForeColor = System.Drawing.Color.Green;
+            this.ppm_a_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_NH3.Image")));
+            this.ppm_a_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_a_NH3.Name = "ppm_a_NH3";
+            this.ppm_a_NH3.Size = new System.Drawing.Size(57, 23);
+            this.ppm_a_NH3.Text = "a-NH3";
+            // 
+            // ppm_b
+            // 
+            this.ppm_b.Checked = true;
+            this.ppm_b.CheckOnClick = true;
+            this.ppm_b.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_b.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_b.ForeColor = System.Drawing.Color.Blue;
+            this.ppm_b.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b.Image")));
+            this.ppm_b.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_b.Name = "ppm_b";
+            this.ppm_b.Size = new System.Drawing.Size(23, 23);
+            this.ppm_b.Text = "b";
+            // 
+            // ppm_b_H2O
+            // 
+            this.ppm_b_H2O.Checked = true;
+            this.ppm_b_H2O.CheckOnClick = true;
+            this.ppm_b_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_b_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_b_H2O.ForeColor = System.Drawing.Color.Blue;
+            this.ppm_b_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_H2O.Image")));
+            this.ppm_b_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_b_H2O.Name = "ppm_b_H2O";
+            this.ppm_b_H2O.Size = new System.Drawing.Size(58, 23);
+            this.ppm_b_H2O.Text = "b-H2O";
+            // 
+            // ppm_b_NH3
+            // 
+            this.ppm_b_NH3.Checked = true;
+            this.ppm_b_NH3.CheckOnClick = true;
+            this.ppm_b_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_b_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_b_NH3.ForeColor = System.Drawing.Color.Blue;
+            this.ppm_b_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_NH3.Image")));
+            this.ppm_b_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_b_NH3.Name = "ppm_b_NH3";
+            this.ppm_b_NH3.Size = new System.Drawing.Size(58, 23);
+            this.ppm_b_NH3.Text = "b-NH3";
+            // 
+            // ppm_c
+            // 
+            this.ppm_c.Checked = true;
+            this.ppm_c.CheckOnClick = true;
+            this.ppm_c.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_c.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_c.ForeColor = System.Drawing.Color.Firebrick;
+            this.ppm_c.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c.Image")));
+            this.ppm_c.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_c.Name = "ppm_c";
+            this.ppm_c.Size = new System.Drawing.Size(23, 23);
+            this.ppm_c.Text = "c";
+            // 
+            // ppm_c_H2O
+            // 
+            this.ppm_c_H2O.Checked = true;
+            this.ppm_c_H2O.CheckOnClick = true;
+            this.ppm_c_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_c_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_c_H2O.ForeColor = System.Drawing.Color.Firebrick;
+            this.ppm_c_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_H2O.Image")));
+            this.ppm_c_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_c_H2O.Name = "ppm_c_H2O";
+            this.ppm_c_H2O.Size = new System.Drawing.Size(56, 23);
+            this.ppm_c_H2O.Text = "c-H2O";
+            // 
+            // ppm_c_NH3
+            // 
+            this.ppm_c_NH3.Checked = true;
+            this.ppm_c_NH3.CheckOnClick = true;
+            this.ppm_c_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_c_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_c_NH3.ForeColor = System.Drawing.Color.Firebrick;
+            this.ppm_c_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_NH3.Image")));
+            this.ppm_c_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_c_NH3.Name = "ppm_c_NH3";
+            this.ppm_c_NH3.Size = new System.Drawing.Size(56, 23);
+            this.ppm_c_NH3.Text = "c-NH3";
+            // 
+            // toolStripContainer1
+            // 
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.ppm_panel);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(537, 376);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.toolStripContainer1.LeftToolStripPanelVisible = false;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            // 
+            // toolStripContainer1.RightToolStripPanel
+            // 
+            this.toolStripContainer1.RightToolStripPanel.Controls.Add(this.ppm_toolStrip);
+            this.toolStripContainer1.Size = new System.Drawing.Size(579, 376);
+            this.toolStripContainer1.TabIndex = 0;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // ppm_panel
+            // 
+            this.ppm_panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ppm_panel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ppm_panel.Location = new System.Drawing.Point(0, 0);
+            this.ppm_panel.Name = "ppm_panel";
+            this.ppm_panel.Size = new System.Drawing.Size(537, 376);
+            this.ppm_panel.TabIndex = 3;
             // 
             // ppm_toolStrip
             // 
@@ -4207,409 +4624,86 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
-            // toolStripContainer1
+            // toolStrip6
             // 
+            this.toolStrip6.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.toolStrip6.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ppm_M,
+            this.ppm_M_H2O,
+            this.ppm_M_NH3,
+            this.ppm_uncheckBtn,
+            this.ppm_checkall_Btn});
+            this.toolStrip6.Location = new System.Drawing.Point(0, 480);
+            this.toolStrip6.Name = "toolStrip6";
+            this.toolStrip6.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+            this.toolStrip6.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip6.Size = new System.Drawing.Size(579, 27);
+            this.toolStrip6.TabIndex = 8;
             // 
-            // toolStripContainer1.ContentPanel
+            // ppm_M
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.ppm_panel);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(547, 313);
-            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.toolStripContainer1.LeftToolStripPanelVisible = false;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
-            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.ppm_M.Checked = true;
+            this.ppm_M.CheckOnClick = true;
+            this.ppm_M.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_M.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_M.ForeColor = System.Drawing.Color.Maroon;
+            this.ppm_M.Image = ((System.Drawing.Image)(resources.GetObject("ppm_M.Image")));
+            this.ppm_M.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_M.Name = "ppm_M";
+            this.ppm_M.Size = new System.Drawing.Size(26, 24);
+            this.ppm_M.Text = "M";
+            this.ppm_M.ToolTipText = "M";
             // 
-            // toolStripContainer1.RightToolStripPanel
+            // ppm_M_H2O
             // 
-            this.toolStripContainer1.RightToolStripPanel.Controls.Add(this.ppm_toolStrip);
-            this.toolStripContainer1.Size = new System.Drawing.Size(579, 313);
-            this.toolStripContainer1.TabIndex = 0;
-            this.toolStripContainer1.Text = "toolStripContainer1";
+            this.ppm_M_H2O.Checked = true;
+            this.ppm_M_H2O.CheckOnClick = true;
+            this.ppm_M_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_M_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_M_H2O.ForeColor = System.Drawing.Color.Maroon;
+            this.ppm_M_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_M_H2O.Image")));
+            this.ppm_M_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_M_H2O.Name = "ppm_M_H2O";
+            this.ppm_M_H2O.Size = new System.Drawing.Size(62, 24);
+            this.ppm_M_H2O.Text = "M-H2O";
             // 
-            // toolStrip4
+            // ppm_M_NH3
             // 
-            this.toolStrip4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton11,
-            this.toolStripButton12,
-            this.toolStripButton13});
-            this.toolStrip4.Location = new System.Drawing.Point(0, 391);
-            this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip4.Size = new System.Drawing.Size(579, 26);
-            this.toolStrip4.TabIndex = 7;
+            this.ppm_M_NH3.Checked = true;
+            this.ppm_M_NH3.CheckOnClick = true;
+            this.ppm_M_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_M_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_M_NH3.ForeColor = System.Drawing.Color.Maroon;
+            this.ppm_M_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_M_NH3.Image")));
+            this.ppm_M_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_M_NH3.Name = "ppm_M_NH3";
+            this.ppm_M_NH3.Size = new System.Drawing.Size(62, 24);
+            this.ppm_M_NH3.Text = "M-NH3";
             // 
-            // toolStripButton11
+            // ppm_checkall_Btn
             // 
-            this.toolStripButton11.Checked = true;
-            this.toolStripButton11.CheckOnClick = true;
-            this.toolStripButton11.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton11.ForeColor = System.Drawing.Color.MediumOrchid;
-            this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
-            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(77, 23);
-            this.toolStripButton11.Text = "internal b";
+            this.ppm_checkall_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ppm_checkall_Btn.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.ppm_checkall_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_checkall_Btn.Image")));
+            this.ppm_checkall_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_checkall_Btn.Name = "ppm_checkall_Btn";
+            this.ppm_checkall_Btn.Size = new System.Drawing.Size(87, 24);
+            this.ppm_checkall_Btn.Text = "Check all";
+            this.ppm_checkall_Btn.ToolTipText = "Check all";
+            this.ppm_checkall_Btn.Click += new System.EventHandler(this.ppm_checkall_Btn_Click);
             // 
-            // toolStripButton12
+            // ppm_uncheckBtn
             // 
-            this.toolStripButton12.Checked = true;
-            this.toolStripButton12.CheckOnClick = true;
-            this.toolStripButton12.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton12.ForeColor = System.Drawing.Color.MediumOrchid;
-            this.toolStripButton12.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton12.Image")));
-            this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton12.Name = "toolStripButton12";
-            this.toolStripButton12.Size = new System.Drawing.Size(113, 23);
-            this.toolStripButton12.Text = "internal b-H2O";
-            // 
-            // toolStripButton13
-            // 
-            this.toolStripButton13.Checked = true;
-            this.toolStripButton13.CheckOnClick = true;
-            this.toolStripButton13.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton13.ForeColor = System.Drawing.Color.MediumOrchid;
-            this.toolStripButton13.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton13.Image")));
-            this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton13.Name = "toolStripButton13";
-            this.toolStripButton13.Size = new System.Drawing.Size(113, 23);
-            this.toolStripButton13.Text = "internal b-NH3";
-            // 
-            // toolStrip5
-            // 
-            this.toolStrip5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton21,
-            this.toolStripButton22,
-            this.toolStripButton23});
-            this.toolStrip5.Location = new System.Drawing.Point(0, 365);
-            this.toolStrip5.Name = "toolStrip5";
-            this.toolStrip5.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip5.Size = new System.Drawing.Size(579, 26);
-            this.toolStrip5.TabIndex = 6;
-            // 
-            // toolStripButton21
-            // 
-            this.toolStripButton21.Checked = true;
-            this.toolStripButton21.CheckOnClick = true;
-            this.toolStripButton21.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton21.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton21.ForeColor = System.Drawing.Color.DarkViolet;
-            this.toolStripButton21.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton21.Image")));
-            this.toolStripButton21.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton21.Name = "toolStripButton21";
-            this.toolStripButton21.Size = new System.Drawing.Size(76, 23);
-            this.toolStripButton21.Text = "internal a";
-            // 
-            // toolStripButton22
-            // 
-            this.toolStripButton22.Checked = true;
-            this.toolStripButton22.CheckOnClick = true;
-            this.toolStripButton22.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton22.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton22.ForeColor = System.Drawing.Color.DarkViolet;
-            this.toolStripButton22.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton22.Image")));
-            this.toolStripButton22.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton22.Name = "toolStripButton22";
-            this.toolStripButton22.Size = new System.Drawing.Size(112, 23);
-            this.toolStripButton22.Text = "internal a-H2O";
-            // 
-            // toolStripButton23
-            // 
-            this.toolStripButton23.Checked = true;
-            this.toolStripButton23.CheckOnClick = true;
-            this.toolStripButton23.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton23.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton23.ForeColor = System.Drawing.Color.DarkViolet;
-            this.toolStripButton23.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton23.Image")));
-            this.toolStripButton23.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton23.Name = "toolStripButton23";
-            this.toolStripButton23.Size = new System.Drawing.Size(112, 23);
-            this.toolStripButton23.Text = "internal a-NH3";
-            // 
-            // toolStrip3
-            // 
-            this.toolStrip3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ppm_x,
-            this.ppm_x_H2O,
-            this.ppm_x_NH3,
-            this.ppm_y,
-            this.ppm_y_H2O,
-            this.ppm_y_NH3,
-            this.ppm_z,
-            this.ppm_z_H2O,
-            this.ppm_z_NH3});
-            this.toolStrip3.Location = new System.Drawing.Point(0, 339);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip3.Size = new System.Drawing.Size(579, 26);
-            this.toolStrip3.TabIndex = 5;
-            // 
-            // ppm_x
-            // 
-            this.ppm_x.Checked = true;
-            this.ppm_x.CheckOnClick = true;
-            this.ppm_x.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_x.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_x.ForeColor = System.Drawing.Color.Lime;
-            this.ppm_x.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x.Image")));
-            this.ppm_x.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_x.Name = "ppm_x";
-            this.ppm_x.Size = new System.Drawing.Size(23, 23);
-            this.ppm_x.Text = "x";
-            // 
-            // ppm_x_H2O
-            // 
-            this.ppm_x_H2O.Checked = true;
-            this.ppm_x_H2O.CheckOnClick = true;
-            this.ppm_x_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_x_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_x_H2O.ForeColor = System.Drawing.Color.Lime;
-            this.ppm_x_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_H2O.Image")));
-            this.ppm_x_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_x_H2O.Name = "ppm_x_H2O";
-            this.ppm_x_H2O.Size = new System.Drawing.Size(57, 23);
-            this.ppm_x_H2O.Text = "x-H2O";
-            // 
-            // ppm_x_NH3
-            // 
-            this.ppm_x_NH3.Checked = true;
-            this.ppm_x_NH3.CheckOnClick = true;
-            this.ppm_x_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_x_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_x_NH3.ForeColor = System.Drawing.Color.Lime;
-            this.ppm_x_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_NH3.Image")));
-            this.ppm_x_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_x_NH3.Name = "ppm_x_NH3";
-            this.ppm_x_NH3.Size = new System.Drawing.Size(57, 23);
-            this.ppm_x_NH3.Text = "x-NH3";
-            // 
-            // ppm_y
-            // 
-            this.ppm_y.Checked = true;
-            this.ppm_y.CheckOnClick = true;
-            this.ppm_y.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_y.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_y.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.ppm_y.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y.Image")));
-            this.ppm_y.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_y.Name = "ppm_y";
-            this.ppm_y.Size = new System.Drawing.Size(23, 23);
-            this.ppm_y.Text = "y";
-            // 
-            // ppm_y_H2O
-            // 
-            this.ppm_y_H2O.Checked = true;
-            this.ppm_y_H2O.CheckOnClick = true;
-            this.ppm_y_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_y_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_y_H2O.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.ppm_y_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_H2O.Image")));
-            this.ppm_y_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_y_H2O.Name = "ppm_y_H2O";
-            this.ppm_y_H2O.Size = new System.Drawing.Size(57, 23);
-            this.ppm_y_H2O.Text = "y-H2O";
-            // 
-            // ppm_y_NH3
-            // 
-            this.ppm_y_NH3.Checked = true;
-            this.ppm_y_NH3.CheckOnClick = true;
-            this.ppm_y_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_y_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_y_NH3.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.ppm_y_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_NH3.Image")));
-            this.ppm_y_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_y_NH3.Name = "ppm_y_NH3";
-            this.ppm_y_NH3.Size = new System.Drawing.Size(57, 23);
-            this.ppm_y_NH3.Text = "y-NH3";
-            // 
-            // ppm_z
-            // 
-            this.ppm_z.Checked = true;
-            this.ppm_z.CheckOnClick = true;
-            this.ppm_z.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_z.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_z.ForeColor = System.Drawing.Color.Tomato;
-            this.ppm_z.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z.Image")));
-            this.ppm_z.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_z.Name = "ppm_z";
-            this.ppm_z.Size = new System.Drawing.Size(23, 23);
-            this.ppm_z.Text = "z";
-            // 
-            // ppm_z_H2O
-            // 
-            this.ppm_z_H2O.Checked = true;
-            this.ppm_z_H2O.CheckOnClick = true;
-            this.ppm_z_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_z_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_z_H2O.ForeColor = System.Drawing.Color.Tomato;
-            this.ppm_z_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_H2O.Image")));
-            this.ppm_z_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_z_H2O.Name = "ppm_z_H2O";
-            this.ppm_z_H2O.Size = new System.Drawing.Size(56, 23);
-            this.ppm_z_H2O.Text = "z-H2O";
-            // 
-            // ppm_z_NH3
-            // 
-            this.ppm_z_NH3.Checked = true;
-            this.ppm_z_NH3.CheckOnClick = true;
-            this.ppm_z_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_z_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_z_NH3.ForeColor = System.Drawing.Color.Tomato;
-            this.ppm_z_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_NH3.Image")));
-            this.ppm_z_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_z_NH3.Name = "ppm_z_NH3";
-            this.ppm_z_NH3.Size = new System.Drawing.Size(56, 23);
-            this.ppm_z_NH3.Text = "z-NH3";
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ppm_a,
-            this.ppm_a_H2O,
-            this.ppm_a_NH3,
-            this.ppm_b,
-            this.ppm_b_H2O,
-            this.ppm_b_NH3,
-            this.ppm_c,
-            this.ppm_c_H2O,
-            this.ppm_c_NH3});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 313);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip2.Size = new System.Drawing.Size(579, 26);
-            this.toolStrip2.TabIndex = 4;
-            // 
-            // ppm_a
-            // 
-            this.ppm_a.Checked = true;
-            this.ppm_a.CheckOnClick = true;
-            this.ppm_a.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_a.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_a.ForeColor = System.Drawing.Color.Green;
-            this.ppm_a.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a.Image")));
-            this.ppm_a.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_a.Name = "ppm_a";
-            this.ppm_a.Size = new System.Drawing.Size(23, 23);
-            this.ppm_a.Text = "a";
-            // 
-            // ppm_a_H2O
-            // 
-            this.ppm_a_H2O.Checked = true;
-            this.ppm_a_H2O.CheckOnClick = true;
-            this.ppm_a_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_a_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_a_H2O.ForeColor = System.Drawing.Color.Green;
-            this.ppm_a_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_H2O.Image")));
-            this.ppm_a_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_a_H2O.Name = "ppm_a_H2O";
-            this.ppm_a_H2O.Size = new System.Drawing.Size(57, 23);
-            this.ppm_a_H2O.Text = "a-H2O";
-            // 
-            // ppm_a_NH3
-            // 
-            this.ppm_a_NH3.Checked = true;
-            this.ppm_a_NH3.CheckOnClick = true;
-            this.ppm_a_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_a_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_a_NH3.ForeColor = System.Drawing.Color.Green;
-            this.ppm_a_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_NH3.Image")));
-            this.ppm_a_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_a_NH3.Name = "ppm_a_NH3";
-            this.ppm_a_NH3.Size = new System.Drawing.Size(57, 23);
-            this.ppm_a_NH3.Text = "a-NH3";
-            // 
-            // ppm_b
-            // 
-            this.ppm_b.Checked = true;
-            this.ppm_b.CheckOnClick = true;
-            this.ppm_b.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_b.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_b.ForeColor = System.Drawing.Color.Blue;
-            this.ppm_b.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b.Image")));
-            this.ppm_b.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_b.Name = "ppm_b";
-            this.ppm_b.Size = new System.Drawing.Size(23, 23);
-            this.ppm_b.Text = "b";
-            // 
-            // ppm_b_H2O
-            // 
-            this.ppm_b_H2O.Checked = true;
-            this.ppm_b_H2O.CheckOnClick = true;
-            this.ppm_b_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_b_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_b_H2O.ForeColor = System.Drawing.Color.Blue;
-            this.ppm_b_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_H2O.Image")));
-            this.ppm_b_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_b_H2O.Name = "ppm_b_H2O";
-            this.ppm_b_H2O.Size = new System.Drawing.Size(58, 23);
-            this.ppm_b_H2O.Text = "b-H2O";
-            // 
-            // ppm_b_NH3
-            // 
-            this.ppm_b_NH3.Checked = true;
-            this.ppm_b_NH3.CheckOnClick = true;
-            this.ppm_b_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_b_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_b_NH3.ForeColor = System.Drawing.Color.Blue;
-            this.ppm_b_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_NH3.Image")));
-            this.ppm_b_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_b_NH3.Name = "ppm_b_NH3";
-            this.ppm_b_NH3.Size = new System.Drawing.Size(58, 23);
-            this.ppm_b_NH3.Text = "b-NH3";
-            // 
-            // ppm_c
-            // 
-            this.ppm_c.Checked = true;
-            this.ppm_c.CheckOnClick = true;
-            this.ppm_c.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_c.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_c.ForeColor = System.Drawing.Color.Firebrick;
-            this.ppm_c.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c.Image")));
-            this.ppm_c.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_c.Name = "ppm_c";
-            this.ppm_c.Size = new System.Drawing.Size(23, 23);
-            this.ppm_c.Text = "c";
-            // 
-            // ppm_c_H2O
-            // 
-            this.ppm_c_H2O.Checked = true;
-            this.ppm_c_H2O.CheckOnClick = true;
-            this.ppm_c_H2O.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_c_H2O.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_c_H2O.ForeColor = System.Drawing.Color.Firebrick;
-            this.ppm_c_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_H2O.Image")));
-            this.ppm_c_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_c_H2O.Name = "ppm_c_H2O";
-            this.ppm_c_H2O.Size = new System.Drawing.Size(56, 23);
-            this.ppm_c_H2O.Text = "c-H2O";
-            // 
-            // ppm_c_NH3
-            // 
-            this.ppm_c_NH3.Checked = true;
-            this.ppm_c_NH3.CheckOnClick = true;
-            this.ppm_c_NH3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ppm_c_NH3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.ppm_c_NH3.ForeColor = System.Drawing.Color.Firebrick;
-            this.ppm_c_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_NH3.Image")));
-            this.ppm_c_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_c_NH3.Name = "ppm_c_NH3";
-            this.ppm_c_NH3.Size = new System.Drawing.Size(56, 23);
-            this.ppm_c_NH3.Text = "c-NH3";
-            // 
-            // ppm_panel
-            // 
-            this.ppm_panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ppm_panel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ppm_panel.Location = new System.Drawing.Point(0, 0);
-            this.ppm_panel.Name = "ppm_panel";
-            this.ppm_panel.Size = new System.Drawing.Size(547, 313);
-            this.ppm_panel.TabIndex = 3;
+            this.ppm_uncheckBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ppm_uncheckBtn.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.ppm_uncheckBtn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_uncheckBtn.Image")));
+            this.ppm_uncheckBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_uncheckBtn.Name = "ppm_uncheckBtn";
+            this.ppm_uncheckBtn.Size = new System.Drawing.Size(102, 24);
+            this.ppm_uncheckBtn.Text = "Uncheck all";
+            this.ppm_uncheckBtn.ToolTipText = "Uncheck all";
+            this.ppm_uncheckBtn.Click += new System.EventHandler(this.ppm_uncheckBtn_Click);
             // 
             // Form2
             // 
@@ -4662,6 +4756,19 @@ namespace Isotope_fitting
             this.tabDiagram.ResumeLayout(false);
             this.panel2_tab2.ResumeLayout(false);
             this.panel2_tab2.PerformLayout();
+            this.toolStrip4.ResumeLayout(false);
+            this.toolStrip4.PerformLayout();
+            this.toolStrip5.ResumeLayout(false);
+            this.toolStrip5.PerformLayout();
+            this.toolStrip3.ResumeLayout(false);
+            this.toolStrip3.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.RightToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
             this.ppm_toolStrip.ResumeLayout(false);
             this.ppm_toolStrip.PerformLayout();
             this.panel1_tab2.ResumeLayout(false);
@@ -4717,19 +4824,8 @@ namespace Isotope_fitting
             this.panel2_intIdxTo.ResumeLayout(false);
             this.int_IdxTo_toolStrip.ResumeLayout(false);
             this.int_IdxTo_toolStrip.PerformLayout();
-            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-            this.toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
-            this.toolStripContainer1.RightToolStripPanel.PerformLayout();
-            this.toolStripContainer1.ResumeLayout(false);
-            this.toolStripContainer1.PerformLayout();
-            this.toolStrip4.ResumeLayout(false);
-            this.toolStrip4.PerformLayout();
-            this.toolStrip5.ResumeLayout(false);
-            this.toolStrip5.PerformLayout();
-            this.toolStrip3.ResumeLayout(false);
-            this.toolStrip3.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
+            this.toolStrip6.ResumeLayout(false);
+            this.toolStrip6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -5045,13 +5141,13 @@ namespace Isotope_fitting
         private System.Windows.Forms.TreeView MSproduct_treeView;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.ToolStrip toolStrip4;
-        private System.Windows.Forms.ToolStripButton toolStripButton11;
-        private System.Windows.Forms.ToolStripButton toolStripButton12;
-        private System.Windows.Forms.ToolStripButton toolStripButton13;
+        private System.Windows.Forms.ToolStripButton ppm_internal_b;
+        private System.Windows.Forms.ToolStripButton ppm_internal_b_H2O;
+        private System.Windows.Forms.ToolStripButton ppm_internal_b_NH3;
         private System.Windows.Forms.ToolStrip toolStrip5;
-        private System.Windows.Forms.ToolStripButton toolStripButton21;
-        private System.Windows.Forms.ToolStripButton toolStripButton22;
-        private System.Windows.Forms.ToolStripButton toolStripButton23;
+        private System.Windows.Forms.ToolStripButton ppm_internal_a;
+        private System.Windows.Forms.ToolStripButton ppm_internal_a_H2O;
+        private System.Windows.Forms.ToolStripButton ppm_internal_a_NH3;
         private System.Windows.Forms.ToolStrip toolStrip3;
         private System.Windows.Forms.ToolStripButton ppm_x;
         private System.Windows.Forms.ToolStripButton ppm_x_H2O;
@@ -5073,5 +5169,11 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton ppm_c_H2O;
         private System.Windows.Forms.ToolStripButton ppm_c_NH3;
         private System.Windows.Forms.Panel ppm_panel;
+        private System.Windows.Forms.ToolStrip toolStrip6;
+        private System.Windows.Forms.ToolStripButton ppm_M;
+        private System.Windows.Forms.ToolStripButton ppm_M_H2O;
+        private System.Windows.Forms.ToolStripButton ppm_M_NH3;
+        private System.Windows.Forms.ToolStripButton ppm_uncheckBtn;
+        private System.Windows.Forms.ToolStripButton ppm_checkall_Btn;
     }
 }
