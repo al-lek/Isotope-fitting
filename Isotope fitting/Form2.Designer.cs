@@ -2892,6 +2892,7 @@ namespace Isotope_fitting
             this.ppm_panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ppm_panel.Location = new System.Drawing.Point(0, 0);
             this.ppm_panel.Name = "ppm_panel";
+            this.ppm_panel.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
             this.ppm_panel.Size = new System.Drawing.Size(537, 376);
             this.ppm_panel.TabIndex = 3;
             // 

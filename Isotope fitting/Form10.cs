@@ -213,10 +213,10 @@ namespace Isotope_fitting
             switch (formatX_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.x_format = "G";
+                    frm2.x_format = "0.0G";
                     break;
                 case 1:
-                    frm2.x_format = "E";
+                    frm2.x_format = "0.0E";
                     break;
             }
             frm2.oxy_changes();
@@ -227,10 +227,10 @@ namespace Isotope_fitting
             switch (formatY_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.y_format = "G";
+                    frm2.y_format = "0.0G";
                     break;
                 case 1:
-                    frm2.y_format = "E";
+                    frm2.y_format = "0.0E";
                     break;
             }
             frm2.oxy_changes();

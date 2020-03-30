@@ -29,7 +29,7 @@ namespace Isotope_fitting
             {
                 if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf))
                 {
-                    seq_BoxFrm16.Text = frm2.sequenceList[0].Sequence;
+                    seq_BoxFrm16.Text =  Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
                 }
                 else
                 {
@@ -41,17 +41,6 @@ namespace Isotope_fitting
                 seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;
                 create_tabPages();
             }
-
-            //if (!String.IsNullOrEmpty(frm2.Peptide)) { seq_BoxFrm16.Text = frm2.Peptide.ToString(); }
-            //if (!frm2.tab_mode)
-            //{
-            //    if (!String.IsNullOrEmpty(frm2.heavy_chain)) { heavy_BoxFrm16.Text = frm2.heavy_chain.ToString(); }
-            //    if (!String.IsNullOrEmpty(frm2.light_chain)) { light_BoxFrm16.Text = frm2.light_chain.ToString(); }
-            //}
-            //else /*if(frm2.sequenceList.Count>0)*/
-            //{
-            //    create_tabPages();
-            //}
         }
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
@@ -74,12 +63,9 @@ namespace Isotope_fitting
                 RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 280), TabIndex = 2, AutoSize = true };
                 if (seq.Type == 1) { bH.Checked = true; }
                 else { bL.Checked = true; }                
-                RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Top, Size = new Size(692, 271), ShowSelectionMargin = true, Rtf = seq.Rtf ,ScrollBars=RichTextBoxScrollBars.Vertical};
-                if (string.IsNullOrEmpty(seq.Rtf))
-                {
-                    box.Text = seq.Sequence;
-                }
-                
+                RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Top, Size = new Size(692, 271), ShowSelectionMargin = true, ScrollBars=RichTextBoxScrollBars.Vertical};
+                if (string.IsNullOrEmpty(seq.Rtf)) box.Text = Regex.Replace(seq.Sequence, @".{10}(?!$)", "$0  ");
+                else box.Rtf = seq.Rtf;
                 box.TextChanged += (s, e1) =>
                 {
                     if (box.Text.Length > 10 && !active_txt)
@@ -110,10 +96,10 @@ namespace Isotope_fitting
                         catch (Exception eee)
                         {
                             Debug.WriteLine(eee.ToString());
-                        }
-                        
+                        }                        
                     }
                 };
+                
                 this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL, box });       
             }            
             if (frm2.sequenceList.Count > 0) { seq_tabControl.SelectedIndex = 1; }
