@@ -30,6 +30,9 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.annotSize_numUD = new System.Windows.Forms.NumericUpDown();
             this.fit_grpBx = new System.Windows.Forms.GroupBox();
             this.fitW1_Lbl = new System.Windows.Forms.Label();
             this.fitW1_numUD = new System.Windows.Forms.NumericUpDown();
@@ -82,11 +85,10 @@
             this.intervalX_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.annotSize_numUD = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).BeginInit();
             this.fit_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fitW1_numUD)).BeginInit();
             this.Theor_grpBx.SuspendLayout();
@@ -102,8 +104,6 @@
             this.tickmark_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -132,6 +132,62 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Lines";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.annotSize_numUD);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.groupBox1.Location = new System.Drawing.Point(279, 160);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(257, 55);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Annotations";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(52, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 15);
+            this.label1.TabIndex = 32;
+            this.label1.Text = "Font Size";
+            // 
+            // annotSize_numUD
+            // 
+            this.annotSize_numUD.DecimalPlaces = 1;
+            this.annotSize_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.annotSize_numUD.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.annotSize_numUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.annotSize_numUD.Location = new System.Drawing.Point(116, 21);
+            this.annotSize_numUD.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.annotSize_numUD.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.annotSize_numUD.Name = "annotSize_numUD";
+            this.annotSize_numUD.ReadOnly = true;
+            this.annotSize_numUD.Size = new System.Drawing.Size(41, 20);
+            this.annotSize_numUD.TabIndex = 9;
+            this.annotSize_numUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.annotSize_numUD.ValueChanged += new System.EventHandler(this.annotSize_numUD_ValueChanged);
             // 
             // fit_grpBx
             // 
@@ -211,9 +267,8 @@
             this.fit10_UD.Items.Add("Solid");
             this.fit10_UD.Items.Add("Dot");
             this.fit10_UD.Items.Add("Dash");
-            this.fit10_UD.Items.Add("LongDash");
+            this.fit10_UD.Items.Add("SmallDot");
             this.fit10_UD.Items.Add("DashDot");
-            this.fit10_UD.Items.Add("LongDashDot");
             this.fit10_UD.Location = new System.Drawing.Point(116, 64);
             this.fit10_UD.Name = "fit10_UD";
             this.fit10_UD.Size = new System.Drawing.Size(120, 20);
@@ -271,9 +326,8 @@
             this.frag10_UD.Items.Add("Solid");
             this.frag10_UD.Items.Add("Dot");
             this.frag10_UD.Items.Add("Dash");
-            this.frag10_UD.Items.Add("LongDash");
+            this.frag10_UD.Items.Add("SmallDot");
             this.frag10_UD.Items.Add("DashDot");
-            this.frag10_UD.Items.Add("LongDashDot");
             this.frag10_UD.Location = new System.Drawing.Point(119, 70);
             this.frag10_UD.Name = "frag10_UD";
             this.frag10_UD.Size = new System.Drawing.Size(120, 20);
@@ -544,9 +598,8 @@
             this.exp10_UD.Items.Add("Solid");
             this.exp10_UD.Items.Add("Dot");
             this.exp10_UD.Items.Add("Dash");
-            this.exp10_UD.Items.Add("LongDash");
+            this.exp10_UD.Items.Add("SmallDot");
             this.exp10_UD.Items.Add("DashDot");
-            this.exp10_UD.Items.Add("LongDashDot");
             this.exp10_UD.Location = new System.Drawing.Point(121, 70);
             this.exp10_UD.Name = "exp10_UD";
             this.exp10_UD.Size = new System.Drawing.Size(120, 20);
@@ -959,62 +1012,6 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.annotSize_numUD);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.groupBox1.Location = new System.Drawing.Point(279, 160);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(257, 55);
-            this.groupBox1.TabIndex = 14;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Annotations";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(52, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 15);
-            this.label1.TabIndex = 32;
-            this.label1.Text = "Font Size";
-            // 
-            // annotSize_numUD
-            // 
-            this.annotSize_numUD.DecimalPlaces = 1;
-            this.annotSize_numUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.annotSize_numUD.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.annotSize_numUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.annotSize_numUD.Location = new System.Drawing.Point(116, 21);
-            this.annotSize_numUD.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.annotSize_numUD.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.annotSize_numUD.Name = "annotSize_numUD";
-            this.annotSize_numUD.ReadOnly = true;
-            this.annotSize_numUD.Size = new System.Drawing.Size(41, 20);
-            this.annotSize_numUD.TabIndex = 9;
-            this.annotSize_numUD.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.annotSize_numUD.ValueChanged += new System.EventHandler(this.annotSize_numUD_ValueChanged);
-            // 
             // Form10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1031,6 +1028,9 @@
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form10_DpiChanged);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).EndInit();
             this.fit_grpBx.ResumeLayout(false);
             this.fit_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fitW1_numUD)).EndInit();
@@ -1051,9 +1051,6 @@
             this.tickmark_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).EndInit();
             this.ResumeLayout(false);
 
         }

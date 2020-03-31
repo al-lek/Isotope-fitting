@@ -157,7 +157,7 @@ namespace Isotope_fitting
                     frm2.x_format13 = "G";
                     break;
                 case 1:
-                    frm2.x_format13 = "E";
+                    frm2.x_format13 = "0.0E+";
                     break;
             }
             frm2.internal_plots_refresh();

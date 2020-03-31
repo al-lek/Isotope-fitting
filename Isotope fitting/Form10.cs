@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using Arction.WinForms.Charting;
+using OxyPlot;
 using OxyPlot.WindowsForms;
 using System;
 using System.Collections.Generic;
@@ -74,23 +75,21 @@ namespace Isotope_fitting
             switch (exp10_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.exper_style = LineStyle.Solid;
+                    frm2.exper_style = LinePattern.Solid;
                     break;
                 case 1:
-                    frm2.exper_style = LineStyle.Dot;
+                    frm2.exper_style = LinePattern.Dot;
                     break;
                 case 2:
-                    frm2.exper_style = LineStyle.Dash;
+                    frm2.exper_style = LinePattern.Dash;
                     break;
                 case 3:
-                    frm2.exper_style = LineStyle.LongDash;
+                    frm2.exper_style = LinePattern.SmallDot;
                     break;
                 case 4:
-                    frm2.exper_style = LineStyle.DashDot;
+                    frm2.exper_style = LinePattern.DashDot;
                     break;
-                case 5:
-                    frm2.exper_style = LineStyle.LongDashDot;
-                    break;
+               
             }
         }
         private void fit10_UD_SelectedItemChanged(object sender, EventArgs e)
@@ -98,23 +97,21 @@ namespace Isotope_fitting
             switch (fit10_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.fit_style = LineStyle.Solid;
+                    frm2.fit_style = LinePattern.Solid;
                     break;
                 case 1:
-                    frm2.fit_style = LineStyle.Dot;
+                    frm2.fit_style = LinePattern.Dot;
                     break;
                 case 2:
-                    frm2.fit_style = LineStyle.Dash;
+                    frm2.fit_style = LinePattern.Dash;
                     break;
                 case 3:
-                    frm2.fit_style = LineStyle.LongDash;
+                    frm2.fit_style = LinePattern.SmallDot;
                     break;
                 case 4:
-                    frm2.fit_style = LineStyle.DashDot;
+                    frm2.fit_style = LinePattern.DashDot;
                     break;
-                case 5:
-                    frm2.fit_style = LineStyle.LongDashDot;
-                    break;
+                
             }
         }
         private void frag10_UD_SelectedItemChanged(object sender, EventArgs e)
@@ -122,29 +119,26 @@ namespace Isotope_fitting
             switch (frag10_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.frag_style = LineStyle.Solid;
+                    frm2.frag_style = LinePattern.Solid;
                     break;
                 case 1:
-                    frm2.frag_style = LineStyle.Dot;
+                    frm2.frag_style = LinePattern.Dot;
                     break;
                 case 2:
-                    frm2.frag_style = LineStyle.Dash;
+                    frm2.frag_style = LinePattern.Dash;
                     break;
                 case 3:
-                    frm2.frag_style = LineStyle.LongDash;
+                    frm2.frag_style = LinePattern.SmallDot;
                     break;
                 case 4:
-                    frm2.frag_style = LineStyle.DashDot;
-                    break;
-                case 5:
-                    frm2.frag_style = LineStyle.LongDashDot;
-                    break;
+                    frm2.frag_style = LinePattern.DashDot;
+                    break;               
             }
         }
         private void reset_Btn_Click(object sender, EventArgs e)
         {
             frm2.fit_color = OxyColors.Black; frm2.peak_color = OxyColors.Crimson; frm2.exp_color = OxyColors.Black.ToColor().ToArgb(); if (Form2.custom_colors.Count>0) { Form2.custom_colors[0] = OxyColors.Black.ToColor().ToArgb(); }
-            frm2.fit_style = LineStyle.Dot; frm2.exper_style = LineStyle.Solid; frm2.frag_style = LineStyle.Solid;
+            frm2.fit_style = LinePattern.Dot; frm2.exper_style = LinePattern.Solid; frm2.frag_style = LinePattern.Solid;
             frm2.exp_width = 1; frm2.frag_width = 2; frm2.fit_width = 1; frm2.peak_width = 1; frm2.cen_width = 1;
             expW1_numUD.Value = 1;fitW1_numUD.Value = 1;fragW1_numUD.Value = 2;cenW1_numUD.Value = 1;peakW1_numUD.Value = 1; annotSize_numUD.Value = 9;
         }
@@ -213,10 +207,10 @@ namespace Isotope_fitting
             switch (formatX_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.x_format = "0.0G";
+                    frm2.x_format = "G";
                     break;
                 case 1:
-                    frm2.x_format = "0.0E";
+                    frm2.x_format = "0.0E+";
                     break;
             }
             frm2.oxy_changes();
@@ -227,10 +221,10 @@ namespace Isotope_fitting
             switch (formatY_UD.SelectedIndex)
             {
                 case 0:
-                    frm2.y_format = "0.0G";
+                    frm2.y_format = "G";
                     break;
                 case 1:
-                    frm2.y_format = "0.0E";
+                    frm2.y_format = "0.0E+";
                     break;
             }
             frm2.oxy_changes();
