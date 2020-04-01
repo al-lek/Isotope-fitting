@@ -5453,8 +5453,8 @@ namespace Isotope_fitting
                 System.IO.StreamReader objReader = new System.IO.StreamReader(fullPath);
                 do { lista.Add(objReader.ReadLine()); }
                 while (objReader.Peek() != -1);
-                objReader.Close();               
-
+                objReader.Close();
+                bool dec = false;
                 int arrayPositionIndex = 0;
                 int isotope_count = -1;
                 int f = Fragments2.Count();
@@ -5466,7 +5466,6 @@ namespace Isotope_fitting
                         try
                         {
                             string[] str = lista[j].Split('\t');
-
                             if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
                             else if (lista[j].StartsWith("Mode")) continue; // to be implemented
                             else if (lista[j].StartsWith("Multiple"))
@@ -5591,6 +5590,7 @@ namespace Isotope_fitting
                                 bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
                                 if (check_mate)
                                 {
+                                    
                                     // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                     isotope_count++;
                                     if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
@@ -5638,7 +5638,12 @@ namespace Isotope_fitting
                                     });
                                     if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                     IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-
+                                    if (exp_deconvoluted && IonDraw.Last().Charge!= 0)
+                                    {
+                                        dec = true;
+                                        fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
+                                        IonDraw.Last().Charge = 0;
+                                    }
                                     if (!new_type)
                                     {
                                         fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
@@ -5705,11 +5710,14 @@ namespace Isotope_fitting
                                     str = lista[j].Split('\t');
                                     if (lista[j].StartsWith("Prof"))
                                     {
-                                        for (int s = 1; s < str.Length; s++)
+                                        if (!exp_deconvoluted && !dec)
                                         {
-                                            string[] prof = str[s].Split(' ');
-                                            fitted_chem.Last().Profile.Add(new PointPlot() { X = dParser(prof[0]), Y = dParser(prof[1]) });
-                                        }
+                                            for (int s = 1; s < str.Length; s++)
+                                            {
+                                                string[] prof = str[s].Split(' ');
+                                                fitted_chem.Last().Profile.Add(new PointPlot() { X = dParser(prof[0]), Y = dParser(prof[1]) });
+                                            }
+                                        }                                       
                                     }
                                     else
                                     {
@@ -5720,11 +5728,14 @@ namespace Isotope_fitting
                                     str = lista[j].Split('\t');
                                     if (lista[j].StartsWith("Cen"))
                                     {
-                                        for (int s = 1; s < str.Length; s++)
+                                        if (!exp_deconvoluted && !dec)
                                         {
-                                            string[] cen = str[s].Split(' ');
-                                            fitted_chem.Last().Centroid.Add(new PointPlot() { X = dParser(cen[0]), Y = dParser(cen[1]) });
-                                        }
+                                            for (int s = 1; s < str.Length; s++)
+                                            {
+                                                string[] cen = str[s].Split(' ');
+                                                fitted_chem.Last().Centroid.Add(new PointPlot() { X = dParser(cen[0]), Y = dParser(cen[1]) });
+                                            }
+                                        }                                           
                                     }
                                     else
                                     {
@@ -5740,21 +5751,29 @@ namespace Isotope_fitting
                         catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
                         arrayPositionIndex++;
                     }
-                    foreach (ChemiForm chemi in fitted_chem)
+                    if (!dec)
                     {
-                        List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
-                        add_fragment_to_Fragments2(chemi,cen);
+                        foreach (ChemiForm chemi in fitted_chem)
+                        {
+                            List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
+                            add_fragment_to_Fragments2(chemi, cen);
+                        }
+
+                        // sort by mz the fragments list (global) beause it is mixed by multi-threading
+                        Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
+                        // also restore indexes to match array position
+                        for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+                        change_name_duplicates();
+                        is_calc = false;
+                        MessageBox.Show(fitted_chem.Count.ToString() + " fragments added from file. ", "Fitted fragments file");
+                        // thread safely fire event to continue calculations
+                        if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
                     }
-                   
-                    // sort by mz the fragments list (global) beause it is mixed by multi-threading
-                    Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
-                    // also restore indexes to match array position
-                    for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-                    change_name_duplicates();
-                    is_calc = false;
-                    MessageBox.Show(fitted_chem.Count.ToString() + " fragments added from file. ", "Fitted fragments file");
-                    // thread safely fire event to continue calculations
-                    if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
+                    else
+                    {
+                        Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
+                        envipat_fitted.Start();
+                    }               
                     //refresh_iso_plot();
                     is_loading = false;
                     fitted_results.Clear();
@@ -5942,7 +5961,11 @@ namespace Isotope_fitting
                                     });
                                     if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                     IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-
+                                    if (exp_deconvoluted)
+                                    {
+                                        fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge =0;
+                                        IonDraw.Last().Charge=0;
+                                    }
                                     if (!new_type)
                                     {
                                         fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
