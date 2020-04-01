@@ -6236,19 +6236,7 @@ namespace Isotope_fitting
             initialize_tabs();
             recalculate_all_data_aligned();
             factor_panel.Controls.Clear();
-        }
-        private void saveListBtn1_Click(object sender, EventArgs e)
-        {
-            saveList(selectedFragments);
-        }
-        private void loadListBtn1_Click(object sender, EventArgs e)
-        {
-            loadList();            
-        }
-        private void clearListBtn1_Click(object sender, EventArgs e)
-        {
-            clearList();
-        }
+        }       
         #endregion
 
         #region FILTER list fragments
@@ -6633,7 +6621,7 @@ namespace Isotope_fitting
         #region UI
         private void Initialize_UI()
         {
-            plotExp_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
+            plotExp_chkBox.CheckedChanged += (s, e) => { if (!exp_deconvoluted) { refresh_iso_plot(); } else if(plotExp_chkBox.Checked) { plotExp_chkBox.Checked = false; } };
             plotCentr_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
             plotFragCent_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
             plotFragProf_chkBox.CheckedChanged += (s, e) => { refresh_iso_plot(); };
