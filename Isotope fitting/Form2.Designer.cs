@@ -42,9 +42,9 @@ namespace Isotope_fitting
             this.styleFormatBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportImage_Btn = new System.Windows.Forms.ToolStripButton();
+            this.autoscale_Btn = new System.Windows.Forms.ToolStripButton();
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.copyImage_Btn = new System.Windows.Forms.ToolStripButton();
-            this.autoscale_Btn = new System.Windows.Forms.ToolStripButton();
             this.legend_chkBx = new System.Windows.Forms.ToolStripButton();
             this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
@@ -576,6 +576,19 @@ namespace Isotope_fitting
             this.exportImage_Btn.Visible = false;
             this.exportImage_Btn.Click += new System.EventHandler(this.exportImage_Btn_Click);
             // 
+            // autoscale_Btn
+            // 
+            this.autoscale_Btn.Checked = true;
+            this.autoscale_Btn.CheckOnClick = true;
+            this.autoscale_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoscale_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.autoscale_Btn.Image = ((System.Drawing.Image)(resources.GetObject("autoscale_Btn.Image")));
+            this.autoscale_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.autoscale_Btn.Name = "autoscale_Btn";
+            this.autoscale_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.autoscale_Btn.Size = new System.Drawing.Size(24, 24);
+            this.autoscale_Btn.Text = "Autoscale";
+            // 
             // cursor_chkBx
             // 
             this.cursor_chkBx.CheckOnClick = true;
@@ -599,19 +612,6 @@ namespace Isotope_fitting
             this.copyImage_Btn.ToolTipText = "Copy Image";
             this.copyImage_Btn.Visible = false;
             this.copyImage_Btn.Click += new System.EventHandler(this.copyImage_Btn_Click);
-            // 
-            // autoscale_Btn
-            // 
-            this.autoscale_Btn.Checked = true;
-            this.autoscale_Btn.CheckOnClick = true;
-            this.autoscale_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.autoscale_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.autoscale_Btn.Image = ((System.Drawing.Image)(resources.GetObject("autoscale_Btn.Image")));
-            this.autoscale_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.autoscale_Btn.Name = "autoscale_Btn";
-            this.autoscale_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.autoscale_Btn.Size = new System.Drawing.Size(24, 24);
-            this.autoscale_Btn.Text = "Autoscale";
             // 
             // legend_chkBx
             // 
@@ -864,6 +864,7 @@ namespace Isotope_fitting
             // 
             // toolStrip_fit_sort
             // 
+            this.toolStrip_fit_sort.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip_fit_sort.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_fit_sort.ImageScalingSize = new System.Drawing.Size(17, 17);
             this.toolStrip_fit_sort.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1019,7 +1020,7 @@ namespace Isotope_fitting
             // 
             // hide_Btn
             // 
-            this.hide_Btn.BackColor = System.Drawing.Color.White;
+            this.hide_Btn.BackColor = System.Drawing.Color.Transparent;
             this.hide_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("hide_Btn.BackgroundImage")));
             this.hide_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.hide_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
@@ -1618,7 +1619,7 @@ namespace Isotope_fitting
             // 
             // show_Btn
             // 
-            this.show_Btn.BackColor = System.Drawing.Color.White;
+            this.show_Btn.BackColor = System.Drawing.Color.Transparent;
             this.show_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("show_Btn.BackgroundImage")));
             this.show_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.show_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
@@ -1897,7 +1898,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(91, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(90, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1909,7 +1910,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(181, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(180, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -2108,6 +2109,7 @@ namespace Isotope_fitting
             // 
             // settingsPeak_Btn
             // 
+            this.settingsPeak_Btn.BackColor = System.Drawing.Color.Transparent;
             this.settingsPeak_Btn.Image = ((System.Drawing.Image)(resources.GetObject("settingsPeak_Btn.Image")));
             this.settingsPeak_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingsPeak_Btn.Name = "settingsPeak_Btn";
@@ -2274,6 +2276,7 @@ namespace Isotope_fitting
             // 
             // fiToolStrip
             // 
+            this.fiToolStrip.BackColor = System.Drawing.Color.Transparent;
             this.fiToolStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.fiToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.fiToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);

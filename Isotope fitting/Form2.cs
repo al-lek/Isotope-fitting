@@ -3302,7 +3302,7 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             // init tree view
-            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 10, bigPanel.Size.Height - 10), ShowNodeToolTips = false, HideSelection = false, TreeViewNodeSorter = new NodeSorter() };
+            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 10, bigPanel.Size.Height - 10), ShowNodeToolTips = false, HideSelection = false, TreeViewNodeSorter = new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
@@ -4616,8 +4616,7 @@ namespace Isotope_fitting
                 DisposeAllAndClear(LC_1.ViewXY.Annotations);
             }
             LC_1.EndUpdate();
-            LC_2.EndUpdate();
-                    
+            LC_2.EndUpdate();                    
         }
 
         private void reset_iso_plot()
@@ -10739,173 +10738,18 @@ namespace Isotope_fitting
         #region sequence
         private void seq_coverageBtn_Click(object sender, EventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-            List<int> a_cov1 = new List<int>(); List<int> b_cov1 = new List<int>(); List<int> c_cov1 = new List<int>(); List<int> x_cov1 = new List<int>(); List<int> y_cov1 = new List<int>(); List<int> z_cov1 = new List<int>();
-            List<int> a_cov2 = new List<int>(); List<int> b_cov2 = new List<int>(); List<int> c_cov2 = new List<int>(); List<int> x_cov2 = new List<int>(); List<int> y_cov2 = new List<int>(); List<int> z_cov2 = new List<int>();
-            List<int> total_1 = new List<int>(); List<int> total_2 = new List<int>();
-            double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, a2 = 0, b2 = 0, c2 = 0, x2 = 0, y2 = 0, z2 = 0, t1 = 0, t2 = 0;
-            if (String.IsNullOrEmpty(heavy_chain) && String.IsNullOrEmpty(light_chain) && String.IsNullOrEmpty(Peptide)) { MessageBox.Show("You have to add amino-acid sequence"); return; }
-            else if (IonDraw.Count == 0) { MessageBox.Show("There aren't any saved ions in order to perform the calculations"); return; }
-            else if (!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain) && !String.IsNullOrEmpty(Peptide)) { MessageBox.Show("You can't have 'General'sequence and 'Heavy' or 'Light' chain sequence simultaneously"); return; }
-            else if (!String.IsNullOrEmpty(heavy_chain) && !String.IsNullOrEmpty(light_chain))
+            StringBuilder sb = new StringBuilder();           
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You have to add amino-acid sequence"); return; }
+            foreach (SequenceTab seq in sequenceList)
             {
+                if (string.IsNullOrEmpty(seq.Sequence)) continue;
+                List<int> a_cov1 = new List<int>(); List<int> b_cov1 = new List<int>(); List<int> c_cov1 = new List<int>(); List<int> x_cov1 = new List<int>(); List<int> y_cov1 = new List<int>(); List<int> z_cov1 = new List<int>();
+                List<int> total_1 = new List<int>();
+                double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0,t1=0;
                 foreach (ion nn in IonDraw)
                 {
-                    if (nn.Name.Contains("_H"))
-                    {
-                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (a_cov1.Count == 0 || !a_cov1.Contains(nn.Index)) { a_cov1.Add(nn.Index); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (b_cov1.Count == 0 || !b_cov1.Contains(nn.Index)) { b_cov1.Add(nn.Index); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (c_cov1.Count == 0 || !c_cov1.Contains(nn.Index)) { c_cov1.Add(nn.Index); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (x_cov1.Count == 0 || !x_cov1.Contains(nn.SortIdx)) { x_cov1.Add(nn.SortIdx); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (y_cov1.Count == 0 || !y_cov1.Contains(nn.SortIdx)) { y_cov1.Add(nn.SortIdx); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (z_cov1.Count == 0 || !z_cov1.Contains(nn.SortIdx)) { z_cov1.Add(nn.SortIdx); }
-                                if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
-                            }
-                        }
-                    }
-                    else if (nn.Name.Contains("_L"))
-                    {
-                        if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (a_cov2.Count == 0 || !a_cov2.Contains(nn.Index)) { a_cov2.Add(nn.Index); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (b_cov2.Count == 0 || !b_cov2.Contains(nn.Index)) { b_cov2.Add(nn.Index); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (c_cov2.Count == 0 || !c_cov2.Contains(nn.Index)) { c_cov2.Add(nn.Index); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.Index)) { total_2.Add(nn.Index); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (x_cov2.Count == 0 || !x_cov2.Contains(nn.SortIdx)) { x_cov2.Add(nn.SortIdx); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (y_cov2.Count == 0 || !y_cov2.Contains(nn.SortIdx)) { y_cov2.Add(nn.SortIdx); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                        {
-                            if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
-                            {
-                                if (z_cov2.Count == 0 || !z_cov2.Contains(nn.SortIdx)) { z_cov2.Add(nn.SortIdx); }
-                                if (total_2.Count == 0 || !total_2.Contains(nn.SortIdx)) { total_2.Add(nn.SortIdx); }
-                            }
-                        }
-                    }
-                }
-                a1 = 100 * (double)a_cov1.Count / heavy_chain.Length;
-                b1 = 100 * (double)b_cov1.Count / heavy_chain.Length;
-                c1 = 100 * (double)c_cov1.Count / heavy_chain.Length;
-                x1 = 100 * (double)x_cov1.Count / heavy_chain.Length;
-                y1 = 100 * (double)y_cov1.Count / heavy_chain.Length;
-                z1 = 100 * (double)z_cov1.Count / heavy_chain.Length;
-                t1 = 100 * (double)total_1.Count / heavy_chain.Length;
-                a2 = 100 * (double)a_cov2.Count / light_chain.Length;
-                b2 = 100 * (double)b_cov2.Count / light_chain.Length;
-                c2 = 100 * (double)c_cov2.Count / light_chain.Length;
-                x2 = 100 * (double)x_cov2.Count / light_chain.Length;
-                y2 = 100 * (double)y_cov2.Count / light_chain.Length;
-                z2 = 100 * (double)z_cov2.Count / light_chain.Length;
-                t2 = 100 * (double)total_2.Count / light_chain.Length;
-
-                sb.AppendLine("Heavy Chain Sequence");
-                sb.AppendLine();
-                sb.AppendLine("a : " + Math.Round(a1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("b : " + Math.Round(b1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("total : " + Math.Round(t1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("Light Chain Sequence");
-                sb.AppendLine();
-                sb.AppendLine("a : " + Math.Round(a2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("b : " + Math.Round(b2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("c : " + Math.Round(c2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("x : " + Math.Round(x2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("y : " + Math.Round(y2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("z : " + Math.Round(z2, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("total : " + Math.Round(t2, 1).ToString() + "%");
-                sb.AppendLine();
-            }
-            else
-            {
-                foreach (ion nn in IonDraw)
-                {
+                    if (!string.IsNullOrEmpty(seq.Extension) && !nn.Extension.Contains(seq.Extension)) { continue; }
+                    else if (string.IsNullOrEmpty(seq.Extension) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
                         if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")))
@@ -10955,43 +10799,16 @@ namespace Isotope_fitting
                         }
                     }
                 }
-                if (!String.IsNullOrEmpty(Peptide))
-                {
-                    a1 = 100 * (double)a_cov1.Count / Peptide.Length;
-                    b1 = 100 * (double)b_cov1.Count / Peptide.Length;
-                    c1 = 100 * (double)c_cov1.Count / Peptide.Length;
-                    x1 = 100 * (double)x_cov1.Count / Peptide.Length;
-                    y1 = 100 * (double)y_cov1.Count / Peptide.Length;
-                    z1 = 100 * (double)z_cov1.Count / Peptide.Length;
-                    t1 = 100 * (double)total_1.Count / Peptide.Length;
-                    sb.AppendLine("General Sequence");
-                    sb.AppendLine();
-                }
-                else if (!String.IsNullOrEmpty(heavy_chain))
-                {
-                    a1 = 100 * (double)a_cov1.Count / heavy_chain.Length;
-                    b1 = 100 * (double)b_cov1.Count / heavy_chain.Length;
-                    c1 = 100 * (double)c_cov1.Count / heavy_chain.Length;
-                    x1 = 100 * (double)x_cov1.Count / heavy_chain.Length;
-                    y1 = 100 * (double)y_cov1.Count / heavy_chain.Length;
-                    z1 = 100 * (double)z_cov1.Count / heavy_chain.Length;
-                    t1 = 100 * (double)total_1.Count / heavy_chain.Length;
-                    sb.AppendLine("Heavy Chain Sequence");
-                    sb.AppendLine();
-                }
-                else if (!String.IsNullOrEmpty(light_chain))
-                {
-                    a1 = 100 * (double)a_cov1.Count / light_chain.Length;
-                    b1 = 100 * (double)b_cov1.Count / light_chain.Length;
-                    c1 = 100 * (double)c_cov1.Count / light_chain.Length;
-                    x1 = 100 * (double)x_cov1.Count / light_chain.Length;
-                    y1 = 100 * (double)y_cov1.Count / light_chain.Length;
-                    z1 = 100 * (double)z_cov1.Count / light_chain.Length;
-                    t1 = 100 * (double)total_1.Count / light_chain.Length;
-                    sb.AppendLine("Light Chain Sequence");
-                    sb.AppendLine();
-                }
+                a1 = 100 * (double)a_cov1.Count / seq.Sequence.Length;
+                b1 = 100 * (double)b_cov1.Count / seq.Sequence.Length;
+                c1 = 100 * (double)c_cov1.Count / seq.Sequence.Length;
+                x1 = 100 * (double)x_cov1.Count / seq.Sequence.Length;
+                y1 = 100 * (double)y_cov1.Count / seq.Sequence.Length;
+                z1 = 100 * (double)z_cov1.Count / seq.Sequence.Length;
+                t1 = 100 * (double)total_1.Count / seq.Sequence.Length; 
 
+                sb.AppendLine("Extension: " + seq.Extension);
+                sb.AppendLine();
                 sb.AppendLine("a : " + Math.Round(a1, 1).ToString() + "%");
                 sb.AppendLine();
                 sb.AppendLine("b : " + Math.Round(b1, 1).ToString() + "%");
@@ -11004,10 +10821,9 @@ namespace Isotope_fitting
                 sb.AppendLine();
                 sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
                 sb.AppendLine();
-                sb.AppendLine("total : " + Math.Round(t1, 1).ToString() + "%");
+                sb.AppendLine("Total : " + Math.Round(t1, 1).ToString() + "%");
                 sb.AppendLine();
             }
-
             error_string = sb.ToString();
             Form17 frm17 = new Form17(this);
             frm17.Text = "Sequence coverage";
