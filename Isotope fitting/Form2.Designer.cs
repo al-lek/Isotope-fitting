@@ -375,6 +375,7 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -840,7 +841,7 @@ namespace Isotope_fitting
             this.Fit_results_groupBox.ForeColor = System.Drawing.Color.SteelBlue;
             this.Fit_results_groupBox.Location = new System.Drawing.Point(3, 367);
             this.Fit_results_groupBox.Name = "Fit_results_groupBox";
-            this.Fit_results_groupBox.Size = new System.Drawing.Size(226, 347);
+            this.Fit_results_groupBox.Size = new System.Drawing.Size(219, 347);
             this.Fit_results_groupBox.TabIndex = 10000019;
             this.Fit_results_groupBox.TabStop = false;
             this.Fit_results_groupBox.Text = "Fit results";
@@ -858,7 +859,7 @@ namespace Isotope_fitting
             this.bigPanel.Location = new System.Drawing.Point(3, 43);
             this.bigPanel.MinimumSize = new System.Drawing.Size(217, 217);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(220, 301);
+            this.bigPanel.Size = new System.Drawing.Size(217, 301);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
             // 
@@ -874,7 +875,7 @@ namespace Isotope_fitting
             this.refresh_fitRes_Btn});
             this.toolStrip_fit_sort.Location = new System.Drawing.Point(3, 18);
             this.toolStrip_fit_sort.Name = "toolStrip_fit_sort";
-            this.toolStrip_fit_sort.Size = new System.Drawing.Size(220, 25);
+            this.toolStrip_fit_sort.Size = new System.Drawing.Size(213, 25);
             this.toolStrip_fit_sort.TabIndex = 10000016;
             this.toolStrip_fit_sort.Text = "toolStrip1";
             // 
@@ -951,6 +952,7 @@ namespace Isotope_fitting
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_calc.Controls.Add(this.sortIdx_chkBx);
             this.panel_calc.Controls.Add(this.dvw_lstBox);
             this.panel_calc.Controls.Add(this.hide_Btn);
             this.panel_calc.Controls.Add(this.optionBtn);
@@ -4711,6 +4713,17 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
+            // sortIdx_chkBx
+            // 
+            this.sortIdx_chkBx.AutoSize = true;
+            this.sortIdx_chkBx.Location = new System.Drawing.Point(67, 431);
+            this.sortIdx_chkBx.Name = "sortIdx_chkBx";
+            this.sortIdx_chkBx.Size = new System.Drawing.Size(15, 14);
+            this.sortIdx_chkBx.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.sortIdx_chkBx, "#index in AA sequence. \r\nWhen checked :\r\nthe index of x,y,z is counted as for the" +
+        " a,b,c fragments.");
+            this.sortIdx_chkBx.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -5181,5 +5194,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton ppm_M_NH3;
         private System.Windows.Forms.ToolStripButton ppm_uncheckBtn;
         private System.Windows.Forms.ToolStripButton ppm_checkall_Btn;
+        private System.Windows.Forms.CheckBox sortIdx_chkBx;
     }
 }

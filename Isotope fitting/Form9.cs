@@ -515,6 +515,51 @@ namespace Isotope_fitting
             List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();                         // a, b, y.....
             List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && !t.Contains("H") && t.Length > 1).ToList();  // a+1, y-2....
 
+
+            //4.index primary
+            List<int[]> primary_indexes = new List<int[]>();
+            if (!string.IsNullOrEmpty(idxPr_Box.Text.ToString()))
+            {
+                string text = idxPr_Box.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    if (str2.Length == 2) { primary_indexes.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    if (str2.Length == 1) { primary_indexes.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
+                }
+            }
+            //5. index internal
+            List<int[]> internal_indexesFrom = new List<int[]>();
+            List<int[]> internal_indexesTo = new List<int[]>();
+            if (!string.IsNullOrEmpty(idxFrom_Box.Text.ToString()))
+            {
+                string text = idxFrom_Box.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    if (str2.Length == 2) { internal_indexesFrom.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    if (str2.Length == 1) { internal_indexesFrom.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
+                }
+            }
+            if (!string.IsNullOrEmpty(idxTo_Box.Text.ToString()))
+            {
+                string text = idxTo_Box.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    if (str2.Length == 2) { internal_indexesTo.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    if (str2.Length == 1) { internal_indexesTo.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
+                }
+            }
+            if (internal_indexesTo.Count != internal_indexesTo.Count)
+            {
+                MessageBox.Show("Wrong format in internal indexes"); internal_indexesTo.Clear(); internal_indexesTo.Clear();
+            }
+
+
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
             {
@@ -532,6 +577,35 @@ namespace Isotope_fitting
 
                 // drop frag by mz and charge rules
                 if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+
+                if (is_internal && internal_indexesTo.Count > 0 && internal_indexesTo.Count > 0)
+                {
+                    int index1 = Int32.Parse(chem.Index);
+                    int index2 = Int32.Parse(chem.IndexTo);
+                    bool in_bounds = false;
+                    for (int k = 0; k < internal_indexesTo.Count; k++)
+                    {
+                        if (index2 >= internal_indexesTo[k][0] && index2 <= internal_indexesTo[k][1] && index1 >= internal_indexesFrom[k][0] && index1 <= internal_indexesFrom[k][1])
+                        {
+                            in_bounds = true; break;
+                        }
+                    }
+                    if (!in_bounds) continue;
+                }
+                else if (!is_precursor && primary_indexes.Count > 0)
+                {
+                    int index1 = Int32.Parse(chem.Index);
+                    if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }                    
+                    bool in_bounds = false;
+                    for (int k = 0; k < primary_indexes.Count; k++)
+                    {
+                        if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
+                        {
+                            in_bounds = true; break;
+                        }
+                    }
+                    if (!in_bounds) continue;
+                }
 
                 //// drop frag if type is not selected, 
                 //if (!types.Contains(curr_type) && !types.Any(t => t.StartsWith(curr_type_first))) continue;
@@ -969,7 +1043,7 @@ namespace Isotope_fitting
             idxPr_Box.Text = string.Empty;
             idxFrom_Box.Text = string.Empty;
             idxTo_Box.Text = string.Empty;
-
+            sortIdx_chkBx.Checked = false;
         }
         private void check_all_boxBtn_Click(object sender, EventArgs e)
         {

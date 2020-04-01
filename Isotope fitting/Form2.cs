@@ -1694,7 +1694,7 @@ namespace Isotope_fitting
             }
             if (internal_indexesTo.Count!= internal_indexesTo.Count)            
             {
-                MessageBox.Show("Wrong format in interna indexes"); internal_indexesTo.Clear(); internal_indexesTo.Clear();
+                MessageBox.Show("Wrong format in internal indexes"); internal_indexesTo.Clear(); internal_indexesTo.Clear();
             }
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
@@ -1731,6 +1731,7 @@ namespace Isotope_fitting
                 else if(!is_precursor && primary_indexes.Count > 0)
                 {
                     int index1 = Int32.Parse(chem.Index);
+                    if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }
                     bool in_bounds = false;
                     for (int k = 0; k < primary_indexes.Count; k++)
                     {
@@ -4442,7 +4443,6 @@ namespace Isotope_fitting
 
             //Allow rendering
             LC_1.EndUpdate();
-
         }
 
         public static void DisposeAllAndClear<T>(List<T> list)
@@ -6777,6 +6777,7 @@ namespace Isotope_fitting
             idxFrom_Box.Text = null;
             idxTo_Box.Text = null;
             idxPr_Box.Text = null;
+            sortIdx_chkBx.Checked = false;
         }
         private void mzMin_Label_Click(object sender, EventArgs e)
         {
@@ -7260,7 +7261,44 @@ namespace Isotope_fitting
         }
         private void statistics_Btn_Click(object sender, EventArgs e)
         {
-            List<int> fragstatistics = selectedFragments.ToList();
+            List<int> fragstatistics = new List<int>();
+            foreach (int idx in selectedFragments)
+            {
+                string ion = Fragments2[idx - 1].Ion_type;
+                if (ion.StartsWith("a") || ion.StartsWith("(a"))
+                {
+                    if (disp_a.Checked) { fragstatistics.Add(idx); }
+                }
+                else if (ion.StartsWith("b") || ion.StartsWith("(b"))
+                {
+                    if (disp_b.Checked) { fragstatistics.Add(idx); }
+                }
+                else if (ion.StartsWith("c") || ion.StartsWith("(c"))
+                {
+                    if (disp_c.Checked) { fragstatistics.Add(idx); }
+                }
+                else if (ion.StartsWith("x") || ion.StartsWith("(x"))
+                {
+                    if (disp_x.Checked) { fragstatistics.Add(idx); }
+                }
+                else if (ion.StartsWith("y") || ion.StartsWith("(y"))
+                {
+                    if (disp_y.Checked) { fragstatistics.Add(idx); }
+                }
+                else if (ion.StartsWith("z") || ion.StartsWith("(z"))
+                {
+                    if (disp_z.Checked) { fragstatistics.Add(idx); }
+                }
+                else if (ion.Contains("inter"))
+                {
+                    if (disp_internal.Checked) { fragstatistics.Add(idx); }
+                }
+                else
+                {
+                    fragstatistics.Add(idx);
+                }
+
+            }
             double sumExp = 0.0;
             double sumFrag = 0.0;
             double coverage = 0.0;
@@ -7283,43 +7321,12 @@ namespace Isotope_fitting
                     sumExp += metr[0];
                 }
             }
-            //foreach (int indexS in fragstatistics)
-            //{
-            //foreach (PointPlot f in Fragments2[indexS - 1].Profile)
-            //{
-            //    if (Fragments2[indexS - 1].Factor * f.Y>1)
-            //    {
-            //        sumFrag += Fragments2[indexS - 1].Factor * f.Y;
-            //    }
-            //}
-
-
-            //}
+            
             coverage = sumFrag / sumExp;
             MessageBox.Show("The experimental is covered by " + Math.Round(coverage * 100, 2) + "%");
         }
         private void fragCalc_Btn2_Click(object sender, EventArgs e)
-        {
-            //FormCollection fc = Application.OpenForms;
-            //bool open = false;
-            //foreach (Form frm in fc)
-            //{
-            //    //iterate through
-            //    if (frm.Name == "Form9")
-            //    {
-            //        open = true; frm.BringToFront(); break;
-            //    }
-            //}
-            //if (!open)
-            //{
-            //    Form9 frag_Calc_form = new Form9(this);
-            //    frag_Calc_form.Show();
-            //}
-            //else
-            //{
-
-            //    return;
-            //}
+        {            
             foreach (Form frm in Application.OpenForms)
                 if (frm.Name == "Form9")
                 {
@@ -15041,10 +15048,6 @@ namespace Isotope_fitting
 
         #endregion
         
-
-
-        
-
 
 
         public void read_rtf_find_color(SequenceTab seq)

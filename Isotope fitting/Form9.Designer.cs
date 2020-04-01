@@ -136,6 +136,7 @@
             this.rem_Btn = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
@@ -688,6 +689,7 @@
             // Frag_tab
             // 
             this.Frag_tab.AutoScroll = true;
+            this.Frag_tab.Controls.Add(this.sortIdx_chkBx);
             this.Frag_tab.Controls.Add(this.toolStrip1);
             this.Frag_tab.Controls.Add(this.frag_Label);
             this.Frag_tab.Controls.Add(this.dvw_lstBox);
@@ -1432,6 +1434,17 @@
             this.rem_Btn.UseVisualStyleBackColor = false;
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
+            // sortIdx_chkBx
+            // 
+            this.sortIdx_chkBx.AutoSize = true;
+            this.sortIdx_chkBx.Location = new System.Drawing.Point(70, 431);
+            this.sortIdx_chkBx.Name = "sortIdx_chkBx";
+            this.sortIdx_chkBx.Size = new System.Drawing.Size(15, 14);
+            this.sortIdx_chkBx.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.sortIdx_chkBx, "#index in AA sequence. \r\nWhen checked :\r\nthe index of x,y,z is counted as for the" +
+        " a,b,c fragments.");
+            this.sortIdx_chkBx.UseVisualStyleBackColor = true;
+            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1582,5 +1595,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.RadioButton Light_chkBox;
         private System.Windows.Forms.RadioButton heavy_ChkBox;
+        private System.Windows.Forms.CheckBox sortIdx_chkBx;
     }
 }
