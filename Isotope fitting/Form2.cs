@@ -907,7 +907,8 @@ namespace Isotope_fitting
             //refresh_iso_plot();
 
             start_idx = 0;
-            end_idx = experimental.Count;
+            end_idx = experimental.Count;            
+            LC_1.ViewXY.ZoomToFit();            
         }
 
         private void peakDetect_and_resolutionRef()
@@ -954,7 +955,9 @@ namespace Isotope_fitting
                     plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
                     plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Checked = true));   //thread safe call
                 }
+                LC_1.BeginUpdate();
                 LC_1.ViewXY.ZoomToFit();
+                LC_1.EndUpdate();
             }
         }
 
@@ -3316,14 +3319,8 @@ namespace Isotope_fitting
                     {
                         if (string.IsNullOrEmpty(e.Node.Name)) { fit_tree.SelectedNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp; }
                         else { _currentNode = e.Node; fit_tree.ContextMenu = ctxMn_fit_grp_solution; }
-                    }
-                    //else
-                    //{
-                    //    if (string.IsNullOrEmpty(e.Node.Name))
-                    //    { fit_set_graph_zoomed(e.Node); }
-                    //}
+                    }                    
                 }
-               
             };           
             
 
@@ -3910,29 +3907,15 @@ namespace Isotope_fitting
         {
             if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
             {
+                LC_1.BeginUpdate();
                 string[] idx_str_arr = new string[2];
                 string idx_str = node.Name;
                 if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
                 else idx_str_arr = node.Parent.Text.Split('-');
                 double min_border = dParser(idx_str_arr[0]);
                 double max_border = dParser(idx_str_arr[1]);
-                LC_1.ViewXY.XAxes[0].SetRange(min_border-3, max_border+3);
-                //iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
-                //if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
-                //{
-                //    try
-                //    {
-                //        double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border && x.X < max_border)).Max(k => k.Y);
-                //        iso_plot.Model.Axes[0].Zoom(-100, pt0 * 1.2);
-                //    }
-                //    catch
-                //    {
-
-                //    }
-
-                //}
-                //iso_plot.Refresh();
-                //invalidate_all();
+                LC_1.ViewXY.XAxes[0].SetRange(min_border-3, max_border+3);       
+                LC_1.EndUpdate();
             }
 
         }
@@ -4181,8 +4164,8 @@ namespace Isotope_fitting
             else if (status == "post calculations")
             {
                 saveCalc_Btn.Enabled = clearCalc_Btn.Enabled = calc_Btn.Enabled = fit_Btn.Enabled = fit_sel_Btn.Enabled = true;
-                loadFit_Btn.Enabled = false; LC_1.ViewXY.ZoomToFit();
-            }
+                loadFit_Btn.Enabled = false;
+            }            
         }
 
 
@@ -4363,76 +4346,79 @@ namespace Isotope_fitting
             LC_2.ViewXY.XAxes[0].RangeChanged += LC_2xAxis_RangeChanged;
             LC_1.MouseMove += new MouseEventHandler(_chart_MouseMove);
             LC_1.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
-            LC_1.MouseDown += new MouseEventHandler(_chart_MouseDown);
-
+            LC_1.MouseDown += new MouseEventHandler(_chart_MouseDown);            
         }
         private void LC_2xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary Y axis
             e.CancelRendering = true;
+            LC_2.BeginUpdate();
             bool scaleChanged;
             LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+            LC_2.EndUpdate();
         }
 
         private void yAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary Y axis
             e.CancelRendering = true;
+            LC_1.BeginUpdate();
             LC_1.ViewXY.YAxes[1].SetRange(e.NewMin, e.NewMax);
+            LC_1.EndUpdate();
         }
 
         private void xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary X axis
             e.CancelRendering = true;
+            LC_1.BeginUpdate();
+            LC_2.BeginUpdate();
             LC_1.ViewXY.XAxes[1].SetRange(e.NewMin, e.NewMax);
             LC_2.ViewXY.XAxes[0].SetRange(e.NewMin, e.NewMax);
             if (autoscale_Btn.Checked)
-            {
-                //Set the same range for secondary Y axis
-                e.CancelRendering = true;
+            {               
                 bool scaleChanged;
                 LC_1.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
             }
-        }
-        void _chart_MouseMove1(object sender, MouseEventArgs e)
-        {
-            if (cursor_chkBx.Checked)
-            {
-                CreateProjections((int)e.X, (int)e.Y);
-            }
-        }
+            LC_1.EndUpdate();
+            LC_2.EndUpdate();
+        }       
         private void _chart_MouseMove(object sender, MouseEventArgs e)
         {
-            if (cursor_chkBx.Checked && !count_distance)
+            if (cursor_chkBx.Checked/* && !count_distance*/)
             {
                 CreateProjections((int)e.X, (int)e.Y);
-            }
-            if (count_distance)
-            {
-                if (LC_1.ViewXY.Bands.Count>0)
+                if (count_distance)
                 {
-                    double x;
-                    LC_1.ViewXY.XAxes[0].CoordToValue(e.X, out x, false);
-                    LC_1.ViewXY.Bands[0].ValueEnd =x;
+                    if (LC_1.ViewXY.Bands.Count > 0)
+                    {
+                        double x;
+                        LC_1.ViewXY.XAxes[0].CoordToValue(e.X, out x, false);
+                        LC_1.ViewXY.Bands[0].ValueEnd = x;
+                    }
                 }
             }
+           
         }
         private void _chart_MouseDown(object sender, MouseEventArgs e)
         {
-            if (cursor_chkBx.Checked)
+            if (cursor_chkBx.Checked && e.Button==MouseButtons.Left)
             {
-                // Remove exsisting custom x - axis tickmarks
-                DisposeAllAndClear(LC_1.ViewXY.XAxes[1].CustomTicks);
-                LC_1.ViewXY.XAxes[1].InvalidateCustomTicks();
+                LC_1.BeginUpdate();
+                //// Remove exsisting custom x - axis tickmarks
+                //DisposeAllAndClear(LC_1.ViewXY.XAxes[1].CustomTicks);
+                //LC_1.ViewXY.XAxes[1].InvalidateCustomTicks();
 
-                //Remove exsisting custom y-axis tickmarks
-                DisposeAllAndClear(LC_1.ViewXY.YAxes[1].CustomTicks);
-                LC_1.ViewXY.YAxes[1].InvalidateCustomTicks();
+                ////Remove exsisting custom y-axis tickmarks
+                //DisposeAllAndClear(LC_1.ViewXY.YAxes[1].CustomTicks);
+                //LC_1.ViewXY.YAxes[1].InvalidateCustomTicks();
 
                 count_distance = true;
                 cursor_distance(e.X);
+                LC_1.EndUpdate();
             }
+            else if (e.Button == MouseButtons.Right) {DisposeAllAndClear(LC_1.ViewXY.Bands); count_distance = false;}
+
         }
         private void CreateProjections(int pX, int pY)
         {
@@ -4631,6 +4617,7 @@ namespace Isotope_fitting
             }
             LC_1.EndUpdate();
             LC_2.EndUpdate();
+                    
         }
 
         private void reset_iso_plot()
@@ -4805,7 +4792,7 @@ namespace Isotope_fitting
         {
             double x;
             LC_1.ViewXY.XAxes[0].CoordToValue(pX, out x, false);
-            if (insert_exp && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked|| plotExp_chkBox.Checked || plotCentr_chkBox.Checked))
+            if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked|| plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {            
                 DisposeAllAndClear(LC_1.ViewXY.Bands);
                 Band band2 = new Band(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]);
@@ -4825,8 +4812,7 @@ namespace Isotope_fitting
                 band2.Title.HorizontalAlign = AlignmentHorizontal.Center;
                 band2.Title.VerticalAlign = AlignmentVertical.Top;
                 band2.Visible = true;
-                band2.ValuesChanged += (s, e) => {band2.Title.Text = "Distance: " + Math.Abs(band2.ValueEnd - band2.ValueBegin).ToString(); };
-                band2.MouseUp += (s, e) => {DisposeAllAndClear(LC_1.ViewXY.Bands); count_distance = false; };
+                band2.ValuesChanged += (s, e) => {band2.Title.Text = "Distance: " + Math.Abs(band2.ValueEnd - band2.ValueBegin).ToString(); };               
                 LC_1.ViewXY.Bands.Add(band2);
             }            
         }
@@ -4881,6 +4867,7 @@ namespace Isotope_fitting
                 DisposeAllAndClear(LC_1.ViewXY.YAxes[1].CustomTicks);
                 LC_1.ViewXY.YAxes[1].InvalidateCustomTicks();
                 DisposeAllAndClear(LC_1.ViewXY.Bands);
+                count_distance = false;
             }
             else cursor_chkBx.Checked = false;            
         }
@@ -15384,5 +15371,6 @@ namespace Isotope_fitting
             else  { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }
             
         }
+       
     }
 }

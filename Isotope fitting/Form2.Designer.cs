@@ -513,9 +513,9 @@ namespace Isotope_fitting
             this.toolStrip_plot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.chartFormatBtn,
             this.exportImage_Btn,
+            this.autoscale_Btn,
             this.cursor_chkBx,
             this.copyImage_Btn,
-            this.autoscale_Btn,
             this.legend_chkBx,
             this.fragPlotLbl_chkBx,
             this.toolStripButton1,
@@ -602,7 +602,9 @@ namespace Isotope_fitting
             // 
             // autoscale_Btn
             // 
+            this.autoscale_Btn.Checked = true;
             this.autoscale_Btn.CheckOnClick = true;
+            this.autoscale_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoscale_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.autoscale_Btn.Image = ((System.Drawing.Image)(resources.GetObject("autoscale_Btn.Image")));
             this.autoscale_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
