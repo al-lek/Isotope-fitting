@@ -44,6 +44,9 @@ namespace Isotope_fitting
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
         public bool tab_mode = false;
         public bool exp_deconvoluted = false;
+        int duplicate_count = 0;
+        int added = 0;
+
         #region PARAMETER SET TAB FIT
 
         #region old new calculations
@@ -1860,7 +1863,7 @@ namespace Isotope_fitting
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
                 MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
             }
-            else MessageBox.Show( selected_fragments.Count.ToString() + " fragments added from file. " , "Fitted fragments file");
+            else MessageBox.Show(added.ToString() + " fragments added from file. "+ duplicate_count.ToString()+" duplicates removed from current file." , "Fitted fragments file");
             // thread safely fire event to continue calculations
             if (selected_fragments.Count>0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }            
         }
@@ -2035,6 +2038,8 @@ namespace Isotope_fitting
                     // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                     chem.Profile.Clear();
                     chem.Points.Clear();
+                    duplicate_count++;
+                    if(added>0)added--;
                 }       
             }
         }
@@ -5600,8 +5605,9 @@ namespace Isotope_fitting
         }
         private void loadList()
         {
+            duplicate_count = 0;added = 0;
             bool mult_extensions=false; bool new_type = false; bool peptide = true;
-            bool heavy = false; bool light = false; bool HEAVY_LIGHT_BOTH = false; string extension = "";
+            bool heavy = false; bool light =false; bool HEAVY_LIGHT_BOTH = false; string extension = "";
             OpenFileDialog loadData = new OpenFileDialog();
             List<string> lista = new List<string>();
             string fullPath = "";
@@ -5620,7 +5626,7 @@ namespace Isotope_fitting
                 if (extension.Equals(".hfit")) { heavy = true; heavy_present = true; }
                 else if (extension.Equals(".lfit")) { light = true; light_present = true; }
                 else if (extension.Equals(".hlfit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; }
-                else if (extension.Equals(".pfit")|| extension.Equals(".ifit")) {envipat = true;}
+                else if (extension.Equals(".pfit")|| extension.Equals(".ifit")) {envipat = true; light = true; light_present = true; }
                 else if (extension.Equals(".hpfit")|| extension.Equals(".hifit")) { heavy = true; heavy_present = true; envipat = true; }
                 else if (extension.Equals(".lpfit")|| extension.Equals(".lifit")) { light = true; light_present = true; envipat = true; }
                 else if (extension.Equals(".hlpfit")|| extension.Equals(".hlifit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; envipat = true; }
@@ -5779,7 +5785,7 @@ namespace Isotope_fitting
                                 bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
                                 if (check_mate)
                                 {
-                                    
+                                    added++;
                                     // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                     isotope_count++;
                                     if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
@@ -5882,7 +5888,7 @@ namespace Isotope_fitting
                                         }
                                     }
                                     else
-                                    {
+                                    {                                        
                                         fitted_chem.Last().Extension = str[18];
                                         fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
                                         fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
@@ -5892,7 +5898,7 @@ namespace Isotope_fitting
                                         IonDraw.Last().minPPM_Error = dParser(str[14]);
                                         IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
                                         IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        IonDraw.Last().Extension = str[18];
+                                        IonDraw.Last().Extension = str[18];                                       
                                     }
                                     arrayPositionIndex++;
                                     j++;
@@ -5934,6 +5940,7 @@ namespace Isotope_fitting
                                 else
                                 {
                                     j = j + 2;
+                                    duplicate_count++;
                                 }
                             }
                         }
@@ -5954,7 +5961,7 @@ namespace Isotope_fitting
                         for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
                         change_name_duplicates();
                         is_calc = false;
-                        MessageBox.Show(fitted_chem.Count.ToString() + " fragments added from file. ", "Fitted fragments file");
+                        MessageBox.Show(fitted_chem.Count.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
                         // thread safely fire event to continue calculations
                         if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
                     }
@@ -6103,6 +6110,7 @@ namespace Isotope_fitting
                                 bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
                                 if (check_mate)
                                 {
+                                    added++;
                                     // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                     isotope_count++;
                                     if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
@@ -6205,7 +6213,7 @@ namespace Isotope_fitting
                                     }
                                     else
                                     {
-                                        fitted_chem.Last().Extension = str[18];
+                                        fitted_chem.Last().Extension = str[18];                                        
                                         fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
                                         fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                         fitted_chem.Last().maxPPM_Error = dParser(str[15]);
@@ -6214,9 +6222,10 @@ namespace Isotope_fitting
                                         IonDraw.Last().minPPM_Error = dParser(str[14]);
                                         IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
                                         IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        IonDraw.Last().Extension = str[18];
+                                        IonDraw.Last().Extension = str[18];                                       
                                     }
                                 }
+                                else duplicate_count++;
                             }
                         }
                         catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }

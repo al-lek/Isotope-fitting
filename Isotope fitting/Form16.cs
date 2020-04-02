@@ -140,7 +140,7 @@ namespace Isotope_fitting
                         {
                             frm2.sequenceList.Last().Type = rdBtn.TabIndex;
                             if (rdBtn.TabIndex == 1) { frm2.heavy_present = true; }
-                            else { frm2.heavy_present = true; }
+                            else { frm2.light_present = true; }
                         }
                     }
                 }
