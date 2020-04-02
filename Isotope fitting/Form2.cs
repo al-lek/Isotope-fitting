@@ -2119,11 +2119,12 @@ namespace Isotope_fitting
             {
                 frag_tree.AfterCheck += (s, e) => {  frag_node_checkChanged(e.Node, e.Node.Checked); };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[5] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[6] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
-                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } })
+                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }),
+                                                                      new MenuItem("Remove Unchecked", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode,true); } })
                 });
 
             }
@@ -2148,28 +2149,65 @@ namespace Isotope_fitting
             frag_tree.EndUpdate();
             frag_tree.Visible = true;
         }
-        private void remove_node(TreeNode node)
-        {
-            if (string.IsNullOrEmpty(node.Name)) return;
-            int idx = Convert.ToInt32(node.Name);
-            fitted_results.Clear();
-            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-            if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
-            if (Fragments2.Count > 0)
+        private void remove_node(TreeNode node,bool Unchecked=false)
+        {                       
+            if (Unchecked)
             {
-                factor_panel.Visible = false;
-                selectedFragments.Remove(idx+1);
-                for (int s= 0; s<selectedFragments.Count;s++)
+                int initial_count = Fragments2.Count;
+                int rr = 0;
+                bool first = true;
+                if (Fragments2.Count > 0)
                 {
-                    if (selectedFragments [s]> idx+1)
+                    while (rr < Fragments2.Count)
                     {
-                        selectedFragments[s]= selectedFragments[s]-1;
+                        if (!Fragments2[rr].To_plot)
+                        {
+                            Fragments2.RemoveAt(rr);
+                            if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
+                        }
+                        else { rr++; }
                     }
+                    // thread safely fire event to continue calculations
+                    Invoke(new Action(() => OnEnvelopeCalcCompleted()));
                 }
-                Fragments2.RemoveAt(idx); // thread safely fire event to continue calculations
-                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+                if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); return; }
+                else
+                {
+                    factor_panel.Visible = false;
+                    bigPanel.Enabled = false;
+                    fitted_results.Clear(); 
+                    if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                    if (fit_tree != null)
+                    {
+                        fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.");
+                    }
+                    fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                }
             }
+            else if (string.IsNullOrEmpty(node.Name) || Fragments2.Count == 0) return;
+            else
+            {
+                int idx = Convert.ToInt32(node.Name);
+                fitted_results.Clear();
+                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed."); }
+                if (Fragments2.Count > 0)
+                {
+                    factor_panel.Visible = false;
+                    selectedFragments.Remove(idx + 1);
+                    for (int s = 0; s < selectedFragments.Count; s++)
+                    {
+                        if (selectedFragments[s] > idx + 1)
+                        {
+                            selectedFragments[s] = selectedFragments[s] - 1;
+                        }
+                    }
+                    Fragments2.RemoveAt(idx); // thread safely fire event to continue calculations
+                    Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+                }
+            }
+           
         }
         private void singleFrag_manipulation(TreeNode node)
         {
@@ -7360,6 +7398,7 @@ namespace Isotope_fitting
             if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed."); return; }
             else
             {
+                factor_panel.Visible = false;
                 bigPanel.Enabled = false;
                 uncheckall_Frag();
                 fitted_results.Clear(); selectedFragments.Clear();
