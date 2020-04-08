@@ -16,7 +16,7 @@ namespace Isotope_fitting
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main()
         {
-            Application.EnableVisualStyles();
+            Application.EnableVisualStyles();            
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);          
             Application.SetCompatibleTextRenderingDefault(false);
@@ -24,6 +24,9 @@ namespace Isotope_fitting
             Application.Run(new Form2());
 
         }
+
+      
+
         static void MyHandler(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
