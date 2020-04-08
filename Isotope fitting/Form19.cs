@@ -59,7 +59,8 @@ namespace Isotope_fitting
         }
         private void save_Btn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            frm2.save_preferences();
+            //this.Close();
         }
         private void regions_chkBx_CheckedChanged(object sender, EventArgs e)
         {
@@ -329,6 +330,12 @@ namespace Isotope_fitting
         private void Form19_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+
+        private void exclusionList_Btn_Click(object sender, EventArgs e)
+        {
+            Form21 frm21 = new Form21(frm2);            
+            frm21.ShowDialog();
         }
     }
 }

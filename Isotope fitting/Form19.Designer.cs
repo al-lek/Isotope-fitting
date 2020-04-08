@@ -79,6 +79,7 @@
             this.save_Btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.thre_numUD = new System.Windows.Forms.NumericUpDown();
+            this.exclusionList_Btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fragGrps_numUD)).BeginInit();
             this.entire_grpBx.SuspendLayout();
@@ -835,9 +836,9 @@
             this.save_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.save_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.save_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_Btn.Location = new System.Drawing.Point(666, 246);
+            this.save_Btn.Location = new System.Drawing.Point(709, 246);
             this.save_Btn.Name = "save_Btn";
-            this.save_Btn.Size = new System.Drawing.Size(105, 23);
+            this.save_Btn.Size = new System.Drawing.Size(62, 23);
             this.save_Btn.TabIndex = 4;
             this.save_Btn.Text = "Save";
             this.save_Btn.UseVisualStyleBackColor = false;
@@ -883,12 +884,26 @@
             0,
             131072});
             // 
+            // exclusionList_Btn
+            // 
+            this.exclusionList_Btn.BackColor = System.Drawing.Color.DarkOrange;
+            this.exclusionList_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.exclusionList_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exclusionList_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.exclusionList_Btn.Location = new System.Drawing.Point(582, 246);
+            this.exclusionList_Btn.Name = "exclusionList_Btn";
+            this.exclusionList_Btn.Size = new System.Drawing.Size(105, 23);
+            this.exclusionList_Btn.TabIndex = 9;
+            this.exclusionList_Btn.Text = "Exclusion List";
+            this.exclusionList_Btn.UseVisualStyleBackColor = false;
+            this.exclusionList_Btn.Click += new System.EventHandler(this.exclusionList_Btn_Click);
+            // 
             // Form19
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(791, 281);
-            this.ControlBox = false;
+            this.Controls.Add(this.exclusionList_Btn);
             this.Controls.Add(this.thre_numUD);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.save_Btn);
@@ -989,5 +1004,6 @@
         private System.Windows.Forms.Button save_Btn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown thre_numUD;
+        private System.Windows.Forms.Button exclusionList_Btn;
     }
 }

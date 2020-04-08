@@ -50,6 +50,15 @@ namespace Isotope_fitting
         int duplicate_count = 0;
         int added = 0;
 
+        public List<ExcludeTypes> exclude_a_indexes = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_b_indexes = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_c_indexes = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_x_indexes = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_y_indexes = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_z_indexes = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_internal_indexesFrom = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_internal_indexesTo = new List<ExcludeTypes>();
+
         #region SAVE PROJECT
         int all = 0;
         string  project_experimental = "";
@@ -552,9 +561,8 @@ namespace Isotope_fitting
         private void optionBtn_Click(object sender, EventArgs e)
         {
             Form19 frm19 = new Form19(this);
-            frm19.FormClosed += (s, f) => { save_preferences(); };
+            //frm19.FormClosed += (s, f) => { save_preferences(); };
             frm19.ShowDialog();
-            //params_form();
         }
 
         private void params_form()
@@ -5045,8 +5053,8 @@ namespace Isotope_fitting
         /// </summary>
         private void progress_display_init()
         {
-            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(40, 20), Style = 0, Minimum = 0, Value = 0, Size = new Size(292, 21), AutoSize = false, Visible = false,Anchor=AnchorStyles.Right | AnchorStyles.Top };
-            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(40,3), AutoSize = true, Visible = false, Anchor = AnchorStyles.Right | AnchorStyles.Top };
+            tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(40, 20), Style = 0, Minimum = 0, Value = 0, Size = new Size(292, 21), AutoSize = false, Visible = false,Dock=DockStyle.Bottom/*Anchor=AnchorStyles.Right | AnchorStyles.Top*/ };
+            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(40,3), AutoSize = true, Visible = false, Dock = DockStyle.Bottom /*Anchor = AnchorStyles.Right | AnchorStyles.Top*/ };
             panel1.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
             prg_lbl.BringToFront(); tlPrgBr.BringToFront();
 
@@ -6469,7 +6477,7 @@ namespace Isotope_fitting
         private void frag_sort_Btn1_Click(object sender, EventArgs e)
         {
             Form19 frm19 = new Form19(this);
-            frm19.FormClosed += (s, f) => { save_preferences(); };
+            //frm19.FormClosed += (s, f) => { save_preferences(); };
             frm19.ShowDialog();
             //params_form();
         }
