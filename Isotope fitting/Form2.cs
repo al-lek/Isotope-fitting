@@ -15360,6 +15360,7 @@ namespace Isotope_fitting
         {
             plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             exp_deconvoluted = false;
+            labels_checked.Clear();
             if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
             if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
             tab_mode = false;
