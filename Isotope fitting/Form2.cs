@@ -56,8 +56,8 @@ namespace Isotope_fitting
         public List<ExcludeTypes> exclude_x_indexes = new List<ExcludeTypes>();
         public List<ExcludeTypes> exclude_y_indexes = new List<ExcludeTypes>();
         public List<ExcludeTypes> exclude_z_indexes = new List<ExcludeTypes>();
-        public List<ExcludeTypes> exclude_internal_indexesFrom = new List<ExcludeTypes>();
-        public List<ExcludeTypes> exclude_internal_indexesTo = new List<ExcludeTypes>();
+        public List<ExcludeTypes> exclude_internal_indexes = new List<ExcludeTypes>();
+        public List<string[]> list_21 = new List<string[]>();
 
         #region SAVE PROJECT
         int all = 0;
@@ -1170,6 +1170,7 @@ namespace Isotope_fitting
         private void import_fragments()
         {
             string loaded_ms = "";
+            if (ms_extension=="_") { ms_extension = ""; }
             OpenFileDialog fragment_import = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Filter = "txt files (*.txt)|*.txt", FilterIndex = 2, RestoreDirectory = true, CheckFileExists = true, CheckPathExists = true };
             List<string> lista = new List<string>();
             x_charged = false;
@@ -1180,8 +1181,8 @@ namespace Isotope_fitting
                 do { lista.Add(objReader.ReadLine()); }
                 while (objReader.Peek() != -1);
                 objReader.Close();
-
-                loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + ms_extension;
+                if (string.IsNullOrEmpty(ms_extension)) { loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + "_"; }
+                else{loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + ms_extension;}
                 loaded_MSproducts.Add(loaded_ms);
                 if (MSproduct_treeView==null || MSproduct_treeView.Nodes.Count==0) { MSproduct_treeView.Nodes.Add("Loaded MS product files"); }
                 MSproduct_treeView.Nodes[0].Nodes.Add(loaded_ms);                
@@ -1656,6 +1657,7 @@ namespace Isotope_fitting
         private void Calc_Btn_Click(object sender, EventArgs e)
         {
             calc_Btn.Enabled = false;
+            if (ChemFormulas.Count==0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calc_Btn.Enabled = true; return; }
             try
             {
                 try
@@ -1676,7 +1678,6 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Please close the program and restart the procedure.", "Error in calculations!");
             }
-
             finally
             {
                 calc_Btn.Enabled = true;
@@ -1688,6 +1689,7 @@ namespace Isotope_fitting
         {
             // this the main sequence after loadind data
             // 1. select fragments according to UI
+            added = 0;
             Fragments2.Clear();
             selectedFragments.Clear();
             custom_colors.Clear();
@@ -1827,30 +1829,161 @@ namespace Isotope_fitting
                 // drop frag by mz and charge rules
                 if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
 
-                if (is_internal && internal_indexesTo.Count > 0 && internal_indexesTo.Count > 0)
+                if (is_internal)
                 {
+                    bool in_bounds = true;
                     int index1 = Int32.Parse(chem.Index);
-                    int index2 = Int32.Parse(chem.IndexTo);
-                    bool in_bounds= false;
-                    for (int k=0; k< internal_indexesTo.Count; k++)
+                    int index2 = Int32.Parse(chem.IndexTo);                    
+                    if (internal_indexesTo.Count > 0 && internal_indexesTo.Count > 0)
                     {
-                        if (index2>= internal_indexesTo[k][0] && index2 <= internal_indexesTo[k][1] && index1 >= internal_indexesFrom[k][0] && index1 <= internal_indexesFrom[k][1])
+                        in_bounds = false;                       
+                        for (int k = 0; k < internal_indexesTo.Count; k++)
                         {
-                            in_bounds = true;break;
+                            if (index2 >= internal_indexesTo[k][0] && index2 <= internal_indexesTo[k][1] && index1 >= internal_indexesFrom[k][0] && index1 <= internal_indexesFrom[k][1])
+                            {
+                                in_bounds = true; break;
+                            }
                         }
+                        if (!in_bounds) continue;
+                    }
+                    if (exclude_internal_indexes.Count>0)
+                    {
+                        foreach (ExcludeTypes ext in  exclude_internal_indexes)
+                        {
+                            if ((ext.Extension!="" && chem.Extension.Contains("_"+ext.Extension))||(ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index2 >= ext.Index2[k][0] && index2 <= ext.Index2[k][1] && index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }                        
                     }
                     if (!in_bounds) continue;
+
                 }
-                else if(!is_precursor && primary_indexes.Count > 0)
+                else if(!is_precursor)
                 {
-                    int index1 = Int32.Parse(chem.Index);
-                    if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }
-                    bool in_bounds = false;
-                    for (int k = 0; k < primary_indexes.Count; k++)
+                    int index1 = chem.SortIdx;
+                    bool in_bounds = true;
+                    if (primary_indexes.Count > 0)
                     {
-                        if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
+                        in_bounds = false;
+                        if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }
+                        for (int k = 0; k < primary_indexes.Count; k++)
                         {
-                            in_bounds = true; break;
+                            if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
+                            {
+                                in_bounds = true; break;
+                            }
+                        }
+                        if (!in_bounds) continue;
+                    }
+                    index1 = Int32.Parse(chem.Index);
+                    if (chem.Ion.StartsWith("a") && exclude_a_indexes.Count>0)
+                    {
+                        foreach (ExcludeTypes ext in exclude_a_indexes)
+                        {
+                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("b") && exclude_b_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in exclude_b_indexes)
+                        {
+                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("c") && exclude_c_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in exclude_c_indexes)
+                        {
+                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("x") && exclude_x_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in exclude_x_indexes)
+                        {
+                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("y") && exclude_y_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in exclude_y_indexes)
+                        {
+                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("z") && exclude_z_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in exclude_z_indexes)
+                        {
+                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
                         }
                     }
                     if (!in_bounds) continue;
@@ -5469,7 +5602,16 @@ namespace Isotope_fitting
                 // Cast the objects to be compared to ListViewItem objects
                 listviewX = (ListViewItem)x;
                 listviewY = (ListViewItem)y;
-
+                FormCollection fc = Application.OpenForms;
+                bool open = false;
+                foreach (Form frm in fc)
+                {
+                    //iterate through
+                    if (frm.Name == "Form21")
+                    {
+                        open = true;break;
+                    }
+                }
                 // Determine the type being compared  //  Columns: 0:Ion type, 1:m/z, 2:charge ,3:Chemical Formula,4:factor,5:code,6:intensity
                 if (Form4.active)
                 {
@@ -5481,11 +5623,11 @@ namespace Isotope_fitting
                     {
                         compareResult = CompareString(listviewX, listviewY);
                     }
-                }
-                else if (ColumnToSort == 0 || ColumnToSort == 4 || ColumnToSort == 1)
+                }                
+                else if ((open && ColumnToSort == 3) ||ColumnToSort == 0 || ColumnToSort == 4 ||( ColumnToSort == 1 && !open))
                 {
                     compareResult = CompareString(listviewX, listviewY);
-                }
+                }                
                 else
                 {
                     try
@@ -5530,7 +5672,7 @@ namespace Isotope_fitting
                 // Compare the two dates.
                 int compareResult = Decimal.Compare(firstValue, secondValue);
                 return compareResult;
-            }
+            }           
             public int CompareString(ListViewItem listviewX, ListViewItem listviewY)
             {
                 // Case Insensitive Compare
@@ -6512,6 +6654,7 @@ namespace Isotope_fitting
         }
         private bool decision_algorithm2(FragForm fra)
         {
+            if (experimental.Count==0) return true;
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
             double temp_pp = ppmError;
@@ -7563,15 +7706,16 @@ namespace Isotope_fitting
 
         private void refresh_frag_Btn2_Click(object sender, EventArgs e)
         {
-            if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!"); return; }
+            if (experimental.Count == 0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_internal_indexes.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!"); return; }
+            if (Fragments2.Count==0) { return; }
             int initial_count = Fragments2.Count;
             int rr = 0;
             bool first = true;
             if (Fragments2.Count > 0)
             {
                 while (rr < Fragments2.Count)
-                {
-                    if (!decision_algorithm2(Fragments2[rr]))
+                {                    
+                    if (is_in_excluded_bounds(Fragments2[rr]) ||!decision_algorithm2(Fragments2[rr]))
                     {
                         Fragments2.RemoveAt(rr);
                         if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
@@ -7594,9 +7738,153 @@ namespace Isotope_fitting
                     fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.");
                 }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                if (IonDraw.Count > 0) IonDraw.Clear();
+                foreach (FragForm fra in Fragments2)
+                {
+                    if (fra.Fixed)
+                    {
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                    }                    
+                }
             }
         }
+        private bool is_in_excluded_bounds(FragForm fra)
+        {
+            if (fra.Ion_type.Contains("int"))
+            {
+                bool in_bounds = true;
+                int index1 = Int32.Parse(fra.Index);
+                int index2 = Int32.Parse(fra.IndexTo);
+                if (exclude_internal_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_internal_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index2 >= ext.Index2[k][0] && index2 <= ext.Index2[k][1] && index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (!in_bounds) return true;
 
+            }
+            else
+            {
+                int index1 = fra.SortIdx;
+                bool in_bounds = true;                  
+                if ((fra.Ion_type.StartsWith("a") || fra.Ion_type.StartsWith("(a")) && exclude_a_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_a_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if ((fra.Ion_type.StartsWith("b") || fra.Ion_type.StartsWith("(b")) && exclude_b_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_b_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if ((fra.Ion_type.StartsWith("c") || fra.Ion_type.StartsWith("(c")) && exclude_c_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_c_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if ((fra.Ion_type.StartsWith("x") || fra.Ion_type.StartsWith("(x")) && exclude_x_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_x_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if ((fra.Ion_type.StartsWith("y") || fra.Ion_type.StartsWith("(y")) && exclude_y_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_y_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if ((fra.Ion_type.StartsWith("z") || fra.Ion_type.StartsWith("(z")) && exclude_z_indexes.Count > 0)
+                {
+                    foreach (ExcludeTypes ext in exclude_z_indexes)
+                    {
+                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        {
+                            for (int k = 0; k < ext.Index1.Count; k++)
+                            {
+                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                {
+                                    in_bounds = false; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (!in_bounds) return true;
+            }
+            return false;
+        }
         private void frag_sort_Btn2_Click(object sender, EventArgs e)
         {
             Form19 frm19 = new Form19(this);
@@ -15297,7 +15585,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf.");
+                                    MessageBox.Show("Error in sequence rtf.");return;
                                 }
                             }
                         }
@@ -15321,7 +15609,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf.");
+                                    MessageBox.Show("Error in sequence rtf.");return;
                                 }
                             }
                         }
@@ -15413,7 +15701,7 @@ namespace Isotope_fitting
             //reset_all();
             Initialize_data_struct();
             refresh_iso_plot();
-
+            list_21.Clear();
             return true;
         }
         private void project_load()
@@ -15945,6 +16233,51 @@ namespace Isotope_fitting
 
         }
 
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ChemFormulas.Count==0 ) return;
+            if (MSproduct_treeView.Nodes[0].Nodes.Count==1)
+            {
+                ChemFormulas.Clear();
+                if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
+                MSproduct_treeView.Nodes.Clear();
+            }
+            else if(MSproduct_treeView.SelectedNode!=null)
+            {
+                string[] str = MSproduct_treeView.SelectedNode.Text.Split('_');
+                MSproduct_treeView.Nodes[0].Nodes.Remove(MSproduct_treeView.SelectedNode); 
+                string exte = "";
+                if (str.Length > 1)
+                {
+                    exte = str.Last();
+                    for (int h = 0; h < loaded_MSproducts.Count; h++)
+                    {
+                        string[] str1 = loaded_MSproducts[h].Split('_');
+                        if (str1.Length > 1 && str1.Last().Equals(exte)) { loaded_MSproducts.RemoveAt(h);break; }
+                    }
+                }
+                else
+                {
+                    for (int h = 0; h < loaded_MSproducts.Count; h++)
+                    {
+                        string[] str1 = loaded_MSproducts[h].Split('_');
+                        if (str1.Length > 1 && str1.Last().Equals(exte)) { loaded_MSproducts.RemoveAt(h); break; }
+                        else if(str1.Length==1) { loaded_MSproducts.RemoveAt(h); break; } 
+                    }
+                }
+                int rr = 0;
+                while (rr < ChemFormulas.Count)
+                {
+                    if (ChemFormulas[rr].Extension.Equals(exte) || ChemFormulas[rr].Extension.Equals("_"+exte))
+                    {
+                        ChemFormulas.RemoveAt(rr);                        
+                    }
+                    else { rr++; }
+                }
+                MessageBox.Show("Extension ' "+exte+" ' removed from MS product files");
+            }
+           
+        }
     }
    
 }

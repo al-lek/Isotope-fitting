@@ -27,18 +27,13 @@ namespace Isotope_fitting
             IntPtr h = this.seq_tabControl.Handle;
             if (frm2.sequenceList != null && frm2.sequenceList.Count==1)
             {
-                if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf))
-                {
-                    seq_BoxFrm16.Text =  Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
-                }
-                else
-                {
-                    seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;
-                }
+                if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf))seq_BoxFrm16.Text =  Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
+                else seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;               
             }
             else if (frm2.sequenceList != null && frm2.sequenceList.Count >1)
             {
-                seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;
+                if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf)) seq_BoxFrm16.Text = Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
+                else seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;                
                 create_tabPages();
             }
         }
@@ -73,6 +68,7 @@ namespace Isotope_fitting
                         active_txt = true;
                         user_txt = box.Text.Replace(Environment.NewLine, " ").ToString();
                         user_txt = user_txt.Replace("\t", "");
+                        user_txt = user_txt.Replace("\n", "");
                         user_txt = user_txt.Replace(" ", "");
                         output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
 

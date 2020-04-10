@@ -63,7 +63,10 @@
             this.end_clmn,
             this.extension_clmn});
             this.listView_21.ContextMenuStrip = this.contextMenuStrip1;
+            this.listView_21.Cursor = System.Windows.Forms.Cursors.Hand;
             this.listView_21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView_21.FullRowSelect = true;
+            this.listView_21.GridLines = true;
             this.listView_21.HideSelection = false;
             this.listView_21.Location = new System.Drawing.Point(0, 0);
             this.listView_21.Name = "listView_21";
@@ -71,6 +74,7 @@
             this.listView_21.TabIndex = 0;
             this.listView_21.UseCompatibleStateImageBehavior = false;
             this.listView_21.View = System.Windows.Forms.View.Details;
+            this.listView_21.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_21_ColumnClick);
             // 
             // ionType_clmn
             // 
@@ -211,6 +215,7 @@
             this.ionType_box.Name = "ionType_box";
             this.ionType_box.Size = new System.Drawing.Size(81, 21);
             this.ionType_box.TabIndex = 20;
+            this.ionType_box.SelectedIndexChanged += new System.EventHandler(this.ionType_box_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -247,6 +252,7 @@
             this.end_box.Name = "end_box";
             this.end_box.Size = new System.Drawing.Size(81, 20);
             this.end_box.TabIndex = 18;
+            this.end_box.TextChanged += new System.EventHandler(this.end_box_TextChanged);
             // 
             // start_box
             // 
@@ -254,6 +260,7 @@
             this.start_box.Name = "start_box";
             this.start_box.Size = new System.Drawing.Size(81, 20);
             this.start_box.TabIndex = 17;
+            this.start_box.TextChanged += new System.EventHandler(this.start_box_TextChanged);
             // 
             // Form21
             // 

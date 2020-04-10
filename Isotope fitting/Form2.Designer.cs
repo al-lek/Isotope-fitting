@@ -153,6 +153,8 @@ namespace Isotope_fitting
             this.plot_Btn = new System.Windows.Forms.Button();
             this.theorData_grpBx = new System.Windows.Forms.GroupBox();
             this.MSproduct_treeView = new System.Windows.Forms.TreeView();
+            this.contextMenuStrip_MSproduct = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteMSProd_Btn = new System.Windows.Forms.Button();
             this.seqBtn = new System.Windows.Forms.Button();
             this.loadFF_Btn = new System.Windows.Forms.Button();
@@ -398,6 +400,7 @@ namespace Isotope_fitting
             this.toolStrip_fragList.SuspendLayout();
             this.fragList_toolStrip.SuspendLayout();
             this.theorData_grpBx.SuspendLayout();
+            this.contextMenuStrip_MSproduct.SuspendLayout();
             this.expData_grpBx.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.fitOptions_grpBox.SuspendLayout();
@@ -1958,7 +1961,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(81, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(78, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1970,7 +1973,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(171, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(168, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -2003,11 +2006,27 @@ namespace Isotope_fitting
             this.MSproduct_treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.MSproduct_treeView.ContextMenuStrip = this.contextMenuStrip_MSproduct;
             this.MSproduct_treeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MSproduct_treeView.Location = new System.Drawing.Point(0, 50);
             this.MSproduct_treeView.Name = "MSproduct_treeView";
             this.MSproduct_treeView.Size = new System.Drawing.Size(219, 68);
             this.MSproduct_treeView.TabIndex = 122;
+            // 
+            // contextMenuStrip_MSproduct
+            // 
+            this.contextMenuStrip_MSproduct.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeToolStripMenuItem});
+            this.contextMenuStrip_MSproduct.Name = "contextMenuStrip_MSproduct";
+            this.contextMenuStrip_MSproduct.Size = new System.Drawing.Size(118, 26);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("removeToolStripMenuItem.Image")));
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // deleteMSProd_Btn
             // 
@@ -4785,7 +4804,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v24.3";
+            this.Text = "Peak Finder v24.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -4814,6 +4833,7 @@ namespace Isotope_fitting
             this.fragList_toolStrip.PerformLayout();
             this.theorData_grpBx.ResumeLayout(false);
             this.theorData_grpBx.PerformLayout();
+            this.contextMenuStrip_MSproduct.ResumeLayout(false);
             this.expData_grpBx.ResumeLayout(false);
             this.expData_grpBx.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -5250,5 +5270,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearAllToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip_MSproduct;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
     }
 }
