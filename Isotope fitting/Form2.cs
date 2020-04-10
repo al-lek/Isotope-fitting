@@ -2137,6 +2137,14 @@ namespace Isotope_fitting
                     fra.Name=fra.Name.Replace(fra.Extension,rep);
                 }
             }
+            if (IonDraw.Count > 0) IonDraw.Clear();
+            foreach (FragForm fra in Fragments2)
+            {
+                if (fra.Fixed)
+                {
+                    IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                }
+            }
             return;
         }
         private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
@@ -5113,7 +5121,7 @@ namespace Isotope_fitting
                 band2.ValueBegin = x;
                 band2.ValueEnd = x;
                 band2.Behind = true;
-                band2.Title.Text = "Distance: " +Math.Abs(band2.ValueEnd- band2.ValueBegin).ToString();
+                band2.Title.Text = "Distance: " +Math.Round(Math.Abs(band2.ValueEnd- band2.ValueBegin),4).ToString();
                 band2.Title.Visible = true;
                 band2.Title.Angle = 0;
                 band2.Title.Font = new Font("Segoe UI", 10f, FontStyle.Regular);
@@ -5121,7 +5129,7 @@ namespace Isotope_fitting
                 band2.Title.HorizontalAlign = AlignmentHorizontal.Center;
                 band2.Title.VerticalAlign = AlignmentVertical.Top;
                 band2.Visible = true;
-                band2.ValuesChanged += (s, e) => {band2.Title.Text = "Distance: " + Math.Abs(band2.ValueEnd - band2.ValueBegin).ToString(); };               
+                band2.ValuesChanged += (s, e) => {band2.Title.Text = "Distance: " + Math.Round(Math.Abs(band2.ValueEnd - band2.ValueBegin), 4).ToString(); };               
                 LC_1.ViewXY.Bands.Add(band2);
             }            
         }
@@ -6133,53 +6141,53 @@ namespace Isotope_fitting
                                         minPPM_Error = 0
                                     });
                                     if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                    IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                    if (exp_deconvoluted && IonDraw.Last().Charge!= 0)
+                                    //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
+                                    if (exp_deconvoluted && fitted_chem.Last().Charge!= 0)
                                     {
                                         dec = true;
                                         fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
-                                        IonDraw.Last().Charge = 0;
+                                        //IonDraw.Last().Charge = 0;
                                     }
                                     if (!new_type)
                                     {
                                         fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
-                                        IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                        //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
                                         if (heavy)
                                         {
                                             if (!str[0].EndsWith("_H")) fitted_chem.Last().Name = str[0] + "_H";
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                            IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                            //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
                                         else if (light)
                                         {
                                             if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; }
                                             fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                            IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type =2;
+                                            //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type =2;
                                         }
                                         else if (HEAVY_LIGHT_BOTH)
                                         {
                                             if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                             {
                                                 fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                                IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                                //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                             }
                                             else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                             {
                                                 fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                                IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                                //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                             }
                                         }
                                         if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
-                                        {
+                                        {                                            
                                             if (HEAVY_LIGHT_BOTH)
                                             {
                                                 if (str[0].EndsWith("_H"))
                                                 {
-                                                    IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                                    fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                                 }
                                                 else if (str[0].EndsWith("_L"))
                                                 {
-                                                    IonDraw.Last().SortIdx = s2_chain.Length - IonDraw.Last().Index;
+                                                    fitted_chem.Last().SortIdx = s2_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                                 }
                                                 else
                                                 {
@@ -6188,17 +6196,17 @@ namespace Isotope_fitting
                                             }
                                             else
                                             {
-                                                IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                                fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                             }
                                         }
-                                        else { IonDraw.Last().SortIdx = IonDraw.Last().Index; }
-                                        fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
+                                        else { fitted_chem.Last().SortIdx = Int32.Parse(fitted_chem.Last().Index); }
+                                        //fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
                                         if (str.Length == 16)
                                         {
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                            IonDraw.Last().maxPPM_Error = dParser(str[15]);
-                                            IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                            //IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                            //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                         }
                                     }
                                     else
@@ -6208,21 +6216,21 @@ namespace Isotope_fitting
                                         fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                         fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                         fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                        IonDraw.Last().maxPPM_Error = dParser(str[15]);
-                                        IonDraw.Last().minPPM_Error = dParser(str[14]);
-                                        IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
-                                        IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        IonDraw.Last().Extension = str[18];                                       
+                                        //IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                        //IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                        //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                                        //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
+                                        //IonDraw.Last().Extension = str[18];                                       
                                     }
                                     if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                     {
                                         fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                        IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                        //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                     }
                                     else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                     {
                                         fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                        IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                        //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                     }
                                     arrayPositionIndex++;
                                     j++;
@@ -6481,39 +6489,39 @@ namespace Isotope_fitting
                                         minPPM_Error = 0
                                     });
                                     if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                    IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
+                                    //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
                                     if (exp_deconvoluted)
                                     {
                                         fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge =0;
-                                        IonDraw.Last().Charge=0;
+                                        //IonDraw.Last().Charge=0;
                                     }
                                     if (!new_type)
                                     {
                                         fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
-                                        IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                        //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
                                         if (heavy)
                                         {
-                                            if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0] + "_H"; IonDraw.Last().Name = str[0] + "_H"; }
+                                            if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0] + "_H"; /*IonDraw.Last().Name = str[0] + "_H";*/ }
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                            IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                            //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
                                         else if (light)
                                         {
-                                            if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; IonDraw.Last().Name = str[0] + "_L"; }
+                                            if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; /*IonDraw.Last().Name = str[0] + "_L"; */}
                                             fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                            IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                            //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                         }
                                         else if (HEAVY_LIGHT_BOTH)
                                         {
                                             if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                             {
                                                 fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                                IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                                //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                             }
                                             else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                             {
                                                 fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                                IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                                //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                             }
                                         }
                                         if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
@@ -6522,11 +6530,11 @@ namespace Isotope_fitting
                                             {
                                                 if (str[0].EndsWith("_H"))
                                                 {
-                                                    IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                                    fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                                 }
                                                 else if (str[0].EndsWith("_L"))
                                                 {
-                                                    IonDraw.Last().SortIdx = s2_chain.Length - IonDraw.Last().Index;
+                                                    fitted_chem.Last().SortIdx = s2_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                                 }
                                                 else
                                                 {
@@ -6535,17 +6543,17 @@ namespace Isotope_fitting
                                             }
                                             else
                                             {
-                                                IonDraw.Last().SortIdx = s_chain.Length - IonDraw.Last().Index;
+                                                fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                             }
                                         }
-                                        else { IonDraw.Last().SortIdx = IonDraw.Last().Index; }
-                                        fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
+                                        else { fitted_chem.Last().SortIdx = Int32.Parse(fitted_chem.Last().Index); }
+                                        //fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
                                         if (str.Length == 16)
                                         {
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                            IonDraw.Last().maxPPM_Error = dParser(str[15]);
-                                            IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                            //IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                            //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                         }
                                     }
                                     else
@@ -6555,21 +6563,21 @@ namespace Isotope_fitting
                                         fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                         fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                         fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                        IonDraw.Last().maxPPM_Error = dParser(str[15]);
-                                        IonDraw.Last().minPPM_Error = dParser(str[14]);
-                                        IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
-                                        IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        IonDraw.Last().Extension = str[18];                                       
+                                        //IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                        //IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                        //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                                        //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
+                                        //IonDraw.Last().Extension = str[18];                                       
                                     }
                                     if (fitted_chem.Last().Name.EndsWith( "_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                     {                                        
                                         fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                        IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                        //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                     }
                                     else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                     {
                                         fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                        IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                        //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                     }                                   
                                 }
                                 else duplicate_count++;
@@ -11158,18 +11166,7 @@ namespace Isotope_fitting
         }
 
         private void tabFit_Leave(object sender, EventArgs e)
-        {
-            if (IonDraw.Count > 0)
-            {
-                IonDraw.Clear();
-                foreach (FragForm fra in Fragments2)
-                {
-                    if (fra.Fixed)
-                    {
-                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
-                    }
-                }
-            }
+        {           
             if ( sequenceList!=null && sequenceList.Count>1)
             {
                 seq_extensionBox.Enabled = seq_extensionBoxCopy1.Enabled = seq_extensionBoxCopy2.Enabled = true;
