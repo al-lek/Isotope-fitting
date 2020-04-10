@@ -37,6 +37,7 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
+        bool multiple_loadlist = false;
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();       
 
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Inherit };
@@ -1690,6 +1691,7 @@ namespace Isotope_fitting
             // this the main sequence after loadind data
             // 1. select fragments according to UI
             added = 0;
+            multiple_loadlist = false;
             Fragments2.Clear();
             selectedFragments.Clear();
             custom_colors.Clear();
@@ -2076,9 +2078,10 @@ namespace Isotope_fitting
         private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
+            is_calc = true;
             sw1.Reset(); sw1.Start();
             int progress = 0;
-            progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");            
+            if (!multiple_loadlist) progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");            
             try
             {
                 Parallel.For(0, selected_fragments.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
@@ -2086,29 +2089,32 @@ namespace Isotope_fitting
                     Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);                    
                     // safelly keep track of progress
                     Interlocked.Increment(ref progress);
-                    if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
+                    if (!multiple_loadlist && progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
                 });
             }
             catch (Exception ex) 
             {
                 Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File.");
             };
-            progress_display_stop();            
-            // sort by mz the fragments list (global) beause it is mixed by multi-threading
-            Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();            
-            // also restore indexes to match array position
-            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-            change_name_duplicates();
-            is_calc = false;
+            if (!multiple_loadlist)progress_display_stop();
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
-            if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
+            is_calc = false;
+            if (!multiple_loadlist)
             {
-                Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
-            }
-            else MessageBox.Show(added.ToString() + " fragments added from file. "+ duplicate_count.ToString()+" duplicates removed from current file." , "Fitted fragments file");
-            // thread safely fire event to continue calculations
-            if (selected_fragments.Count>0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }            
+                if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
+                {
+                    Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
+                    MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
+                }
+                else MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
+                // sort by mz the fragments list (global) beause it is mixed by multi-threading
+                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+                // also restore indexes to match array position
+                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+                change_name_duplicates();                
+                  // thread safely fire event to continue calculations
+                if (selected_fragments.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
+            }                      
         }
         private void change_name_duplicates()
         {
@@ -2234,6 +2240,7 @@ namespace Isotope_fitting
             {
                 if (project || check_duplicates_Fragments2(chem))
                 {
+                    is_calc = true;
                     Fragments2.Add(new FragForm()
                     {
                         Adduct = chem.Adduct,
@@ -5914,139 +5921,116 @@ namespace Isotope_fitting
         }
         private void loadList()
         {
+            multiple_loadlist = false;
+            bool last_fired = false;
             duplicate_count = 0;added = 0;
             bool mult_extensions=false; bool new_type = false; bool peptide = true;
             bool heavy = false; bool light =false; bool HEAVY_LIGHT_BOTH = false; string extension = "";
-            OpenFileDialog loadData = new OpenFileDialog();
-            List<string> lista = new List<string>();
+            OpenFileDialog loadData = new OpenFileDialog() {Multiselect=true, Title= "Load fitting data" ,FileName = "" , Filter = "data file|*.hlfit;*.lfit;*.hfit;*.fit;*.hlpfit;*.lpfit;*.hpfit;*.pfit*.hlifit;*.lifit;*.hifit;*.ifit;|All files|*.*" };
             string fullPath = "";
             bool envipat = false;
             // Open dialogue properties
-            //loadData.InitialDirectory = Application.StartupPath + "\\Data";
-            loadData.Title = "Load fitting data"; loadData.FileName = "";
-            loadData.Filter = "data file|*.hlfit;*.lfit;*.hfit;*.fit;*.hlpfit;*.lpfit;*.hpfit;*.pfit*.hlifit;*.lifit;*.hifit;*.ifit;|All files|*.*";
-            List<ChemiForm> fitted_chem = new List<ChemiForm>();
+            //loadData.InitialDirectory = Application.StartupPath + "\\Data";            
             if (loadData.ShowDialog() != DialogResult.Cancel)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine(loaded_lists);
-                sb.AppendLine(Path.GetFileNameWithoutExtension(loadData.FileName));
-                extension=Path.GetExtension(loadData.FileName);
-                if (extension.Equals(".hfit")) { heavy = true; heavy_present = true; }
-                else if (extension.Equals(".lfit")) { light = true; light_present = true; }
-                else if (extension.Equals(".hlfit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; }
-                else if (extension.Equals(".pfit")|| extension.Equals(".ifit")) {envipat = true; }
-                else if (extension.Equals(".hpfit")|| extension.Equals(".hifit")) { heavy = true; heavy_present = true; envipat = true; }
-                else if (extension.Equals(".lpfit")|| extension.Equals(".lifit")) { light = true; light_present = true; envipat = true; }
-                else if (extension.Equals(".hlpfit")|| extension.Equals(".hlifit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; envipat = true; }
-                loaded_lists = sb.ToString();
-                show_files_Btn.ToolTipText = loaded_lists;
-                is_loading = true;  // performance
-                fullPath = loadData.FileName;
-                string s_chain = string.Empty;
-                string s2_chain = string.Empty;
-
                 #region UI & data                 
                 fit_Btn.Enabled = true; fit_sel_Btn.Enabled = true;
                 plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
                 saveFit_Btn.Enabled = true;
                 loadExp_Btn.Enabled = true;
-                loadFit_Btn.Enabled = false;                         
+                loadFit_Btn.Enabled = false;
                 #endregion
-               
-                System.IO.StreamReader objReader = new System.IO.StreamReader(fullPath);
-                do { lista.Add(objReader.ReadLine()); }
-                while (objReader.Peek() != -1);
-                objReader.Close();
-                bool dec = false;
-                int arrayPositionIndex = 0;
-                int isotope_count = -1;
-                int f = Fragments2.Count();
-                if (envipat)
+                if (loadData.FileNames.Length>1) { multiple_loadlist = true; }
+                int file_count = loadData.FileNames.Length;
+                for (int n= 0; n< file_count; n++ )
                 {
-                    for (int j = 0; j != (lista.Count); j++)
+                    if (n== file_count-1) { last_fired = true; }
+                    string FileName = loadData.FileNames[n];
+                    List<ChemiForm> fitted_chem = new List<ChemiForm>();
+                    List<string> lista = new List<string>();                   
+                    mult_extensions = false;  new_type = false;  peptide = true; envipat = false;
+                    heavy = false;  light = false;  HEAVY_LIGHT_BOTH = false;  extension = "";
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine(loaded_lists);
+                    sb.AppendLine(Path.GetFileNameWithoutExtension(FileName));
+                    extension = Path.GetExtension(FileName);
+                    if (extension.Equals(".hfit")) { heavy = true; heavy_present = true; }
+                    else if (extension.Equals(".lfit")) { light = true; light_present = true; }
+                    else if (extension.Equals(".hlfit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; }
+                    else if (extension.Equals(".pfit") || extension.Equals(".ifit")) { envipat = true; }
+                    else if (extension.Equals(".hpfit") || extension.Equals(".hifit")) { heavy = true; heavy_present = true; envipat = true; }
+                    else if (extension.Equals(".lpfit") || extension.Equals(".lifit")) { light = true; light_present = true; envipat = true; }
+                    else if (extension.Equals(".hlpfit") || extension.Equals(".hlifit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; envipat = true; }
+                    loaded_lists = sb.ToString();
+                    show_files_Btn.ToolTipText = loaded_lists;
+                    is_loading = true;  // performance
+                    fullPath = FileName;
+                    string s_chain = string.Empty;
+                    string s2_chain = string.Empty;
+                    System.IO.StreamReader objReader = new System.IO.StreamReader(fullPath);
+                    do { lista.Add(objReader.ReadLine()); }
+                    while (objReader.Peek() != -1);
+                    objReader.Close();
+                    bool dec = false;
+                    int arrayPositionIndex = 0;
+                    int isotope_count = -1;
+                    int f = Fragments2.Count();
+                    if (envipat)
                     {
-                        //string[] str = new string[15];
-                        try
+                        for (int j = 0; j != (lista.Count); j++)
                         {
-                            string[] str = lista[j].Split('\t');
-                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
-                            else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                            else if (lista[j].StartsWith("Multiple"))
+                            //string[] str = new string[15];
+                            try
                             {
-                                mult_extensions = string_to_bool(str[1]);new_type = true;
-                            }
-                            else if (lista[j].StartsWith("Extension"))
-                            {
-                                if (peptide)
+                                string[] str = lista[j].Split('\t');
+                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
+                                else if (lista[j].StartsWith("Mode")) continue; // to be implemented
+                                else if (lista[j].StartsWith("Multiple"))
                                 {
-                                    peptide = false;
-                                    Peptide = str[1];
-                                    if (sequenceList==null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
+                                    mult_extensions = string_to_bool(str[1]); new_type = true;
+                                }
+                                else if (lista[j].StartsWith("Extension"))
+                                {
+                                    if (peptide)
+                                    {
+                                        peptide = false;
+                                        Peptide = str[1];
+                                        if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
+                                        else
+                                        {
+                                            if (string.IsNullOrEmpty(str[3])) continue;
+                                            else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; read_rtf_find_color(sequenceList[0]); }
+                                        }
+                                    }
                                     else
                                     {
-                                        if (string.IsNullOrEmpty(str[3])) continue;
-                                        else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; read_rtf_find_color(sequenceList[0]); }
+                                        bool found = false;
+                                        foreach (SequenceTab seq in sequenceList)
+                                        {
+                                            if (seq.Extension.Equals(str[1]))
+                                            {
+                                                if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                else { found = true; }
+                                                break;
+                                            }
+                                        }
+                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
                                     }
                                 }
-                                else
+                                else if (lista[j].StartsWith("AA"))
                                 {
-                                    bool found = false;
-                                    foreach (SequenceTab seq in sequenceList)
-                                    {
-                                        if (seq.Extension.Equals(str[1]))
-                                        {                                           
-                                            if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
-                                            else { found = true; }
-                                            break;
-                                        }
-                                    }
-                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
-                                } 
-                            }
-                            else if (lista[j].StartsWith("AA"))
-                            {
-                                if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = "", Rtf = "", Type = 0 }); }
+                                    if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = "", Rtf = "", Type = 0 }); }
 
-                                if (HEAVY_LIGHT_BOTH)
-                                {
-                                    if (str.Count() < 3)
+                                    if (HEAVY_LIGHT_BOTH)
                                     {
-                                        MessageBox.Show("You have inserted a .hlfit file without two sequences.The heavy chain and the light chain sequences are needed!And in the format heavy chain TAB light chain in the sequence section of the file. Please close the program and correct data type with the correct extension!"); return;
-                                    }
-                                    s_chain = str[1];
-                                    s2_chain = str[2];
-                                    heavy_chain = str[1];
-                                    light_chain = str[2];
-                                    bool found = false;
-                                    foreach (SequenceTab seq in sequenceList)
-                                    {
-                                        if (seq.Extension.Equals("H"))
+                                        if (str.Count() < 3)
                                         {
-                                            if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
-                                            else { found = true; }
-                                            break;
+                                            MessageBox.Show("You have inserted a .hlfit file without two sequences.The heavy chain and the light chain sequences are needed!And in the format heavy chain TAB light chain in the sequence section of the file. Please close the program and correct data type with the correct extension!"); return;
                                         }
-                                    }
-                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }
-                                    found = false;
-                                    foreach (SequenceTab seq in sequenceList)
-                                    {
-                                        if (seq.Extension.Equals("L"))
-                                        {
-                                            if (!seq.Sequence.Equals(str[2])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
-                                            else { found = true; }
-                                            break;
-                                        }
-                                    }
-                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[2], Rtf = "", Type = 2 }); }
-                                }
-                                else
-                                {
-                                    s_chain = str[1];
-                                    if (heavy)
-                                    {
+                                        s_chain = str[1];
+                                        s2_chain = str[2];
                                         heavy_chain = str[1];
+                                        light_chain = str[2];
                                         bool found = false;
                                         foreach (SequenceTab seq in sequenceList)
                                         {
@@ -6058,343 +6042,350 @@ namespace Isotope_fitting
                                             }
                                         }
                                         if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }
-                                    }
-                                    else if (light)
-                                    {
-                                        light_chain = str[1];
-                                        bool found = false;
+                                        found = false;
                                         foreach (SequenceTab seq in sequenceList)
                                         {
                                             if (seq.Extension.Equals("L"))
                                             {
-                                                if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                if (!seq.Sequence.Equals(str[2])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
                                                 else { found = true; }
                                                 break;
                                             }
                                         }
-                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[1], Rtf = "", Type = 2 }); }
+                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[2], Rtf = "", Type = 2 }); }
                                     }
                                     else
                                     {
-                                        peptide = false;
-                                        Peptide = str[1];
-                                        if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }); }
-                                        else
-                                        {
-                                            if (string.IsNullOrEmpty(str[1])) continue;
-                                            else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }; }
-                                        }
-                                    }
-                                }
-                            }
-                            else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
-                            else if (lista[j].StartsWith("Name")) continue;
-                            else
-                            {
-                                bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
-                                if (check_mate)
-                                {
-                                    added++;
-                                    // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
-                                    isotope_count++;
-                                    if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
-                                    {
-                                        all_data.Add(new List<double[]>());
-                                        if (custom_colors.Count > 0) custom_colors[0] = exp_color;
-                                        else custom_colors.Add(exp_color);
-                                    }
-                                    f++;
-                                    fitted_chem.Add(new ChemiForm
-                                    {
-                                        InputFormula = str[9],
-                                        Adduct = str[10],
-                                        Deduct = str[11],
-                                        Multiplier = 1,
-                                        Mz = str[5],
-                                        Ion = string.Empty,
-                                        Index = str[2],
-                                        IndexTo = str[3],
-                                        Error = false,
-                                        Elements_set = new List<Element_set>(),
-                                        Iso_total_amount = 0,
-                                        Monoisotopic = new CompoundMulti(),
-                                        Points = new List<PointPlot>(),
-                                        Machine = string.Empty,
-                                        Resolution = double.Parse(str[13]),
-                                        Combinations = new List<Combination_1>(),
-                                        Profile = new List<PointPlot>(),
-                                        Centroid = new List<PointPlot>(),
-                                        Intensoid = new List<PointPlot>(),
-                                        Combinations4 = new List<Combination_4>(),
-                                        FinalFormula = string.Empty,
-                                        Color = new OxyColor(),
-                                        Charge = Int32.Parse(str[4]),
-                                        Ion_type = str[1],
-                                        PPM_Error = dParser(str[8]),
-                                        PrintFormula = str[9],
-                                        Name = str[0],
-                                        Radio_label = string.Empty,
-                                        Factor = dParser(str[7]),
-                                        Fixed = true,
-                                        Max_man_int = 0,
-                                        maxPPM_Error = 0,
-                                        minPPM_Error = 0
-                                    });
-                                    if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                    //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                    if (exp_deconvoluted && fitted_chem.Last().Charge!= 0)
-                                    {
-                                        dec = true;
-                                        fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
-                                        //IonDraw.Last().Charge = 0;
-                                    }
-                                    if (!new_type)
-                                    {
-                                        fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
-                                        //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                        s_chain = str[1];
                                         if (heavy)
                                         {
-                                            if (!str[0].EndsWith("_H")) fitted_chem.Last().Name = str[0] + "_H";
-                                            fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                            //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                            heavy_chain = str[1];
+                                            bool found = false;
+                                            foreach (SequenceTab seq in sequenceList)
+                                            {
+                                                if (seq.Extension.Equals("H"))
+                                                {
+                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                    else { found = true; }
+                                                    break;
+                                                }
+                                            }
+                                            if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }
                                         }
                                         else if (light)
                                         {
-                                            if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; }
-                                            fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                            //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type =2;
-                                        }
-                                        else if (HEAVY_LIGHT_BOTH)
-                                        {
-                                            if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                            light_chain = str[1];
+                                            bool found = false;
+                                            foreach (SequenceTab seq in sequenceList)
                                             {
-                                                fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                                //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                                if (seq.Extension.Equals("L"))
+                                                {
+                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                    else { found = true; }
+                                                    break;
+                                                }
                                             }
-                                            else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                            if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[1], Rtf = "", Type = 2 }); }
+                                        }
+                                        else
+                                        {
+                                            peptide = false;
+                                            Peptide = str[1];
+                                            if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }); }
+                                            else
                                             {
+                                                if (string.IsNullOrEmpty(str[1])) continue;
+                                                else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }; }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
+                                else if (lista[j].StartsWith("Name")) continue;
+                                else
+                                {
+                                    bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
+                                    if (check_mate)
+                                    {
+                                        added++;
+                                        // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
+                                        isotope_count++;
+                                        if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
+                                        {
+                                            all_data.Add(new List<double[]>());
+                                            if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                            else custom_colors.Add(exp_color);
+                                        }
+                                        f++;
+                                        fitted_chem.Add(new ChemiForm
+                                        {
+                                            InputFormula = str[9],
+                                            Adduct = str[10],
+                                            Deduct = str[11],
+                                            Multiplier = 1,
+                                            Mz = str[5],
+                                            Ion = string.Empty,
+                                            Index = str[2],
+                                            IndexTo = str[3],
+                                            Error = false,
+                                            Elements_set = new List<Element_set>(),
+                                            Iso_total_amount = 0,
+                                            Monoisotopic = new CompoundMulti(),
+                                            Points = new List<PointPlot>(),
+                                            Machine = string.Empty,
+                                            Resolution = double.Parse(str[13]),
+                                            Combinations = new List<Combination_1>(),
+                                            Profile = new List<PointPlot>(),
+                                            Centroid = new List<PointPlot>(),
+                                            Intensoid = new List<PointPlot>(),
+                                            Combinations4 = new List<Combination_4>(),
+                                            FinalFormula = string.Empty,
+                                            Color = new OxyColor(),
+                                            Charge = Int32.Parse(str[4]),
+                                            Ion_type = str[1],
+                                            PPM_Error = dParser(str[8]),
+                                            PrintFormula = str[9],
+                                            Name = str[0],
+                                            Radio_label = string.Empty,
+                                            Factor = dParser(str[7]),
+                                            Fixed = true,
+                                            Max_man_int = 0,
+                                            maxPPM_Error = 0,
+                                            minPPM_Error = 0
+                                        });
+                                        if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
+                                        //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
+                                        if (exp_deconvoluted && fitted_chem.Last().Charge != 0)
+                                        {
+                                            dec = true;
+                                            fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
+                                            //IonDraw.Last().Charge = 0;
+                                        }
+                                        if (!new_type)
+                                        {
+                                            fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
+                                            //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                            if (heavy)
+                                            {
+                                                if (!str[0].EndsWith("_H")) fitted_chem.Last().Name = str[0] + "_H";
                                                 fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                                 //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                             }
-                                        }
-                                        if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
-                                        {                                            
-                                            if (HEAVY_LIGHT_BOTH)
+                                            else if (light)
                                             {
-                                                if (str[0].EndsWith("_H"))
+                                                if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; }
+                                                fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                                //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type =2;
+                                            }
+                                            else if (HEAVY_LIGHT_BOTH)
+                                            {
+                                                if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                                 {
-                                                    fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                                    //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                                 }
-                                                else if (str[0].EndsWith("_L"))
+                                                else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                                 {
-                                                    fitted_chem.Last().SortIdx = s2_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                                    //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                                }
+                                            }
+                                            if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+                                            {
+                                                if (HEAVY_LIGHT_BOTH)
+                                                {
+                                                    if (str[0].EndsWith("_H"))
+                                                    {
+                                                        fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    }
+                                                    else if (str[0].EndsWith("_L"))
+                                                    {
+                                                        fitted_chem.Last().SortIdx = s2_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    }
+                                                    else
+                                                    {
+                                                        MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                    fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                                 }
                                             }
-                                            else
+                                            else { fitted_chem.Last().SortIdx = Int32.Parse(fitted_chem.Last().Index); }
+                                            //fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
+                                            if (str.Length == 16)
                                             {
-                                                fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                fitted_chem.Last().maxPPM_Error = dParser(str[15]);
+                                                fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                                //IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                                //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             }
                                         }
-                                        else { fitted_chem.Last().SortIdx = Int32.Parse(fitted_chem.Last().Index); }
-                                        //fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
-                                        if (str.Length == 16)
+                                        else
                                         {
+                                            fitted_chem.Last().Extension = str[18];
+                                            fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
+                                            fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
                                             //IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                             //IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                            //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                                            //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
+                                            //IonDraw.Last().Extension = str[18];                                       
+                                        }
+                                        if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                        {
+                                            fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                            //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                        }
+                                        else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                        {
+                                            fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                            //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                        }
+                                        arrayPositionIndex++;
+                                        j++;
+                                        str = lista[j].Split('\t');
+                                        if (lista[j].StartsWith("Prof"))
+                                        {
+                                            if (!exp_deconvoluted && !dec)
+                                            {
+                                                for (int s = 1; s < str.Length; s++)
+                                                {
+                                                    string[] prof = str[s].Split(' ');
+                                                    fitted_chem.Last().Profile.Add(new PointPlot() { X = dParser(prof[0]), Y = dParser(prof[1]) });
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return;
+                                        }
+                                        arrayPositionIndex++;
+                                        j++;
+                                        str = lista[j].Split('\t');
+                                        if (lista[j].StartsWith("Cen"))
+                                        {
+                                            if (!exp_deconvoluted && !dec)
+                                            {
+                                                for (int s = 1; s < str.Length; s++)
+                                                {
+                                                    string[] cen = str[s].Split(' ');
+                                                    fitted_chem.Last().Centroid.Add(new PointPlot() { X = dParser(cen[0]), Y = dParser(cen[1]) });
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return;
                                         }
                                     }
                                     else
-                                    {                                        
-                                        fitted_chem.Last().Extension = str[18];
-                                        fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
-                                        fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        fitted_chem.Last().maxPPM_Error = dParser(str[15]);
-                                        fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                        //IonDraw.Last().maxPPM_Error = dParser(str[15]);
-                                        //IonDraw.Last().minPPM_Error = dParser(str[14]);
-                                        //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
-                                        //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        //IonDraw.Last().Extension = str[18];                                       
-                                    }
-                                    if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                     {
-                                        fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                        //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                        j = j + 2;
+                                        duplicate_count++;
                                     }
-                                    else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
-                                    {
-                                        fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                        //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
-                                    }
-                                    arrayPositionIndex++;
-                                    j++;
-                                    str = lista[j].Split('\t');
-                                    if (lista[j].StartsWith("Prof"))
-                                    {
-                                        if (!exp_deconvoluted && !dec)
-                                        {
-                                            for (int s = 1; s < str.Length; s++)
-                                            {
-                                                string[] prof = str[s].Split(' ');
-                                                fitted_chem.Last().Profile.Add(new PointPlot() { X = dParser(prof[0]), Y = dParser(prof[1]) });
-                                            }
-                                        }                                       
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return;
-                                    }
-                                    arrayPositionIndex++;
-                                    j++;
-                                    str = lista[j].Split('\t');
-                                    if (lista[j].StartsWith("Cen"))
-                                    {
-                                        if (!exp_deconvoluted && !dec)
-                                        {
-                                            for (int s = 1; s < str.Length; s++)
-                                            {
-                                                string[] cen = str[s].Split(' ');
-                                                fitted_chem.Last().Centroid.Add(new PointPlot() { X = dParser(cen[0]), Y = dParser(cen[1]) });
-                                            }
-                                        }                                           
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return;
-                                    }
-                                }
-                                else
-                                {
-                                    j = j + 2;
-                                    duplicate_count++;
                                 }
                             }
+                            catch(Exception ex) { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j] + "\r\n" + ex.ToString(), "Error!"); is_loading = false; return; }
+                            arrayPositionIndex++;
                         }
-                        catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!");is_loading = false; return; }
-                        arrayPositionIndex++;
-                    }
-                    if (!dec)
-                    {
-                        foreach (ChemiForm chemi in fitted_chem)
+                        if (!dec)
                         {
-                            List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
-                            add_fragment_to_Fragments2(chemi, cen);
-                        }
+                            
+                            foreach (ChemiForm chemi in fitted_chem)
+                            {
+                                List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
+                                add_fragment_to_Fragments2(chemi, cen);
+                            }                           
+                            if (!multiple_loadlist)
+                            {
+                                MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
+                                // sort by mz the fragments list (global) beause it is mixed by multi-threading
+                                Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
+                                // also restore indexes to match array position
+                                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+                                change_name_duplicates();
+                                // thread safely fire event to continue calculations
+                                if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
+                            }             
+                            if (n == file_count - 1) { last_fired = true; is_calc = false; }
 
-                        // sort by mz the fragments list (global) beause it is mixed by multi-threading
-                        Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
-                        // also restore indexes to match array position
-                        for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-                        change_name_duplicates();
-                        is_calc = false;
-                        MessageBox.Show(fitted_chem.Count.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
-                        // thread safely fire event to continue calculations
-                        if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
+                        }
+                        else
+                        {
+                            Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
+                            envipat_fitted.Start();
+                            while (envipat_fitted.IsAlive)
+                            {
+                                is_calc = true;
+                            }
+                            if (n == file_count - 1) { last_fired = true; is_calc = false; }
+                        }
+                        is_loading = false;
+                        fitted_results.Clear();
+                        if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                        if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
+                        fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
                     }
                     else
                     {
-                        Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
-                        envipat_fitted.Start();
-                    }               
-                    //refresh_iso_plot();
-                    is_loading = false;
-                    fitted_results.Clear();
-                    if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-                    if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-                    fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-                }
-                else
-                {
-                    for (int j = 0; j != (lista.Count); j++)
-                    {
-                        //string[] str = new string[15];
-                        try
-                        {
-                            string[] str = lista[j].Split('\t');
+                        for (int j = 0; j != (lista.Count); j++)
+                        {                            
+                            try
+                            {
+                                string[] str = lista[j].Split('\t');
 
-                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
-                            else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                            else if (lista[j].StartsWith("Multiple"))
-                            {
-                                mult_extensions = string_to_bool(str[1]); new_type = true;
-                            }
-                            else if (lista[j].StartsWith("Extension"))
-                            {
-                                if (peptide)
+                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
+                                else if (lista[j].StartsWith("Mode")) continue; // to be implemented
+                                else if (lista[j].StartsWith("Multiple"))
                                 {
-                                    peptide = false;
-                                    Peptide = str[1];
-                                    if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
+                                    mult_extensions = string_to_bool(str[1]); new_type = true;
+                                }
+                                else if (lista[j].StartsWith("Extension"))
+                                {
+                                    if (peptide)
+                                    {
+                                        peptide = false;
+                                        Peptide = str[1];
+                                        if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
+                                        else
+                                        {
+                                            if (string.IsNullOrEmpty(str[3])) continue;
+                                            else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; read_rtf_find_color(sequenceList[0]); }
+                                        }
+                                    }
                                     else
                                     {
-                                        if (string.IsNullOrEmpty(str[3])) continue;
-                                        else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; read_rtf_find_color(sequenceList[0]); }
-                                    }
-                                }
-                                else
-                                {
-                                    bool found = false;
-                                    foreach (SequenceTab seq in sequenceList)
-                                    {
-                                        if (seq.Extension.Equals(str[1]))
+                                        bool found = false;
+                                        foreach (SequenceTab seq in sequenceList)
                                         {
-                                            if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
-                                            else { found = true; }
-                                            break;
+                                            if (seq.Extension.Equals(str[1]))
+                                            {
+                                                if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                else { found = true; }
+                                                break;
+                                            }
                                         }
+                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
                                     }
-                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
                                 }
-                            }
-                            else if (lista[j].StartsWith("AA"))
-                            {
-                                if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = "", Rtf = "", Type = 0 }); }
+                                else if (lista[j].StartsWith("AA"))
+                                {
+                                    if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = "", Rtf = "", Type = 0 }); }
 
-                                if (HEAVY_LIGHT_BOTH)
-                                {
-                                    if (str.Count() < 3)
+                                    if (HEAVY_LIGHT_BOTH)
                                     {
-                                        MessageBox.Show("You have inserted a .hlfit file without two sequences.The heavy chain and the light chain sequences are needed!And in the format heavy chain TAB light chain in the sequence section of the file. Please close the program and correct data type with the correct extension!"); return;
-                                    }
-                                    s_chain = str[1];
-                                    s2_chain = str[2];
-                                    heavy_chain = str[1];
-                                    light_chain = str[2];
-                                    bool found = false;
-                                    foreach (SequenceTab seq in sequenceList)
-                                    {
-                                        if (seq.Extension.Equals("H"))
+                                        if (str.Count() < 3)
                                         {
-                                            if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
-                                            else { found = true; }
-                                            break;
+                                            MessageBox.Show("You have inserted a .hlfit file without two sequences.The heavy chain and the light chain sequences are needed!And in the format heavy chain TAB light chain in the sequence section of the file. Please close the program and correct data type with the correct extension!"); return;
                                         }
-                                    }
-                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }
-                                    found = false;
-                                    foreach (SequenceTab seq in sequenceList)
-                                    {
-                                        if (seq.Extension.Equals("L"))
-                                        {
-                                            if (!seq.Sequence.Equals(str[2])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
-                                            else { found = true; }
-                                            break;
-                                        }
-                                    }
-                                    if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[2], Rtf = "", Type = 2 }); }                                   
-                                }
-                                else
-                                {
-                                    s_chain = str[1];
-                                    if (heavy)
-                                    {
+                                        s_chain = str[1];
+                                        s2_chain = str[2];
                                         heavy_chain = str[1];
+                                        light_chain = str[2];
                                         bool found = false;
                                         foreach (SequenceTab seq in sequenceList)
                                         {
@@ -6405,209 +6396,265 @@ namespace Isotope_fitting
                                                 break;
                                             }
                                         }
-                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }                                        
-                                    }
-                                    else if (light)
-                                    {
-                                        light_chain = str[1];
-                                        bool found = false;
+                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }
+                                        found = false;
                                         foreach (SequenceTab seq in sequenceList)
                                         {
                                             if (seq.Extension.Equals("L"))
                                             {
-                                                if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                if (!seq.Sequence.Equals(str[2])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
                                                 else { found = true; }
                                                 break;
                                             }
                                         }
-                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[1], Rtf = "", Type = 2 }); }
+                                        if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[2], Rtf = "", Type = 2 }); }
                                     }
                                     else
                                     {
-                                        peptide = false;
-                                        Peptide = str[1];
-                                        if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }); }
-                                        else
-                                        {
-                                            if (string.IsNullOrEmpty(str[1])) continue;
-                                            else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 };}
-                                        }
-                                    }
-                                }
-                            }
-                            else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
-                            else if (lista[j].StartsWith("Name")) continue;
-                            else
-                            {
-                                bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
-                                if (check_mate)
-                                {
-                                    added++;
-                                    // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
-                                    isotope_count++;
-                                    if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
-                                    {
-                                        all_data.Add(new List<double[]>());
-                                        if (custom_colors.Count > 0) custom_colors[0] = exp_color;
-                                        else custom_colors.Add(exp_color);
-                                    }
-                                    f++;
-                                    fitted_chem.Add(new ChemiForm
-                                    {
-                                        InputFormula = str[9],
-                                        Adduct = str[10],
-                                        Deduct = str[11],
-                                        Multiplier = 1,
-                                        Mz = str[5],
-                                        Ion = string.Empty,
-                                        Index = str[2],
-                                        IndexTo = str[3],
-                                        Error = false,
-                                        Elements_set = new List<Element_set>(),
-                                        Iso_total_amount = 0,
-                                        Monoisotopic = new CompoundMulti(),
-                                        Points = new List<PointPlot>(),
-                                        Machine = string.Empty,
-                                        Resolution = double.Parse(str[13]),
-                                        Combinations = new List<Combination_1>(),
-                                        Profile = new List<PointPlot>(),
-                                        Centroid = new List<PointPlot>(),
-                                        Intensoid = new List<PointPlot>(),
-                                        Combinations4 = new List<Combination_4>(),
-                                        FinalFormula = string.Empty,
-                                        Color = new OxyColor(),
-                                        Charge = Int32.Parse(str[4]),
-                                        Ion_type = str[1],
-                                        PPM_Error = dParser(str[8]),
-                                        PrintFormula = str[9],
-                                        Name = str[0],
-                                        Radio_label = string.Empty,
-                                        Factor = dParser(str[7]),
-                                        Fixed = true,
-                                        Max_man_int = 0,
-                                        maxPPM_Error = 0,
-                                        minPPM_Error = 0
-                                    });
-                                    if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
-                                    //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                    if (exp_deconvoluted)
-                                    {
-                                        fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge =0;
-                                        //IonDraw.Last().Charge=0;
-                                    }
-                                    if (!new_type)
-                                    {
-                                        fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
-                                        //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                        s_chain = str[1];
                                         if (heavy)
                                         {
-                                            if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0] + "_H"; /*IonDraw.Last().Name = str[0] + "_H";*/ }
-                                            fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                            //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                            heavy_chain = str[1];
+                                            bool found = false;
+                                            foreach (SequenceTab seq in sequenceList)
+                                            {
+                                                if (seq.Extension.Equals("H"))
+                                                {
+                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                    else { found = true; }
+                                                    break;
+                                                }
+                                            }
+                                            if (!found) { sequenceList.Add(new SequenceTab() { Extension = "H", Sequence = str[1], Rtf = "", Type = 1 }); }
                                         }
                                         else if (light)
                                         {
-                                            if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; /*IonDraw.Last().Name = str[0] + "_L"; */}
-                                            fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                            //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
-                                        }
-                                        else if (HEAVY_LIGHT_BOTH)
-                                        {
-                                            if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                            light_chain = str[1];
+                                            bool found = false;
+                                            foreach (SequenceTab seq in sequenceList)
                                             {
-                                                fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                                //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                                if (seq.Extension.Equals("L"))
+                                                {
+                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations"); }
+                                                    else { found = true; }
+                                                    break;
+                                                }
                                             }
-                                            else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                            if (!found) { sequenceList.Add(new SequenceTab() { Extension = "L", Sequence = str[1], Rtf = "", Type = 2 }); }
+                                        }
+                                        else
+                                        {
+                                            peptide = false;
+                                            Peptide = str[1];
+                                            if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }); }
+                                            else
                                             {
+                                                if (string.IsNullOrEmpty(str[1])) continue;
+                                                else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[1], Rtf = "", Type = 0 }; }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
+                                else if (lista[j].StartsWith("Name")) continue;
+                                else
+                                {
+                                    bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
+                                    if (check_mate)
+                                    {
+                                        added++;
+                                        // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
+                                        isotope_count++;
+                                        if (isotope_count == 0 && all_data.Count == 0)//in case experimental is not added yet
+                                        {
+                                            all_data.Add(new List<double[]>());
+                                            if (custom_colors.Count > 0) custom_colors[0] = exp_color;
+                                            else custom_colors.Add(exp_color);
+                                        }
+                                        f++;
+                                        fitted_chem.Add(new ChemiForm
+                                        {
+                                            InputFormula = str[9],
+                                            Adduct = str[10],
+                                            Deduct = str[11],
+                                            Multiplier = 1,
+                                            Mz = str[5],
+                                            Ion = string.Empty,
+                                            Index = str[2],
+                                            IndexTo = str[3],
+                                            Error = false,
+                                            Elements_set = new List<Element_set>(),
+                                            Iso_total_amount = 0,
+                                            Monoisotopic = new CompoundMulti(),
+                                            Points = new List<PointPlot>(),
+                                            Machine = string.Empty,
+                                            Resolution = double.Parse(str[13]),
+                                            Combinations = new List<Combination_1>(),
+                                            Profile = new List<PointPlot>(),
+                                            Centroid = new List<PointPlot>(),
+                                            Intensoid = new List<PointPlot>(),
+                                            Combinations4 = new List<Combination_4>(),
+                                            FinalFormula = string.Empty,
+                                            Color = new OxyColor(),
+                                            Charge = Int32.Parse(str[4]),
+                                            Ion_type = str[1],
+                                            PPM_Error = dParser(str[8]),
+                                            PrintFormula = str[9],
+                                            Name = str[0],
+                                            Radio_label = string.Empty,
+                                            Factor = dParser(str[7]),
+                                            Fixed = true,
+                                            Max_man_int = 0,
+                                            maxPPM_Error = 0,
+                                            minPPM_Error = 0
+                                        });
+                                        if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
+                                        //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
+                                        if (exp_deconvoluted)
+                                        {
+                                            fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
+                                            //IonDraw.Last().Charge=0;
+                                        }
+                                        if (!new_type)
+                                        {
+                                            fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
+                                            //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
+                                            if (heavy)
+                                            {
+                                                if (!str[0].EndsWith("_H")) { fitted_chem.Last().Name = str[0] + "_H"; /*IonDraw.Last().Name = str[0] + "_H";*/ }
                                                 fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                                 //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                             }
-                                        }
-                                        if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
-                                        {
-                                            if (HEAVY_LIGHT_BOTH)
+                                            else if (light)
                                             {
-                                                if (str[0].EndsWith("_H"))
+                                                if (!str[0].EndsWith("_L")) { fitted_chem.Last().Name = str[0] + "_L"; /*IonDraw.Last().Name = str[0] + "_L"; */}
+                                                fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                                //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                            }
+                                            else if (HEAVY_LIGHT_BOTH)
+                                            {
+                                                if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                                 {
-                                                    fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                                    //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
                                                 }
-                                                else if (str[0].EndsWith("_L"))
+                                                else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                                 {
-                                                    fitted_chem.Last().SortIdx = s2_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                                    //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
+                                                }
+                                            }
+                                            if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+                                            {
+                                                if (HEAVY_LIGHT_BOTH)
+                                                {
+                                                    if (str[0].EndsWith("_H"))
+                                                    {
+                                                        fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    }
+                                                    else if (str[0].EndsWith("_L"))
+                                                    {
+                                                        fitted_chem.Last().SortIdx = s2_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                    }
+                                                    else
+                                                    {
+                                                        MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name the x,y,z will be false. Please close the program and correct data type with the correct extension!");
+                                                    fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
                                                 }
                                             }
-                                            else
+                                            else { fitted_chem.Last().SortIdx = Int32.Parse(fitted_chem.Last().Index); }
+                                            //fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
+                                            if (str.Length == 16)
                                             {
-                                                fitted_chem.Last().SortIdx = s_chain.Length - Int32.Parse(fitted_chem.Last().Index);
+                                                fitted_chem.Last().maxPPM_Error = dParser(str[15]);
+                                                fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                                //IonDraw.Last().maxPPM_Error = dParser(str[15]);
+                                                //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             }
                                         }
-                                        else { fitted_chem.Last().SortIdx = Int32.Parse(fitted_chem.Last().Index); }
-                                        //fitted_chem.Last().SortIdx = IonDraw.Last().SortIdx;
-                                        if (str.Length == 16)
+                                        else
                                         {
+                                            fitted_chem.Last().Extension = str[18];
+                                            fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
+                                            fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
                                             //IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                             //IonDraw.Last().minPPM_Error = dParser(str[14]);
+                                            //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                                            //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
+                                            //IonDraw.Last().Extension = str[18];                                       
+                                        }
+                                        if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                        {
+                                            fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
+                                            //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
+                                        }
+                                        else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
+                                        {
+                                            fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                            //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
                                     }
-                                    else
-                                    {
-                                        fitted_chem.Last().Extension = str[18];                                        
-                                        fitted_chem.Last().SortIdx = Convert.ToInt32(str[16]);
-                                        fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        fitted_chem.Last().maxPPM_Error = dParser(str[15]);
-                                        fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                        //IonDraw.Last().maxPPM_Error = dParser(str[15]);
-                                        //IonDraw.Last().minPPM_Error = dParser(str[14]);
-                                        //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
-                                        //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                        //IonDraw.Last().Extension = str[18];                                       
-                                    }
-                                    if (fitted_chem.Last().Name.EndsWith( "_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
-                                    {                                        
-                                        fitted_chem.Last().Extension = "_L"; fitted_chem.Last().Chain_type = 2;
-                                        //IonDraw.Last().Extension = "_L"; IonDraw.Last().Chain_type = 2;
-                                    }
-                                    else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
-                                    {
-                                        fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
-                                        //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
-                                    }                                   
+                                    else duplicate_count++;
                                 }
-                                else duplicate_count++;
                             }
+                            catch(Exception ex) { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j] + "\r\n" +ex.ToString(), "Error!"); is_loading = false; return; }
+                            arrayPositionIndex++;
                         }
-                        catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); is_loading = false; return; }
-                        arrayPositionIndex++;
-                    }
 
-                    Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
-                    envipat_fitted.Start();
-                    //refresh_iso_plot();
-                    is_loading = false;
-                    fitted_results.Clear();
-                    if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-                    if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-                    fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-                }                
+                        Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
+                        envipat_fitted.Start();
+                        
+                        while (envipat_fitted.IsAlive) { is_calc = true; }
+                        //refresh_iso_plot();
+                        is_loading = false;
+                        fitted_results.Clear();
+                        if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                        if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
+                        fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                        if (n == file_count - 1) { last_fired = true; is_calc = false; }
+                    }
+                }
+                             
             }
             if (sequenceList.Count == 1) { tab_mode = false; }
             else { tab_mode = true; }
             is_loading = false;
+           
+            if (multiple_loadlist)
+            {
+                Task.Delay(25);
+                while (is_calc || !last_fired)
+                {
+                    Console.WriteLine("Thread is busy");
+                    Task.Delay(25);
+                }
+               
+                // sort by mz the fragments list (global) beause it is mixed by multi-threading
+                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+                // also restore indexes to match array position
+                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+                change_name_duplicates();
+                // thread safely fire event to continue calculations
+                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+                MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current files.", "Fitted fragments files");
+
+            }
             return;
         }
         private bool check_for_duplicates(string name,double mz)
         {
             int[] a = new int[] {1,1};
             if(Fragments2.Count<1) return true;
-            foreach (FragForm fra in Fragments2)
+            int count = Fragments2.Count;
+            for (int f=0; f < count; f++ )
             {
+                FragForm fra = Fragments2[f];
                 if (fra.Name.Equals(name) && dParser(fra.Mz)==mz) return false;                
             }    
             return true;
@@ -6962,6 +7009,7 @@ namespace Isotope_fitting
             // this the main sequence after loadind data
             // 1. select fragments according to UI
             Fragments2.Clear();
+            multiple_loadlist = false;
             selectedFragments.Clear();
             custom_colors.Clear();
             custom_colors.Add(exp_color);
