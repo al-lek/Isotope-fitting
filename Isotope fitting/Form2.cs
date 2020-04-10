@@ -1850,7 +1850,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in  exclude_internal_indexes)
                         {
-                            if ((ext.Extension!="" && chem.Extension.Contains("_"+ext.Extension))||(ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension!="" && recognise_extension(chem.Extension, ext.Extension))||(ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1888,7 +1888,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in exclude_a_indexes)
                         {
-                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension) ) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1905,7 +1905,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in exclude_b_indexes)
                         {
-                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension) ) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1922,7 +1922,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in exclude_c_indexes)
                         {
-                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1939,7 +1939,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in exclude_x_indexes)
                         {
-                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1956,7 +1956,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in exclude_y_indexes)
                         {
-                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1973,7 +1973,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in exclude_z_indexes)
                         {
-                            if ((ext.Extension != "" && chem.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -2300,12 +2300,13 @@ namespace Isotope_fitting
                             Debug.WriteLine(fra.Name.ToString()+" is considered duplicate with "+ chem1.Name.ToString());
                             return false;
                         }
-                        else if (fra.Extension.Contains(chem1.Extension))
+                        int mode = recognise_extension_frag(fra.Extension, chem1.Extension);
+                        if (mode==1 || mode == 2)
                         {
                             Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
                             return false;
                         }
-                        else if (chem1.Extension.Contains(fra.Extension))
+                        else if (mode == 3)
                         {
                             Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
                             int ext_idx=fra.Name.IndexOf(fra.Extension);
@@ -2317,15 +2318,33 @@ namespace Isotope_fitting
                             }
                             else
                             {
+                                fra.Extension = chem1.Extension;
                                 return false;
                             }
                         }
-                        else
+                        else if(mode==5)
                         {
                             Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
                             fra.Extension += chem1.Extension;
                             fra.Name += chem1.Extension;
                             return false;
+                        }
+                        else
+                        {
+                            Debug.WriteLine(fra.Name.ToString() + " is considered duplicate with" + chem1.Name.ToString());
+                            string new_extension = find_common_extensions(fra.Extension, chem1.Extension);
+                            int ext_idx = fra.Name.IndexOf(fra.Extension);
+                            if (ext_idx != -1)
+                            {
+                                fra.Name.Replace(fra.Extension, new_extension);
+                                fra.Extension = new_extension;
+                                return false;
+                            }
+                            else
+                            {
+                                fra.Extension = new_extension;
+                                return false;
+                            }
                         }
                     }                    
                 }
@@ -7759,7 +7778,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_internal_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension,ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -7783,7 +7802,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_a_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension) ) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -7800,7 +7819,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_b_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -7817,7 +7836,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_c_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -7834,7 +7853,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_x_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -7851,7 +7870,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_y_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -7868,7 +7887,7 @@ namespace Isotope_fitting
                 {
                     foreach (ExcludeTypes ext in exclude_z_indexes)
                     {
-                        if ((ext.Extension != "" && fra.Extension.Contains("_" + ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
+                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
                         {
                             for (int k = 0; k < ext.Index1.Count; k++)
                             {
@@ -11140,6 +11159,17 @@ namespace Isotope_fitting
 
         private void tabFit_Leave(object sender, EventArgs e)
         {
+            if (IonDraw.Count > 0)
+            {
+                IonDraw.Clear();
+                foreach (FragForm fra in Fragments2)
+                {
+                    if (fra.Fixed)
+                    {
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                    }
+                }
+            }
             if ( sequenceList!=null && sequenceList.Count>1)
             {
                 seq_extensionBox.Enabled = seq_extensionBoxCopy1.Enabled = seq_extensionBoxCopy2.Enabled = true;
@@ -11234,7 +11264,7 @@ namespace Isotope_fitting
                 double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0,t1=0;
                 foreach (ion nn in IonDraw)
                 {
-                    if (!string.IsNullOrEmpty(seq.Extension) && !nn.Extension.Contains(seq.Extension)) { continue; }
+                    if (!string.IsNullOrEmpty(seq.Extension) && !recognise_extension(nn.Extension,seq.Extension)) { continue; }
                     else if (string.IsNullOrEmpty(seq.Extension) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
@@ -11404,7 +11434,7 @@ namespace Isotope_fitting
                 g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);               
                 foreach (ion nn in IonDraw)
                 {
-                    if (!string.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
                     if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
@@ -11697,7 +11727,7 @@ namespace Isotope_fitting
                     g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
                     foreach (ion nn in IonDraw)
                     {
-                        if (!nn.Extension.Contains(s_ext)) { continue; }                        
+                        if (!recognise_extension(nn.Extension, s_ext)) { continue; }                        
                         Point temp_p = pp;
                         if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
                         if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
@@ -12120,7 +12150,7 @@ namespace Isotope_fitting
                     g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
                     foreach (ion nn in IonDraw)
                     {
-                        if ( !nn.Extension.Contains(s_ext)) { continue; }                        
+                        if ( !recognise_extension(nn.Extension, s_ext)) { continue; }                        
                         Point temp_p = pp;
                         if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
                         if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
@@ -12910,7 +12940,7 @@ namespace Isotope_fitting
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = IonDraw[i];
-                if (!string.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
@@ -14163,7 +14193,7 @@ namespace Isotope_fitting
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = IonDraw[i];
-                if (!string.IsNullOrEmpty(s_ext) && !nn.Extension.Contains(s_ext)) { continue; }
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {
@@ -16277,6 +16307,55 @@ namespace Isotope_fitting
                 MessageBox.Show("Extension ' "+exte+" ' removed from MS product files");
             }
            
+        }
+
+        private bool recognise_extension(string fra_exte, string Extension)
+        {
+            string[] str = fra_exte.Split('_');
+            for (int k = 1; k < str.Length; k++)
+            {
+                if (str[k].Equals(Extension)) { return true; }
+            }                      
+            return false;
+        }
+        private int recognise_extension_frag(string fra_exte, string Extension)
+        {
+            string[] exte_str = Extension.Split('_');
+            string[] str = fra_exte.Split('_');
+            int length1 = str.Length;
+            int length2 = exte_str.Length;
+            int count = 0;
+            string name_exte = fra_exte;
+            
+            for (int k = 1; k < length1; k++)
+            {
+                for (int m = 1; m < length2; m++)
+                {
+                    if (str[k].Equals(exte_str[m])) { count++; }
+                }
+            }
+            if (count==0) return 5;
+            else if (length1 == length2 && length1 == count) return 1;    
+            else if (length1>length2 && length2 == count) return 2;   
+            else if (length1 < length2 && length1 == count) return 3;    
+            else return 4;
+        }
+        private string find_common_extensions(string fra_exte, string Extension)
+        {
+            string[] str = fra_exte.Split('_');
+            string[] exte_str = Extension.Split('_');
+            int count = 0;
+            string name_exte= Extension;
+            for (int k = 1; k < str.Length; k++)
+            {
+                count = 0;
+                for (int m = 1; m < exte_str.Length; m++)
+                {
+                    if (str[k].Equals(exte_str[m])) { count++; }
+                }
+                if (count == 0) { name_exte +="_"+ str[k]; }
+            }
+            return name_exte;
         }
     }
    
