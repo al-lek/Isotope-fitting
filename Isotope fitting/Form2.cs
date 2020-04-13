@@ -37,7 +37,7 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
-        bool multiple_loadlist = false;
+        List<double[]> experimental_dec = new List<double[]>();
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();       
 
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Inherit };
@@ -1691,7 +1691,6 @@ namespace Isotope_fitting
             // this the main sequence after loadind data
             // 1. select fragments according to UI
             added = 0;
-            multiple_loadlist = false;
             Fragments2.Clear();
             selectedFragments.Clear();
             custom_colors.Clear();
@@ -2081,7 +2080,7 @@ namespace Isotope_fitting
             is_calc = true;
             sw1.Reset(); sw1.Start();
             int progress = 0;
-            if (!multiple_loadlist) progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");            
+            progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");            
             try
             {
                 Parallel.For(0, selected_fragments.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
@@ -2089,32 +2088,29 @@ namespace Isotope_fitting
                     Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);                    
                     // safelly keep track of progress
                     Interlocked.Increment(ref progress);
-                    if (!multiple_loadlist && progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
+                    if ( progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
                 });
             }
             catch (Exception ex) 
             {
                 Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File.");
             };
-            if (!multiple_loadlist)progress_display_stop();
+            progress_display_stop();
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             is_calc = false;
-            if (!multiple_loadlist)
+            if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
             {
-                if (selected_fragments.Count > 0 && !selected_fragments[0].Fixed)
-                {
-                    Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
-                    MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
-                }
-                else MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
-                // sort by mz the fragments list (global) beause it is mixed by multi-threading
-                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
-                // also restore indexes to match array position
-                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-                change_name_duplicates();                
-                  // thread safely fire event to continue calculations
-                if (selected_fragments.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
-            }                      
+                Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
+                MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
+            }
+            else MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
+            // sort by mz the fragments list (global) beause it is mixed by multi-threading
+            Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+            // also restore indexes to match array position
+            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+            change_name_duplicates();
+            // thread safely fire event to continue calculations
+            if (selected_fragments.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
         }
         private void change_name_duplicates()
         {
@@ -5221,7 +5217,8 @@ namespace Isotope_fitting
         private void progress_display_init()
         {
             tlPrgBr = new ProgressBar() { Name = "tlPrgBr", Location = new Point(40, 20), Style = 0, Minimum = 0, Value = 0, Size = new Size(292, 21), AutoSize = false, Visible = false,Dock=DockStyle.Bottom/*Anchor=AnchorStyles.Right | AnchorStyles.Top*/ };
-            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(40,3), AutoSize = true, Visible = false, Dock = DockStyle.Bottom /*Anchor = AnchorStyles.Right | AnchorStyles.Top*/ };
+            prg_lbl = new Label { Name = "prg_lbl", Location = new Point(40, 3), AutoSize = true, Visible = false, Dock = DockStyle.Bottom, Padding = new System.Windows.Forms.Padding(40, 0, 0, 0) };
+        
             panel1.Controls.AddRange(new Control[] { tlPrgBr, prg_lbl });
             prg_lbl.BringToFront(); tlPrgBr.BringToFront();
 
@@ -5921,7 +5918,7 @@ namespace Isotope_fitting
         }
         private void loadList()
         {
-            multiple_loadlist = false;
+            
             bool last_fired = false;
             duplicate_count = 0;added = 0;
             bool mult_extensions=false; bool new_type = false; bool peptide = true;
@@ -5940,7 +5937,6 @@ namespace Isotope_fitting
                 loadExp_Btn.Enabled = true;
                 loadFit_Btn.Enabled = false;
                 #endregion
-                if (loadData.FileNames.Length>1) { multiple_loadlist = true; }
                 int file_count = loadData.FileNames.Length;
                 for (int n= 0; n< file_count; n++ )
                 {
@@ -6299,36 +6295,20 @@ namespace Isotope_fitting
                             {
                                 List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
                                 add_fragment_to_Fragments2(chemi, cen);
-                            }                           
-                            if (!multiple_loadlist)
-                            {
-                                MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
-                                // sort by mz the fragments list (global) beause it is mixed by multi-threading
-                                Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
-                                // also restore indexes to match array position
-                                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-                                change_name_duplicates();
-                                // thread safely fire event to continue calculations
-                                if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
-                            }             
+                            }     
                             if (n == file_count - 1) { last_fired = true; is_calc = false; }
 
                         }
                         else
                         {
-                            Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
+                            Thread envipat_fitted = new Thread(() => calculate_loaded_fragment_properties(fitted_chem));
                             envipat_fitted.Start();
                             while (envipat_fitted.IsAlive)
                             {
                                 is_calc = true;
                             }
                             if (n == file_count - 1) { last_fired = true; is_calc = false; }
-                        }
-                        is_loading = false;
-                        fitted_results.Clear();
-                        if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-                        if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-                        fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                        }                        
                     }
                     else
                     {
@@ -6607,45 +6587,58 @@ namespace Isotope_fitting
                             arrayPositionIndex++;
                         }
 
-                        Thread envipat_fitted = new Thread(() => calculate_fragment_properties(fitted_chem));
+                        Thread envipat_fitted = new Thread(() => calculate_loaded_fragment_properties(fitted_chem));
                         envipat_fitted.Start();
                         
                         while (envipat_fitted.IsAlive) { is_calc = true; }
-                        //refresh_iso_plot();
-                        is_loading = false;
-                        fitted_results.Clear();
-                        if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-                        if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-                        fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
                         if (n == file_count - 1) { last_fired = true; is_calc = false; }
                     }
                 }
                              
             }
+            is_loading = false;
+            fitted_results.Clear();
+            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+            if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
+            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+            
             if (sequenceList.Count == 1) { tab_mode = false; }
             else { tab_mode = true; }
             is_loading = false;
-           
-            if (multiple_loadlist)
+            Task.Delay(25);
+            while (is_calc || !last_fired)
             {
+                Console.WriteLine("Thread is busy");
                 Task.Delay(25);
-                while (is_calc || !last_fired)
-                {
-                    Console.WriteLine("Thread is busy");
-                    Task.Delay(25);
-                }
-               
-                // sort by mz the fragments list (global) beause it is mixed by multi-threading
-                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
-                // also restore indexes to match array position
-                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-                change_name_duplicates();
-                // thread safely fire event to continue calculations
-                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
-                MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current files.", "Fitted fragments files");
-
             }
+            // sort by mz the fragments list (global) beause it is mixed by multi-threading
+            Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+            // also restore indexes to match array position
+            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+            change_name_duplicates();
+            // thread safely fire event to continue calculations
+            Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current files.", "Fitted fragments files");
+
             return;
+        }
+        private void calculate_loaded_fragment_properties(List<ChemiForm> selected_fragments)
+        {
+            // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
+            is_calc = true;
+            sw1.Reset(); sw1.Start();
+            try
+            {
+                Parallel.For(0, selected_fragments.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                {
+                    Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File.");
+            };
+            sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());           
         }
         private bool check_for_duplicates(string name,double mz)
         {
@@ -7009,7 +7002,6 @@ namespace Isotope_fitting
             // this the main sequence after loadind data
             // 1. select fragments according to UI
             Fragments2.Clear();
-            multiple_loadlist = false;
             selectedFragments.Clear();
             custom_colors.Clear();
             custom_colors.Add(exp_color);
