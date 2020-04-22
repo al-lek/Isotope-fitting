@@ -37,20 +37,24 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
-        List<double[]> experimental_dec = new List<double[]>();
-        BackgroundWorker _bw_save_envipat = new BackgroundWorker();       
-
+        BackgroundWorker _bw_save_envipat = new BackgroundWorker();    
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Inherit };
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
-        public bool tab_mode = false;
-        public bool exp_deconvoluted = false;
+        public bool tab_mode = false;        
         int duplicate_count = 0;
         int added = 0;
+        #region deconvoluted
+        public bool exp_deconvoluted = false;
+        public string deconv_machine = "";
+        public bool deconv_const_resolution = false;
+        List<List<double[]>> experimental_dec = new List<List<double[]>>();
+        #endregion
 
+        #region exclude indexes
         public List<ExcludeTypes> exclude_a_indexes = new List<ExcludeTypes>();
         public List<ExcludeTypes> exclude_b_indexes = new List<ExcludeTypes>();
         public List<ExcludeTypes> exclude_c_indexes = new List<ExcludeTypes>();
@@ -59,6 +63,7 @@ namespace Isotope_fitting
         public List<ExcludeTypes> exclude_z_indexes = new List<ExcludeTypes>();
         public List<ExcludeTypes> exclude_internal_indexes = new List<ExcludeTypes>();
         public List<string[]> list_21 = new List<string[]>();
+        #endregion
 
         #region SAVE PROJECT
         int all = 0;
@@ -216,7 +221,7 @@ namespace Isotope_fitting
         /// <summary>
         /// peak detect min intensity
         /// </summary>
-        public static double min_intes = 50.0;
+        public double min_intes = 50.0;
         /// <summary>
         /// size of fragments groups
         /// </summary>
@@ -942,13 +947,21 @@ namespace Isotope_fitting
         private void load_experimental_sequence()
         {
             // load experimental and break if not loaded ok
-            if (!load_experimental()) return;            
-
-            sw1.Reset(); sw1.Start();
-            post_load_actions();
+            if (!load_experimental()) return; 
+            sw1.Reset(); sw1.Start();            
             sw1.Stop(); Debug.WriteLine("post_load_actions: " + sw1.ElapsedMilliseconds.ToString());
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
             peak_detection.Start();
+            try
+            {
+                post_load_actions();
+
+            }
+            catch(Exception l)
+            {
+                MessageBox.Show(l.ToString(), "Error in loading experimental data");
+
+            }
             //plotCentr_chkBox.Enabled = true;
             //plotExp_chkBox.Checked = true;
         }
@@ -972,9 +985,11 @@ namespace Isotope_fitting
                     while (objReader.Peek() != -1);
                     objReader.Close();
                     experimental.Clear();
+                    experimental_dec.Clear();
                     //add toolstrip progress bar
                     progress_display_start(lista.Count, "Loading experimental data...");
-                    max_exp = 0.0;                    
+                    max_exp = 0.0;
+                    double mz_prev =0;
                     for (int j = 0; j != (lista.Count); j++)
                     {
                         try
@@ -982,12 +997,22 @@ namespace Isotope_fitting
                             string[] tmp_str = lista[j].Split('\t');
                             double mz = dParser(tmp_str[0]);
                             double y = dParser(tmp_str[1]);
-                            if (tmp_str.Length == 2) experimental.Add(new double[] { mz, y });
+                            if (tmp_str.Length == 2)
+                            {
+                                experimental.Add(new double[] { mz, y });
+                                if (exp_deconvoluted)
+                                {
+                                    if (experimental_dec.Count==0) { experimental_dec.Add(new List<double[]>()); }
+                                    else if (mz-mz_prev>2) { experimental_dec.Add(new List<double[]>()); }
+                                    experimental_dec.Last().Add(new double[] { mz, y });
+                                    mz_prev = mz;
+                                }
+                            }
                             if (max_exp < y) max_exp = y;                            
                         }
                         catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); return false; }
                         if (j % 10000 == 0 && j > 0) progress_display_update(j);
-                    }
+                    }                    
                     sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
                     progress_display_stop();
                     //plotExp_chkBox.Enabled = true;
@@ -999,7 +1024,7 @@ namespace Isotope_fitting
             else { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return false; }
         }
         
-        private void post_load_actions()
+        public void post_load_actions()
         {
             insert_exp = true;
             recalc = true;
@@ -1013,68 +1038,311 @@ namespace Isotope_fitting
             if (custom_colors.Count > 0) custom_colors[0] = exp_color;
             else custom_colors.Add(exp_color);
 
+            if (exp_deconvoluted) find_resolution();
             // copy experimental to all_data
             experimental_to_all_data();
             recalculate_all_data_aligned();
 
             ////// add experimental to plot
-            //refresh_iso_plot();
-
             start_idx = 0;
             end_idx = experimental.Count;            
             LC_1.ViewXY.ZoomToFit();            
         }
 
+
         private void peakDetect_and_resolutionRef()
         {
             // run peak detection and add new resolution map from experimental
-            if (experimental.Count() > 0)
+            if (experimental.Count() > 0 && !exp_deconvoluted)
             {
                 plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true));   //thread safe call
-
-                if (!exp_deconvoluted)
+                peak_detect();
+                if (peak_points.Count() > 0)
                 {
-                    peak_detect();
-                    if (peak_points.Count() > 0)
-                    {
-                        displayPeakList_btn.Invoke(new Action(() => displayPeakList_btn.Enabled = true));   //thread safe call
-                        plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
-
-                        exp_res++;
-                        //plot_peak(); 
-                        List<double> tmp1 = new List<double>();
-                        List<double> tmp2 = new List<double>();
-                        foreach (double[] peak in peak_points)
-                        {
-                            if (peak[5] > 200000)
-                            {
-                                tmp1.Add((double)(peak[1] + peak[4]));
-                                tmp2.Add((double)peak[3]);
-                            }
-                        }
-                        if (tmp1.Count > 0)
-                        {
-                            Resolution_List.L.Add("resolution from file" + exp_res.ToString(), new Resolution_List.MachineR(tmp1.ToArray(), tmp2.ToArray()));
-                            add_machine(true);
-                        }
-                    }
-                }
-                else
-                {
-                    peak_points.Clear();
-                    for (int exp=0;exp<experimental.Count ;exp++)
-                    {
-                        peak_points.Add(new double[] {exp, experimental[exp][0], experimental[exp][1],10000, 0, experimental[exp][1] });
-                    }
+                    displayPeakList_btn.Invoke(new Action(() => displayPeakList_btn.Enabled = true));   //thread safe call
                     plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
-                    plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Checked = true));   //thread safe call
+
+                    exp_res++;
+                    //plot_peak(); 
+                    List<double> tmp1 = new List<double>();
+                    List<double> tmp2 = new List<double>();
+                    foreach (double[] peak in peak_points)
+                    {
+                        if (peak[5] > 200000)
+                        {
+                            tmp1.Add((double)(peak[1] + peak[4]));
+                            tmp2.Add((double)peak[3]);
+                        }
+                    }
+                    if (tmp1.Count > 0)
+                    {
+                        Resolution_List.L.Add("resolution from file" + exp_res.ToString(), new Resolution_List.MachineR(tmp1.ToArray(), tmp2.ToArray()));
+                        add_machine(true);
+                    }
                 }
+                LC_1.BeginUpdate();
+                LC_1.ViewXY.ZoomToFit();
+                LC_1.EndUpdate();   
+            }
+            else if (exp_deconvoluted && experimental_dec.Count>0)
+            {
+                plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true));   //thread safe call
+                peak_points.Clear();
+                for (int exp = 0; exp < experimental_dec.Count; exp++)
+                {
+                    for (int g=0;g< experimental_dec[exp].Count; g++)
+                    {
+                        peak_points.Add(new double[] { exp, experimental_dec[exp][g][0], experimental_dec[exp][g][1], 10000, 0, experimental_dec[exp][g][1] });
+
+                    }
+                }
+                plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
+                plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Checked = true));   //thread safe call
                 LC_1.BeginUpdate();
                 LC_1.ViewXY.ZoomToFit();
                 LC_1.EndUpdate();
             }
         }
 
+        
+        private void find_resolution()
+        {
+            double resolution = 0.0;
+            double previous_res = 0.0;
+            double max_res = 0.0;
+            List<double[]> experimental_f = new List<double[]>();
+            List<double[]> experimental_f2 = new List<double[]>();
+            List<List<double[]>> exp_groups = new List<List<double[]>>();
+            List<double> exp_x = new List<double>();
+            string machine = deconv_machine;
+            if (deconv_const_resolution)
+            {
+                resolution = dParser(machine);
+                Parallel.For(0, experimental_dec.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                {
+                    List<double[]>temp_list=Envelope_Experimental(experimental_dec[i], resolution, 0.1);
+                    lock (_locker) { experimental_f.AddRange(temp_list); }
+                });
+                experimental = experimental_f.OrderBy(d => d[0]).ToList();
+            }
+            else
+            {
+                machine = deconv_machine;
+                if (Resolution_List.L.TryGetValue(machine, out Resolution_List.MachineR data))
+                {
+                    int n = 50;
+                    double stepSize = (data.m_z[data.m_z.Length - 1] - data.m_z[0]) / (n - 1);
+                    double[] x1 = new double[1];
+                    double[] x = data.m_z;
+                    double[] y = data.R;
+                    List<double> xss = new List<double>();
+                    xss.Add(x.Last());
+                    double[] x_ = Array.ConvertAll(data.m_z, k => (double)k);
+                    double[] y_ = Array.ConvertAll(data.R, k => (double)k);
+                    double[] w = new double[y_.Count()];
+                    for (int u = 0; u < y_.Count(); u++) { w[u] = 1; }
+                    int info = new int();
+                    alglib.spline1dinterpolant s = new alglib.spline1dinterpolant();
+                    alglib.spline1dfitreport rep = new alglib.spline1dfitreport();
+                    double rho = 1;
+                    alglib.spline1dfitpenalized(x_, y_, 50, rho, out info, out s, out rep);
+                    Parallel.For(0, experimental_dec.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                    {
+                        List<double[]> initial_entry = new List<double[]>();
+                        List<List<double[]>> temp_exp_groups = new List<List<double[]>>();
+                        for (int ii = 0; ii < experimental_dec[i].Count; ii++)
+                        {
+                            x1 = new double[] { experimental_dec[i][ii][0] };
+                            if (data.m_z[data.m_z.Length - 1] <= x1[0])
+                            {
+                                resolution = data.R[data.m_z.Length - 1];
+                            }
+                            else if (data.m_z[0] >= x1[0])
+                            {
+                                resolution = data.R[0];
+                            }
+                            else
+                            {
+                                resolution = alglib.spline1dcalc(s, x1[0]);
+                            }
+                            if (resolution > max_res) max_res = resolution;
+                            if (previous_res == resolution) { initial_entry.Add(new double[] { experimental_dec[i][ii][0], experimental_dec[i][ii][1] }); }
+                            else if (initial_entry.Count > 0)
+                            {
+                                temp_exp_groups.Add(Envelope_Experimental(initial_entry, resolution));
+                                initial_entry.Clear();
+                                previous_res = resolution;
+                                initial_entry.Add(new double[] { experimental_dec[i][ii][0], experimental_dec[i][ii][1] });
+                            }
+                            else
+                            {
+                                previous_res = resolution;
+                                initial_entry.Add(new double[] { experimental_dec[i][ii][0], experimental_dec[i][ii][1] });
+                            }
+                        }
+                        if (initial_entry.Count > 0)
+                        {
+                            temp_exp_groups.Add(Envelope_Experimental(initial_entry, resolution, 0.1));
+                        }
+                        List<double> temp_exp_x = Range_Final_Exp(temp_exp_groups);
+
+                        List<double[]> temp_list = Envelope_Experimental(experimental_dec[i], resolution, 0.1);
+
+                        lock (_locker) { exp_groups.AddRange(temp_exp_groups); }
+                        lock (_locker) { exp_x.AddRange(temp_exp_x); }
+
+                    });
+                    exp_x.Sort();
+                    Parallel.For(0, exp_x.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                    {
+                        double one_aligned_point = 0.0;
+                        double mz_toInterp = exp_x[i];
+                        for (int j = 0; j < exp_groups.Count; j++)
+                        {
+                            double aligned_value = 0.0;
+                            int grp_points = exp_groups[j].Count;
+                            for (int k = 0; k < grp_points - 1; k++)
+                            {
+                                if (k == 0 && mz_toInterp > exp_groups[j][grp_points - 1][0])
+                                {
+                                    aligned_value = 0.0; break;
+                                }
+                                if (k == 0 && mz_toInterp < exp_groups[j][k][0])
+                                {
+                                    aligned_value = 0.0; break;
+                                }
+                                if (mz_toInterp >= exp_groups[j][k][0] && mz_toInterp <= exp_groups[j][k + 1][0])
+                                {
+                                    aligned_value = interpolate(exp_groups[j][k][0], exp_groups[j][k][1], exp_groups[j][k + 1][0], exp_groups[j][k + 1][1], mz_toInterp);
+                                    break;
+                                }
+                            }
+                            one_aligned_point += aligned_value;
+                        }
+                        if(i % 2==0) lock (_locker) { experimental_f.Add(new double[] { mz_toInterp, one_aligned_point }); }
+                        else lock (_locker) { experimental_f2.Add(new double[] { mz_toInterp, one_aligned_point }); }
+                    });
+                    experimental_f.AddRange(experimental_f2);
+                    // sort by mz the aligned intensities list (global) beause it is mixed by multi-threading
+                    experimental = experimental_f.OrderBy(d => d[0]).ToList();
+                }
+            }            
+             
+            return;
+        }
+        private List<double> Range_Final_Exp(List<List<double[]>> exp_groups)
+        {
+            List<double> final = new List<double>();
+            foreach (List<double[]> list in exp_groups)
+            {
+                foreach (double[] num in list) { final.Add(num[0]); }
+            }            
+            final.Sort();
+            int k = 0;
+            while (k< final.Count-1)
+            {
+                if (final[k] == final[k + 1])
+                {
+                    final.RemoveAt(k + 1);
+                }
+                else k++;                
+            }
+            return final;
+        }
+        private IEnumerable<double> Range_Exp(double start, double end, List<double[]> initial, Func<double, double> step)
+        {
+            if (initial.Count < 2)
+            {
+                //check parameters
+                while (start <= end)
+                {
+                    yield return start;
+                    start = step(start);
+                }
+            }
+            else
+            {
+                int curr_idx = 0;
+                //check parameters
+                while (start <= end)
+                {
+                    yield return start;
+                    if (curr_idx < initial.Count && step(start) > initial[curr_idx][0])
+                    {
+                        start = initial[curr_idx][0];
+                        curr_idx++;
+                    }
+                    else start = step(start);                   
+                }
+            }
+        }
+        private List<double[]> Envelope_Experimental(List<double[]>initial,double resolution, double frac = 0.3, int filter = 1)
+        {
+            //Peak shape function "Gaussian"-->profile_type = 0 
+            //code as dmz="get" default value. Derive stick discretization from argument resolution. As written in the manual :
+            //" the stick discretization is retrieved from (dm/z)*frac, with (dm/z) = (m/z)/R = peak width at half maximum."
+            //create stick masses                       
+            double extend = 0.5;//default value in code
+            int index_prev_m = 0;
+            int c = 0;
+            List<double[]> final = new List<double[]>();
+            //reminder X stands for mass and Y for abundance
+            var array = initial.Select(x => x[0]).ToArray();
+            double average = array.Average();
+            double dmz2 = average / resolution;
+            //double a_max = initial.Max(x => x[1]);
+            double a_max = initial[0][1];
+
+            IEnumerable<double> traceit = Range_Exp(initial.Min(x => x[0]) - 0.5, initial.Max(x => x[0]) + extend,initial, x => x + (dmz2 * frac));
+            foreach (double tr in traceit)
+            {
+                double value = 0.0;
+                for (int i = index_prev_m; i < initial.Count; i++)
+                {
+                    double mk = initial[i][0];
+                    //if(tr== mk) a_max = mk;
+                    double ab = initial[i][1];                    
+                    double v = ab * Math.Exp(-1.0 * (Math.Pow(tr - mk, 2.0) * Math.Pow(resolution, 2.0) * Math.Log(256)) / (2.0 * Math.Pow(mk, 2.0)));
+                    if (tr < mk)
+                    {
+                        double threshold = a_max * Math.Exp(-1.0 * (Math.Pow(tr - mk, 2.0) * Math.Pow(resolution, 2.0) * Math.Log(256.0)) / (2.0 * Math.Pow(mk, 2.0)));
+                        if (threshold == 0.0)
+                        {
+                            break;
+                        }
+                    }
+                    if (tr > mk)
+                    {
+                        double m_prev = initial[index_prev_m][0];
+                        double threshold = a_max * Math.Exp(-1.0 * (Math.Pow(tr - m_prev, 2.0) * Math.Pow(resolution, 2.0) * Math.Log(256)) / (2.0 * Math.Pow(m_prev, 2.0)));
+                        if (threshold == 0.0)
+                        {
+                            index_prev_m = i;
+                            if (i< initial.Count-1) a_max = initial[i+1][1];
+                        }
+                    }
+                    value += v;                    
+                }
+                //if (c > 0)
+                //{
+                //    if (value > 0.0 || (value == 0.0 && final[c - 1][1] > 0.0))
+                //    {
+                //        final.Add(new double[] { tr, value });
+                //        c++;
+                //    }
+                //}
+                //else
+                //{
+                //    if (value > 0.0)
+                //    {
+                //        final.Add(new double[] { tr, value }); c++;
+
+                //    }
+                //}
+                final.Add(new double[] { tr, value }); c++;
+            }
+            return final;
+        }
         #endregion
 
         #region 1.b Import fragment list
@@ -1167,11 +1435,10 @@ namespace Isotope_fitting
             prompt.ShowDialog();
             return ext_listBox.Text;
         }
-
         private void import_fragments()
         {
             string loaded_ms = "";
-            if (ms_extension=="_") { ms_extension = ""; }
+            if (ms_extension.Equals("_")) { ms_extension = ""; }
             OpenFileDialog fragment_import = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Filter = "txt files (*.txt)|*.txt", FilterIndex = 2, RestoreDirectory = true, CheckFileExists = true, CheckPathExists = true };
             List<string> lista = new List<string>();
             x_charged = false;
@@ -1188,9 +1455,7 @@ namespace Isotope_fitting
                 if (MSproduct_treeView==null || MSproduct_treeView.Nodes.Count==0) { MSproduct_treeView.Nodes.Add("Loaded MS product files"); }
                 MSproduct_treeView.Nodes[0].Nodes.Add(loaded_ms);                
                 lista.RemoveAt(0);
-                //get_precursor_carbons(lista.Last());
                 progress_display_start(lista.Count, "Importing fragments list...");
-
                 for (int j = 0; j != (lista.Count); j++)
                 {
                     try
@@ -1206,17 +1471,13 @@ namespace Isotope_fitting
                 progress_display_stop();
                 post_import_fragments();
                 sw1.Stop(); Debug.WriteLine("Import frags and generate X: " + sw1.ElapsedMilliseconds.ToString());
-            }
-            
+            }            
         }
-
-
         private void get_precursor_carbons(string last_line)
         {
             string[] tmp_str = last_line.Split('\t');
             if (tmp_str[1] == "MH")precursor_carbons = tmp_str[4].Split(' ').First();
         }
-
         private void assign_resolve_fragment(string[] frag_info)
         {
             int charge = Int32.Parse(frag_info[3]);
@@ -1322,7 +1583,7 @@ namespace Isotope_fitting
                     ChemFormulas[i].Ion_type = "M" + substring[1];
                     ChemFormulas[i].Color = OxyColors.DarkRed;
                     ChemFormulas[i].Index = 0.ToString();
-                    ChemFormulas[i].IndexTo = (Peptide.Length - 1).ToString();
+                    ChemFormulas[i].IndexTo = (ms_sequence.Length - 1).ToString();
 
                     string lbl = ChemFormulas[i].Ion_type;
                     ChemFormulas[i].Radio_label = lbl + ms_extension;
@@ -1615,7 +1876,6 @@ namespace Isotope_fitting
             ms_light_chain = false; ms_heavy_chain = false;
             enable_UIcontrols("post import fragments");
         }
-
         private void generate_x()
         {
             // this adds all x fragments msProduct does not generate (x multiCharged and x with adducts)
@@ -1650,7 +1910,6 @@ namespace Isotope_fitting
                 }
             }
         }
-
         
         #endregion
 
@@ -2103,7 +2362,8 @@ namespace Isotope_fitting
                 Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
                 MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments2.Count.ToString() + " were within ppm filter.", "Fragment selection results");
             }
-            else MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
+            else if (selected_fragments.Count > 0 && selected_fragments[0].Fixed) MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current file.", "Fitted fragments file");
+            else if (selected_fragments.Count == 0) { MessageBox.Show("No fragments match to your research", "Fragment selection results"); return; }
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
@@ -4841,12 +5101,12 @@ namespace Isotope_fitting
             // 1.b Add the experimental to plot if selected
             if (plotExp_chkBox.Checked && all_data.Count > 0)
             {
-                if (!exp_deconvoluted)
-                {
+                //if (!exp_deconvoluted)
+                //{
                     double[] mz = all_data[0].Select(a => a[0]).ToArray();
                     double[] y = all_data[0].Select(a => a[1]).ToArray();
                     PointLine_addSeries(LC_1, 0, mz, y, 1);
-                }
+                //}
             }
 
             // 2. replot all isotopes
@@ -4909,7 +5169,7 @@ namespace Isotope_fitting
             if (residual.Count > 0) PointLine_addSeries(LC_2, 0, residual);
 
             // 5. centroid (bar)
-            if (plotCentr_chkBox.Checked && !exp_deconvoluted && peak_points.Count > 0)
+            if (plotCentr_chkBox.Checked /*&& !exp_deconvoluted*/ && peak_points.Count > 0 && all_data.Count>0)
             {
                 int pointCount = peak_points.Count;
                 List<double[]> data_decon = new List<double[]>();
@@ -4921,11 +5181,7 @@ namespace Isotope_fitting
                     data_decon.Add(new double[] { mz, inten });
                 }
                 LineCollection_addLines(LC_1, all_data.Count - 1, data_decon);
-            }
-            else if (plotCentr_chkBox.Checked && exp_deconvoluted)
-            {
-                LineCollection_addLines(LC_1, all_data.Count - 1, experimental);
-            }
+            }          
 
             // 6. fragment annotations
             if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
@@ -5501,7 +5757,7 @@ namespace Isotope_fitting
         }
         private void settingsPeak_Btn_Click(object sender, EventArgs e)
         {
-            Form8 frm8 = new Form8();
+            Form8 frm8 = new Form8(this);
             frm8.FormClosed += (s, f) => { save_preferences(); };
             frm8.ShowDialog();
         }
@@ -5917,8 +6173,7 @@ namespace Isotope_fitting
             is_loading = false;
         }
         private void loadList()
-        {
-            
+        {            
             bool last_fired = false;
             duplicate_count = 0;added = 0;
             bool mult_extensions=false; bool new_type = false; bool peptide = true;
@@ -7065,7 +7320,7 @@ namespace Isotope_fitting
         #region UI
         private void Initialize_UI()
         {
-            plotExp_chkBox.CheckedChanged += (s, e) => { if (!exp_deconvoluted && (!block_plot_refresh)) { refresh_iso_plot(); } else if(plotExp_chkBox.Checked) { plotExp_chkBox.Checked = false; } };
+            plotExp_chkBox.CheckedChanged += (s, e) => { if (/*!exp_deconvoluted &&*/ (!block_plot_refresh)) { refresh_iso_plot(); } /*else if(plotExp_chkBox.Checked) { plotExp_chkBox.Checked = false; }*/ };
             plotCentr_chkBox.CheckedChanged += (s, e) => { if (!block_plot_refresh) refresh_iso_plot(); };
             plotFragCent_chkBox.CheckedChanged += (s, e) => { if (!block_plot_refresh) refresh_iso_plot(); };
             plotFragProf_chkBox.CheckedChanged += (s, e) => {if(!block_plot_refresh) refresh_iso_plot(); };
@@ -9166,6 +9421,7 @@ namespace Isotope_fitting
         public static string find_index_fix_formula(string input, int amount = -1, char element = 'H')
         {
             int idx = input.IndexOf(element);
+            if (idx < 0) return input;
             var theString = input;
             var aStringBuilder = new StringBuilder(theString);
             if (Char.IsNumber(input[idx + 2]))

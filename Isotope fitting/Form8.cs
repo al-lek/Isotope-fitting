@@ -12,28 +12,66 @@ namespace Isotope_fitting
 {
     public partial class Form8 : Form
     {
-        public Form8()
+        Form2 frm2;
+        public Form8(Form2 f)
         {
             InitializeComponent();
-            minIntensity_numUD.TextChanged += new EventHandler(minIntensity_numUD_TextChanged);
-            minIntensity_numUD.Value = (decimal)Form2.min_intes;
+            frm2 = f;
+            //minIntensity_numUD.TextChanged += new EventHandler(minIntensity_numUD_TextChanged);
+            minIntensity_numUD.Value = (decimal)frm2.min_intes;
+            constRes_radBtn.Checked = frm2.deconv_const_resolution;
+            listRes_radBtn.Checked = !constRes_radBtn.Checked;
         }
 
-        private void minIntensity_numUD_ValueChanged(object sender, EventArgs e)
-        {
-            Form2.min_intes = (double)minIntensity_numUD.Value;
-        }
-        void minIntensity_numUD_TextChanged(object sender, EventArgs e)
-        {
-            if (minIntensity_numUD.ActiveControl != null && !string.IsNullOrEmpty(minIntensity_numUD.ActiveControl.Text))
-            {
-                Form2.min_intes = double.Parse(minIntensity_numUD.ActiveControl.Text);
-            }
-        }
+        //private void minIntensity_numUD_ValueChanged(object sender, EventArgs e)
+        //{
+        //    Form2.min_intes = (double)minIntensity_numUD.Value;
+        //}
+        //void minIntensity_numUD_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (minIntensity_numUD.ActiveControl != null && !string.IsNullOrEmpty(minIntensity_numUD.ActiveControl.Text))
+        //    {
+        //        Form2.min_intes = double.Parse(minIntensity_numUD.ActiveControl.Text);
+        //    }
+        //}
 
         private void Form8_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+
+        private void Form8_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void save_btn_Click(object sender, EventArgs e)
+        {
+            if ((constRes_radBtn.Checked && selection_list_1.SelectedIndex == -1) ||(listRes_radBtn.Checked && resolution_list_combBox.SelectedIndex == -1))
+            {
+                MessageBox.Show("First select resolution and then press 'save' button!"); return;
+
+            }
+            else if (constRes_radBtn.Checked)
+            {
+                frm2.deconv_machine = selection_list_1.SelectedItem.ToString();
+                frm2.deconv_const_resolution=true;
+            }
+            else
+            {
+                frm2.deconv_machine = resolution_list_combBox.SelectedItem.ToString();
+                frm2.deconv_const_resolution =false;
+            }
+        }
+
+        private void save_peak_btn_Click(object sender, EventArgs e)
+        {
+            frm2.min_intes = (double)minIntensity_numUD.Value;
+        }
+
+        private void recalc_Exp_Btn_Click(object sender, EventArgs e)
+        {
+            frm2.post_load_actions();
         }
     }
 }
