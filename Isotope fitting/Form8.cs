@@ -19,7 +19,7 @@ namespace Isotope_fitting
             frm2 = f;
             //minIntensity_numUD.TextChanged += new EventHandler(minIntensity_numUD_TextChanged);
             minIntensity_numUD.Value = (decimal)frm2.min_intes;
-            constRes_radBtn.Checked = frm2.deconv_const_resolution;
+            constRes_radBtn.Checked = frm2.is_deconv_const_resolution;
             listRes_radBtn.Checked = !constRes_radBtn.Checked;
         }
 
@@ -55,12 +55,12 @@ namespace Isotope_fitting
             else if (constRes_radBtn.Checked)
             {
                 frm2.deconv_machine = selection_list_1.SelectedItem.ToString();
-                frm2.deconv_const_resolution=true;
+                frm2.is_deconv_const_resolution=true;
             }
             else
             {
                 frm2.deconv_machine = resolution_list_combBox.SelectedItem.ToString();
-                frm2.deconv_const_resolution =false;
+                frm2.is_deconv_const_resolution =false;
             }
         }
 
@@ -72,6 +72,16 @@ namespace Isotope_fitting
         private void recalc_Exp_Btn_Click(object sender, EventArgs e)
         {
             frm2.post_load_actions();
+        }
+
+        private void listRes_radBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            resolution_list_combBox.Enabled = listRes_radBtn.Checked;
+        }
+
+        private void constRes_radBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            selection_list_1.Enabled = constRes_radBtn.Checked;
         }
     }
 }

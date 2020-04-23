@@ -48,10 +48,11 @@ namespace Isotope_fitting
         int duplicate_count = 0;
         int added = 0;
         #region deconvoluted
-        public bool exp_deconvoluted = false;
+        public bool is_exp_deconvoluted = false;
         public string deconv_machine = "";
-        public bool deconv_const_resolution = false;
+        public bool is_deconv_const_resolution = false;
         List<List<double[]>> experimental_dec = new List<List<double[]>>();
+        BackgroundWorker _bw_deconcoluted_exp_resolution = new BackgroundWorker();
         #endregion
 
         #region exclude indexes
@@ -437,7 +438,9 @@ namespace Isotope_fitting
             _bw_load_project_fragments.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fragments_RunWorkerCompleted);
             _bw_load_project_fit_results.DoWork += new DoWorkEventHandler(Project_load_fit_results);
             _bw_load_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fit_RunWorkerCompleted);
-
+            //deconvolution
+            _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
+            _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
         }
 
         #region save load bw
@@ -448,8 +451,10 @@ namespace Isotope_fitting
         void _bw_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
+            progress_display_update(2*all);
             if (all==3)
             {
+                progress_display_stop();
                 MessageBox.Show("Save project procedure is completed");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
@@ -457,8 +462,10 @@ namespace Isotope_fitting
         void _bw_project_frag_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
+            progress_display_update(2*all);
             if (all == 3)
             {
+                progress_display_stop();
                 MessageBox.Show("Save project procedure is completed");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
@@ -466,11 +473,12 @@ namespace Isotope_fitting
         void _bw_project_fitResults_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
+            progress_display_update(2*all);
             if (all == 3)
             {
+                progress_display_stop();
                 MessageBox.Show("Save project procedure is completed");
-                root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
-            }
+                root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();            }
         }
         void _bw_load_project_exp_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -744,46 +752,38 @@ namespace Isotope_fitting
                     threshold = Convert.ToDouble(preferences[84].Split(':')[1]);
 
                     annotation_size = Convert.ToDouble(preferences[85].Split(':')[1]);
+                    is_deconv_const_resolution = string_to_bool(preferences[86].Split(':')[1]);
+                    deconv_machine = preferences[87].Split(':')[1].ToString();
                 }
                 catch
                 {
                     MessageBox.Show("Error!", "Corrupted preferences file! Preferences not loaded!");
-                    ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2;selection_rule = new bool[] { false, true, false, false, false, false };
-                    fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0 ,100.0,100.0}; ppmDi = 8.0;
-                    fit_color = OxyColors.Black;exp_color = OxyColors.Black.ToColor().ToArgb();peak_color = OxyColors.Crimson;fit_style = LinePattern.Dot;exper_style = LinePattern.Solid;frag_style = LinePattern.Solid;exp_width = 1;frag_width = 2;fit_width = 1;
-                    peak_width = 1;cen_width = 1;Xmajor_grid = false;Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside;Y_tick = OxyPlot.Axes.TickStyle.Outside;x_interval = 50;
-                    y_interval = 50;x_format = "G";y_format = "0.0E+"; x_numformat = "0";y_numformat = "0";Xmajor_grid12 = OxyPlot.LineStyle.Solid;Xminor_grid12 = OxyPlot.LineStyle.None;Ymajor_grid12 = OxyPlot.LineStyle.Solid;Yminor_grid12 = OxyPlot.LineStyle.None;y_interval12 = 50;
-                    X_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_tick12 = OxyPlot.Axes.TickStyle.Outside;y_format12 = "0.0E+"; y_numformat12 = "0";x_majorStep12 = 5;x_minorStep12 = 1;bar_width = 1;Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid;Xminor_charge_grid12 = OxyPlot.LineStyle.None;
-                    Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid;Yminor_charge_grid12 = OxyPlot.LineStyle.None;X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;y_charge_majorStep12 = 2;y_charge_minorStep12 = 1;x_charge_majorStep12 = 5;
-                    x_charge_minorStep12 = 1;Xint_major_grid13 = OxyPlot.LineStyle.Solid;Xint_minor_grid13 = OxyPlot.LineStyle.None;Yint_major_grid13 = OxyPlot.LineStyle.Solid;Yint_minor_grid13 = OxyPlot.LineStyle.None;x_format13 = "0.0E+"; x_numformat13 = "0";x_interval13 = 50;Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
-                    Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;xINT_majorStep13 = 5;xINT_minorStep13 = 1;yINT_majorStep13 = 5;yINT_minorStep13 = 1;int_width = 1;
-                    for (int a = 0; a < 6; a++)
-                    {
-                        ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
-                    }
-                    entire_spectrum = true; threshold = 0.01;annotation_size = 9.0;
+                    init_preferences();
                 }
             }
             else
             {
-                ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2; selection_rule = new bool[] { false, true, false, false, false, false };
-                fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
-                fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb(); peak_color = OxyColors.Crimson; fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid; exp_width = 1; frag_width = 2; fit_width = 1;
-                peak_width = 1; cen_width = 1; Xmajor_grid = false; Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside; Y_tick = OxyPlot.Axes.TickStyle.Outside; x_interval = 50;
-                y_interval = 50; x_format = "G"; y_format = "0.0E+"; x_numformat = "0"; y_numformat = "0"; Xmajor_grid12 = OxyPlot.LineStyle.Solid; Xminor_grid12 = OxyPlot.LineStyle.None; Ymajor_grid12 = OxyPlot.LineStyle.Solid; Yminor_grid12 = OxyPlot.LineStyle.None; y_interval12 = 50;
-                X_tick12 = OxyPlot.Axes.TickStyle.Outside; Y_tick12 = OxyPlot.Axes.TickStyle.Outside; y_format12 = "0.0E+"; y_numformat12 = "0"; x_majorStep12 = 5; x_minorStep12 = 1; bar_width = 1; Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid; Xminor_charge_grid12 = OxyPlot.LineStyle.None;
-                Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid; Yminor_charge_grid12 = OxyPlot.LineStyle.None; X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside; Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside; y_charge_majorStep12 = 2; y_charge_minorStep12 = 1; x_charge_majorStep12 = 5;
-                x_charge_minorStep12 = 1; Xint_major_grid13 = OxyPlot.LineStyle.Solid; Xint_minor_grid13 = OxyPlot.LineStyle.None; Yint_major_grid13 = OxyPlot.LineStyle.Solid; Yint_minor_grid13 = OxyPlot.LineStyle.None; x_format13 = "0.0E+"; x_numformat13 = "0"; x_interval13 = 50; Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
-                Yint_tick13 = OxyPlot.Axes.TickStyle.Outside; xINT_majorStep13 = 5; xINT_minorStep13 = 1; yINT_majorStep13 = 5; yINT_minorStep13 = 1; int_width = 1;
-                for (int a = 0; a < 6; a++)
-                {
-                    ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
-                }
-                entire_spectrum = true; threshold = 0.01;
+                init_preferences();
                 save_preferences();
             }
         }
-
+        public void init_preferences()
+        {
+            ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2; selection_rule = new bool[] { false, true, false, false, false, false };
+            fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+            fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb(); peak_color = OxyColors.Crimson; fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid; exp_width = 1; frag_width = 2; fit_width = 1;
+            peak_width = 1; cen_width = 1; Xmajor_grid = false; Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside; Y_tick = OxyPlot.Axes.TickStyle.Outside; x_interval = 50;
+            y_interval = 50; x_format = "G"; y_format = "0.0E+"; x_numformat = "0"; y_numformat = "0"; Xmajor_grid12 = OxyPlot.LineStyle.Solid; Xminor_grid12 = OxyPlot.LineStyle.None; Ymajor_grid12 = OxyPlot.LineStyle.Solid; Yminor_grid12 = OxyPlot.LineStyle.None; y_interval12 = 50;
+            X_tick12 = OxyPlot.Axes.TickStyle.Outside; Y_tick12 = OxyPlot.Axes.TickStyle.Outside; y_format12 = "0.0E+"; y_numformat12 = "0"; x_majorStep12 = 5; x_minorStep12 = 1; bar_width = 1; Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid; Xminor_charge_grid12 = OxyPlot.LineStyle.None;
+            Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid; Yminor_charge_grid12 = OxyPlot.LineStyle.None; X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside; Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside; y_charge_majorStep12 = 2; y_charge_minorStep12 = 1; x_charge_majorStep12 = 5;
+            x_charge_minorStep12 = 1; Xint_major_grid13 = OxyPlot.LineStyle.Solid; Xint_minor_grid13 = OxyPlot.LineStyle.None; Yint_major_grid13 = OxyPlot.LineStyle.Solid; Yint_minor_grid13 = OxyPlot.LineStyle.None; x_format13 = "0.0E+"; x_numformat13 = "0"; x_interval13 = 50; Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
+            Yint_tick13 = OxyPlot.Axes.TickStyle.Outside; xINT_majorStep13 = 5; xINT_minorStep13 = 1; yINT_majorStep13 = 5; yINT_minorStep13 = 1; int_width = 1;
+            for (int a = 0; a < 6; a++)
+            {
+                ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
+            }
+            entire_spectrum = true; threshold = 0.01; annotation_size = 9.0; deconv_machine = ""; is_deconv_const_resolution = false;
+        }
         public void save_preferences()
         {
             // will save user preferences in file
@@ -917,6 +917,9 @@ namespace Isotope_fitting
             preferences[0] += "threshold: " + threshold.ToString() + "\r\n";
             //annotations size
             preferences[0] += "Annotations size: " + annotation_size.ToString() + "\r\n";
+            //deconvoluted spectra
+            preferences[0] += "is resolution const: " + is_deconv_const_resolution.ToString() + "\r\n";
+            preferences[0] += "deconvoluted resolution: " + deconv_machine.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -979,8 +982,8 @@ namespace Isotope_fitting
                     project_experimental = expData.FileName;
                     file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
                     string extension = Path.GetExtension(expData.FileName);
-                    if (extension.Equals(".dec")) { exp_deconvoluted = true; }
-                    else { exp_deconvoluted = false; }
+                    if (extension.Equals(".dec")) { is_exp_deconvoluted = true; }
+                    else { is_exp_deconvoluted = false; }
                     do { lista.Add(objReader.ReadLine()); }
                     while (objReader.Peek() != -1);
                     objReader.Close();
@@ -1000,7 +1003,7 @@ namespace Isotope_fitting
                             if (tmp_str.Length == 2)
                             {
                                 experimental.Add(new double[] { mz, y });
-                                if (exp_deconvoluted)
+                                if (is_exp_deconvoluted)
                                 {
                                     if (experimental_dec.Count==0) { experimental_dec.Add(new List<double[]>()); }
                                     else if (mz-mz_prev>2) { experimental_dec.Add(new List<double[]>()); }
@@ -1037,22 +1040,27 @@ namespace Isotope_fitting
             // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = exp_color;
             else custom_colors.Add(exp_color);
+            prg_lbl.Invoke(new Action(() => prg_lbl.Visible = true));   //thread safe call
+            prg_lbl.Invoke(new Action(() => prg_lbl.Text = "Experimental Data Processing..."));   //thread safe call
+            _bw_deconcoluted_exp_resolution.RunWorkerAsync();
 
-            if (exp_deconvoluted) find_resolution();
+        }
+        void _bw_find_exp_resolution_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            prg_lbl.Invoke(new Action(() => prg_lbl.Visible = false));   //thread safe call
             // copy experimental to all_data
             experimental_to_all_data();
             recalculate_all_data_aligned();
-
             ////// add experimental to plot
             start_idx = 0;
-            end_idx = experimental.Count;            
-            LC_1.ViewXY.ZoomToFit();            
+            end_idx = experimental.Count;
+            MessageBox.Show("The processing of the experimental data is completed.");
+            LC_1.ViewXY.ZoomToFit();
         }
-        
         private void peakDetect_and_resolutionRef()
         {
             // run peak detection and add new resolution map from experimental
-            if (experimental.Count() > 0 && !exp_deconvoluted)
+            if (experimental.Count() > 0 && !is_exp_deconvoluted)
             {
                 plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true));   //thread safe call
                 peak_detect();
@@ -1083,7 +1091,7 @@ namespace Isotope_fitting
                 LC_1.ViewXY.ZoomToFit();
                 LC_1.EndUpdate();   
             }
-            else if (exp_deconvoluted && experimental_dec.Count>0)
+            else if (is_exp_deconvoluted && experimental_dec.Count>0)
             {
                 plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true));   //thread safe call
                 peak_points.Clear();
@@ -1103,8 +1111,9 @@ namespace Isotope_fitting
             }
         }
         
-        private void find_resolution()
+        void find_resolution(object sender, DoWorkEventArgs e)
         {
+            if (!is_exp_deconvoluted) return;
             double resolution = 0.0;
             double previous_res = 0.0;
             double max_res = 0.0;
@@ -1113,7 +1122,7 @@ namespace Isotope_fitting
             List<List<double[]>> exp_groups = new List<List<double[]>>();
             List<double> exp_x = new List<double>();
             string machine = deconv_machine;
-            if (deconv_const_resolution)
+            if (is_deconv_const_resolution)
             {
                 resolution = dParser(machine);
                 Parallel.For(0, experimental_dec.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
@@ -1478,7 +1487,7 @@ namespace Isotope_fitting
         private void assign_resolve_fragment(string[] frag_info)
         {
             int charge = Int32.Parse(frag_info[3]);
-            if (exp_deconvoluted && charge > 1) { return; }
+            if (is_exp_deconvoluted && charge > 1) { return; }
 
             ChemFormulas.Add(new ChemiForm
             {
@@ -1523,7 +1532,7 @@ namespace Isotope_fitting
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
             if (!calc_FF)ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
-            if (exp_deconvoluted)
+            if (is_exp_deconvoluted)
             {
                 //in case of a deconvoluted spectra 
                 ChemFormulas[i].Charge = 0;
@@ -1694,7 +1703,7 @@ namespace Isotope_fitting
         }
         private void assign_manually_pro_fragment(string[] frag_info)
         {
-            if (exp_deconvoluted && Int32.Parse(frag_info[4]) > 1) { return; }
+            if (is_exp_deconvoluted && Int32.Parse(frag_info[4]) > 1) { return; }
             
             //frag_info 0:m/z monoisotopic , 1:ion type , 2:index  ,3:index to ,4:charge ,5:formula ,6: iso_ amount
             ChemFormulas.Add(new ChemiForm
@@ -1865,7 +1874,7 @@ namespace Isotope_fitting
         private void post_import_fragments()
         {
             // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
-            if(!calc_FF && !exp_deconvoluted)generate_x();
+            if(!calc_FF && !is_exp_deconvoluted)generate_x();
             ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
 
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
@@ -2011,7 +2020,7 @@ namespace Isotope_fitting
             double qMax = txt_to_d(chargeMax_Box);
             if (double.IsNaN(qMax)) qMax =100.0;
 
-            if (exp_deconvoluted) { qMax = 1; }
+            if (is_exp_deconvoluted) { qMax = 1; }
             // 2. get checked types
             List<string> types = new List<string>();            
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
@@ -2316,18 +2325,42 @@ namespace Isotope_fitting
             calc_resolution = true;
             recalc = true;
             neues = Fragments2.Count();
-
-            foreach (ChemiForm chem in selected_fragments)
+            if (is_exp_deconvoluted)
             {
-                if (machine_listBox.SelectedItems.Count > 0)
+                string machine = "";
+                double res = 0.0;
+                if (is_deconv_const_resolution)
                 {
-                    chem.Machine = machine_listBox.SelectedItem.ToString();
+                    res = dParser(machine);
+                    foreach (ChemiForm chem in selected_fragments)
+                    {
+                        chem.Resolution = res;
+                    }
                 }
                 else
                 {
-                    chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+                    machine = deconv_machine;
+                    foreach (ChemiForm chem in selected_fragments)
+                    {
+                        chem.Machine = machine;
+                    }
                 }
             }
+            else
+            {
+                foreach (ChemiForm chem in selected_fragments)
+                {
+                    if (machine_listBox.SelectedItems.Count > 0)
+                    {
+                        chem.Machine = machine_listBox.SelectedItem.ToString();
+                    }
+                    else
+                    {
+                        chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+                    }
+                }
+            }
+           
         }
 
         private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
@@ -2454,7 +2487,7 @@ namespace Isotope_fitting
                 fragment_is_canditate = decision_algorithmFF(chem, cen);
                 if (ignore_ppm || fragment_is_canditate)
                 {
-                    if (exp_deconvoluted)  add_fragment_to_Fragments2(chem, cen);                   
+                    if (is_exp_deconvoluted)  add_fragment_to_Fragments2(chem, cen);                   
                     else
                     {
                         chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
@@ -2466,7 +2499,7 @@ namespace Isotope_fitting
                     }                   
                 }            
             }
-            else if (exp_deconvoluted)
+            else if (is_exp_deconvoluted)
             {
                 fragment_is_canditate = decision_algorithm(chem, cen);
                 if (fragment_is_canditate) add_fragment_to_Fragments2(chem, cen);               
@@ -3075,7 +3108,7 @@ namespace Isotope_fitting
             {
                 chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0;
             }
-            if (!exp_deconvoluted) chem.Resolution = (double)results.Average(p => p[1]);
+            if (!is_exp_deconvoluted) chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
         }
@@ -3871,6 +3904,8 @@ namespace Isotope_fitting
         //**
         private void generate_fit_results(bool project=false)
         {
+            if (all_fitted_results.Count == 0) return;
+            else if (all_fitted_results.Count == 1 && all_fitted_results[0].Count == 0) return;
             sw1.Reset(); sw1.Start();
             // clear panel
             bigPanel.Enabled = true;
@@ -3908,13 +3943,12 @@ namespace Isotope_fitting
             fit_tree.BeginUpdate();
             for (int i = 0; i < all_fitted_results.Count; i++)
             {
+                if (all_fitted_sets[i].Count == 0) continue;
                 // get first and last mz of this fit, from the array that contains all the indexes (the longest)
                 int[] longest = all_fitted_sets[i].OrderBy(x => x.Length).Last();
                 fit_tree.Nodes.Add(Fragments2[longest.First() - 1].Mz + " - " + Fragments2[longest.Last() - 1].Mz);
-
                 //double[] tree_index = new double[all_fitted_results[i].Count];
-                //double[] tree_sse = new double[all_fitted_results[i].Count];
-                            
+                //double[] tree_sse = new double[all_fitted_results[i].Count];                            
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
                     if (all_fitted_results[i][j][all_fitted_results[i][j].Length - 2] <tab_thres[i][0] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 1] < tab_thres[i][1] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 4]< tab_thres[i][2] && all_fitted_results[i][j][all_fitted_results[i][j].Length -5] < tab_thres[i][3] && (all_fitted_results[i][j][all_fitted_results[i][j].Length - 6] < tab_thres[i][4] /*|| all_fitted_sets[i][j].Length== 1*/))
@@ -6403,7 +6437,7 @@ namespace Isotope_fitting
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                        if (exp_deconvoluted && fitted_chem.Last().Charge != 0)
+                                        if (is_exp_deconvoluted && fitted_chem.Last().Charge != 0)
                                         {
                                             dec = true;
                                             fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
@@ -6498,7 +6532,7 @@ namespace Isotope_fitting
                                         str = lista[j].Split('\t');
                                         if (lista[j].StartsWith("Prof"))
                                         {
-                                            if (!exp_deconvoluted && !dec)
+                                            if (!is_exp_deconvoluted && !dec)
                                             {
                                                 for (int s = 1; s < str.Length; s++)
                                                 {
@@ -6516,7 +6550,7 @@ namespace Isotope_fitting
                                         str = lista[j].Split('\t');
                                         if (lista[j].StartsWith("Cen"))
                                         {
-                                            if (!exp_deconvoluted && !dec)
+                                            if (!is_exp_deconvoluted && !dec)
                                             {
                                                 for (int s = 1; s < str.Length; s++)
                                                 {
@@ -6742,7 +6776,7 @@ namespace Isotope_fitting
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                        if (exp_deconvoluted)
+                                        if (is_exp_deconvoluted)
                                         {
                                             fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
                                             //IonDraw.Last().Charge=0;
@@ -7308,7 +7342,7 @@ namespace Isotope_fitting
                 chem.maxPPM_Error = 0.0;chem.minPPM_Error = 0.0;
             }
          
-            if(!exp_deconvoluted)chem.Resolution = (double)results.Average(p => p[1]);
+            if(!is_exp_deconvoluted)chem.Resolution = (double)results.Average(p => p[1]);
 
             return fragment_is_canditate;
         }
@@ -7882,7 +7916,7 @@ namespace Isotope_fitting
             if (dialogResult == DialogResult.Yes)
             {
                 plotExp_chkBox.Checked = false;plotCentr_chkBox.Checked = false;plotFragCent_chkBox.Checked = false;plotFragProf_chkBox.Checked = false;
-                exp_deconvoluted = false;
+                is_exp_deconvoluted = false;
                 if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
                 if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
                 tab_mode = false;
@@ -8257,7 +8291,12 @@ namespace Isotope_fitting
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
             fit_style = LinePattern.Dot;exper_style = LinePattern.Solid;frag_style = LinePattern.Solid;
             exp_width = 1;frag_width = 2;fit_width = 1;
-    }
+            //exp deconvoluted
+            is_exp_deconvoluted = false;
+            deconv_machine = "";
+            is_deconv_const_resolution = false;
+            experimental_dec = new List<List<double[]>>();
+        }
         private List<double> get_UI_intensities2(int[] subSet, double max = 1.0, bool optimizer_default = false, bool window = false, int w = 1)
         {
             //(Μ)to subset einai to to_plot se array to opoio perieei touw indexes tvn epilegmenvn fragments
@@ -14883,7 +14922,7 @@ namespace Isotope_fitting
             // 1.b Add the experimental to plot if selected
             if (plotExp_chkBox.Checked && all_data.Count > 0)
             {
-                if (!exp_deconvoluted)
+                if (!is_exp_deconvoluted)
                 {
                     double[] mz = all_data[0].Select(a => a[0]).ToArray();
                     double[] y = all_data[0].Select(a => a[1]).ToArray();
@@ -14948,7 +14987,7 @@ namespace Isotope_fitting
             if (summation.Count > 0 && Fitting_chkBox.Checked) PointLine_addSeries(temp_plot, all_data.Count, summation);
 
             // 5. centroid (bar)
-            if (plotCentr_chkBox.Checked && !exp_deconvoluted && peak_points.Count > 0)
+            if (plotCentr_chkBox.Checked && !is_exp_deconvoluted && peak_points.Count > 0)
             {
                 int pointCount = peak_points.Count;
                 List<double[]> data_decon = new List<double[]>();
@@ -14961,7 +15000,7 @@ namespace Isotope_fitting
                 }
                 LineCollection_addLines(temp_plot, all_data.Count - 1, data_decon);
             }
-            else if (plotCentr_chkBox.Checked && exp_deconvoluted)
+            else if (plotCentr_chkBox.Checked && is_exp_deconvoluted)
             {
                 LineCollection_addLines(temp_plot, all_data.Count - 1, experimental);
             }
@@ -15941,8 +15980,6 @@ namespace Isotope_fitting
             seq.Color_table = color_table;
         }
 
-        
-
         private void fragPlotLbl_chkBx2_CheckedChanged(object sender, EventArgs e)
         {
             if (fragPlotLbl_chkBx2.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
@@ -15952,14 +15989,12 @@ namespace Isotope_fitting
         private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
         {
             if (fragPlotLbl_chkBx.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
-            else  { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }
-            
+            else  { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }            
         }
 
 
-
-
         #region PROJECT SAVE LOAD CLEAR
+        //clear
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
@@ -15975,7 +16010,7 @@ namespace Isotope_fitting
         private bool Clear_all()
         {
             plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
-            exp_deconvoluted = false;
+            is_exp_deconvoluted = false;
             labels_checked.Clear();
             if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
             if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
@@ -16024,6 +16059,11 @@ namespace Isotope_fitting
             list_21.Clear();
             return true;
         }
+        //load
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            project_load();
+        }
         private void project_load()
         {
             all = 0;
@@ -16040,8 +16080,8 @@ namespace Isotope_fitting
                 string path_fragments = Path.Combine(folderName, "Fragment Data.txt");
                 string path_fit = Path.Combine(folderName, "Fit Data.txt");
                 string extension = Path.GetExtension(path_experimental);
-                if (extension.Equals(".dec")) { exp_deconvoluted = true; }
-                else { exp_deconvoluted = false; }               
+                if (extension.Equals(".dec")) { is_exp_deconvoluted = true; }
+                else { is_exp_deconvoluted = false; }               
                 _bw_load_project_exp.RunWorkerAsync(path_experimental);
                 _bw_load_project_peaks.RunWorkerAsync(path_peaks);
                 _bw_load_project_fragments.RunWorkerAsync(path_fragments);
@@ -16054,57 +16094,83 @@ namespace Isotope_fitting
         {
             string filename = (string)e.Argument;
             string[] fl = filename.Split('/');
+            double mz_prev = 0;
             file_name = fl[fl.Length - 1];
             file_name = file_name.Remove(file_name.Length-4,4);
             //sw1.Reset(); sw1.Start();
             List<string> lista = new List<string>();
             StreamReader objReader = new StreamReader(filename);
             project_experimental = filename;
-            //file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
-           
+            //file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);           
             do { lista.Add(objReader.ReadLine()); }
             while (objReader.Peek() != -1);
             objReader.Close();
-            experimental.Clear();
+            experimental_dec.Clear();
+            if (is_exp_deconvoluted) peak_points.Clear();
             //add toolstrip progress bar
             //progress_display_start(lista.Count, "Loading experimental data...");
             max_exp = 0.0;
-            for (int j = 0; j != (lista.Count); j++)
+            if (is_exp_deconvoluted)
             {
-                try
+                for (int j = 0; j != (lista.Count); j++)
                 {
-                    string[] tmp_str = lista[j].Split('\t');
-                    double mz = dParser(tmp_str[0]);
-                    double y = dParser(tmp_str[1]);
-                    if (tmp_str.Length == 2) experimental.Add(new double[] { mz, y });
-                    if (max_exp < y) max_exp = y;
+                    try
+                    {
+                        string[] tmp_str = lista[j].Split('\t');
+                        double mz = dParser(tmp_str[0]);
+                        double y = dParser(tmp_str[1]);
+                        if (tmp_str.Length == 2)
+                        {
+                            peak_points.Add(new double[] { j, mz, y, 10000, 0, y });
+                            if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
+                            else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
+                            experimental_dec.Last().Add(new double[] { mz, y });
+                            mz_prev = mz;
+                        }
+                        if (max_exp < y) max_exp = y;
+                    }
+                    catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); }
                 }
-                catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); }
-                //if (j % 10000 == 0 && j > 0) progress_display_update(j);
             }
-            //sw1.Stop(); Debug.WriteLine("load_experimental: " + sw1.ElapsedMilliseconds.ToString());
-            //progress_display_stop();            
+            else
+            {
+                experimental.Clear();
+                for (int j = 0; j != (lista.Count); j++)
+                {
+                    try
+                    {
+                        string[] tmp_str = lista[j].Split('\t');
+                        double mz = dParser(tmp_str[0]);
+                        double y = dParser(tmp_str[1]);
+                        if (tmp_str.Length == 2)
+                        {
+                            experimental.Add(new double[] { mz, y });                            
+                        }
+                        if (max_exp < y) max_exp = y;
+                    }
+                    catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); }
+                }
+            }
+              
         }
         void Project_load_peaks(object sender, DoWorkEventArgs e)
         {
-            peak_points.Clear();
             string filename = (string)e.Argument;
-            //sw1.Reset(); sw1.Start();
             List<string> lista = new List<string>();
-            StreamReader objReader = new StreamReader(filename);            
+            StreamReader objReader = new StreamReader(filename);
             do { lista.Add(objReader.ReadLine()); }
             while (objReader.Peek() != -1);
-            objReader.Close();            
+            objReader.Close();
+            peak_points.Clear();
             for (int j = 0; j != (lista.Count); j++)
             {
                 try
                 {
                     string[] tmp_str = lista[j].Split('\t');
-                    peak_points.Add(new double[] { dParser(tmp_str[0]), dParser( tmp_str[1]), dParser(tmp_str[2]), dParser( tmp_str[3]), dParser(tmp_str[4]), dParser( tmp_str[5]) });
+                    peak_points.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]), dParser(tmp_str[2]), dParser(tmp_str[3]), dParser(tmp_str[4]), dParser(tmp_str[5]) });
                 }
-                catch { MessageBox.Show("Error in data file"+filename+" in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); return; }
-            }           
-                     
+                catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error!"); return; }
+            }
         }
         void Project_load_fit_results(object sender, DoWorkEventArgs e)
         {
@@ -16357,11 +16423,11 @@ namespace Isotope_fitting
             experimental_to_all_data();             
             start_idx = 0;
             end_idx = experimental.Count;            
-            plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true;   
-            if (!exp_deconvoluted)
+            plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true;
+            plotCentr_chkBox.Enabled = true;
+            if (!is_exp_deconvoluted)
             {
                 displayPeakList_btn.Enabled = true;  
-                plotCentr_chkBox.Enabled = true;   
                 exp_res++;
                 List<double> tmp1 = new List<double>();
                 List<double> tmp2 = new List<double>();
@@ -16381,7 +16447,6 @@ namespace Isotope_fitting
             }
             else
             {
-                 plotCentr_chkBox.Enabled = true;   
                  plotCentr_chkBox.Checked = true;   
             }
             //frag            
@@ -16396,6 +16461,7 @@ namespace Isotope_fitting
             //fit
             generate_fit_results(true);
         }
+        //save
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             save_preferences();
@@ -16404,11 +16470,12 @@ namespace Isotope_fitting
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
+                progress_display_start(7, "Saving project...");
                 all = 0;
                 // The user selected a folder and pressed the OK button.                
                 string folderName = folderBrowserDialog1.SelectedPath;
                 string path_experimental = Path.Combine(folderName, "Experimental Data.txt");
-                if (exp_deconvoluted) { path_experimental = Path.Combine(folderName, "Experimental Data.dec"); }
+                if (is_exp_deconvoluted) { path_experimental = Path.Combine(folderName, "Experimental Data.dec"); }
                 string path_peaks = Path.Combine(folderName, "Peak Data.txt");
                 string path_fragments = Path.Combine(folderName, "Fragment Data.txt");
                 string path_fit = Path.Combine(folderName, "Fit Data.txt");
@@ -16421,11 +16488,10 @@ namespace Isotope_fitting
             }
 
         }
-
         void Project_save_fit_results(object sender, DoWorkEventArgs e)
         {
-            string fit_path = e.Argument.ToString();
-            using (StreamWriter writer = new StreamWriter(fit_path, append: false))
+            string path = e.Argument.ToString();
+            using (StreamWriter writer = new StreamWriter(path, append: false))
             {
                 writer.WriteLine("results");
                 foreach (List<double[]> region in all_fitted_results)
@@ -16496,25 +16562,128 @@ namespace Isotope_fitting
                 writer.WriteLine(line_write);
             }
         }
+        void Project_save_fit_results1(object sender, DoWorkEventArgs e)
+        {
+            string path = e.Argument.ToString();
+            string[] fragText = new string[1];
+            fragText[0] += "results" + "\r\n";
+            foreach (List<double[]> region in all_fitted_results)
+                {
+                    string line = "";
+                    for (int solution = 0; solution < region.Count(); solution++)
+                    {
+                        line += "\t";
+                        int length = region[solution].Length;
+                        for (int kk = 0; kk < length; kk++)
+                        {
+                            line += " " + region[solution][kk];
+                        }
+                    }
+                fragText[0] += line + "\r\n";
+            }
+
+            fragText[0] += "sets" + "\r\n";
+            foreach (List<int[]> region in all_fitted_sets)
+                {
+                    string line = "";
+                    for (int solution = 0; solution < region.Count(); solution++)
+                    {
+                        line += "\t";
+                        int length = region[solution].Length;
+                        for (int kk = 0; kk < length; kk++)
+                        {
+                            line += " " + region[solution][kk];
+                        }
+                    }
+                    fragText[0] += line + "\r\n";
+            }
+
+            fragText[0] += "tab_node" + "\r\n";
+            string line_write = "";
+                for (int n = 0; n < tab_node.Count; n++)
+                {
+                    line_write += "\t";
+                    line_write += tab_node[n][0] + " " + tab_node[n][1] + " " + tab_node[n][2] + " " + tab_node[n][3] + " " + tab_node[n][4] + " " + tab_node[n][5];
+                }
+            fragText[0] += line_write + "\r\n";
+            
+            fragText[0] += "tab_coef" + "\r\n";
+            line_write = "";
+                for (int n = 0; n < tab_coef.Count; n++)
+                {
+                    line_write += "\t";
+                    line_write += tab_coef[n][0] + " " + tab_coef[n][1] + " " + tab_coef[n][2] + " " + tab_coef[n][3] + " " + tab_coef[n][4] + " " + tab_coef[n][5];
+                }
+            fragText[0] += line_write + "\r\n";
+
+            fragText[0] += "tab_thres" + "\r\n";
+            line_write = "";
+                for (int n = 0; n < tab_thres.Count; n++)
+                {
+                    line_write += "\t";
+                    line_write += tab_thres[n][0] + " " + tab_thres[n][1] + " " + tab_thres[n][2] + " " + tab_thres[n][3] + " " + tab_thres[n][4] + " " + tab_thres[n][5] + " " + tab_thres[n][6];
+                }
+            fragText[0] += line_write + "\r\n";
+
+            fragText[0] += "labels_checked" + "\r\n";
+            line_write = "";
+                for (int n = 0; n < labels_checked.Count; n++)
+                {
+                    line_write += "\t";
+                    line_write += labels_checked[n];
+                }
+            fragText[0] += line_write + "\r\n";
+            File.WriteAllLines(path, fragText);
+        }
         void Project_save_peaks(object sender, DoWorkEventArgs e)
         {
-            string peak_path = e.Argument.ToString();
-
-            if (peak_points.Count == 0) { return; }
-            using (StreamWriter writer = new StreamWriter(peak_path, append: false))
+            string path = e.Argument.ToString();
+            if (peak_points.Count == 0 && !is_exp_deconvoluted) { return; }
+            using (StreamWriter writer = new StreamWriter(path, append: false))
+            {
+                if (is_exp_deconvoluted)
+                {
+                    foreach (double[] exp in experimental)
+                    {
+                        writer.WriteLine(exp[0] + "\t" + exp[1]);
+                    }
+                }
+                else
+                {
+                    foreach (double[] peak in peak_points)
+                    {
+                        writer.WriteLine(peak[0] + "\t" + peak[1] + "\t" + peak[2] + "\t" + peak[3] + "\t" + peak[4] + "\t" + peak[5]);
+                    }
+                }               
+            }
+        }
+        void Project_save_peaks1(object sender, DoWorkEventArgs e)
+        {
+            string path = e.Argument.ToString();
+            string[] fragText = new string[1];
+            if (peak_points.Count == 0 && !is_exp_deconvoluted) { return; }
+            if (is_exp_deconvoluted)
+            {
+                foreach (double[] exp in experimental)
+                {
+                    fragText[0] += exp[0] + "\t" + exp[1] + "\r\n";
+                }
+            }
+            else
             {
                 foreach (double[] peak in peak_points)
                 {
-                    writer.WriteLine(peak[0] + "\t" + peak[1] + "\t" + peak[2] + "\t" + peak[3] + "\t" + peak[4] + "\t" + peak[5]);
+                    fragText[0] += peak[0] + "\t" + peak[1] + "\t" + peak[2] + "\t" + peak[3] + "\t" + peak[4] + "\t" + peak[5] + "\r\n";
                 }
             }
+            File.WriteAllLines(path, fragText);
         }
 
         void Project_save_fragments(object sender, DoWorkEventArgs e)
         {
-            string fragment_path = e.Argument.ToString();
+            string path = e.Argument.ToString();
 
-            using (StreamWriter writer = new StreamWriter(fragment_path, append: false))
+            using (StreamWriter writer = new StreamWriter(path, append: false))
             {
                 foreach (SequenceTab seq in sequenceList)
                 {
@@ -16541,18 +16710,42 @@ namespace Isotope_fitting
                 }
             }
         }
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        void Project_save_fragments1(object sender, DoWorkEventArgs e)
         {
-            project_load();
-        }
+            string path = e.Argument.ToString();
+            string[] fragText = new string[1];
+            foreach (SequenceTab seq in sequenceList)
+            {
+                fragText[0] += "Extension:\t" + seq.Extension + "\t" + seq.Type.ToString() + "\t" + seq.Sequence + "\t" + seq.Rtf + "\r\n";
+            }
+            fragText[0] += "Loaded Fitted Files:\t" + loaded_lists.Replace("\r\n", "\t") + "\r\n";
+            fragText[0] += "Loaded Fitted Files:\t" + loaded_lists.Replace("\r\n", "\t") + "\r\n";
+            for (int indexS = 1; indexS <= Fragments2.Count; indexS++)
+            {
+                string profile_string = "Prof:";
+                string centroid_string = "Centr:";
+                foreach (PointPlot pp in Fragments2[indexS - 1].Profile)
+                {
+                    profile_string += "\t" + pp.X + " " + pp.Y;
+                }
+                foreach (PointPlot pp in Fragments2[indexS - 1].Centroid)
+                {
+                    centroid_string += "\t" + pp.X + " " + pp.Y;
+                }
+                fragText[0] += Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension + "\t" + Form2.Fragments2[indexS - 1].To_plot.ToString() + "\t" + Form2.Fragments2[indexS - 1].Fixed.ToString() + "\r\n";
 
+                fragText[0] += profile_string + "\r\n";
+                fragText[0] += centroid_string + "\r\n";
+
+            }
+            File.WriteAllLines(path, fragText);
+        }
         #endregion
-        
+
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
         {
 
         }
-
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ChemFormulas.Count==0 ) return;
@@ -16598,7 +16791,6 @@ namespace Isotope_fitting
             }
            
         }
-
         private bool recognise_extension(string fra_exte, string Extension)
         {
             string[] str = fra_exte.Split('_');

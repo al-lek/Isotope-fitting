@@ -94,6 +94,7 @@
             this.listRes_radBtn.TabIndex = 8;
             this.listRes_radBtn.Text = "Machine List";
             this.listRes_radBtn.UseVisualStyleBackColor = true;
+            this.listRes_radBtn.CheckedChanged += new System.EventHandler(this.listRes_radBtn_CheckedChanged);
             // 
             // constRes_radBtn
             // 
@@ -104,10 +105,13 @@
             this.constRes_radBtn.TabIndex = 7;
             this.constRes_radBtn.Text = "Constant ";
             this.constRes_radBtn.UseVisualStyleBackColor = true;
+            this.constRes_radBtn.CheckedChanged += new System.EventHandler(this.constRes_radBtn_CheckedChanged);
             // 
             // resolution_list_combBox
             // 
             this.resolution_list_combBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.resolution_list_combBox.DropDownWidth = 250;
+            this.resolution_list_combBox.Enabled = false;
             this.resolution_list_combBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resolution_list_combBox.FormattingEnabled = true;
             this.resolution_list_combBox.Items.AddRange(new object[] {
@@ -146,6 +150,7 @@
             // selection_list_1
             // 
             this.selection_list_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.selection_list_1.Enabled = false;
             this.selection_list_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selection_list_1.FormattingEnabled = true;
             this.selection_list_1.Items.AddRange(new object[] {
