@@ -1004,7 +1004,7 @@ namespace Isotope_fitting
                                 {
                                     if (experimental_dec.Count==0) { experimental_dec.Add(new List<double[]>()); }
                                     else if (mz-mz_prev>2) { experimental_dec.Add(new List<double[]>()); }
-                                    experimental_dec.Last().Add(new double[] { mz, y });
+                                    if(mz_prev != mz) experimental_dec.Last().Add(new double[] { mz, y });
                                     mz_prev = mz;
                                 }
                             }
@@ -1048,8 +1048,7 @@ namespace Isotope_fitting
             end_idx = experimental.Count;            
             LC_1.ViewXY.ZoomToFit();            
         }
-
-
+        
         private void peakDetect_and_resolutionRef()
         {
             // run peak detection and add new resolution map from experimental
@@ -1103,7 +1102,6 @@ namespace Isotope_fitting
                 LC_1.EndUpdate();
             }
         }
-
         
         private void find_resolution()
         {
@@ -1120,7 +1118,7 @@ namespace Isotope_fitting
                 resolution = dParser(machine);
                 Parallel.For(0, experimental_dec.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
                 {
-                    List<double[]>temp_list=Envelope_Experimental(experimental_dec[i], resolution, 0.1);
+                    List<double[]>temp_list=Envelope_Experimental(experimental_dec[i], resolution);
                     lock (_locker) { experimental_f.AddRange(temp_list); }
                 });
                 experimental = experimental_f.OrderBy(d => d[0]).ToList();
@@ -1182,11 +1180,11 @@ namespace Isotope_fitting
                         }
                         if (initial_entry.Count > 0)
                         {
-                            temp_exp_groups.Add(Envelope_Experimental(initial_entry, resolution, 0.1));
+                            temp_exp_groups.Add(Envelope_Experimental(initial_entry, resolution));
                         }
                         List<double> temp_exp_x = Range_Final_Exp(temp_exp_groups);
 
-                        List<double[]> temp_list = Envelope_Experimental(experimental_dec[i], resolution, 0.1);
+                        List<double[]> temp_list = Envelope_Experimental(experimental_dec[i], resolution);
 
                         lock (_locker) { exp_groups.AddRange(temp_exp_groups); }
                         lock (_locker) { exp_x.AddRange(temp_exp_x); }
@@ -1278,7 +1276,7 @@ namespace Isotope_fitting
         }
         private List<double[]> Envelope_Experimental(List<double[]>initial,double resolution, double frac = 0.3, int filter = 1)
         {
-            //Peak shape function "Gaussian"-->profile_type = 0 
+            //Peak shape function "Gaussian"
             //code as dmz="get" default value. Derive stick discretization from argument resolution. As written in the manual :
             //" the stick discretization is retrieved from (dm/z)*frac, with (dm/z) = (m/z)/R = peak width at half maximum."
             //create stick masses                       
@@ -1288,12 +1286,12 @@ namespace Isotope_fitting
             List<double[]> final = new List<double[]>();
             //reminder X stands for mass and Y for abundance
             var array = initial.Select(x => x[0]).ToArray();
-            double average = array.Average();
-            double dmz2 = average / resolution;
+            //double average = array.Average();
+            double dmz2 = initial[0][0] / resolution;
             //double a_max = initial.Max(x => x[1]);
             double a_max = initial[0][1];
 
-            IEnumerable<double> traceit = Range_Exp(initial.Min(x => x[0]) - 0.5, initial.Max(x => x[0]) + extend,initial, x => x + (dmz2 * frac));
+            IEnumerable<double> traceit = Range_Exp(initial[0][0] - extend, initial.Last()[0] + extend,initial, x => x + (dmz2 * frac));
             foreach (double tr in traceit)
             {
                 double value = 0.0;
@@ -1323,23 +1321,22 @@ namespace Isotope_fitting
                     }
                     value += v;                    
                 }
-                //if (c > 0)
-                //{
-                //    if (value > 0.0 || (value == 0.0 && final[c - 1][1] > 0.0))
-                //    {
-                //        final.Add(new double[] { tr, value });
-                //        c++;
-                //    }
-                //}
-                //else
-                //{
-                //    if (value > 0.0)
-                //    {
-                //        final.Add(new double[] { tr, value }); c++;
-
-                //    }
-                //}
-                final.Add(new double[] { tr, value }); c++;
+                if (c > 0)
+                {
+                    if (value > 0.0 || (value == 0.0 && final[c - 1][1] > 0.0))
+                    {
+                        final.Add(new double[] { tr, value });
+                        c++;
+                    }
+                }
+                else
+                {
+                    if (value > 0.0)
+                    {
+                        final.Add(new double[] { tr, value }); c++;
+                    }
+                }
+                //final.Add(new double[] { tr, value }); c++;
             }
             return final;
         }
