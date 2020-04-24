@@ -754,6 +754,7 @@ namespace Isotope_fitting
             ChemiForm.Vdetect(chem);
             double emass = 0.00054858;
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+            chem.Centroid.Clear(); chem.Intensoid.Clear();
             chem.Points= chem.Points.OrderBy(p => p.X).ToList();
             chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString();
             if (!insert_exp ) { add_fragment_to_Fragments3(chem, cen); return; }
@@ -767,6 +768,7 @@ namespace Isotope_fitting
                 ChemiForm.Envelope(chem);
                 ChemiForm.Vdetect(chem);
                 cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                chem.Centroid.Clear(); chem.Intensoid.Clear();
                 add_fragment_to_Fragments3(chem,cen);return;
             }
             else if (ignore_ppm_form9.Checked)
@@ -778,12 +780,13 @@ namespace Isotope_fitting
                 ChemiForm.Envelope(chem);
                 ChemiForm.Vdetect(chem);
                 cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                chem.Centroid.Clear(); chem.Intensoid.Clear();
                 add_fragment_to_Fragments3(chem, cen,false);
                 return;
             }
             else
             {
-                chem.Points.Clear(); chem.Profile.Clear();
+                chem.Points.Clear(); chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
             }
         }
 
@@ -852,6 +855,7 @@ namespace Isotope_fitting
                 // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                 chem.Profile.Clear();
                 chem.Points.Clear();
+                chem.Centroid.Clear(); chem.Intensoid.Clear();
             }
         }
         private bool decision_algorithm_frm9(ChemiForm chem, List<PointPlot> cen)
