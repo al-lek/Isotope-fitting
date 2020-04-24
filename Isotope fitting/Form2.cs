@@ -6865,6 +6865,8 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
+                                        
+
                                     }
                                     else duplicate_count++;
                                 }
