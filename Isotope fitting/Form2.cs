@@ -40,7 +40,7 @@ namespace Isotope_fitting
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();    
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Inherit };
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
-        public string error_string = String.Empty;
+        //public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
@@ -4089,7 +4089,9 @@ namespace Isotope_fitting
                 string idx_str = node.Name;
                 string[] idx_str_arr = idx_str.Split(' ');
                 int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
-                int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
+                int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
+                // identifies a fit combination in this set
+                string error_string = String.Empty;
                 List<TreeNode> all_nodes = get_all_nodes(frag_tree);
                 for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
                 {
@@ -4160,7 +4162,7 @@ namespace Isotope_fitting
                     sb.AppendLine();
                 }
                 error_string = sb.ToString();
-                Form17 frm17 = new Form17(this);
+                Form17 frm17 = new Form17(error_string);
                 frm17.ShowDialog();
             }
            
@@ -6276,7 +6278,7 @@ namespace Isotope_fitting
                                     if (peptide)
                                     {
                                         peptide = false;
-                                        Peptide = str[1];
+                                        Peptide = str[3];
                                         if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
                                         else
                                         {
@@ -6615,7 +6617,7 @@ namespace Isotope_fitting
                                     if (peptide)
                                     {
                                         peptide = false;
-                                        Peptide = str[1];
+                                        Peptide = str[3];
                                         if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
                                         else
                                         {
@@ -6866,7 +6868,6 @@ namespace Isotope_fitting
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
                                         
-
                                     }
                                     else duplicate_count++;
                                 }
@@ -11585,6 +11586,7 @@ namespace Isotope_fitting
         #region sequence
         private void seq_coverageBtn_Click(object sender, EventArgs e)
         {
+            string message_string = String.Empty;
             StringBuilder sb = new StringBuilder();           
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You have to add amino-acid sequence"); return; }
             foreach (SequenceTab seq in sequenceList)
@@ -11671,8 +11673,8 @@ namespace Isotope_fitting
                 sb.AppendLine("Total : " + Math.Round(t1, 1).ToString() + "%");
                 sb.AppendLine();
             }
-            error_string = sb.ToString();
-            Form17 frm17 = new Form17(this);
+            message_string = sb.ToString();
+            Form17 frm17 = new Form17(message_string);
             frm17.Text = "Sequence coverage";
             frm17.ShowDialog();
         }
@@ -16296,7 +16298,7 @@ namespace Isotope_fitting
                         if (peptide)
                         {
                             peptide = false;
-                            Peptide = str[1];
+                            Peptide = str[3];
                             if (sequenceList == null || sequenceList.Count == 0) { sequenceList.Add(new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }); read_rtf_find_color(sequenceList.Last()); }
                             else
                             {
@@ -16840,6 +16842,13 @@ namespace Isotope_fitting
                 if (count == 0) { name_exte +="_"+ str[k]; }
             }
             return name_exte;
+        }
+
+        private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
+        {
+            int x = e.X;
+            int y = e.Y;
+
         }
     }
    
