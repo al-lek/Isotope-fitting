@@ -245,7 +245,7 @@ namespace Isotope_fitting
         /// max ppm error used in di and ei calculation during fitting
         /// </summary>
         static public double ppmDi = 8.0;
-
+        public bool ignore_ppm_refresh = false;
         private TreeNode _currentNode = new TreeNode();
         #endregion
 
@@ -372,7 +372,7 @@ namespace Isotope_fitting
         /// </summary>
         public double ppmErrorFF = 100.0;
         public bool calc_FF = false;
-        public bool ignore_ppm = false;
+        public bool ignore_ppm_FF = false;
         public bool calc_form14 = false;
         #endregion
 
@@ -2486,20 +2486,20 @@ namespace Isotope_fitting
             if (calc_FF)
             {
                 fragment_is_canditate = decision_algorithmFF(chem, cen);
-                if (ignore_ppm || fragment_is_canditate)
-                {
-                    if (is_exp_deconvoluted)  add_fragment_to_Fragments2(chem, cen);                   
-                    else
-                    {
-                        chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                        // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                        ChemiForm.Envelope(chem);
-                        ChemiForm.Vdetect(chem);
-                        cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                        chem.Centroid.Clear(); chem.Intensoid.Clear();
-                        add_fragment_to_Fragments2(chem, cen);
-                    }                   
-                }            
+                //if (ignore_ppm || fragment_is_canditate)
+                //{
+                //    if (is_exp_deconvoluted)  add_fragment_to_Fragments2(chem, cen);                   
+                //    else
+                //    {
+                //        chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                //        // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                //        ChemiForm.Envelope(chem);
+                //        ChemiForm.Vdetect(chem);
+                //        cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                //        chem.Centroid.Clear(); chem.Intensoid.Clear();
+                //        add_fragment_to_Fragments2(chem, cen);
+                //    }                   
+                //}            
             }
             else
             {
@@ -2565,7 +2565,8 @@ namespace Isotope_fitting
                         minPPM_Error = chem.minPPM_Error,
                         Extension=chem.Extension,
                         Chain_type=chem.Chain_type,
-                        SortIdx=chem.SortIdx
+                        SortIdx=chem.SortIdx,
+                        Candidate=true
                     });
 
                     Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
@@ -2712,9 +2713,7 @@ namespace Isotope_fitting
             frag_tree.BeginUpdate();
 
             for (int i = 0; i < Fragments2.Count; i++)
-            {
-                bool newfrag = Fragments2[i].Fixed;
-                //if (Fragments2[i].Factor != 1.0) { newfrag = true; }
+            {               
                 // group in mz windows
                 // first fragment in group, opens a new ggroup, and contributes to the group title
                 if (i % frag_mzGroups == 0) frag_tree.Nodes.Add(Fragments2[i].Mz + " - ");
@@ -2919,6 +2918,10 @@ namespace Isotope_fitting
             if (Fragments2[idx].Fixed)
             {
                 tr.ForeColor = Color.DarkGreen;
+            }
+            if (!Fragments2[idx].Candidate)
+            {
+                tr.ForeColor = Color.Red;
             }
             selectedFragments = selectedFragments.OrderBy(p => p).ToList();
             return tr;
@@ -7070,11 +7073,11 @@ namespace Isotope_fitting
                 double[] tmp = ppm_calculator(fra.Centroid[i].X);
 
                 if (Math.Abs(tmp[0])< temp_pp) results.Add(tmp);
-                else { fragment_is_canditate = false; break; }
+                else { fragment_is_canditate = false; results.Add(tmp);/*break;*/ }
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate) { fra.Profile.Clear(); return false; }
+            if (!fragment_is_canditate && !ignore_ppm_refresh) { fra.Profile.Clear(); return false; }
 
             fra.PPM_Error = results.Average(p => p[0]);
             if (results.Count > 1)
@@ -7086,8 +7089,6 @@ namespace Isotope_fitting
             {
                 fra.maxPPM_Error = 0.0; fra.minPPM_Error = 0.0;
             }
-            //fra.Resolution = (float)results.Average(p => p[1]);
-
             return fragment_is_canditate;
         }
         #endregion
@@ -7334,22 +7335,30 @@ namespace Isotope_fitting
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
-
             int total_peaks = cen.Count;
-
             double[] tmp = ppm_calculator(cen[0].X);
 
-            if (Math.Abs(tmp[0]) < ppmErrorFF) results.Add(tmp);
-            else
+            //round 1 , to find the correct resolution 
+            //for the deconvoluted spectra the resolution is not derived from the experimental therefore there is only round 1
+            results.Add(tmp);
+            if (Math.Abs(tmp[0]) > ppmErrorFF && is_exp_deconvoluted) { fragment_is_canditate = false; }
+            //round 2, with the correct resolution
+            if (fragment_is_canditate && !is_exp_deconvoluted)
             {
+                // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                results = new List<double[]>();
+                chem.Resolution = (double)results.Average(p => p[1]);
+                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                ChemiForm.Envelope(chem);
+                ChemiForm.Vdetect(chem);
+                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                tmp = ppm_calculator(cen[0].X);
                 results.Add(tmp);
-                fragment_is_canditate = false;
+                if (Math.Abs(tmp[0]) > ppmErrorFF) { fragment_is_canditate = false; }               
             }
-
-
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate && !ignore_ppm) { chem.Profile.Clear(); chem.Points.Clear();chem.Centroid.Clear();chem.Intensoid.Clear(); return false; }
-
+            if (!fragment_is_canditate && !ignore_ppm_FF) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
+            //set PPM error
             chem.PPM_Error = results.Average(p => p[0]);
             if (results.Count > 1)
             {
@@ -7358,11 +7367,9 @@ namespace Isotope_fitting
             }
             else
             {
-                chem.maxPPM_Error = 0.0;chem.minPPM_Error = 0.0;
-            }
-         
-            if(!is_exp_deconvoluted)chem.Resolution = (double)results.Average(p => p[1]);
-
+                chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0;
+            }           
+            add_fragment_to_Fragments2(chem, cen);
             return fragment_is_canditate;
         }
         #endregion
@@ -8086,11 +8093,21 @@ namespace Isotope_fitting
             if (Fragments2.Count > 0)
             {
                 while (rr < Fragments2.Count)
-                {                    
-                    if (is_in_excluded_bounds(Fragments2[rr]) ||!decision_algorithm2(Fragments2[rr]))
+                {
+                    Fragments2[rr].Candidate = true;
+                    if (is_in_excluded_bounds(Fragments2[rr]))
                     {
                         Fragments2.RemoveAt(rr);
                         if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
+                    }
+                    else if (!decision_algorithm2(Fragments2[rr]))
+                    {
+                        if (ignore_ppm_refresh) { Fragments2[rr].Candidate = false; rr++; }
+                        else
+                        {
+                            Fragments2.RemoveAt(rr);
+                            if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
+                        }
                     }
                     else { rr++; }
                 }
@@ -9128,7 +9145,7 @@ namespace Isotope_fitting
                             else//fragments
                             {
                                 f++;
-                                Fragments2.Add(new FragForm() { Name = str[1], Centroid = new List<PointPlot>(), Factor = 1.0, Fix = 1.0, Charge = 0, Mz = "", Radio_label = "", ListName = new string[4], Color = new OxyColor(), To_plot = false, Counter = f, Fixed = false });
+                                Fragments2.Add(new FragForm() { Candidate = true, Name = str[1], Centroid = new List<PointPlot>(), Factor = 1.0, Fix = 1.0, Charge = 0, Mz = "", Radio_label = "", ListName = new string[4], Color = new OxyColor(), To_plot = false, Counter = f, Fixed = false });
                                 all_data.Add(new List<double[]>());
                                 if (loaded_window == true) { windowList.Last().Mono_fragments.Add(f); }
                             }
@@ -9326,7 +9343,7 @@ namespace Isotope_fitting
                             else//fragments
                             {
                                 f++;
-                                Fragments2.Add(new FragForm() { Name = str[1], Factor = 1.0, Fix = 1.0, Charge = 0, Mz = "", Radio_label = "", ListName = new string[4], Color = new OxyColor(), To_plot = false, Counter = f, Fixed = false });
+                                Fragments2.Add(new FragForm() { Candidate = true, Name = str[1], Factor = 1.0, Fix = 1.0, Charge = 0, Mz = "", Radio_label = "", ListName = new string[4], Color = new OxyColor(), To_plot = false, Counter = f, Fixed = false });
                                 all_data.Add(new List<double[]>());
                                 windowList.Last().Fragments.Add(f);
                             }

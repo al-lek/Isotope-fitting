@@ -80,6 +80,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.thre_numUD = new System.Windows.Forms.NumericUpDown();
             this.exclusionList_Btn = new System.Windows.Forms.Button();
+            this.ignore_ppm_chkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fragGrps_numUD)).BeginInit();
             this.entire_grpBx.SuspendLayout();
@@ -898,11 +899,24 @@
             this.exclusionList_Btn.UseVisualStyleBackColor = false;
             this.exclusionList_Btn.Click += new System.EventHandler(this.exclusionList_Btn_Click);
             // 
+            // ignore_ppm_chkBox
+            // 
+            this.ignore_ppm_chkBox.AutoSize = true;
+            this.ignore_ppm_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ignore_ppm_chkBox.Location = new System.Drawing.Point(444, 246);
+            this.ignore_ppm_chkBox.Name = "ignore_ppm_chkBox";
+            this.ignore_ppm_chkBox.Size = new System.Drawing.Size(99, 19);
+            this.ignore_ppm_chkBox.TabIndex = 10;
+            this.ignore_ppm_chkBox.Text = "ignore ppm";
+            this.ignore_ppm_chkBox.UseVisualStyleBackColor = true;
+            this.ignore_ppm_chkBox.CheckedChanged += new System.EventHandler(this.ignore_ppm_chkBox_CheckedChanged);
+            // 
             // Form19
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(791, 281);
+            this.Controls.Add(this.ignore_ppm_chkBox);
             this.Controls.Add(this.exclusionList_Btn);
             this.Controls.Add(this.thre_numUD);
             this.Controls.Add(this.label1);
@@ -1005,5 +1019,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown thre_numUD;
         private System.Windows.Forms.Button exclusionList_Btn;
+        private System.Windows.Forms.CheckBox ignore_ppm_chkBox;
     }
 }

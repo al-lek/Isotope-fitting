@@ -17,6 +17,7 @@ namespace Isotope_fitting
         {
             InitializeComponent();
             frm2 = f;
+            ignore_ppm_chkBox.Checked=frm2.ignore_ppm_refresh;
             ppm_numUD.TextChanged += new EventHandler(ppm_numUD_TextChanged);
             fragGrps_numUD.TextChanged += new EventHandler(fragGrps_numUD_TextChanged);
             thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
@@ -336,6 +337,13 @@ namespace Isotope_fitting
         {
             Form21 frm21 = new Form21(frm2);            
             frm21.ShowDialog();
+        }
+
+        private void ignore_ppm_chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            frm2.ignore_ppm_refresh = ignore_ppm_chkBox.Checked;
+            if (ignore_ppm_chkBox.Checked) ignore_ppm_chkBox.ForeColor = Color.Red;
+            else ignore_ppm_chkBox.ForeColor = Color.Black;
         }
     }
 }

@@ -1961,7 +1961,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(68, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(66, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1973,7 +1973,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(158, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(156, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -3719,9 +3719,9 @@ namespace Isotope_fitting
             this.seqCopy_Btn,
             this.seq_coverageBtn});
             this.sequence_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.sequence_toolStrip.Location = new System.Drawing.Point(720, 27);
+            this.sequence_toolStrip.Location = new System.Drawing.Point(728, 27);
             this.sequence_toolStrip.Name = "sequence_toolStrip";
-            this.sequence_toolStrip.Size = new System.Drawing.Size(32, 96);
+            this.sequence_toolStrip.Size = new System.Drawing.Size(24, 77);
             this.sequence_toolStrip.TabIndex = 8;
             // 
             // seqSave_Btn
@@ -3730,7 +3730,7 @@ namespace Isotope_fitting
             this.seqSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("seqSave_Btn.Image")));
             this.seqSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqSave_Btn.Name = "seqSave_Btn";
-            this.seqSave_Btn.Size = new System.Drawing.Size(30, 22);
+            this.seqSave_Btn.Size = new System.Drawing.Size(22, 22);
             this.seqSave_Btn.Text = "Save";
             // 
             // seqCopy_Btn
@@ -3739,7 +3739,7 @@ namespace Isotope_fitting
             this.seqCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("seqCopy_Btn.Image")));
             this.seqCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqCopy_Btn.Name = "seqCopy_Btn";
-            this.seqCopy_Btn.Size = new System.Drawing.Size(30, 22);
+            this.seqCopy_Btn.Size = new System.Drawing.Size(22, 22);
             this.seqCopy_Btn.Text = "Copy";
             // 
             // seq_coverageBtn
@@ -3748,7 +3748,7 @@ namespace Isotope_fitting
             this.seq_coverageBtn.Image = ((System.Drawing.Image)(resources.GetObject("seq_coverageBtn.Image")));
             this.seq_coverageBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seq_coverageBtn.Name = "seq_coverageBtn";
-            this.seq_coverageBtn.Size = new System.Drawing.Size(30, 22);
+            this.seq_coverageBtn.Size = new System.Drawing.Size(22, 22);
             this.seq_coverageBtn.ToolTipText = "Sequence coverage statistics";
             this.seq_coverageBtn.Click += new System.EventHandler(this.seq_coverageBtn_Click);
             // 

@@ -19,8 +19,8 @@ namespace Isotope_fitting
             InitializeComponent();
             frm2 = f;
             ppmUD14.Value = (decimal)frm2.ppmErrorFF;
-            ppmUD14.Enabled = ppm_Lbl14.Enabled = !frm2.ignore_ppm;
-            ignore_ppm_ChkBx.Checked= frm2.ignore_ppm;
+            ppmUD14.Enabled = ppm_Lbl14.Enabled = !frm2.ignore_ppm_FF;
+            ignore_ppm_ChkBx.Checked= frm2.ignore_ppm_FF;
         }
 
         private void ppmUD14_ValueChanged(object sender, EventArgs e)
@@ -40,13 +40,13 @@ namespace Isotope_fitting
             {
                 ppmUD14.Enabled = false;
                 ppm_Lbl14.Enabled = false;
-                frm2.ignore_ppm = true;
+                frm2.ignore_ppm_FF = true;
             }
             else
             {
                 ppmUD14.Enabled = true;
                 ppm_Lbl14.Enabled = true;
-                frm2.ignore_ppm = false;
+                frm2.ignore_ppm_FF = false;
             }
         }
 

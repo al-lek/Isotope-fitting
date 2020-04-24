@@ -35,6 +35,7 @@ namespace Isotope_fitting
         delegate void CalcFrag3Completed();
         event CalcFrag3Completed OnCalcFrag3Completed;
         bool first = true;
+        bool is_res_user_defined = false;
         public static List<int> last_plotted = new List<int>();
         List<ChemiForm> mult_loaded = new List<ChemiForm>();
 
@@ -301,6 +302,7 @@ namespace Isotope_fitting
             // this the main sequence after loading data
             // 1. select fragments according to UI            
             sw1.Reset(); sw1.Start();
+            is_res_user_defined = false;
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
             if (FragCalc_TabControl.SelectedTab == FragCalc_TabControl.TabPages["Frag_tab"])
             {
@@ -678,10 +680,51 @@ namespace Isotope_fitting
 
         private void calculate_fragments_resolution_frm9(List<ChemiForm> selected_fragments)
         {
-            foreach (ChemiForm chem in selected_fragments)
+            if (!string.IsNullOrEmpty(resolution_Box.Text) && resolution_Box.Enabled)
             {
-                chem.Machine = "Elite_R60000@400";
+                is_res_user_defined = true;
+                try
+                {
+                    double res = (double)dParser(resolution_Box.Text.ToString());
+                    foreach (ChemiForm chem in selected_fragments)
+                    {
+                        chem.Resolution = res;
+                    }
+                }
+                catch
+                {
+                    is_res_user_defined = false;
+                }                
             }
+            if (is_res_user_defined) return;
+            else if (frm2.is_exp_deconvoluted)
+            {
+                string machine = "";
+                double res = 0.0;
+                if (frm2.is_deconv_const_resolution)
+                {
+                    res = dParser(machine);
+                    foreach (ChemiForm chem in selected_fragments)
+                    {
+                        chem.Resolution = res;
+                    }
+                }
+                else
+                {
+                    machine = frm2.deconv_machine;
+                    foreach (ChemiForm chem in selected_fragments)
+                    {
+                        chem.Machine = machine;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ChemiForm chem in selected_fragments)
+                {
+                    chem.Machine = "Elite_R60000@400";
+                }
+            }            
         }
 
         private void calculate_fragment_properties_frm9(List<ChemiForm> selected_fragments)
@@ -761,33 +804,33 @@ namespace Isotope_fitting
             // MAIN decesion algorithm 
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
 
-            // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)            
-            if (fragment_is_canditate)
-            {
-                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                ChemiForm.Envelope(chem);
-                ChemiForm.Vdetect(chem);
-                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                chem.Centroid.Clear(); chem.Intensoid.Clear();
-                add_fragment_to_Fragments3(chem,cen);return;
-            }
-            else if (ignore_ppm_form9.Checked)
-            {
-                //chem.Profile.Clear();
-                //ChemiForm.Envelope(chem);               
-                //MessageBox.Show(chem.Name+ " is out of ppm bounds.");
-                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                ChemiForm.Envelope(chem);
-                ChemiForm.Vdetect(chem);
-                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                chem.Centroid.Clear(); chem.Intensoid.Clear();
-                add_fragment_to_Fragments3(chem, cen,false);
-                return;
-            }
-            else
-            {
-                chem.Points.Clear(); chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-            }
+            //// only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)            
+            //if (fragment_is_canditate)
+            //{
+            //    chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+            //    ChemiForm.Envelope(chem);
+            //    ChemiForm.Vdetect(chem);
+            //    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+            //    chem.Centroid.Clear(); chem.Intensoid.Clear();
+            //    add_fragment_to_Fragments3(chem,cen);return;
+            //}
+            //else if (ignore_ppm_form9.Checked)
+            //{
+            //    //chem.Profile.Clear();
+            //    //ChemiForm.Envelope(chem);               
+            //    //MessageBox.Show(chem.Name+ " is out of ppm bounds.");
+            //    chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+            //    ChemiForm.Envelope(chem);
+            //    ChemiForm.Vdetect(chem);
+            //    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+            //    chem.Centroid.Clear(); chem.Intensoid.Clear();
+            //    add_fragment_to_Fragments3(chem, cen,false);
+            //    return;
+            //}
+            //else
+            //{
+            //    chem.Points.Clear(); chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+            //}
         }
 
         private void add_fragment_to_Fragments3(ChemiForm chem, List<PointPlot> cen, bool candidate=true)
@@ -860,7 +903,7 @@ namespace Isotope_fitting
         }
         private bool decision_algorithm_frm9(ChemiForm chem, List<PointPlot> cen)
         {
-            // all the decisions if a fragment is canidate for fitting
+            // all the decisions if a fragment is candidate for fitting
             bool fragment_is_canditate = true;
             double max_error = 0.0;
             // deceide how many peaks will be involved in the selection process
@@ -882,40 +925,51 @@ namespace Isotope_fitting
             // sanity check. No matter what, check at least most intense peak!
             if (contrib_peaks == 0) contrib_peaks = 1;
             if (contrib_peaks > cen.Count) { contrib_peaks = cen.Count; }
+            //round 1 , to find the correct resolution 
+            //for the deconvoluted spectra the resolution is not derived from the experimental therefore there is only round 1
             for (int i = 0; i < contrib_peaks; i++)
             {
                 double[] tmp = ppm_calculator(cen[i].X);
-
-                if (Math.Abs(tmp[0])< ppmError9) results.Add(tmp);
-                else
+                results.Add(tmp);
+                if (Math.Abs(tmp[0])> ppmError9) 
                 {
-                    fragment_is_canditate = false;
+                    //fragment_is_canditate = false;
                     try
                     {
-                        if (!string.IsNullOrEmpty(resolution_Box.Text) && resolution_Box.Enabled)
+                        if (is_res_user_defined || frm2.is_exp_deconvoluted)
                         {
-                            chem.Resolution = (double)dParser(resolution_Box.Text.ToString());
-                        }
-                        else
-                        {
-                            results.Add(tmp); chem.Resolution = (double)results.Average(p => p[1]);
-                        }
+                            fragment_is_canditate = false;
+                            break;
+                        }                       
                     }
-                    catch { }
-                    break;
+                    catch { }                   
                 }
             }
-
+            if (!fragment_is_canditate && !ignore_ppm_form9.Checked) { return false; }
+            if (fragment_is_canditate && !frm2.is_exp_deconvoluted &&!is_res_user_defined)
+            {
+                results = new List<double[]>();
+                chem.Resolution = (double)results.Average(p => p[1]);
+                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                ChemiForm.Envelope(chem);
+                ChemiForm.Vdetect(chem);
+                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                for (int i = 0; i < contrib_peaks; i++)
+                {
+                    double[] tmp = ppm_calculator(cen[i].X);
+                    results.Add(tmp);
+                    if (Math.Abs(tmp[0]) > ppmError9) { fragment_is_canditate = false; }
+                }
+            }                
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
             if (!fragment_is_canditate && !ignore_ppm_form9.Checked) { return false; }
             chem.PPM_Error = results.Average(p => p[0]);
-            //foreach (double[] pp in results)
-            //{
-            //    if (Math.Abs(pp[0])>Math.Abs(max_error)) { max_error = pp[0]; }
-            //}
-            //if (max_error < 0) { chem.PPM_Error = -chem.PPM_Error; }
-            chem.Resolution = (double)results.Average(p => p[1]); 
-            
+            if (results.Count > 1) { chem.maxPPM_Error = results.Max(p => p[0]); chem.minPPM_Error = results.Min(p => p[0]); }
+            else { chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0; }
+            if (fragment_is_canditate){add_fragment_to_Fragments3(chem, cen);}
+            else if (ignore_ppm_form9.Checked){add_fragment_to_Fragments3(chem, cen, false);}
+            else{chem.Points.Clear(); chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();}
             return fragment_is_canditate;
         }
         #endregion
@@ -988,7 +1042,8 @@ namespace Isotope_fitting
                     minPPM_Error= Fragments3[new_fragin].minPPM_Error,
                     Extension = Fragments3[new_fragin].Extension,
                     Chain_type = Fragments3[new_fragin].Chain_type,
-                    SortIdx = Fragments3[new_fragin].SortIdx
+                    SortIdx = Fragments3[new_fragin].SortIdx,
+                    Candidate = Fragments3[new_fragin].Candidate
                 });
 
                 Fragments2.Last().Centroid = Fragments3[new_fragin].Centroid.Select(point => point.DeepCopy()).ToList();
