@@ -722,7 +722,7 @@ namespace Isotope_fitting
             {
                 foreach (ChemiForm chem in selected_fragments)
                 {
-                    chem.Machine = "Elite_R60000@400";
+                    chem.Machine = "Q-Exactive,ExactivePlus_280K@200";
                 }
             }            
         }
@@ -948,8 +948,8 @@ namespace Isotope_fitting
             if (!fragment_is_canditate && !ignore_ppm_form9.Checked) { return false; }
             if (fragment_is_canditate && !frm2.is_exp_deconvoluted &&!is_res_user_defined)
             {
-                results = new List<double[]>();
                 chem.Resolution = (double)results.Average(p => p[1]);
+                results = new List<double[]>();
                 chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                 // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
                 ChemiForm.Envelope(chem);
@@ -1463,6 +1463,7 @@ namespace Isotope_fitting
 
                 }
             }
+            else { return; }
             MessageBox.Show(mult_loaded.Count().ToString() + " chemical formulas have been added!");
         }
         private void multChem_min_charge_TextChanged(object sender, EventArgs e)

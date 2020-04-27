@@ -93,6 +93,7 @@
             this.seq_BoxFrm16.AllowDrop = true;
             this.seq_BoxFrm16.DetectUrls = false;
             this.seq_BoxFrm16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.seq_BoxFrm16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seq_BoxFrm16.Location = new System.Drawing.Point(3, 3);
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
             this.seq_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;

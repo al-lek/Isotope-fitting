@@ -687,7 +687,7 @@ namespace Isotope_fitting
                         str = lista[j].Split('\t');
 
                         if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("m/z")) continue; // comments
-                        else if (lista[j].StartsWith("Mode")); // to be implemented
+                        else if (lista[j].StartsWith("Mode")) ; // to be implemented
                         else if (lista[j].StartsWith("Fitted"))
                         {
                             // get the number of isotopes and refresh all UI and get a grip on the new dynamic controls
@@ -701,12 +701,12 @@ namespace Isotope_fitting
                             fact_txtBoxs = GetControls(this).OfType<TextBox>().Where(t => t.Name.EndsWith("factor")).ToList();
                             iso_chkBoxs = GetControls(this).OfType<CheckBox>().Where(t => t.Name.EndsWith("chkBox")).ToList();
                         }
-                        else if (lista[j].StartsWith("Name")) 
-                        { 
+                        else if (lista[j].StartsWith("Name"))
+                        {
                             // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
-                            isotope_count++; 
+                            isotope_count++;
                             name_txtBoxs[isotope_count].Text = str[1];
-                            if (tmp != "") { data_txtBoxs[isotope_count - 1].Text = tmp; parse_data_txt(tmp, isotope_count - 1); tmp = "";  }
+                            if (tmp != "") { data_txtBoxs[isotope_count - 1].Text = tmp; parse_data_txt(tmp, isotope_count - 1); tmp = ""; }
                         }
                         else if (lista[j].StartsWith("Factor")) fact_txtBoxs[isotope_count].Text = str[1];
                         else if (lista[j].StartsWith("Selected")) iso_chkBoxs[isotope_count].Checked = str[1] == "True";
@@ -720,7 +720,7 @@ namespace Isotope_fitting
                 // assignement is done every time a new name is foune in the lista. After the last one there is no new name.
                 data_txtBoxs[isotope_count].Text = tmp; parse_data_txt(tmp, isotope_count); iso_chkBoxs[isotope_count].Checked = true;
             }
-
+            else { return; }
             is_loading = false;
 
             // post load actions

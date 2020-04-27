@@ -2382,7 +2382,7 @@ namespace Isotope_fitting
             }
             catch (Exception ex) 
             {
-                Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File.");
+                 MessageBox.Show("Incorrect Data Format. Check your Fragment File." + ex.ToString());
             };
             progress_display_stop();
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
@@ -3115,9 +3115,9 @@ namespace Isotope_fitting
             }
             //round 2, with the correct resolution
             if (fragment_is_canditate && !is_exp_deconvoluted)
-            {
-                results = new List<double[]>();
+            {                
                 chem.Resolution = (double)results.Average(p => p[1]);
+                results = new List<double[]>();
                 chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                 // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
                 ChemiForm.Envelope(chem);
@@ -6918,12 +6918,12 @@ namespace Isotope_fitting
                 }
                              
             }
+            else { return; }
             is_loading = false;
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-            
+            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;            
             if (sequenceList.Count == 1) { tab_mode = false; }
             else { tab_mode = true; }
             is_loading = false;
@@ -6958,7 +6958,7 @@ namespace Isotope_fitting
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File.");
+                Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File." +ex.ToString());
             };
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());           
         }
@@ -7366,8 +7366,8 @@ namespace Isotope_fitting
             if (fragment_is_canditate && !is_exp_deconvoluted)
             {
                 // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                results = new List<double[]>();
                 chem.Resolution = (double)results.Average(p => p[1]);
+                results = new List<double[]>();
                 chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
                 ChemiForm.Envelope(chem);
                 ChemiForm.Vdetect(chem);
@@ -7404,7 +7404,7 @@ namespace Isotope_fitting
             mzMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) mzMax_Box.Focus(); };
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
-            machine_listBox.SelectedIndex = 2;
+            machine_listBox.SelectedIndex = 9;
             filename_txtBx.Text = file_name;
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
             progress_display_init();
@@ -7886,7 +7886,7 @@ namespace Isotope_fitting
             {
                 loadList();
             }
-            else if (dialogResult == DialogResult.No)
+            else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
             {
                 return;
             }
@@ -7984,7 +7984,7 @@ namespace Isotope_fitting
                 UncheckAll_calculationPanel();
                  resolution_Box.Text = null;
                 machine_listBox.ClearSelected();
-                machine_listBox.SelectedIndex = 2;
+                machine_listBox.SelectedIndex = 9;
                 loadExp_Btn.Enabled = true;
                 selected_window = 1000000;
                 bigPanel.Controls.Clear();                
@@ -11731,7 +11731,6 @@ namespace Isotope_fitting
             frm17.Text = "Sequence coverage";
             frm17.ShowDialog();
         }
-
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
             if (ax_chBx.Checked)
@@ -11787,7 +11786,57 @@ namespace Isotope_fitting
         {
             int x = e.X;
             int y = e.Y;
-
+            int temp_x = 3;
+            int temp_y = 20;
+            string s = Peptide;
+            StringBuilder sb = new StringBuilder();
+            string s_ext = "";//the desired extension
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            SequenceTab curr_ss = sequenceList[0];
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+            {
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    {
+                        curr_ss = seq;
+                        s = seq.Sequence; s_ext = seq.Extension;
+                        break;
+                    }
+                }
+            }
+            int grp_num = 25;
+            if (rdBtn50.Checked) grp_num = 50;
+            for (int idx = 0; idx < s.Length; idx++)
+            {
+                if (temp_x<=x && temp_x + 8 >= x && temp_y  <= y && temp_y + 15 >= y)
+                {
+                    foreach (ion nn in IonDraw)
+                    {
+                        if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                        if (nn.SortIdx == idx + 1)
+                        {
+                            sb.AppendLine(nn.Name + "\twith m/z:\t" + nn.Mz.ToString() + "\tand intesity:\t" + Math.Round(nn.Max_intensity,4).ToString());
+                        }
+                    }
+                    if (sb.Length== 0)
+                    {
+                         sb.AppendLine("No ions match to your research");
+                    }
+                    string message_string = sb.ToString();
+                    Form17 frm17 = new Form17(message_string);
+                    frm17.Text = "Aminoacid: "+ s[idx]+ " with index: " + (idx+1).ToString()+" (Extension: "+ s_ext + ")" ;
+                    frm17.ShowDialog();
+                    return;
+                }
+                else
+                {
+                    temp_x = temp_x + 20;
+                    if (temp_x + 20 >= sequence_Pnl.Width) { temp_x = 3; temp_y = temp_y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_x = 3; temp_y = temp_y + 50; }
+                }                
+            }
         }
         private void sequence_draw(Graphics g)
         {            
@@ -13326,32 +13375,16 @@ namespace Isotope_fitting
             List<CustomDataPoint> ppm_points_M_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000000000 = new List<CustomDataPoint>();
             #endregion
 
-            //fill the list with the correct ions
-            int ppm_points = 0;
-            string ppm_range = "";
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            //fill the list with the correct ions            
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = IonDraw[i];
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";                        
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_a_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
+                {                    
                     if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
                     {
                         if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.SortIdx)
@@ -13371,22 +13404,6 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O")  && ppm_b_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_b_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
                     if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
                     {
                         if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.SortIdx)
@@ -13406,22 +13423,6 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_c_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
                     if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
                     {
                         if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.SortIdx)
@@ -13440,23 +13441,7 @@ namespace Isotope_fitting
                     }
                 }
                 else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_x_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
+                {                    
                     if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
                     {
                         if (merged_x.Count == 0 || (int)merged_x.Last()[0] != nn.SortIdx)
@@ -13475,23 +13460,7 @@ namespace Isotope_fitting
                     }
                 }
                 else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_y_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
+                {                    
                     if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
                     {
                         if (merged_y.Count == 0 || (int)merged_y.Last()[0] != nn.SortIdx)
@@ -13511,22 +13480,6 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_z_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
                     if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx))
                     {
                         if (merged_z.Count == 0 || (int)merged_z.Last()[0] != nn.SortIdx)
@@ -13548,64 +13501,13 @@ namespace Isotope_fitting
                 {
                     if (nn.Ion_type.Contains("b"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
-                        {
-                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                            if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else { ppm_points_intB_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            ppm_points++;
-                        }
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = Color.Blue, Max_intensity = nn.Max_intensity });
+                         IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = Color.Blue, Max_intensity = nn.Max_intensity });
                     }
                     else
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
-                        {
-                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                            if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else { ppm_points_intA_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            ppm_points++;
-                        }
                         IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Green, Charge = nn.Charge, Max_intensity = nn.Max_intensity });
                     }
-                }
-                else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_M_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                }
+                }               
             }
             foreach (ion nn in charge_merged_a)
             {
@@ -13684,6 +13586,190 @@ namespace Isotope_fitting
                 else if (nn.Max_intensity / 100000000 < 10) { points_z_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
                 else if (nn.Max_intensity / 1000000000 < 10) { points_z_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
                 else { points_z_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
+            }
+
+            CI_mass comMass = new CI_mass(); IonDraw.Sort(comMass);
+            int ppm_points = 0;
+            string ppm_range = "";
+            for (int i = 0; i < iondraw_count; i++)
+            {
+                ion nn = IonDraw[i];
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_a_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }
+                }
+                else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_b_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }
+                }
+                else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_c_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }
+                }
+                else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_x_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }
+                }
+                else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_y_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }                   
+                }
+                else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_z_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }                   
+                }
+                else if (nn.Ion_type.StartsWith("inter"))
+                {
+                    if (nn.Ion_type.Contains("b"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_intB_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_intA_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                }
+                else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                    {
+                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                        if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        else { ppm_points_M_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                        ppm_points++;
+                    }
+                }
             }
 
             #region ppm plot
@@ -14230,6 +14316,15 @@ namespace Isotope_fitting
                 return -Decimal.Compare(x.Index, y.Index);
             }
         }
+        class CI_mass : IComparer<ion>
+        {
+            public int Compare(ion x, ion y)
+            {
+                decimal x_mass = (decimal)dParser(x.Mz);
+                decimal y_mass = (decimal)dParser(y.Mz);
+                return Decimal.Compare(x_mass, y_mass);
+            }
+        }
 
         #region export and resize panels
 
@@ -14476,8 +14571,7 @@ namespace Isotope_fitting
                     }
                 }
             }
-            CI ion_comp = new CI();
-            IonDraw.Sort(ion_comp);
+            CI_mass comMass = new CI_mass(); IonDraw.Sort(comMass);
             //ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
             ScatterSeries ppm_a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
             ScatterSeries ppm_a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
@@ -14917,7 +15011,7 @@ namespace Isotope_fitting
             axisX_1.Title.MouseInteraction = false;
             axisX_1.AutoFormatLabels = false;axisX_1.LabelsNumberFormat = x_format + x_numformat;
             axisY_1.Title.MouseInteraction = false;            
-            axisY_1.AutoFormatLabels = false;axisY_1.LabelsNumberFormat = x_format + x_numformat;
+            axisY_1.AutoFormatLabels = false;axisY_1.LabelsNumberFormat = y_format + y_numformat;
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(temp_plot.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;
@@ -16101,7 +16195,7 @@ namespace Isotope_fitting
             UncheckAll_calculationPanel();
             resolution_Box.Text = null;
             machine_listBox.ClearSelected();
-            machine_listBox.SelectedIndex = 2;
+            machine_listBox.SelectedIndex = 9;
             loadExp_Btn.Enabled = true;
             selected_window = 1000000;
             bigPanel.Controls.Clear();
@@ -16417,7 +16511,8 @@ namespace Isotope_fitting
                             minPPM_Error = 0,
                             Extension = str[18],
                             To_plot = string_to_bool(str[19]),
-                            Max_intensity=dParser(str[6])
+                            Max_intensity=dParser(str[6]),
+                            Candidate=true
                         });
                         if (UInt32.TryParse(str[12], out uint result_color)) Fragments2.Last().Color = OxyColor.FromUInt32(result_color);
                         IonDraw.Add(new ion() { Extension = str[18], Name = Fragments2.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = Fragments2.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
