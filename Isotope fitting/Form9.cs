@@ -1521,9 +1521,5 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void Light_chkBox_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

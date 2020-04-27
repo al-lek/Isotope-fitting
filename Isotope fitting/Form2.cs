@@ -2698,17 +2698,16 @@ namespace Isotope_fitting
             {
                 frag_tree.AfterCheck += (s, e) => {  frag_node_checkChanged(e.Node, e.Node.Checked); };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[6] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[7] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
                                                                       new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }),
-                                                                      new MenuItem("Remove Unchecked", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode,true); } })
+                                                                      new MenuItem("Remove Unchecked", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode,true); } }),
+                                                                      new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } })
                 });
 
-            }
-            //frag_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Remove", (s, e) => { remove_node(frag_tree.SelectedNode.Index); }) });
-
+            }           
             // interpret fitted results
             frag_tree.BeginUpdate();
 
@@ -2725,6 +2724,21 @@ namespace Isotope_fitting
 
             frag_tree.EndUpdate();
             frag_tree.Visible = true;
+        }
+        private void colorSelection_frag_tree(TreeNode node)
+        {
+            if (string.IsNullOrEmpty(node.Name) || Fragments2.Count == 0) return;
+            else
+            {
+                int idx = Convert.ToInt32(node.Name);
+                ColorDialog clrDlg = new ColorDialog();
+                if (clrDlg.ShowDialog() == DialogResult.OK)
+                {       
+                    custom_colors[idx + 1] = clrDlg.Color.ToArgb();
+                    Fragments2[idx].Color = OxyColor.FromUInt32((uint)custom_colors[idx + 1]);
+                    LC_1.ViewXY.PointLineSeries[idx + 1].LineStyle.Color = clrDlg.Color;
+                }
+            }
         }
         private void remove_node(TreeNode node,bool Unchecked=false)
         {                       
@@ -3058,7 +3072,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-            // deceide how many peaks will be involved in the selection process
+            // decide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
             double temp_pp = ppmError;
@@ -7033,7 +7047,7 @@ namespace Isotope_fitting
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
             double temp_pp = ppmError;
-            // deceide how many peaks will be involved in the selection process
+            // decide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
 
@@ -7073,7 +7087,13 @@ namespace Isotope_fitting
                 double[] tmp = ppm_calculator(fra.Centroid[i].X);
 
                 if (Math.Abs(tmp[0])< temp_pp) results.Add(tmp);
-                else { fragment_is_canditate = false; results.Add(tmp);/*break;*/ }
+                else
+                {
+                    fragment_is_canditate = false;
+                    if(results.Count==0)
+                    results.Add(tmp);
+                    break;
+                }
             }
 
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
@@ -7332,7 +7352,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is canidate for fitting
             bool fragment_is_canditate = true;
-            // deceide how many peaks will be involved in the selection process
+            // decide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
             int total_peaks = cen.Count;
@@ -7381,21 +7401,10 @@ namespace Isotope_fitting
             plotCentr_chkBox.CheckedChanged += (s, e) => { if (!block_plot_refresh) refresh_iso_plot(); };
             plotFragCent_chkBox.CheckedChanged += (s, e) => { if (!block_plot_refresh) refresh_iso_plot(); };
             plotFragProf_chkBox.CheckedChanged += (s, e) => {if(!block_plot_refresh) refresh_iso_plot(); };
-            fitMax_Box.Click += (s, e) => { fitMax_Box.SelectAll(); };
-            fitMin_Box.Click += (s, e) => { fitMin_Box.SelectAll(); };
-            fitMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true, false, true); };
-            fitMax_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true, false, true); };
-            //fitStep_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) { step_Fitting(); if (!is_loading && !is_calc) { if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); } refresh_iso_plot(); } } };
-            //step_rangeBox.KeyPress += (s, e) => { if (e.KeyChar == (char)13) { step_Fitting(); if (!is_loading && !is_calc) { if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); } refresh_iso_plot(); } } };
             mzMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) mzMax_Box.Focus(); };
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
             machine_listBox.SelectedIndex = 2;
-            ContextMenu ctxMn1 = new ContextMenu() { };
-            MenuItem copyRow = new MenuItem("Copy items", copyRowList);
-            MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
-            ctxMn1.MenuItems.AddRange(new MenuItem[] { copyRow, colorSelection });
-            frag_listView.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
             filename_txtBx.Text = file_name;
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
             progress_display_init();
@@ -7415,6 +7424,17 @@ namespace Isotope_fitting
             disp_internal.Checked = true;
 
             #region unused
+            //fitMax_Box.Click += (s, e) => { fitMax_Box.SelectAll(); };
+            //fitMin_Box.Click += (s, e) => { fitMin_Box.SelectAll(); };
+            //fitMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true, false, true); };
+            //fitMax_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) select_from_experimental(fitMin_Box.Text, fitMax_Box.Text, true, false, true); };
+            //fitStep_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) { step_Fitting(); if (!is_loading && !is_calc) { if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); } refresh_iso_plot(); } } };
+            //step_rangeBox.KeyPress += (s, e) => { if (e.KeyChar == (char)13) { step_Fitting(); if (!is_loading && !is_calc) { if (string.IsNullOrEmpty(fitStep_Box.Text)) { recalculate_all_data_aligned(); } refresh_iso_plot(); } } };
+            //ContextMenu ctxMn1 = new ContextMenu() { };
+            //MenuItem copyRow = new MenuItem("Copy items", copyRowList);
+            //MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
+            //ctxMn1.MenuItems.AddRange(new MenuItem[] { copyRow, colorSelection });
+            //frag_listView.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
             ////index menu for fragment type ckeckboxes
             //ContextMenu ctxMn2 = new ContextMenu() { };
             //MenuItem indexOpt = new MenuItem("Index", indexForm);
