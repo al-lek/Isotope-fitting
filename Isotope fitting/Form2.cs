@@ -14906,6 +14906,11 @@ namespace Isotope_fitting
             temp_plot.EndUpdate();
             refresh_temp_plot(temp_plot);
             temp_plot.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
+            temp_plot.BeginUpdate();
+            temp_plot.ViewXY.XAxes[0].SetRange(LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum);
+            temp_plot.ViewXY.YAxes[0].SetRange(LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
+
+            temp_plot.EndUpdate();
             Form20 frm20 = new Form20(temp_plot);
             frm20.Show();
         }
