@@ -11817,7 +11817,7 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.SortIdx == idx + 1)
                         {
-                            sb.AppendLine(nn.Name + "\twith m/z:\t" + nn.Mz.ToString() + "\tand intesity:\t" + Math.Round(nn.Max_intensity,4).ToString());
+                            sb.AppendLine(nn.Name + "\twith m/z:\t" + nn.Mz.ToString() + "\tand intensity:\t" + Math.Round(nn.Max_intensity,4).ToString());
                         }
                     }
                     if (sb.Length== 0)

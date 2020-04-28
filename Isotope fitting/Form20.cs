@@ -15,7 +15,7 @@ using Arction.WinForms.Charting.EventMarkers;
 using Arction.WinForms.Charting.Titles;
 using Arction.WinForms.Charting.Views.ViewXY;
 using Arction.WinForms.Charting.Annotations;
-
+using System.Diagnostics;
 
 namespace Isotope_fitting
 {
@@ -49,17 +49,16 @@ namespace Isotope_fitting
                 LightningChartUltimate chart = plot as LightningChartUltimate;
                 if (copy)
                 {
-
                     try
                     {
-                        chart.CopyToClipboard(ClipboardImageFormat.Emf, null);
+                        //chart.CopyToClipboard(ClipboardImageFormat.Emf, null);
+                        chart.CopyToClipboardAsEmf();
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message + " " + ex.InnerException);
+                        Debug.WriteLine(ex.ToString());
                     }
-                    //var bitmap = pngExporter.ExportToBitmap(plot.Model);
-                    //Clipboard.SetImage(bitmap);
                 }
                 else
                 {
@@ -69,7 +68,6 @@ namespace Isotope_fitting
                     {
                         try
                         {
-                            //if (chart.SaveToFile(ofd.FileName, Math.Max((int)((float)(chart.Width) * 0.5f),0), chart.Height ) == false)
                             if (chart.SaveToFile(ofd.FileName) == false)
                             {
                                 MessageBox.Show(this, "Save to file failed.", "Peak Finder", MessageBoxButtons.OK, MessageBoxIcon.Error);
