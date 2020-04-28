@@ -203,7 +203,8 @@ namespace Isotope_fitting
             Name = "frag_tree",
             Size = new System.Drawing.Size(341, 323),
             TabIndex = 1000000,
-            Visible = false ,ShowNodeToolTips=false};
+            Visible = false ,ShowNodeToolTips=false
+        };
         string root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
         string loaded_lists="";
@@ -2624,7 +2625,7 @@ namespace Isotope_fitting
                             int ext_idx=fra.Name.IndexOf(fra.Extension);
                             if (ext_idx!=-1)
                             {
-                                fra.Name.Replace(fra.Extension, chem1.Extension);
+                                fra.Name = fra.Name.Replace(fra.Extension, chem1.Extension);
                                 fra.Extension = chem1.Extension;
                                 return false;
                             }
@@ -2648,7 +2649,7 @@ namespace Isotope_fitting
                             int ext_idx = fra.Name.IndexOf(fra.Extension);
                             if (ext_idx != -1)
                             {
-                                fra.Name.Replace(fra.Extension, new_extension);
+                                fra.Name = fra.Name.Replace(fra.Extension, new_extension);
                                 fra.Extension = new_extension;
                                 return false;
                             }
@@ -2690,22 +2691,23 @@ namespace Isotope_fitting
 
         private void populate_frag_treeView()
         {
-            frag_listView.Visible = false;             
+            frag_listView.Visible = false;           
             if (frag_tree.Nodes.Count>0)
             {
                 frag_tree.Nodes.Clear();
             }
-            else
+            else if(frag_tree.ContextMenu==null)
             {
                 frag_tree.AfterCheck += (s, e) => {  frag_node_checkChanged(e.Node, e.Node.Checked); };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[7] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[8] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
                                                                       new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }),
                                                                       new MenuItem("Remove Unchecked", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode,true); } }),
-                                                                      new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } })
+                                                                      new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
+                                                                      new MenuItem("Replace Extension", (s, e) => {replace_extension();  })
                 });
 
             }           
@@ -2737,9 +2739,127 @@ namespace Isotope_fitting
                 {       
                     custom_colors[idx + 1] = clrDlg.Color.ToArgb();
                     Fragments2[idx].Color = OxyColor.FromUInt32((uint)custom_colors[idx + 1]);
+                    LC_1.BeginUpdate();
                     LC_1.ViewXY.PointLineSeries[idx + 1].LineStyle.Color = clrDlg.Color;
+                    LC_1.ViewXY.LineCollections[idx].LineStyle.Color = clrDlg.Color;
+                    LC_1.EndUpdate();
                 }
             }
+        }
+        private void replace_extension()
+        {
+            int initial_count = Fragments2.Count;
+            if (initial_count==0) return;
+            string previous_exte = "";
+            string final_exte = "";
+            int previous_chain_type = 0;
+            int final_chain_type = 0;
+            int present = 0;//if present=2 both extension are present in sequence list and chain types matter
+            var showDialog = ShowRenameExtensionDialog();
+            previous_exte = showDialog[0].Replace(" ", ""); 
+            final_exte = showDialog[1].Replace(" ", "");
+            if (string.IsNullOrEmpty(previous_exte) || string.IsNullOrEmpty(final_exte)) { return; }
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            foreach (SequenceTab seq in sequenceList)
+            {
+                if (seq.Extension.Equals(previous_exte))
+                {
+                    previous_chain_type = seq.Type;present++;
+                }
+                if (seq.Extension.Equals(final_exte))
+                {
+                    final_chain_type = seq.Type;present++;
+                }
+            }
+            //if (selectedFragments != null && selectedFragments.Count > 0) { selectedFragments.Clear(); }
+            foreach (FragForm fra in Fragments2)
+            {
+                if (present == 2){recognise_extension_and_replace(fra, previous_exte, final_exte,true, final_chain_type);}
+                else { recognise_extension_and_replace(fra, previous_exte, final_exte);}
+            }
+            if (IonDraw.Count > 0)
+            {
+                IonDraw.Clear();
+                foreach (FragForm fra in Fragments2)
+                {
+                    if (fra.Fixed)
+                    {
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                    }
+                }
+            }            
+            populate_frag_treeView();
+            populate_fragtypes_treeView();
+            LC_1.BeginUpdate();
+            reset_names_iso_plot();
+            if (selectedFragments.Count > 0)
+            {
+                if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
+                {
+                    frag_annotation(selectedFragments.ToList());
+                }
+                else
+                {
+                    DisposeAllAndClear(LC_1.ViewXY.Annotations);
+                }
+            }  
+            LC_1.EndUpdate();
+        }
+        private void reset_names_iso_plot()
+        {            
+            for (int i = 0; i < Fragments2.Count; i++)
+            {
+                LC_1.ViewXY.LineCollections[i].Title = new SeriesTitle { Text = Fragments2[i].Name };
+                LC_1.ViewXY.PointLineSeries[i+1].Title = new SeriesTitle { Text = Fragments2[i].Name };
+            }           
+        }
+        private int recognise_extension_and_replace(FragForm fra, string initial, string final, bool present = false, int f_type = 0)
+        {
+            int ext_idx = fra.Name.IndexOf(fra.Extension);
+            string new_extension = "";
+            string[] str = fra.Extension.Split('_');
+            bool changed = false;
+            for (int k = 1; k < str.Length; k++)
+            {
+                if (str[k].Equals(initial))
+                {
+                    str[k] = final;
+                    changed = true;
+                    break;
+                }
+            }
+            if (changed)
+            {                
+                for (int k = 1; k < str.Length; k++)
+                {
+                    new_extension += "_" + str[k];
+                }
+                if (ext_idx != -1)
+                {
+                    fra.Name = fra.Name.Replace(fra.Extension, new_extension);
+                }
+                fra.Extension = new_extension;
+                if (present) fra.Chain_type = f_type;
+                return 1;
+            }
+            else{ return 0;}
+        }
+        public string[] ShowRenameExtensionDialog()
+        {           
+            Form prompt = new Form() { ShowIcon = false, ShowInTaskbar = false, ControlBox = true, StartPosition = FormStartPosition.CenterParent };
+            prompt.Width = 300;
+            prompt.Height = 200;
+            prompt.Text = "Replace the extension";
+            Label textLabel1 = new Label() { Left = 25, Top = 20, Text = "Previous Extension", AutoSize = true, BackColor = Color.Transparent };
+            TextBox textBox1 = new TextBox() { Left = 25, Top = 40, Width = 200 };
+            Label textLabel2 = new Label() { Left = 25, Top = 70, Text = "New Extension", AutoSize = true, BackColor = Color.Transparent };
+            TextBox textBox2 = new TextBox() { Left = 25, Top = 90, Width = 200 };
+            Button confirmation = new Button() { Text = "Done", Left = 175, Width = 50, Top = 120 };
+            textBox1.KeyDown += (sender, e) => { if (e.KeyCode == Keys.Enter) confirmation.Focus(); };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.AddRange(new Control[] { textBox1, textLabel1, textBox2, textLabel2, confirmation });
+            prompt.ShowDialog();
+            return new string[] { textBox1.Text.Replace("_",""), textBox2.Text.Replace("_", "") };
         }
         private void remove_node(TreeNode node,bool Unchecked=false)
         {                       
@@ -2759,6 +2879,8 @@ namespace Isotope_fitting
                         }
                         else { rr++; }
                     }
+                    // also restore indexes to match array position
+                    for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }                    
                     // thread safely fire event to continue calculations
                     Invoke(new Action(() => OnEnvelopeCalcCompleted()));
                 }
@@ -2796,6 +2918,7 @@ namespace Isotope_fitting
                         }
                     }
                     Fragments2.RemoveAt(idx); // thread safely fire event to continue calculations
+                    for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }                   
                     Invoke(new Action(() => OnEnvelopeCalcCompleted()));
                 }
             }
@@ -2843,10 +2966,13 @@ namespace Isotope_fitting
             //user_grpBox.Controls.Add(fragTypes_tree);
             //fragTypes_tree.BringToFront();
             if (fragTypes_tree.Nodes.Count>0) { fragTypes_tree.Nodes.Clear(); }
-            fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
+            if (fragTypes_tree.ContextMenu==null)
+            {
+                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
                                                                            new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); }),
                                                                            new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) });
 
+            }
             fragTypes_tree.BeginUpdate();
             for (int i = 0; i < Fragments2.Count; i++)
             {
@@ -2916,7 +3042,6 @@ namespace Isotope_fitting
             fragTypes_tree.Visible = true; fragStorage_Lbl.Visible = true;
 
         }
-
         private TreeNode new_fragTreeNode(int idx)
         {
             TreeNode tr = new TreeNode
@@ -2941,7 +3066,6 @@ namespace Isotope_fitting
             selectedFragments = selectedFragments.OrderBy(p => p).ToList();
             return tr;
         }
-
         private void copyTree_toClip(TreeView tree, bool all_nodes,bool only_selected=false)
         {
             StringBuilder sb = new StringBuilder();
@@ -2995,12 +3119,10 @@ namespace Isotope_fitting
             Clipboard.Clear();
             Clipboard.SetText(sb.ToString());
         }
-
         private void saveTree_toFile(TreeView tree)
         {
             // to be implemented
         }
-
         private void frag_node_checkChanged(TreeNode node, bool is_checked)
         {
             this.Cursor= System.Windows.Forms.Cursors.WaitCursor;
@@ -3139,7 +3261,6 @@ namespace Isotope_fitting
             add_fragment_to_Fragments2(chem, cen);
             return fragment_is_canditate;
         }
-
         public static double[] ppm_calculator(double centroid)
         {
             // find the closest experimental peak, and return calculated ppm and resolution
@@ -4793,7 +4914,7 @@ namespace Isotope_fitting
         {
             if (status == "post load")
             {
-                fitMin_Box.Enabled = fitMax_Box.Enabled = fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
+               fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
                 Fitting_chkBox.Checked = loadFit_Btn.Enabled = false; 
             }
             else if (status == "post import fragments")
@@ -6993,7 +7114,10 @@ namespace Isotope_fitting
             powerSet.Clear();powerSet_distroIdx.Clear();
             summation.Clear();residual.Clear();
             all_data.RemoveRange(1, all_data.Count - 1);
-            if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
+            if (frag_tree != null)
+            {
+                frag_tree.Nodes.Clear(); frag_tree.Visible = false;               
+            }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false; fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
@@ -7090,8 +7214,7 @@ namespace Isotope_fitting
                 else
                 {
                     fragment_is_canditate = false;
-                    if(results.Count==0)
-                    results.Add(tmp);
+                    if(results.Count==0)results.Add(tmp);
                     break;
                 }
             }
@@ -7753,48 +7876,7 @@ namespace Isotope_fitting
             //    fitStep_Box.Text = fitStep_Box.Text.Remove(fitStep_Box.Text.Length - 1);
             //}
         }
-        private void FitMax_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(fitMax_Box.Text))
-            {
-                try
-                {
-                    max_border = double.Parse(fitMax_Box.Text, NumberStyles.AllowDecimalPoint);
-                    recalc = true;
-                }
-                catch
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    fitMax_Box.Text = fitMax_Box.Text.Remove(fitMax_Box.Text.Length - 1);
-                }
-            }
-            //if (Regex.IsMatch(fitMax_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    fitMax_Box.Text = fitMax_Box.Text.Remove(fitMax_Box.Text.Length - 1);
-            //}
-        }
-        private void FitMin_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(fitMin_Box.Text))
-            {
-                try
-                {
-                    min_border = double.Parse(fitMin_Box.Text, NumberStyles.AllowDecimalPoint);
-                    recalc = true;
-                }
-                catch
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    fitMin_Box.Text = fitMin_Box.Text.Remove(fitMin_Box.Text.Length - 1);
-                }
-            }
-            //if (Regex.IsMatch(fitMin_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    fitMin_Box.Text = fitMin_Box.Text.Remove(fitMin_Box.Text.Length - 1);
-            //}  
-        }
+        
         private void exportImage_Btn_Click(object sender, EventArgs e)
         {
             export_copy_plotLightningChartUltimate(false, LC_1);
@@ -7805,23 +7887,21 @@ namespace Isotope_fitting
         }
         private void export_copy_plotLightningChartUltimate(bool copy, LightningChartUltimate plot)
         {
-            //var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Height, Background = OxyColors.White };
             if (plot is LightningChartUltimate)
             {
                 LightningChartUltimate chart = plot as LightningChartUltimate;
                 if (copy)
                 {
-
                     try
                     {
-                        chart.CopyToClipboard(ClipboardImageFormat.Emf, null);
+                        //chart.CopyToClipboard(ClipboardImageFormat.Emf, null);
+                        chart.CopyToClipboardAsEmf();
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message + " " + ex.InnerException);
+                        Debug.WriteLine(ex.ToString());
                     }
-                    //var bitmap = pngExporter.ExportToBitmap(plot.Model);
-                    //Clipboard.SetImage(bitmap);
                 }
                 else
                 {
@@ -7974,8 +8054,7 @@ namespace Isotope_fitting
                 insert_exp = false;
                 plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
                 loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
-                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false;  fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
-                fitMin_Box.Text = null; fitMax_Box.Text = null; fitStep_Box.Text = null; step_rangeBox.Text = null;
+                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false;   fitStep_Box.Text = null; step_rangeBox.Text = null;
                 Fitting_chkBox.Checked = false;
                 Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
                 Fragments2.Clear();ChemFormulas.Clear();
@@ -8301,6 +8380,8 @@ namespace Isotope_fitting
             frm19.ShowDialog();
             //params_form();
         }
+
+        //MS product
         private void deleteMSProd_Btn_Click(object sender, EventArgs e)
         {
             if (ChemFormulas.Count > 0) { ChemFormulas.Clear(); }
@@ -8308,7 +8389,51 @@ namespace Isotope_fitting
             if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
 
         }
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ChemFormulas.Count == 0) return;
+            if (MSproduct_treeView.Nodes[0].Nodes.Count == 1)
+            {
+                ChemFormulas.Clear();
+                if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
+                MSproduct_treeView.Nodes.Clear();
+            }
+            else if (MSproduct_treeView.SelectedNode != null)
+            {
+                string[] str = MSproduct_treeView.SelectedNode.Text.Split('_');
+                MSproduct_treeView.Nodes[0].Nodes.Remove(MSproduct_treeView.SelectedNode);
+                string exte = "";
+                if (str.Length > 1)
+                {
+                    exte = str.Last();
+                    for (int h = 0; h < loaded_MSproducts.Count; h++)
+                    {
+                        string[] str1 = loaded_MSproducts[h].Split('_');
+                        if (str1.Length > 1 && str1.Last().Equals(exte)) { loaded_MSproducts.RemoveAt(h); break; }
+                    }
+                }
+                else
+                {
+                    for (int h = 0; h < loaded_MSproducts.Count; h++)
+                    {
+                        string[] str1 = loaded_MSproducts[h].Split('_');
+                        if (str1.Length > 1 && str1.Last().Equals(exte)) { loaded_MSproducts.RemoveAt(h); break; }
+                        else if (str1.Length == 1) { loaded_MSproducts.RemoveAt(h); break; }
+                    }
+                }
+                int rr = 0;
+                while (rr < ChemFormulas.Count)
+                {
+                    if (ChemFormulas[rr].Extension.Equals(exte) || ChemFormulas[rr].Extension.Equals("_" + exte))
+                    {
+                        ChemFormulas.RemoveAt(rr);
+                    }
+                    else { rr++; }
+                }
+                MessageBox.Show("Extension ' " + exte + " ' removed from MS product files");
+            }
 
+        }
         #endregion
 
         #region Data manipulation
@@ -8404,11 +8529,11 @@ namespace Isotope_fitting
             // find closest experimental m/z
             start_idx = 0;
             for (int i = 1; i < experimental.Count; i++)
-                if (start < experimental[i][0]) { if (text_box_entry) { fitMin_Box.Text = experimental[i - 1][0].ToString(); } start_idx = i - 1; break; }
+                if (start < experimental[i][0]) { if (text_box_entry) {  } start_idx = i - 1; break; }
 
             end_idx = 0;
             for (int i = experimental.Count - 1; i > 1; i--)
-                if (end > experimental[i][0]) { if (text_box_entry) { fitMax_Box.Text = experimental[i + 1][0].ToString(); } end_idx = i + 1; break; }
+                if (end > experimental[i][0]) { if (text_box_entry) {  } end_idx = i + 1; break; }
 
             // copy experimental data range to distribution 0
             for (int i = start_idx; i < end_idx + 1; i++)
@@ -9062,9 +9187,7 @@ namespace Isotope_fitting
             selected_all_data.Clear();     
             UncheckAll_calculationPanel();
             clearCalc_Btn.Enabled = false;
-            calc_Btn.Enabled = false;
-            fitMin_Box.Enabled = false;
-            fitMax_Box.Enabled = false;
+            calc_Btn.Enabled = false;            
             fitStep_Box.Enabled = false;
             resolution_Box.Text = null;
             resolution_Box.Enabled = false;
@@ -9191,12 +9314,8 @@ namespace Isotope_fitting
                     catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
                     arrayPositionIndex++;
                 }
-                if (loaded_window == true) { window_count = windowList.Count; }
-                fitMin_Box.Enabled = false;
-                fitMax_Box.Enabled = false;
-                fitStep_Box.Enabled = false;
-                fitMin_Box.Text = experimental[0][0].ToString();
-                fitMax_Box.Text = experimental[all_data[0].Count - 1][0].ToString();
+                if (loaded_window == true) { window_count = windowList.Count; }                
+                fitStep_Box.Enabled = false;                
                 //_lvwItemComparer = new ListViewItemComparer();
                 //Initialize_listviewComparer();                                
 
@@ -9224,9 +9343,7 @@ namespace Isotope_fitting
                     create_step_panels();
                 }
                 if (loaded_window == false)
-                {
-                    fitMin_Box.Enabled = true;
-                    fitMax_Box.Enabled = true;
+                {                   
                     fitStep_Box.Enabled = true;
                 }
 
@@ -9388,13 +9505,9 @@ namespace Isotope_fitting
                     catch { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return; }
                     arrayPositionIndex++;
                 }
-                window_count = windowList.Count;
-                fitMin_Box.Enabled = false;
-                fitMax_Box.Enabled = false;
+                window_count = windowList.Count;                
                 fitStep_Box.Enabled = false;
                 Fitting_chkBox.Enabled = true;
-                fitMin_Box.Text = experimental[0][0].ToString();
-                fitMax_Box.Text = experimental[all_data[0].Count - 1][0].ToString();
                 //_lvwItemComparer = new ListViewItemComparer();
                 //Initialize_listviewComparer();                                
 
@@ -11615,11 +11728,11 @@ namespace Isotope_fitting
         private void ppm_checkall_Btn_Click(object sender, EventArgs e)
         {
             block_tab_diagrams_refresh = true;
-            foreach (ToolStripButton btn in toolStrip2.Items) { if (!btn.Checked) { btn.Checked = true; } }
-            foreach (ToolStripButton btn in toolStrip3.Items) { if (!btn.Checked) { btn.Checked = true; } }
-            foreach (ToolStripButton btn in toolStrip4.Items) { if (!btn.Checked) { btn.Checked = true; } }
-            foreach (ToolStripButton btn in toolStrip5.Items) { if (!btn.Checked) { btn.Checked = true; } }
-            foreach (ToolStripButton btn in toolStrip6.Items) { if (btn.Name.Contains("M") && !btn.Checked) { btn.Checked = true; } }
+            foreach (ToolStripButton btn in ppm_toolStrip2.Items) { if (!btn.Checked) { btn.Checked = true; } }
+            foreach (ToolStripButton btn in ppm_toolStrip3.Items) { if (!btn.Checked) { btn.Checked = true; } }
+            foreach (ToolStripButton btn in ppm_toolStrip4.Items) { if (!btn.Checked) { btn.Checked = true; } }
+            foreach (ToolStripButton btn in ppm_toolStrip5.Items) { if (!btn.Checked) { btn.Checked = true; } }
+            foreach (ToolStripButton btn in ppm_toolStrip6.Items) { if (btn.Name.Contains("M") && !btn.Checked) { btn.Checked = true; } }
             block_tab_diagrams_refresh = false;
             initialize_plot_tabs();
         }
@@ -11627,11 +11740,11 @@ namespace Isotope_fitting
         private void ppm_uncheckBtn_Click(object sender, EventArgs e)
         {
             block_tab_diagrams_refresh = true;
-            foreach (ToolStripButton btn in toolStrip2.Items) { if (btn.Checked) { btn.Checked = false; } }
-            foreach (ToolStripButton btn in toolStrip3.Items) { if (btn.Checked) { btn.Checked = false; } }
-            foreach (ToolStripButton btn in toolStrip4.Items) { if (btn.Checked) { btn.Checked = false; } }
-            foreach (ToolStripButton btn in toolStrip5.Items) { if (btn.Checked) { btn.Checked = false; } }
-            foreach (ToolStripButton btn in toolStrip6.Items) { if (btn.Name.Contains("M") && btn.Checked) { btn.Checked = false; } }
+            foreach (ToolStripButton btn in ppm_toolStrip2.Items) { if (btn.Checked) { btn.Checked = false; } }
+            foreach (ToolStripButton btn in ppm_toolStrip3.Items) { if (btn.Checked) { btn.Checked = false; } }
+            foreach (ToolStripButton btn in ppm_toolStrip4.Items) { if (btn.Checked) { btn.Checked = false; } }
+            foreach (ToolStripButton btn in ppm_toolStrip5.Items) { if (btn.Checked) { btn.Checked = false; } }
+            foreach (ToolStripButton btn in ppm_toolStrip6.Items) { if (btn.Name.Contains("M") && btn.Checked) { btn.Checked = false; } }
             block_tab_diagrams_refresh = false;
             initialize_plot_tabs();
         }
@@ -15020,12 +15133,12 @@ namespace Isotope_fitting
             temp_plot.EndUpdate();
             refresh_temp_plot(temp_plot);
             temp_plot.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
-            temp_plot.BeginUpdate();
-            temp_plot.ViewXY.XAxes[0].SetRange(LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum);
-            temp_plot.ViewXY.YAxes[0].SetRange(LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
+            //temp_plot.BeginUpdate();
+            //temp_plot.ViewXY.XAxes[0].SetRange(LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum);
+            //temp_plot.ViewXY.YAxes[0].SetRange(LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
 
-            temp_plot.EndUpdate();
-            Form20 frm20 = new Form20(temp_plot);
+            //temp_plot.EndUpdate();
+            Form20 frm20 = new Form20(temp_plot, LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum, LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
             frm20.Show();
         }
 
@@ -16185,8 +16298,7 @@ namespace Isotope_fitting
             insert_exp = false;
             plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
             loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
-            clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false; fitMin_Box.Enabled = false; fitMax_Box.Enabled = false;
-            fitMin_Box.Text = null; fitMax_Box.Text = null; fitStep_Box.Text = null; step_rangeBox.Text = null;
+            clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false;  fitStep_Box.Text = null; step_rangeBox.Text = null;
             Fitting_chkBox.Checked = false;
             Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
             Fragments2.Clear(); ChemFormulas.Clear();
@@ -16909,51 +17021,8 @@ namespace Isotope_fitting
         {
 
         }
-        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ChemFormulas.Count==0 ) return;
-            if (MSproduct_treeView.Nodes[0].Nodes.Count==1)
-            {
-                ChemFormulas.Clear();
-                if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
-                MSproduct_treeView.Nodes.Clear();
-            }
-            else if(MSproduct_treeView.SelectedNode!=null)
-            {
-                string[] str = MSproduct_treeView.SelectedNode.Text.Split('_');
-                MSproduct_treeView.Nodes[0].Nodes.Remove(MSproduct_treeView.SelectedNode); 
-                string exte = "";
-                if (str.Length > 1)
-                {
-                    exte = str.Last();
-                    for (int h = 0; h < loaded_MSproducts.Count; h++)
-                    {
-                        string[] str1 = loaded_MSproducts[h].Split('_');
-                        if (str1.Length > 1 && str1.Last().Equals(exte)) { loaded_MSproducts.RemoveAt(h);break; }
-                    }
-                }
-                else
-                {
-                    for (int h = 0; h < loaded_MSproducts.Count; h++)
-                    {
-                        string[] str1 = loaded_MSproducts[h].Split('_');
-                        if (str1.Length > 1 && str1.Last().Equals(exte)) { loaded_MSproducts.RemoveAt(h); break; }
-                        else if(str1.Length==1) { loaded_MSproducts.RemoveAt(h); break; } 
-                    }
-                }
-                int rr = 0;
-                while (rr < ChemFormulas.Count)
-                {
-                    if (ChemFormulas[rr].Extension.Equals(exte) || ChemFormulas[rr].Extension.Equals("_"+exte))
-                    {
-                        ChemFormulas.RemoveAt(rr);                        
-                    }
-                    else { rr++; }
-                }
-                MessageBox.Show("Extension ' "+exte+" ' removed from MS product files");
-            }
-           
-        }
+        
+        #region extension
         private bool recognise_extension(string fra_exte, string Extension)
         {
             string[] str = fra_exte.Split('_');
@@ -17002,8 +17071,8 @@ namespace Isotope_fitting
             }
             return name_exte;
         }
+        #endregion
 
-        
     }
    
 }

@@ -144,10 +144,11 @@ namespace Isotope_fitting
                 frm2.read_rtf_find_color(frm2.sequenceList.Last());
             }
             if (frm2.sequenceList.Count == 1) { frm2.tab_mode = false; }
-            else { frm2.tab_mode = true; }        
+            else { frm2.tab_mode = true; }
             this.Close();
         }
 
+        #region general sequence        
         private void seq_BoxFrm16_TextChanged(object sender, EventArgs e)
         {
             if (seq_BoxFrm16.Text.Length>10 && !active_txt)
@@ -165,13 +166,9 @@ namespace Isotope_fitting
             }
             active_txt = false;
         }
+        #endregion
 
-        
-        private void Form16_DpiChanged(object sender, DpiChangedEventArgs e)
-        {
-            this.PerformAutoScale();
-        }
-
+        #region tab options
         private void seq_tabControl_Selecting(object sender, TabControlCancelEventArgs e)
         {
             if (e.TabPageIndex == this.seq_tabControl.TabCount - 1)
@@ -187,15 +184,15 @@ namespace Isotope_fitting
             }
             else if (e.Button == MouseButtons.Right)
             {
-                for (int i = 0; i < this.seq_tabControl.TabCount-1; ++i)
+                for (int i = 0; i < this.seq_tabControl.TabCount - 1; ++i)
                 {
                     if (this.seq_tabControl.GetTabRect(i).Contains(new Point(e.X, e.Y)))
                     {
-                        if (seq_tabControl.ContextMenu!=null && seq_tabControl.ContextMenu.MenuItems.Count>0)
+                        if (seq_tabControl.ContextMenu != null && seq_tabControl.ContextMenu.MenuItems.Count > 0)
                         {
                             seq_tabControl.ContextMenu.MenuItems.Clear();
                         }
-                        if ( i == 0 ) {  return; }
+                        if (i == 0) { return; }
                         this.seq_tabControl.SelectedIndex = i;
                         ContextMenu cm = new ContextMenu();
                         cm.MenuItems.Add("Remove", new EventHandler(rmv_click));
@@ -212,8 +209,15 @@ namespace Isotope_fitting
             this.seq_tabControl.SelectedIndex = lastIndex;
             RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 280), TabIndex = 1, Checked = true, AutoSize = true };
             RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 280), TabIndex = 2, AutoSize = true };
-            RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Top, Size = new Size(692, 271), ShowSelectionMargin = true, ScrollBars = RichTextBoxScrollBars.Vertical,
-                Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+            RichTextBox box = new RichTextBox()
+            {
+                TabIndex = 3,
+                Dock = DockStyle.Top,
+                Size = new Size(692, 271),
+                ShowSelectionMargin = true,
+                ScrollBars = RichTextBoxScrollBars.Vertical,
+                Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)))
+            };
             box.TextChanged += (s, e1) =>
             {
                 if (box.Text.Length > 10 && !active_txt)
@@ -293,6 +297,11 @@ namespace Isotope_fitting
             prompt.ShowDialog();
             return textBox.Text;
         }
+        #endregion
 
+        private void Form16_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
     }
 }

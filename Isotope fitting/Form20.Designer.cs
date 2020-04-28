@@ -34,7 +34,7 @@
             this.Copy_Btn = new System.Windows.Forms.ToolStripButton();
             this.x_Box = new System.Windows.Forms.ToolStripTextBox();
             this.y_Box = new System.Windows.Forms.ToolStripTextBox();
-            this.panel_frm11 = new System.Windows.Forms.Panel();
+            this.panel_frm20 = new System.Windows.Forms.Panel();
             this.toolStrip_frm11.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,36 +79,41 @@
             this.x_Box.AutoSize = false;
             this.x_Box.Name = "x_Box";
             this.x_Box.Size = new System.Drawing.Size(40, 22);
+            this.x_Box.TextChanged += new System.EventHandler(this.x_Box_TextChanged);
             // 
             // y_Box
             // 
             this.y_Box.AutoSize = false;
             this.y_Box.Name = "y_Box";
             this.y_Box.Size = new System.Drawing.Size(40, 22);
+            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
             // 
-            // panel_frm11
+            // panel_frm20
             // 
-            this.panel_frm11.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel_frm11.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel_frm11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel_frm11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_frm11.Location = new System.Drawing.Point(43, 0);
-            this.panel_frm11.Name = "panel_frm11";
-            this.panel_frm11.Size = new System.Drawing.Size(757, 450);
-            this.panel_frm11.TabIndex = 29;
+            this.panel_frm20.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel_frm20.BackColor = System.Drawing.Color.Transparent;
+            this.panel_frm20.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_frm20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_frm20.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel_frm20.Location = new System.Drawing.Point(43, 0);
+            this.panel_frm20.Name = "panel_frm20";
+            this.panel_frm20.Size = new System.Drawing.Size(757, 450);
+            this.panel_frm20.TabIndex = 29;
             // 
             // Form20
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.panel_frm11);
+            this.Controls.Add(this.panel_frm20);
             this.Controls.Add(this.toolStrip_frm11);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form20";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Extract Plot";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form20_DpiChanged);
+            this.Resize += new System.EventHandler(this.Form20_Resize);
             this.toolStrip_frm11.ResumeLayout(false);
             this.toolStrip_frm11.PerformLayout();
             this.ResumeLayout(false);
@@ -123,6 +128,6 @@
         private System.Windows.Forms.ToolStripButton Copy_Btn;
         private System.Windows.Forms.ToolStripTextBox x_Box;
         private System.Windows.Forms.ToolStripTextBox y_Box;
-        private System.Windows.Forms.Panel panel_frm11;
+        private System.Windows.Forms.Panel panel_frm20;
     }
 }
