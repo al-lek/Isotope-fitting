@@ -27,7 +27,6 @@ namespace Isotope_fitting
         {
             InitializeComponent();
             plot = p as LightningChartUltimate;            
-            //plot.ViewXY.Zoom((int)minx, (int)miny, (int)maxx, (int)maxy);
             plot.Dock = DockStyle.Fill;
             plot.ViewXY.XAxes[0].SetRange(minx, maxx);
             plot.ViewXY.YAxes[0].SetRange(miny, maxy);
@@ -55,8 +54,9 @@ namespace Isotope_fitting
                 {
                     try
                     {
+                        chart.CopyToClipboard(ClipboardImageFormat.Png, null);
                         //chart.CopyToClipboard(ClipboardImageFormat.Emf, null);
-                        chart.CopyToClipboardAsEmf();
+                        //chart.CopyToClipboardAsEmf();
                     }
                     catch (Exception ex)
                     {

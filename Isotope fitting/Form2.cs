@@ -37,14 +37,15 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
+        #region PARAMETER SET TAB FIT
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();
-        LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,AutoScaleMode=AutoScaleMode.Inherit };
+        LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         //public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
-        public bool tab_mode = false;        
+        public bool tab_mode = false;
         int duplicate_count = 0;
         int added = 0;
         #region deconvoluted
@@ -68,7 +69,7 @@ namespace Isotope_fitting
 
         #region SAVE PROJECT
         int all = 0;
-        string  project_experimental = "";
+        string project_experimental = "";
         //save
         BackgroundWorker _bw_save_project_frag = new BackgroundWorker();
         BackgroundWorker _bw_save_project_peaks = new BackgroundWorker();
@@ -80,8 +81,6 @@ namespace Isotope_fitting
         BackgroundWorker _bw_load_project_fit_results = new BackgroundWorker();
 
         #endregion
-
-        #region PARAMETER SET TAB FIT
 
         #region old new calculations
         bool plot_rem_Btns = false;
@@ -323,9 +322,20 @@ namespace Isotope_fitting
         public string x_numformat = "0";
         public string y_numformat = "0";
         public double annotation_size = 9.0;
-        //primary tab plots
-
-        //intensity
+        //ppm plot
+        public OxyPlot.LineStyle Xmajor_ppm_grid = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Xminor_ppm_grid = OxyPlot.LineStyle.None;
+        public OxyPlot.LineStyle Ymajor_ppm_grid = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Yminor_ppm_grid = OxyPlot.LineStyle.None;
+        public OxyPlot.Axes.TickStyle X_ppm_tick = OxyPlot.Axes.TickStyle.Outside;
+        public OxyPlot.Axes.TickStyle Y_ppm_tick = OxyPlot.Axes.TickStyle.Outside;
+        public double y_ppm_majorStep = 2;
+        public double y_ppm_minorStep = 1;
+        public double x_ppm_majorStep = 5;
+        public double x_ppm_minorStep = 1;
+        public double ppm_bullet_size = 1.0;
+        public int ppm_graph_type = 1;
+        //primary tab plots        //intensity
         public OxyPlot.LineStyle Xmajor_grid12 = OxyPlot.LineStyle.Solid;
         public OxyPlot.LineStyle Xminor_grid12 = OxyPlot.LineStyle.None;
         public OxyPlot.LineStyle Ymajor_grid12 = OxyPlot.LineStyle.Solid;
@@ -338,7 +348,7 @@ namespace Isotope_fitting
         public double x_majorStep12 = 5;
         public double x_minorStep12 = 1;
         public double bar_width = 1;
-        //charge
+        //primary tab plots        //charge
         public OxyPlot.LineStyle Xmajor_charge_grid12 = OxyPlot.LineStyle.Solid;
         public OxyPlot.LineStyle Xminor_charge_grid12 = OxyPlot.LineStyle.None;
         public OxyPlot.LineStyle Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid;
@@ -752,6 +762,14 @@ namespace Isotope_fitting
                     annotation_size = Convert.ToDouble(preferences[85].Split(':')[1]);
                     is_deconv_const_resolution = string_to_bool(preferences[86].Split(':')[1]);
                     deconv_machine = preferences[87].Split(':')[1].ToString();
+                    //ppm plot extra parameters
+                    y_ppm_majorStep = Convert.ToDouble(preferences[88].Split(':')[1]);
+                    y_ppm_minorStep = Convert.ToDouble(preferences[89].Split(':')[1]);
+                    x_ppm_majorStep = Convert.ToDouble(preferences[90].Split(':')[1]);
+                    x_ppm_minorStep = Convert.ToDouble(preferences[91].Split(':')[1]);
+                    ppm_bullet_size = Convert.ToDouble(preferences[92].Split(':')[1]);
+                    ppm_graph_type = Int32.Parse(preferences[93].Split(':')[1]);
+
                 }
                 catch
                 {
@@ -781,6 +799,7 @@ namespace Isotope_fitting
                 ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
             }
             entire_spectrum = true; threshold = 0.01; annotation_size = 9.0; deconv_machine = ""; is_deconv_const_resolution = false;
+             y_ppm_majorStep = 2;y_ppm_minorStep = 1;x_ppm_majorStep = 5;x_ppm_minorStep = 1;ppm_bullet_size = 1.0;ppm_graph_type = 1;
         }
         public void save_preferences()
         {
@@ -918,6 +937,14 @@ namespace Isotope_fitting
             //deconvoluted spectra
             preferences[0] += "is resolution const: " + is_deconv_const_resolution.ToString() + "\r\n";
             preferences[0] += "deconvoluted resolution: " + deconv_machine.ToString() + "\r\n";
+
+            //ppm plot extra parameters
+            preferences[0] += "y_ppm_majorStep: " + y_ppm_majorStep.ToString() + "\r\n";
+            preferences[0] += "y_ppm_minorStep: " + y_ppm_minorStep.ToString() + "\r\n";
+            preferences[0] += "x_ppm_majorStep: " + x_ppm_majorStep.ToString() + "\r\n";
+            preferences[0] += "x_ppm_minorStep: " + x_ppm_minorStep.ToString() + "\r\n";
+            preferences[0] += "ppm_bullet_size: " + ppm_bullet_size.ToString() + "\r\n";
+            preferences[0] += "ppm_graph_type: " + ppm_graph_type.ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -2406,7 +2433,18 @@ namespace Isotope_fitting
         }
         private void change_name_duplicates()
         {
-            if (Fragments2.Count == 0 || sequenceList == null || sequenceList.Count < 3) return;
+            if (Fragments2.Count == 0 || sequenceList == null || sequenceList.Count < 3)
+            {
+                if (IonDraw.Count > 0) IonDraw.Clear();
+                foreach (FragForm fra in Fragments2)
+                {
+                    if (fra.Fixed)
+                    {
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                    }
+                }
+                return;
+            } 
             int light_chain_count = 0;//the amount of heavy chain sequences
             int heavy_chain_count = 0;
             foreach (SequenceTab seq in sequenceList)
@@ -6281,7 +6319,7 @@ namespace Isotope_fitting
                     if (IonDraw.Count > 0) IonDraw.Clear();
                     progress_display_start(fragToSave.Count, "Saving fragments...");
                     foreach (int indexS in fragToSave)
-                    {
+                    {                        
                         Form2.Fragments2[indexS - 1].Fixed = true;
                         file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx+"\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension);
                         IonDraw.Add(new ion() {Extension= Form2.Fragments2[indexS - 1].Extension,SortIdx= Form2.Fragments2[indexS - 1].SortIdx , Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(),Chain_type= Fragments2[indexS - 1].Chain_type });
@@ -6423,6 +6461,8 @@ namespace Isotope_fitting
                     is_calc = true;
                     if (envipat)
                     {
+                        progress_display_start(lista.Count, "Receiving fragment isotopic distributions...");
+
                         for (int j = 0; j != (lista.Count); j++)
                         {
                             //string[] str = new string[15];
@@ -6736,8 +6776,12 @@ namespace Isotope_fitting
                                 }
                             }
                             catch(Exception ex) { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j] + "\r\n" + ex.ToString(), "Error!"); is_loading = false; return; }
-                            arrayPositionIndex++;
+                            arrayPositionIndex++;                            
+                            if (j % 10 == 0 && j > 0) { progress_display_update(j); }
                         }
+                        progress_display_stop();
+
+
                         if (!dec)
                         {                            
                             foreach (ChemiForm chemi in fitted_chem)
@@ -7330,34 +7374,7 @@ namespace Isotope_fitting
 
             LC_2.ViewXY.YAxes[0].MajorGrid.Visible = Ymajor_grid;
             LC_2.ViewXY.YAxes[0].MinorGrid.Visible = Yminor_grid;
-            LC_2.ViewXY.YAxes[0].LabelsNumberFormat = y_format + y_numformat;
-
-
-            //iso_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
-            //iso_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
-            //iso_plot.Model.Axes[0].TickStyle = Y_tick;
-            //iso_plot.Model.Axes[0].IntervalLength = y_interval;
-            //iso_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
-
-            //iso_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
-            //iso_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
-            //iso_plot.Model.Axes[1].TickStyle = X_tick;
-            //iso_plot.Model.Axes[1].IntervalLength = x_interval;
-            //iso_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
-
-            //res_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_grid;
-            //res_plot.Model.Axes[0].MinorGridlineStyle = Yminor_grid;
-            //res_plot.Model.Axes[0].TickStyle = Y_tick;
-            //res_plot.Model.Axes[0].IntervalLength = y_interval;
-            //res_plot.Model.Axes[0].StringFormat = y_format + y_numformat;
-
-            //res_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_grid;
-            //res_plot.Model.Axes[1].MinorGridlineStyle = Xminor_grid;
-            //res_plot.Model.Axes[1].TickStyle = X_tick;
-            //res_plot.Model.Axes[1].IntervalLength = x_interval;
-            //res_plot.Model.Axes[1].StringFormat = x_format + x_numformat;
-
-            //invalidate_all();
+            LC_2.ViewXY.YAxes[0].LabelsNumberFormat = y_format + y_numformat;           
         }
         #endregion
 
@@ -8379,6 +8396,18 @@ namespace Isotope_fitting
             //frm19.FormClosed += (s, f) => { save_preferences(); };        //this is a property that the object (Form 19) will always have. It should be declared within the object itself
             frm19.ShowDialog();
             //params_form();
+        }
+        //plot
+        private void fragPlotLbl_chkBx2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (fragPlotLbl_chkBx2.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
+            else { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }
+        }
+
+        private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (fragPlotLbl_chkBx.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
+            else { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }
         }
 
         //MS product
@@ -11623,9 +11652,7 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
-            
-
-
+        
         #region TAB DIAGRAMS
         public class CustomDataPoint : IScatterPointProvider
         {
@@ -11711,6 +11738,7 @@ namespace Isotope_fitting
         private void styleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form12 frm12 = new Form12(this);
+            frm12.FormClosed += (s, f) => { save_preferences(); };
             frm12.ShowDialog();
         }
 
@@ -11723,6 +11751,7 @@ namespace Isotope_fitting
         private void styleToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             Form13 frm13 = new Form13(this);
+            frm13.FormClosed += (s, f) => { save_preferences(); };
             frm13.ShowDialog();
         }
         private void ppm_checkall_Btn_Click(object sender, EventArgs e)
@@ -13182,11 +13211,11 @@ namespace Isotope_fitting
             if (ppm_plot != null) ppm_plot.Dispose();
             ppm_plot = new PlotView() { Name = "ppm_plot", BackColor = Color.White, Dock=DockStyle.Fill};
             ppm_panel.Controls.Add(ppm_plot);
-            PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal,SubtitleFontSize=10,SubtitleFont = "Arial" };
+            PlotModel ppm_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error", TitleColor = OxyColors.Teal,SubtitleFontSize=10,SubtitleFont = "Arial" };
             ppm_plot.Model = ppm_model;
-            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
+            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle =Ymajor_ppm_grid,MinorGridlineStyle=Yminor_ppm_grid, FontSize = 10, TickStyle =Y_ppm_tick , MajorStep = y_ppm_majorStep, MinorStep =y_ppm_minorStep , MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
             ppm_model.Axes.Add(linearAxis21);
-            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_ppm_grid, MinorGridlineStyle = Xminor_ppm_grid, FontSize = 10, TickStyle = X_ppm_tick, MajorStep =x_ppm_majorStep , MinorStep = x_ppm_minorStep, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
             ppm_model.Axes.Add(linearAxis22);
             ppm_plot.MouseDoubleClick += (s, e) => { ppm_model.ResetAllAxes(); ppm_plot.InvalidatePlot(true); };
 
@@ -13294,96 +13323,96 @@ namespace Isotope_fitting
             ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
             //
             //ScatterSeries ppm_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
-            ScatterSeries ppm_a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_1000 = new ScatterSeries() { MarkerSize = 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_10000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_100000 = new ScatterSeries() { MarkerSize = 6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_b_10 = new ScatterSeries() { MarkerSize = 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_100 = new ScatterSeries() { MarkerSize = 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_1000 = new ScatterSeries() { MarkerSize = 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_10000 = new ScatterSeries() { MarkerSize = 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_100000 = new ScatterSeries() { MarkerSize = 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_c_10 = new ScatterSeries() { MarkerSize = 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_100 = new ScatterSeries() { MarkerSize = 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_1000 = new ScatterSeries() { MarkerSize = 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_10000 = new ScatterSeries() { MarkerSize = 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_100000 = new ScatterSeries() { MarkerSize = 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_100000 = new ScatterSeries() { MarkerSize = 6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_y_10 = new ScatterSeries() { MarkerSize = 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_100 = new ScatterSeries() { MarkerSize = 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_1000 = new ScatterSeries() { MarkerSize = 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_10000 = new ScatterSeries() { MarkerSize = 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_100000 = new ScatterSeries() { MarkerSize = 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_z_10 = new ScatterSeries() { MarkerSize = 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_100 = new ScatterSeries() { MarkerSize = 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_1000 = new ScatterSeries() { MarkerSize = 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_10000 = new ScatterSeries() { MarkerSize = 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_100000 = new ScatterSeries() { MarkerSize = 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_intA_10 = new ScatterSeries() { MarkerSize = 2, Title = "int.a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_100 = new ScatterSeries() { MarkerSize = 3, Title = "int.a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_1000 = new ScatterSeries() { MarkerSize = 4, Title = "int.a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_10000 = new ScatterSeries() { MarkerSize = 5, Title = "int.a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_100000 = new ScatterSeries() { MarkerSize = 6, Title = "int.a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "int.a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "int.a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "int.a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "int.a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "int.a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intB_10 = new ScatterSeries() { MarkerSize = 2, Title = "int.b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_100 = new ScatterSeries() { MarkerSize = 3, Title = "int.b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_1000 = new ScatterSeries() { MarkerSize = 4, Title = "int.b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_10000 = new ScatterSeries() { MarkerSize = 5, Title = "int.b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_100000 = new ScatterSeries() { MarkerSize = 6, Title = "int.b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "int.b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "int.b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "int.b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "int.b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "int.b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_M_10 = new ScatterSeries() { MarkerSize = 2, Title = "M 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_100 = new ScatterSeries() { MarkerSize = 3, Title = "M 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_1000 = new ScatterSeries() { MarkerSize = 4, Title = "M 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_10000 = new ScatterSeries() { MarkerSize = 5, Title = "M 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_100000 = new ScatterSeries() { MarkerSize = 6, Title = "M 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "M 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "M 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "M 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "M 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "M 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_a_10 = new ScatterSeries() { MarkerSize =ppm_bullet_size* 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_b_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_c_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_1000000000 = new ScatterSeries() { MarkerSize= ppm_bullet_size * 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_x_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_y_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_z_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_intA_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "int.a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "int.a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "int.a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "int.a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "int.a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "int.a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "int.a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "int.a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "int.a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "int.a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intB_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "int.b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "int.b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "int.b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "int.b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "int.b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "int.b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "int.b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "int.b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "int.b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "int.b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_M_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "M 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "M 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "M 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "M 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "M 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "M 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "M 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "M 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "M 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "M 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Crimson).ToOxyColor() };
 
             //
             ScatterSeries a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
@@ -13701,196 +13730,405 @@ namespace Isotope_fitting
                 else { points_z_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
             }
 
+            #region ppm plot
             CI_mass comMass = new CI_mass(); IonDraw.Sort(comMass);
             int ppm_points = 0;
+            double first_m_z =0.0;
+            double last_m_z =0.0;
             string ppm_range = "";
-            for (int i = 0; i < iondraw_count; i++)
+            if (ppm_graph_type == 1)
             {
-                ion nn = IonDraw[i];
-                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                ppm_plot.Model.Axes[1].Title = "# fragments";
+                for (int i = 0; i < iondraw_count; i++)
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                    ion nn = IonDraw[i];
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_a_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_b_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_c_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_x_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_y_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }                   
-                }
-                else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_z_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }                   
-                }
-                else if (nn.Ion_type.StartsWith("inter"))
-                {
-                    if (nn.Ion_type.Contains("b"))
-                    {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
                         {
                             if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
                             else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                            if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else { ppm_points_intB_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_a_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
                             ppm_points++;
                         }
                     }
-                    else
+                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
                         {
                             if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
                             else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                            if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else { ppm_points_intA_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_b_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
                             ppm_points++;
                         }
                     }
-                }
-                else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                     {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_M_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_c_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_x_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_y_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_z_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter"))
+                    {
+                        if (nn.Ion_type.Contains("b"))
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intB_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                            }
+                        }
+                        else
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intA_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                            }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_M_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
                     }
                 }
             }
+            else
+            {
+                ppm_plot.Model.Axes[1].Title = "m/z";
 
-            #region ppm plot
-            //ppm_series.ItemsSource = ppmpoints;
+                for (int i = 0; i < iondraw_count; i++)
+                {
+                    ion nn = IonDraw[i];
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    double m_z = dParser(nn.Mz);
+                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_a_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_b_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_c_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_x_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_y_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_z_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter"))
+                    {
+                        if (nn.Ion_type.Contains("b"))
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intB_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                                if (first_m_z == 0) { first_m_z = m_z; }
+                                last_m_z = m_z;
+                            }
+                        }
+                        else
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intA_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                                if (first_m_z == 0) { first_m_z = m_z; }
+                                last_m_z = m_z;
+                            }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_M_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                }
+            }
+            
             //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
             // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value            
             //ppm_series.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}"+ "\nName:{Name}"; 
-            //ppm_plot.Model.Series.Add(ppm_series);
+            
             ppm_a_10.ItemsSource = ppm_points_a_10; ppm_a_100.ItemsSource = ppm_points_a_100; ppm_a_1000.ItemsSource = ppm_points_a_1000; ppm_a_10000.ItemsSource = ppm_points_a_10000; ppm_a_100000.ItemsSource = ppm_points_a_100000; ppm_a_1000000.ItemsSource = ppm_points_a_1000000; ppm_a_10000000.ItemsSource = ppm_points_a_10000000; ppm_a_100000000.ItemsSource = ppm_points_a_100000000; ppm_a_1000000000.ItemsSource = ppm_points_a_1000000000; ppm_a_10000000000.ItemsSource = ppm_points_a_10000000000;
             ppm_b_10.ItemsSource = ppm_points_b_10; ppm_b_100.ItemsSource = ppm_points_b_100; ppm_b_1000.ItemsSource = ppm_points_b_1000; ppm_b_10000.ItemsSource = ppm_points_b_10000; ppm_b_100000.ItemsSource = ppm_points_b_100000; ppm_b_1000000.ItemsSource = ppm_points_b_1000000; ppm_b_10000000.ItemsSource = ppm_points_b_10000000; ppm_b_100000000.ItemsSource = ppm_points_b_100000000; ppm_b_1000000000.ItemsSource = ppm_points_b_1000000000; ppm_b_10000000000.ItemsSource = ppm_points_b_10000000000;
             ppm_c_10.ItemsSource = ppm_points_c_10; ppm_c_100.ItemsSource = ppm_points_c_100; ppm_c_1000.ItemsSource = ppm_points_c_1000; ppm_c_10000.ItemsSource = ppm_points_c_10000; ppm_c_100000.ItemsSource = ppm_points_c_100000; ppm_c_1000000.ItemsSource = ppm_points_c_1000000; ppm_c_10000000.ItemsSource = ppm_points_c_10000000; ppm_c_100000000.ItemsSource = ppm_points_c_100000000; ppm_c_1000000000.ItemsSource = ppm_points_c_1000000000; ppm_c_10000000000.ItemsSource = ppm_points_c_10000000000;
@@ -14007,6 +14245,9 @@ namespace Isotope_fitting
                 ppm_plot.Model.Subtitle = e.HitResult != null ?  e.HitResult.Text : null;
                 ppm_plot.Model.InvalidatePlot(false);
             };
+            if (ppm_graph_type == 1) { ppm_plot.Model.Axes[1].Maximum = ppm_points + 1; ppm_plot.Model.Axes[1].Minimum = 0; }
+            else { ppm_plot.Model.Axes[1].Maximum = last_m_z + 1; ppm_plot.Model.Axes[1].Minimum = 0; }
+            ppm_plot.InvalidatePlot(true);
             #endregion
 
             #region  charge plots
@@ -14192,6 +14433,7 @@ namespace Isotope_fitting
             {
                 czCharge_plot.Model.Title = "c - z  fragments";
             }
+         
             #endregion
 
             #region intesity plots
@@ -14273,8 +14515,7 @@ namespace Isotope_fitting
             axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
             axCharge_plot.Model.Axes[0].Maximum = maxcharge_a+1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b+1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c+1;          
             axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true); ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
-            ppm_plot.Model.Axes[1].Maximum =ppm_points + 1; ppm_plot.Model.Axes[1].Minimum = 0;
-            ppm_plot.InvalidatePlot(true);
+            
 
             #region internal plots 
             if (IonDrawIndexTo.Count() > 0)
@@ -14498,6 +14739,29 @@ namespace Isotope_fitting
 
         #endregion
 
+        #region FORM 22 ppm plot settings
+        public void ppm_plot_refresh()
+        {
+            ppm_plot.Model.Axes[0].MajorGridlineStyle = Ymajor_ppm_grid;
+            ppm_plot.Model.Axes[0].MinorGridlineStyle = Yminor_ppm_grid;
+            ppm_plot.Model.Axes[0].TickStyle = Y_ppm_tick;
+            ppm_plot.Model.Axes[0].MajorStep = y_ppm_majorStep;
+            ppm_plot.Model.Axes[0].MinorStep = y_ppm_minorStep;
+            ppm_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_ppm_grid;
+            ppm_plot.Model.Axes[1].MinorGridlineStyle = Xminor_ppm_grid;
+            ppm_plot.Model.Axes[1].TickStyle = X_ppm_tick;
+            ppm_plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
+            ppm_plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
+            ppm_plot.InvalidatePlot(true);            
+        }
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form22 frm22 = new Form22(this);
+            frm22.FormClosed += (s, f) => { save_preferences(); };
+            frm22.ShowDialog();
+        }
+        #endregion
+
         #region FORM 12 plot settings
         public void primary_plots_refresh(bool charge =false)
         {
@@ -14643,8 +14907,6 @@ namespace Isotope_fitting
 
         #endregion
         
-
-
         #region EXTRACT PLOTS
         #region extract ppm_plot
 
@@ -14658,9 +14920,9 @@ namespace Isotope_fitting
             PlotView temp_plot = new PlotView() { Name = "temp_plot ", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             PlotModel temp_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "ppm Error of each fragment", TitleColor = OxyColors.Teal, SubtitleFontSize = 10, SubtitleFont = "Arial" };
             temp_plot.Model = temp_model;
-            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
+            var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_ppm_grid, MinorGridlineStyle = Yminor_ppm_grid, FontSize = 10, TickStyle = Y_ppm_tick, MajorStep = y_ppm_majorStep, MinorStep = y_ppm_minorStep, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
             temp_model.Axes.Add(linearAxis21);
-            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = OxyPlot.LineStyle.Solid, FontSize = 10, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_ppm_grid, MinorGridlineStyle = Xminor_ppm_grid, FontSize = 10, TickStyle = X_ppm_tick, MajorStep = x_ppm_majorStep, MinorStep = x_ppm_minorStep, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
             temp_model.Axes.Add(linearAxis22);
             temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
             refresh_temp_ppm_plot(temp_plot);
@@ -14685,97 +14947,98 @@ namespace Isotope_fitting
                 }
             }
             CI_mass comMass = new CI_mass(); IonDraw.Sort(comMass);
-            //ScatterSeries temp_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
-            ScatterSeries ppm_a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_1000 = new ScatterSeries() { MarkerSize = 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_10000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_100000 = new ScatterSeries() { MarkerSize = 6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_a_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
-            ScatterSeries ppm_b_10 = new ScatterSeries() { MarkerSize = 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_100 = new ScatterSeries() { MarkerSize = 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_1000 = new ScatterSeries() { MarkerSize = 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_10000 = new ScatterSeries() { MarkerSize = 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_100000 = new ScatterSeries() { MarkerSize = 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_b_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
-            ScatterSeries ppm_c_10 = new ScatterSeries() { MarkerSize = 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_100 = new ScatterSeries() { MarkerSize = 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_1000 = new ScatterSeries() { MarkerSize = 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_10000 = new ScatterSeries() { MarkerSize = 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_100000 = new ScatterSeries() { MarkerSize = 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_c_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
-            ScatterSeries ppm_x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_100000 = new ScatterSeries() { MarkerSize = 6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_x_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries ppm_y_10 = new ScatterSeries() { MarkerSize = 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_100 = new ScatterSeries() { MarkerSize = 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_1000 = new ScatterSeries() { MarkerSize = 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_10000 = new ScatterSeries() { MarkerSize = 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_100000 = new ScatterSeries() { MarkerSize = 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_y_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries ppm_z_10 = new ScatterSeries() { MarkerSize = 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_100 = new ScatterSeries() { MarkerSize = 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_1000 = new ScatterSeries() { MarkerSize = 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_10000 = new ScatterSeries() { MarkerSize = 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_100000 = new ScatterSeries() { MarkerSize = 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_z_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
-            ScatterSeries ppm_intA_10 = new ScatterSeries() { MarkerSize = 2, Title = "int.a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_100 = new ScatterSeries() { MarkerSize = 3, Title = "int.a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_1000 = new ScatterSeries() { MarkerSize = 4, Title = "int.a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_10000 = new ScatterSeries() { MarkerSize = 5, Title = "int.a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_100000 = new ScatterSeries() { MarkerSize = 6, Title = "int.a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "int.a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "int.a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "int.a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "int.a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intA_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "int.a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DarkViolet).ToOxyColor() };
-            ScatterSeries ppm_intB_10 = new ScatterSeries() { MarkerSize = 2, Title = "int.b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_100 = new ScatterSeries() { MarkerSize = 3, Title = "int.b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_1000 = new ScatterSeries() { MarkerSize = 4, Title = "int.b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_10000 = new ScatterSeries() { MarkerSize = 5, Title = "int.b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_100000 = new ScatterSeries() { MarkerSize = 6, Title = "int.b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "int.b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "int.b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "int.b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "int.b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_intB_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "int.b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.MediumOrchid).ToOxyColor() };
-            ScatterSeries ppm_M_10 = new ScatterSeries() { MarkerSize = 2, Title = "M 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_100 = new ScatterSeries() { MarkerSize = 3, Title = "M 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_1000 = new ScatterSeries() { MarkerSize = 4, Title = "M 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_10000 = new ScatterSeries() { MarkerSize = 5, Title = "M 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_100000 = new ScatterSeries() { MarkerSize = 6, Title = "M 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "M 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "M 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "M 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "M 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Crimson).ToOxyColor() };
-            ScatterSeries ppm_M_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "M 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Crimson).ToOxyColor() };
+
+            #region init series
+            ScatterSeries ppm_a_10 = new ScatterSeries() { MarkerSize =ppm_bullet_size* 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_a_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
+            ScatterSeries ppm_b_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_b_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
+            ScatterSeries ppm_c_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_c_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
+            ScatterSeries ppm_x_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_x_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
+            ScatterSeries ppm_y_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_y_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
+            ScatterSeries ppm_z_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_z_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
+            ScatterSeries ppm_intA_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "int.a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "int.a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "int.a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "int.a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "int.a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "int.a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "int.a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "int.a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "int.a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intA_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "int.a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DarkViolet).ToOxyColor() };
+            ScatterSeries ppm_intB_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "int.b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "int.b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "int.b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "int.b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "int.b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "int.b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "int.b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "int.b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "int.b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_intB_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "int.b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.MediumOrchid).ToOxyColor() };
+            ScatterSeries ppm_M_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "M 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "M 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "M 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "M 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "M 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "M 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "M 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "M 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "M 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Crimson).ToOxyColor() };
+            ScatterSeries ppm_M_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "M 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Crimson).ToOxyColor() };
 
             //ppm points
             List<CustomDataPoint> ppm_points_a_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_10000000000 = new List<CustomDataPoint>();
@@ -14787,194 +15050,402 @@ namespace Isotope_fitting
             List<CustomDataPoint> ppm_points_intB_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> ppm_points_intA_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_10000000000 = new List<CustomDataPoint>();
             List<CustomDataPoint> ppm_points_M_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000000000 = new List<CustomDataPoint>();
+            #endregion
+
             int ppm_points = 0;
             string ppm_range = "";
-            for (int i = 0; i < iondraw_count; i++)
+            double first_m_z = 0.0;
+            double last_m_z = 0.0;
+            if (ppm_graph_type == 1)
             {
-                ion nn = IonDraw[i];
-                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                temp_plot.Model.Axes[1].Title = "# fragments";
+                for (int i = 0; i < iondraw_count; i++)
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                    ion nn = IonDraw[i];
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_a_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                    
-                }
-                else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_b_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                    
-                }
-                else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_c_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                   
-                }
-                else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_x_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                    
-                }
-                else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_y_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }
-                    
-                }
-                else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
-                    {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_z_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
-                    }                   
-                }
-                else if (nn.Ion_type.StartsWith("inter"))
-                {
-                    if (nn.Ion_type.Contains("b"))
-                    {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
                         {
                             if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
                             else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                            if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else { ppm_points_intB_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_a_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
                             ppm_points++;
                         }
                     }
-                    else
+                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
                         {
                             if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
                             else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                            if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                            else { ppm_points_intA_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_b_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
                             ppm_points++;
                         }
                     }
-                }
-                else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                     {
-                        if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
-                        else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
-                        if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        else { ppm_points_M_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
-                        ppm_points++;
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_c_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_x_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_y_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_z_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter"))
+                    {
+                        if (nn.Ion_type.Contains("b"))
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intB_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                            }
+                        }
+                        else
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intA_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                            }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_M_10000000000.Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                        }
                     }
                 }
             }
-                        
+            else
+            {
+                temp_plot.Model.Axes[1].Title = "m/z";
+
+                for (int i = 0; i < iondraw_count; i++)
+                {
+                    ion nn = IonDraw[i];
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    double m_z = dParser(nn.Mz);
+                    if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_a_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_a_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_a_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_a_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_a_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_a_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_a_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_a_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_a_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_a_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_b_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_b_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_b_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_b_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_b_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_b_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_b_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_b_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_b_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_b_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_c_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_c_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_c_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_c_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_c_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_c_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_c_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_c_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_c_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_c_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_x_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_x_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_x_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_x_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_x_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_x_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_x_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_x_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_x_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_x_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_y_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_y_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_y_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_y_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_y_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_y_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_y_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_y_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_y_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_y_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_z_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_z_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_z_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_z_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_z_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_z_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_z_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_z_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_z_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_z_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter"))
+                    {
+                        if (nn.Ion_type.Contains("b"))
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intB_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intB_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intB_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intB_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intB_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intB_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intB_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intB_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intB_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intB_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                                if (first_m_z == 0) { first_m_z = m_z; }
+                                last_m_z = m_z;
+                            }
+                        }
+                        else
+                        {
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                            {
+                                if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                                else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                                if (nn.Max_intensity / 10 < 10) { ppm_points_intA_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100 < 10) { ppm_points_intA_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000 < 10) { ppm_points_intA_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000 < 10) { ppm_points_intA_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000 < 10) { ppm_points_intA_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000 < 10) { ppm_points_intA_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 10000000 < 10) { ppm_points_intA_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 100000000 < 10) { ppm_points_intA_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_intA_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                else { ppm_points_intA_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                                ppm_points++;
+                                if (first_m_z == 0) { first_m_z = m_z; }
+                                last_m_z = m_z;
+                            }
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                        {
+                            if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
+                            else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
+                            if (nn.Max_intensity / 10 < 10) { ppm_points_M_10.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100 < 10) { ppm_points_M_100.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000 < 10) { ppm_points_M_1000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000 < 10) { ppm_points_M_10000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000 < 10) { ppm_points_M_100000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000 < 10) { ppm_points_M_1000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 10000000 < 10) { ppm_points_M_10000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 100000000 < 10) { ppm_points_M_100000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else if (nn.Max_intensity / 1000000000 < 10) { ppm_points_M_1000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            else { ppm_points_M_10000000000.Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name)); }
+                            ppm_points++;
+                            if (first_m_z == 0) { first_m_z = m_z; }
+                            last_m_z = m_z;
+                        }
+                    }
+                }
+            }
+
+            #region tracker format
             //default TrackerFormatString: "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}"
             // { 0} = Title of Series { 1} = Title of X-Axis { 2} = X Value { 3} = Title of Y-Axis { 4} = Y Value      
             ppm_a_10.ItemsSource = ppm_points_a_10; ppm_a_100.ItemsSource = ppm_points_a_100; ppm_a_1000.ItemsSource = ppm_points_a_1000; ppm_a_10000.ItemsSource = ppm_points_a_10000; ppm_a_100000.ItemsSource = ppm_points_a_100000; ppm_a_1000000.ItemsSource = ppm_points_a_1000000; ppm_a_10000000.ItemsSource = ppm_points_a_10000000; ppm_a_100000000.ItemsSource = ppm_points_a_100000000; ppm_a_1000000000.ItemsSource = ppm_points_a_1000000000; ppm_a_10000000000.ItemsSource = ppm_points_a_10000000000;
@@ -14996,7 +15467,9 @@ namespace Isotope_fitting
             ppm_intA_10.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_100.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_1000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_10000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_100000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_1000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_10000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_100000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_1000000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intA_10000000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}";
             ppm_intB_10.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_100.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_1000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_10000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_100000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_1000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_10000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_100000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_1000000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_intB_10000000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}";
             ppm_M_10.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_100.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_1000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_10000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_100000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_1000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_10000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_100000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_1000000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; ppm_M_10000000000.TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}";
+            #endregion
 
+            #region pass values
             if (ppm_points_a_10000000000.Count > 0) temp_plot.Model.Series.Add(ppm_a_10000000000);
             if (ppm_points_b_10000000000.Count > 0) temp_plot.Model.Series.Add(ppm_b_10000000000);
             if (ppm_points_c_10000000000.Count > 0) temp_plot.Model.Series.Add(ppm_c_10000000000);
@@ -15086,22 +15559,24 @@ namespace Isotope_fitting
             if (ppm_points_z_10.Count > 0) temp_plot.Model.Series.Add(ppm_z_10);
             if (ppm_points_intA_10.Count > 0) temp_plot.Model.Series.Add(ppm_intA_10);
             if (ppm_points_intB_10.Count > 0) temp_plot.Model.Series.Add(ppm_intB_10);
-            if (ppm_points_M_10.Count > 0) temp_plot.Model.Series.Add(ppm_M_10); 
+            if (ppm_points_M_10.Count > 0) temp_plot.Model.Series.Add(ppm_M_10);
+            #endregion
 
             temp_plot.Model.TrackerChanged += (s, e) =>
             {
                 temp_plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
                 temp_plot.Model.InvalidatePlot(false);
             };
-            temp_plot.Model.Axes[1].Maximum = ppm_points + 1; temp_plot.Model.Axes[1].Minimum = 0;
+            
+            if (ppm_graph_type == 1) { temp_plot.Model.Axes[1].Maximum = ppm_points + 1; temp_plot.Model.Axes[1].Minimum = 0; }
+            else { temp_plot.Model.Axes[1].Maximum = last_m_z + 1; temp_plot.Model.Axes[1].Minimum = 0; }
             temp_plot.InvalidatePlot(true);
         }
         #endregion
 
         #region FORM 11 extract plot isoplot
         public void plotview_rebuild()
-        {           
-
+        {   
             LightningChartUltimate temp_plot = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
             temp_plot.BeginUpdate();
             ViewXY v = temp_plot.ViewXY;
@@ -15136,7 +15611,6 @@ namespace Isotope_fitting
             //temp_plot.BeginUpdate();
             //temp_plot.ViewXY.XAxes[0].SetRange(LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum);
             //temp_plot.ViewXY.YAxes[0].SetRange(LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
-
             //temp_plot.EndUpdate();
             Form20 frm20 = new Form20(temp_plot, LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum, LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
             frm20.Show();
@@ -16161,113 +16635,6 @@ namespace Isotope_fitting
 
         #endregion
         
-
-
-        public void read_rtf_find_color(SequenceTab seq)
-        {
-            string rtf = seq.Rtf;
-            string sequence = seq.Sequence;
-            string color_section = "";
-            string text_section = "";
-            List<Color> color_table = new List<Color>();
-            color_table.Add(Color.Black);
-            int[] char_color = new int[sequence.Length];
-            string[] str = rtf.Split('{');
-            for (int k = 0; k < str.Length; k++)
-            {
-                if (str[k].Contains("colortbl"))
-                {
-                    color_section = str[k];
-                }
-                else if (str[k].Contains("\\pard"))
-                {
-                    text_section = str[k];
-                }
-            }
-            if (string.IsNullOrEmpty(color_section)) return;
-            string[] str2 = color_section.Split(';');
-            if (str2.Length < 3) return;
-            for (int c = 1; c < str2.Length - 1; c++)
-            {
-                string[] str3 = str2[c].Split('\\');
-                if (str3.Length < 4) return;
-                int r = Int32.Parse(str3[1].Substring(3));
-                int g = Int32.Parse(str3[2].Substring(5));
-                int b = Int32.Parse(str3[3].Substring(4));
-                Color color = Color.FromArgb(r, g, b);
-                color_table.Add(color);
-            }
-            string[] str4 = text_section.Split('}');
-            //\viewkind4\uc1 \pard\f0\fs17 MQIFVKTLTG  KTITLEVEPS  \cf1 DTIENVKAKI  \cf0 QDKEGIPPDQ  QRLIFAGKQL  \cf2 EDGRTLSDYN  \cf0 IQKESTLHLV  LRLR\cf3 GG\cf0\par
-            string[] str5 = str4[str4.Length - 2].Split('\\');
-            int str_c = 0;
-            foreach (string sub in str5)
-            {
-
-                if (sub.StartsWith("f0") || sub.StartsWith("lang") || sub.StartsWith("fs"))
-                {
-                    string[] str6 = sub.Split(' ');
-                    if (str6.Length > 1)
-                    {
-                        for (int i = 1; i < str6.Length; i++)
-                        {
-                            for (int h = 0; h < str6[i].Length; h++)
-                            {
-                                if (sequence[str_c].Equals(str6[i][h]))
-                                {
-                                    char_color[str_c] = 0; str_c++;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Error in sequence rtf.");return;
-                                }
-                            }
-                        }
-                    }
-
-                }
-                else if (sub.StartsWith("cf"))
-                {
-                    string[] str6 = sub.Split(' ');
-                    if (str6.Length > 1)
-                    {
-                        int color_idx = Int32.Parse(str6[0].Substring(2));
-
-                        for (int i = 1; i < str6.Length; i++)
-                        {
-                            for (int h = 0; h < str6[i].Length; h++)
-                            {
-                                if (sequence[str_c].Equals(str6[i][h]))
-                                {
-                                    char_color[str_c] = color_idx; str_c++;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Error in sequence rtf.");return;
-                                }
-                            }
-                        }
-                    }
-                    else break;
-                }
-            }
-            seq.Char_color = char_color;
-            seq.Color_table = color_table;
-        }
-
-        private void fragPlotLbl_chkBx2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (fragPlotLbl_chkBx2.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
-            else { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }
-        }
-
-        private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (fragPlotLbl_chkBx.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
-            else  { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }            
-        }
-
-
         #region PROJECT SAVE LOAD CLEAR
         //clear
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -17017,11 +17384,6 @@ namespace Isotope_fitting
         }
         #endregion
 
-        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
-        {
-
-        }
-        
         #region extension
         private bool recognise_extension(string fra_exte, string Extension)
         {
@@ -17073,6 +17435,104 @@ namespace Isotope_fitting
         }
         #endregion
 
+       
+
+        public void read_rtf_find_color(SequenceTab seq)
+        {
+            string rtf = seq.Rtf;
+            string sequence = seq.Sequence;
+            string color_section = "";
+            string text_section = "";
+            List<Color> color_table = new List<Color>();
+            color_table.Add(Color.Black);
+            int[] char_color = new int[sequence.Length];
+            string[] str = rtf.Split('{');
+            for (int k = 0; k < str.Length; k++)
+            {
+                if (str[k].Contains("colortbl"))
+                {
+                    color_section = str[k];
+                }
+                else if (str[k].Contains("\\pard"))
+                {
+                    text_section = str[k];
+                }
+            }
+            if (string.IsNullOrEmpty(color_section)) return;
+            string[] str2 = color_section.Split(';');
+            if (str2.Length < 3) return;
+            for (int c = 1; c < str2.Length - 1; c++)
+            {
+                string[] str3 = str2[c].Split('\\');
+                if (str3.Length < 4) return;
+                int r = Int32.Parse(str3[1].Substring(3));
+                int g = Int32.Parse(str3[2].Substring(5));
+                int b = Int32.Parse(str3[3].Substring(4));
+                Color color = Color.FromArgb(r, g, b);
+                color_table.Add(color);
+            }
+            string[] str4 = text_section.Split('}');
+            //\viewkind4\uc1 \pard\f0\fs17 MQIFVKTLTG  KTITLEVEPS  \cf1 DTIENVKAKI  \cf0 QDKEGIPPDQ  QRLIFAGKQL  \cf2 EDGRTLSDYN  \cf0 IQKESTLHLV  LRLR\cf3 GG\cf0\par
+            string[] str5 = str4[str4.Length - 2].Split('\\');
+            int str_c = 0;
+            foreach (string sub in str5)
+            {
+
+                if (sub.StartsWith("f0") || sub.StartsWith("lang") || sub.StartsWith("fs"))
+                {
+                    string[] str6 = sub.Split(' ');
+                    if (str6.Length > 1)
+                    {
+                        for (int i = 1; i < str6.Length; i++)
+                        {
+                            for (int h = 0; h < str6[i].Length; h++)
+                            {
+                                if (sequence[str_c].Equals(str6[i][h]))
+                                {
+                                    char_color[str_c] = 0; str_c++;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Error in sequence rtf."); return;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else if (sub.StartsWith("cf"))
+                {
+                    string[] str6 = sub.Split(' ');
+                    if (str6.Length > 1)
+                    {
+                        int color_idx = Int32.Parse(str6[0].Substring(2));
+
+                        for (int i = 1; i < str6.Length; i++)
+                        {
+                            for (int h = 0; h < str6[i].Length; h++)
+                            {
+                                if (sequence[str_c].Equals(str6[i][h]))
+                                {
+                                    char_color[str_c] = color_idx; str_c++;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Error in sequence rtf."); return;
+                                }
+                            }
+                        }
+                    }
+                    else break;
+                }
+            }
+            seq.Char_color = char_color;
+            seq.Color_table = color_table;
+        }
+
+        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
+        {
+
+        }
     }
-   
+
 }
