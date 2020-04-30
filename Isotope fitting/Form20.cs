@@ -105,36 +105,42 @@ namespace Isotope_fitting
             }
         }
 
-        private void y_Box_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                double size_y = Double.Parse(y_Box.Text);
-                this.Height = (int)size_y + 39; text = true;
-
-            }
-            catch
-            {
-                x_Box.Text = "";
-            }
-        }
-
-        private void x_Box_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                double size_x = Double.Parse(x_Box.Text);
-                this.Width = (int)size_x + 59; text = true;
-            }
-            catch
-            {
-                x_Box.Text = "";
-            }
-        }
-
         private void Form20_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+
+        private void x_Box_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    double size_x = Double.Parse(x_Box.Text);
+                    this.Width = (int)size_x + 59; text = true;
+                }
+                catch
+                {
+                    x_Box.Text = "";
+                }
+            }
+        }
+
+        private void y_Box_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    double size_y = Double.Parse(y_Box.Text);
+                    this.Height = (int)size_y + 39; text = true;
+
+                }
+                catch
+                {
+                    y_Box.Text = "";
+                }
+            }
         }
     }
 }

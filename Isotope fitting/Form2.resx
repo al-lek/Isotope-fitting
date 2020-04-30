@@ -1763,6 +1763,20 @@
         AaPDHsuc0eFmCYlcdNhjmTM63CwhkYsOeyxzRocXzBmt1k9Go6powwV5wQAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="ppm_legend_Btn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHRSURBVEhLxZXNSwJRFMW1gqD6e2ojrQRBMsUvJhQZXRRa
+        5EIncZGLKGRoU0FQy4hADNyFK9uEeze6EHeCuBG3LoTTuw/HDxwdh2d04be47807Z+67zFzLf4VVkPkI
+        h8MfkUgEHo9HCLvdjmg0+sUkNxgTM5fLhVqthnq9jmazKUQgEACT3GZscnEKcqfNXq8nDGkxyR3GFhdn
+        YaXFVquFfr+P/FuOk3qI89wsI4NdxqxBu93GYDDg4unHBC7yMZ673W5kMhl4vV44HA6+1mg0kEwmkUql
+        UCgU+JrGyGCPMTGgHnQ6HQyHQyhP50jenyJxJ/PcLLoGtNjtdrGOWGqg90ZmWWhAPaAHbnPvHOXyde7w
+        KugaTPdAE4+FbngeDAbhdDpRLpfBPkgoioJsNgtVVeH3+xEKhVCtVpcbTFdwJquISNc48V2ND5lhoYFW
+        gSiGFYhiWMFPOsz5lA7nDq+CrgE1WatAE385PuA5NZKaHI/HUSqVUKlUQM9LkgSbzYZisWhsMH1Fz0f7
+        Y6YProrhFYmy0OBPv2T6K67LwOfzkcHs75rGHG2Quwg0zWRZ/maaMwOHgmYojTnaIHeCyjQLnSON2ZHJ
+        ggY0mZDrOmDiFusvAyUvpT/c56kAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="ppm_extract_btn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -2901,7 +2915,7 @@
 </value>
   </data>
   <metadata name="folderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>970, 16</value>
+    <value>976, 18</value>
   </metadata>
   <data name="toolStripButton4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2919,7 +2933,7 @@
 </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>73</value>
+    <value>72</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

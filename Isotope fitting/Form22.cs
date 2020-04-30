@@ -23,6 +23,9 @@ namespace Isotope_fitting
             y_ppm_stepmajor_UD.Value = (decimal)frm2.y_ppm_majorStep;
             x_ppm_stepmajor_UD.Value = (decimal)frm2.x_ppm_majorStep;
             bullet_size_numUD.Value = (decimal)frm2.ppm_bullet_size;
+            end_valUD.Value = (decimal)frm2.last_m_z;
+            start_valUD.Value = (decimal)frm2.first_m_z;
+
             if (frm2.ppm_graph_type == 2) mz_rdBtn.Checked = true;
             else number_rdBtn.Checked = true;
         }
@@ -168,6 +171,17 @@ namespace Isotope_fitting
         private void bullet_size_numUD_ValueChanged(object sender, EventArgs e)
         {
             frm2.ppm_bullet_size= (double)bullet_size_numUD.Value;
+        }
+
+        private void start_valUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.first_m_z = (double)start_valUD.Value;
+
+        }
+
+        private void end_valUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.last_m_z = (double)end_valUD.Value;
         }
     }
 }

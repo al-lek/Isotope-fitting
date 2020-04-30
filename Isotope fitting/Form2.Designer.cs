@@ -223,6 +223,7 @@ namespace Isotope_fitting
             this.ppm_toolStrip = new System.Windows.Forms.ToolStrip();
             this.ppmSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.ppmCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.ppm_legend_Btn = new System.Windows.Forms.ToolStripButton();
             this.ppm_extract_btn = new System.Windows.Forms.ToolStripDropDownButton();
             this.extractPlotToolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -555,14 +556,14 @@ namespace Isotope_fitting
             // styleFormatBtn
             // 
             this.styleFormatBtn.Name = "styleFormatBtn";
-            this.styleFormatBtn.Size = new System.Drawing.Size(180, 22);
+            this.styleFormatBtn.Size = new System.Drawing.Size(134, 22);
             this.styleFormatBtn.Text = "Style";
             this.styleFormatBtn.Click += new System.EventHandler(this.styleFormatBtn_Click);
             // 
             // extractPlotToolStripMenuItem
             // 
             this.extractPlotToolStripMenuItem.Name = "extractPlotToolStripMenuItem";
-            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
             // 
@@ -1901,7 +1902,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(56, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(53, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1913,7 +1914,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(146, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(143, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -2953,11 +2954,12 @@ namespace Isotope_fitting
             this.ppm_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppmSave_Btn,
             this.ppmCopy_Btn,
+            this.ppm_legend_Btn,
             this.ppm_extract_btn});
             this.ppm_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ppm_toolStrip.Location = new System.Drawing.Point(0, 8);
             this.ppm_toolStrip.Name = "ppm_toolStrip";
-            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 96);
+            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 102);
             this.ppm_toolStrip.TabIndex = 1;
             // 
             // ppmSave_Btn
@@ -2978,6 +2980,16 @@ namespace Isotope_fitting
             this.ppmCopy_Btn.Size = new System.Drawing.Size(30, 22);
             this.ppmCopy_Btn.Text = "Copy";
             // 
+            // ppm_legend_Btn
+            // 
+            this.ppm_legend_Btn.CheckOnClick = true;
+            this.ppm_legend_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ppm_legend_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_legend_Btn.Image")));
+            this.ppm_legend_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_legend_Btn.Name = "ppm_legend_Btn";
+            this.ppm_legend_Btn.Size = new System.Drawing.Size(30, 22);
+            this.ppm_legend_Btn.CheckedChanged += new System.EventHandler(this.ppm_legend_Btn_CheckedChanged);
+            // 
             // ppm_extract_btn
             // 
             this.ppm_extract_btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -2992,14 +3004,14 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem9
             // 
             this.extractPlotToolStripMenuItem9.Name = "extractPlotToolStripMenuItem9";
-            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(180, 22);
+            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(134, 22);
             this.extractPlotToolStripMenuItem9.Text = "Extract plot";
             this.extractPlotToolStripMenuItem9.Click += new System.EventHandler(this.extractPlotToolStripMenuItem9_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.settingsToolStripMenuItem.Text = "Properties";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -4697,7 +4709,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v24.9.3";
+            this.Text = "Peak Finder v24.9.5";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -5156,5 +5168,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_MSproduct;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton ppm_legend_Btn;
     }
 }

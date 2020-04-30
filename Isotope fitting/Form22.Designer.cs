@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.axisX_Charge_grpBx = new System.Windows.Forms.GroupBox();
-            this.refresh_Btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.number_rdBtn = new System.Windows.Forms.RadioButton();
             this.mz_rdBtn = new System.Windows.Forms.RadioButton();
@@ -42,6 +41,7 @@
             this.x_ppm_majorGrid_Lbl = new System.Windows.Forms.Label();
             this.x_ppm_tickUD = new System.Windows.Forms.DomainUpDown();
             this.axisx_ppm_tick_Lbl = new System.Windows.Forms.Label();
+            this.refresh_Btn = new System.Windows.Forms.Button();
             this.axisY_Charge_grpBx = new System.Windows.Forms.GroupBox();
             this.y_ppm_stepmajor_UD = new System.Windows.Forms.NumericUpDown();
             this.y_ppm_stepminor_UD = new System.Windows.Forms.NumericUpDown();
@@ -53,8 +53,12 @@
             this.y_ppm_tickUD = new System.Windows.Forms.DomainUpDown();
             this.axisy_ppm_tick_Lbl = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.bullet_size_numUD = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.start_valUD = new System.Windows.Forms.NumericUpDown();
+            this.end_valUD = new System.Windows.Forms.NumericUpDown();
             this.axisX_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepmajor_UD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepminor_UD)).BeginInit();
@@ -63,10 +67,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepminor_UD)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).BeginInit();
             this.SuspendLayout();
             // 
             // axisX_Charge_grpBx
             // 
+            this.axisX_Charge_grpBx.Controls.Add(this.end_valUD);
+            this.axisX_Charge_grpBx.Controls.Add(this.start_valUD);
+            this.axisX_Charge_grpBx.Controls.Add(this.label4);
+            this.axisX_Charge_grpBx.Controls.Add(this.label3);
             this.axisX_Charge_grpBx.Controls.Add(this.label1);
             this.axisX_Charge_grpBx.Controls.Add(this.number_rdBtn);
             this.axisX_Charge_grpBx.Controls.Add(this.mz_rdBtn);
@@ -84,30 +94,17 @@
             this.axisX_Charge_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
             this.axisX_Charge_grpBx.Location = new System.Drawing.Point(0, 0);
             this.axisX_Charge_grpBx.Name = "axisX_Charge_grpBx";
-            this.axisX_Charge_grpBx.Size = new System.Drawing.Size(289, 209);
+            this.axisX_Charge_grpBx.Size = new System.Drawing.Size(289, 274);
             this.axisX_Charge_grpBx.TabIndex = 3;
             this.axisX_Charge_grpBx.TabStop = false;
             this.axisX_Charge_grpBx.Text = "Axis X";
-            // 
-            // refresh_Btn
-            // 
-            this.refresh_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.refresh_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.refresh_Btn.ForeColor = System.Drawing.Color.SlateBlue;
-            this.refresh_Btn.Location = new System.Drawing.Point(421, 18);
-            this.refresh_Btn.Name = "refresh_Btn";
-            this.refresh_Btn.Size = new System.Drawing.Size(128, 34);
-            this.refresh_Btn.TabIndex = 25;
-            this.refresh_Btn.Text = "Refresh Plot";
-            this.refresh_Btn.UseVisualStyleBackColor = true;
-            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(83, 180);
+            this.label1.Location = new System.Drawing.Point(83, 168);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
             this.label1.TabIndex = 17;
@@ -118,7 +115,7 @@
             this.number_rdBtn.AutoSize = true;
             this.number_rdBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.number_rdBtn.ForeColor = System.Drawing.Color.Black;
-            this.number_rdBtn.Location = new System.Drawing.Point(192, 178);
+            this.number_rdBtn.Location = new System.Drawing.Point(192, 166);
             this.number_rdBtn.Name = "number_rdBtn";
             this.number_rdBtn.Size = new System.Drawing.Size(87, 19);
             this.number_rdBtn.TabIndex = 16;
@@ -132,7 +129,7 @@
             this.mz_rdBtn.AutoSize = true;
             this.mz_rdBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mz_rdBtn.ForeColor = System.Drawing.Color.Black;
-            this.mz_rdBtn.Location = new System.Drawing.Point(137, 178);
+            this.mz_rdBtn.Location = new System.Drawing.Point(137, 166);
             this.mz_rdBtn.Name = "mz_rdBtn";
             this.mz_rdBtn.Size = new System.Drawing.Size(45, 19);
             this.mz_rdBtn.TabIndex = 15;
@@ -144,7 +141,7 @@
             // x_ppm_stepmajor_UD
             // 
             this.x_ppm_stepmajor_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_ppm_stepmajor_UD.Location = new System.Drawing.Point(209, 66);
+            this.x_ppm_stepmajor_UD.Location = new System.Drawing.Point(209, 63);
             this.x_ppm_stepmajor_UD.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -168,7 +165,7 @@
             // x_ppm_stepminor_UD
             // 
             this.x_ppm_stepminor_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_ppm_stepminor_UD.Location = new System.Drawing.Point(137, 66);
+            this.x_ppm_stepminor_UD.Location = new System.Drawing.Point(137, 63);
             this.x_ppm_stepminor_UD.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -194,7 +191,7 @@
             this.stepX_ppm_Lbl.AutoSize = true;
             this.stepX_ppm_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stepX_ppm_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.stepX_ppm_Lbl.Location = new System.Drawing.Point(5, 69);
+            this.stepX_ppm_Lbl.Location = new System.Drawing.Point(5, 66);
             this.stepX_ppm_Lbl.Name = "stepX_ppm_Lbl";
             this.stepX_ppm_Lbl.Size = new System.Drawing.Size(116, 15);
             this.stepX_ppm_Lbl.TabIndex = 12;
@@ -205,7 +202,7 @@
             this.x_ppm_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.x_ppm_minorGrid_UD.Items.Add("None");
             this.x_ppm_minorGrid_UD.Items.Add("Solid");
-            this.x_ppm_minorGrid_UD.Location = new System.Drawing.Point(137, 140);
+            this.x_ppm_minorGrid_UD.Location = new System.Drawing.Point(137, 131);
             this.x_ppm_minorGrid_UD.Name = "x_ppm_minorGrid_UD";
             this.x_ppm_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.x_ppm_minorGrid_UD.TabIndex = 11;
@@ -216,7 +213,7 @@
             this.x_ppm_minorGrid_Lbl.AutoSize = true;
             this.x_ppm_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.x_ppm_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_ppm_minorGrid_Lbl.Location = new System.Drawing.Point(36, 143);
+            this.x_ppm_minorGrid_Lbl.Location = new System.Drawing.Point(36, 134);
             this.x_ppm_minorGrid_Lbl.Name = "x_ppm_minorGrid_Lbl";
             this.x_ppm_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
             this.x_ppm_minorGrid_Lbl.TabIndex = 10;
@@ -227,7 +224,7 @@
             this.x_ppm_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.x_ppm_majorGrid_UD.Items.Add("None");
             this.x_ppm_majorGrid_UD.Items.Add("Solid");
-            this.x_ppm_majorGrid_UD.Location = new System.Drawing.Point(137, 103);
+            this.x_ppm_majorGrid_UD.Location = new System.Drawing.Point(137, 97);
             this.x_ppm_majorGrid_UD.Name = "x_ppm_majorGrid_UD";
             this.x_ppm_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.x_ppm_majorGrid_UD.TabIndex = 9;
@@ -238,7 +235,7 @@
             this.x_ppm_majorGrid_Lbl.AutoSize = true;
             this.x_ppm_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.x_ppm_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.x_ppm_majorGrid_Lbl.Location = new System.Drawing.Point(36, 106);
+            this.x_ppm_majorGrid_Lbl.Location = new System.Drawing.Point(36, 100);
             this.x_ppm_majorGrid_Lbl.Name = "x_ppm_majorGrid_Lbl";
             this.x_ppm_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
             this.x_ppm_majorGrid_Lbl.TabIndex = 8;
@@ -268,6 +265,19 @@
             this.axisx_ppm_tick_Lbl.TabIndex = 0;
             this.axisx_ppm_tick_Lbl.Text = "Tick Marks";
             // 
+            // refresh_Btn
+            // 
+            this.refresh_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.refresh_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.refresh_Btn.ForeColor = System.Drawing.Color.SlateBlue;
+            this.refresh_Btn.Location = new System.Drawing.Point(421, 18);
+            this.refresh_Btn.Name = "refresh_Btn";
+            this.refresh_Btn.Size = new System.Drawing.Size(128, 34);
+            this.refresh_Btn.TabIndex = 25;
+            this.refresh_Btn.Text = "Refresh Plot";
+            this.refresh_Btn.UseVisualStyleBackColor = true;
+            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
+            // 
             // axisY_Charge_grpBx
             // 
             this.axisY_Charge_grpBx.Controls.Add(this.y_ppm_stepmajor_UD);
@@ -284,7 +294,7 @@
             this.axisY_Charge_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
             this.axisY_Charge_grpBx.Location = new System.Drawing.Point(292, 0);
             this.axisY_Charge_grpBx.Name = "axisY_Charge_grpBx";
-            this.axisY_Charge_grpBx.Size = new System.Drawing.Size(269, 209);
+            this.axisY_Charge_grpBx.Size = new System.Drawing.Size(269, 274);
             this.axisY_Charge_grpBx.TabIndex = 15;
             this.axisY_Charge_grpBx.TabStop = false;
             this.axisY_Charge_grpBx.Text = "Axis Y";
@@ -292,7 +302,7 @@
             // y_ppm_stepmajor_UD
             // 
             this.y_ppm_stepmajor_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_ppm_stepmajor_UD.Location = new System.Drawing.Point(207, 66);
+            this.y_ppm_stepmajor_UD.Location = new System.Drawing.Point(207, 63);
             this.y_ppm_stepmajor_UD.Maximum = new decimal(new int[] {
             50,
             0,
@@ -316,7 +326,7 @@
             // y_ppm_stepminor_UD
             // 
             this.y_ppm_stepminor_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_ppm_stepminor_UD.Location = new System.Drawing.Point(135, 66);
+            this.y_ppm_stepminor_UD.Location = new System.Drawing.Point(135, 63);
             this.y_ppm_stepminor_UD.Maximum = new decimal(new int[] {
             50,
             0,
@@ -342,7 +352,7 @@
             this.stepY_ppm_Lbl.AutoSize = true;
             this.stepY_ppm_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stepY_ppm_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.stepY_ppm_Lbl.Location = new System.Drawing.Point(3, 69);
+            this.stepY_ppm_Lbl.Location = new System.Drawing.Point(3, 66);
             this.stepY_ppm_Lbl.Name = "stepY_ppm_Lbl";
             this.stepY_ppm_Lbl.Size = new System.Drawing.Size(116, 15);
             this.stepY_ppm_Lbl.TabIndex = 21;
@@ -353,7 +363,7 @@
             this.y_ppm_minorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.y_ppm_minorGrid_UD.Items.Add("None");
             this.y_ppm_minorGrid_UD.Items.Add("Solid");
-            this.y_ppm_minorGrid_UD.Location = new System.Drawing.Point(135, 140);
+            this.y_ppm_minorGrid_UD.Location = new System.Drawing.Point(135, 131);
             this.y_ppm_minorGrid_UD.Name = "y_ppm_minorGrid_UD";
             this.y_ppm_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.y_ppm_minorGrid_UD.TabIndex = 20;
@@ -364,7 +374,7 @@
             this.y_ppm_minorGrid_Lbl.AutoSize = true;
             this.y_ppm_minorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.y_ppm_minorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.y_ppm_minorGrid_Lbl.Location = new System.Drawing.Point(34, 143);
+            this.y_ppm_minorGrid_Lbl.Location = new System.Drawing.Point(34, 134);
             this.y_ppm_minorGrid_Lbl.Name = "y_ppm_minorGrid_Lbl";
             this.y_ppm_minorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
             this.y_ppm_minorGrid_Lbl.TabIndex = 19;
@@ -375,7 +385,7 @@
             this.y_ppm_majorGrid_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.y_ppm_majorGrid_UD.Items.Add("None");
             this.y_ppm_majorGrid_UD.Items.Add("Solid");
-            this.y_ppm_majorGrid_UD.Location = new System.Drawing.Point(135, 103);
+            this.y_ppm_majorGrid_UD.Location = new System.Drawing.Point(135, 97);
             this.y_ppm_majorGrid_UD.Name = "y_ppm_majorGrid_UD";
             this.y_ppm_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.y_ppm_majorGrid_UD.TabIndex = 18;
@@ -386,7 +396,7 @@
             this.y_ppm_majorGrid_Lbl.AutoSize = true;
             this.y_ppm_majorGrid_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.y_ppm_majorGrid_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.y_ppm_majorGrid_Lbl.Location = new System.Drawing.Point(34, 106);
+            this.y_ppm_majorGrid_Lbl.Location = new System.Drawing.Point(34, 100);
             this.y_ppm_majorGrid_Lbl.Name = "y_ppm_majorGrid_Lbl";
             this.y_ppm_majorGrid_Lbl.Size = new System.Drawing.Size(85, 15);
             this.y_ppm_majorGrid_Lbl.TabIndex = 17;
@@ -422,22 +432,11 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.refresh_Btn);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 209);
+            this.groupBox1.Location = new System.Drawing.Point(0, 274);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(561, 67);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(28, 28);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 15);
-            this.label2.TabIndex = 26;
-            this.label2.Text = "Point size factor";
             // 
             // bullet_size_numUD
             // 
@@ -469,11 +468,84 @@
             0});
             this.bullet_size_numUD.ValueChanged += new System.EventHandler(this.bullet_size_numUD_ValueChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label2.Location = new System.Drawing.Point(28, 28);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 15);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "Point size factor";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label3.Location = new System.Drawing.Point(43, 236);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(78, 15);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Ending value";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label4.Location = new System.Drawing.Point(40, 202);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(81, 15);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Starting value";
+            // 
+            // start_valUD
+            // 
+            this.start_valUD.DecimalPlaces = 4;
+            this.start_valUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.start_valUD.Location = new System.Drawing.Point(137, 199);
+            this.start_valUD.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.start_valUD.Name = "start_valUD";
+            this.start_valUD.Size = new System.Drawing.Size(120, 20);
+            this.start_valUD.TabIndex = 20;
+            this.start_valUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.start_valUD.ValueChanged += new System.EventHandler(this.start_valUD_ValueChanged);
+            // 
+            // end_valUD
+            // 
+            this.end_valUD.DecimalPlaces = 4;
+            this.end_valUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.end_valUD.Location = new System.Drawing.Point(137, 233);
+            this.end_valUD.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.end_valUD.Name = "end_valUD";
+            this.end_valUD.Size = new System.Drawing.Size(120, 20);
+            this.end_valUD.TabIndex = 21;
+            this.end_valUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.end_valUD.ValueChanged += new System.EventHandler(this.end_valUD_ValueChanged);
+            // 
             // Form22
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 276);
+            this.ClientSize = new System.Drawing.Size(561, 341);
             this.Controls.Add(this.axisY_Charge_grpBx);
             this.Controls.Add(this.axisX_Charge_grpBx);
             this.Controls.Add(this.groupBox1);
@@ -495,6 +567,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -528,5 +602,9 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown bullet_size_numUD;
+        private System.Windows.Forms.NumericUpDown end_valUD;
+        private System.Windows.Forms.NumericUpDown start_valUD;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
     }
 }

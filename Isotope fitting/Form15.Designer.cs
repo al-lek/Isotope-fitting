@@ -48,7 +48,6 @@
             this.panel_frm11.AutoSize = true;
             this.panel_frm11.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_frm11.BackColor = System.Drawing.Color.Transparent;
-            this.panel_frm11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel_frm11.Controls.Add(this.splitContainer1);
             this.panel_frm11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_frm11.Location = new System.Drawing.Point(43, 0);
@@ -70,8 +69,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.Color.Transparent;
-            this.splitContainer1.Size = new System.Drawing.Size(1238, 526);
-            this.splitContainer1.SplitterDistance = 804;
+            this.splitContainer1.Size = new System.Drawing.Size(1242, 530);
+            this.splitContainer1.SplitterDistance = 977;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 0;
             // 

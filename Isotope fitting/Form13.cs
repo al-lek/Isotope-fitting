@@ -25,6 +25,11 @@ namespace Isotope_fitting
             xInterval_UD13.Value = (decimal)frm2.x_interval13;
             intLine_numUD13.Value = (decimal)frm2.int_width;
             formatY_numUD13.Value= Decimal.Parse(frm2.x_numformat13);
+            foreach (int[] region in frm2.color_internal_indexes)
+            {
+                textBox1.Text +=region[0]+"-"+region[1]+",";
+            }
+            if (!String.IsNullOrEmpty(textBox1.Text)) { textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1); }
         }
 
         private void xtickUD13_SelectedItemChanged(object sender, EventArgs e)
@@ -176,6 +181,38 @@ namespace Isotope_fitting
         private void Form13_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+
+        private void color_Btn_Click(object sender, EventArgs e)
+        {
+            ColorDialog clrDlg = new ColorDialog();
+            if (clrDlg.ShowDialog() == DialogResult.OK)
+            {
+                frm2.color_internal = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb());
+            }
+        }
+
+        private void refresh_Btn_Click(object sender, EventArgs e)
+        {
+            frm2.color_internal_indexes.Clear();
+            if (!string.IsNullOrEmpty(textBox1.Text.ToString()))
+            {
+                string text = textBox1.Text.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    try
+                    {
+                        if (str2.Length == 2) { frm2.color_internal_indexes.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please check your input. Fill the box with the numbers of the areas you want to be colored  e.g.1-3,6-8");
+                    }
+                }
+            }
+            frm2.paint_annotations_in_graphs(false, 2);
         }
     }
 }

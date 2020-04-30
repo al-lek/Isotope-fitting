@@ -79,14 +79,14 @@
             this.x_Box.AutoSize = false;
             this.x_Box.Name = "x_Box";
             this.x_Box.Size = new System.Drawing.Size(40, 22);
-            this.x_Box.TextChanged += new System.EventHandler(this.x_Box_TextChanged);
+            this.x_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.x_Box_KeyUp);
             // 
             // y_Box
             // 
             this.y_Box.AutoSize = false;
             this.y_Box.Name = "y_Box";
             this.y_Box.Size = new System.Drawing.Size(40, 22);
-            this.y_Box.TextChanged += new System.EventHandler(this.y_Box_TextChanged);
+            this.y_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.y_Box_KeyUp);
             // 
             // panel_frm20
             // 
