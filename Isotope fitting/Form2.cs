@@ -161,7 +161,7 @@ namespace Isotope_fitting
         List<double[]> fitted_results = new List<double[]>();
         List<int[]> powerSet = new List<int[]>();
         List<int[]> powerSet_distroIdx = new List<int[]>();
-        List<int> last_ploted = new List<int>();
+        List<int> last_ploted_iso = new List<int>();
         List<double[]> summation = new List<double[]>();
         List<double[]> residual = new List<double[]>();
         public static List<int> custom_colors = new List<int>();
@@ -339,6 +339,7 @@ namespace Isotope_fitting
         #endregion
 
         #region PARAMETER SET TAB DIAGRAMS
+        Color highlight_color = Color.SlateGray;
         bool block_tab_diagrams_refresh = false;
         List<ion> IonDraw = new List<ion>();
         List<ion> IonDrawIndex = new List<ion>();
@@ -3349,7 +3350,7 @@ namespace Isotope_fitting
             // when single threaded we could add only the new fragments. In multi thread Fragments have to be resorted every time by mass, so their relative position (idxs) changes on every new addition
             //int start = 1; bool add = false; if (all_data_aligned.Count > 0 && (all_data_aligned[0].Count() < Fragments2.Count + 1)) { start = all_data_aligned[0].Count(); add = true; }
             //fix_experimental_gaps2020();
-
+            if(last_ploted_iso.Count>0) last_ploted_iso.Clear();
             List<int> idxs = new List<int>();
             for (int i = 1; i < all_data.Count; i++) { idxs.Add(i); }
 
@@ -4996,16 +4997,16 @@ namespace Isotope_fitting
             List<int> plot_idxs = new List<int>(to_plot);
 
             // When ONE fragment is checked/unchecked do NOT recalculate ALL fragments. Just add/subtract the checked/uncheked
-            if (Math.Abs(last_ploted.Count - to_plot.Count) == 1)
+            if (Math.Abs(last_ploted_iso.Count - to_plot.Count) == 1)
             {
                 //sw2.Start();
                 int operand = 1;
-                int diff = to_plot.Except(last_ploted).ToList().FirstOrDefault();
+                int diff = to_plot.Except(last_ploted_iso).ToList().FirstOrDefault();
 
-                if (last_ploted.Count - to_plot.Count == 1)
+                if (last_ploted_iso.Count - to_plot.Count == 1)
                 {
                     operand = -1;
-                    diff = last_ploted.Except(to_plot).ToList().FirstOrDefault();
+                    diff = last_ploted_iso.Except(to_plot).ToList().FirstOrDefault();
                 }
                 
                 for (int i = 0; i < all_data_aligned.Count(); i++)
@@ -5018,7 +5019,7 @@ namespace Isotope_fitting
                     }
                 }
 
-                last_ploted = new List<int>(to_plot);
+                last_ploted_iso = new List<int>(to_plot);
                 //sw2.Stop(); Console.WriteLine("single frag change: " + sw2.ElapsedMilliseconds.ToString());
                 return;
             }
@@ -5056,7 +5057,7 @@ namespace Isotope_fitting
             summation = summation_temp.ToList();
             residual = residual_temp.ToList();
 
-            last_ploted = new List<int>(to_plot);
+            last_ploted_iso = new List<int>(to_plot);
             //sw1.Stop(); Console.WriteLine("Total compute Parallel: " + sw1.ElapsedMilliseconds.ToString()); sw1.Reset();
         }
         private void invalidate_all()
@@ -8316,66 +8317,7 @@ namespace Isotope_fitting
                 frag_tree.EndUpdate();
                 refresh_iso_plot();
             }
-        }
-        private void clear_toolStripButton_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                plotExp_chkBox.Checked = false;plotCentr_chkBox.Checked = false;plotFragCent_chkBox.Checked = false;plotFragProf_chkBox.Checked = false;
-                is_exp_deconvoluted = false;
-                if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
-                if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
-                tab_mode = false;
-                loaded_lists = ""; show_files_Btn.ToolTipText = "";                
-                displayPeakList_btn.Enabled = false;
-                Peptide = String.Empty; 
-                heavy_chain = String.Empty;light_chain = String.Empty;light_present = false; heavy_present = false;
-                if (sequenceList != null) { sequenceList.Clear(); }
-                insert_exp = false;
-                plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; saveFit_Btn.Enabled = false;
-                loadMS_Btn.Enabled = true; loadFit_Btn.Enabled = true;
-                clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false;   fitStep_Box.Text = null; step_rangeBox.Text = null;
-                Fitting_chkBox.Checked = false;
-                Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
-                Fragments2.Clear();ChemFormulas.Clear();
-                selectedFragments.Clear();
-                frag_listView.Items.Clear();
-                UncheckAll_calculationPanel();
-                 resolution_Box.Text = null;
-                machine_listBox.ClearSelected();
-                machine_listBox.SelectedIndex = 9;
-                loadExp_Btn.Enabled = true;
-                selected_window = 1000000;
-                bigPanel.Controls.Clear();                
-                candidate_fragments = 1;
-                mzMax_Box.Enabled = false; mzMin_Box.Enabled = false; mzMax_Label.Enabled = false; mzMin_Label.Enabled = false; chargeMax_Box.Enabled = false; chargeMin_Box.Enabled = false; chargeAll_Btn.Enabled = false;
-                idxPr_Box.Enabled = false; idxTo_Box.Enabled = false; idxFrom_Box.Enabled = false; resolution_Box.Enabled= false; machine_listBox.Enabled = false;
-                fit_sel_Btn.Enabled = false; saveWd_Btn.Enabled = false;
-                windowList.Clear();
-                mark_neues = false; loaded_window = false;
-                neues = 0;               
-                Form4.active = false;
-                if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
-                if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
-                if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-                factor_panel.Controls.Clear();
-                //other tabs
-                if (IonDraw.Count > 0) IonDraw.Clear();
-                if (IonDrawIndex.Count > 0) IonDrawIndex.Clear();
-                if (IonDrawIndexTo.Count > 0) IonDrawIndexTo.Clear();
-                //reset_all();
-                Initialize_data_struct();
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                return;
-            }            
-        }
-        private void rel_res_chkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            refresh_iso_plot();
-        }
+        }        
         private void extractPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
             plotview_rebuild();
@@ -8751,6 +8693,7 @@ namespace Isotope_fitting
         {
             aligned_intensities.Clear();
             all_data_aligned.Clear();
+            //if (last_ploted_iso.Count > 0) last_ploted_iso.Clear();
             fitted_results.Clear();            
             powerSet.Clear();
             powerSet_distroIdx.Clear();
@@ -12281,7 +12224,7 @@ namespace Isotope_fitting
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
-                        else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx || nn.IndexTo == idx + 1))
+                        else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx+1 || nn.IndexTo == idx + 1))
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
@@ -12462,7 +12405,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 8, nn.Color, g);
                         }
                     }
-                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
                     {
                         if (!los_chkBox.Checked)
                         {
@@ -12496,8 +12439,9 @@ namespace Isotope_fitting
         }
        
         private void sequence_Pnl_Paint(object sender, PaintEventArgs e)
-        {            
-            /*if (IonDraw.Count > 0) {*/ sequence_draw(e.Graphics); /*}*/
+        {
+            if(!highlight_ibt_ckBx.Checked)sequence_draw(e.Graphics);
+            else draw_internal(e.Graphics, highlight_color);
         }
 
         private void rdBtn25_CheckedChanged(object sender, EventArgs e)
@@ -12515,43 +12459,275 @@ namespace Isotope_fitting
             else { intB_chBx.Enabled = true; intA_chBx.Enabled = true; }
 
         }
-        private void heavy_chkBox_CheckedChanged(object sender, EventArgs e)
+       
+        private void draw_internal(Graphics g,Color paint_color)
         {
-            if (heavy_chkBox.Checked)
+            //g = pnl.CreateGraphics();
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            Pen p = new Pen(Color.Black);
+            int point_x, point_y;
+            point_y = 20;
+            point_x = 3;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            string s = Peptide;
+            string s_ext = "";//the desired extension
+
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            SequenceTab curr_ss = sequenceList[0];
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
-                light_chkBox.Checked = false;
-                ax_chBx.Checked = false;
-                by_chBx.Checked = false;
-                cz_chBx.Checked = false;
-                los_chkBox.Checked = false;
-                intA_chBx.Checked = false;
-                intB_chBx.Checked = false;
-
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    {
+                        curr_ss = seq;
+                        s = seq.Sequence; s_ext = seq.Extension;
+                        break;
+                    }
+                }
             }
-            initialize_ions_todraw(); initialize_plot_tabs();
-            sequence_Pnl.Refresh();
+            if (s.Length / 25 >= 9) { draw_sequence_panel.Height = 58 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panel.Height = 58 * s.Length / 25; }
+            else { draw_sequence_panel.Height = 400; }
+            Point pp = new Point(point_x, point_y);
+            int grp_num = 25;
+            if (rdBtn50.Checked) grp_num = 50;
 
+            //draw the rectangles
+            for (int idx = 0; idx < s.Length; idx++)
+            {                
+                double intensity = 0.0;
+                foreach (ion nn in IonDraw)
+                {
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }                    
+                    if (nn.Ion_type.StartsWith("inter") && (nn.Index <= idx + 1 && nn.IndexTo >= idx + 1))
+                    {
+                        if (!los_chkBox.Checked)
+                        {
+                            if (intA_chBx.Checked && !nn.Ion_type.Contains("b"))
+                            {
+                                intensity += nn.Max_intensity;
+                            }
+                            else if (intB_chBx.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                intensity += nn.Max_intensity;
+                            }
+                        }
+                    }
+                }
+                if (intensity > 0)
+                {
+                    //draw_rectangle(pp, GetColor((Int64)intensity), g);
+
+                    if (intensity / 10 < 10) { draw_rectangle(pp, Color.FromArgb(30, paint_color), g); }
+                    else if (intensity / 100 < 10) { draw_rectangle(pp, Color.FromArgb(55, paint_color), g); }
+                    else if (intensity / 1000 < 10) { draw_rectangle(pp, Color.FromArgb(80, paint_color), g); }
+                    else if (intensity / 10000 < 10) { draw_rectangle(pp, Color.FromArgb(105, paint_color), g); }
+                    else if (intensity / 100000 < 10) { draw_rectangle(pp, Color.FromArgb(130, paint_color), g); }
+                    else if (intensity / 1000000 < 10) { draw_rectangle(pp, Color.FromArgb(155, paint_color), g); }
+                    else if (intensity / 10000000 < 10) { draw_rectangle(pp, Color.FromArgb(180, paint_color), g); }
+                    else if (intensity / 100000000 < 10) { draw_rectangle(pp, Color.FromArgb(205, paint_color), g); }
+                    else if (intensity / 1000000000 < 10) { draw_rectangle(pp, Color.FromArgb(230, paint_color), g); }
+                    else if (intensity / 10000000000 < 10) { draw_rectangle(pp, Color.FromArgb(255, paint_color), g); }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
+
+            //draw as usual over the rectangles
+            pp = new Point(point_x, point_y);
+
+            for (int idx = 0; idx < s.Length; idx++)
+            {
+                if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
+                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);
+                foreach (ion nn in IonDraw)
+                {
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (ax_chBx.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBox.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.LimeGreen, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Green, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBx.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBox.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.DodgerBlue, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Blue, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBx.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBox.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.Tomato, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Firebrick, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 8, nn.Color, g);
+                        }
+                    }
+                    else if (ax_chBx.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBox.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Green, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBx.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBox.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Blue, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBx.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBox.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 8, nn.Color, g);
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    {
+                        if (!los_chkBox.Checked)
+                        {
+                            if (intA_chBx.Checked && !nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                            else if (intB_chBx.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                        }
+                    }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
+
+            return;
         }
-
-        private void light_chkBox_CheckedChanged(object sender, EventArgs e)
+        private void draw_rectangle( Point pf, Color color_draw, Graphics g)
         {
-            if (light_chkBox.Checked)
-            {
-                heavy_chkBox.Checked = false;
-                ax_chBx.Checked = false;
-                by_chBx.Checked = false;
-                cz_chBx.Checked = false;
-                los_chkBox.Checked = false;
-                intA_chBx.Checked = false;
-                intB_chBx.Checked = false;
-            }
-            initialize_ions_todraw(); initialize_plot_tabs();
+            //Pen mypen = new Pen(Color.FromArgb(intesity, color_draw), 1F);
+            //g.DrawRectangle(mypen, pf.X, pf.Y, 16, 15);
+            // Create solid brush.
+            SolidBrush blueBrush = new SolidBrush( color_draw);
+
+            // Create rectangle.
+            Rectangle rect = new Rectangle(pf.X-1, pf.Y, 20, 17);
+
+            // Fill rectangle to screen.
+            g.FillRectangle(blueBrush, rect);
+        }
+        private void highlight_ibt_ckBx_CheckedChanged(object sender, EventArgs e)
+        {
             sequence_Pnl.Refresh();
+        }
+        private void hightlight_clr_Btn_Click(object sender, EventArgs e)
+        {
+            ColorDialog clrDlg = new ColorDialog();
+            if (clrDlg.ShowDialog() == DialogResult.OK)
+            {
+                highlight_color = clrDlg.Color;
+            }
+        }
+        private Color GetColor(Int64 actualValue)
+        {
+            Int64 rangeStart =10;
+            Int64 rangeEnd =10000000000;
+            if (rangeStart >= rangeEnd) return Color.Red;
+            if (actualValue >= rangeEnd) return Color.Red;
+            if (actualValue <= rangeStart) return Color.Green;
+            Int64 max = rangeEnd - rangeStart; // make the scale start from 0
+            Int64 value = actualValue - rangeStart; // adjust the value accordingly
+            Int64 red = (255 * value) / max;// calculate red (the closer the value is to max, the greener it gets)
+            Int64 green = 255 - red;  // set green as inverse of green
+
+            return Color.FromArgb((Byte)red, (Byte)green, (Byte)0);
         }
         #endregion
 
         #region sequence panels copies
         #region sequence copy 1
+        private void highlight_ibt_ckBxCopy1_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_PnlCopy1.Refresh();
+        }
         private void ax_chBxCopy1_CheckedChanged(object sender, EventArgs e)
         {
             if (ax_chBxCopy1.Checked)
@@ -12605,7 +12781,8 @@ namespace Isotope_fitting
         }
         private void sequence_PnlCopy1_Paint(object sender, PaintEventArgs e)
         {
-            sequence_drawCopy1(e.Graphics);
+            if (!highlight_ibt_ckBxCopy1.Checked) sequence_drawCopy1(e.Graphics);
+            else draw_internalCopy1(e.Graphics, highlight_color);
         }
         private void sequence_drawCopy1(Graphics g)
         {
@@ -12637,290 +12814,361 @@ namespace Isotope_fitting
             Point pp = new Point(point_x, point_y);
             int grp_num = 25;
             if (rdBtn50Copy1.Checked) grp_num = 50;
-            if (!string.IsNullOrEmpty(s_ext))
+            for (int idx = 0; idx < s.Length; idx++)
             {
-                for (int idx = 0; idx < s.Length; idx++)
+                g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
+                foreach (ion nn in IonDraw)
                 {
-                    g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
-                    foreach (ion nn in IonDraw)
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
-                        if (!recognise_extension(nn.Extension, s_ext)) { continue; }                        
-                        Point temp_p = pp;
-                        if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
+                        if (los_chkBoxCopy1.Checked)
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Green, g);
-                                }
+                                draw_line(pp, true, 4, Color.LimeGreen, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(pp, true, 0, nn.Color, g);
+                                draw_line(pp, true, 0, Color.Green, g);
                             }
                         }
-                        else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            draw_line(pp, true, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.DodgerBlue, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Blue, g);
-                                }
+                                draw_line(pp, true, 4, Color.DodgerBlue, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(pp, true, 4, nn.Color, g);
+                                draw_line(pp, true, 0, Color.Blue, g);
                             }
                         }
-                        else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            draw_line(pp, true, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Firebrick, g);
-                                }
+                                draw_line(pp, true, 4, Color.Tomato, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(pp, true, 8, nn.Color, g);
+                                draw_line(pp, true, 0, Color.Firebrick, g);
                             }
                         }
-                        else if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            draw_line(pp, true, 8, nn.Color, g);
+                        }
+                    }
+                    else if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Green, g);
-                                }
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(temp_p, false, 0, nn.Color, g);
+                                draw_line(temp_p, false, 0, Color.Green, g);
                             }
                         }
-                        else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            draw_line(temp_p, false, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.DodgerBlue, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Blue, g);
-                                }
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(temp_p, false, 4, nn.Color, g);
+                                draw_line(temp_p, false, 0, Color.Blue, g);
                             }
                         }
-                        else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            draw_line(temp_p, false, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Firebrick, g);
-                                }
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(temp_p, false, 8, nn.Color, g);
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
                             }
                         }
-                        else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (!los_chkBoxCopy1.Checked)
+                            draw_line(temp_p, false, 8, nn.Color, g);
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    {
+                        if (!los_chkBoxCopy1.Checked)
+                        {
+                            if (intA_chBxCopy1.Checked && !nn.Ion_type.Contains("b"))
                             {
-                                if (intA_chBxCopy1.Checked && !nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
-                                else if (intB_chBxCopy1.Checked && nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                            else if (intB_chBxCopy1.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
                             }
                         }
                     }
-                    pp.X = pp.X + 20;
-                    if (pp.X + 20 >= sequence_PnlCopy1.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
                 }
-            }
-            else
-            {
-                for (int idx = 0; idx < s.Length; idx++)
-                {
-                    g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
-                    foreach (ion nn in IonDraw)
-                    {
-                         if (!string.IsNullOrEmpty(nn.Extension)) { continue; }
-                        if (heavy_chkBoxCopy1.Checked && !nn.Name.Contains("_H")) { continue; }
-                        else if (light_chkBoxCopy1.Checked && !nn.Name.Contains("_L")) { continue; }
-                        Point temp_p = pp;
-                        if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
-                        {
-                            if (los_chkBoxCopy1.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Green, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(pp, true, 0, nn.Color, g);
-                            }
-                        }
-                        else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
-                        {
-                            if (los_chkBoxCopy1.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.DodgerBlue, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Blue, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(pp, true, 4, nn.Color, g);
-                            }
-                        }
-                        else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
-                        {
-                            if (los_chkBoxCopy1.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Firebrick, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(pp, true, 8, nn.Color, g);
-                            }
-                        }
-                        else if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
-                        {
-                            if (los_chkBoxCopy1.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Green, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(temp_p, false, 0, nn.Color, g);
-                            }
-                        }
-                        else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
-                        {
-                            if (los_chkBoxCopy1.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.DodgerBlue, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Blue, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(temp_p, false, 4, nn.Color, g);
-                            }
-                        }
-                        else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
-                        {
-                            if (los_chkBoxCopy1.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Firebrick, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(temp_p, false, 8, nn.Color, g);
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
-                        {
-                            if (!los_chkBoxCopy1.Checked)
-                            {
-                                if (intA_chBxCopy1.Checked && !nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
-                                else if (intB_chBxCopy1.Checked && nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
-                            }
-                        }
-                    }
-                    pp.X = pp.X + 20;
-                    if (pp.X + 20 >= sequence_PnlCopy1.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
-                }
-
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy1.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
             return;
         }
+        private void draw_internalCopy1(Graphics g, Color paint_color)
+        {
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            //g = pnl.CreateGraphics();
+            Pen p = new Pen(Color.Black);
+            int point_x, point_y;
+            point_y = 20;
+            point_x = 3;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            string s = Peptide;
+            string s_ext = "";//the desired extension
+
+            if (tab_mode && seq_extensionBoxCopy1.Enabled && seq_extensionBoxCopy1.SelectedIndex != -1)
+            {
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBoxCopy1.SelectedItem))
+                    {
+                        s = seq.Sequence; s_ext = seq.Extension; break;
+                    }
+                }
+            }
+
+            if (s.Length / 25 >= 9) { draw_sequence_panelCopy1.Height = 58 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panelCopy1.Height = 58 * s.Length / 25; }
+            else { draw_sequence_panelCopy1.Height = 400; }
+            Point pp = new Point(point_x, point_y);
+            int grp_num = 25;
+            if (rdBtn50Copy1.Checked) grp_num = 50;
+
+            //draw the rectangles
+            for (int idx = 0; idx < s.Length; idx++)
+            {
+                double intensity = 0.0;
+                foreach (ion nn in IonDraw)
+                {
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }                    
+                    if (nn.Ion_type.StartsWith("inter") && (nn.Index <= idx + 1 && nn.IndexTo >= idx + 1))
+                    {
+                        if (!los_chkBoxCopy1.Checked)
+                        {
+                            if (intA_chBxCopy1.Checked && !nn.Ion_type.Contains("b"))
+                            {
+                                intensity += nn.Max_intensity;
+                            }
+                            else if (intB_chBxCopy1.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                intensity += nn.Max_intensity;
+                            }
+                        }
+                    }
+                }
+                if (intensity > 0)
+                {
+                    if (intensity / 10 < 10) { draw_rectangle(pp, Color.FromArgb(30, paint_color), g); }
+                    else if (intensity / 100 < 10) { draw_rectangle(pp, Color.FromArgb(55, paint_color), g); }
+                    else if (intensity / 1000 < 10) { draw_rectangle(pp, Color.FromArgb(80, paint_color), g); }
+                    else if (intensity / 10000 < 10) { draw_rectangle(pp, Color.FromArgb(105, paint_color), g); }
+                    else if (intensity / 100000 < 10) { draw_rectangle(pp, Color.FromArgb(130, paint_color), g); }
+                    else if (intensity / 1000000 < 10) { draw_rectangle(pp, Color.FromArgb(155, paint_color), g); }
+                    else if (intensity / 10000000 < 10) { draw_rectangle(pp, Color.FromArgb(180, paint_color), g); }
+                    else if (intensity / 100000000 < 10) { draw_rectangle(pp, Color.FromArgb(205, paint_color), g); }
+                    else if (intensity / 1000000000 < 10) { draw_rectangle(pp, Color.FromArgb(230, paint_color), g); }
+                    else if (intensity / 10000000000 < 10) { draw_rectangle(pp, Color.FromArgb(255, paint_color), g); }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy1.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
+
+            //draw as usual over the rectangles
+            pp = new Point(point_x, point_y);
+            for (int idx = 0; idx < s.Length; idx++)
+            {
+                g.DrawString(s[idx].ToString(), sequence_PnlCopy1.Font, sb, pp);
+                foreach (ion nn in IonDraw)
+                {
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.LimeGreen, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Green, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.DodgerBlue, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Blue, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.Tomato, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Firebrick, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 8, nn.Color, g);
+                        }
+                    }
+                    else if (ax_chBxCopy1.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Green, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy1.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Blue, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy1.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 8, nn.Color, g);
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    {
+                        if (!los_chkBoxCopy1.Checked)
+                        {
+                            if (intA_chBxCopy1.Checked && !nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                            else if (intB_chBxCopy1.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                        }
+                    }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy1.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
+
+            return;
+        }
+
         private void sequence_PnlCopy1_Resize(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh();
@@ -12934,38 +13182,7 @@ namespace Isotope_fitting
             if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; intB_chBxCopy1.Enabled = false; intA_chBxCopy1.Enabled = false; }
             else { intB_chBxCopy1.Enabled = true; intA_chBxCopy1.Enabled = true; }
         }
-        private void heavy_chkBoxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (heavy_chkBoxCopy1.Checked)
-            {
-                light_chkBoxCopy1.Checked = false;
-                ax_chBxCopy1.Checked = false;
-                by_chBxCopy1.Checked = false;
-                cz_chBxCopy1.Checked = false;
-                los_chkBoxCopy1.Checked = false;
-                intA_chBxCopy1.Checked = false;
-                intB_chBxCopy1.Checked = false;
-
-            }
-            initialize_ions_todraw(); initialize_plot_tabs();
-            sequence_PnlCopy1.Refresh();
-        }
-
-        private void light_chkBoxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (light_chkBoxCopy1.Checked)
-            {
-                heavy_chkBoxCopy1.Checked = false;
-                ax_chBxCopy1.Checked = false;
-                by_chBxCopy1.Checked = false;
-                cz_chBxCopy1.Checked = false;
-                los_chkBoxCopy1.Checked = false;
-                intA_chBxCopy1.Checked = false;
-                intB_chBxCopy1.Checked = false;
-            }
-            initialize_ions_todraw(); initialize_plot_tabs();
-            sequence_PnlCopy1.Refresh();
-        }
+        
         private void seq_extensionBoxCopy1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh();
@@ -12973,6 +13190,11 @@ namespace Isotope_fitting
         #endregion
 
         #region sequence copy 2
+        private void highlight_ibt_ckBxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_PnlCopy2.Refresh();
+
+        }
         private void ax_chBxCopy2_CheckedChanged(object sender, EventArgs e)
         {
             if (ax_chBxCopy2.Checked)
@@ -13029,7 +13251,8 @@ namespace Isotope_fitting
 
         private void sequence_PnlCopy2_Paint(object sender, PaintEventArgs e)
         {
-            sequence_drawCopy2(e.Graphics);
+            if(!highlight_ibt_ckBxCopy2.Checked)sequence_drawCopy2(e.Graphics);
+            else draw_internalCopy2(e.Graphics, highlight_color);
         }
 
         private void sequence_drawCopy2(Graphics g)
@@ -13062,289 +13285,359 @@ namespace Isotope_fitting
             int grp_num = 25;
             Point pp = new Point(point_x, point_y);
             if (rdBtn50Copy2.Checked) grp_num = 50;
-            if (!string.IsNullOrEmpty(s_ext))
+            for (int idx = 0; idx < s.Length; idx++)
             {
-                for (int idx = 0; idx < s.Length; idx++)
+                g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
+                foreach (ion nn in IonDraw)
                 {
-                    g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
-                    foreach (ion nn in IonDraw)
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
-                        if ( !recognise_extension(nn.Extension, s_ext)) { continue; }                        
-                        Point temp_p = pp;
-                        if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
+                        if (los_chkBoxCopy2.Checked)
                         {
-                            if (los_chkBoxCopy2.Checked)
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Green, g);
-                                }
+                                draw_line(pp, true, 4, Color.LimeGreen, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(pp, true, 0, nn.Color, g);
+                                draw_line(pp, true, 0, Color.Green, g);
                             }
                         }
-                        else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy2.Checked)
+                            draw_line(pp, true, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.DodgerBlue, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Blue, g);
-                                }
+                                draw_line(pp, true, 4, Color.DodgerBlue, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(pp, true, 4, nn.Color, g);
+                                draw_line(pp, true, 0, Color.Blue, g);
                             }
                         }
-                        else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy2.Checked)
+                            draw_line(pp, true, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Firebrick, g);
-                                }
+                                draw_line(pp, true, 4, Color.Tomato, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(pp, true, 8, nn.Color, g);
+                                draw_line(pp, true, 0, Color.Firebrick, g);
                             }
                         }
-                        else if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy2.Checked)
+                            draw_line(pp, true, 8, nn.Color, g);
+                        }
+                    }
+                    else if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Green, g);
-                                }
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(temp_p, false, 0, nn.Color, g);
+                                draw_line(temp_p, false, 0, Color.Green, g);
                             }
                         }
-                        else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy2.Checked)
+                            draw_line(temp_p, false, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
 
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Blue, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Blue, g);
 
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(temp_p, false, 4, nn.Color, g);
                             }
                         }
-                        else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            draw_line(temp_p, false, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Firebrick, g);
-                                }
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else
                             {
-                                draw_line(temp_p, false, 8, nn.Color, g);
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
                             }
                         }
-                        else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
                         {
-                            if (!los_chkBoxCopy2.Checked)
+                            draw_line(temp_p, false, 8, nn.Color, g);
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    {
+                        if (!los_chkBoxCopy2.Checked)
+                        {
+                            if (intA_chBxCopy2.Checked && !nn.Ion_type.Contains("b"))
                             {
-                                if (intA_chBxCopy2.Checked && !nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
-                                else if (intB_chBxCopy2.Checked && nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                            else if (intB_chBxCopy2.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
                             }
                         }
                     }
-                    pp.X = pp.X + 20;
-                    if (pp.X + 20 >= sequence_PnlCopy2.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
                 }
-
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy2.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
-            else
+
+            return;
+        }
+        private void draw_internalCopy2(Graphics g, Color paint_color)
+        {
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            //g = pnl.CreateGraphics();
+            Pen p = new Pen(Color.Black);
+            int point_x, point_y;
+            point_y = 20;
+            point_x = 3;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            string s = Peptide;
+            string s_ext = "";//the desired extension
+
+            if (tab_mode && seq_extensionBoxCopy2.Enabled && seq_extensionBoxCopy2.SelectedIndex != -1)
             {
-                for (int idx = 0; idx < s.Length; idx++)
+                foreach (SequenceTab seq in sequenceList)
                 {
-                    g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
-                    foreach (ion nn in IonDraw)
+                    if (seq.Extension.Equals(seq_extensionBoxCopy2.SelectedItem))
                     {
-                        if (!string.IsNullOrEmpty(nn.Extension)) { continue; }
-                        Point temp_p = pp;
-                        if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                        if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
-                        {
-                            if (los_chkBoxCopy2.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Green, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(pp, true, 0, nn.Color, g);
-                            }
-                        }
-                        else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
-                        {
-                            if (los_chkBoxCopy2.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.DodgerBlue, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Blue, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(pp, true, 4, nn.Color, g);
-                            }
-                        }
-                        else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
-                        {
-                            if (los_chkBoxCopy2.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(pp, true, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(pp, true, 0, Color.Firebrick, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(pp, true, 8, nn.Color, g);
-                            }
-                        }
-                        else if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
-                        {
-                            if (los_chkBoxCopy2.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.LimeGreen, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Green, g);
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(temp_p, false, 0, nn.Color, g);
-                            }
-                        }
-                        else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
-                        {
-                            if (los_chkBoxCopy2.Checked)
-                            {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                        s = seq.Sequence; s_ext = seq.Extension; break;
+                    }
+                }
+            }
 
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Blue, g);
-
-                                }
-                            }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
-                            {
-                                draw_line(temp_p, false, 4, nn.Color, g);
-                            }
-                        }
-                        else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+            if (s.Length / 25 >= 9) { draw_sequence_panelCopy2.Height = 58 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panelCopy2.Height = 58 * s.Length / 25; }
+            else { draw_sequence_panelCopy2.Height = 400; }
+            int grp_num = 25;
+            Point pp = new Point(point_x, point_y);
+            if (rdBtn50Copy2.Checked) grp_num = 50;
+            //draw the rectangles
+            for (int idx = 0; idx < s.Length; idx++)
+            {
+                double intensity = 0.0;
+                foreach (ion nn in IonDraw)
+                {
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }                    
+                    if (nn.Ion_type.StartsWith("inter") && (nn.Index <= idx + 1 && nn.IndexTo >= idx + 1))
+                    {
+                        if (!los_chkBoxCopy2.Checked)
                         {
-                            if (los_chkBoxCopy1.Checked)
+                            if (intA_chBxCopy2.Checked && !nn.Ion_type.Contains("b"))
                             {
-                                if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
-                                {
-                                    draw_line(temp_p, false, 4, Color.Tomato, g);
-                                }
-                                else
-                                {
-                                    draw_line(temp_p, false, 0, Color.Firebrick, g);
-                                }
+                                intensity += nn.Max_intensity;
                             }
-                            else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                            else if (intB_chBxCopy2.Checked && nn.Ion_type.Contains("b"))
                             {
-                                draw_line(temp_p, false, 8, nn.Color, g);
-                            }
-                        }
-                        else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
-                        {
-                            if (!los_chkBoxCopy2.Checked)
-                            {
-                                if (intA_chBxCopy2.Checked && !nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
-                                else if (intB_chBxCopy2.Checked && nn.Ion_type.Contains("b"))
-                                {
-                                    draw_line(pp, false, 0, nn.Color, g, true);
-                                }
+                                intensity += nn.Max_intensity;
                             }
                         }
                     }
-                    pp.X = pp.X + 20;
-                    if (pp.X + 20 >= sequence_PnlCopy2.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
                 }
+                if (intensity > 0)
+                {
+                    if (intensity / 10 < 10) { draw_rectangle(pp, Color.FromArgb(30, paint_color), g); }
+                    else if (intensity / 100 < 10) { draw_rectangle(pp, Color.FromArgb(55, paint_color), g); }
+                    else if (intensity / 1000 < 10) { draw_rectangle(pp, Color.FromArgb(80, paint_color), g); }
+                    else if (intensity / 10000 < 10) { draw_rectangle(pp, Color.FromArgb(105, paint_color), g); }
+                    else if (intensity / 100000 < 10) { draw_rectangle(pp, Color.FromArgb(130, paint_color), g); }
+                    else if (intensity / 1000000 < 10) { draw_rectangle(pp, Color.FromArgb(155, paint_color), g); }
+                    else if (intensity / 10000000 < 10) { draw_rectangle(pp, Color.FromArgb(180, paint_color), g); }
+                    else if (intensity / 100000000 < 10) { draw_rectangle(pp, Color.FromArgb(205, paint_color), g); }
+                    else if (intensity / 1000000000 < 10) { draw_rectangle(pp, Color.FromArgb(230, paint_color), g); }
+                    else if (intensity / 10000000000 < 10) { draw_rectangle(pp, Color.FromArgb(255, paint_color), g); }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy2.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+            }
 
+            //draw as usual over the rectangles
+            pp = new Point(point_x, point_y);
+            for (int idx = 0; idx < s.Length; idx++)
+            {
+                g.DrawString(s[idx].ToString(), sequence_PnlCopy2.Font, sb, pp);
+                foreach (ion nn in IonDraw)
+                {
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    Point temp_p = pp;
+                    if (pp.X + 40 >= sequence_Pnl.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.LimeGreen, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Green, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.DodgerBlue, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Blue, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(pp, true, 4, Color.Tomato, g);
+                            }
+                            else
+                            {
+                                draw_line(pp, true, 0, Color.Firebrick, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(pp, true, 8, nn.Color, g);
+                        }
+                    }
+                    else if (ax_chBxCopy2.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Green, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 0, nn.Color, g);
+                        }
+                    }
+                    else if (by_chBxCopy2.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy2.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Blue, g);
+
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 4, nn.Color, g);
+                        }
+                    }
+                    else if (cz_chBxCopy2.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
+                    {
+                        if (los_chkBoxCopy1.Checked)
+                        {
+                            if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3"))
+                            {
+                                draw_line(temp_p, false, 4, Color.Tomato, g);
+                            }
+                            else
+                            {
+                                draw_line(temp_p, false, 0, Color.Firebrick, g);
+                            }
+                        }
+                        else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3"))
+                        {
+                            draw_line(temp_p, false, 8, nn.Color, g);
+                        }
+                    }
+                    else if (nn.Ion_type.StartsWith("inter") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    {
+                        if (!los_chkBoxCopy2.Checked)
+                        {
+                            if (intA_chBxCopy2.Checked && !nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                            else if (intB_chBxCopy2.Checked && nn.Ion_type.Contains("b"))
+                            {
+                                draw_line(pp, false, 0, nn.Color, g, true);
+                            }
+                        }
+                    }
+                }
+                pp.X = pp.X + 20;
+                if (pp.X + 20 >= sequence_PnlCopy2.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
             return;
@@ -13365,38 +13658,7 @@ namespace Isotope_fitting
             if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; intB_chBxCopy2.Enabled = false; intA_chBxCopy2.Enabled = false; }
             else { intB_chBxCopy2.Enabled = true; intA_chBxCopy2.Enabled = true; }
         }
-        private void heavy_chkBoxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (heavy_chkBoxCopy2.Checked)
-            {
-                light_chkBoxCopy2.Checked = false;
-                ax_chBxCopy2.Checked = false;
-                by_chBxCopy2.Checked = false;
-                cz_chBxCopy2.Checked = false;
-                los_chkBoxCopy2.Checked = false;
-                intA_chBxCopy2.Checked = false;
-                intB_chBxCopy2.Checked = false;
-
-            }
-            initialize_ions_todraw(); initialize_plot_tabs();
-            sequence_PnlCopy2.Refresh();
-        }
-
-        private void light_chkBoxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (light_chkBoxCopy2.Checked)
-            {
-                heavy_chkBoxCopy2.Checked = false;
-                ax_chBxCopy2.Checked = false;
-                by_chBxCopy2.Checked = false;
-                cz_chBxCopy2.Checked = false;
-                los_chkBoxCopy2.Checked = false;
-                intA_chBxCopy2.Checked = false;
-                intB_chBxCopy2.Checked = false;
-            }
-            initialize_ions_todraw(); initialize_plot_tabs();
-            sequence_PnlCopy2.Refresh();
-        }
+       
         #endregion
 
         private void add_sequencePanel1_Click(object sender, EventArgs e)
@@ -13878,7 +14140,7 @@ namespace Isotope_fitting
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                 {                    
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx, s_ext))
                     {
                         if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.SortIdx)
                         {
@@ -13897,7 +14159,7 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx, s_ext))
                     {
                         if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.SortIdx)
                         {
@@ -13916,7 +14178,7 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx, s_ext))
                     {
                         if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.SortIdx)
                         {
@@ -13935,7 +14197,7 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                 {                    
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx, s_ext))
                     {
                         if (merged_x.Count == 0 || (int)merged_x.Last()[0] != nn.SortIdx)
                         {
@@ -13954,7 +14216,7 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                 {                    
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx, s_ext))
                     {
                         if (merged_y.Count == 0 || (int)merged_y.Last()[0] != nn.SortIdx)
                         {
@@ -13973,7 +14235,7 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx, s_ext))
                     {
                         if (merged_z.Count == 0 || (int)merged_z.Last()[0] != nn.SortIdx)
                         {
@@ -14958,12 +15220,12 @@ namespace Isotope_fitting
 
             paint_annotations_in_graphs();
         }
-        private bool search_primary(string type, int idx)
+        private bool search_primary(string type, int idx,string s_ext)
         {            
             foreach (ion nn in IonDraw)
             {
-                if (heavy_chkBox.Checked && !nn.Name.Contains("_H")) { continue; }
-                else if (light_chkBox.Checked && !nn.Name.Contains("_L")) { continue; }
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.SortIdx > idx) break;
                 else if (nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;                
             }
@@ -16289,7 +16551,7 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx, s_ext))
                             {                                
                                 if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
                                 {
@@ -16305,7 +16567,7 @@ namespace Isotope_fitting
                         }                      
                         else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx, s_ext))
                             {                               
                                 if (merged_down.Count == 0 || (int)merged_down.Last()[0] != nn.SortIdx)
                                 {
@@ -16332,7 +16594,7 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx, s_ext))
                             {                              
 
                                 if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
@@ -16349,7 +16611,7 @@ namespace Isotope_fitting
                         }                        
                         else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx, s_ext))
                             {
                                 if (merged_down.Count == 0 || (int)merged_down.Last()[0] != nn.SortIdx)
                                 {
@@ -16376,7 +16638,7 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx, s_ext))
                             {                                
                                 if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
                                 {
@@ -16471,7 +16733,7 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx, s_ext))
                             {
                                 if (charge_merged_up.Count != 0 && charge_merged_up.Last().SortIdx == nn.SortIdx && charge_merged_up.Last().Charge == nn.Charge)
                                 {
@@ -16486,7 +16748,7 @@ namespace Isotope_fitting
                         }
                         else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx, s_ext))
                             {
                                 if (charge_merged_down.Count != 0 && charge_merged_down.Last().SortIdx == nn.SortIdx && charge_merged_down.Last().Charge == nn.Charge)
                                 {
@@ -16618,9 +16880,9 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx, s_ext))
                             {
-                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx))
+                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx, s_ext))
                                 {
                                     if(charge_merged_up.Count != 0 && charge_merged_up.Last().SortIdx == nn.SortIdx && charge_merged_up.Last().Charge == nn.Charge)
                                     {
@@ -16636,9 +16898,9 @@ namespace Isotope_fitting
                         }
                         else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx, s_ext))
                             {
-                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx))
+                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx, s_ext))
                                 {
                                     if (charge_merged_down.Count != 0 && charge_merged_down.Last().SortIdx == nn.SortIdx && charge_merged_down.Last().Charge == nn.Charge)
                                     {
@@ -16772,9 +17034,9 @@ namespace Isotope_fitting
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx, s_ext))
                             {
-                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx))
+                                if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx, s_ext))
                                 {
                                     if (charge_merged_up.Count != 0 && charge_merged_up.Last().SortIdx == nn.SortIdx && charge_merged_up.Last().Charge == nn.Charge)
                                     {
@@ -16790,7 +17052,7 @@ namespace Isotope_fitting
                         }
                         else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx, s_ext))
                             {
                                 if (charge_merged_down.Count != 0 && charge_merged_down.Last().SortIdx == nn.SortIdx && charge_merged_down.Last().Charge == nn.Charge)
                                 {
@@ -17895,6 +18157,8 @@ namespace Isotope_fitting
             ppm_plot.Model.IsLegendVisible = ppm_legend_Btn.Checked;
             ppm_plot.InvalidatePlot(true);
         }
+
+       
     }
 
 }
