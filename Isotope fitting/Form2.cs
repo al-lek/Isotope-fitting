@@ -161,6 +161,7 @@ namespace Isotope_fitting
         List<double[]> fitted_results = new List<double[]>();
         List<int[]> powerSet = new List<int[]>();
         List<int[]> powerSet_distroIdx = new List<int[]>();
+        List<int> last_ploted = new List<int>();
         List<double[]> summation = new List<double[]>();
         List<double[]> residual = new List<double[]>();
         public static List<int> custom_colors = new List<int>();
@@ -176,6 +177,7 @@ namespace Isotope_fitting
         
         Stopwatch sw1 = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
         ProgressBar tlPrgBr;
         Label prg_lbl;
         string precursor_carbons = "C0";
@@ -4989,47 +4991,73 @@ namespace Isotope_fitting
             // it is always called on every refresh of the plot 
             // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
             // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
-            // shallow copy to_plot and UI_intensities so as not to fuck up original Lists
 
+            //sw3.Reset();  sw2.Reset(); sw1.Reset(); 
             List<int> plot_idxs = new List<int>(to_plot);
+
+            // When ONE fragment is checked/unchecked do NOT recalculate ALL fragments. Just add/subtract the checked/uncheked
+            if (Math.Abs(last_ploted.Count - to_plot.Count) == 1)
+            {
+                //sw2.Start();
+                int operand = 1;
+                int diff = to_plot.Except(last_ploted).ToList().FirstOrDefault();
+
+                if (last_ploted.Count - to_plot.Count == 1)
+                {
+                    operand = -1;
+                    diff = last_ploted.Except(to_plot).ToList().FirstOrDefault();
+                }
+                
+                for (int i = 0; i < all_data_aligned.Count(); i++)
+                {
+                    if (all_data_aligned[i][diff] > 0)
+                    {
+                        double change = operand * all_data_aligned[i][diff] * Fragments2[diff - 1].Factor;
+                        summation[i][1] += change;
+                        residual[i][1] += change;
+                    }
+                }
+
+                last_ploted = new List<int>(to_plot);
+                //sw2.Stop(); Console.WriteLine("single frag change: " + sw2.ElapsedMilliseconds.ToString());
+                return;
+            }
+                        
+            //sw1.Start();
+            // 1. calculate addition of fragments and residual
+            // This is the case when MANY fragments are selected/unselected. 
+            // a. Major improvement from skiping calculations for zeros (reduce time by 60%). 
+            // b. multi-thread (reduce time by 60%)
             summation.Clear();
             residual.Clear();
-            // 1. calculate addition of fragments and residual
-            for (int i = 0; i < all_data_aligned.Count; i++)//(M)gia osa einai ta peiramatika dedomena
+
+            double[][] summation_temp = new double[all_data_aligned.Count][];
+            double[][] residual_temp = new double[all_data_aligned.Count][];
+
+            Parallel.For(0, all_data_aligned.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
             {
                 double intensity = 0.0;
-
                 for (int j = 0; j < plot_idxs.Count; j++)
-                {
-                    int k = plot_idxs[j];
-                    intensity += all_data_aligned[i][k] * Fragments2[k - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
-                }
+                    if (all_data_aligned[i][plot_idxs[j]] > 0)
+                        intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
+
                 if (Form9.now)
                 {
-                    int count=all_data_aligned[i].Count();
-                    for (int extras=0; extras< Form9.last_plotted.Count() ; extras++)
-                    {
-                        intensity += all_data_aligned[i][count-extras-1] * Form9.Fragments3[Form9.last_plotted[extras]].Factor;
-                    }                   
+                    int count = all_data_aligned[i].Count();
+                    for (int extras = 0; extras < Form9.last_plotted.Count(); extras++)
+                        if (all_data_aligned[i][count - extras - 1] > 0)
+                            intensity += all_data_aligned[i][count - extras - 1] * Form9.Fragments3[Form9.last_plotted[extras]].Factor;
                 }
-                summation.Add(new double[] { all_data[0][i][0], intensity });
 
-                //if (rel_res_chkBx.Checked)
-                //{
-                //    if (all_data[0][i][1]==0 || intensity==0)
-                //    {
-                //        residual.Add(new double[] { all_data[0][i][0], 1 });
-                //    }
-                //    else
-                //    {
-                //        residual.Add(new double[] { all_data[0][i][0], (all_data[0][i][1] - intensity) / all_data[0][i][1] });
-                //    }                    
-                //}
-                //else
-                //{
-                    residual.Add(new double[] { all_data[0][i][0], all_data[0][i][1] - intensity });
-                //}
-            }
+                summation_temp[i] = new double[] { all_data[0][i][0], intensity };
+                residual_temp[i] = new double[] { all_data[0][i][0], all_data[0][i][1] - intensity };
+            });
+
+            summation = summation_temp.ToList();
+            residual = residual_temp.ToList();
+
+            last_ploted = new List<int>(to_plot);
+            //sw1.Stop(); Console.WriteLine("Total compute Parallel: " + sw1.ElapsedMilliseconds.ToString()); sw1.Reset();
         }
         private void invalidate_all()
         {
