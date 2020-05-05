@@ -218,7 +218,7 @@ namespace Isotope_fitting
             foreach (FragForm fra in Fragments3)
             {
                 var listviewitem = new ListViewItem(fra.Name);
-                if (fra.Ion_type.StartsWith("inter")) { listviewitem.SubItems.Add(fra.Index + "-" + fra.IndexTo); }
+                if (fra.Ion_type.StartsWith("int")) { listviewitem.SubItems.Add(fra.Index + "-" + fra.IndexTo); }
                 else { listviewitem.SubItems.Add(fra.Index); }
                 listviewitem.SubItems.Add(fra.Mz);
                 listviewitem.SubItems.Add(fra.Charge.ToString());

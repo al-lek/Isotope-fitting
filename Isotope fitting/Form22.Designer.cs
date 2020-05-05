@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.axisX_Charge_grpBx = new System.Windows.Forms.GroupBox();
+            this.end_valUD = new System.Windows.Forms.NumericUpDown();
+            this.start_valUD = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.number_rdBtn = new System.Windows.Forms.RadioButton();
             this.mz_rdBtn = new System.Windows.Forms.RadioButton();
@@ -55,11 +59,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bullet_size_numUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.start_valUD = new System.Windows.Forms.NumericUpDown();
-            this.end_valUD = new System.Windows.Forms.NumericUpDown();
             this.axisX_Charge_grpBx.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepmajor_UD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepminor_UD)).BeginInit();
             this.axisY_Charge_grpBx.SuspendLayout();
@@ -67,8 +69,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepminor_UD)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).BeginInit();
             this.SuspendLayout();
             // 
             // axisX_Charge_grpBx
@@ -98,6 +98,68 @@
             this.axisX_Charge_grpBx.TabIndex = 3;
             this.axisX_Charge_grpBx.TabStop = false;
             this.axisX_Charge_grpBx.Text = "Axis X";
+            // 
+            // end_valUD
+            // 
+            this.end_valUD.DecimalPlaces = 4;
+            this.end_valUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.end_valUD.Location = new System.Drawing.Point(137, 233);
+            this.end_valUD.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.end_valUD.Name = "end_valUD";
+            this.end_valUD.Size = new System.Drawing.Size(120, 20);
+            this.end_valUD.TabIndex = 21;
+            this.end_valUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.end_valUD.ValueChanged += new System.EventHandler(this.end_valUD_ValueChanged);
+            // 
+            // start_valUD
+            // 
+            this.start_valUD.DecimalPlaces = 4;
+            this.start_valUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.start_valUD.Location = new System.Drawing.Point(137, 199);
+            this.start_valUD.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.start_valUD.Name = "start_valUD";
+            this.start_valUD.Size = new System.Drawing.Size(120, 20);
+            this.start_valUD.TabIndex = 20;
+            this.start_valUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.start_valUD.ValueChanged += new System.EventHandler(this.start_valUD_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label4.Location = new System.Drawing.Point(40, 202);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(81, 15);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Starting value";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label3.Location = new System.Drawing.Point(43, 236);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(78, 15);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Ending value";
             // 
             // label1
             // 
@@ -479,68 +541,6 @@
             this.label2.TabIndex = 26;
             this.label2.Text = "Point size factor";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label3.Location = new System.Drawing.Point(43, 236);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(78, 15);
-            this.label3.TabIndex = 18;
-            this.label3.Text = "Ending value";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label4.Location = new System.Drawing.Point(40, 202);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 15);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "Starting value";
-            // 
-            // start_valUD
-            // 
-            this.start_valUD.DecimalPlaces = 4;
-            this.start_valUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.start_valUD.Location = new System.Drawing.Point(137, 199);
-            this.start_valUD.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.start_valUD.Name = "start_valUD";
-            this.start_valUD.Size = new System.Drawing.Size(120, 20);
-            this.start_valUD.TabIndex = 20;
-            this.start_valUD.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.start_valUD.ValueChanged += new System.EventHandler(this.start_valUD_ValueChanged);
-            // 
-            // end_valUD
-            // 
-            this.end_valUD.DecimalPlaces = 4;
-            this.end_valUD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.end_valUD.Location = new System.Drawing.Point(137, 233);
-            this.end_valUD.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.end_valUD.Name = "end_valUD";
-            this.end_valUD.Size = new System.Drawing.Size(120, 20);
-            this.end_valUD.TabIndex = 21;
-            this.end_valUD.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.end_valUD.ValueChanged += new System.EventHandler(this.end_valUD_ValueChanged);
-            // 
             // Form22
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -558,6 +558,8 @@
             this.Text = "Properties";
             this.axisX_Charge_grpBx.ResumeLayout(false);
             this.axisX_Charge_grpBx.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepmajor_UD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepminor_UD)).EndInit();
             this.axisY_Charge_grpBx.ResumeLayout(false);
@@ -567,8 +569,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).EndInit();
             this.ResumeLayout(false);
 
         }
