@@ -116,7 +116,10 @@ namespace Isotope_fitting
         //List<string> selectedMz = new List<string>();
         //List<int> stepIndeces =new List<int>();            
         public static List<FragForm> Fragments2 = new List<FragForm>();
+        bool frag_types_save = false;
         public List<int> selectedFragments = new List<int>();
+        public List<int> selectedFragments_fragTypes = new List<int>();
+
         int start_idx = 0;
         int end_idx = 0;
         public static double max_exp = 0.0;
@@ -2584,7 +2587,100 @@ namespace Isotope_fitting
             //    }
             //}                  
         }
+        private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
+        {
+            // all the decisions if a fragment is canidate for fitting
+            bool fragment_is_canditate = true;
+            // decide how many peaks will be involved in the selection process
+            // results = {[resol1, ppm1], [resol2, ppm2], ....}
+            List<double[]> results = new List<double[]>();
+            double temp_pp = ppmError;
+            int total_peaks = cen.Count;
+            int contrib_peaks = 0;
+            int rule_idx = Array.IndexOf(selection_rule, true);
+            if (!entire_spectrum)
+            {
+                double mz = dParser(chem.Mz);
+                foreach (ppm_area area in ppm_regions)
+                {
+                    if (area.Chk)
+                    {
+                        if (mz > area.Min && mz < area.Max)
+                        {
+                            temp_pp = area.Max_ppm;
+                            rule_idx = area.Rule;
+                        }
+                    }
+                }
+            }
+            if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
+            else
+            {
+                if (rule_idx == 3) contrib_peaks = total_peaks / 2;                 // Total 8, use 4. Total 7, use 3
+                else if (rule_idx == 4) contrib_peaks = total_peaks / 2 - 1;        // Total 8, use 3. Total 7, use 2
+                else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
+            }
 
+            // sanity check. No matter what, check at least most intense peak!
+            if (contrib_peaks == 0) contrib_peaks = 1;
+            if (contrib_peaks > cen.Count) { contrib_peaks = cen.Count; }
+            //round 1 , to find the correct resolution 
+            //for the deconvoluted spectra the resolution is not derived from the experimental therefore there is only round 1
+            for (int i = 0; i < contrib_peaks; i++)
+            {
+                double[] tmp = ppm_calculator(cen[i].X);
+                results.Add(tmp);
+                if (Math.Abs(tmp[0]) > temp_pp && is_exp_deconvoluted) { fragment_is_canditate = false; break; }
+            }
+            //round 2, with the correct resolution
+            if (fragment_is_canditate && !is_exp_deconvoluted)
+            {
+                chem.Resolution = (double)results.Average(p => p[1]);
+                results = new List<double[]>();
+                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
+                // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
+                ChemiForm.Envelope(chem);
+                ChemiForm.Vdetect(chem);
+                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                for (int i = 0; i < contrib_peaks; i++)
+                {
+                    double[] tmp = ppm_calculator(cen[i].X);
+                    if (Math.Abs(tmp[0]) < temp_pp) { results.Add(tmp); }
+                    else { fragment_is_canditate = false; break; }
+                }
+            }
+            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
+            //set PPM error
+            chem.PPM_Error = results.Average(p => p[0]);
+            if (results.Count > 1) { chem.maxPPM_Error = results.Max(p => p[0]); chem.minPPM_Error = results.Min(p => p[0]); }
+            else { chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0; }
+            add_fragment_to_Fragments2(chem, cen);
+            return fragment_is_canditate;
+        }
+        public static double[] ppm_calculator(double centroid)
+        {
+            // find the closest experimental peak, and return calculated ppm and resolution
+            double exp_cen, curr_diff, ppm;
+
+            int closest_idx = 0;
+            double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
+
+            for (int i = 1; i < peak_points.Count; i++)
+            {
+                exp_cen = peak_points[i][1] + peak_points[i][4];
+                curr_diff = Math.Abs(exp_cen - centroid);
+
+                if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+                else
+                    break;
+            }
+
+            exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
+            //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
+            ppm = (exp_cen - centroid) * 1e6 / (centroid);
+
+            return new double[] { ppm, peak_points[closest_idx][3] };
+        }
         private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen,bool project=false)
         {
             // adds safely a matched fragment to Fragments2, and releases memory
@@ -3013,92 +3109,7 @@ namespace Isotope_fitting
 
             factor_panel.Controls.AddRange(new Control[] { factor_lbl, btn_solo, numUD });            
         }      
-        private void populate_fragtypes_treeView()
-        {
-            // create a new tree
-            //fragTypes_tree = null;
-            //if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Dispose(); }        // for GC?
-
-            //fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(555, 560), Name = "fragType_tree", Size = new Size(338, 420), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
-            //user_grpBox.Controls.Add(fragTypes_tree);
-            //fragTypes_tree.BringToFront();
-            if (fragTypes_tree.Nodes.Count>0) { fragTypes_tree.Nodes.Clear(); }
-            if (fragTypes_tree.ContextMenu==null)
-            {
-                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
-                                                                           new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); }),
-                                                                           new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) });
-
-            }
-            fragTypes_tree.BeginUpdate();
-            for (int i = 0; i < Fragments2.Count; i++)
-            {
-                string ion_type = Fragments2[i].Ion_type;
-                bool added = false;
-                if (Fragments2[i].Fixed)
-                {
-                    // check if base node corresponding to type already exists and add fragment. Else make a new base node 
-                    foreach (TreeNode baseNode in fragTypes_tree.Nodes)
-                    {
-                        if (baseNode.Text == ion_type)
-                        {
-                            // insert at sorted position. Get index of already added fragment
-                            for (int j = 0; j < baseNode.Nodes.Count; j++)
-                            {
-                                int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Name);
-                                int inTree_num = Convert.ToInt32(Fragments2[inTree_frag_idx].Index);
-                                int inTree_charge = Fragments2[inTree_frag_idx].Charge;
-                                int curr_num = Convert.ToInt32(Fragments2[i].Index);
-                                int curr_charge = Fragments2[i].Charge;
-
-                                // case where curr_frag 
-                                if (curr_num < inTree_num)
-                                {
-                                    baseNode.Nodes.Insert(j, new_fragTreeNode(i));
-                                    added = true; break;
-                                }
-
-                                else if (curr_num == inTree_num)
-                                {
-                                    for (int k = j; k < baseNode.Nodes.Count; k++)
-                                    {
-                                        if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
-                                            curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
-                                        {
-                                            baseNode.Nodes.Insert(k, new_fragTreeNode(i));
-                                            added = true; break;
-                                        }
-                                        else if (k == baseNode.Nodes.Count - 1)
-                                        {
-                                            baseNode.Nodes.Add(new_fragTreeNode(i));
-                                            added = true; break;
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-
-                            if (!added)
-                            {
-                                baseNode.Nodes.Add(new_fragTreeNode(i));
-                                added = true;
-                            }
-                        }
-                    }
-
-                    if (!added)
-                    {
-                        TreeNode tr_inner = new_fragTreeNode(i);
-                        TreeNode tr_base = new TreeNode { Text = ion_type };
-                        tr_base.Nodes.Add(tr_inner);
-                        fragTypes_tree.Nodes.Add(tr_base);
-                    }
-                }   
-            }
-            fragTypes_tree.EndUpdate();
-            fragTypes_tree.Visible = true; fragStorage_Lbl.Visible = true;
-
-        }
+       
         private TreeNode new_fragTreeNode(int idx)
         {
             TreeNode tr = new TreeNode
@@ -3248,101 +3259,139 @@ namespace Isotope_fitting
             }
             return count;
         }
-        private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
+        
+        //fragTypes
+        private void populate_fragtypes_treeView()
         {
-            // all the decisions if a fragment is canidate for fitting
-            bool fragment_is_canditate = true;
-            // decide how many peaks will be involved in the selection process
-            // results = {[resol1, ppm1], [resol2, ppm2], ....}
-            List<double[]> results = new List<double[]>();
-            double temp_pp = ppmError;
-            int total_peaks = cen.Count;
-            int contrib_peaks = 0;
-            int rule_idx = Array.IndexOf(selection_rule, true);
-            if (!entire_spectrum)
+            // create a new tree
+            //fragTypes_tree = null;
+            //if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Dispose(); }        // for GC?
+
+            //fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(555, 560), Name = "fragType_tree", Size = new Size(338, 420), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
+            //user_grpBox.Controls.Add(fragTypes_tree);
+            //fragTypes_tree.BringToFront();
+            if (fragTypes_tree.Nodes.Count > 0) { fragTypes_tree.Nodes.Clear(); }
+            if (fragTypes_tree.ContextMenu == null)
             {
-                double mz = dParser(chem.Mz);
-                foreach (ppm_area area in ppm_regions)
+                fragTypes_tree.AfterCheck += (s, e) =>
                 {
-                    if (area.Chk)
-                    {                        
-                        if (mz> area.Min && mz<area.Max)
+                    if (string.IsNullOrEmpty(e.Node.Name) && e.Node.Nodes != null && e.Node.Nodes.Count > 0)
+                    {
+                        foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked) { innerNode.Checked = e.Node.Checked; } }
+                    }
+                };
+                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[3] { new MenuItem("Copy", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
+                                                                           new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); }),
+                                                                           new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) });
+
+            }
+            fragTypes_tree.BeginUpdate();
+            for (int i = 0; i < Fragments2.Count; i++)
+            {
+                string ion_type = Fragments2[i].Ion_type;
+                bool added = false;
+                if (Fragments2[i].Fixed)
+                {
+                    // check if base node corresponding to type already exists and add fragment. Else make a new base node 
+                    foreach (TreeNode baseNode in fragTypes_tree.Nodes)
+                    {
+                        if (baseNode.Text == ion_type)
                         {
-                            temp_pp = area.Max_ppm;
-                            rule_idx = area.Rule;
+                            // insert at sorted position. Get index of already added fragment
+                            for (int j = 0; j < baseNode.Nodes.Count; j++)
+                            {
+                                int inTree_frag_idx = Convert.ToInt32(baseNode.Nodes[j].Name);
+                                int inTree_num = Convert.ToInt32(Fragments2[inTree_frag_idx].Index);
+                                int inTree_charge = Fragments2[inTree_frag_idx].Charge;
+                                int curr_num = Convert.ToInt32(Fragments2[i].Index);
+                                int curr_charge = Fragments2[i].Charge;
+
+                                // case where curr_frag 
+                                if (curr_num < inTree_num)
+                                {
+                                    baseNode.Nodes.Insert(j, new_fragTreeNode(i));
+                                    added = true; break;
+                                }
+
+                                else if (curr_num == inTree_num)
+                                {
+                                    for (int k = j; k < baseNode.Nodes.Count; k++)
+                                    {
+                                        if (curr_charge < Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Charge ||
+                                            curr_num < Convert.ToInt32(Fragments2[Convert.ToInt32(baseNode.Nodes[k].Name)].Index))
+                                        {
+                                            baseNode.Nodes.Insert(k, new_fragTreeNode(i));
+                                            added = true; break;
+                                        }
+                                        else if (k == baseNode.Nodes.Count - 1)
+                                        {
+                                            baseNode.Nodes.Add(new_fragTreeNode(i));
+                                            added = true; break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!added)
+                            {
+                                baseNode.Nodes.Add(new_fragTreeNode(i));
+                                added = true;
+                            }
                         }
+                    }
+
+                    if (!added)
+                    {
+                        TreeNode tr_inner = new_fragTreeNode(i);
+                        TreeNode tr_base = new TreeNode { Text = ion_type };
+                        tr_base.Nodes.Add(tr_inner);
+                        fragTypes_tree.Nodes.Add(tr_base);
                     }
                 }
             }
-            if (rule_idx < 3) contrib_peaks = rule_idx + 1;   // hard limit, one two or three peaks
-            else
-            {
-                if (rule_idx == 3) contrib_peaks = total_peaks / 2;                 // Total 8, use 4. Total 7, use 3
-                else if (rule_idx == 4) contrib_peaks = total_peaks / 2 - 1;        // Total 8, use 3. Total 7, use 2
-                else if (rule_idx == 5) contrib_peaks = total_peaks / 2 + 1;        // Total 8, use 5. Total 7, use 4
-            }            
+            fragTypes_tree.EndUpdate();
+            fragTypes_tree.Visible = true; fragStorage_Lbl.Visible = true; fragTypes_toolStrip.Visible = true;
 
-            // sanity check. No matter what, check at least most intense peak!
-            if (contrib_peaks == 0) contrib_peaks = 1;
-            if (contrib_peaks>cen.Count) { contrib_peaks = cen.Count; }
-            //round 1 , to find the correct resolution 
-            //for the deconvoluted spectra the resolution is not derived from the experimental therefore there is only round 1
-            for (int i = 0; i < contrib_peaks; i ++)
+        }
+        private void save_FragTypes_Btn_Click(object sender, EventArgs e)
+        {
+            selectedFragments_fragTypes.Clear();
+            foreach (TreeNode baseNode in fragTypes_tree.Nodes)
             {
-                double[] tmp = ppm_calculator(cen[i].X);
-                results.Add(tmp);
-                if (Math.Abs(tmp[0]) > temp_pp && is_exp_deconvoluted) { fragment_is_canditate = false; break; }                 
-            }
-            //round 2, with the correct resolution
-            if (fragment_is_canditate && !is_exp_deconvoluted)
-            {                
-                chem.Resolution = (double)results.Average(p => p[1]);
-                results = new List<double[]>();
-                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                ChemiForm.Envelope(chem);
-                ChemiForm.Vdetect(chem);
-                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                for (int i = 0; i < contrib_peaks; i++)
+                if (baseNode.Nodes != null && baseNode.Nodes.Count > 0)
                 {
-                    double[] tmp = ppm_calculator(cen[i].X);
-                    if (Math.Abs(tmp[0]) < temp_pp) { results.Add(tmp); }
-                    else{fragment_is_canditate = false; break;}
+                    foreach (TreeNode innerNode in baseNode.Nodes)
+                    {
+                        if (!string.IsNullOrEmpty(innerNode.Name) && innerNode.Checked)
+                        {
+                            int idx = Convert.ToInt32(innerNode.Name);
+                            selectedFragments_fragTypes.Add(idx + 1);
+                        }
+                    }
+                }
+
+            }
+            if (selectedFragments_fragTypes.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. "); return; }
+            frag_types_save = true;
+            saveList();
+        }
+
+        private void toggle_FragTypes_Btn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (fragTypes_tree != null)
+            {
+                if (toggle_FragTypes_Btn.Checked)
+                {
+                    fragTypes_tree.ExpandAll();
+                }
+                else
+                {
+                    fragTypes_tree.CollapseAll();
                 }
             }
-            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
-            //set PPM error
-            chem.PPM_Error = results.Average(p => p[0]);
-            if (results.Count > 1){chem.maxPPM_Error = results.Max(p => p[0]);chem.minPPM_Error = results.Min(p => p[0]);}
-            else{chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0;}
-            add_fragment_to_Fragments2(chem, cen);
-            return fragment_is_canditate;
         }
-        public static double[] ppm_calculator(double centroid)
-        {
-            // find the closest experimental peak, and return calculated ppm and resolution
-            double exp_cen, curr_diff, ppm;
 
-            int closest_idx = 0;
-            double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-
-            for (int i = 1; i < peak_points.Count; i++)
-            {
-                exp_cen = peak_points[i][1] + peak_points[i][4];
-                curr_diff = Math.Abs(exp_cen - centroid);
-
-                if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                else
-                    break;
-            }
-
-            exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
-            //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
-            ppm = (exp_cen - centroid) * 1e6 / (centroid);
-            
-            return new double[] { ppm, peak_points[closest_idx][3] };
-        }
-      
         #endregion
 
         #region 3.a Recalculate data aligned
@@ -6333,7 +6382,9 @@ namespace Isotope_fitting
         //save
         private void saveList()
         {
-            List<int> fragToSave = selectedFragments.ToList();
+            List<int> fragToSave = new List<int>();             
+            if (frag_types_save) { fragToSave = selectedFragments_fragTypes.ToList(); }
+            else { fragToSave = selectedFragments.ToList(); }            
             int fragments_count = fragToSave.Count();
             bool mult_extension = true;
             string name_extension = "";
@@ -6434,7 +6485,9 @@ namespace Isotope_fitting
         }
         void Save_frag_envipat(object sender, DoWorkEventArgs e)
         {
-            List<int> fragToSave = selectedFragments.ToList();
+            List<int> fragToSave = new List<int>();
+            if (frag_types_save) { fragToSave = selectedFragments_fragTypes.ToList(); }
+            else { fragToSave = selectedFragments.ToList(); }
             StreamWriter file =(StreamWriter) e.Argument;
             int progress = 0;
             progress_display_start(fragToSave.Count, "Saving fragments...");
@@ -7414,7 +7467,7 @@ namespace Isotope_fitting
         {
             /*plotExp_chkBox.Checked = false;*/ plotCentr_chkBox.Checked = false; plotFragProf_chkBox.Checked = false; plotFragCent_chkBox.Checked = false;
              loaded_lists = ""; show_files_Btn.ToolTipText = "";
-
+            factor_panel.Controls.Clear();
             if (Fragments2.Count == 0 || all_data.Count<2) return;
             if (IonDraw.Count > 0) IonDraw.Clear();
             selectedFragments.Clear();
@@ -7433,13 +7486,12 @@ namespace Isotope_fitting
             {
                 frag_tree.Nodes.Clear(); frag_tree.Visible = false;               
             }
-            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
+            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragTypes_toolStrip.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             fit_sel_Btn.Enabled = false; fit_Btn.Enabled =  false; fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             //init_chart();
             //initialize_tabs();
             recalculate_all_data_aligned();
-            factor_panel.Controls.Clear();
         }       
         #endregion
 
@@ -8244,6 +8296,7 @@ namespace Isotope_fitting
         private void saveListBtn11_Click(object sender, EventArgs e)
         {
             if (selectedFragments.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. ");return; }
+            frag_types_save = false;
             saveList();            
         }
 
@@ -12724,6 +12777,42 @@ namespace Isotope_fitting
                 g.FillRectangle(Brush, rect);
             }
         }
+        private void label_color_panel(Graphics g, Panel temp)
+        {
+            int padding = temp.Padding.Top;
+            int extra_padding = color_range_panel.Padding.Top;
+            int width = temp.Size.Width;
+            int height = temp.Size.Height - (2 * extra_padding);
+            int fractions = seq_reg;
+            int step = (int)Math.Ceiling((decimal)height / fractions);
+            Int64 value_step = (seq_max_val - seq_min_val) / fractions;
+            Int64 value = seq_max_val;
+            int x1 = 0, x2 = 3, y1 = extra_padding;
+            Pen mypen = new Pen(Color.Black, 2F);
+            SolidBrush sb = new SolidBrush(Color.Black);
+            Point[] points = new Point[2];
+            while (y1 < height + extra_padding)
+            {
+                points = new Point[2] { new Point(x1, y1), new Point(x2, y1) };
+                g.DrawLines(mypen, points);
+                g.DrawString(value.ToString("0.0E+0"), temp.Font, sb, new Point(x2 + 1, y1 - 8));
+                y1 += step;
+                value -= value_step;
+            }
+            y1 = height + extra_padding;
+            value = seq_min_val;
+            points = new Point[2] { new Point(x1, y1), new Point(x2, y1) };
+            g.DrawString(value.ToString("0.0E+0"), temp.Font, sb, new Point(x2 + 1, y1 - 8));
+            g.DrawLines(mypen, points);
+        }
+        private void color_range_panel_Paint(object sender, PaintEventArgs e)
+        {
+            color_panel(e.Graphics, color_range_panel);
+        }
+        private void seq_lbl_panel_Paint(object sender, PaintEventArgs e)
+        {
+            label_color_panel(e.Graphics, seq_lbl_panel);
+        }
         //refresh, checks etc
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
@@ -13236,6 +13325,14 @@ namespace Isotope_fitting
             return;
         }
 
+        private void color_range_panelCopy1_Paint(object sender, PaintEventArgs e)
+        {
+            color_panel(e.Graphics, color_range_panelCopy1);
+        }
+        private void seq_lbl_panelCopy1_Paint(object sender, PaintEventArgs e)
+        {
+            label_color_panel(e.Graphics, seq_lbl_panelCopy1);
+        }
         private void sequence_PnlCopy1_Resize(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh(); seq_lbl_panelCopy1.Refresh();
@@ -13703,12 +13800,20 @@ namespace Isotope_fitting
 
             return;
         }
+        private void color_range_panelCopy2_Paint(object sender, PaintEventArgs e)
+        {
+            color_panel(e.Graphics, color_range_panelCopy2);
+        }
+
+        private void seq_lbl_panelCopy2_Paint(object sender, PaintEventArgs e)
+        {
+            label_color_panel(e.Graphics, seq_lbl_panelCopy2);
+        }
         private void sequence_PnlCopy2_Resize(object sender, EventArgs e)
         {
             sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
         }
-
-
+        
         private void delele_sequencePnl2_Click(object sender, EventArgs e)
         {
             draw_sequence_panelCopy2.Visible = false;
@@ -17305,7 +17410,7 @@ namespace Isotope_fitting
             neues = 0;
             Form4.active = false;
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
-            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragStorage_Lbl.Visible = false; }
+            if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragTypes_toolStrip.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             factor_panel.Controls.Clear();
             //other tabs
@@ -18250,65 +18355,7 @@ namespace Isotope_fitting
             ppm_plot.InvalidatePlot(true);
         }
 
-
-
-        private void color_range_panel_Paint(object sender, PaintEventArgs e)
-        {
-            color_panel(e.Graphics, color_range_panel);
-        }
-
-        private void color_range_panelCopy1_Paint(object sender, PaintEventArgs e)
-        {
-            color_panel(e.Graphics, color_range_panelCopy1);
-        }
-
-        private void color_range_panelCopy2_Paint(object sender, PaintEventArgs e)
-        {
-            color_panel(e.Graphics, color_range_panelCopy2);
-        }
-
-        private void seq_lbl_panel_Paint(object sender, PaintEventArgs e)
-        {
-            label_color_panel(e.Graphics, seq_lbl_panel);
-        }
-
-        private void seq_lbl_panelCopy1_Paint(object sender, PaintEventArgs e)
-        {
-            label_color_panel(e.Graphics, seq_lbl_panelCopy1);
-        }
-
-        private void seq_lbl_panelCopy2_Paint(object sender, PaintEventArgs e)
-        {
-            label_color_panel(e.Graphics, seq_lbl_panelCopy2);
-        }
-        private void label_color_panel(Graphics g, Panel temp)
-        {
-            int padding = temp.Padding.Top;
-            int extra_padding= color_range_panel.Padding.Top;
-            int width = temp.Size.Width;
-            int height = temp.Size.Height-(2* extra_padding);
-            int fractions = seq_reg;
-            int step = (int)Math.Ceiling((decimal)height / fractions);
-            Int64 value_step = (seq_max_val - seq_min_val) / fractions;
-            Int64 value=seq_max_val;
-            int x1 =0, x2=3, y1= extra_padding;
-            Pen mypen = new Pen(Color.Black, 2F);
-            SolidBrush sb = new SolidBrush(Color.Black);
-            Point[] points = new Point[2];
-            while (y1< height+ extra_padding)
-            {               
-               points = new Point[2] { new Point(x1, y1), new Point(x2, y1) };
-               g.DrawLines(mypen, points);
-               g.DrawString(value.ToString("0.0E+0"), temp.Font, sb, new Point(x2+1, y1-8));
-               y1 += step;
-               value -= value_step;
-            }
-            y1 = height+ extra_padding;
-            value = seq_min_val;
-            points = new Point[2] { new Point(x1, y1), new Point(x2, y1) };
-            g.DrawString(value.ToString("0.0E+0"), temp.Font, sb, new Point(x2 + 1, y1-8));
-            g.DrawLines(mypen, points);
-        }
+       
     }
 
 
