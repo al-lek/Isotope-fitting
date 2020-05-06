@@ -24,6 +24,7 @@ namespace Isotope_fitting
             hightColor_rdBtn.Checked = !frm2.is_rgb_color_range;
             max_numUD.Value = (decimal)frm2.seq_max_val;
             min_numUD.Value = (decimal)frm2.seq_min_val;
+            seq_reg_numUD.Value= (decimal)frm2.seq_reg;
         }
 
 
@@ -43,6 +44,8 @@ namespace Isotope_fitting
             frm2.seq_max_val = (Int64)max_numUD.Value; 
             frm2.seq_min_val = (Int64)min_numUD.Value;
             frm2.is_rgb_color_range = rgb_rdBtn.Checked;
+            frm2.seq_reg = (int)seq_reg_numUD.Value;
+
         }
     }
 }

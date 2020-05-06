@@ -350,6 +350,8 @@ namespace Isotope_fitting
         public bool is_rgb_color_range = true;
         public Int64 seq_min_val=10;
         public Int64 seq_max_val = 10000000000;
+        public int seq_reg = 6;
+
 
         PlotView ax_plot;
         PlotView by_plot;
@@ -4104,7 +4106,7 @@ namespace Isotope_fitting
                 //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
         }
-        //**
+        //***************************************************
         private void generate_fit_results(bool project=false)
         {
             if (all_fitted_results.Count == 0) return;
@@ -11865,6 +11867,7 @@ namespace Isotope_fitting
         #endregion
 
         #region TAB DIAGRAMS
+
         #region class init
         public class CustomDataPoint : IScatterPointProvider
         {
@@ -11957,6 +11960,7 @@ namespace Isotope_fitting
             }
         }
         #endregion
+
         private void tabFit_Leave(object sender, EventArgs e)
         {           
             if ( sequenceList!=null && sequenceList.Count>1)
@@ -12058,6 +12062,7 @@ namespace Isotope_fitting
             {
                 sequence_Pnl.Refresh();sequence_PnlCopy1.Refresh(); sequence_PnlCopy2.Refresh();
                 color_range_panel.Refresh(); color_range_panelCopy1.Refresh(); color_range_panelCopy2.Refresh();
+                seq_lbl_panel.Refresh(); seq_lbl_panelCopy1.Refresh(); seq_lbl_panelCopy2.Refresh();
             };
             frm23.ShowDialog();
         }
@@ -12154,84 +12159,8 @@ namespace Isotope_fitting
             Form17 frm17 = new Form17(message_string);
             frm17.Text = "Sequence coverage";
             frm17.ShowDialog();
-        }
-        //draw color range panels
-        private void color_panel(Graphics g ,Panel temp)
-        {
-            int width = temp.Size.Width;
-            int height= temp.Size.Height;
-            int max_alpha = 200;
-            int min_alpha = 50;
-            int temp_alpha = max_alpha;
-            int step =(int)height / (max_alpha- min_alpha);
-            Color cc = Color.FromArgb(temp_alpha, highlight_color);
-            // Create solid brush.
-            SolidBrush Brush = new SolidBrush(cc);
-            // Create rectangle.
-            Rectangle rect = new Rectangle(0, 0, width, step);
-            int temp_counter = 0;
-            while (temp_counter< height)
-            {
-                cc = Color.FromArgb(temp_alpha, highlight_color);
-                Brush.Color=cc;
-                rect = new Rectangle(0, temp_counter, width, step);
-                // Fill rectangle to screen.
-                g.FillRectangle(Brush, rect);
-                temp_counter += step;
-                temp_alpha--;
-            }           
-        }
-        private void ax_chBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ax_chBx.Checked)
-            {
-                ax_chBx.ForeColor = Color.ForestGreen;
-                if (los_chkBox.Checked) { by_chBx.Checked = false;cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
-            }
-            else
-            {
-                ax_chBx.ForeColor = Control.DefaultForeColor;
-            }
-        }
-        private void by_chBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (by_chBx.Checked)
-            {
-                by_chBx.ForeColor = Color.Blue;
-                if (los_chkBox.Checked) { ax_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
-
-            }
-            else
-            {
-                by_chBx.ForeColor = Control.DefaultForeColor;
-            }
-        }
-        private void cz_chBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cz_chBx.Checked)
-            {
-                cz_chBx.ForeColor = Color.Crimson;
-                if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
-
-            }
-            else
-            {
-                cz_chBx.ForeColor = Control.DefaultForeColor;
-            }
-        }
-        private void draw_Btn_Click(object sender, EventArgs e)
-        {           
-            sequence_Pnl.Refresh(); color_range_panel.Refresh();
-        }
-        private void sequence_Pnl_Resize(object sender, EventArgs e)
-        {
-            sequence_Pnl.Refresh(); color_range_panel.Refresh();
-        }
-        private void seq_extensionBox_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            initialize_ions_todraw(); initialize_plot_tabs();
-            sequence_Pnl.Refresh();
-        }
+        }       
+        //mouse down
         private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
         {
             int x = e.X;
@@ -12259,12 +12188,12 @@ namespace Isotope_fitting
             if (rdBtn50.Checked) grp_num = 50;
             for (int idx = 0; idx < s.Length; idx++)
             {
-                if (temp_x<=x && temp_x + 20 >= x && temp_y  <= y && temp_y + 15 >= y)
+                if (temp_x <= x && temp_x + 20 >= x && temp_y <= y && temp_y + 15 >= y)
                 {
                     foreach (ion nn in IonDraw)
                     {
                         if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)){ continue; }
+                        else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Index == idx + 1 && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c") || nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b") || nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")))
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
@@ -12273,14 +12202,14 @@ namespace Isotope_fitting
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
-                        else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx+1 || nn.IndexTo == idx + 1))
+                        else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
                     }
-                    if (sb.Length== 0)
+                    if (sb.Length == 0)
                     {
-                         sb.AppendLine("No ions match to your research");
+                        sb.AppendLine("No ions match to your research");
                     }
                     else
                     {
@@ -12290,7 +12219,7 @@ namespace Isotope_fitting
                     }
                     string message_string = sb.ToString();
                     Form17 frm17 = new Form17(message_string);
-                    frm17.Text = "Aminoacid: "+ s[idx]+ " with index: " + (idx+1).ToString()+" (Extension: "+ s_ext + ")" ;
+                    frm17.Text = "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")";
                     frm17.ShowDialog();
                     return;
                 }
@@ -12299,26 +12228,26 @@ namespace Isotope_fitting
                     temp_x = temp_x + 20;
                     if (temp_x + 20 >= sequence_Pnl.Width) { temp_x = 3; temp_y = temp_y + 50; }
                     if ((idx + 1) % grp_num == 0) { temp_x = 3; temp_y = temp_y + 50; }
-                }                
+                }
             }
         }
+        //draw
         private void sequence_draw(Graphics g)
         {
-            color_range_picBox.Visible = false; color_range_panel.Visible = false;
+            color_range_picBox.Visible = false; color_range_panel.Visible = false;seq_lbl_panel.Visible = false;
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
-            Pen p = new Pen(Color.Black);           
+            Pen p = new Pen(Color.Black);
             int point_x, point_y;
-            point_y =20;
+            point_y = 20;
             point_x = 3;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
-            
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
-            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex!=-1)
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
                 {
@@ -12329,17 +12258,17 @@ namespace Isotope_fitting
                         break;
                     }
                 }
-            }                    
-            if (s.Length/25 >=9) { draw_sequence_panel.Height =58 * s.Length / 25; }
-            else if (s.Length / 25>5) { draw_sequence_panel.Height = 58 * s.Length / 25; }
+            }
+            if (s.Length / 25 >= 9) { draw_sequence_panel.Height = 58 * s.Length / 25; }
+            else if (s.Length / 25 > 5) { draw_sequence_panel.Height = 58 * s.Length / 25; }
             else { draw_sequence_panel.Height = 400; }
             Point pp = new Point(point_x, point_y);
             int grp_num = 25;
             if (rdBtn50.Checked) grp_num = 50;
             for (int idx = 0; idx < s.Length; idx++)
             {
-                if (curr_ss.Char_color != null) sb.Color= curr_ss.Color_table[curr_ss.Char_color[idx]];
-                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);               
+                if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
+                g.DrawString(s[idx].ToString(), sequence_Pnl.Font, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -12474,46 +12403,29 @@ namespace Isotope_fitting
                 if (pp.X + 20 >= sequence_Pnl.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
-
             return;
-        }        
+        }
         private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false)
         {
-            int x1, x2, x3, y1, y2, y3;            
-            Pen mypen = new Pen(color_draw,2F);
-            if (inter){ x1 = pf.X +18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2;}
-            else if (up) { x1 = pf.X +18; x2 = x1; y1 = pf.Y - step+3; y2 =y1 - 5 ; y3 = y2; x3 = x2 - 10;  }
-            else { x1 = pf.X + 18; x2 = x1; y1 = pf.Y+14 + step+2; y2 =y1 +5; y3 = y2; x3 = x2 + 10;}
+            int x1, x2, x3, y1, y2, y3;
+            Pen mypen = new Pen(color_draw, 2F);
+            if (inter) { x1 = pf.X + 18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2; }
+            else if (up) { x1 = pf.X + 18; x2 = x1; y1 = pf.Y - step + 3; y2 = y1 - 5; y3 = y2; x3 = x2 - 10; }
+            else { x1 = pf.X + 18; x2 = x1; y1 = pf.Y + 14 + step + 2; y2 = y1 + 5; y3 = y2; x3 = x2 + 10; }
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
-            g.DrawLines(mypen,points);
+            g.DrawLines(mypen, points);
         }
-       
         private void sequence_Pnl_Paint(object sender, PaintEventArgs e)
         {
-            if(!highlight_ibt_ckBx.Checked)sequence_draw(e.Graphics);
+            if (!highlight_ibt_ckBx.Checked) sequence_draw(e.Graphics);
             else draw_internal(e.Graphics, highlight_color);
         }
-
-        private void rdBtn25_CheckedChanged(object sender, EventArgs e)
-        {
-            sequence_Pnl.Refresh();
-        }
-
-        private void rdBtn50_CheckedChanged(object sender, EventArgs e)
-        {
-            sequence_Pnl.Refresh();
-        }
-        private void los_chkBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; intB_chBx.Enabled = false; intA_chBx.Enabled = false; }
-            else { intB_chBx.Enabled = true; intA_chBx.Enabled = true; }
-
-        }
-       
-        private void draw_internal(Graphics g,Color paint_color)
+        //color internal
+        private void draw_internal(Graphics g, Color paint_color)
         {
             color_range_picBox.Visible = is_rgb_color_range;
             color_range_panel.Visible = !is_rgb_color_range;
+            seq_lbl_panel.Visible = true;
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
@@ -12548,13 +12460,13 @@ namespace Isotope_fitting
 
             //draw the rectangles
             for (int idx = 0; idx < s.Length; idx++)
-            {                
+            {
                 double intensity = 0.0;
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }                    
-                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1  || nn.IndexTo== idx + 1))
+                    else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                     {
                         if (!los_chkBox.Checked)
                         {
@@ -12571,10 +12483,10 @@ namespace Isotope_fitting
                 }
                 if (intensity > 0)
                 {
-                     draw_rectangle(pp, GetColor(intensity), g);
+                    draw_rectangle(pp, GetColor(intensity), g);
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl.Width-21) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_Pnl.Width - 21-50) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
@@ -12716,13 +12628,13 @@ namespace Isotope_fitting
                     }
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl.Width-21) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_Pnl.Width - 21-50) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
             return;
         }
-        private void draw_rectangle( Point pf, Color color_draw, Graphics g)
+        private void draw_rectangle(Point pf, Color color_draw, Graphics g)
         {
             //Pen mypen = new Pen(Color.FromArgb(intesity, color_draw), 1F);
             //g.DrawRectangle(mypen, pf.X, pf.Y, 16, 15);
@@ -12730,25 +12642,24 @@ namespace Isotope_fitting
             SolidBrush blueBrush = new SolidBrush(color_draw);
 
             // Create rectangle.
-            Rectangle rect = new Rectangle(pf.X-1, pf.Y, 20, 17);
+            Rectangle rect = new Rectangle(pf.X - 1, pf.Y, 20, 17);
 
             // Fill rectangle to screen.
             g.FillRectangle(blueBrush, rect);
         }
         private void highlight_ibt_ckBx_CheckedChanged(object sender, EventArgs e)
         {
-            sequence_Pnl.Refresh(); color_range_panel.Refresh();            
+            sequence_Pnl.Refresh(); color_range_panel.Refresh(); seq_lbl_panel.Refresh();
         }
-        
         private Color GetColor(double actualValue)
         {
             //normalize
-            Int64 rangeStart =seq_min_val;
-            Int64 rangeEnd =seq_max_val;
+            Int64 rangeStart = seq_min_val;
+            Int64 rangeEnd = seq_max_val;
             if (actualValue >= rangeEnd) actualValue = rangeEnd;
-            if (actualValue <= rangeStart) actualValue = rangeStart;      
+            if (actualValue <= rangeStart) actualValue = rangeStart;
             Int64 max = rangeEnd - rangeStart; // make the scale start from 0
-            Int64 mid = max/2; //mid point
+            Int64 mid = max / 2; //mid point
             if (is_rgb_color_range)
             {
                 double value = (actualValue - rangeStart) / mid - 1; // adjust the value accordingly                                                                     
@@ -12759,30 +12670,134 @@ namespace Isotope_fitting
             {
                 int max_alpha = 200;
                 int min_alpha = 50;
-                double value = (actualValue - rangeStart)* (max_alpha-min_alpha )/ max + min_alpha;
-                int temp_alpha =(int) Math.Round(value,0);
-                return Color.FromArgb(temp_alpha,highlight_color);
+                double value = (actualValue - rangeStart) * (max_alpha - min_alpha) / max + min_alpha;
+                int temp_alpha = (int)Math.Round(value, 0);
+                return Color.FromArgb(temp_alpha, highlight_color);
             }
         }
         private Color GetColorRGB(double x)
         {
-            int alpha = 150;            
-            int blue =0;
-            int red =0;
-            int green =0;
+            int alpha = 150;
+            int blue = 0;
+            int red = 0;
+            int green = 0;
             if (x < -0.5) { blue = 255; red = 0; green = (int)(2 * (x + 1) * 255); }
-            else if(x < 0) { blue = (int)(-2 * (x) * 255); red = 0; green =  255; }
-            else if (x<0.5) { blue = 0; red = (int)(2 * (x) * 255); green = 255; }
-            else { blue =0; red = 255; green = (int)(-2 * (x - 1) * 255); }
+            else if (x < 0) { blue = (int)(-2 * (x) * 255); red = 0; green = 255; }
+            else if (x < 0.5) { blue = 0; red = (int)(2 * (x) * 255); green = 255; }
+            else { blue = 0; red = 255; green = (int)(-2 * (x - 1) * 255); }
             return Color.FromArgb(150, (Byte)red, (Byte)green, (Byte)blue);
         }
+        //draw color range panels
+        private void color_panel(Graphics g, Panel temp)
+        {
+            int padding = temp.Padding.Top;
+            int width = temp.Size.Width;
+            int height = temp.Size.Height-(padding*2);
+            int max_alpha = 200;
+            int min_alpha = 50;
+            int temp_alpha = max_alpha;
+            int step = (int)Math.Ceiling((decimal)height / (max_alpha - min_alpha));
+            Color cc = Color.FromArgb(temp_alpha, highlight_color);
+            // Create solid brush.
+            SolidBrush Brush = new SolidBrush(cc);
+            // Create rectangle.
+            Rectangle rect = new Rectangle(0, 0, width, step);
+            int temp_counter = padding;
+            while (temp_counter < height+ padding)
+            {
+                cc = Color.FromArgb(temp_alpha, highlight_color);
+                Brush.Color = cc;
+                rect = new Rectangle(0, temp_counter, width, step);
+                // Fill rectangle to screen.
+                g.FillRectangle(Brush, rect);
+                temp_counter += step;
+                temp_alpha--;
+            }
+            if (temp_counter > height + padding)
+            {
+                int diff = temp_counter- height + padding;
+                temp_counter += height;
+                cc = Color.FromArgb(temp_alpha, highlight_color);
+                Brush.Color = cc;
+                rect = new Rectangle(0, temp_counter, width, diff);
+                // Fill rectangle to screen.
+                g.FillRectangle(Brush, rect);
+            }
+        }
+        //refresh, checks etc
+        private void ax_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ax_chBx.Checked)
+            {
+                ax_chBx.ForeColor = Color.ForestGreen;
+                if (los_chkBox.Checked) { by_chBx.Checked = false;cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
+            }
+            else
+            {
+                ax_chBx.ForeColor = Control.DefaultForeColor;
+            }
+        }
+        private void by_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (by_chBx.Checked)
+            {
+                by_chBx.ForeColor = Color.Blue;
+                if (los_chkBox.Checked) { ax_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
+
+            }
+            else
+            {
+                by_chBx.ForeColor = Control.DefaultForeColor;
+            }
+        }
+        private void cz_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cz_chBx.Checked)
+            {
+                cz_chBx.ForeColor = Color.Crimson;
+                if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
+
+            }
+            else
+            {
+                cz_chBx.ForeColor = Control.DefaultForeColor;
+            }
+        }
+        private void draw_Btn_Click(object sender, EventArgs e)
+        {           
+            sequence_Pnl.Refresh(); color_range_panel.Refresh(); seq_lbl_panel.Refresh();
+        }
+        private void sequence_Pnl_Resize(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh(); color_range_panel.Refresh(); seq_lbl_panel.Refresh();
+        }
+        private void rdBtn25_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh();
+        }
+        private void rdBtn50_CheckedChanged(object sender, EventArgs e)
+        {
+            sequence_Pnl.Refresh();
+        }
+        private void los_chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; intB_chBx.Enabled = false; intA_chBx.Enabled = false; }
+            else { intB_chBx.Enabled = true; intA_chBx.Enabled = true; }
+
+        }
+        private void seq_extensionBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            initialize_ions_todraw(); initialize_plot_tabs();
+            sequence_Pnl.Refresh();
+        }
+        
         #endregion
 
         #region sequence panels copies
         #region sequence copy 1
         private void highlight_ibt_ckBxCopy1_CheckedChanged(object sender, EventArgs e)
         {
-            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh();           
+            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh(); seq_lbl_panelCopy1.Refresh();
         }
 
         private void ax_chBxCopy1_CheckedChanged(object sender, EventArgs e)
@@ -12825,7 +12840,7 @@ namespace Isotope_fitting
         }
         private void draw_BtnCopy1_Click(object sender, EventArgs e)
         {
-            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh();
+            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh(); seq_lbl_panelCopy1.Refresh();
         }
         private void rdBtn25Copy1_CheckedChanged(object sender, EventArgs e)
         {
@@ -12843,8 +12858,8 @@ namespace Isotope_fitting
         }
         private void sequence_drawCopy1(Graphics g)
         {
-            color_range_picBoxCopy1.Visible = false; color_range_panelCopy1.Visible = false;
-            CI ion_comp = new CI();
+            color_range_picBoxCopy1.Visible = false; color_range_panelCopy1.Visible = false; seq_lbl_panelCopy1.Visible = false;
+             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             //g = pnl.CreateGraphics();
             Pen p = new Pen(Color.Black);
@@ -13016,6 +13031,7 @@ namespace Isotope_fitting
         {
             color_range_panelCopy1.Visible = !is_rgb_color_range;
             color_range_picBoxCopy1.Visible = is_rgb_color_range;
+            seq_lbl_panelCopy1.Visible = true;
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             //g = pnl.CreateGraphics();
@@ -13073,7 +13089,7 @@ namespace Isotope_fitting
                     draw_rectangle(pp, GetColor(intensity), g);
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_PnlCopy1.Width-21) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_PnlCopy1.Width-21-50) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
@@ -13213,7 +13229,7 @@ namespace Isotope_fitting
                     }
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_PnlCopy1.Width-21) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_PnlCopy1.Width-21-50) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
@@ -13222,7 +13238,7 @@ namespace Isotope_fitting
 
         private void sequence_PnlCopy1_Resize(object sender, EventArgs e)
         {
-            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh();
+            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh(); seq_lbl_panelCopy1.Refresh();
         }
         private void delele_sequencePnl1_Click(object sender, EventArgs e)
         {
@@ -13243,7 +13259,7 @@ namespace Isotope_fitting
         #region sequence copy 2
         private void highlight_ibt_ckBxCopy2_CheckedChanged(object sender, EventArgs e)
         {
-            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh();           
+            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
         }
         private void ax_chBxCopy2_CheckedChanged(object sender, EventArgs e)
         {
@@ -13286,7 +13302,7 @@ namespace Isotope_fitting
         }
         private void draw_BtnCopy2_Click(object sender, EventArgs e)
         {
-            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh();
+            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
         }
 
         private void rdBtn25Copy2_CheckedChanged(object sender, EventArgs e)
@@ -13307,8 +13323,8 @@ namespace Isotope_fitting
 
         private void sequence_drawCopy2(Graphics g)
         {
-            color_range_picBoxCopy2.Visible = false; color_range_panelCopy2.Visible = false;
-            CI ion_comp = new CI();
+            color_range_picBoxCopy2.Visible = false; color_range_panelCopy2.Visible = false; seq_lbl_panelCopy2.Visible = false;
+             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             //g = pnl.CreateGraphics();
             Pen p = new Pen(Color.Black);
@@ -13482,6 +13498,7 @@ namespace Isotope_fitting
         {
             color_range_panelCopy2.Visible = !is_rgb_color_range;
             color_range_picBoxCopy2.Visible = is_rgb_color_range;
+            seq_lbl_panelCopy2.Visible = true;
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             //g = pnl.CreateGraphics();
@@ -13538,7 +13555,7 @@ namespace Isotope_fitting
                     draw_rectangle(pp, GetColor(intensity), g);
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_PnlCopy2.Width-21) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_PnlCopy2.Width-21-50) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
@@ -13680,7 +13697,7 @@ namespace Isotope_fitting
                     }
                 }
                 pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_PnlCopy2.Width-21) { pp.X = 3; pp.Y = pp.Y + 50; }
+                if (pp.X + 20 >= sequence_PnlCopy2.Width-21-50) { pp.X = 3; pp.Y = pp.Y + 50; }
                 if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
             }
 
@@ -13688,7 +13705,7 @@ namespace Isotope_fitting
         }
         private void sequence_PnlCopy2_Resize(object sender, EventArgs e)
         {
-            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh();
+            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
         }
 
 
@@ -18233,6 +18250,8 @@ namespace Isotope_fitting
             ppm_plot.InvalidatePlot(true);
         }
 
+
+
         private void color_range_panel_Paint(object sender, PaintEventArgs e)
         {
             color_panel(e.Graphics, color_range_panel);
@@ -18246,6 +18265,49 @@ namespace Isotope_fitting
         private void color_range_panelCopy2_Paint(object sender, PaintEventArgs e)
         {
             color_panel(e.Graphics, color_range_panelCopy2);
+        }
+
+        private void seq_lbl_panel_Paint(object sender, PaintEventArgs e)
+        {
+            label_color_panel(e.Graphics, seq_lbl_panel);
+        }
+
+        private void seq_lbl_panelCopy1_Paint(object sender, PaintEventArgs e)
+        {
+            label_color_panel(e.Graphics, seq_lbl_panelCopy1);
+        }
+
+        private void seq_lbl_panelCopy2_Paint(object sender, PaintEventArgs e)
+        {
+            label_color_panel(e.Graphics, seq_lbl_panelCopy2);
+        }
+        private void label_color_panel(Graphics g, Panel temp)
+        {
+            int padding = temp.Padding.Top;
+            int extra_padding= color_range_panel.Padding.Top;
+            int width = temp.Size.Width;
+            int height = temp.Size.Height-(2* extra_padding);
+            int fractions = seq_reg;
+            int step = (int)Math.Ceiling((decimal)height / fractions);
+            Int64 value_step = (seq_max_val - seq_min_val) / fractions;
+            Int64 value=seq_max_val;
+            int x1 =0, x2=3, y1= extra_padding;
+            Pen mypen = new Pen(Color.Black, 2F);
+            SolidBrush sb = new SolidBrush(Color.Black);
+            Point[] points = new Point[2];
+            while (y1< height+ extra_padding)
+            {               
+               points = new Point[2] { new Point(x1, y1), new Point(x2, y1) };
+               g.DrawLines(mypen, points);
+               g.DrawString(value.ToString("0.0E+0"), temp.Font, sb, new Point(x2+1, y1-8));
+               y1 += step;
+               value -= value_step;
+            }
+            y1 = height+ extra_padding;
+            value = seq_min_val;
+            points = new Point[2] { new Point(x1, y1), new Point(x2, y1) };
+            g.DrawString(value.ToString("0.0E+0"), temp.Font, sb, new Point(x2 + 1, y1-8));
+            g.DrawLines(mypen, points);
         }
     }
 

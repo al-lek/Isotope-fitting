@@ -245,6 +245,7 @@ namespace Isotope_fitting
             this.sequence_PnlCopy2 = new System.Windows.Forms.Panel();
             this.color_range_panelCopy2 = new System.Windows.Forms.Panel();
             this.color_range_picBoxCopy2 = new System.Windows.Forms.PictureBox();
+            this.seq_lbl_panelCopy2 = new System.Windows.Forms.Panel();
             this.draw_BtnCopy2 = new System.Windows.Forms.Button();
             this.draw_sequence_panelCopy1 = new System.Windows.Forms.Panel();
             this.seq_LblCopy1 = new System.Windows.Forms.Label();
@@ -265,6 +266,7 @@ namespace Isotope_fitting
             this.sequence_PnlCopy1 = new System.Windows.Forms.Panel();
             this.color_range_panelCopy1 = new System.Windows.Forms.Panel();
             this.color_range_picBoxCopy1 = new System.Windows.Forms.PictureBox();
+            this.seq_lbl_panelCopy1 = new System.Windows.Forms.Panel();
             this.draw_BtnCopy1 = new System.Windows.Forms.Button();
             this.draw_sequence_panel = new System.Windows.Forms.Panel();
             this.seq_Lbl = new System.Windows.Forms.Label();
@@ -287,6 +289,7 @@ namespace Isotope_fitting
             this.sequence_Pnl = new System.Windows.Forms.Panel();
             this.color_range_panel = new System.Windows.Forms.Panel();
             this.color_range_picBox = new System.Windows.Forms.PictureBox();
+            this.seq_lbl_panel = new System.Windows.Forms.Panel();
             this.draw_Btn = new System.Windows.Forms.Button();
             this.tabPrimary = new System.Windows.Forms.TabPage();
             this.panel2_tab3 = new System.Windows.Forms.Panel();
@@ -518,6 +521,7 @@ namespace Isotope_fitting
             // 
             this.toolStrip_plot.AutoSize = false;
             this.toolStrip_plot.BackColor = System.Drawing.Color.Lavender;
+            this.toolStrip_plot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStrip_plot.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_plot.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip_plot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -641,7 +645,7 @@ namespace Isotope_fitting
             this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
             this.fragPlotLbl_chkBx.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(72, 24);
+            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(73, 24);
             this.fragPlotLbl_chkBx.Text = "Primary";
             this.fragPlotLbl_chkBx.ToolTipText = "Show Primary Fragment Label";
             this.fragPlotLbl_chkBx.CheckedChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
@@ -658,7 +662,7 @@ namespace Isotope_fitting
             this.fragPlotLbl_chkBx2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.fragPlotLbl_chkBx2.Name = "fragPlotLbl_chkBx2";
             this.fragPlotLbl_chkBx2.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(71, 24);
+            this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(72, 24);
             this.fragPlotLbl_chkBx2.Text = "Internal";
             this.fragPlotLbl_chkBx2.ToolTipText = "Show Internal Fragments Label";
             this.fragPlotLbl_chkBx2.CheckedChanged += new System.EventHandler(this.fragPlotLbl_chkBx2_CheckedChanged);
@@ -805,7 +809,7 @@ namespace Isotope_fitting
             // 
             this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -813,7 +817,7 @@ namespace Isotope_fitting
             // 
             this.loadToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadToolStripMenuItem.Image")));
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -821,7 +825,7 @@ namespace Isotope_fitting
             // 
             this.clearAllToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("clearAllToolStripMenuItem.Image")));
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearAllToolStripMenuItem.Text = "Clear all";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -1577,6 +1581,7 @@ namespace Isotope_fitting
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel2.Location = new System.Drawing.Point(0, 106);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(369, 340);
@@ -1874,6 +1879,7 @@ namespace Isotope_fitting
             this.fragTypes_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fragTypes_tree.CheckBoxes = true;
             this.fragTypes_tree.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.fragTypes_tree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fragTypes_tree.Location = new System.Drawing.Point(0, 493);
             this.fragTypes_tree.Name = "fragTypes_tree";
             this.fragTypes_tree.Size = new System.Drawing.Size(369, 224);
@@ -1883,7 +1889,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(43, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(41, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1895,7 +1901,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(133, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(131, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -2438,7 +2444,7 @@ namespace Isotope_fitting
             // 
             // ppm_toolStrip6
             // 
-            this.ppm_toolStrip6.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.ppm_toolStrip6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm_toolStrip6.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ppm_toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_M,
@@ -2446,7 +2452,7 @@ namespace Isotope_fitting
             this.ppm_M_NH3,
             this.ppm_uncheckBtn,
             this.ppm_checkall_Btn});
-            this.ppm_toolStrip6.Location = new System.Drawing.Point(0, 480);
+            this.ppm_toolStrip6.Location = new System.Drawing.Point(0, 476);
             this.ppm_toolStrip6.Name = "ppm_toolStrip6";
             this.ppm_toolStrip6.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
             this.ppm_toolStrip6.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -2463,7 +2469,7 @@ namespace Isotope_fitting
             this.ppm_M.Image = ((System.Drawing.Image)(resources.GetObject("ppm_M.Image")));
             this.ppm_M.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_M.Name = "ppm_M";
-            this.ppm_M.Size = new System.Drawing.Size(26, 24);
+            this.ppm_M.Size = new System.Drawing.Size(24, 24);
             this.ppm_M.Text = "M";
             this.ppm_M.ToolTipText = "M";
             // 
@@ -2477,7 +2483,7 @@ namespace Isotope_fitting
             this.ppm_M_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_M_H2O.Image")));
             this.ppm_M_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_M_H2O.Name = "ppm_M_H2O";
-            this.ppm_M_H2O.Size = new System.Drawing.Size(62, 24);
+            this.ppm_M_H2O.Size = new System.Drawing.Size(59, 24);
             this.ppm_M_H2O.Text = "M-H2O";
             // 
             // ppm_M_NH3
@@ -2490,7 +2496,7 @@ namespace Isotope_fitting
             this.ppm_M_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_M_NH3.Image")));
             this.ppm_M_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_M_NH3.Name = "ppm_M_NH3";
-            this.ppm_M_NH3.Size = new System.Drawing.Size(62, 24);
+            this.ppm_M_NH3.Size = new System.Drawing.Size(59, 24);
             this.ppm_M_NH3.Text = "M-NH3";
             // 
             // ppm_uncheckBtn
@@ -2519,16 +2525,16 @@ namespace Isotope_fitting
             // 
             // ppm_toolStrip4
             // 
-            this.ppm_toolStrip4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.ppm_toolStrip4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm_toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_internal_b,
             this.ppm_internal_b_H2O,
             this.ppm_internal_b_NH3});
-            this.ppm_toolStrip4.Location = new System.Drawing.Point(0, 454);
+            this.ppm_toolStrip4.Location = new System.Drawing.Point(0, 451);
             this.ppm_toolStrip4.Name = "ppm_toolStrip4";
             this.ppm_toolStrip4.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
             this.ppm_toolStrip4.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ppm_toolStrip4.Size = new System.Drawing.Size(579, 26);
+            this.ppm_toolStrip4.Size = new System.Drawing.Size(579, 25);
             this.ppm_toolStrip4.TabIndex = 7;
             // 
             // ppm_internal_b
@@ -2541,7 +2547,7 @@ namespace Isotope_fitting
             this.ppm_internal_b.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_b.Image")));
             this.ppm_internal_b.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_internal_b.Name = "ppm_internal_b";
-            this.ppm_internal_b.Size = new System.Drawing.Size(77, 23);
+            this.ppm_internal_b.Size = new System.Drawing.Size(76, 22);
             this.ppm_internal_b.Text = "internal b";
             // 
             // ppm_internal_b_H2O
@@ -2554,7 +2560,7 @@ namespace Isotope_fitting
             this.ppm_internal_b_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_b_H2O.Image")));
             this.ppm_internal_b_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_internal_b_H2O.Name = "ppm_internal_b_H2O";
-            this.ppm_internal_b_H2O.Size = new System.Drawing.Size(113, 23);
+            this.ppm_internal_b_H2O.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_b_H2O.Text = "internal b-H2O";
             // 
             // ppm_internal_b_NH3
@@ -2567,21 +2573,21 @@ namespace Isotope_fitting
             this.ppm_internal_b_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_b_NH3.Image")));
             this.ppm_internal_b_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_internal_b_NH3.Name = "ppm_internal_b_NH3";
-            this.ppm_internal_b_NH3.Size = new System.Drawing.Size(113, 23);
+            this.ppm_internal_b_NH3.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_b_NH3.Text = "internal b-NH3";
             // 
             // ppm_toolStrip5
             // 
-            this.ppm_toolStrip5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.ppm_toolStrip5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm_toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_internal_a,
             this.ppm_internal_a_H2O,
             this.ppm_internal_a_NH3});
-            this.ppm_toolStrip5.Location = new System.Drawing.Point(0, 428);
+            this.ppm_toolStrip5.Location = new System.Drawing.Point(0, 426);
             this.ppm_toolStrip5.Name = "ppm_toolStrip5";
             this.ppm_toolStrip5.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
             this.ppm_toolStrip5.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ppm_toolStrip5.Size = new System.Drawing.Size(579, 26);
+            this.ppm_toolStrip5.Size = new System.Drawing.Size(579, 25);
             this.ppm_toolStrip5.TabIndex = 6;
             // 
             // ppm_internal_a
@@ -2594,7 +2600,7 @@ namespace Isotope_fitting
             this.ppm_internal_a.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_a.Image")));
             this.ppm_internal_a.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_internal_a.Name = "ppm_internal_a";
-            this.ppm_internal_a.Size = new System.Drawing.Size(76, 23);
+            this.ppm_internal_a.Size = new System.Drawing.Size(76, 22);
             this.ppm_internal_a.Text = "internal a";
             // 
             // ppm_internal_a_H2O
@@ -2607,7 +2613,7 @@ namespace Isotope_fitting
             this.ppm_internal_a_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_a_H2O.Image")));
             this.ppm_internal_a_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_internal_a_H2O.Name = "ppm_internal_a_H2O";
-            this.ppm_internal_a_H2O.Size = new System.Drawing.Size(112, 23);
+            this.ppm_internal_a_H2O.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_a_H2O.Text = "internal a-H2O";
             // 
             // ppm_internal_a_NH3
@@ -2620,12 +2626,12 @@ namespace Isotope_fitting
             this.ppm_internal_a_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_internal_a_NH3.Image")));
             this.ppm_internal_a_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_internal_a_NH3.Name = "ppm_internal_a_NH3";
-            this.ppm_internal_a_NH3.Size = new System.Drawing.Size(112, 23);
+            this.ppm_internal_a_NH3.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_a_NH3.Text = "internal a-NH3";
             // 
             // ppm_toolStrip3
             // 
-            this.ppm_toolStrip3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.ppm_toolStrip3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm_toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_x,
             this.ppm_x_H2O,
@@ -2636,11 +2642,11 @@ namespace Isotope_fitting
             this.ppm_z,
             this.ppm_z_H2O,
             this.ppm_z_NH3});
-            this.ppm_toolStrip3.Location = new System.Drawing.Point(0, 402);
+            this.ppm_toolStrip3.Location = new System.Drawing.Point(0, 401);
             this.ppm_toolStrip3.Name = "ppm_toolStrip3";
             this.ppm_toolStrip3.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
             this.ppm_toolStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ppm_toolStrip3.Size = new System.Drawing.Size(579, 26);
+            this.ppm_toolStrip3.Size = new System.Drawing.Size(579, 25);
             this.ppm_toolStrip3.TabIndex = 5;
             // 
             // ppm_x
@@ -2653,7 +2659,7 @@ namespace Isotope_fitting
             this.ppm_x.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x.Image")));
             this.ppm_x.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_x.Name = "ppm_x";
-            this.ppm_x.Size = new System.Drawing.Size(23, 23);
+            this.ppm_x.Size = new System.Drawing.Size(23, 22);
             this.ppm_x.Text = "x";
             // 
             // ppm_x_H2O
@@ -2666,7 +2672,7 @@ namespace Isotope_fitting
             this.ppm_x_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_H2O.Image")));
             this.ppm_x_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_x_H2O.Name = "ppm_x_H2O";
-            this.ppm_x_H2O.Size = new System.Drawing.Size(57, 23);
+            this.ppm_x_H2O.Size = new System.Drawing.Size(54, 22);
             this.ppm_x_H2O.Text = "x-H2O";
             // 
             // ppm_x_NH3
@@ -2679,7 +2685,7 @@ namespace Isotope_fitting
             this.ppm_x_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_x_NH3.Image")));
             this.ppm_x_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_x_NH3.Name = "ppm_x_NH3";
-            this.ppm_x_NH3.Size = new System.Drawing.Size(57, 23);
+            this.ppm_x_NH3.Size = new System.Drawing.Size(54, 22);
             this.ppm_x_NH3.Text = "x-NH3";
             // 
             // ppm_y
@@ -2692,7 +2698,7 @@ namespace Isotope_fitting
             this.ppm_y.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y.Image")));
             this.ppm_y.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_y.Name = "ppm_y";
-            this.ppm_y.Size = new System.Drawing.Size(23, 23);
+            this.ppm_y.Size = new System.Drawing.Size(23, 22);
             this.ppm_y.Text = "y";
             // 
             // ppm_y_H2O
@@ -2705,7 +2711,7 @@ namespace Isotope_fitting
             this.ppm_y_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_H2O.Image")));
             this.ppm_y_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_y_H2O.Name = "ppm_y_H2O";
-            this.ppm_y_H2O.Size = new System.Drawing.Size(57, 23);
+            this.ppm_y_H2O.Size = new System.Drawing.Size(55, 22);
             this.ppm_y_H2O.Text = "y-H2O";
             // 
             // ppm_y_NH3
@@ -2718,7 +2724,7 @@ namespace Isotope_fitting
             this.ppm_y_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_y_NH3.Image")));
             this.ppm_y_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_y_NH3.Name = "ppm_y_NH3";
-            this.ppm_y_NH3.Size = new System.Drawing.Size(57, 23);
+            this.ppm_y_NH3.Size = new System.Drawing.Size(55, 22);
             this.ppm_y_NH3.Text = "y-NH3";
             // 
             // ppm_z
@@ -2731,7 +2737,7 @@ namespace Isotope_fitting
             this.ppm_z.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z.Image")));
             this.ppm_z.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_z.Name = "ppm_z";
-            this.ppm_z.Size = new System.Drawing.Size(23, 23);
+            this.ppm_z.Size = new System.Drawing.Size(23, 22);
             this.ppm_z.Text = "z";
             // 
             // ppm_z_H2O
@@ -2744,7 +2750,7 @@ namespace Isotope_fitting
             this.ppm_z_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_H2O.Image")));
             this.ppm_z_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_z_H2O.Name = "ppm_z_H2O";
-            this.ppm_z_H2O.Size = new System.Drawing.Size(56, 23);
+            this.ppm_z_H2O.Size = new System.Drawing.Size(54, 22);
             this.ppm_z_H2O.Text = "z-H2O";
             // 
             // ppm_z_NH3
@@ -2757,12 +2763,12 @@ namespace Isotope_fitting
             this.ppm_z_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_z_NH3.Image")));
             this.ppm_z_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_z_NH3.Name = "ppm_z_NH3";
-            this.ppm_z_NH3.Size = new System.Drawing.Size(56, 23);
+            this.ppm_z_NH3.Size = new System.Drawing.Size(54, 22);
             this.ppm_z_NH3.Text = "z-NH3";
             // 
             // ppm_toolStrip2
             // 
-            this.ppm_toolStrip2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.ppm_toolStrip2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm_toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_a,
             this.ppm_a_H2O,
@@ -2777,7 +2783,7 @@ namespace Isotope_fitting
             this.ppm_toolStrip2.Name = "ppm_toolStrip2";
             this.ppm_toolStrip2.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
             this.ppm_toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ppm_toolStrip2.Size = new System.Drawing.Size(579, 26);
+            this.ppm_toolStrip2.Size = new System.Drawing.Size(579, 25);
             this.ppm_toolStrip2.TabIndex = 4;
             // 
             // ppm_a
@@ -2790,7 +2796,7 @@ namespace Isotope_fitting
             this.ppm_a.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a.Image")));
             this.ppm_a.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_a.Name = "ppm_a";
-            this.ppm_a.Size = new System.Drawing.Size(23, 23);
+            this.ppm_a.Size = new System.Drawing.Size(23, 22);
             this.ppm_a.Text = "a";
             // 
             // ppm_a_H2O
@@ -2803,7 +2809,7 @@ namespace Isotope_fitting
             this.ppm_a_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_H2O.Image")));
             this.ppm_a_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_a_H2O.Name = "ppm_a_H2O";
-            this.ppm_a_H2O.Size = new System.Drawing.Size(57, 23);
+            this.ppm_a_H2O.Size = new System.Drawing.Size(56, 22);
             this.ppm_a_H2O.Text = "a-H2O";
             // 
             // ppm_a_NH3
@@ -2816,7 +2822,7 @@ namespace Isotope_fitting
             this.ppm_a_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_a_NH3.Image")));
             this.ppm_a_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_a_NH3.Name = "ppm_a_NH3";
-            this.ppm_a_NH3.Size = new System.Drawing.Size(57, 23);
+            this.ppm_a_NH3.Size = new System.Drawing.Size(56, 22);
             this.ppm_a_NH3.Text = "a-NH3";
             // 
             // ppm_b
@@ -2829,7 +2835,7 @@ namespace Isotope_fitting
             this.ppm_b.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b.Image")));
             this.ppm_b.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_b.Name = "ppm_b";
-            this.ppm_b.Size = new System.Drawing.Size(23, 23);
+            this.ppm_b.Size = new System.Drawing.Size(23, 22);
             this.ppm_b.Text = "b";
             // 
             // ppm_b_H2O
@@ -2842,7 +2848,7 @@ namespace Isotope_fitting
             this.ppm_b_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_H2O.Image")));
             this.ppm_b_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_b_H2O.Name = "ppm_b_H2O";
-            this.ppm_b_H2O.Size = new System.Drawing.Size(58, 23);
+            this.ppm_b_H2O.Size = new System.Drawing.Size(56, 22);
             this.ppm_b_H2O.Text = "b-H2O";
             // 
             // ppm_b_NH3
@@ -2855,7 +2861,7 @@ namespace Isotope_fitting
             this.ppm_b_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_b_NH3.Image")));
             this.ppm_b_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_b_NH3.Name = "ppm_b_NH3";
-            this.ppm_b_NH3.Size = new System.Drawing.Size(58, 23);
+            this.ppm_b_NH3.Size = new System.Drawing.Size(56, 22);
             this.ppm_b_NH3.Text = "b-NH3";
             // 
             // ppm_c
@@ -2868,7 +2874,7 @@ namespace Isotope_fitting
             this.ppm_c.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c.Image")));
             this.ppm_c.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_c.Name = "ppm_c";
-            this.ppm_c.Size = new System.Drawing.Size(23, 23);
+            this.ppm_c.Size = new System.Drawing.Size(23, 22);
             this.ppm_c.Text = "c";
             // 
             // ppm_c_H2O
@@ -2881,7 +2887,7 @@ namespace Isotope_fitting
             this.ppm_c_H2O.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_H2O.Image")));
             this.ppm_c_H2O.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_c_H2O.Name = "ppm_c_H2O";
-            this.ppm_c_H2O.Size = new System.Drawing.Size(56, 23);
+            this.ppm_c_H2O.Size = new System.Drawing.Size(55, 22);
             this.ppm_c_H2O.Text = "c-H2O";
             // 
             // ppm_c_NH3
@@ -2894,7 +2900,7 @@ namespace Isotope_fitting
             this.ppm_c_NH3.Image = ((System.Drawing.Image)(resources.GetObject("ppm_c_NH3.Image")));
             this.ppm_c_NH3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_c_NH3.Name = "ppm_c_NH3";
-            this.ppm_c_NH3.Size = new System.Drawing.Size(56, 23);
+            this.ppm_c_NH3.Size = new System.Drawing.Size(55, 22);
             this.ppm_c_NH3.Text = "c-NH3";
             // 
             // toolStripContainer1
@@ -3049,7 +3055,7 @@ namespace Isotope_fitting
             // highlight_ibt_ckBxCopy2
             // 
             this.highlight_ibt_ckBxCopy2.AutoSize = true;
-            this.highlight_ibt_ckBxCopy2.Location = new System.Drawing.Point(7, 238);
+            this.highlight_ibt_ckBxCopy2.Location = new System.Drawing.Point(7, 235);
             this.highlight_ibt_ckBxCopy2.Name = "highlight_ibt_ckBxCopy2";
             this.highlight_ibt_ckBxCopy2.Size = new System.Drawing.Size(50, 17);
             this.highlight_ibt_ckBxCopy2.TabIndex = 20;
@@ -3062,7 +3068,7 @@ namespace Isotope_fitting
             this.seq_extensionBoxCopy2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seq_extensionBoxCopy2.Enabled = false;
             this.seq_extensionBoxCopy2.FormattingEnabled = true;
-            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(7, 200);
+            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(7, 199);
             this.seq_extensionBoxCopy2.Name = "seq_extensionBoxCopy2";
             this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy2.TabIndex = 19;
@@ -3095,7 +3101,7 @@ namespace Isotope_fitting
             // rdBtn50Copy2
             // 
             this.rdBtn50Copy2.AutoSize = true;
-            this.rdBtn50Copy2.Location = new System.Drawing.Point(10, 334);
+            this.rdBtn50Copy2.Location = new System.Drawing.Point(7, 299);
             this.rdBtn50Copy2.Name = "rdBtn50Copy2";
             this.rdBtn50Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy2.TabIndex = 10;
@@ -3107,7 +3113,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25Copy2.AutoSize = true;
             this.rdBtn25Copy2.Checked = true;
-            this.rdBtn25Copy2.Location = new System.Drawing.Point(10, 309);
+            this.rdBtn25Copy2.Location = new System.Drawing.Point(7, 277);
             this.rdBtn25Copy2.Name = "rdBtn25Copy2";
             this.rdBtn25Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy2.TabIndex = 9;
@@ -3211,6 +3217,7 @@ namespace Isotope_fitting
             this.sequence_PnlCopy2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sequence_PnlCopy2.Controls.Add(this.color_range_panelCopy2);
             this.sequence_PnlCopy2.Controls.Add(this.color_range_picBoxCopy2);
+            this.sequence_PnlCopy2.Controls.Add(this.seq_lbl_panelCopy2);
             this.sequence_PnlCopy2.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequence_PnlCopy2.Location = new System.Drawing.Point(103, 27);
             this.sequence_PnlCopy2.Name = "sequence_PnlCopy2";
@@ -3222,8 +3229,9 @@ namespace Isotope_fitting
             // color_range_panelCopy2
             // 
             this.color_range_panelCopy2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.color_range_panelCopy2.Location = new System.Drawing.Point(572, 0);
+            this.color_range_panelCopy2.Location = new System.Drawing.Point(522, 0);
             this.color_range_panelCopy2.Name = "color_range_panelCopy2";
+            this.color_range_panelCopy2.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.color_range_panelCopy2.Size = new System.Drawing.Size(21, 455);
             this.color_range_panelCopy2.TabIndex = 22;
             this.color_range_panelCopy2.Visible = false;
@@ -3233,22 +3241,35 @@ namespace Isotope_fitting
             // 
             this.color_range_picBoxCopy2.Dock = System.Windows.Forms.DockStyle.Right;
             this.color_range_picBoxCopy2.Image = ((System.Drawing.Image)(resources.GetObject("color_range_picBoxCopy2.Image")));
-            this.color_range_picBoxCopy2.Location = new System.Drawing.Point(593, 0);
+            this.color_range_picBoxCopy2.Location = new System.Drawing.Point(543, 0);
             this.color_range_picBoxCopy2.Name = "color_range_picBoxCopy2";
+            this.color_range_picBoxCopy2.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.color_range_picBoxCopy2.Size = new System.Drawing.Size(21, 455);
             this.color_range_picBoxCopy2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.color_range_picBoxCopy2.TabIndex = 21;
             this.color_range_picBoxCopy2.TabStop = false;
             this.color_range_picBoxCopy2.Visible = false;
             // 
+            // seq_lbl_panelCopy2
+            // 
+            this.seq_lbl_panelCopy2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.seq_lbl_panelCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seq_lbl_panelCopy2.Location = new System.Drawing.Point(564, 0);
+            this.seq_lbl_panelCopy2.Name = "seq_lbl_panelCopy2";
+            this.seq_lbl_panelCopy2.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
+            this.seq_lbl_panelCopy2.Size = new System.Drawing.Size(50, 455);
+            this.seq_lbl_panelCopy2.TabIndex = 23;
+            this.seq_lbl_panelCopy2.Visible = false;
+            this.seq_lbl_panelCopy2.Paint += new System.Windows.Forms.PaintEventHandler(this.seq_lbl_panelCopy2_Paint);
+            // 
             // draw_BtnCopy2
             // 
             this.draw_BtnCopy2.BackColor = System.Drawing.Color.Teal;
             this.draw_BtnCopy2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.draw_BtnCopy2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.draw_BtnCopy2.Location = new System.Drawing.Point(10, 163);
+            this.draw_BtnCopy2.Location = new System.Drawing.Point(7, 163);
             this.draw_BtnCopy2.Name = "draw_BtnCopy2";
-            this.draw_BtnCopy2.Size = new System.Drawing.Size(69, 20);
+            this.draw_BtnCopy2.Size = new System.Drawing.Size(87, 21);
             this.draw_BtnCopy2.TabIndex = 6;
             this.draw_BtnCopy2.Text = "Draw";
             this.draw_BtnCopy2.UseVisualStyleBackColor = false;
@@ -3294,7 +3315,7 @@ namespace Isotope_fitting
             // highlight_ibt_ckBxCopy1
             // 
             this.highlight_ibt_ckBxCopy1.AutoSize = true;
-            this.highlight_ibt_ckBxCopy1.Location = new System.Drawing.Point(5, 236);
+            this.highlight_ibt_ckBxCopy1.Location = new System.Drawing.Point(5, 235);
             this.highlight_ibt_ckBxCopy1.Name = "highlight_ibt_ckBxCopy1";
             this.highlight_ibt_ckBxCopy1.Size = new System.Drawing.Size(50, 17);
             this.highlight_ibt_ckBxCopy1.TabIndex = 19;
@@ -3307,7 +3328,7 @@ namespace Isotope_fitting
             this.seq_extensionBoxCopy1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seq_extensionBoxCopy1.Enabled = false;
             this.seq_extensionBoxCopy1.FormattingEnabled = true;
-            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(7, 200);
+            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(5, 199);
             this.seq_extensionBoxCopy1.Name = "seq_extensionBoxCopy1";
             this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy1.TabIndex = 18;
@@ -3340,7 +3361,7 @@ namespace Isotope_fitting
             // rdBtn50Copy1
             // 
             this.rdBtn50Copy1.AutoSize = true;
-            this.rdBtn50Copy1.Location = new System.Drawing.Point(10, 331);
+            this.rdBtn50Copy1.Location = new System.Drawing.Point(5, 299);
             this.rdBtn50Copy1.Name = "rdBtn50Copy1";
             this.rdBtn50Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy1.TabIndex = 10;
@@ -3352,7 +3373,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25Copy1.AutoSize = true;
             this.rdBtn25Copy1.Checked = true;
-            this.rdBtn25Copy1.Location = new System.Drawing.Point(10, 306);
+            this.rdBtn25Copy1.Location = new System.Drawing.Point(5, 274);
             this.rdBtn25Copy1.Name = "rdBtn25Copy1";
             this.rdBtn25Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy1.TabIndex = 9;
@@ -3456,6 +3477,7 @@ namespace Isotope_fitting
             this.sequence_PnlCopy1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sequence_PnlCopy1.Controls.Add(this.color_range_panelCopy1);
             this.sequence_PnlCopy1.Controls.Add(this.color_range_picBoxCopy1);
+            this.sequence_PnlCopy1.Controls.Add(this.seq_lbl_panelCopy1);
             this.sequence_PnlCopy1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequence_PnlCopy1.Location = new System.Drawing.Point(103, 27);
             this.sequence_PnlCopy1.Name = "sequence_PnlCopy1";
@@ -3467,8 +3489,9 @@ namespace Isotope_fitting
             // color_range_panelCopy1
             // 
             this.color_range_panelCopy1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.color_range_panelCopy1.Location = new System.Drawing.Point(572, 0);
+            this.color_range_panelCopy1.Location = new System.Drawing.Point(522, 0);
             this.color_range_panelCopy1.Name = "color_range_panelCopy1";
+            this.color_range_panelCopy1.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.color_range_panelCopy1.Size = new System.Drawing.Size(21, 455);
             this.color_range_panelCopy1.TabIndex = 21;
             this.color_range_panelCopy1.Visible = false;
@@ -3478,22 +3501,35 @@ namespace Isotope_fitting
             // 
             this.color_range_picBoxCopy1.Dock = System.Windows.Forms.DockStyle.Right;
             this.color_range_picBoxCopy1.Image = ((System.Drawing.Image)(resources.GetObject("color_range_picBoxCopy1.Image")));
-            this.color_range_picBoxCopy1.Location = new System.Drawing.Point(593, 0);
+            this.color_range_picBoxCopy1.Location = new System.Drawing.Point(543, 0);
             this.color_range_picBoxCopy1.Name = "color_range_picBoxCopy1";
+            this.color_range_picBoxCopy1.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.color_range_picBoxCopy1.Size = new System.Drawing.Size(21, 455);
             this.color_range_picBoxCopy1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.color_range_picBoxCopy1.TabIndex = 20;
             this.color_range_picBoxCopy1.TabStop = false;
             this.color_range_picBoxCopy1.Visible = false;
             // 
+            // seq_lbl_panelCopy1
+            // 
+            this.seq_lbl_panelCopy1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.seq_lbl_panelCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seq_lbl_panelCopy1.Location = new System.Drawing.Point(564, 0);
+            this.seq_lbl_panelCopy1.Name = "seq_lbl_panelCopy1";
+            this.seq_lbl_panelCopy1.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
+            this.seq_lbl_panelCopy1.Size = new System.Drawing.Size(50, 455);
+            this.seq_lbl_panelCopy1.TabIndex = 22;
+            this.seq_lbl_panelCopy1.Visible = false;
+            this.seq_lbl_panelCopy1.Paint += new System.Windows.Forms.PaintEventHandler(this.seq_lbl_panelCopy1_Paint);
+            // 
             // draw_BtnCopy1
             // 
             this.draw_BtnCopy1.BackColor = System.Drawing.Color.Teal;
             this.draw_BtnCopy1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.draw_BtnCopy1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.draw_BtnCopy1.Location = new System.Drawing.Point(10, 163);
+            this.draw_BtnCopy1.Location = new System.Drawing.Point(5, 163);
             this.draw_BtnCopy1.Name = "draw_BtnCopy1";
-            this.draw_BtnCopy1.Size = new System.Drawing.Size(69, 20);
+            this.draw_BtnCopy1.Size = new System.Drawing.Size(87, 21);
             this.draw_BtnCopy1.TabIndex = 6;
             this.draw_BtnCopy1.Text = "Draw";
             this.draw_BtnCopy1.UseVisualStyleBackColor = false;
@@ -3538,7 +3574,7 @@ namespace Isotope_fitting
             // highlight_ibt_ckBx
             // 
             this.highlight_ibt_ckBx.AutoSize = true;
-            this.highlight_ibt_ckBx.Location = new System.Drawing.Point(7, 230);
+            this.highlight_ibt_ckBx.Location = new System.Drawing.Point(7, 227);
             this.highlight_ibt_ckBx.Name = "highlight_ibt_ckBx";
             this.highlight_ibt_ckBx.Size = new System.Drawing.Size(50, 17);
             this.highlight_ibt_ckBx.TabIndex = 16;
@@ -3573,7 +3609,7 @@ namespace Isotope_fitting
             this.add_sequencePanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("add_sequencePanel1.BackgroundImage")));
             this.add_sequencePanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.add_sequencePanel1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 378);
+            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 317);
             this.add_sequencePanel1.Name = "add_sequencePanel1";
             this.add_sequencePanel1.Size = new System.Drawing.Size(29, 28);
             this.add_sequencePanel1.TabIndex = 11;
@@ -3583,7 +3619,7 @@ namespace Isotope_fitting
             // rdBtn50
             // 
             this.rdBtn50.AutoSize = true;
-            this.rdBtn50.Location = new System.Drawing.Point(4, 343);
+            this.rdBtn50.Location = new System.Drawing.Point(7, 287);
             this.rdBtn50.Name = "rdBtn50";
             this.rdBtn50.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50.TabIndex = 10;
@@ -3595,7 +3631,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25.AutoSize = true;
             this.rdBtn25.Checked = true;
-            this.rdBtn25.Location = new System.Drawing.Point(4, 323);
+            this.rdBtn25.Location = new System.Drawing.Point(7, 266);
             this.rdBtn25.Name = "rdBtn25";
             this.rdBtn25.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25.TabIndex = 9;
@@ -3721,6 +3757,7 @@ namespace Isotope_fitting
             this.sequence_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sequence_Pnl.Controls.Add(this.color_range_panel);
             this.sequence_Pnl.Controls.Add(this.color_range_picBox);
+            this.sequence_Pnl.Controls.Add(this.seq_lbl_panel);
             this.sequence_Pnl.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequence_Pnl.Location = new System.Drawing.Point(103, 27);
             this.sequence_Pnl.Name = "sequence_Pnl";
@@ -3733,8 +3770,9 @@ namespace Isotope_fitting
             // color_range_panel
             // 
             this.color_range_panel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.color_range_panel.Location = new System.Drawing.Point(572, 0);
+            this.color_range_panel.Location = new System.Drawing.Point(522, 0);
             this.color_range_panel.Name = "color_range_panel";
+            this.color_range_panel.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.color_range_panel.Size = new System.Drawing.Size(21, 455);
             this.color_range_panel.TabIndex = 17;
             this.color_range_panel.Visible = false;
@@ -3744,22 +3782,35 @@ namespace Isotope_fitting
             // 
             this.color_range_picBox.Dock = System.Windows.Forms.DockStyle.Right;
             this.color_range_picBox.Image = ((System.Drawing.Image)(resources.GetObject("color_range_picBox.Image")));
-            this.color_range_picBox.Location = new System.Drawing.Point(593, 0);
+            this.color_range_picBox.Location = new System.Drawing.Point(543, 0);
             this.color_range_picBox.Name = "color_range_picBox";
+            this.color_range_picBox.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.color_range_picBox.Size = new System.Drawing.Size(21, 455);
             this.color_range_picBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.color_range_picBox.TabIndex = 0;
             this.color_range_picBox.TabStop = false;
             this.color_range_picBox.Visible = false;
             // 
+            // seq_lbl_panel
+            // 
+            this.seq_lbl_panel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.seq_lbl_panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seq_lbl_panel.Location = new System.Drawing.Point(564, 0);
+            this.seq_lbl_panel.Name = "seq_lbl_panel";
+            this.seq_lbl_panel.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
+            this.seq_lbl_panel.Size = new System.Drawing.Size(50, 455);
+            this.seq_lbl_panel.TabIndex = 18;
+            this.seq_lbl_panel.Visible = false;
+            this.seq_lbl_panel.Paint += new System.Windows.Forms.PaintEventHandler(this.seq_lbl_panel_Paint);
+            // 
             // draw_Btn
             // 
             this.draw_Btn.BackColor = System.Drawing.Color.Teal;
             this.draw_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.draw_Btn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.draw_Btn.Location = new System.Drawing.Point(10, 163);
+            this.draw_Btn.Location = new System.Drawing.Point(4, 163);
             this.draw_Btn.Name = "draw_Btn";
-            this.draw_Btn.Size = new System.Drawing.Size(69, 20);
+            this.draw_Btn.Size = new System.Drawing.Size(87, 21);
             this.draw_Btn.TabIndex = 6;
             this.draw_Btn.Text = "Draw";
             this.draw_Btn.UseVisualStyleBackColor = false;
@@ -4562,6 +4613,7 @@ namespace Isotope_fitting
             this.int_Idx_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.int_Idx_toolStrip.Location = new System.Drawing.Point(0, 0);
             this.int_Idx_toolStrip.Name = "int_Idx_toolStrip";
+            this.int_Idx_toolStrip.Padding = new System.Windows.Forms.Padding(0, 20, 1, 0);
             this.int_Idx_toolStrip.Size = new System.Drawing.Size(32, 345);
             this.int_Idx_toolStrip.TabIndex = 25;
             // 
@@ -4725,7 +4777,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v24.9.9";
+            this.Text = "Peak Finder v24.10.2";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -5193,5 +5245,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel color_range_panelCopy2;
         private System.Windows.Forms.Panel color_range_panelCopy1;
         private System.Windows.Forms.Panel color_range_panel;
+        private System.Windows.Forms.Panel seq_lbl_panelCopy2;
+        private System.Windows.Forms.Panel seq_lbl_panelCopy1;
+        private System.Windows.Forms.Panel seq_lbl_panel;
     }
 }

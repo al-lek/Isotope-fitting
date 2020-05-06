@@ -39,24 +39,29 @@
             this.min_numUD = new System.Windows.Forms.NumericUpDown();
             this.max_numUD = new System.Windows.Forms.NumericUpDown();
             this.btn = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.seq_reg_numUD = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_numUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // hightlight_clr_Btn
             // 
-            this.hightlight_clr_Btn.Location = new System.Drawing.Point(302, 45);
+            this.hightlight_clr_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.hightlight_clr_Btn.Location = new System.Drawing.Point(285, 48);
             this.hightlight_clr_Btn.Name = "hightlight_clr_Btn";
-            this.hightlight_clr_Btn.Size = new System.Drawing.Size(93, 30);
+            this.hightlight_clr_Btn.Size = new System.Drawing.Size(64, 24);
             this.hightlight_clr_Btn.TabIndex = 18;
-            this.hightlight_clr_Btn.Text = "Highlight color";
+            this.hightlight_clr_Btn.Text = "Color";
             this.hightlight_clr_Btn.UseVisualStyleBackColor = true;
             this.hightlight_clr_Btn.Click += new System.EventHandler(this.hightlight_clr_Btn_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 20);
+            this.label1.Location = new System.Drawing.Point(25, 20);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(112, 13);
             this.label1.TabIndex = 19;
@@ -87,7 +92,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(51, 127);
+            this.label2.Location = new System.Drawing.Point(57, 127);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 22;
@@ -96,7 +101,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(48, 157);
+            this.label3.Location = new System.Drawing.Point(54, 157);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(83, 13);
             this.label3.TabIndex = 23;
@@ -105,7 +110,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(28, 97);
+            this.label4.Location = new System.Drawing.Point(34, 97);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(103, 13);
             this.label4.TabIndex = 24;
@@ -152,7 +157,7 @@
             this.btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btn.Location = new System.Drawing.Point(331, 187);
+            this.btn.Location = new System.Drawing.Point(285, 260);
             this.btn.Name = "btn";
             this.btn.Size = new System.Drawing.Size(64, 24);
             this.btn.TabIndex = 27;
@@ -160,11 +165,54 @@
             this.btn.UseVisualStyleBackColor = false;
             this.btn.Click += new System.EventHandler(this.btn_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 202);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(131, 13);
+            this.label5.TabIndex = 28;
+            this.label5.Text = "Format color scale legend:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(88, 231);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(49, 13);
+            this.label6.TabIndex = 29;
+            this.label6.Text = "Regions:";
+            // 
+            // seq_reg_numUD
+            // 
+            this.seq_reg_numUD.Location = new System.Drawing.Point(161, 227);
+            this.seq_reg_numUD.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.seq_reg_numUD.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.seq_reg_numUD.Name = "seq_reg_numUD";
+            this.seq_reg_numUD.Size = new System.Drawing.Size(66, 20);
+            this.seq_reg_numUD.TabIndex = 30;
+            this.seq_reg_numUD.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
             // Form23
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 223);
+            this.ClientSize = new System.Drawing.Size(362, 297);
+            this.Controls.Add(this.seq_reg_numUD);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.btn);
             this.Controls.Add(this.max_numUD);
             this.Controls.Add(this.min_numUD);
@@ -184,6 +232,7 @@
             this.Text = "Highlight options";
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_numUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,5 +250,8 @@
         private System.Windows.Forms.NumericUpDown min_numUD;
         private System.Windows.Forms.NumericUpDown max_numUD;
         private System.Windows.Forms.Button btn;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown seq_reg_numUD;
     }
 }
