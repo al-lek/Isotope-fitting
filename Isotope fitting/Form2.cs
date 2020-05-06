@@ -12105,6 +12105,52 @@ namespace Isotope_fitting
             block_tab_diagrams_refresh = false;
             initialize_plot_tabs();
         }
+        private void ppm_legend_Btn_CheckedChanged(object sender, EventArgs e)
+        {
+            ppm_plot.Model.IsLegendVisible = ppm_legend_Btn.Checked;
+            ppm_plot.InvalidatePlot(true);
+        }
+        public void paint_annotations_in_graphs(bool all = true, int code = 1)
+        {
+            if (all || code == 1)
+            {
+                ax_plot.Model.Annotations.Clear();
+                axCharge_plot.Model.Annotations.Clear();
+                by_plot.Model.Annotations.Clear();
+                byCharge_plot.Model.Annotations.Clear();
+                cz_plot.Model.Annotations.Clear();
+                czCharge_plot.Model.Annotations.Clear();
+                foreach (int[] region in color_primary_indexes)
+                {
+                    ax_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                    by_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                    cz_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                    axCharge_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                    byCharge_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                    czCharge_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                }
+                ax_plot.InvalidatePlot(true);
+                by_plot.InvalidatePlot(true);
+                cz_plot.InvalidatePlot(true);
+                axCharge_plot.InvalidatePlot(true);
+                byCharge_plot.InvalidatePlot(true);
+                czCharge_plot.InvalidatePlot(true);
+            }
+            if (all || code == 2)
+            {
+                index_plot.Model.Annotations.Clear();
+                indexto_plot.Model.Annotations.Clear();
+                foreach (int[] region in color_internal_indexes)
+                {
+                    index_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
+                    indexto_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
+                }
+                index_plot.InvalidatePlot(true);
+                indexto_plot.InvalidatePlot(true);
+            }
+        }
+
+
 
         #region sequence
         //sequence toolstrip
@@ -15415,7 +15461,6 @@ namespace Isotope_fitting
             }
         }
 
-        
 
         #region export and resize panels
 
@@ -17352,11 +17397,33 @@ namespace Isotope_fitting
         private void extractPlotToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             primary_plotview_rebuild(6, czCharge_plot);
-        }        
+        }
         #endregion
 
+        public void paint_annotations_in_temp_graphs(int code, PlotView temp)
+        {
+            if (code == 1)
+            {
+                temp.Model.Annotations.Clear();
+
+                foreach (int[] region in color_primary_indexes)
+                {
+                    temp.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
+                }
+                temp.InvalidatePlot(true);
+            }
+            if (code == 2)
+            {
+                temp.Model.Annotations.Clear();
+                foreach (int[] region in color_internal_indexes)
+                {
+                    temp.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
+                }
+                temp.InvalidatePlot(true);
+            }
+        }
         #endregion
-        
+
         #region PROJECT SAVE LOAD CLEAR
         //clear
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -18187,70 +18254,7 @@ namespace Isotope_fitting
             return name_exte;
         }
         #endregion
-
        
-        public void paint_annotations_in_graphs(bool all=true, int code=1)
-        {
-            if (all || code == 1)
-            {
-                ax_plot.Model.Annotations.Clear();
-                axCharge_plot.Model.Annotations.Clear();
-                by_plot.Model.Annotations.Clear();
-                byCharge_plot.Model.Annotations.Clear();
-                cz_plot.Model.Annotations.Clear();
-                czCharge_plot.Model.Annotations.Clear();
-                foreach (int[] region in color_primary_indexes)
-                {
-                    ax_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                    by_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                    cz_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                    axCharge_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                    byCharge_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                    czCharge_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                }
-                ax_plot.InvalidatePlot(true);
-                by_plot.InvalidatePlot(true);
-                cz_plot.InvalidatePlot(true);
-                axCharge_plot.InvalidatePlot(true);
-                byCharge_plot.InvalidatePlot(true);
-                czCharge_plot.InvalidatePlot(true);
-            }
-            if(all || code==2)
-            {
-                index_plot.Model.Annotations.Clear();
-                indexto_plot.Model.Annotations.Clear();               
-                foreach (int[] region in color_internal_indexes)
-                {
-                    index_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
-                    indexto_plot.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
-                }
-                index_plot.InvalidatePlot(true);
-                indexto_plot.InvalidatePlot(true);               
-            }    
-        }
-
-        public void paint_annotations_in_temp_graphs (int code,PlotView temp)
-        {
-            if ( code == 1)
-            {
-                temp.Model.Annotations.Clear();
-                
-                foreach (int[] region in color_primary_indexes)
-                {
-                    temp.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
-                }
-                temp.InvalidatePlot(true);
-            }
-            if (code == 2)
-            {
-                temp.Model.Annotations.Clear();
-                foreach (int[] region in color_internal_indexes)
-                {
-                    temp.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
-                }
-                temp.InvalidatePlot(true);
-            }
-        }
         public void read_rtf_find_color(SequenceTab seq)
         {
             string rtf = seq.Rtf;
@@ -18291,7 +18295,6 @@ namespace Isotope_fitting
             int str_c = 0;
             foreach (string sub in str5)
             {
-
                 if (sub.StartsWith("f0") || sub.StartsWith("lang") || sub.StartsWith("fs"))
                 {
                     string[] str6 = sub.Split(' ');
@@ -18343,20 +18346,9 @@ namespace Isotope_fitting
             seq.Color_table = color_table;
         }
 
-
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
         {
 
-        }
-
-        private void ppm_legend_Btn_CheckedChanged(object sender, EventArgs e)
-        {
-            ppm_plot.Model.IsLegendVisible = ppm_legend_Btn.Checked;
-            ppm_plot.InvalidatePlot(true);
-        }
-
-       
+        }        
     }
-
-
 }

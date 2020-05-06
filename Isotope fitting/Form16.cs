@@ -153,17 +153,21 @@ namespace Isotope_fitting
         {
             if (seq_BoxFrm16.Text.Length>10 && !active_txt)
             {
+                //MessageBox.Show(seq_BoxFrm16.Rtf.ToString());
+
                 active_txt = true;
+                string old = seq_BoxFrm16.Rtf.ToString();
                 user_txt = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
                 user_txt = user_txt.Replace("\t", "");
                 user_txt = user_txt.Replace("\n", "");
                 user_txt = user_txt.Replace(" ", "");
-                output_txt =Regex.Replace(user_txt, @".{10}(?!$)", "$0  "); 
+                output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
 
-                seq_BoxFrm16.Text= output_txt;
+                seq_BoxFrm16.Text = output_txt;
                 seq_BoxFrm16.SelectionStart = seq_BoxFrm16.Text.Length;
                 seq_BoxFrm16.SelectionLength = 0;
-            }
+
+            } 
             active_txt = false;
         }
         #endregion
@@ -298,10 +302,91 @@ namespace Isotope_fitting
             return textBox.Text;
         }
         #endregion
-
+               
         private void Form16_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+        
+        private string add_space_to_rtf(string initial,string sequence)
+        {
+            string final = "";            
+            string text_section = "";            
+            string[] str = initial.Split('{');
+            for (int k = 0; k < str.Length; k++)
+            {
+                if (str[k].Contains("\\pard"))
+                {
+                    text_section = str[k];break;
+                }
+                else
+                {
+                    final += "{" + str[k];
+                }
+            }            
+            string[] str4 = text_section.Split('}');
+            for (int k = 0; k < str4.Length - 2; k++)
+            {
+                final += "}" + str4[k];
+            }
+            //\viewkind4\uc1 \pard\f0\fs17 MQIFVKTLTG  KTITLEVEPS  \cf1 DTIENVKAKI  \cf0 QDKEGIPPDQ  QRLIFAGKQL  \cf2 EDGRTLSDYN  \cf0 IQKESTLHLV  LRLR\cf3 GG\cf0\par
+            string[] str5 = str4[str4.Length - 2].Split('\\');
+            int str_c = 0;
+            foreach (string sub in str5)
+            {
+                if (sub.StartsWith("f0") || sub.StartsWith("lang") || sub.StartsWith("fs"))
+                {
+                    string[] str6 = sub.Split(' ');
+                    if (str6.Length > 1)
+                    {
+                        for (int i = 1; i < str6.Length; i++)
+                        {
+                            for (int h = 0; h < str6[i].Length; h++)
+                            {
+                                if (sequence[str_c].Equals(str6[i][h]))
+                                {
+                                     str_c++;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Error in sequence rtf."); 
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else if (sub.StartsWith("cf"))
+                {
+                    string[] str6 = sub.Split(' ');
+                    if (str6.Length > 1)
+                    {
+                        int color_idx = Int32.Parse(str6[0].Substring(2));
+
+                        for (int i = 1; i < str6.Length; i++)
+                        {
+                            for (int h = 0; h < str6[i].Length; h++)
+                            {
+                                if (sequence[str_c].Equals(str6[i][h]))
+                                {
+                                    str_c++;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Error in sequence rtf.");
+                                }
+                            }
+                        }
+                    }                    
+                    else break;
+                }
+                else
+                {
+                    final +=;
+                }
+            }
+            
+            return final;
         }
     }
 }
