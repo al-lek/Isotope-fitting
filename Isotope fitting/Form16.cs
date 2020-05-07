@@ -19,6 +19,7 @@ namespace Isotope_fitting
         string user_txt;
         string output_txt;
         bool active_txt = false;
+        bool initial_set = true;
         public Form16(Form2 f)
         {
             frm2 =f;
@@ -27,8 +28,9 @@ namespace Isotope_fitting
             IntPtr h = this.seq_tabControl.Handle;
             if (frm2.sequenceList != null && frm2.sequenceList.Count==1)
             {
-                if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf))seq_BoxFrm16.Text =  Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
-                else seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;               
+                active_txt = true;
+                if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf)) seq_BoxFrm16.Text = Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
+                else { seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;  }        
             }
             else if (frm2.sequenceList != null && frm2.sequenceList.Count >1)
             {
@@ -36,6 +38,7 @@ namespace Isotope_fitting
                 else seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;                
                 create_tabPages();
             }
+            initial_set = false;
         }
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
@@ -54,26 +57,29 @@ namespace Isotope_fitting
                 lastIndex = seq_tabControl.TabCount - 1;
                 seq_tabControl.TabPages.Insert(lastIndex, seq.Extension.ToString());
                 seq_tabControl.SelectedIndex = lastIndex;
-                RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 280), TabIndex = 1,  AutoSize = true };
-                RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 280), TabIndex = 2, AutoSize = true };
+                GroupBox grp = new GroupBox() { Text = "", Dock = DockStyle.Bottom, Size = new Size(600, 40) };
+                RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 10)/*new Point(9, 280)*/, TabIndex = 1,  AutoSize = true };
+                RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 10)/*new Point(101, 280)*/, TabIndex = 2, AutoSize = true };
                 if (seq.Type == 1) { bH.Checked = true; }
                 else { bL.Checked = true; }                
-                RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Top, Size = new Size(692, 271), ShowSelectionMargin = true, ScrollBars=RichTextBoxScrollBars.Vertical,
+                RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Fill, Size = new Size(692, 271), ShowSelectionMargin = true, ScrollBars=RichTextBoxScrollBars.Vertical,
                    Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)))};
                 if (string.IsNullOrEmpty(seq.Rtf)) box.Text = Regex.Replace(seq.Sequence, @".{10}(?!$)", "$0  ");
                 else box.Rtf = seq.Rtf;
                 box.TextChanged += (s, e1) =>
                 {
-                    if (box.Text.Length > 10 && !active_txt)
+                    if (box.Text.Length > 10 && !active_txt && !initial_set)
                     {
                         active_txt = true;
+                        string old = box.Rtf.ToString().Replace("\r\n", "");
                         user_txt = box.Text.Replace(Environment.NewLine, " ").ToString();
                         user_txt = user_txt.Replace("\t", "");
                         user_txt = user_txt.Replace("\n", "");
                         user_txt = user_txt.Replace(" ", "");
-                        output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
-
-                        box.Text = output_txt;
+                        //output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
+                        //box.Text = output_txt;
+                        output_txt = add_space_to_rtf(old, user_txt);
+                        box.Rtf = output_txt;
                         box.SelectionStart = box.Text.Length;
                         box.SelectionLength = 0;
                     }
@@ -96,8 +102,8 @@ namespace Isotope_fitting
                         }                        
                     }
                 };
-                
-                this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL, box });       
+                grp.Controls.AddRange(new Control[] { bH, bL });
+                this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { grp, box });       
             }            
             if (frm2.sequenceList.Count > 0) { seq_tabControl.SelectedIndex = 1; }
         }
@@ -131,7 +137,7 @@ namespace Isotope_fitting
                 else
                 {
                     frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = rtf_s });
-                    foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<RadioButton>())
+                    foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<GroupBox>().First().Controls.OfType<RadioButton>())
                     {
                         if (rdBtn.Checked)
                         {
@@ -151,23 +157,22 @@ namespace Isotope_fitting
         #region general sequence        
         private void seq_BoxFrm16_TextChanged(object sender, EventArgs e)
         {
-            if (seq_BoxFrm16.Text.Length>10 && !active_txt)
-            {
-                //MessageBox.Show(seq_BoxFrm16.Rtf.ToString());
-
+            if (seq_BoxFrm16.Text.Length>10 && !active_txt &&!initial_set)
+            {                
                 active_txt = true;
-                string old = seq_BoxFrm16.Rtf.ToString();
+                string old = seq_BoxFrm16.Rtf.ToString().Replace("\r\n", "");
                 user_txt = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
                 user_txt = user_txt.Replace("\t", "");
                 user_txt = user_txt.Replace("\n", "");
                 user_txt = user_txt.Replace(" ", "");
-                output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
-
-                seq_BoxFrm16.Text = output_txt;
+                //output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
+                //seq_BoxFrm16.Text = output_txt;
+                
+                output_txt = add_space_to_rtf(old, user_txt);
+                seq_BoxFrm16.Rtf = output_txt;
                 seq_BoxFrm16.SelectionStart = seq_BoxFrm16.Text.Length;
                 seq_BoxFrm16.SelectionLength = 0;
-
-            } 
+            }
             active_txt = false;
         }
         #endregion
@@ -211,12 +216,13 @@ namespace Isotope_fitting
         {
             this.seq_tabControl.TabPages.Insert(lastIndex, "New Tab");
             this.seq_tabControl.SelectedIndex = lastIndex;
-            RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 280), TabIndex = 1, Checked = true, AutoSize = true };
-            RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 280), TabIndex = 2, AutoSize = true };
+            GroupBox grp = new GroupBox() { Text = "", Dock = DockStyle.Bottom, Size = new Size(600, 40) };
+            RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 10)/*new Point(9, 280)*/, Checked = true, TabIndex = 1, AutoSize = true };
+            RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 10)/*new Point(101, 280)*/, TabIndex = 2, AutoSize = true };
             RichTextBox box = new RichTextBox()
             {
                 TabIndex = 3,
-                Dock = DockStyle.Top,
+                Dock = DockStyle.Fill,
                 Size = new Size(692, 271),
                 ShowSelectionMargin = true,
                 ScrollBars = RichTextBoxScrollBars.Vertical,
@@ -224,16 +230,18 @@ namespace Isotope_fitting
             };
             box.TextChanged += (s, e1) =>
             {
-                if (box.Text.Length > 10 && !active_txt)
+                if (box.Text.Length > 10 && !active_txt && !initial_set)
                 {
                     active_txt = true;
+                    string old = box.Rtf.ToString().Replace("\r\n", "");
                     user_txt = box.Text.Replace(Environment.NewLine, " ").ToString();
                     user_txt = user_txt.Replace("\n", "");
                     user_txt = user_txt.Replace("\t", "");
                     user_txt = user_txt.Replace(" ", "");
-                    output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
-
-                    box.Text = output_txt;
+                    //output_txt = Regex.Replace(user_txt, @".{10}(?!$)", "$0  ");
+                    //box.Text = output_txt;
+                    output_txt = add_space_to_rtf(old, user_txt);
+                    box.Rtf = output_txt;
                     box.SelectionStart = box.Text.Length;
                     box.SelectionLength = 0;
                 }
@@ -248,7 +256,8 @@ namespace Isotope_fitting
                     box.ContextMenu = cm_box;
                 }
             };
-            this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { bH, bL, box });
+            grp.Controls.AddRange(new Control[] { bH, bL });
+            this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { grp,box });
             //foreach (RadioButton rdBtn in seq_tabControl.TabPages[lastIndex].Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e1) => { if (rdBtn.Checked) frm2.sequenceList[lastIndex-1].Type= rdBtn.TabIndex; };
 
         }
@@ -311,9 +320,9 @@ namespace Isotope_fitting
         private string add_space_to_rtf(string initial,string sequence)
         {
             string final = "";            
-            string text_section = "";            
+            string text_section = "";           
             string[] str = initial.Split('{');
-            for (int k = 0; k < str.Length; k++)
+            for (int k = 1; k < str.Length; k++)
             {
                 if (str[k].Contains("\\pard"))
                 {
@@ -323,69 +332,81 @@ namespace Isotope_fitting
                 {
                     final += "{" + str[k];
                 }
-            }            
+            }           
+            final += "{";
             string[] str4 = text_section.Split('}');
             for (int k = 0; k < str4.Length - 2; k++)
             {
-                final += "}" + str4[k];
+                final +=  str4[k]+"}";
             }
             //\viewkind4\uc1 \pard\f0\fs17 MQIFVKTLTG  KTITLEVEPS  \cf1 DTIENVKAKI  \cf0 QDKEGIPPDQ  QRLIFAGKQL  \cf2 EDGRTLSDYN  \cf0 IQKESTLHLV  LRLR\cf3 GG\cf0\par
             string[] str5 = str4[str4.Length - 2].Split('\\');
             int str_c = 0;
-            foreach (string sub in str5)
+            for (int s=1;s< str5.Length ; s++)
             {
+                string sub = str5[s];
                 if (sub.StartsWith("f0") || sub.StartsWith("lang") || sub.StartsWith("fs"))
                 {
                     string[] str6 = sub.Split(' ');
                     if (str6.Length > 1)
                     {
+                        final += '\\' + str6[0] + " ";
                         for (int i = 1; i < str6.Length; i++)
                         {
                             for (int h = 0; h < str6[i].Length; h++)
                             {
-                                if (sequence[str_c].Equals(str6[i][h]))
+                                char letter = str6[i][h];
+                                if (sequence[str_c].Equals(letter))
                                 {
-                                     str_c++;
+                                    final += letter; str_c++;
+                                    if (str_c % 10 == 0) { final += " "; }
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf."); 
+                                    MessageBox.Show("Error in sequence rtf."); return initial;
                                 }
                             }
                         }
                     }
-
+                    else
+                    {
+                        final += '\\' + sub;
+                    }
                 }
                 else if (sub.StartsWith("cf"))
                 {
                     string[] str6 = sub.Split(' ');
                     if (str6.Length > 1)
                     {
-                        int color_idx = Int32.Parse(str6[0].Substring(2));
-
+                        final += '\\' + str6[0]+" ";
                         for (int i = 1; i < str6.Length; i++)
                         {
                             for (int h = 0; h < str6[i].Length; h++)
                             {
-                                if (sequence[str_c].Equals(str6[i][h]))
+                                char letter = str6[i][h];
+                                if (sequence[str_c].Equals(letter))
                                 {
-                                    str_c++;
+                                    final += letter; str_c++;
+                                    if (str_c%10==0) { final +=  " "; }
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf.");
+                                    MessageBox.Show("Error in sequence rtf."); return initial;
                                 }
                             }
                         }
-                    }                    
-                    else break;
-                }
-                else
+                    }
+                    else//when cf is not followed by a space then the plain text region has ended
+                    {
+                        final += '\\' + sub;
+                    }
+                }                
+                else if(!sub.Equals("n"))
                 {
-                    final +=;
+                    final += '\\' + sub;
                 }
             }
-            
+            final += "}";
             return final;
         }
     }

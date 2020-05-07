@@ -18317,7 +18317,7 @@ namespace Isotope_fitting
                     }
 
                 }
-                else if (sub.StartsWith("cf"))
+                else if (sub.StartsWith("cf"))//change color keyword
                 {
                     string[] str6 = sub.Split(' ');
                     if (str6.Length > 1)
@@ -18339,7 +18339,7 @@ namespace Isotope_fitting
                             }
                         }
                     }
-                    else break;
+                    //else break;//when cf is not followed by a space then the plain text region has ended
                 }
             }
             seq.Char_color = char_color;
