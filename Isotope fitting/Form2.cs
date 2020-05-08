@@ -7643,9 +7643,9 @@ namespace Isotope_fitting
             try
             {
                 Parallel.For(0, all_data[0].Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
-                //for(int i=0;i < all_data[0].Count; i++)
-                //{
+                //for (int i = 0; i < all_data[0].Count; i++)
                 {
+                    //{
                      // one by one for all points
                     List<double> one_aligned_point = all_data_aligned[i].ToList();
                     //we set the vestor entry to null in order to release memory
@@ -7679,9 +7679,9 @@ namespace Isotope_fitting
                         }
                         one_aligned_point.Add(aligned_value);
                     }
-                    all_data_aligned[i] = one_aligned_point.ToArray();
+                    ////all_data_aligned[i] = one_aligned_point.ToArray();
 
-                    //lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                    lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
                     try
                     {
                         lock (_locker)
@@ -7694,8 +7694,8 @@ namespace Isotope_fitting
                         Debug.WriteLine("progress: " + progress.ToString() + "  " + i.ToString() + " X " + all_data[0][i][0].ToString() + " Y " + all_data[0][i][1].ToString() + "  " + ex);
                     }
 
-            });
-            //}
+                });
+                //}
             }
             catch(Exception eeee)
             {
@@ -7703,8 +7703,8 @@ namespace Isotope_fitting
             }
             // sort by mz the aligned intensities list (global) beause it is mixed by multi-threading
             int sort_idx = 0;
-            //all_data_aligned.Clear();
-            //all_data_aligned = aligned_intensities.OrderBy(d => aux_idx[sort_idx++]).ToList();
+            all_data_aligned.Clear();
+            all_data_aligned = aligned_intensities.OrderBy(d => aux_idx[sort_idx++]).ToList();
             progress_display_stop();
             Invoke(new Action(() => OnRecalculate_completed()));
 

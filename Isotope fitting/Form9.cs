@@ -1340,8 +1340,10 @@ namespace Isotope_fitting
                 last_plotted.Add(frag_idx);
             }
             if (last_plotted.Count != 0)
-            {                
-                frm2.recalc_frm9(count, last_plotted.Count);               
+            {
+                Thread recalc = new Thread(() => frm2.recalc_frm9(count, last_plotted.Count));
+                recalc.Start();
+                //frm2.recalc_frm9(count, last_plotted.Count);               
             }
         }
         private void rem_Btn_Click(object sender, EventArgs e)
@@ -1352,7 +1354,8 @@ namespace Isotope_fitting
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-                frm2.recalc_frm9(count,0);
+                Thread recalc = new Thread(() => frm2.recalc_frm9(count, last_plotted.Count));
+                recalc.Start();
             }
         }
         #endregion
