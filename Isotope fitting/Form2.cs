@@ -7681,7 +7681,7 @@ namespace Isotope_fitting
                     }
                     all_data_aligned[i] = one_aligned_point.ToArray();
 
-                    lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                    //lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
                     try
                     {
                         lock (_locker)
