@@ -2949,7 +2949,7 @@ namespace Isotope_fitting
             {
                 if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
                 {
-                    frag_annotation(selectedFragments.ToList());
+                    frag_annotation(selectedFragments.ToList(),LC_1);
                 }
                 else
                 {
@@ -5507,7 +5507,7 @@ namespace Isotope_fitting
             // 6. fragment annotations
             if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
             {
-                frag_annotation(to_plot);
+                frag_annotation(to_plot, LC_1);
             }
             else
             {
@@ -5721,19 +5721,19 @@ namespace Isotope_fitting
         }
 
 
-        private void frag_annotation(List<int> to_plot)
+        private void frag_annotation(List<int> to_plot,LightningChartUltimate plot)
         {
             if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked) && !cursor_chkBx.Checked && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
             {
                 List<int> plot_idxs = new List<int>(to_plot);
-                LC_1.BeginUpdate();
-                DisposeAllAndClear(LC_1.ViewXY.Annotations);
+                plot.BeginUpdate();
+                DisposeAllAndClear(plot.ViewXY.Annotations);
                 foreach (int p in plot_idxs)
                 {
                     if ((fragPlotLbl_chkBx.Checked && !Fragments2[p - 1].Ion_type.StartsWith("inte")) || (fragPlotLbl_chkBx2.Checked && Fragments2[p - 1].Ion_type.StartsWith("inte")))
                     {
                         //Arrow from location to target
-                        AnnotationXY annotAxisValues2 = new AnnotationXY(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { MouseInteraction = false };
+                        AnnotationXY annotAxisValues2 = new AnnotationXY(plot.ViewXY, plot.ViewXY.XAxes[0], plot.ViewXY.YAxes[0]) { MouseInteraction = false };
                         annotAxisValues2.Style = AnnotationStyle.Arrow;
                         annotAxisValues2.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
                         annotAxisValues2.Text = Fragments2[p - 1].Name.ToString();
@@ -5745,10 +5745,10 @@ namespace Isotope_fitting
                         annotAxisValues2.ArrowLineStyle = new Arction.WinForms.Charting.LineStyle() { Color = Color.Transparent, Width = (float)0.5 };
                         annotAxisValues2.RotateAngle = 90;
                         annotAxisValues2.TextStyle.Font= new Font(FontFamily.GenericSansSerif,(float)annotation_size, FontStyle.Regular);
-                        LC_1.ViewXY.Annotations.Add(annotAxisValues2);
+                        plot.ViewXY.Annotations.Add(annotAxisValues2);
                     }                     
                 }
-                LC_1.EndUpdate();
+                plot.EndUpdate();
             }
         }
 
@@ -5823,6 +5823,8 @@ namespace Isotope_fitting
         private void progress_display_update(int idx)                                                                                                           
         {
             prg_lbl.Invoke(new Action(() => prg_lbl.Invalidate(true)));   //thread safe call
+            if (!prg_lbl.Visible) { prg_lbl.Invoke(new Action(() => prg_lbl.Visible = true)); }
+            if (!tlPrgBr.Visible){ tlPrgBr.Invoke(new Action(() => tlPrgBr.Visible = true)); }
             if (idx<=tlPrgBr.Maximum)
             {
                 try
@@ -7627,29 +7629,85 @@ namespace Isotope_fitting
                 return;
             }
         }
-        public void recalc_frm9(/*double min_border,double  max_border*/)
+        public void recalc_frm9(int prev_count,int curr_count)
         {
-            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
-            //if (!plotFragProf_chkBox.Checked) { plotFragProf_chkBox.Checked = true; }
-            recalculate_all_data_aligned();
-            //if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
-            //{                
-            //    if (max_border> iso_plot.Model.Axes[1].ActualMaximum || min_border < iso_plot.Model.Axes[1].ActualMinimum || (iso_plot.Model.Axes[1].ActualMaximum- iso_plot.Model.Axes[1].ActualMinimum)/100> (max_border-min_border))           
-            //    {
-            //        iso_plot.Model.Axes[1].Zoom(min_border - 3, max_border + 10);
-            //        if ((iso_plot.Model.Series[0] as LineSeries).Points.Count > 0 && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
-            //        {
-            //            try
-            //            {
-            //                double pt0 = (iso_plot.Model.Series[0] as LineSeries).Points.FindAll(x => (x.X >= min_border - 3 && x.X < max_border + 10)).Max(k => k.Y);
-            //                iso_plot.Model.Axes[0].Zoom(-10, pt0 * 1.2);
-            //            }
-            //            catch{}
-            //        }
-            //        iso_plot.Refresh();
-            //        invalidate_all();
-            //    }                
+            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }            
+            //recalculate_all_data_aligned();
+
+            List<double[]> aligned_intensities = new List<double[]>();
+            List<int> aux_idx = new List<int>();
+            progress_display_start(all_data[0].Count, "Preparing data for fit...");
+            // generate alligned (in m/z) isotope distributions at the same step as the experimental
+            // pickup each point in experimental and find (interpolate) the intensity of each fragment
+            int progress = 0;
+            try
+            {
+                Parallel.For(0, all_data[0].Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                //for(int i=0;i < all_data[0].Count; i++)
+                //{
+                {
+                     // one by one for all points
+                    List<double> one_aligned_point = all_data_aligned[i].ToList();
+                    //we set the vestor entry to null in order to release memory
+                    all_data_aligned[i] = null;
+                    if (prev_count != 0) { one_aligned_point.RemoveRange(one_aligned_point.Count - prev_count, prev_count); }
+
+                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ta experimental ola ta x-->m/z
+                    for (int j = curr_count; j > 0; j--)
+                    {
+                        int distro_idx = all_data.Count - j;
+
+                        // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
+                        double aligned_value = 0.0;
+
+                        for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
+                        {
+                            if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                            {
+                                aligned_value = 0.0; break;
+                            }
+                            if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
+                            {
+                                aligned_value = 0.0; break;
+                            }
+                            if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
+                            {
+                                //aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
+                                aligned_value = interpolate(all_data[distro_idx][k][0], all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], all_data[distro_idx][k + 1][1], mz_toInterp);
+                                break;
+                            }
+                        }
+                        one_aligned_point.Add(aligned_value);
+                    }
+                    all_data_aligned[i] = one_aligned_point.ToArray();
+
+                    lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                    try
+                    {
+                        lock (_locker)
+                        {
+                            Interlocked.Increment(ref progress); if (progress % 5000 == 0 && i > 0) progress_display_update(progress);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("progress: " + progress.ToString() + "  " + i.ToString() + " X " + all_data[0][i][0].ToString() + " Y " + all_data[0][i][1].ToString() + "  " + ex);
+                    }
+
+            });
             //}
+            }
+            catch(Exception eeee)
+            {
+                MessageBox.Show(eeee.ToString());
+            }
+            // sort by mz the aligned intensities list (global) beause it is mixed by multi-threading
+            int sort_idx = 0;
+            //all_data_aligned.Clear();
+            //all_data_aligned = aligned_intensities.OrderBy(d => aux_idx[sort_idx++]).ToList();
+            progress_display_stop();
+            Invoke(new Action(() => OnRecalculate_completed()));
+
         }
         public void refresh_frm9()
         {
@@ -16513,6 +16571,16 @@ namespace Isotope_fitting
             else if (plotCentr_chkBox.Checked && is_exp_deconvoluted)
             {
                 LineCollection_addLines(temp_plot, all_data.Count - 1, experimental);
+            }
+
+            // 6. fragment annotations
+            if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
+            {
+                frag_annotation(to_plot, temp_plot);
+            }
+            else
+            {
+                DisposeAllAndClear(temp_plot.ViewXY.Annotations);
             }
             temp_plot.EndUpdate();        
         }

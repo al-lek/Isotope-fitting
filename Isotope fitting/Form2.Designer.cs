@@ -1935,7 +1935,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(40, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(37, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1947,7 +1947,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(130, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(127, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -4823,7 +4823,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v24.10.2";
+            this.Text = "Peak Finder v24.10.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);

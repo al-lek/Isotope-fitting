@@ -1316,7 +1316,8 @@ namespace Isotope_fitting
         }
         private void plot_checked()
         {
-            if (last_plotted.Count != 0)
+            int count = last_plotted.Count;
+            if (count != 0)
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
@@ -1339,32 +1340,19 @@ namespace Isotope_fitting
                 last_plotted.Add(frag_idx);
             }
             if (last_plotted.Count != 0)
-            {
-                //try
-                //{
-                frm2.recalc_frm9(/*Fragments3[frag_idx].Profile[0].X, Fragments3[frag_idx].Profile.Last().X*/);/* adjust_height();*/
-                //}
-                //catch(Exception ex)
-                //{
-                //    MessageBox.Show("Fragments don't belong to the experimental data!"+ex.ToString());
-                //    if (last_plotted.Count != 0)
-                //    {
-                //        all_data.RemoveAt(all_data.Count - last_plotted.Count); custom_colors.RemoveAt(custom_colors.Count - last_plotted.Count);
-                //        last_plotted.Clear();
-                //    }
-                //    first = true; now = false;
-                //    frm2.ending_frm9();
-                //}
+            {                
+                frm2.recalc_frm9(count, last_plotted.Count);               
             }
         }
         private void rem_Btn_Click(object sender, EventArgs e)
         {
-            if (last_plotted.Count == 0) return;
+            int count = last_plotted.Count;
+            if (count == 0) return;
             else
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-                frm2.recalc_frm9();
+                frm2.recalc_frm9(count,0);
             }
         }
         #endregion
