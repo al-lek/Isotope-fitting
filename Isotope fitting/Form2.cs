@@ -2858,7 +2858,7 @@ namespace Isotope_fitting
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
                                                                       new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }),
-                                                                      new MenuItem("Remove Unchecked", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode,true); } }),
+                                                                      new MenuItem("Remove Unchecked", (s, e) => {remove_node(frag_tree.SelectedNode,true); }),
                                                                       new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
                                                                       new MenuItem("Replace Extension", (s, e) => {replace_extension();  })
                 });
