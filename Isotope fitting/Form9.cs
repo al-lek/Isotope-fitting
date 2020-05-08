@@ -98,6 +98,7 @@ namespace Isotope_fitting
         private void delete_all(object sender, EventArgs e)
         {
             fragListView9.Enabled=false;
+            int count = last_plotted.Count;
             if ((sender as MenuItem).Text == "Clear all" )
             {
                 //when closing the form public data from this form are restored in their initial values
@@ -105,20 +106,23 @@ namespace Isotope_fitting
                 fragListView9.BeginUpdate();
                 fragListView9.Items.Clear();               
                 fragListView9.EndUpdate();
-                if (last_plotted.Count != 0)
+                if (count != 0)
                 {
                     all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                     last_plotted.Clear();
+                    frm2.recalc_frm9(count, last_plotted.Count);
                 }
                 //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
                 //we don't want to refresh fragment trees in the basic form
-                frm2.ending_frm9();
+                //frm2.ending_frm9();
 
             }
             fragListView9.Enabled = true;
         }
         private void delete_frag(object sender, EventArgs e)
         {
+            int count_last_plotted = last_plotted.Count;
+
             if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
             fragListView9.Enabled = false;
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
@@ -137,18 +141,18 @@ namespace Isotope_fitting
                 for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
                 //refresh listview 
                 Fragments3_to_listview();
-                if (last_plotted.Count != 0)
-                {
-                    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
-                    last_plotted.Clear();
-                }
+                //if (count_last_plotted != 0)
+                //{
+                //    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                //    last_plotted.Clear();
+                //}
                 //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
                 first = true;
                 factor_panel9.Visible = false; selected_idx = 0;
-                frm2.ending_frm9();                
+                //frm2.ending_frm9();                
             }
             fragListView9.Enabled = true;
-            plot_checked();
+            plot_checked(true,count_last_plotted);
         }
         private void colorSelectionList(object sender, EventArgs e)
         {
@@ -1272,16 +1276,18 @@ namespace Isotope_fitting
 
         private void Form9_FormClosing(object sender, FormClosingEventArgs e)
         {
+            int count = last_plotted.Count;
             //when closing the form public data from this form are restored in their initial values
             initialize_data();
-            if (last_plotted.Count!=0)
+            if (count != 0)
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-            }           
-            //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
-            //we don't want to refresh fragment trees in the basic form
-            frm2.ending_frm9();
+                frm2.recalc_frm9(count, last_plotted.Count);
+            }
+            ////when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
+            ////we don't want to refresh fragment trees in the basic form
+            //frm2.ending_frm9();
         }
                 
         void ppm9_numUD_TextChanged(object sender, EventArgs e)
@@ -1314,9 +1320,10 @@ namespace Isotope_fitting
         {
             plot_checked();
         }
-        private void plot_checked()
+        private void plot_checked(bool from_delete = false,int count_last_plotted=0)
         {
             int count = last_plotted.Count;
+            if (from_delete) { count = count_last_plotted; }
             if (count != 0)
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
@@ -1339,10 +1346,9 @@ namespace Isotope_fitting
                 first = false; now = true;
                 last_plotted.Add(frag_idx);
             }
-            if (last_plotted.Count != 0)
+            if (last_plotted.Count != 0 || count!=0)
             {
-                Thread recalc = new Thread(() => frm2.recalc_frm9(count, last_plotted.Count));
-                recalc.Start();
+                frm2.recalc_frm9(count, last_plotted.Count);
                 //frm2.recalc_frm9(count, last_plotted.Count);               
             }
         }
@@ -1354,8 +1360,7 @@ namespace Isotope_fitting
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-                Thread recalc = new Thread(() => frm2.recalc_frm9(count, last_plotted.Count));
-                recalc.Start();
+                frm2.recalc_frm9(count, last_plotted.Count);
             }
         }
         #endregion

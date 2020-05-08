@@ -7631,9 +7631,14 @@ namespace Isotope_fitting
         }
         public void recalc_frm9(int prev_count,int curr_count)
         {
-            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }            
+            if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
             //recalculate_all_data_aligned();
+            Thread recalc = new Thread(() => refresh_all_data_aligned(prev_count, curr_count));
+            recalc.Start();
 
+        }
+        public void refresh_all_data_aligned(int prev_count, int curr_count)
+        {
             List<double[]> aligned_intensities = new List<double[]>();
             List<int> aux_idx = new List<int>();
             progress_display_start(all_data[0].Count, "Preparing data for fit...");
@@ -7646,7 +7651,7 @@ namespace Isotope_fitting
                 //for (int i = 0; i < all_data[0].Count; i++)
                 {
                     //{
-                     // one by one for all points
+                    // one by one for all points
                     List<double> one_aligned_point = all_data_aligned[i].ToList();
                     //we set the vestor entry to null in order to release memory
                     all_data_aligned[i] = null;
@@ -7697,7 +7702,7 @@ namespace Isotope_fitting
                 });
                 //}
             }
-            catch(Exception eeee)
+            catch (Exception eeee)
             {
                 MessageBox.Show(eeee.ToString());
             }
