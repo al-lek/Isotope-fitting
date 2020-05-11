@@ -97,6 +97,7 @@ namespace Isotope_fitting
 
         private void delete_all(object sender, EventArgs e)
         {
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             fragListView9.Enabled=false;
             int count = last_plotted.Count;
             if ((sender as MenuItem).Text == "Clear all" )
@@ -121,8 +122,8 @@ namespace Isotope_fitting
         }
         private void delete_frag(object sender, EventArgs e)
         {
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             int count_last_plotted = last_plotted.Count;
-
             if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
             fragListView9.Enabled = false;
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
@@ -261,6 +262,7 @@ namespace Isotope_fitting
       
         private void adjust_height()
         {
+
             double frag_intensity = Fragments3[selected_idx].Factor * Fragments3[selected_idx].Max_intensity;
             factor_panel9.Visible = true;
             factor_panel9.Controls.Clear();
@@ -276,6 +278,7 @@ namespace Isotope_fitting
             };
             numUD.ValueChanged += (s, e) =>
             {
+                if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
                 // manualy adjust height. We have also to maualy call refresh plot
                 Fragments3[selected_idx].Factor = Convert.ToDouble(numUD.Value) / Fragments3[selected_idx].Max_intensity;
                 frm2.refresh_frm9();
@@ -806,35 +809,7 @@ namespace Isotope_fitting
             chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString();
             if (!insert_exp ) { add_fragment_to_Fragments3(chem, cen); return; }
             // MAIN decesion algorithm 
-            bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);
-
-            //// only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)            
-            //if (fragment_is_canditate)
-            //{
-            //    chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //    ChemiForm.Envelope(chem);
-            //    ChemiForm.Vdetect(chem);
-            //    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-            //    chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //    add_fragment_to_Fragments3(chem,cen);return;
-            //}
-            //else if (ignore_ppm_form9.Checked)
-            //{
-            //    //chem.Profile.Clear();
-            //    //ChemiForm.Envelope(chem);               
-            //    //MessageBox.Show(chem.Name+ " is out of ppm bounds.");
-            //    chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //    ChemiForm.Envelope(chem);
-            //    ChemiForm.Vdetect(chem);
-            //    cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-            //    chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //    add_fragment_to_Fragments3(chem, cen,false);
-            //    return;
-            //}
-            //else
-            //{
-            //    chem.Points.Clear(); chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //}
+            bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);          
         }
 
         private void add_fragment_to_Fragments3(ChemiForm chem, List<PointPlot> cen, bool candidate=true)
@@ -1318,6 +1293,7 @@ namespace Isotope_fitting
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
         {
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             plot_checked();
         }
         private void plot_checked(bool from_delete = false,int count_last_plotted=0)
@@ -1349,11 +1325,12 @@ namespace Isotope_fitting
             if (last_plotted.Count != 0 || count!=0)
             {
                 frm2.recalc_frm9(count, last_plotted.Count);
-                //frm2.recalc_frm9(count, last_plotted.Count);               
             }
         }
         private void rem_Btn_Click(object sender, EventArgs e)
         {
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+
             int count = last_plotted.Count;
             if (count == 0) return;
             else

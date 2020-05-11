@@ -48,6 +48,7 @@ namespace Isotope_fitting
         public bool tab_mode = false;
         int duplicate_count = 0;
         int added = 0;
+        public bool is_frag_calc_recalc = false;
         #region deconvoluted
         public bool is_exp_deconvoluted = false;
         public string deconv_machine = "";
@@ -2566,26 +2567,7 @@ namespace Isotope_fitting
             else
             {
                 fragment_is_canditate = decision_algorithm(chem, cen);
-            }
-            //else if (is_exp_deconvoluted)
-            //{
-            //    fragment_is_canditate = decision_algorithm(chem, cen);
-            //    if (fragment_is_canditate) add_fragment_to_Fragments2(chem, cen);               
-            //}
-            //else
-            //{
-            //    fragment_is_canditate = decision_algorithm(chem, cen);
-            //    if (fragment_is_canditate)
-            //    {
-            //        chem.Profile.Clear();chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //        // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-            //        ChemiForm.Envelope(chem); 
-            //        ChemiForm.Vdetect(chem);
-            //        cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-            //        chem.Centroid.Clear(); chem.Intensoid.Clear();
-            //        add_fragment_to_Fragments2(chem, cen);
-            //    }
-            //}                  
+            }                      
         }
         private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
         {
@@ -2737,17 +2719,13 @@ namespace Isotope_fitting
                     else Fragments2.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
                     // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                     // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
-                    chem.Profile.Clear();
-                    chem.Points.Clear();
-                    chem.Centroid.Clear(); chem.Intensoid.Clear();
+                    chem.Profile.Clear();chem.Points.Clear();chem.Centroid.Clear(); chem.Intensoid.Clear();
                 }
                 else
                 {
                     // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                     // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
-                    chem.Profile.Clear();
-                    chem.Points.Clear();
-                    chem.Centroid.Clear(); chem.Intensoid.Clear();
+                    chem.Profile.Clear();chem.Points.Clear();chem.Centroid.Clear(); chem.Intensoid.Clear();
                     duplicate_count++;
                     if(added>0)added--;
                 }       
@@ -5100,9 +5078,10 @@ namespace Isotope_fitting
                 if (Form9.now)
                 {
                     int count = all_data_aligned[i].Count();
-                    for (int extras = 0; extras < Form9.last_plotted.Count(); extras++)
+                    int count_last_plot = Form9.last_plotted.Count;
+                    for (int extras =0; extras< count_last_plot ; extras++)
                         if (all_data_aligned[i][count - extras - 1] > 0)
-                            intensity += all_data_aligned[i][count - extras - 1] * Form9.Fragments3[Form9.last_plotted[extras]].Factor;
+                            intensity += all_data_aligned[i][count - extras - 1] * Form9.Fragments3[Form9.last_plotted[count_last_plot - extras - 1]].Factor;
                 }
 
                 summation_temp[i] = new double[] { all_data[0][i][0], intensity };
@@ -6573,7 +6552,6 @@ namespace Isotope_fitting
                     if (envipat)
                     {
                         progress_display_start(lista.Count, "Receiving fragment isotopic distributions...");
-
                         for (int j = 0; j != (lista.Count); j++)
                         {
                             //string[] str = new string[15];
@@ -6906,8 +6884,6 @@ namespace Isotope_fitting
                             if (j % 10 == 0 && j > 0) { progress_display_update(j); }
                         }
                         progress_display_stop();
-
-
                         if (!dec)
                         {                            
                             foreach (ChemiForm chemi in fitted_chem)
@@ -6915,7 +6891,10 @@ namespace Isotope_fitting
                                 List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
                                 add_fragment_to_Fragments2(chemi, cen);
                             }     
-                            if (n == file_count - 1) {  is_calc = false; }
+                            if (n == file_count - 1)
+                            {
+                                is_calc = false;
+                            }
                         }
                         else
                         {
@@ -7220,7 +7199,6 @@ namespace Isotope_fitting
                              
             }
             else { return; }
-            is_loading = false;
             fitted_results.Clear();
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
@@ -7244,6 +7222,7 @@ namespace Isotope_fitting
                 MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current files.", "Fitted fragments files");
             }
             exclude_list_make_lists();
+            is_loading = false; is_calc = false;
         }
         private void exclude_list_make_lists()
         {
@@ -7431,27 +7410,6 @@ namespace Isotope_fitting
                 }
             }
         }
-        private void calculate_loaded_fragment_properties(List<ChemiForm> selected_fragments)
-        {
-            // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
-            is_calc = true;
-            sw1.Reset(); sw1.Start();
-            try
-            {
-                Parallel.For(0, selected_fragments.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
-                {
-                    is_calc = true;
-                    Envipat_Calcs_and_filter_byPPM(selected_fragments[i]);
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex); MessageBox.Show("Incorrect Data Format. Check your Fragment File." +ex.ToString());
-                is_calc = false;
-            };
-            sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString()); 
-            is_calc = false;
-        }
         private bool check_for_duplicates(string name,double mz)
         {
             int[] a = new int[] {1,1};
@@ -7635,10 +7593,10 @@ namespace Isotope_fitting
             //recalculate_all_data_aligned();
             Thread recalc = new Thread(() => refresh_all_data_aligned(prev_count, curr_count));
             recalc.Start();
-
         }
         public void refresh_all_data_aligned(int prev_count, int curr_count)
         {
+            is_frag_calc_recalc = true;
             List<double[]> aligned_intensities = new List<double[]>();
             List<int> aux_idx = new List<int>();
             progress_display_start(all_data[0].Count, "Preparing data for fit...");
@@ -7712,7 +7670,7 @@ namespace Isotope_fitting
             all_data_aligned = aligned_intensities.OrderBy(d => aux_idx[sort_idx++]).ToList();
             progress_display_stop();
             Invoke(new Action(() => OnRecalculate_completed()));
-
+            is_frag_calc_recalc = false;
         }
         public void refresh_frm9()
         {
@@ -17928,11 +17886,10 @@ namespace Isotope_fitting
             Fragments2 = Fragments2.OrderBy(fr => Convert.ToDouble(fr.Mz)).ToList();
             // also restore indexes to match array position
             for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
-            is_calc = false;
             // thread safely fire event to continue calculations                       
             if (sequenceList.Count == 1) { tab_mode = false; }
             else { tab_mode = true; }
-            is_loading = false;
+            is_loading = false; is_calc = false;
             exclude_list_make_lists();
             return;
         }
