@@ -49,6 +49,7 @@ namespace Isotope_fitting
         int duplicate_count = 0;
         int added = 0;
         public bool is_frag_calc_recalc = false;
+        bool first_move_cursor_chkBx = true;
         #region deconvoluted
         public bool is_exp_deconvoluted = false;
         public string deconv_machine = "";
@@ -133,9 +134,9 @@ namespace Isotope_fitting
         PlotView iso_plot;
         PlotView res_plot;
         OxyColor[] data_colors = new OxyColor[21] { OxyColors.Black, OxyColors.Green, OxyColors.IndianRed, OxyColors.Turquoise, OxyColors.DarkViolet, OxyColors.SlateGray, OxyColors.DarkRed, OxyColors.DarkOliveGreen, OxyColors.DarkSlateBlue,
-            OxyColors.DarkKhaki, OxyColors.DimGray, OxyColors.DeepPink, OxyColors.Ivory, OxyColors.Tan, OxyColors.PaleGoldenrod, OxyColors.Olive, OxyColors.MistyRose, OxyColors.Moccasin, OxyColors.MediumOrchid, OxyColors.LimeGreen, OxyColors.LightGoldenrodYellow};
+            OxyColors.DarkKhaki, OxyColors.DimGray, OxyColors.DeepPink, OxyColors.Ivory, OxyColors.Tan, OxyColors.Orange, OxyColors.Olive, OxyColors.MistyRose, OxyColors.Moccasin, OxyColors.MediumOrchid, OxyColors.LimeGreen, OxyColors.LightGoldenrodYellow};
         OxyColor[] charge_colors = new OxyColor[21] { OxyColors.Black, OxyColors.Green, OxyColors.IndianRed, OxyColors.Turquoise, OxyColors.DarkViolet, OxyColors.SlateGray, OxyColors.DarkRed, OxyColors.DarkOliveGreen, OxyColors.DarkSlateBlue,
-            OxyColors.DarkKhaki, OxyColors.DimGray, OxyColors.DeepPink, OxyColors.Ivory, OxyColors.Tan, OxyColors.PaleGoldenrod, OxyColors.Olive, OxyColors.MistyRose, OxyColors.Moccasin, OxyColors.MediumOrchid, OxyColors.LimeGreen, OxyColors.LightGoldenrodYellow};
+            OxyColors.DarkKhaki, OxyColors.DimGray, OxyColors.DeepPink, OxyColors.Ivory, OxyColors.Tan, OxyColors.Orange, OxyColors.Olive, OxyColors.MistyRose, OxyColors.Moccasin, OxyColors.MediumOrchid, OxyColors.LimeGreen, OxyColors.LightGoldenrodYellow};
 
         OxyColor[] b_colors = new OxyColor[3] { OxyColors.Blue, OxyColors.Blue, OxyColors.Blue }; //OxyColors.Navy
         OxyColor[] y_colors = new OxyColor[3] { OxyColors.DodgerBlue, OxyColors.DodgerBlue, OxyColors.DodgerBlue };
@@ -1610,7 +1611,7 @@ namespace Isotope_fitting
                 else if (ChemFormulas[i].Ion.StartsWith("y")) { ChemFormulas[i].Color = OxyColors.DodgerBlue; }
                 else if (ChemFormulas[i].Ion.StartsWith("z")) { ChemFormulas[i].Color = OxyColors.Tomato;  }
                 else if (ChemFormulas[i].Ion.StartsWith("c")) ChemFormulas[i].Color = OxyColors.Firebrick;
-                else ChemFormulas[i].Color = OxyColors.PaleGoldenrod;
+                else ChemFormulas[i].Color = OxyColors.Orange;
 
                 string lbl = "";
                 if (ChemFormulas[i].Ion_type.Length == 1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
@@ -1812,7 +1813,7 @@ namespace Isotope_fitting
                 else if (ChemFormulas[i].Ion.StartsWith("c")) ChemFormulas[i].Color = OxyColors.Firebrick;
                 else if(ChemFormulas[i].Ion.Contains("int") && ChemFormulas[i].Ion.Contains("b")) ChemFormulas[i].Color = OxyColors.MediumOrchid;
                 else if (ChemFormulas[i].Ion.Contains("int")) ChemFormulas[i].Color = OxyColors.DarkViolet;
-                else ChemFormulas[i].Color = OxyColors.PaleGoldenrod;
+                else ChemFormulas[i].Color = OxyColors.Orange;
 
                 string lbl = "";
                 if (ChemFormulas[i].Ion.StartsWith("int"))//for internal fragments
@@ -2543,7 +2544,7 @@ namespace Isotope_fitting
             else { chem.Mz = Math.Round((chem.Monoisotopic.Mass - emass * chem.Charge) / chem.Charge, 4).ToString(); }
             
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
-            if (!insert_exp|| chem.Fixed ) {  add_fragment_to_Fragments2(chem, cen); return; }
+            if (!insert_exp/*|| chem.Fixed*/ ) {  add_fragment_to_Fragments2(chem, cen); return; }
             // MAIN decesion algorithm
             bool fragment_is_canditate = true;
             if (calc_FF)
@@ -2612,8 +2613,9 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(cen[i].X);
                 results.Add(tmp);
-                if (Math.Abs(tmp[0]) > temp_pp && is_exp_deconvoluted) { fragment_is_canditate = false; break; }
+                if (Math.Abs(tmp[0]) > temp_pp /*&& is_exp_deconvoluted*/) { fragment_is_canditate = false; break; }
             }
+
             //round 2, with the correct resolution
             if (fragment_is_canditate && !is_exp_deconvoluted)
             {
@@ -2624,14 +2626,16 @@ namespace Isotope_fitting
                 ChemiForm.Envelope(chem);
                 ChemiForm.Vdetect(chem);
                 cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                if (contrib_peaks > cen.Count) { contrib_peaks = cen.Count; }
                 for (int i = 0; i < contrib_peaks; i++)
                 {
                     double[] tmp = ppm_calculator(cen[i].X);
-                    if (Math.Abs(tmp[0]) < temp_pp) { results.Add(tmp); }
+                    results.Add(tmp);
+                    if (Math.Abs(tmp[0]) < temp_pp) {/* results.Add(tmp); */}
                     else { fragment_is_canditate = false; break; }
                 }
             }
-            if (!fragment_is_canditate) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
+            if (!fragment_is_canditate && !chem.Fixed) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
             //set PPM error
             chem.PPM_Error = results.Average(p => p[0]);
             if (results.Count > 1) { chem.maxPPM_Error = results.Max(p => p[0]); chem.minPPM_Error = results.Min(p => p[0]); }
@@ -5048,7 +5052,7 @@ namespace Isotope_fitting
                     {
                         double change = operand * all_data_aligned[i][diff] * Fragments2[diff - 1].Factor;
                         summation[i][1] += change;
-                        residual[i][1] += change;
+                        residual[i][1] -= change;
                     }
                 }
 
@@ -5275,6 +5279,15 @@ namespace Isotope_fitting
                         LC_1.ViewXY.Bands[0].ValueEnd = x;
                     }
                 }
+                //if (first_move_cursor_chkBx)
+                //{
+                //    // fragment annotations
+                //    if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
+                //    {
+                //        frag_annotation(selectedFragments.ToList(), LC_1);
+                //    }
+                //    first_move_cursor_chkBx = false;
+                //}                
             }
            
         }
@@ -5702,7 +5715,7 @@ namespace Isotope_fitting
 
         private void frag_annotation(List<int> to_plot,LightningChartUltimate plot)
         {
-            if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked) && !cursor_chkBx.Checked && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+            if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked)&& (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
             {
                 List<int> plot_idxs = new List<int>(to_plot);
                 plot.BeginUpdate();
@@ -5715,6 +5728,7 @@ namespace Isotope_fitting
                         AnnotationXY annotAxisValues2 = new AnnotationXY(plot.ViewXY, plot.ViewXY.XAxes[0], plot.ViewXY.YAxes[0]) { MouseInteraction = false };
                         annotAxisValues2.Style = AnnotationStyle.Arrow;
                         annotAxisValues2.LocationCoordinateSystem = CoordinateSystem.RelativeCoordinatesToTarget;
+                        annotAxisValues2.TargetCoordinateSystem = AnnotationTargetCoordinates.AxisValues;
                         annotAxisValues2.Text = Fragments2[p - 1].Name.ToString();
                         annotAxisValues2.TargetAxisValues.X = Fragments2[p - 1].Centroid[0].X;
                         annotAxisValues2.TargetAxisValues.Y = Fragments2[p - 1].Centroid[0].Y * Fragments2[p - 1].Factor;
@@ -5730,10 +5744,18 @@ namespace Isotope_fitting
                 plot.EndUpdate();
             }
         }
-
-        private void cursor_chkBx_Click(object sender, EventArgs e)
+        private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {
-            if ( plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
+            first_move_cursor_chkBx = true;
+            //if (!cursor_chkBx.Checked)
+            //{
+            //    // fragment annotations
+            //    if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
+            //    {
+            //        frag_annotation(selectedFragments.ToList(), LC_1);
+            //    }                
+            //}
+            if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
                 // Remove exsisting custom x - axis tickmarks
                 DisposeAllAndClear(LC_1.ViewXY.XAxes[1].CustomTicks);
@@ -5745,9 +5767,8 @@ namespace Isotope_fitting
                 DisposeAllAndClear(LC_1.ViewXY.Bands);
                 count_distance = false;
             }
-            else cursor_chkBx.Checked = false;            
+            else cursor_chkBx.Checked = false;
         }
-
 
         public class CustomPlotController : PlotController
         {
@@ -6516,6 +6537,7 @@ namespace Isotope_fitting
                 loadFit_Btn.Enabled = false;
                 #endregion
                 int file_count = loadData.FileNames.Length;
+                selectedFragments.Clear();
                 for (int n= 0; n< file_count; n++ )
                 {
                     string FileName = loadData.FileNames[n];
@@ -18379,6 +18401,8 @@ namespace Isotope_fitting
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
         {
 
-        }        
+        }
+
+       
     }
 }

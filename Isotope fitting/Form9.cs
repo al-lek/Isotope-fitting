@@ -38,7 +38,7 @@ namespace Isotope_fitting
         bool is_res_user_defined = false;
         public static List<int> last_plotted = new List<int>();
         List<ChemiForm> mult_loaded = new List<ChemiForm>();
-
+        bool is_in_calc_mode = false;
         public Form9(Form2 f)
         {
             frm2 = f;
@@ -98,7 +98,7 @@ namespace Isotope_fitting
         private void delete_all(object sender, EventArgs e)
         {
             if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
-            fragListView9.Enabled=false;
+            during_calc(true);
             int count = last_plotted.Count;
             if ((sender as MenuItem).Text == "Clear all" )
             {
@@ -116,25 +116,26 @@ namespace Isotope_fitting
                 //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
                 //we don't want to refresh fragment trees in the basic form
                 //frm2.ending_frm9();
-
+                factor_panel9.Visible = false;
             }
-            fragListView9.Enabled = true;
+            during_calc(false);
         }
         private void delete_frag(object sender, EventArgs e)
         {
             if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             int count_last_plotted = last_plotted.Count;
             if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
-            fragListView9.Enabled = false;
+            during_calc(true);
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
             if ((sender as MenuItem).Text == "Delete fragment" && selectedItems.Count > 0)
             {
                 now = false;
                 int count = 0;
-                foreach (int item in fragListView9.SelectedIndices)
+                foreach (ListViewItem item in fragListView9.SelectedItems)
                 {
+                    int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
                     //remove fragment from the current listview
-                    Fragments3.RemoveAt(item - count); count++;                   
+                    Fragments3.RemoveAt(frag_idx - count); count++;
                 }
                 // sort by mz the fragments list 
                 Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
@@ -152,7 +153,7 @@ namespace Isotope_fitting
                 factor_panel9.Visible = false; selected_idx = 0;
                 //frm2.ending_frm9();                
             }
-            fragListView9.Enabled = true;
+            during_calc(false);
             plot_checked(true,count_last_plotted);
         }
         private void colorSelectionList(object sender, EventArgs e)
@@ -160,10 +161,11 @@ namespace Isotope_fitting
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
             if ((sender as MenuItem).Text == "Fragment color" && selectedItems.Count > 0)
             {
-                foreach (int item in fragListView9.SelectedIndices)
+                foreach (ListViewItem item in fragListView9.SelectedItems)
                 {
+                    int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
                     ColorDialog clrDlg = new ColorDialog();
-                    if (clrDlg.ShowDialog() == DialogResult.OK) {  Fragments3[item].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
+                    if (clrDlg.ShowDialog() == DialogResult.OK) {  Fragments3[frag_idx].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
                 }
             }
         }
@@ -220,6 +222,7 @@ namespace Isotope_fitting
         {
             fragListView9.BeginUpdate();
             fragListView9.Items.Clear();
+            selected_idx = 0;
             foreach (FragForm fra in Fragments3)
             {
                 var listviewitem = new ListViewItem(fra.Name);
@@ -235,16 +238,7 @@ namespace Isotope_fitting
             }
             fragListView9.EndUpdate();
         }
-        private void fragListView9_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            if (e.CurrentValue != CheckState.Checked)
-            {
-                foreach (ListViewItem lili in fragListView9.Items)
-                {
-                    lili.Checked = false;
-                }
-            }
-        }
+        
         private void fragListView9_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (last_plotted.Count==0) { return; }
@@ -296,11 +290,13 @@ namespace Isotope_fitting
         #region isotopic distributions calculations
         private void calc_Btn_Click(object sender, EventArgs e)
         {
+            during_calc(true);
             if (Fragments3.Count > 0)
             {
                 DialogResult dialogResult = MessageBox.Show("Clear List before proceeding with calculation?", "Fragment Calculator", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes) Fragments3.Clear();
-            }            
+            }
+            factor_panel9.Visible = false;
             //the basic algorithm with small changes for the specific form9
             fragments_and_calculations_sequence_A_frm9();
         }
@@ -313,17 +309,17 @@ namespace Isotope_fitting
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
             if (FragCalc_TabControl.SelectedTab == FragCalc_TabControl.TabPages["Frag_tab"])
             {
-                if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); return; }
+                if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); during_calc(false); return; }
                 selected_fragments = select_fragments2_frm9();
             }
             else if (mult_loaded!=null && mult_loaded.Count>0)
             {
                 selected_fragments = mult_loaded;
             }
-            else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); return; }
+            else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); during_calc(false); return; }
             else { selected_fragments = check_chem_inputs(); }
 
-            if (selected_fragments.Count == 0) { MessageBox.Show("No fragments found"); return; } 
+            if (selected_fragments.Count == 0) { MessageBox.Show("No fragments found"); during_calc(false); return; } 
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution
@@ -333,7 +329,10 @@ namespace Isotope_fitting
             Thread envipat_properties = new Thread(() => calculate_fragment_properties_frm9(selected_fragments));
             envipat_properties.Start();
         } 
-
+        private void during_calc(bool set=true)
+        {
+             is_in_calc_mode = set;
+        }
         private List<ChemiForm> check_chem_inputs()
         {
             List<ChemiForm> res = new List<ChemiForm>();
@@ -463,9 +462,9 @@ namespace Isotope_fitting
                 else if (res.Last().Ion.StartsWith("z")) res.Last().Color = OxyColors.Tomato;
                 else if (res.Last().Ion.StartsWith("c")) res.Last().Color = OxyColors.Firebrick;
                 else if (res.Last().Ion.Contains("internal") && res.Last().Ion.Contains("b")) res.Last().Color = OxyColors.MediumOrchid;
-                else if (res.Last().Ion.Contains("internal") ) res.Last().Color = OxyColors.DarkViolet;
+                else if (res.Last().Ion.Contains("internal")) res.Last().Color = OxyColors.DarkViolet;
                 else if (res.Last().Ion.StartsWith("M")) res.Last().Color = OxyColors.DarkRed;
-                else res.Last().Color = OxyColors.PaleGoldenrod;
+                else res.Last().Color = OxyColors.Orange;
 
                 string lbl = "";
                 if (res.Last().Ion.Contains("internal"))
@@ -755,9 +754,9 @@ namespace Isotope_fitting
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Debug.WriteLine(ex); during_calc(false);
             };
-
+            during_calc(false);
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
@@ -766,7 +765,7 @@ namespace Isotope_fitting
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
             if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { MessageBox.Show("Chemical formulas profile calculation is completed!From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Chemical formula calculation results"); }
-            else { MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results"); }                
+            else { MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results"); }
             Invoke(new Action(() => OnCalcFrag3Completed()));
         }
         private void Envipat_Calcs_and_filter_byPPM_frm9(ChemiForm chem)
@@ -981,13 +980,15 @@ namespace Isotope_fitting
         #region insert fragment to Fragments2
         private void insert_Btn_Click(object sender, EventArgs e)
         {
+            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             insert_frag_to_Fragments2();
         }
         private void insert_frag_to_Fragments2()
         {
             if (fragListView9.CheckedIndices.Count == 0) { MessageBox.Show("First check the desired fragments and then press insert!"); return; }
-            foreach (int new_fragin in fragListView9.CheckedIndices)
+            foreach (ListViewItem item in fragListView9.CheckedItems)
             {
+                int new_fragin = System.Convert.ToInt32(item.SubItems[5].Text);
                 //set now to false in order to let refresh_iso_plot follow the basic algorithm 
                 now = false;
                 Fragments2.Add(new FragForm()
@@ -1037,8 +1038,9 @@ namespace Isotope_fitting
             frm2.add_frag_frm9();
 
             int count = 0;
-            foreach (int new_fragin in fragListView9.CheckedIndices)
+            foreach (ListViewItem item in fragListView9.CheckedItems)
             {
+                int new_fragin = System.Convert.ToInt32(item.SubItems[5].Text);
                 //remove fragment from the current listview
                 Fragments3.RemoveAt(new_fragin- count); count++;
             }                
@@ -1293,7 +1295,7 @@ namespace Isotope_fitting
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
         {
-            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             plot_checked();
         }
         private void plot_checked(bool from_delete = false,int count_last_plotted=0)
@@ -1305,8 +1307,9 @@ namespace Isotope_fitting
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
             }
-            foreach (int frag_idx in fragListView9.CheckedIndices)
+            foreach (ListViewItem item in fragListView9.CheckedItems)            
             {
+                int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
                 if (first)
                 {
                     // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
@@ -1329,7 +1332,7 @@ namespace Isotope_fitting
         }
         private void rem_Btn_Click(object sender, EventArgs e)
         {
-            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
 
             int count = last_plotted.Count;
             if (count == 0) return;
