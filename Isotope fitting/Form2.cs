@@ -49,7 +49,7 @@ namespace Isotope_fitting
         int duplicate_count = 0;
         int added = 0;
         public bool is_frag_calc_recalc = false;
-        bool first_move_cursor_chkBx = true;
+        bool is_recalc_res = false;
         #region deconvoluted
         public bool is_exp_deconvoluted = false;
         public string deconv_machine = "";
@@ -2544,7 +2544,7 @@ namespace Isotope_fitting
             else { chem.Mz = Math.Round((chem.Monoisotopic.Mass - emass * chem.Charge) / chem.Charge, 4).ToString(); }
             
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
-            if (!insert_exp/*|| chem.Fixed*/ ) {  add_fragment_to_Fragments2(chem, cen); return; }
+            if (!insert_exp || (chem.Fixed && !is_recalc_res)) {  add_fragment_to_Fragments2(chem, cen); return; }
             // MAIN decesion algorithm
             bool fragment_is_canditate = true;
             if (calc_FF)
@@ -2615,9 +2615,8 @@ namespace Isotope_fitting
                 results.Add(tmp);
                 if (Math.Abs(tmp[0]) > temp_pp /*&& is_exp_deconvoluted*/) { fragment_is_canditate = false; break; }
             }
-
             //round 2, with the correct resolution
-            if (fragment_is_canditate && !is_exp_deconvoluted)
+            if ((fragment_is_canditate || chem.Fixed) && !is_exp_deconvoluted)
             {
                 chem.Resolution = (double)results.Average(p => p[1]);
                 results = new List<double[]>();
@@ -5745,16 +5744,7 @@ namespace Isotope_fitting
             }
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
-        {
-            first_move_cursor_chkBx = true;
-            //if (!cursor_chkBx.Checked)
-            //{
-            //    // fragment annotations
-            //    if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
-            //    {
-            //        frag_annotation(selectedFragments.ToList(), LC_1);
-            //    }                
-            //}
+        {            
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
                 // Remove exsisting custom x - axis tickmarks
@@ -6862,7 +6852,7 @@ namespace Isotope_fitting
                                         str = lista[j].Split('\t');
                                         if (lista[j].StartsWith("Prof"))
                                         {
-                                            if (!is_exp_deconvoluted && !dec)
+                                            if ((!is_exp_deconvoluted || !dec) && !is_recalc_res)
                                             {
                                                 for (int s = 1; s < str.Length; s++)
                                                 {
@@ -6880,7 +6870,7 @@ namespace Isotope_fitting
                                         str = lista[j].Split('\t');
                                         if (lista[j].StartsWith("Cen"))
                                         {
-                                            if (!is_exp_deconvoluted && !dec)
+                                            if ((!is_exp_deconvoluted || !dec) && !is_recalc_res)
                                             {
                                                 for (int s = 1; s < str.Length; s++)
                                                 {
@@ -6906,13 +6896,13 @@ namespace Isotope_fitting
                             if (j % 10 == 0 && j > 0) { progress_display_update(j); }
                         }
                         progress_display_stop();
-                        if (!dec)
-                        {                            
+                        if (!dec && !is_recalc_res)
+                        {
                             foreach (ChemiForm chemi in fitted_chem)
                             {
                                 List<PointPlot> cen = chemi.Centroid.OrderByDescending(p => p.Y).ToList();
                                 add_fragment_to_Fragments2(chemi, cen);
-                            }     
+                            }
                             if (n == file_count - 1)
                             {
                                 is_calc = false;
@@ -8338,16 +8328,44 @@ namespace Isotope_fitting
         }
         private void saveListBtn11_Click(object sender, EventArgs e)
         {
-            if (selectedFragments.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. ");return; }
+            if (selectedFragments.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. "); return; }
             frag_types_save = false;
-            saveList();            
+            saveList();
         }
 
         private void loadListBtn11_Click(object sender, EventArgs e)
         {
+            //DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo);
+            //if (dialogResult == DialogResult.Yes)
+            //{
+            //    loadList();
+            //}
+            //else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
+            //{
+            //    return;
+            //}
+        }
+        private void loadFragmentsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
+                is_recalc_res = false;
+                loadList();
+            }
+            else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+        }
+
+        private void loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!insert_exp) { MessageBox.Show("You must first load the experimental data for this action!", "Load Fragment List and recalculate resolution");return; }
+            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {                
+                is_recalc_res = true;
                 loadList();
             }
             else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)

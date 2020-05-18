@@ -126,8 +126,9 @@ namespace Isotope_fitting
             this.show_Btn = new System.Windows.Forms.Button();
             this.selFrag_Label = new System.Windows.Forms.Label();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
-            this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
-            this.loadListBtn11 = new System.Windows.Forms.ToolStripButton();
+            this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.loadFragmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton10 = new System.Windows.Forms.ToolStripSeparator();
             this.checkall_Frag_Btn = new System.Windows.Forms.ToolStripButton();
@@ -385,6 +386,7 @@ namespace Isotope_fitting
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -813,7 +815,7 @@ namespace Isotope_fitting
             // 
             this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -821,7 +823,7 @@ namespace Isotope_fitting
             // 
             this.loadToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadToolStripMenuItem.Image")));
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -829,7 +831,7 @@ namespace Isotope_fitting
             // 
             this.clearAllToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("clearAllToolStripMenuItem.Image")));
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearAllToolStripMenuItem.Text = "Clear all";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -1722,27 +1724,36 @@ namespace Isotope_fitting
             this.toolStrip_fragList.Size = new System.Drawing.Size(369, 27);
             this.toolStrip_fragList.TabIndex = 119;
             // 
-            // saveListBtn11
-            // 
-            this.saveListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("saveListBtn11.Image")));
-            this.saveListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveListBtn11.Name = "saveListBtn11";
-            this.saveListBtn11.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.saveListBtn11.Size = new System.Drawing.Size(24, 24);
-            this.saveListBtn11.Text = "Save checked fragments";
-            this.saveListBtn11.Click += new System.EventHandler(this.saveListBtn11_Click);
-            // 
             // loadListBtn11
             // 
             this.loadListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.loadListBtn11.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadFragmentsToolStripMenuItem,
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem});
             this.loadListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("loadListBtn11.Image")));
             this.loadListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.loadListBtn11.Name = "loadListBtn11";
             this.loadListBtn11.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.loadListBtn11.Size = new System.Drawing.Size(24, 24);
+            this.loadListBtn11.Size = new System.Drawing.Size(33, 24);
             this.loadListBtn11.Text = "Load fragments from a \' .fit \' file";
+            this.loadListBtn11.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
             this.loadListBtn11.Click += new System.EventHandler(this.loadListBtn11_Click);
+            // 
+            // loadFragmentsToolStripMenuItem
+            // 
+            this.loadFragmentsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadFragmentsToolStripMenuItem.Image")));
+            this.loadFragmentsToolStripMenuItem.Name = "loadFragmentsToolStripMenuItem";
+            this.loadFragmentsToolStripMenuItem.Size = new System.Drawing.Size(217, 26);
+            this.loadFragmentsToolStripMenuItem.Text = "Load Frag.";
+            this.loadFragmentsToolStripMenuItem.Click += new System.EventHandler(this.loadFragmentsToolStripMenuItem_Click);
+            // 
+            // loadFragmentsAndRecalculateResolutionToolStripMenuItem
+            // 
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadFragmentsAndRecalculateResolutionToolStripMenuItem.Image")));
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Name = "loadFragmentsAndRecalculateResolutionToolStripMenuItem";
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Size = new System.Drawing.Size(217, 26);
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Text = "Load Frag. and recalc. Res.";
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Click += new System.EventHandler(this.loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click);
             // 
             // clearListBtn11
             // 
@@ -1935,7 +1946,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(33, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(31, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1947,7 +1958,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(123, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(121, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -4812,6 +4823,17 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
+            // saveListBtn11
+            // 
+            this.saveListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("saveListBtn11.Image")));
+            this.saveListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveListBtn11.Name = "saveListBtn11";
+            this.saveListBtn11.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.saveListBtn11.Size = new System.Drawing.Size(24, 24);
+            this.saveListBtn11.Text = "Save checked fragments";
+            this.saveListBtn11.Click += new System.EventHandler(this.saveListBtn11_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -5034,8 +5056,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton legend_chkBx;
         private System.Windows.Forms.ToolStripButton cursor_chkBx;
         private System.Windows.Forms.ToolStrip toolStrip_fragList;
-        private System.Windows.Forms.ToolStripButton saveListBtn11;
-        private System.Windows.Forms.ToolStripButton loadListBtn11;
         private System.Windows.Forms.ToolStripButton clearListBtn11;
         private System.Windows.Forms.TabPage tabInternal;
         private System.Windows.Forms.Label idxPlotLbl;
@@ -5299,5 +5319,9 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStrip fragTypes_toolStrip;
         private System.Windows.Forms.ToolStripButton save_FragTypes_Btn;
         private System.Windows.Forms.ToolStripButton toggle_FragTypes_Btn;
+        private System.Windows.Forms.ToolStripDropDownButton loadListBtn11;
+        private System.Windows.Forms.ToolStripMenuItem loadFragmentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadFragmentsAndRecalculateResolutionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton saveListBtn11;
     }
 }

@@ -933,6 +933,7 @@ namespace Isotope_fitting
                 ChemiForm.Envelope(chem);
                 ChemiForm.Vdetect(chem);
                 cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
+                if (contrib_peaks > cen.Count) { contrib_peaks = cen.Count; }
                 for (int i = 0; i < contrib_peaks; i++)
                 {
                     double[] tmp = ppm_calculator(cen[i].X);
