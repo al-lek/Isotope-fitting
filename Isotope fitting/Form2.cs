@@ -47,6 +47,8 @@ namespace Isotope_fitting
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
         public bool tab_mode = false;
         int duplicate_count = 0;
+        public int machine_sel_index = 9;
+        public string res_string_24 = "";
         int added = 0;
         public bool is_frag_calc_recalc = false;
         bool is_recalc_res = false;
@@ -475,10 +477,12 @@ namespace Isotope_fitting
             //deconvolution
             _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
             _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
+
+            hide_calc_Btn(); show_Btn.Visible = false;
         }
 
         #region save load bw
-        
+
         void _bw_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
@@ -1971,8 +1975,12 @@ namespace Isotope_fitting
         #region 2.a Select fragments and calculate their envelopes
         private void Calc_Btn_Click(object sender, EventArgs e)
         {
+            //calculate_procedure();
+        }
+        public void calculate_procedure(List<ChemiForm> selected_fragments)
+        {
             calc_Btn.Enabled = false;
-            if (ChemFormulas.Count==0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calc_Btn.Enabled = true; return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calc_Btn.Enabled = true; return; }
             try
             {
                 try
@@ -1985,7 +1993,7 @@ namespace Isotope_fitting
                 }
                 finally
                 {
-                    fragments_and_calculations_sequence_A();
+                    fragments_and_calculations_sequence_A(selected_fragments);
                 }
 
             }
@@ -1997,10 +2005,9 @@ namespace Isotope_fitting
             {
                 calc_Btn.Enabled = true;
             }
-            
-        }
 
-        private void fragments_and_calculations_sequence_A()
+        }
+        private void fragments_and_calculations_sequence_A(List<ChemiForm> selected_fragments)
         {
             // this the main sequence after loadind data
             // 1. select fragments according to UI
@@ -2010,12 +2017,12 @@ namespace Isotope_fitting
             custom_colors.Clear();
             custom_colors.Add(exp_color);
             sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = select_fragments2();
+            //List<ChemiForm> selected_fragments = select_fragments2();
             if (selected_fragments == null) return;
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution
-            calculate_fragments_resolution(selected_fragments);
+            //calculate_fragments_resolution(selected_fragments);
             sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
             // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
             Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
@@ -2376,7 +2383,7 @@ namespace Isotope_fitting
             neues = Fragments2.Count();
             if (is_exp_deconvoluted)
             {
-                string machine = "";
+                string machine = deconv_machine;
                 double res = 0.0;
                 if (is_deconv_const_resolution)
                 {
@@ -5234,7 +5241,7 @@ namespace Isotope_fitting
             //Set the same range for secondary Y axis
             e.CancelRendering = true;
             LC_2.BeginUpdate();
-            bool scaleChanged;
+            bool scaleChanged=false;
             LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
             LC_2.EndUpdate();
         }
@@ -5258,7 +5265,7 @@ namespace Isotope_fitting
             LC_2.ViewXY.XAxes[0].SetRange(e.NewMin, e.NewMax);
             if (autoscale_Btn.Checked)
             {               
-                bool scaleChanged;
+                bool scaleChanged=false;
                 LC_1.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
             }
             LC_1.EndUpdate();
@@ -7900,6 +7907,7 @@ namespace Isotope_fitting
             mzMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) mzMax_Box.Focus(); };
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
+            machine_sel_index = 9;
             machine_listBox.SelectedIndex = 9;
             filename_txtBx.Text = file_name;
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
@@ -10045,7 +10053,10 @@ namespace Isotope_fitting
 
         private void hide_Btn_Click(object sender, EventArgs e)
         {
-            
+            hide_calc_Btn();
+        }
+        private void hide_calc_Btn()
+        {
             panel_calc.Hide(); splitContainer2.Panel1Collapsed = true;
             Size initial_splitcontSize = splitContainer2.Size;
             splitContainer2.Size = new Size(initial_splitcontSize.Width - panel_calc.Size.Width, initial_splitcontSize.Height);
@@ -10057,7 +10068,6 @@ namespace Isotope_fitting
             plots_grpBox.Size = new Size(initial_plot_size.Width + panel_calc.Size.Width, initial_plot_size.Height);
             show_Btn.Visible = true; show_Btn.BringToFront();
             splitContainer2.Invalidate();
-
         }
 
         private void show_Btn_Click(object sender, EventArgs e)
@@ -17535,6 +17545,7 @@ namespace Isotope_fitting
             UncheckAll_calculationPanel();
             resolution_Box.Text = null;
             machine_listBox.ClearSelected();
+            machine_sel_index = 9;
             machine_listBox.SelectedIndex = 9;
             loadExp_Btn.Enabled = true;
             selected_window = 1000000;
@@ -18275,7 +18286,7 @@ namespace Isotope_fitting
         #endregion
 
         #region extension
-        private bool recognise_extension(string fra_exte, string Extension)
+        public bool recognise_extension(string fra_exte, string Extension)
         {
             string[] str = fra_exte.Split('_');
             for (int k = 1; k < str.Length; k++)
@@ -18421,6 +18432,11 @@ namespace Isotope_fitting
 
         }
 
-       
+        private void ProfCalc_Btn_Click(object sender, EventArgs e)
+        {
+            if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then access 'Calculation Box'", "Error in Calculation Box!");  return; }
+            Form24 frm24 = new Form24(this);
+            frm24.ShowDialog();
+        }
     }
 }
