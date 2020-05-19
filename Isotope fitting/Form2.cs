@@ -8336,6 +8336,7 @@ namespace Isotope_fitting
         }
         private void saveListBtn11_Click(object sender, EventArgs e)
         {
+            if (Fragments2.Count == 0) { MessageBox.Show("Fragment list is empty. "); return; }
             if (selectedFragments.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. "); return; }
             frag_types_save = false;
             saveList();
@@ -18437,6 +18438,33 @@ namespace Isotope_fitting
             if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then access 'Calculation Box'", "Error in Calculation Box!");  return; }
             Form24 frm24 = new Form24(this);
             frm24.ShowDialog();
+        }
+
+        private void zoomIn_Y_Btn_Click(object sender, EventArgs e)
+        {
+            //Disable rendering, strongly recommended before updating chart properties
+            LC_1.BeginUpdate();
+
+            foreach (AxisY axisY in LC_1.ViewXY.YAxes)
+            {
+                axisY.SetRange(axisY.Minimum / 2.0, axisY.Maximum / 2.0);
+            }
+            //Allow chart rendering
+            LC_1.EndUpdate();
+        }
+
+        private void zoomOut_Y_Btn_Click(object sender, EventArgs e)
+        {         
+
+            //Disable rendering, strongly recommended before updating chart properties
+            LC_1.BeginUpdate();
+
+            foreach (AxisY axisY in LC_1.ViewXY.YAxes)
+            {
+                axisY.SetRange(axisY.Minimum * 2.0, axisY.Maximum * 2.0);
+            }
+            //Allow chart rendering
+            LC_1.EndUpdate();
         }
     }
 }
