@@ -71,7 +71,7 @@ namespace Isotope_fitting
         public List<string[]> list_21 = new List<string[]>();
         #endregion
 
-        #region SAVE PROJECT
+        #region SAVE-LOAD PROJECT
         int all = 0;
         string project_experimental = "";
         //save
@@ -83,7 +83,8 @@ namespace Isotope_fitting
         BackgroundWorker _bw_load_project_peaks = new BackgroundWorker();
         BackgroundWorker _bw_load_project_fragments = new BackgroundWorker();
         BackgroundWorker _bw_load_project_fit_results = new BackgroundWorker();
-
+        //parameters
+        bool dont_refresh_frag_tree=false;
         #endregion
 
         #region old new calculations
@@ -2935,9 +2936,48 @@ namespace Isotope_fitting
             reset_names_iso_plot();
             if (selectedFragments.Count > 0)
             {
-                if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
+                if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked) && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
                 {
-                    frag_annotation(selectedFragments.ToList(),LC_1);
+                    List<int> to_plot = new List<int>();
+                    // add only the desired fragments to to_plot
+                    foreach (int idx in selectedFragments)
+                    {
+                        string ion = Fragments2[idx - 1].Ion_type;
+                        if (ion.StartsWith("a") || ion.StartsWith("(a"))
+                        {
+                            if (disp_a.Checked) { to_plot.Add(idx); }
+                        }
+                        else if (ion.StartsWith("b") || ion.StartsWith("(b"))
+                        {
+                            if (disp_b.Checked) { to_plot.Add(idx); }
+                        }
+                        else if (ion.StartsWith("c") || ion.StartsWith("(c"))
+                        {
+                            if (disp_c.Checked) { to_plot.Add(idx); }
+                        }
+                        else if (ion.StartsWith("x") || ion.StartsWith("(x"))
+                        {
+                            if (disp_x.Checked) { to_plot.Add(idx); }
+                        }
+                        else if (ion.StartsWith("y") || ion.StartsWith("(y"))
+                        {
+                            if (disp_y.Checked) { to_plot.Add(idx); }
+                        }
+                        else if (ion.StartsWith("z") || ion.StartsWith("(z"))
+                        {
+                            if (disp_z.Checked) { to_plot.Add(idx); }
+                        }
+                        else if (ion.Contains("int"))
+                        {
+                            if (disp_internal.Checked) { to_plot.Add(idx); }
+                        }
+                        else
+                        {
+                            to_plot.Add(idx);
+                        }
+
+                    }
+                    frag_annotation(to_plot.ToList(),LC_1);
                 }
                 else
                 {
@@ -4156,9 +4196,9 @@ namespace Isotope_fitting
             // init tree view
             fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 10, bigPanel.Size.Height - 10), ShowNodeToolTips = false, HideSelection = false, TreeViewNodeSorter = new NodeSorter()};
             bigPanel.Controls.Add(fit_tree);
-            fit_tree.AfterCheck += (s, e) => { fit_node_checkChanged(e.Node); };
+            fit_tree.AfterCheck += (s, e) => {if(!dont_refresh_frag_tree) fit_node_checkChanged(e.Node); };
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
-            fit_tree.BeforeCheck += (s, e) => { node_beforeCheck(s, e); };
+            fit_tree.BeforeCheck += (s, e) => { if (!dont_refresh_frag_tree) node_beforeCheck(s, e); };
             fit_tree.BeforeSelect += (s, e) => { node_beforeCheck(s, e); };
             fit_tree.AfterSelect += (s, e) => { if (string.IsNullOrEmpty(e.Node.Name)) { toolTip_fit.Hide(fit_tree); fit_set_graph_zoomed(e.Node); } else { select_check(e.Node); } };
             ContextMenu ctxMn_fit_grp = new ContextMenu(new MenuItem[2] { new MenuItem("Sort & Filter node", (s, e) => { fitnode_Re_Sort(fit_tree.SelectedNode); }), new MenuItem("Refresh node", (s, e) => {/*uncheckall_Frag();*/refresh_fitnode_sorting(fit_tree.SelectedNode); }) });
@@ -4247,6 +4287,8 @@ namespace Isotope_fitting
             }
             else checked_labels();
         }
+        //***************************************************
+
         /// <summary>
         /// Custom tooltip for each fit group solution node
         /// </summary>
@@ -4281,16 +4323,16 @@ namespace Isotope_fitting
             // Node location in form client coordinates.
             loc.Offset(fit_tree.Location);
            
-            if (show_Btn.Visible == true)
-            {
+            //if (show_Btn.Visible == true)
+            //{
                 // Make balloon point to upper left corner of the node.
                 loc.Offset(0, fitnode.Bounds.Height+10);
-            }
-            else
-            {
-                // Make balloon point to upper right corner of the node.
-                loc.Offset(fitnode.Bounds.Width, 0);
-            }
+            //}
+            //else
+            //{
+            //    // Make balloon point to upper right corner of the node.
+            //    loc.Offset(fitnode.Bounds.Width, 0);
+            //}
 
             toolTip_fit.Show(tool_text, fit_tree, loc);
            
@@ -4569,6 +4611,7 @@ namespace Isotope_fitting
         {
             if (fit_tree != null && fit_tree.Nodes.Count==labels_checked.Count)
             {
+                dont_refresh_frag_tree = true;
                 block_plot_refresh = true;block_fit_refresh = true;
                 for (int nd=0;nd< fit_tree.Nodes.Count ;nd++)
                 {
@@ -4578,6 +4621,7 @@ namespace Isotope_fitting
                 // because of multiple checked events it was disabled
                 // it will be called once, now that all coresponding fragments are checked
             }
+            dont_refresh_frag_tree = false;
             refresh_iso_plot();
         }
         private List<TreeNode> get_all_nodes(TreeView tree)
@@ -4764,13 +4808,13 @@ namespace Isotope_fitting
         {
             if (plotExp_chkBox.Checked || plotCentr_chkBox.Checked || plotCentr_chkBox.Checked || plotFragCent_chkBox.Checked)
             {
-                LC_1.BeginUpdate();
                 string[] idx_str_arr = new string[2];
                 string idx_str = node.Name;
                 if (string.IsNullOrEmpty(idx_str)) idx_str_arr = node.Text.Split('-');
                 else idx_str_arr = node.Parent.Text.Split('-');
                 double min_border = dParser(idx_str_arr[0]);
                 double max_border = dParser(idx_str_arr[1]);
+                LC_1.BeginUpdate();
                 LC_1.ViewXY.XAxes[0].SetRange(min_border-3, max_border+3);       
                 LC_1.EndUpdate();
             }
@@ -5125,9 +5169,11 @@ namespace Isotope_fitting
             {
                 LC_1.Dispose();
             }
-            LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
+            LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray,BackColor=Color.White };
             LC_1.BeginUpdate();
             ViewXY v = LC_1.ViewXY;
+            LC_1.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            v.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
             LC_1.Parent = this;
             LC_1.Title.Visible = false;
             LC_1.ViewXY.LegendBox.Visible = false;
@@ -5200,6 +5246,8 @@ namespace Isotope_fitting
             }
             LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
             LC_2.BeginUpdate();
+            LC_2.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            LC_2.ViewXY.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
             LC_2.Parent = this;
             LC_2.Title.Visible = false;
             LC_2.ViewXY.LegendBox.Visible = false;
@@ -5264,9 +5312,9 @@ namespace Isotope_fitting
             LC_1.ViewXY.XAxes[1].SetRange(e.NewMin, e.NewMax);
             LC_2.ViewXY.XAxes[0].SetRange(e.NewMin, e.NewMax);
             if (autoscale_Btn.Checked)
-            {               
-                bool scaleChanged=false;
-                LC_1.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+            {
+                bool bChanged = false;
+                LC_1.ViewXY.YAxes[0].Fit(20.0, out bChanged, true, false);
             }
             LC_1.EndUpdate();
             LC_2.EndUpdate();
@@ -5326,7 +5374,6 @@ namespace Isotope_fitting
             AxisY secondaryYAxis = LC_1.ViewXY.YAxes[1];
             //Disable rendering
             LC_1.BeginUpdate();
-
             //Remove exsisting custom x-axis tickmarks
             DisposeAllAndClear(secondaryXAxis.CustomTicks);
             secondaryXAxis.CustomTicks.Add(new CustomAxisTick(secondaryXAxis, x, x.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
@@ -5336,7 +5383,10 @@ namespace Isotope_fitting
             DisposeAllAndClear(secondaryYAxis.CustomTicks);
             secondaryYAxis.CustomTicks.Add(new CustomAxisTick(secondaryYAxis, y, y.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
             secondaryYAxis.InvalidateCustomTicks();
-
+            if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked) && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
+            {
+                refresh_frag_annotation(LC_1);              
+            }
             //Allow rendering
             LC_1.EndUpdate();
         }
@@ -5749,6 +5799,17 @@ namespace Isotope_fitting
                 }
                 plot.EndUpdate();
             }
+        }
+        private void refresh_frag_annotation(LightningChartUltimate plot)
+        {
+            plot.BeginUpdate();
+            foreach (AnnotationXY annotAxisValues2 in plot.ViewXY.Annotations)
+            {
+                //Arrow from location to target                
+                annotAxisValues2.TargetAxisValues.X = annotAxisValues2.TargetAxisValues.X;
+                annotAxisValues2.LocationAxisValues.X = annotAxisValues2.LocationAxisValues.X;                
+            }
+            plot.EndUpdate();
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {            
@@ -6890,6 +6951,8 @@ namespace Isotope_fitting
                                         {
                                             MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error!"); return;
                                         }
+
+                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx= check_false_sort_idx(fitted_chem.Last()); }
                                     }
                                     else
                                     {
@@ -7204,7 +7267,7 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
-                                        
+                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
                                     }
                                     else duplicate_count++;
                                 }
@@ -7242,6 +7305,29 @@ namespace Isotope_fitting
             }
             exclude_list_make_lists();
             is_loading = false; is_calc = false;
+        }
+        private int check_false_sort_idx(ChemiForm chem)
+        {
+            string s = string.Empty;
+            int sort_index = 0;
+            if (chem.Ion_type.StartsWith("x") || chem.Ion_type.StartsWith("y") || chem.Ion_type.StartsWith("z") || chem.Ion_type.StartsWith("(x") || chem.Ion_type.StartsWith("(y") || chem.Ion_type.StartsWith("(z"))
+            {
+                bool found = false;
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if ((seq.Extension != "" && recognise_extension(chem.Extension, seq.Extension)) || (seq.Extension == "" && chem.Extension == ""))
+                    {
+                        found = true;break;
+                    }
+                }
+                if (found) { sort_index = s.Length - Int32.Parse(chem.Index); }
+                else { sort_index = 0;MessageBox.Show("Error in fragment "+chem.Name+ "index."); }
+            }
+            else
+            {
+                sort_index = Int32.Parse(chem.Index);
+            }
+            return sort_index;
         }
         private void exclude_list_make_lists()
         {
@@ -8743,6 +8829,33 @@ namespace Isotope_fitting
         {
             if (fragPlotLbl_chkBx.Checked) { cursor_chkBx.Checked = false; refresh_iso_plot(); }
             else { DisposeAllAndClear(LC_1.ViewXY.Annotations); refresh_iso_plot(); }
+        }
+
+        private void zoomIn_Y_Btn_Click(object sender, EventArgs e)
+        {
+            //Disable rendering, strongly recommended before updating chart properties
+            LC_1.BeginUpdate();
+
+            foreach (AxisY axisY in LC_1.ViewXY.YAxes)
+            {
+                axisY.SetRange(axisY.Minimum / 2.0, axisY.Maximum / 2.0);
+            }
+            //Allow chart rendering
+            LC_1.EndUpdate();
+        }
+
+        private void zoomOut_Y_Btn_Click(object sender, EventArgs e)
+        {
+
+            //Disable rendering, strongly recommended before updating chart properties
+            LC_1.BeginUpdate();
+
+            foreach (AxisY axisY in LC_1.ViewXY.YAxes)
+            {
+                axisY.SetRange(axisY.Minimum * 2.0, axisY.Maximum * 2.0);
+            }
+            //Allow chart rendering
+            LC_1.EndUpdate();
         }
 
         //MS product
@@ -16414,9 +16527,12 @@ namespace Isotope_fitting
         #region FORM 20 extract plot isoplot
         public void plotview_rebuild()
         {   
-            LightningChartUltimate temp_plot = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
+            LightningChartUltimate temp_plot = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray};
             temp_plot.BeginUpdate();
+            //temp_plot.BackColor = Color.White;
             ViewXY v = temp_plot.ViewXY;
+            temp_plot.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            v.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
             temp_plot.Parent = this;
             temp_plot.Title.Visible = false;
             temp_plot.ViewXY.LegendBox.Visible = false;     
@@ -16436,7 +16552,8 @@ namespace Isotope_fitting
             axisX_1.Title.MouseInteraction = false;
             axisX_1.AutoFormatLabels = false;axisX_1.LabelsNumberFormat = x_format + x_numformat;
             axisY_1.Title.MouseInteraction = false;            
-            axisY_1.AutoFormatLabels = false;axisY_1.LabelsNumberFormat = y_format + y_numformat;
+            axisY_1.AutoFormatLabels = false;axisY_1.LabelsNumberFormat = y_format + y_numformat;           
+
             //Add a line series cursor 
             LineSeriesCursor cursor_1 = new LineSeriesCursor(temp_plot.ViewXY, axisX_1);
             cursor_1.SnapToPoints = false;
@@ -18438,33 +18555,6 @@ namespace Isotope_fitting
             if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then access 'Calculation Box'", "Error in Calculation Box!");  return; }
             Form24 frm24 = new Form24(this);
             frm24.ShowDialog();
-        }
-
-        private void zoomIn_Y_Btn_Click(object sender, EventArgs e)
-        {
-            //Disable rendering, strongly recommended before updating chart properties
-            LC_1.BeginUpdate();
-
-            foreach (AxisY axisY in LC_1.ViewXY.YAxes)
-            {
-                axisY.SetRange(axisY.Minimum / 2.0, axisY.Maximum / 2.0);
-            }
-            //Allow chart rendering
-            LC_1.EndUpdate();
-        }
-
-        private void zoomOut_Y_Btn_Click(object sender, EventArgs e)
-        {         
-
-            //Disable rendering, strongly recommended before updating chart properties
-            LC_1.BeginUpdate();
-
-            foreach (AxisY axisY in LC_1.ViewXY.YAxes)
-            {
-                axisY.SetRange(axisY.Minimum * 2.0, axisY.Maximum * 2.0);
-            }
-            //Allow chart rendering
-            LC_1.EndUpdate();
         }
     }
 }

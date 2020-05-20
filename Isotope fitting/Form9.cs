@@ -345,7 +345,7 @@ namespace Isotope_fitting
             string s = frm2.Peptide;
             string extension = extensionBox1.Text.ToString();
             int chain_type = 0;
-            if (heavy_ChkBox.Checked && Light_chkBox.Checked) { MessageBox.Show("Both heavy ald light chain are checked. Please select only one chain type."); return res; }
+            if (heavy_ChkBox.Checked && Light_chkBox.Checked) { MessageBox.Show("Both heavy and light chain are checked. Please select only one chain type."); return res; }
             else if (heavy_ChkBox.Checked) { chain_type = 1; }
             else if (Light_chkBox.Checked) { chain_type = 2; }
             if (!string.IsNullOrEmpty(extension))
@@ -359,10 +359,8 @@ namespace Isotope_fitting
             }
             if (!ext_exists)
             {
-                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." +                   
-                    "If you want to stop the calcuations select 'No'. " +
-                    "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
-                if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." , "Wrong Input", MessageBoxButtons.YesNo);
+                 return res; 
             }
             if (ion_txtBox.Text.Contains("M"))
             {
@@ -413,6 +411,14 @@ namespace Isotope_fitting
                 {
                     MessageBox.Show("Internal indexes are inserted with '-'. Example: 5-9");return res;
                 }               
+            }
+            else if(string.IsNullOrEmpty(index))
+            {
+                DialogResult dd = MessageBox.Show("You have not inserted an index. The calculations will proceed as for index=0" +
+                    "If you want to stop the calcuations select 'No'. " +
+                    "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
+                if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
+                index = "0"; indexTo = "0";
             }
             double qMin = txt_to_d(minCharge_txtBox);
             if (double.IsNaN(qMin)) qMin =1;
@@ -490,6 +496,14 @@ namespace Isotope_fitting
                     else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";                    
                 }
                 res.Last().Radio_label += extension; res.Last().Name += extension;
+                if (res.Last().Ion.StartsWith("x") || res.Last().Ion.StartsWith("y") || res.Last().Ion.StartsWith("z") || res.Last().Ion.StartsWith("(x") || res.Last().Ion.StartsWith("(y") || res.Last().Ion.StartsWith("(z"))
+                {
+                    res.Last().SortIdx = s.Length - Int32.Parse(res.Last().Index);
+                }
+                else
+                {
+                    res.Last().SortIdx = Int32.Parse(res.Last().Index);
+                }
             }
             return res;
         }
@@ -1368,10 +1382,8 @@ namespace Isotope_fitting
             }
             if (!ext_exists)
             {
-                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." +
-                    "If you want to stop the calcuations select 'No'. " +
-                    "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
-                if (dd == DialogResult.No || dd == DialogResult.None) { return; }
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted.", "Wrong Input", MessageBoxButtons.YesNo);
+                return; 
             }
             double qMin = txt_to_d(multChem_min_charge);
             if (double.IsNaN(qMin)) qMin = 1;

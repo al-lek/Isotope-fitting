@@ -45,6 +45,8 @@ namespace Isotope_fitting
             this.autoscale_Btn = new System.Windows.Forms.ToolStripButton();
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.copyImage_Btn = new System.Windows.Forms.ToolStripButton();
+            this.zoomIn_Y_Btn = new System.Windows.Forms.ToolStripButton();
+            this.zoomOut_Y_Btn = new System.Windows.Forms.ToolStripButton();
             this.legend_chkBx = new System.Windows.Forms.ToolStripButton();
             this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
@@ -388,8 +390,6 @@ namespace Isotope_fitting
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.zoomOut_Y_Btn = new System.Windows.Forms.ToolStripButton();
-            this.zoomIn_Y_Btn = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
@@ -637,6 +637,26 @@ namespace Isotope_fitting
             this.copyImage_Btn.Visible = false;
             this.copyImage_Btn.Click += new System.EventHandler(this.copyImage_Btn_Click);
             // 
+            // zoomIn_Y_Btn
+            // 
+            this.zoomIn_Y_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomIn_Y_Btn.Image = ((System.Drawing.Image)(resources.GetObject("zoomIn_Y_Btn.Image")));
+            this.zoomIn_Y_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomIn_Y_Btn.Name = "zoomIn_Y_Btn";
+            this.zoomIn_Y_Btn.Size = new System.Drawing.Size(24, 24);
+            this.zoomIn_Y_Btn.ToolTipText = "Zoom In Y Axis";
+            this.zoomIn_Y_Btn.Click += new System.EventHandler(this.zoomIn_Y_Btn_Click);
+            // 
+            // zoomOut_Y_Btn
+            // 
+            this.zoomOut_Y_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomOut_Y_Btn.Image = ((System.Drawing.Image)(resources.GetObject("zoomOut_Y_Btn.Image")));
+            this.zoomOut_Y_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomOut_Y_Btn.Name = "zoomOut_Y_Btn";
+            this.zoomOut_Y_Btn.Size = new System.Drawing.Size(24, 24);
+            this.zoomOut_Y_Btn.ToolTipText = "Zoom Out Y Axis";
+            this.zoomOut_Y_Btn.Click += new System.EventHandler(this.zoomOut_Y_Btn_Click);
+            // 
             // legend_chkBx
             // 
             this.legend_chkBx.CheckOnClick = true;
@@ -820,7 +840,7 @@ namespace Isotope_fitting
             // 
             this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -828,7 +848,7 @@ namespace Isotope_fitting
             // 
             this.loadToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadToolStripMenuItem.Image")));
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -836,7 +856,7 @@ namespace Isotope_fitting
             // 
             this.clearAllToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("clearAllToolStripMenuItem.Image")));
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.clearAllToolStripMenuItem.Text = "Clear all";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -1962,7 +1982,7 @@ namespace Isotope_fitting
             // remPlot_Btn
             // 
             this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(30, 664);
+            this.remPlot_Btn.Location = new System.Drawing.Point(28, 664);
             this.remPlot_Btn.Name = "remPlot_Btn";
             this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
             this.remPlot_Btn.TabIndex = 43;
@@ -1974,7 +1994,7 @@ namespace Isotope_fitting
             // plot_Btn
             // 
             this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(120, 664);
+            this.plot_Btn.Location = new System.Drawing.Point(118, 664);
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(75, 23);
             this.plot_Btn.TabIndex = 42;
@@ -4855,26 +4875,6 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
-            // zoomOut_Y_Btn
-            // 
-            this.zoomOut_Y_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.zoomOut_Y_Btn.Image = ((System.Drawing.Image)(resources.GetObject("zoomOut_Y_Btn.Image")));
-            this.zoomOut_Y_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.zoomOut_Y_Btn.Name = "zoomOut_Y_Btn";
-            this.zoomOut_Y_Btn.Size = new System.Drawing.Size(24, 24);
-            this.zoomOut_Y_Btn.ToolTipText = "Zoom Out Y Axis";
-            this.zoomOut_Y_Btn.Click += new System.EventHandler(this.zoomOut_Y_Btn_Click);
-            // 
-            // zoomIn_Y_Btn
-            // 
-            this.zoomIn_Y_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.zoomIn_Y_Btn.Image = ((System.Drawing.Image)(resources.GetObject("zoomIn_Y_Btn.Image")));
-            this.zoomIn_Y_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.zoomIn_Y_Btn.Name = "zoomIn_Y_Btn";
-            this.zoomIn_Y_Btn.Size = new System.Drawing.Size(24, 24);
-            this.zoomIn_Y_Btn.ToolTipText = "Zoom In Y Axis";
-            this.zoomIn_Y_Btn.Click += new System.EventHandler(this.zoomIn_Y_Btn_Click);
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -4886,7 +4886,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v24.11.1";
+            this.Text = "Peak Finder v24.11.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
