@@ -101,7 +101,6 @@ namespace Isotope_fitting
             this.resolution_Label = new System.Windows.Forms.Label();
             this.mzMin_Box = new System.Windows.Forms.TextBox();
             this.b_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.saveCalc_Btn = new System.Windows.Forms.Button();
             this.idxTo_Label = new System.Windows.Forms.Label();
             this.clearCalc_Btn = new System.Windows.Forms.Button();
             this.idxFrom_Label = new System.Windows.Forms.Label();
@@ -116,17 +115,8 @@ namespace Isotope_fitting
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.frag_listView = new System.Windows.Forms.ListView();
-            this.ionTypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.mzHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.zHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.formulaHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.factorHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.codeNoHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.intensityHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.show_Btn = new System.Windows.Forms.Button();
-            this.selFrag_Label = new System.Windows.Forms.Label();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -150,8 +140,6 @@ namespace Isotope_fitting
             this.save_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
             this.toggle_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
             this.fragTypes_tree = new System.Windows.Forms.TreeView();
-            this.remPlot_Btn = new System.Windows.Forms.Button();
-            this.plot_Btn = new System.Windows.Forms.Button();
             this.theorData_grpBx = new System.Windows.Forms.GroupBox();
             this.ProfCalc_Btn = new System.Windows.Forms.Button();
             this.MSproduct_treeView = new System.Windows.Forms.TreeView();
@@ -183,10 +171,6 @@ namespace Isotope_fitting
             this.step_rangeBox = new System.Windows.Forms.TextBox();
             this.fitStep_Box = new System.Windows.Forms.TextBox();
             this.fitStep_Label = new System.Windows.Forms.Label();
-            this.loadFit_Btn = new System.Windows.Forms.Button();
-            this.loadWd_Btn = new System.Windows.Forms.Button();
-            this.saveWd_Btn = new System.Windows.Forms.Button();
-            this.saveFit_Btn = new System.Windows.Forms.Button();
             this.tabDiagram = new System.Windows.Forms.TabPage();
             this.splitter4 = new System.Windows.Forms.Splitter();
             this.panel2_tab2 = new System.Windows.Forms.Panel();
@@ -387,6 +371,13 @@ namespace Isotope_fitting
             this.int_IdxToCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton8 = new System.Windows.Forms.ToolStripDropDownButton();
             this.extractPlotToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ionTypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mzHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.zHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.formulaHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.factorHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.codeNoHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.intensityHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
@@ -879,10 +870,6 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.theorData_grpBx);
             this.user_grpBox.Controls.Add(this.expData_grpBx);
             this.user_grpBox.Controls.Add(this.fitOptions_grpBox);
-            this.user_grpBox.Controls.Add(this.loadFit_Btn);
-            this.user_grpBox.Controls.Add(this.loadWd_Btn);
-            this.user_grpBox.Controls.Add(this.saveWd_Btn);
-            this.user_grpBox.Controls.Add(this.saveFit_Btn);
             this.user_grpBox.Dock = System.Windows.Forms.DockStyle.Right;
             this.user_grpBox.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.user_grpBox.Location = new System.Drawing.Point(452, 3);
@@ -992,14 +979,11 @@ namespace Isotope_fitting
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.panel2);
-            this.splitContainer2.Panel2.Controls.Add(this.frag_listView);
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Panel2.Controls.Add(this.factor_panel);
             this.splitContainer2.Panel2.Controls.Add(this.fragStorage_Lbl);
             this.splitContainer2.Panel2.Controls.Add(this.fragTypes_toolStrip);
             this.splitContainer2.Panel2.Controls.Add(this.fragTypes_tree);
-            this.splitContainer2.Panel2.Controls.Add(this.remPlot_Btn);
-            this.splitContainer2.Panel2.Controls.Add(this.plot_Btn);
             this.splitContainer2.Panel2MinSize = 353;
             this.splitContainer2.Size = new System.Drawing.Size(682, 717);
             this.splitContainer2.SplitterDistance = 308;
@@ -1039,7 +1023,6 @@ namespace Isotope_fitting
             this.panel_calc.Controls.Add(this.resolution_Label);
             this.panel_calc.Controls.Add(this.mzMin_Box);
             this.panel_calc.Controls.Add(this.b_lstBox);
-            this.panel_calc.Controls.Add(this.saveCalc_Btn);
             this.panel_calc.Controls.Add(this.idxTo_Label);
             this.panel_calc.Controls.Add(this.clearCalc_Btn);
             this.panel_calc.Controls.Add(this.idxFrom_Label);
@@ -1450,18 +1433,6 @@ namespace Isotope_fitting
             this.b_lstBox.Size = new System.Drawing.Size(47, 79);
             this.b_lstBox.TabIndex = 3;
             // 
-            // saveCalc_Btn
-            // 
-            this.saveCalc_Btn.Enabled = false;
-            this.saveCalc_Btn.Location = new System.Drawing.Point(7, 537);
-            this.saveCalc_Btn.Name = "saveCalc_Btn";
-            this.saveCalc_Btn.Size = new System.Drawing.Size(43, 23);
-            this.saveCalc_Btn.TabIndex = 38;
-            this.saveCalc_Btn.Text = "Save ";
-            this.saveCalc_Btn.UseVisualStyleBackColor = true;
-            this.saveCalc_Btn.Visible = false;
-            this.saveCalc_Btn.Click += new System.EventHandler(this.SaveCalc_Btn_Click);
-            // 
             // idxTo_Label
             // 
             this.idxTo_Label.AutoSize = true;
@@ -1619,70 +1590,9 @@ namespace Isotope_fitting
             this.panel2.Size = new System.Drawing.Size(369, 340);
             this.panel2.TabIndex = 116;
             // 
-            // frag_listView
-            // 
-            this.frag_listView.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.frag_listView.CheckBoxes = true;
-            this.frag_listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.ionTypeHeader,
-            this.mzHeader,
-            this.zHeader,
-            this.formulaHeader,
-            this.factorHeader,
-            this.codeNoHeader,
-            this.intensityHeader});
-            this.frag_listView.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.frag_listView.FullRowSelect = true;
-            this.frag_listView.GridLines = true;
-            this.frag_listView.HideSelection = false;
-            this.frag_listView.LabelEdit = true;
-            this.frag_listView.Location = new System.Drawing.Point(19, 153);
-            this.frag_listView.Name = "frag_listView";
-            this.frag_listView.Size = new System.Drawing.Size(320, 215);
-            this.frag_listView.TabIndex = 41;
-            this.frag_listView.UseCompatibleStateImageBehavior = false;
-            this.frag_listView.View = System.Windows.Forms.View.Details;
-            this.frag_listView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.frag_listView_ColumnClick);
-            this.frag_listView.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.frag_listView_ItemChecked);
-            this.frag_listView.SelectedIndexChanged += new System.EventHandler(this.frag_listView_SelectedIndexChanged);
-            // 
-            // ionTypeHeader
-            // 
-            this.ionTypeHeader.Text = "Ion Type";
-            this.ionTypeHeader.Width = 58;
-            // 
-            // mzHeader
-            // 
-            this.mzHeader.Text = "m/z";
-            // 
-            // zHeader
-            // 
-            this.zHeader.Text = "z";
-            this.zHeader.Width = 28;
-            // 
-            // formulaHeader
-            // 
-            this.formulaHeader.Text = "Elem. Formula";
-            this.formulaHeader.Width = 109;
-            // 
-            // factorHeader
-            // 
-            this.factorHeader.Text = "Factor";
-            this.factorHeader.Width = 42;
-            // 
-            // codeNoHeader
-            // 
-            this.codeNoHeader.Text = "No";
-            this.codeNoHeader.Width = 30;
-            // 
-            // intensityHeader
-            // 
-            this.intensityHeader.Text = "Intensity";
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.show_Btn);
-            this.panel1.Controls.Add(this.selFrag_Label);
             this.panel1.Controls.Add(this.toolStrip_fragList);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -1705,20 +1615,6 @@ namespace Isotope_fitting
             this.show_Btn.UseVisualStyleBackColor = false;
             this.show_Btn.Visible = false;
             this.show_Btn.Click += new System.EventHandler(this.show_Btn_Click);
-            // 
-            // selFrag_Label
-            // 
-            this.selFrag_Label.AutoSize = true;
-            this.selFrag_Label.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.selFrag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selFrag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.selFrag_Label.Location = new System.Drawing.Point(0, 62);
-            this.selFrag_Label.Name = "selFrag_Label";
-            this.selFrag_Label.Size = new System.Drawing.Size(89, 17);
-            this.selFrag_Label.TabIndex = 120;
-            this.selFrag_Label.Text = "Fragment list";
-            this.toolTip1.SetToolTip(this.selFrag_Label, "Select all fragments presented in the list");
-            this.selFrag_Label.Click += new System.EventHandler(this.selFrag_Label_Click);
             // 
             // toolStrip_fragList
             // 
@@ -1978,30 +1874,6 @@ namespace Isotope_fitting
             this.fragTypes_tree.Size = new System.Drawing.Size(369, 224);
             this.fragTypes_tree.TabIndex = 112;
             this.fragTypes_tree.Visible = false;
-            // 
-            // remPlot_Btn
-            // 
-            this.remPlot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remPlot_Btn.Location = new System.Drawing.Point(28, 664);
-            this.remPlot_Btn.Name = "remPlot_Btn";
-            this.remPlot_Btn.Size = new System.Drawing.Size(75, 23);
-            this.remPlot_Btn.TabIndex = 43;
-            this.remPlot_Btn.Text = "Remove";
-            this.remPlot_Btn.UseVisualStyleBackColor = true;
-            this.remPlot_Btn.Visible = false;
-            this.remPlot_Btn.Click += new System.EventHandler(this.remPlot_Btn_Click);
-            // 
-            // plot_Btn
-            // 
-            this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.plot_Btn.Location = new System.Drawing.Point(118, 664);
-            this.plot_Btn.Name = "plot_Btn";
-            this.plot_Btn.Size = new System.Drawing.Size(75, 23);
-            this.plot_Btn.TabIndex = 42;
-            this.plot_Btn.Text = "Plot";
-            this.plot_Btn.UseVisualStyleBackColor = true;
-            this.plot_Btn.Visible = false;
-            this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
             // 
             // theorData_grpBx
             // 
@@ -2454,65 +2326,6 @@ namespace Isotope_fitting
             this.fitStep_Label.TabIndex = 37;
             this.fitStep_Label.Text = "step";
             this.fitStep_Label.Visible = false;
-            // 
-            // loadFit_Btn
-            // 
-            this.loadFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.loadFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadFit_Btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.loadFit_Btn.Location = new System.Drawing.Point(9, 472);
-            this.loadFit_Btn.Name = "loadFit_Btn";
-            this.loadFit_Btn.Size = new System.Drawing.Size(80, 27);
-            this.loadFit_Btn.TabIndex = 40;
-            this.loadFit_Btn.Text = "Load Fit";
-            this.loadFit_Btn.UseVisualStyleBackColor = true;
-            this.loadFit_Btn.Visible = false;
-            this.loadFit_Btn.Click += new System.EventHandler(this.loadFit_Btn_Click);
-            // 
-            // loadWd_Btn
-            // 
-            this.loadWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadWd_Btn.Location = new System.Drawing.Point(115, 524);
-            this.loadWd_Btn.Name = "loadWd_Btn";
-            this.loadWd_Btn.Size = new System.Drawing.Size(114, 23);
-            this.loadWd_Btn.TabIndex = 46;
-            this.loadWd_Btn.Text = "Load window";
-            this.loadWd_Btn.UseVisualStyleBackColor = true;
-            this.loadWd_Btn.Visible = false;
-            this.loadWd_Btn.Click += new System.EventHandler(this.loadWd_Btn_Click);
-            // 
-            // saveWd_Btn
-            // 
-            this.saveWd_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveWd_Btn.Enabled = false;
-            this.saveWd_Btn.Location = new System.Drawing.Point(6, 524);
-            this.saveWd_Btn.Name = "saveWd_Btn";
-            this.saveWd_Btn.Size = new System.Drawing.Size(114, 23);
-            this.saveWd_Btn.TabIndex = 45;
-            this.saveWd_Btn.Text = "Save window";
-            this.saveWd_Btn.UseVisualStyleBackColor = true;
-            this.saveWd_Btn.Visible = false;
-            this.saveWd_Btn.Click += new System.EventHandler(this.saveWd_Btn_Click);
-            // 
-            // saveFit_Btn
-            // 
-            this.saveFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveFit_Btn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveFit_Btn.Enabled = false;
-            this.saveFit_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveFit_Btn.Location = new System.Drawing.Point(7, 497);
-            this.saveFit_Btn.Name = "saveFit_Btn";
-            this.saveFit_Btn.Size = new System.Drawing.Size(222, 23);
-            this.saveFit_Btn.TabIndex = 20;
-            this.saveFit_Btn.Text = "Save Fit";
-            this.saveFit_Btn.UseVisualStyleBackColor = true;
-            this.saveFit_Btn.Visible = false;
-            this.saveFit_Btn.Click += new System.EventHandler(this.saveFit_Btn_Click);
             // 
             // tabDiagram
             // 
@@ -4862,6 +4675,39 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem2.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem2.Click += new System.EventHandler(this.extractPlotToolStripMenuItem2_Click);
             // 
+            // ionTypeHeader
+            // 
+            this.ionTypeHeader.Text = "Ion Type";
+            this.ionTypeHeader.Width = 58;
+            // 
+            // mzHeader
+            // 
+            this.mzHeader.Text = "m/z";
+            // 
+            // zHeader
+            // 
+            this.zHeader.Text = "z";
+            this.zHeader.Width = 28;
+            // 
+            // formulaHeader
+            // 
+            this.formulaHeader.Text = "Elem. Formula";
+            this.formulaHeader.Width = 109;
+            // 
+            // factorHeader
+            // 
+            this.factorHeader.Text = "Factor";
+            this.factorHeader.Width = 42;
+            // 
+            // codeNoHeader
+            // 
+            this.codeNoHeader.Text = "No";
+            this.codeNoHeader.Width = 30;
+            // 
+            // intensityHeader
+            // 
+            this.intensityHeader.Text = "Intensity";
+            // 
             // folderBrowserDialog1
             // 
             this.folderBrowserDialog1.HelpRequest += new System.EventHandler(this.folderBrowserDialog1_HelpRequest);
@@ -5014,7 +4860,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel user_grpBox;
         private System.Windows.Forms.GroupBox fitOptions_grpBox;
         private System.Windows.Forms.Button fit_Btn;
-        private System.Windows.Forms.Button saveFit_Btn;
         private System.Windows.Forms.TextBox fitStep_Box;
         private System.Windows.Forms.Label fitStep_Label;
         private System.Windows.Forms.Label idxTo_Label;
@@ -5030,7 +4875,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.Label chargeMin_Label;
         private System.Windows.Forms.Label chargeMax_Label;
         private System.Windows.Forms.Button clearCalc_Btn;
-        private System.Windows.Forms.Button saveCalc_Btn;
         private System.Windows.Forms.TextBox mzMin_Box;
         private System.Windows.Forms.TextBox mzMax_Box;
         private System.Windows.Forms.Label mzMin_Label;
@@ -5054,12 +4898,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.CheckedListBox b_lstBox;
         private System.Windows.Forms.CheckedListBox a_lstBox;
         private System.Windows.Forms.CheckedListBox internal_lstBox;
-        private System.Windows.Forms.Button loadFit_Btn;
         private System.Windows.Forms.Button loadExp_Btn;
-        private System.Windows.Forms.Label selFrag_Label;
-        private System.Windows.Forms.ListView frag_listView;
-        private System.Windows.Forms.Button remPlot_Btn;
-        private System.Windows.Forms.Button plot_Btn;
         private System.Windows.Forms.ColumnHeader ionTypeHeader;
         private System.Windows.Forms.ColumnHeader mzHeader;
         private System.Windows.Forms.ColumnHeader zHeader;
@@ -5070,8 +4909,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel panel_calc;
         private System.Windows.Forms.ColumnHeader codeNoHeader;
         private System.Windows.Forms.ColumnHeader factorHeader;
-        private System.Windows.Forms.Button loadWd_Btn;
-        private System.Windows.Forms.Button saveWd_Btn;
         private System.Windows.Forms.Button fit_sel_Btn;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button optionBtn;
