@@ -136,12 +136,6 @@
     <Compile Include="ChemiForm.cs" />
     <Compile Include="CubicSpline.cs" />
     <Compile Include="ExcludeTypes.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form10.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -283,9 +277,6 @@
     <Compile Include="SequenceTab.cs" />
     <Compile Include="TriDiagonalMatrixF.cs" />
     <Compile Include="WindowSet.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form10.resx">
       <DependentUpon>Form10.cs</DependentUpon>
     </EmbeddedResource>
