@@ -131,15 +131,25 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayUtil.cs" />
-    <Compile Include="ChemForm.cs" />
-    <Compile Include="ChemiForm.cs" />
-    <Compile Include="CubicSpline.cs" />
-    <Compile Include="ExcludeTypes.cs" />
-    <Compile Include="Form10.cs">
+    <Compile Include="ChangeStateForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form10.Designer.cs">
+    <Compile Include="ChangeStateForm.Designer.cs">
+      <DependentUpon>ChangeStateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChemForm.cs" />
+    <Compile Include="ChemiForm.cs" />
+    <Compile Include="ExcludeTypes.cs" />
+    <Compile Include="Form24_2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form24_2.Designer.cs">
+      <DependentUpon>Form24_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Peptides\Form10.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Peptides\Form10.Designer.cs">
       <DependentUpon>Form10.cs</DependentUpon>
     </Compile>
     <Compile Include="Form11.cs">
@@ -148,22 +158,22 @@
     <Compile Include="Form11.Designer.cs">
       <DependentUpon>Form11.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form12.cs">
+    <Compile Include="Peptides\Form12.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form12.Designer.cs">
+    <Compile Include="Peptides\Form12.Designer.cs">
       <DependentUpon>Form12.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form13.cs">
+    <Compile Include="Peptides\Form13.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form13.Designer.cs">
+    <Compile Include="Peptides\Form13.Designer.cs">
       <DependentUpon>Form13.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form14.cs">
+    <Compile Include="Peptides\Form14.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form14.Designer.cs">
+    <Compile Include="Peptides\Form14.Designer.cs">
       <DependentUpon>Form14.cs</DependentUpon>
     </Compile>
     <Compile Include="Form15.cs">
@@ -172,10 +182,10 @@
     <Compile Include="Form15.Designer.cs">
       <DependentUpon>Form15.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form16.cs">
+    <Compile Include="Peptides\Form16.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form16.Designer.cs">
+    <Compile Include="Peptides\Form16.Designer.cs">
       <DependentUpon>Form16.cs</DependentUpon>
     </Compile>
     <Compile Include="Form17.cs">
@@ -184,10 +194,10 @@
     <Compile Include="Form17.Designer.cs">
       <DependentUpon>Form17.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form18.cs">
+    <Compile Include="Peptides\Form18.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form18.Designer.cs">
+    <Compile Include="Peptides\Form18.Designer.cs">
       <DependentUpon>Form18.cs</DependentUpon>
     </Compile>
     <Compile Include="Form19.cs">
@@ -196,10 +206,10 @@
     <Compile Include="Form19.Designer.cs">
       <DependentUpon>Form19.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form2.cs">
+    <Compile Include="Peptides\Form2.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.cs">
+    <Compile Include="Peptides\Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="Form20.cs">
@@ -208,52 +218,52 @@
     <Compile Include="Form20.Designer.cs">
       <DependentUpon>Form20.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form21.cs">
+    <Compile Include="Peptides\Form21.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form21.Designer.cs">
+    <Compile Include="Peptides\Form21.Designer.cs">
       <DependentUpon>Form21.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form22.cs">
+    <Compile Include="Peptides\Form22.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form22.Designer.cs">
+    <Compile Include="Peptides\Form22.Designer.cs">
       <DependentUpon>Form22.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form23.cs">
+    <Compile Include="Peptides\Form23.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form23.Designer.cs">
+    <Compile Include="Peptides\Form23.Designer.cs">
       <DependentUpon>Form23.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form24.cs">
+    <Compile Include="Peptides\Form24.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form24.Designer.cs">
+    <Compile Include="Peptides\Form24.Designer.cs">
       <DependentUpon>Form24.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form4.cs">
+    <Compile Include="Peptides\Form4.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form4.Designer.cs">
+    <Compile Include="Peptides\Form4.Designer.cs">
       <DependentUpon>Form4.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form5.cs">
+    <Compile Include="Peptides\Form5.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form5.Designer.cs">
+    <Compile Include="Peptides\Form5.Designer.cs">
       <DependentUpon>Form5.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form6.cs">
+    <Compile Include="Peptides\Form6.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form6.Designer.cs">
+    <Compile Include="Peptides\Form6.Designer.cs">
       <DependentUpon>Form6.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form7.cs">
+    <Compile Include="Peptides\Form7.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form7.Designer.cs">
+    <Compile Include="Peptides\Form7.Designer.cs">
       <DependentUpon>Form7.cs</DependentUpon>
     </Compile>
     <Compile Include="Form8.cs">
@@ -262,10 +272,10 @@
     <Compile Include="Form8.Designer.cs">
       <DependentUpon>Form8.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form9.cs">
+    <Compile Include="Peptides\Form9.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form9.Designer.cs">
+    <Compile Include="Peptides\Form9.Designer.cs">
       <DependentUpon>Form9.cs</DependentUpon>
     </Compile>
     <Compile Include="FragForm.cs" />
@@ -275,72 +285,77 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolution_List.cs" />
     <Compile Include="SequenceTab.cs" />
-    <Compile Include="TriDiagonalMatrixF.cs" />
     <Compile Include="WindowSet.cs" />
-    <EmbeddedResource Include="Form10.resx">
+    <EmbeddedResource Include="ChangeStateForm.resx">
+      <DependentUpon>ChangeStateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form24_2.resx">
+      <DependentUpon>Form24_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Peptides\Form10.resx">
       <DependentUpon>Form10.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form11.resx">
       <DependentUpon>Form11.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form12.resx">
+    <EmbeddedResource Include="Peptides\Form12.resx">
       <DependentUpon>Form12.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form13.resx">
+    <EmbeddedResource Include="Peptides\Form13.resx">
       <DependentUpon>Form13.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form14.resx">
+    <EmbeddedResource Include="Peptides\Form14.resx">
       <DependentUpon>Form14.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form15.resx">
       <DependentUpon>Form15.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form16.resx">
+    <EmbeddedResource Include="Peptides\Form16.resx">
       <DependentUpon>Form16.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form17.resx">
       <DependentUpon>Form17.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form18.resx">
+    <EmbeddedResource Include="Peptides\Form18.resx">
       <DependentUpon>Form18.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form19.resx">
       <DependentUpon>Form19.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
+    <EmbeddedResource Include="Peptides\Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form20.resx">
       <DependentUpon>Form20.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form21.resx">
+    <EmbeddedResource Include="Peptides\Form21.resx">
       <DependentUpon>Form21.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form22.resx">
+    <EmbeddedResource Include="Peptides\Form22.resx">
       <DependentUpon>Form22.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form23.resx">
+    <EmbeddedResource Include="Peptides\Form23.resx">
       <DependentUpon>Form23.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form24.resx">
+    <EmbeddedResource Include="Peptides\Form24.resx">
       <DependentUpon>Form24.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form4.resx">
+    <EmbeddedResource Include="Peptides\Form4.resx">
       <DependentUpon>Form4.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form5.resx">
+    <EmbeddedResource Include="Peptides\Form5.resx">
       <DependentUpon>Form5.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form6.resx">
+    <EmbeddedResource Include="Peptides\Form6.resx">
       <DependentUpon>Form6.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form7.resx">
+    <EmbeddedResource Include="Peptides\Form7.resx">
       <DependentUpon>Form7.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form8.resx">
       <DependentUpon>Form8.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form9.resx">
+    <EmbeddedResource Include="Peptides\Form9.resx">
       <DependentUpon>Form9.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -379,6 +394,9 @@
     <Content Include="Resources\check5.png" />
     <None Include="Resources\clipboardcheck_IgA_icon.ico" />
     <None Include="Resources\Icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Oligonoucleotides\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

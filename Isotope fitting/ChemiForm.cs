@@ -650,6 +650,7 @@ namespace Isotope_fitting
     {
         public static List<double> xs = new List<double>();
         public static List<double> ys = new List<double>();
+        public static int H_minus = 0;
 
         #region ChemiForm class parameters set
         private List<Element_set> elements_set = new List<Element_set>();
@@ -1634,11 +1635,11 @@ namespace Isotope_fitting
                                     }
                                     else if (chem.Charge == 1)
                                     {
-                                        Data.Add(new PointPlot { X = tmp_mass - emass, Y = tmp_abundance });
+                                        Data.Add(new PointPlot { X = tmp_mass - emass - (H_minus * 1.007825), Y = tmp_abundance });
                                     }
                                     else
                                     {
-                                        Data.Add(new PointPlot { X = ((tmp_mass - chem.Charge * emass) / Math.Abs(chem.Charge)), Y = tmp_abundance });
+                                        Data.Add(new PointPlot { X = (((tmp_mass - chem.Charge * emass) - (H_minus * 1.007825)) / Math.Abs(chem.Charge)), Y = tmp_abundance });
                                     }
 
                                 }
@@ -1652,11 +1653,11 @@ namespace Isotope_fitting
                                     }
                                     else if (chem.Charge == 1)
                                     {
-                                        Data.Add(new PointPlot { X = tmp_mass - emass, Y = (100 / max_abundance) * tmp_abundance });
+                                        Data.Add(new PointPlot { X = tmp_mass - emass - (H_minus * 1.007825), Y = (100 / max_abundance) * tmp_abundance });
                                     }
                                     else
                                     {
-                                        Data.Add(new PointPlot { X = (tmp_mass - chem.Charge * emass) / Math.Abs(chem.Charge), Y = (100 / max_abundance) * tmp_abundance });
+                                        Data.Add(new PointPlot { X = ((tmp_mass - chem.Charge * emass) - (H_minus * 1.007825)) / Math.Abs(chem.Charge), Y = (100 / max_abundance) * tmp_abundance });
                                     }
 
                                 }
@@ -1724,12 +1725,6 @@ namespace Isotope_fitting
             }
             peak_amount = v;
 
-            //IEnumerable<PointPlot> Pattern_Points = Data.OrderBy(p => p.X);
-            //foreach (PointPlot p in Pattern_Points)
-            //{
-            //    chem.Points.Add(new PointPlot { X = p.X, Y = p.Y });
-            //}
-
             List<PointPlot> DataSort = Data.OrderBy(p => p.X).ToList();
             chem.Points = RemoveDuplicatesPoint(DataSort);
             if (chem.Points.Count > 0)
@@ -1739,6 +1734,7 @@ namespace Isotope_fitting
             else
             {
                 // error
+                chem.Error = true;
                 return;
             }
         }
@@ -2665,11 +2661,11 @@ namespace Isotope_fitting
                                     }
                                     else if (chem.Charge == 1)
                                     {
-                                        Data.Add(new PointPlot { X = tmp_mass - emass, Y = tmp_abundance });
+                                        Data.Add(new PointPlot { X = tmp_mass - emass - (H_minus * 1.007825), Y = tmp_abundance });
                                     }
                                     else
                                     {
-                                        Data.Add(new PointPlot { X = ((tmp_mass - chem.Charge * emass) / Math.Abs(chem.Charge)), Y = tmp_abundance });
+                                        Data.Add(new PointPlot { X = (((tmp_mass - chem.Charge * emass) - (H_minus * 1.007825)) / Math.Abs(chem.Charge)), Y = tmp_abundance });
                                     }
 
                                 }
@@ -2682,11 +2678,11 @@ namespace Isotope_fitting
                                     }
                                     else if (chem.Charge == 1)
                                     {
-                                        Data.Add(new PointPlot { X = tmp_mass - emass, Y = (100 / max_abundance) * tmp_abundance });
+                                        Data.Add(new PointPlot { X = tmp_mass - emass - (H_minus * 1.007825), Y = (100 / max_abundance) * tmp_abundance });
                                     }
                                     else
                                     {
-                                        Data.Add(new PointPlot { X = (tmp_mass - chem.Charge * emass) / Math.Abs(chem.Charge), Y = (100 / max_abundance) * tmp_abundance });
+                                        Data.Add(new PointPlot { X = ((tmp_mass - chem.Charge * emass) - (H_minus * 1.007825)) / Math.Abs(chem.Charge), Y = (100 / max_abundance) * tmp_abundance });
                                     }
 
                                 }
@@ -2768,6 +2764,7 @@ namespace Isotope_fitting
             else
             {
                 // error
+                chem.Error = true;
                 return;
             }
 
@@ -2812,6 +2809,12 @@ namespace Isotope_fitting
             string[] elem = new string[ChemForm.isoTable.Length];
             Regex rgx = new Regex("[A-Z]");
             chem.FinalFormula = "";
+            H_minus = 0;
+            if (FORMULA.Contains("-"))
+            {
+                FORMULA = fix_H_minus(FORMULA);
+                if (FORMULA.Equals("error")) { FORMULA = null; chem.Error = true; }
+            }
             if (chem.Error == false && String.IsNullOrEmpty(chem.Adduct) == false)
             {
                 //multiply each number with the multiplier
@@ -3403,10 +3406,37 @@ namespace Isotope_fitting
 
 
         }
-
+        public static string fix_H_minus(string initial_formula)
+        {
+            string final_formula = "";
+            string[] sub = initial_formula.Split('-');
+            if (sub.Length == 2)
+            {
+                final_formula += sub[0].Remove(sub[0].Length - 1, 1);
+                int endIndex = 0;
+                for (int i = 0; i < sub[1].Length; i++)
+                {
+                    if (Char.IsNumber(sub[1][i]) != true)
+                    {
+                        endIndex = i; break;
+                    }
+                }
+                if (endIndex == 0)
+                {
+                    H_minus = Int32.Parse(sub[1].Substring(0, endIndex));
+                    final_formula += sub[1].Remove(0, endIndex);
+                }
+                else { final_formula = "error"; }
+            }
+            else
+            {
+                final_formula = "error";
+            }
+            return final_formula;
+        }
         #endregion
 
-        
+
     }
 
 }

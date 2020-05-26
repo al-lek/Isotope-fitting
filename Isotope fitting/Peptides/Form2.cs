@@ -477,8 +477,6 @@ namespace Isotope_fitting
             //deconvolution
             _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
             _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
-
-            hide_calc_Btn(); show_Btn.Visible = false;
         }
 
         #region save load bw
@@ -1936,10 +1934,7 @@ namespace Isotope_fitting
         {
             // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
             if (!calc_FF && !is_exp_deconvoluted) generate_x();
-            ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
-
-            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
-            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
+            ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();                        
             ms_light_chain = false; ms_heavy_chain = false;
             enable_UIcontrols("post import fragments");
         }
@@ -1977,7 +1972,195 @@ namespace Isotope_fitting
                 }
             }
         }
+        private void assign_riken_fragment(string[] frag_info)
+        {
+            List<string> other_frag_types = new List<string> { "acp3Y", "dRp" };
 
+            //m/z	Charge	Chemical Formula	Type
+            int charge = Int32.Parse(frag_info[1]);
+            if (is_exp_deconvoluted && charge > 1) { return; }
+
+            ChemFormulas.Add(new ChemiForm
+            {
+                InputFormula = frag_info[2],
+                Adduct = string.Empty,
+                Deduct = string.Empty,
+                Multiplier = 1,
+                Mz = frag_info[0],
+                Ion = frag_info[3],
+                Index = string.Empty,
+                IndexTo = string.Empty,
+                Error = false,
+                Elements_set = new List<Element_set>(),
+                Iso_total_amount = 0,
+                Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
+                Points = new List<PointPlot>(),
+                Machine = string.Empty,
+                Resolution = new double(),
+                Combinations = new List<Combination_1>(),
+                Profile = new List<PointPlot>(),
+                Centroid = new List<PointPlot>(),
+                Intensoid = new List<PointPlot>(),
+                Combinations4 = new List<Combination_4>(),
+                FinalFormula = string.Empty,
+                Factor = 1.0,
+                Fixed = false,
+                PrintFormula = frag_info[2],
+                Max_man_int = 0,
+                Extension = ms_extension,
+            });
+            int i = ChemFormulas.Count - 1;
+            //if (ms_heavy_chain) ChemFormulas[i].Chain_type = 1;
+            //else if (ms_light_chain) ChemFormulas[i].Chain_type = 2;
+            /*else*/
+            ChemFormulas[i].Chain_type = 0;
+
+            // Note on formulas
+            // InputFormula is the text from Riken.
+
+            if (is_exp_deconvoluted)
+            {
+                ChemFormulas.RemoveAt(i);
+                return;
+            }
+            else
+            {
+                ChemFormulas[i].Charge = Int32.Parse(frag_info[1]);
+            }
+
+            //x_charged = true; //set to true in order to avoid charged x ions calculations
+            string[] substring = ChemFormulas[i].Ion.Split('-');
+            string ion_type = "";
+            if (char.IsLower(ChemFormulas[i].Ion[0]))
+            {
+                // normal fragment
+                bool primary_present = false;
+                if (ChemFormulas[i].Ion.StartsWith("a") && !ChemFormulas[i].Ion.StartsWith("acp3Y")) { ChemFormulas[i].Color = OxyColors.Green; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("b")) { ChemFormulas[i].Color = OxyColors.Blue; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("c")) { ChemFormulas[i].Color = OxyColors.Firebrick; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("d") && !ChemFormulas[i].Ion.StartsWith("dRp")) { ChemFormulas[i].Color = OxyColors.DeepPink; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("w")) { ChemFormulas[i].Color = OxyColors.LimeGreen; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("x")) { ChemFormulas[i].Color = OxyColors.DodgerBlue; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("y")) { ChemFormulas[i].Color = OxyColors.Tomato; primary_present = true; }
+                else if (ChemFormulas[i].Ion.StartsWith("z")) { ChemFormulas[i].Color = OxyColors.HotPink; primary_present = true; }
+                else ChemFormulas[i].Color = OxyColors.Orange;
+                if (primary_present && (substring.Length == 1 || (substring.Length == 2 && substring[1].StartsWith("B("))))
+                {
+                    ion_type = substring[0][0].ToString();
+                    bool is_number = Int32.TryParse(substring[0].Remove(0, 1), out int index);
+                    if (is_number)
+                    {
+                        ChemFormulas[i].SortIdx = index;
+                        if (ChemFormulas[i].Ion.StartsWith("w") || ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(w") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z"))
+                        {
+                            ChemFormulas[i].Index = (ms_sequence.Length - ChemFormulas[i].SortIdx).ToString();
+                        }
+                        else
+                        {
+                            ChemFormulas[i].Index = ChemFormulas[i].SortIdx.ToString();
+                        }
+                        ChemFormulas[i].IndexTo = ChemFormulas[i].Index;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Τhe remaining calculations will continue normally.");
+                        ChemFormulas.RemoveAt(i); return;
+                    }
+
+                    for (int c = 1; c < substring.Length; c++)
+                    {
+                        if (substring[c].StartsWith("B")) ion_type += "-B()";
+                        else ion_type += "-" + substring[c];
+                    }
+                    ChemFormulas[i].Ion_type = ion_type;
+                }
+                else if (primary_present)
+                {
+                    ChemFormulas[i].Color = OxyColors.Violet;
+                    ion_type = "internal";
+                    int[] index_values = new int[2];
+                    for (int c = 0; c < 2; c++)
+                    {
+                        bool is_number = Int32.TryParse(substring[c].Remove(0, 1), out int index);
+                        if (is_number)
+                        {
+                            if (c == 0) ChemFormulas[i].SortIdx = index;
+                            index_values[c] = index;
+                            if (substring[c].StartsWith("w") || substring[c].StartsWith("x") || substring[c].StartsWith("y") || substring[c].StartsWith("z") || substring[c].StartsWith("(w") || substring[c].StartsWith("(x") || substring[c].StartsWith("(y") || substring[c].StartsWith("(z"))
+                            {
+                                index_values[c] = (ms_sequence.Length - index_values[c]);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Τhe remaining calculations will continue normally.");
+                            ChemFormulas.RemoveAt(i); return;
+                        }
+                    }
+                    ChemFormulas[i].Index = index_values[0].ToString();
+                    ChemFormulas[i].IndexTo = index_values[1].ToString();
+                    for (int c = 2; c < substring.Length; c++)
+                    {
+                        if (substring[c].StartsWith("B")) ion_type += "-B()";
+                        else ion_type += "-" + substring[c];
+                    }
+                    ChemFormulas[i].Ion_type = ion_type;
+                }
+                else
+                {
+                    ion_type = "known MS2";
+                    ChemFormulas[i].SortIdx = 0;
+                    ChemFormulas[i].Index = "0";
+                    ChemFormulas[i].IndexTo = "0";
+                    for (int c = 1; c < substring.Length; c++)
+                    {
+                        if (substring[c].StartsWith("B")) ion_type += "-B()";
+                        else ion_type += "-" + substring[c];
+                    }
+                    ChemFormulas[i].Ion_type = ion_type;
+                }
+            }
+            else if (ChemFormulas[i].Ion.StartsWith("B("))//base fragments are not followed by losses ex B(G) or B(m7G)
+            {
+                string sub = ChemFormulas[i].Ion.Substring(2, ChemFormulas[i].Ion.Length - 2);
+                ChemFormulas[i].Ion_type = "B()";
+                ChemFormulas[i].Color = OxyColors.DarkSalmon;
+                ChemFormulas[i].SortIdx = ms_sequence.IndexOf(sub) + 1;
+                ChemFormulas[i].Index = (ms_sequence.IndexOf(sub) + 1).ToString();
+                ChemFormulas[i].IndexTo = (ms_sequence.IndexOf(sub) + sub.Length).ToString();
+            }
+            else
+            {
+                if (substring[0].StartsWith("M") && c_is_precursor(ChemFormulas[i].InputFormula))
+                {
+                    ion_type = "M";
+                    ChemFormulas[i].Color = OxyColors.DarkRed;
+                    ChemFormulas[i].SortIdx = 0;
+                    ChemFormulas[i].Index = "0";
+                    ChemFormulas[i].IndexTo = (ms_sequence.Length - 1).ToString();
+                }
+                else
+                {
+                    ion_type = "known MS2";
+                    ChemFormulas[i].Color = OxyColors.Orange;
+                    ChemFormulas[i].SortIdx = 0;
+                    ChemFormulas[i].Index = "0";
+                    ChemFormulas[i].IndexTo = "0";
+
+                }
+                for (int c = 1; c < substring.Length; c++)
+                {
+                    if (substring[c].StartsWith("B")) ion_type += "-B()";
+                    else ion_type += "-" + substring[c];
+                }
+                ChemFormulas[i].Ion_type = ion_type;
+            }
+            string lbl = "";
+            lbl = ChemFormulas[i].Ion;
+            ChemFormulas[i].Radio_label = lbl + ms_extension;
+            if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
+            else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+        }
         #endregion
 
         #region 2.a Select fragments and calculate their envelopes
@@ -1987,8 +2170,7 @@ namespace Isotope_fitting
         }
         public void calculate_procedure(List<ChemiForm> selected_fragments)
         {
-            calc_Btn.Enabled = false;
-            if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calc_Btn.Enabled = true; return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); return; }
             try
             {
                 try
@@ -2011,7 +2193,6 @@ namespace Isotope_fitting
             }
             finally
             {
-                calc_Btn.Enabled = true;
             }
 
         }
@@ -2093,15 +2274,20 @@ namespace Isotope_fitting
             }
             else
             {
+                string machine = "";
+                double res = 0.0;
+                if (!string.IsNullOrEmpty(res_string_24)) res = double.Parse(res_string_24, CultureInfo.InvariantCulture.NumberFormat);
+                else if (machine_sel_index != -1) machine = Resolution_List.L.Keys.ToList()[machine_sel_index];
+                else machine = Resolution_List.L.Keys.ToList()[9];
                 foreach (ChemiForm chem in selected_fragments)
                 {
-                    if (machine_listBox.SelectedItems.Count > 0)
+                    if (res == 0)
                     {
-                        chem.Machine = machine_listBox.SelectedItem.ToString();
+                        chem.Machine = machine;
                     }
                     else
                     {
-                        chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+                        chem.Resolution = res;
                     }
                 }
             }
@@ -4672,18 +4858,16 @@ namespace Isotope_fitting
         {
             if (status == "post load")
             {
-                fitStep_Box.Enabled = Fitting_chkBox.Enabled = true;
+                Fitting_chkBox.Enabled = true;
                 Fitting_chkBox.Checked = false;
             }
             else if (status == "post import fragments")
             {
-                clearCalc_Btn.Enabled = mzMax_Box.Enabled = mzMin_Box.Enabled = mzMax_Label.Enabled = mzMin_Label.Enabled = chargeMax_Box.Enabled = true;
-                chargeMin_Box.Enabled = chargeAll_Btn.Enabled = idxPr_Box.Enabled = idxTo_Box.Enabled = idxFrom_Box.Enabled = resolution_Box.Enabled = true;
-                machine_listBox.Enabled = calc_Btn.Enabled = true;                
+                              
             }
             else if (status == "post calculations")
             {
-                 clearCalc_Btn.Enabled = calc_Btn.Enabled = fit_Btn.Enabled = fit_sel_Btn.Enabled = true;                
+                 fit_Btn.Enabled = fit_sel_Btn.Enabled = true;                
             }
         }
 
@@ -7745,10 +7929,8 @@ namespace Isotope_fitting
             plotCentr_chkBox.CheckedChanged += (s, e) => { if (!block_plot_refresh) refresh_iso_plot(); };
             plotFragCent_chkBox.CheckedChanged += (s, e) => { if (!block_plot_refresh) refresh_iso_plot(); };
             plotFragProf_chkBox.CheckedChanged += (s, e) => {if(!block_plot_refresh) refresh_iso_plot(); };
-            mzMin_Box.KeyPress += (s, e) => { if (e.KeyChar == (char)13) mzMax_Box.Focus(); };
             _lvwItemComparer = new ListViewItemComparer();
             machine_sel_index = 9;
-            machine_listBox.SelectedIndex = 9;
             filename_txtBx.Text = file_name;
             displayPeakList_btn.Click += (s, e) => { display_peakList(); };
             progress_display_init();
@@ -7800,265 +7982,8 @@ namespace Isotope_fitting
             //dvw_lstBox.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn2; } };            
             //addin_lstBox.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn2; } };
             #endregion
-        }       
-        private void UncheckAll_calculationPanel()
-        {
-            foreach (int i in a_lstBox.CheckedIndices)
-            {
-                a_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in b_lstBox.CheckedIndices)
-            {
-                b_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in c_lstBox.CheckedIndices)
-            {
-                c_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in x_lstBox.CheckedIndices)
-            {
-                x_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in y_lstBox.CheckedIndices)
-            {
-                y_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in z_lstBox.CheckedIndices)
-            {
-                z_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in M_lstBox.CheckedIndices)
-            {
-                M_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in addin_lstBox.CheckedIndices)
-            {
-                addin_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in dvw_lstBox.CheckedIndices)
-            {
-                dvw_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            foreach (int i in internal_lstBox.CheckedIndices)
-            {
-                internal_lstBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-            a_lstBox.ClearSelected();
-            b_lstBox.ClearSelected();
-            c_lstBox.ClearSelected();
-            x_lstBox.ClearSelected();
-            y_lstBox.ClearSelected();
-            z_lstBox.ClearSelected();
-            M_lstBox.ClearSelected();
-            dvw_lstBox.ClearSelected();
-            internal_lstBox.ClearSelected();
-            addin_lstBox.ClearSelected();
-            mzMax_Box.Text = null;
-            mzMin_Box.Text = null;
-            chargeMin_Box.Text = null;
-            chargeMax_Box.Text = null;
-            idxFrom_Box.Text = null;
-            idxTo_Box.Text = null;
-            idxPr_Box.Text = null;
-            sortIdx_chkBx.Checked = false;
-        }
-        private void mzMin_Label_Click(object sender, EventArgs e)
-        {
-            mzMin_Box.Text = null;
-            mzMin_Box.Text = ChemFormulas.FirstOrDefault().Mz.ToString();
-        }
-        private void mzMax_Label_Click(object sender, EventArgs e)
-        {
-            mzMax_Box.Text = null;
-            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
-        }
-        private void mzMin_Box_Click(object sender, EventArgs e)
-        {
-            mzMin_Box.SelectAll();
-        }
-        private void mzMax_Box_Click(object sender, EventArgs e)
-        {
-            mzMax_Box.SelectAll();
-        }
-        private void chargeAll_Btn_Click(object sender, EventArgs e)
-        {
-            chargeMin_Box.Text = null;
-            chargeMax_Box.Text = null;
-        }
-        private void Resolution_Box_TextChanged(object sender, EventArgs e)
-        {
-            // Clear all selections in the ListBox.
-            machine_listBox.ClearSelected();
-            if (Regex.IsMatch(resolution_Box.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                resolution_Box.Text = resolution_Box.Text.Remove(resolution_Box.Text.Length - 1);
-                resolution_Box.SelectionStart = resolution_Box.Text.Length;
-                resolution_Box.SelectionLength = 0;
-            }
-        }
-        private void Machine_listBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            resolution_Box.Text = null;
-        }
-        private void MzMin_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(mzMin_Box.Text))
-            {
-                try
-                {
-                    double.Parse(mzMin_Box.Text, NumberStyles.AllowDecimalPoint);
-                }
-                catch (FormatException ex)
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    mzMin_Box.Text = mzMin_Box.Text.Remove(mzMin_Box.Text.Length - 1);
-                    mzMin_Box.SelectionStart = mzMin_Box.Text.Length;
-                    mzMin_Box.SelectionLength = 0;
-                }
-            }
-        }
-        private void MzMax_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(mzMax_Box.Text))
-            {
-                try
-                {
-                    double.Parse(mzMax_Box.Text, NumberStyles.AllowDecimalPoint);
-                }
-                catch
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    mzMax_Box.Text = mzMax_Box.Text.Remove(mzMax_Box.Text.Length - 1);
-                    mzMax_Box.SelectionStart = mzMax_Box.Text.Length;
-                    mzMax_Box.SelectionLength = 0;
-                }
-            }           
-        }
-        private void ChargeMin_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(chargeMin_Box.Text))
-            {
-                if (chargeMin_Box.Text != "-")
-                {
-                    try
-                    {
-                        double.Parse(chargeMin_Box.Text, NumberStyles.Integer);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please enter only numbers.");
-                        chargeMin_Box.Text = chargeMin_Box.Text.Remove(chargeMin_Box.Text.Length - 1);
-                        chargeMin_Box.SelectionStart = chargeMin_Box.Text.Length;
-                        chargeMin_Box.SelectionLength = 0;
-                    }
-                }
-            }
-            //if (Regex.IsMatch(chargeMin_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    chargeMin_Box.Text = chargeMin_Box.Text.Remove(chargeMin_Box.Text.Length - 1);
-            //}
-        }
-        private void ChargeMax_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(chargeMax_Box.Text))
-            {
-                if (chargeMax_Box.Text != "-")
-                {
-
-                    try
-                    {
-                        double.Parse(chargeMax_Box.Text, NumberStyles.Integer);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please enter only numbers.");
-                        chargeMax_Box.Text = chargeMax_Box.Text.Remove(chargeMax_Box.Text.Length - 1);
-                        chargeMax_Box.SelectionStart = chargeMax_Box.Text.Length;
-                        chargeMax_Box.SelectionLength = 0;
-                    }
-                }
-            }
-            //if (Regex.IsMatch(chargeMax_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    chargeMax_Box.Text = chargeMax_Box.Text.Remove(chargeMax_Box.Text.Length - 1);
-            //}
-        }
-        private void IdxPr_Box_TextChanged(object sender, EventArgs e)
-        {
-            //if (Regex.IsMatch(idxPr_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    idxPr_Box.Text = idxPr_Box.Text.Remove(idxPr_Box.Text.Length - 1);
-            //    idxPr_Box.SelectionStart = idxPr_Box.Text.Length;
-            //    idxPr_Box.SelectionLength = 0;
-            //}
-        }
-        private void IdxFrom_Box_TextChanged(object sender, EventArgs e)
-        {
-            //if (Regex.IsMatch(idxFrom_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    idxFrom_Box.Text = idxFrom_Box.Text.Remove(idxFrom_Box.Text.Length - 1);
-            //    idxFrom_Box.SelectionStart = idxFrom_Box.Text.Length;
-            //    idxFrom_Box.SelectionLength = 0;
-            //}
-
-        }
-        private void IdxTo_Box_TextChanged(object sender, EventArgs e)
-        {
-            //if (Regex.IsMatch(idxTo_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    idxTo_Box.Text = idxTo_Box.Text.Remove(idxTo_Box.Text.Length - 1);
-            //    idxTo_Box.SelectionStart = idxTo_Box.Text.Length;
-            //    idxTo_Box.SelectionLength = 0;
-            //}
-        }
-        private void step_rangeBox_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(step_rangeBox.Text))
-            {
-                try
-                {
-                    step_range = double.Parse(step_rangeBox.Text, NumberStyles.AllowDecimalPoint);
-                }
-                catch
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    step_rangeBox.Text = step_rangeBox.Text.Remove(step_rangeBox.Text.Length - 1);
-                }
-            }
-        }
-        private void FitStep_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(fitStep_Box.Text))
-            {
-                try
-                {
-                    double.Parse(fitStep_Box.Text, NumberStyles.AllowDecimalPoint);
-                    stepRange_Lbl.Visible = true;
-                    step_rangeBox.Visible = true;
-                }
-                catch
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    fitStep_Box.Text = fitStep_Box.Text.Remove(fitStep_Box.Text.Length - 1);
-                }
-            }
-            else
-            {
-                stepRange_Lbl.Visible = false;
-                step_rangeBox.Visible = false;
-            }
-            //if (Regex.IsMatch(fitStep_Box.Text, "[^0-9]"))
-            //{
-            //    MessageBox.Show("Please enter only numbers.");
-            //    fitStep_Box.Text = fitStep_Box.Text.Remove(fitStep_Box.Text.Length - 1);
-            //}
-        }        
+        }               
+        
         private void exportImage_Btn_Click(object sender, EventArgs e)
         {
             export_copy_plotLightningChartUltimate(false, LC_1);
@@ -8677,11 +8602,7 @@ namespace Isotope_fitting
         #endregion
 
         #region Calculation Options
-        private void ClearCalc_Btn_Click(object sender, EventArgs e)
-        {
-            UncheckAll_calculationPanel();
-        }
-
+       
         public static string fix_formula(string input, bool simple = true, int h = -1, int h2o = 0, int nh3 = 0)
         {
             string formula = "";
@@ -8762,42 +8683,7 @@ namespace Isotope_fitting
         {
             Invalidate();
         }
-
-        private void hide_Btn_Click(object sender, EventArgs e)
-        {
-            hide_calc_Btn();
-        }
-        private void hide_calc_Btn()
-        {
-            panel_calc.Hide(); splitContainer2.Panel1Collapsed = true;
-            Size initial_splitcontSize = splitContainer2.Size;
-            splitContainer2.Size = new Size(initial_splitcontSize.Width - panel_calc.Size.Width, initial_splitcontSize.Height);
-            Size initial_ug_size = user_grpBox.Size;
-            user_grpBox.Size = new Size(initial_ug_size.Width - panel_calc.Size.Width, initial_ug_size.Height);
-            Point initial_ug_loc = user_grpBox.Location;
-            user_grpBox.Location = new Point(initial_ug_loc.X + panel_calc.Size.Width, initial_ug_loc.Y);
-            Size initial_plot_size = plots_grpBox.Size;
-            plots_grpBox.Size = new Size(initial_plot_size.Width + panel_calc.Size.Width, initial_plot_size.Height);
-            show_Btn.Visible = true; show_Btn.BringToFront();
-            splitContainer2.Invalidate();
-        }
-
-        private void show_Btn_Click(object sender, EventArgs e)
-        {
-            panel_calc.Show(); splitContainer2.Panel1Collapsed = false;
-            Size initial_splitcontSize = splitContainer2.Size;
-            splitContainer2.Size = new Size(initial_splitcontSize.Width + panel_calc.Size.Width, initial_splitcontSize.Height);
-            Size initial_ug_size = user_grpBox.Size;
-            user_grpBox.Size = new Size(initial_ug_size.Width + panel_calc.Size.Width, initial_ug_size.Height);
-            Point initial_ug_loc = user_grpBox.Location;
-            user_grpBox.Location = new Point(initial_ug_loc.X - panel_calc.Size.Width, initial_ug_loc.Y);
-            Size initial_plot_size = plots_grpBox.Size;
-            plots_grpBox.Size = new Size(initial_plot_size.Width - panel_calc.Size.Width, initial_plot_size.Height);
-            splitContainer2.SplitterDistance = 302;
-            splitContainer2.Invalidate();
-            hide_Btn.Visible = true; hide_Btn.BringToFront();
-            show_Btn.Visible = false;
-        }
+              
 
         private void customRes_Btn_Click(object sender, EventArgs e)
         {
@@ -8817,19 +8703,19 @@ namespace Isotope_fitting
                 name = Form4.new_machine;
             }
             else return;
-            for (int i1 = 0; i1 < machine_listBox.Items.Count; i1++)
+            for (int i1 = 0; i1 < Form24.machine_listBox.Items.Count; i1++)
             {
-                string m = (string)machine_listBox.Items[i1];
+                string m = (string)Form24.machine_listBox.Items[i1];
                 if (m.Equals(name)) { return; }
             }
 
-            machine_listBox.Invoke(new Action(() => machine_listBox.ClearSelected()));   //thread safe call
-            machine_listBox.Invoke(new Action(() => machine_listBox.Items.Add(name)));   //thread safe call
-            machine_listBox.Invoke(new Action(() => machine_listBox.SelectedItem = name));   //thread safe call
+            Form24.machine_listBox.Invoke(new Action(() => Form24.machine_listBox.ClearSelected()));   //thread safe call
+            Form24.machine_listBox.Invoke(new Action(() => Form24.machine_listBox.Items.Add(name)));   //thread safe call
+            Form24.machine_listBox.Invoke(new Action(() => Form24.machine_listBox.SelectedItem = name));   //thread safe call
         }
 
         #endregion
-                
+
 
         #endregion
 
@@ -14397,23 +14283,16 @@ namespace Isotope_fitting
             insert_exp = false;
             plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false; 
             loadMS_Btn.Enabled = true; 
-            clearCalc_Btn.Enabled = false; calc_Btn.Enabled = false;  fitStep_Box.Text = null; step_rangeBox.Text = null;
             Fitting_chkBox.Checked = false;
-            Fitting_chkBox.Enabled = false; fitStep_Box.Enabled = false;
+            Fitting_chkBox.Enabled = false; 
             Fragments2.Clear(); ChemFormulas.Clear();
             selectedFragments.Clear();
-            UncheckAll_calculationPanel();
-            resolution_Box.Text = null;
-            machine_listBox.ClearSelected();
             machine_sel_index = 9;
-            machine_listBox.SelectedIndex = 9;
             loadExp_Btn.Enabled = true;
             selected_window = 1000000;
             bigPanel.Controls.Clear();
             candidate_fragments = 1;
-            mzMax_Box.Enabled = false; mzMin_Box.Enabled = false; mzMax_Label.Enabled = false; mzMin_Label.Enabled = false; chargeMax_Box.Enabled = false; chargeMin_Box.Enabled = false; chargeAll_Btn.Enabled = false;
-            idxPr_Box.Enabled = false; idxTo_Box.Enabled = false; idxFrom_Box.Enabled = false; resolution_Box.Enabled = false; machine_listBox.Enabled = false;
-            fit_sel_Btn.Enabled = false; 
+             fit_sel_Btn.Enabled = false; 
             windowList.Clear();
             mark_neues = false; loaded_window = false;
             neues = 0;

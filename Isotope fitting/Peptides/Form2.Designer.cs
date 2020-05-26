@@ -31,7 +31,6 @@ namespace Isotope_fitting
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.Label customRes_Btn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabFit = new System.Windows.Forms.TabPage();
@@ -73,50 +72,9 @@ namespace Isotope_fitting
             this.uncheckFit_Btn = new System.Windows.Forms.ToolStripButton();
             this.sortSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.refresh_fitRes_Btn = new System.Windows.Forms.ToolStripButton();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.panel_calc = new System.Windows.Forms.Panel();
-            this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
-            this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.hide_Btn = new System.Windows.Forms.Button();
-            this.optionBtn = new System.Windows.Forms.Button();
-            this.chargeMax_Box = new System.Windows.Forms.TextBox();
-            this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.addin_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.machine_listBox = new System.Windows.Forms.ListBox();
-            this.frag_Label = new System.Windows.Forms.Label();
-            this.M_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.charge_Label = new System.Windows.Forms.Label();
-            this.z_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.chargeAll_Btn = new System.Windows.Forms.Button();
-            this.machine_Label = new System.Windows.Forms.Label();
-            this.calc_Btn = new System.Windows.Forms.Button();
-            this.y_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.mz_Label = new System.Windows.Forms.Label();
-            this.c_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.mzMax_Label = new System.Windows.Forms.Label();
-            this.resolution_Box = new System.Windows.Forms.TextBox();
-            this.mzMin_Label = new System.Windows.Forms.Label();
-            this.x_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.mzMax_Box = new System.Windows.Forms.TextBox();
-            this.resolution_Label = new System.Windows.Forms.Label();
-            this.mzMin_Box = new System.Windows.Forms.TextBox();
-            this.b_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.idxTo_Label = new System.Windows.Forms.Label();
-            this.clearCalc_Btn = new System.Windows.Forms.Button();
-            this.idxFrom_Label = new System.Windows.Forms.Label();
-            this.chargeMax_Label = new System.Windows.Forms.Label();
-            this.a_lstBox = new System.Windows.Forms.CheckedListBox();
-            this.chargeMin_Label = new System.Windows.Forms.Label();
-            this.idxTo_Box = new System.Windows.Forms.TextBox();
-            this.chargeMin_Box = new System.Windows.Forms.TextBox();
-            this.idxFrom_Box = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.idxPr_Box = new System.Windows.Forms.TextBox();
-            this.primary_Label = new System.Windows.Forms.Label();
-            this.internal_Label = new System.Windows.Forms.Label();
+            this.splitContainer2 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.show_Btn = new System.Windows.Forms.Button();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -167,10 +125,6 @@ namespace Isotope_fitting
             this.fitSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.fit_Btn = new System.Windows.Forms.Button();
             this.fit_sel_Btn = new System.Windows.Forms.Button();
-            this.stepRange_Lbl = new System.Windows.Forms.Label();
-            this.step_rangeBox = new System.Windows.Forms.TextBox();
-            this.fitStep_Box = new System.Windows.Forms.TextBox();
-            this.fitStep_Label = new System.Windows.Forms.Label();
             this.tabDiagram = new System.Windows.Forms.TabPage();
             this.splitter4 = new System.Windows.Forms.Splitter();
             this.panel2_tab2 = new System.Windows.Forms.Panel();
@@ -381,7 +335,6 @@ namespace Isotope_fitting
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            customRes_Btn = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabFit.SuspendLayout();
             this.plots_grpBox.SuspendLayout();
@@ -389,11 +342,7 @@ namespace Isotope_fitting
             this.user_grpBox.SuspendLayout();
             this.Fit_results_groupBox.SuspendLayout();
             this.toolStrip_fit_sort.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.panel_calc.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.fragTypes_toolStrip.SuspendLayout();
@@ -453,18 +402,6 @@ namespace Isotope_fitting
             this.int_IdxTo_toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // customRes_Btn
-            // 
-            customRes_Btn.AutoSize = true;
-            customRes_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            customRes_Btn.ForeColor = System.Drawing.Color.SlateGray;
-            customRes_Btn.Location = new System.Drawing.Point(192, 485);
-            customRes_Btn.Name = "customRes_Btn";
-            customRes_Btn.Size = new System.Drawing.Size(94, 13);
-            customRes_Btn.TabIndex = 22;
-            customRes_Btn.Text = "Custom Resolution";
-            customRes_Btn.Click += new System.EventHandler(this.customRes_Btn_Click);
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabFit);
@@ -503,7 +440,7 @@ namespace Isotope_fitting
             this.plots_grpBox.Controls.Add(this.res_grpBox);
             this.plots_grpBox.Location = new System.Drawing.Point(3, 3);
             this.plots_grpBox.Name = "plots_grpBox";
-            this.plots_grpBox.Size = new System.Drawing.Size(443, 717);
+            this.plots_grpBox.Size = new System.Drawing.Size(743, 717);
             this.plots_grpBox.TabIndex = 2;
             // 
             // fit_grpBox
@@ -513,7 +450,7 @@ namespace Isotope_fitting
             this.fit_grpBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fit_grpBox.Location = new System.Drawing.Point(0, 27);
             this.fit_grpBox.Name = "fit_grpBox";
-            this.fit_grpBox.Size = new System.Drawing.Size(443, 423);
+            this.fit_grpBox.Size = new System.Drawing.Size(743, 423);
             this.fit_grpBox.TabIndex = 4;
             this.fit_grpBox.TabStop = false;
             // 
@@ -548,7 +485,7 @@ namespace Isotope_fitting
             this.project_options_toolStripButton});
             this.toolStrip_plot.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_plot.Name = "toolStrip_plot";
-            this.toolStrip_plot.Size = new System.Drawing.Size(443, 27);
+            this.toolStrip_plot.Size = new System.Drawing.Size(743, 27);
             this.toolStrip_plot.TabIndex = 3;
             this.toolStrip_plot.Text = "Graph Tools";
             // 
@@ -824,7 +761,7 @@ namespace Isotope_fitting
             this.project_options_toolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("project_options_toolStripButton.Image")));
             this.project_options_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.project_options_toolStripButton.Name = "project_options_toolStripButton";
-            this.project_options_toolStripButton.Size = new System.Drawing.Size(60, 19);
+            this.project_options_toolStripButton.Size = new System.Drawing.Size(60, 24);
             this.project_options_toolStripButton.Text = "Project";
             // 
             // saveToolStripMenuItem
@@ -857,7 +794,7 @@ namespace Isotope_fitting
             this.res_grpBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.res_grpBox.Location = new System.Drawing.Point(0, 450);
             this.res_grpBox.Name = "res_grpBox";
-            this.res_grpBox.Size = new System.Drawing.Size(443, 267);
+            this.res_grpBox.Size = new System.Drawing.Size(743, 267);
             this.res_grpBox.TabIndex = 1;
             this.res_grpBox.TabStop = false;
             // 
@@ -872,9 +809,9 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.fitOptions_grpBox);
             this.user_grpBox.Dock = System.Windows.Forms.DockStyle.Right;
             this.user_grpBox.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.user_grpBox.Location = new System.Drawing.Point(452, 3);
+            this.user_grpBox.Location = new System.Drawing.Point(749, 3);
             this.user_grpBox.Name = "user_grpBox";
-            this.user_grpBox.Size = new System.Drawing.Size(907, 717);
+            this.user_grpBox.Size = new System.Drawing.Size(610, 717);
             this.user_grpBox.TabIndex = 1;
             // 
             // Fit_results_groupBox
@@ -967,619 +904,17 @@ namespace Isotope_fitting
             // 
             // splitContainer2
             // 
+            this.splitContainer2.Controls.Add(this.panel2);
+            this.splitContainer2.Controls.Add(this.panel1);
+            this.splitContainer2.Controls.Add(this.factor_panel);
+            this.splitContainer2.Controls.Add(this.fragStorage_Lbl);
+            this.splitContainer2.Controls.Add(this.fragTypes_toolStrip);
+            this.splitContainer2.Controls.Add(this.fragTypes_tree);
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitContainer2.Location = new System.Drawing.Point(225, 0);
+            this.splitContainer2.Location = new System.Drawing.Point(228, 0);
             this.splitContainer2.Name = "splitContainer2";
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.panel_calc);
-            this.splitContainer2.Panel1MinSize = 0;
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.panel2);
-            this.splitContainer2.Panel2.Controls.Add(this.panel1);
-            this.splitContainer2.Panel2.Controls.Add(this.factor_panel);
-            this.splitContainer2.Panel2.Controls.Add(this.fragStorage_Lbl);
-            this.splitContainer2.Panel2.Controls.Add(this.fragTypes_toolStrip);
-            this.splitContainer2.Panel2.Controls.Add(this.fragTypes_tree);
-            this.splitContainer2.Panel2MinSize = 353;
-            this.splitContainer2.Size = new System.Drawing.Size(682, 717);
-            this.splitContainer2.SplitterDistance = 308;
-            this.splitContainer2.SplitterWidth = 5;
+            this.splitContainer2.Size = new System.Drawing.Size(382, 717);
             this.splitContainer2.TabIndex = 10000018;
-            // 
-            // panel_calc
-            // 
-            this.panel_calc.AutoScroll = true;
-            this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panel_calc.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel_calc.Controls.Add(this.sortIdx_chkBx);
-            this.panel_calc.Controls.Add(this.dvw_lstBox);
-            this.panel_calc.Controls.Add(this.hide_Btn);
-            this.panel_calc.Controls.Add(this.optionBtn);
-            this.panel_calc.Controls.Add(customRes_Btn);
-            this.panel_calc.Controls.Add(this.chargeMax_Box);
-            this.panel_calc.Controls.Add(this.internal_lstBox);
-            this.panel_calc.Controls.Add(this.addin_lstBox);
-            this.panel_calc.Controls.Add(this.machine_listBox);
-            this.panel_calc.Controls.Add(this.frag_Label);
-            this.panel_calc.Controls.Add(this.M_lstBox);
-            this.panel_calc.Controls.Add(this.charge_Label);
-            this.panel_calc.Controls.Add(this.z_lstBox);
-            this.panel_calc.Controls.Add(this.chargeAll_Btn);
-            this.panel_calc.Controls.Add(this.machine_Label);
-            this.panel_calc.Controls.Add(this.calc_Btn);
-            this.panel_calc.Controls.Add(this.y_lstBox);
-            this.panel_calc.Controls.Add(this.mz_Label);
-            this.panel_calc.Controls.Add(this.c_lstBox);
-            this.panel_calc.Controls.Add(this.mzMax_Label);
-            this.panel_calc.Controls.Add(this.resolution_Box);
-            this.panel_calc.Controls.Add(this.mzMin_Label);
-            this.panel_calc.Controls.Add(this.x_lstBox);
-            this.panel_calc.Controls.Add(this.mzMax_Box);
-            this.panel_calc.Controls.Add(this.resolution_Label);
-            this.panel_calc.Controls.Add(this.mzMin_Box);
-            this.panel_calc.Controls.Add(this.b_lstBox);
-            this.panel_calc.Controls.Add(this.idxTo_Label);
-            this.panel_calc.Controls.Add(this.clearCalc_Btn);
-            this.panel_calc.Controls.Add(this.idxFrom_Label);
-            this.panel_calc.Controls.Add(this.chargeMax_Label);
-            this.panel_calc.Controls.Add(this.a_lstBox);
-            this.panel_calc.Controls.Add(this.chargeMin_Label);
-            this.panel_calc.Controls.Add(this.idxTo_Box);
-            this.panel_calc.Controls.Add(this.chargeMin_Box);
-            this.panel_calc.Controls.Add(this.idxFrom_Box);
-            this.panel_calc.Controls.Add(this.label7);
-            this.panel_calc.Controls.Add(this.idxPr_Box);
-            this.panel_calc.Controls.Add(this.primary_Label);
-            this.panel_calc.Controls.Add(this.internal_Label);
-            this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel_calc.Location = new System.Drawing.Point(3, 3);
-            this.panel_calc.MaximumSize = new System.Drawing.Size(318, 700);
-            this.panel_calc.MinimumSize = new System.Drawing.Size(300, 620);
-            this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(300, 620);
-            this.panel_calc.TabIndex = 3;
-            // 
-            // sortIdx_chkBx
-            // 
-            this.sortIdx_chkBx.AutoSize = true;
-            this.sortIdx_chkBx.Location = new System.Drawing.Point(71, 431);
-            this.sortIdx_chkBx.Name = "sortIdx_chkBx";
-            this.sortIdx_chkBx.Size = new System.Drawing.Size(15, 14);
-            this.sortIdx_chkBx.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.sortIdx_chkBx, "#index in AA sequence. \r\nWhen checked :\r\nthe index of x,y,z is counted as for the" +
-        " a,b,c fragments.");
-            this.sortIdx_chkBx.UseVisualStyleBackColor = true;
-            // 
-            // dvw_lstBox
-            // 
-            this.dvw_lstBox.CheckOnClick = true;
-            this.dvw_lstBox.ColumnWidth = 40;
-            this.dvw_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.dvw_lstBox.FormattingEnabled = true;
-            this.dvw_lstBox.IntegralHeight = false;
-            this.dvw_lstBox.Items.AddRange(new object[] {
-            "da",
-            "wa",
-            "db",
-            "wb",
-            "v"});
-            this.dvw_lstBox.Location = new System.Drawing.Point(72, 210);
-            this.dvw_lstBox.MultiColumn = true;
-            this.dvw_lstBox.Name = "dvw_lstBox";
-            this.dvw_lstBox.Size = new System.Drawing.Size(86, 50);
-            this.dvw_lstBox.TabIndex = 11;
-            // 
-            // hide_Btn
-            // 
-            this.hide_Btn.BackColor = System.Drawing.Color.Transparent;
-            this.hide_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("hide_Btn.BackgroundImage")));
-            this.hide_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.hide_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.hide_Btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lavender;
-            this.hide_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.hide_Btn.Font = new System.Drawing.Font("Microsoft Tai Le", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hide_Btn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.hide_Btn.Location = new System.Drawing.Point(252, -2);
-            this.hide_Btn.Name = "hide_Btn";
-            this.hide_Btn.Size = new System.Drawing.Size(35, 31);
-            this.hide_Btn.TabIndex = 40;
-            this.toolTip1.SetToolTip(this.hide_Btn, "Hide calculation box");
-            this.hide_Btn.UseVisualStyleBackColor = false;
-            this.hide_Btn.Click += new System.EventHandler(this.hide_Btn_Click);
-            // 
-            // optionBtn
-            // 
-            this.optionBtn.BackColor = System.Drawing.Color.LightSlateGray;
-            this.optionBtn.FlatAppearance.BorderColor = System.Drawing.Color.Thistle;
-            this.optionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.optionBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.optionBtn.Location = new System.Drawing.Point(55, 582);
-            this.optionBtn.Name = "optionBtn";
-            this.optionBtn.Size = new System.Drawing.Size(119, 23);
-            this.optionBtn.TabIndex = 23;
-            this.optionBtn.Text = "Calculation Settings";
-            this.optionBtn.UseVisualStyleBackColor = false;
-            this.optionBtn.Click += new System.EventHandler(this.optionBtn_Click);
-            // 
-            // chargeMax_Box
-            // 
-            this.chargeMax_Box.Enabled = false;
-            this.chargeMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.chargeMax_Box.Location = new System.Drawing.Point(52, 379);
-            this.chargeMax_Box.Name = "chargeMax_Box";
-            this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
-            this.chargeMax_Box.TabIndex = 15;
-            this.chargeMax_Box.TextChanged += new System.EventHandler(this.ChargeMax_Box_TextChanged);
-            // 
-            // internal_lstBox
-            // 
-            this.internal_lstBox.CheckOnClick = true;
-            this.internal_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.internal_lstBox.FormattingEnabled = true;
-            this.internal_lstBox.Items.AddRange(new object[] {
-            "internal a",
-            "internal b",
-            "internal b-H2O",
-            "internal b-NH3",
-            "internal b-2H2O",
-            "internal b-2NH3"});
-            this.internal_lstBox.Location = new System.Drawing.Point(165, 29);
-            this.internal_lstBox.Name = "internal_lstBox";
-            this.internal_lstBox.Size = new System.Drawing.Size(120, 94);
-            this.internal_lstBox.TabIndex = 5;
-            // 
-            // addin_lstBox
-            // 
-            this.addin_lstBox.CheckOnClick = true;
-            this.addin_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.addin_lstBox.FormattingEnabled = true;
-            this.addin_lstBox.Items.AddRange(new object[] {
-            "a-NH3",
-            "b-NH3",
-            "b-H2O",
-            "b+H2O",
-            "y-NH3",
-            "y-H2O",
-            "b-2NH3",
-            "b-2H2O",
-            "y-2NH3",
-            "y-2H2O",
-            "b-H2O-NH3",
-            "y-H2O-NH3",
-            "x-H2O"});
-            this.addin_lstBox.Location = new System.Drawing.Point(165, 129);
-            this.addin_lstBox.Name = "addin_lstBox";
-            this.addin_lstBox.Size = new System.Drawing.Size(120, 199);
-            this.addin_lstBox.TabIndex = 10;
-            // 
-            // machine_listBox
-            // 
-            this.machine_listBox.Enabled = false;
-            this.machine_listBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.machine_listBox.FormattingEnabled = true;
-            this.machine_listBox.Items.AddRange(new object[] {
-            "Elite_R240000@400",
-            "Elite_R120000@400",
-            "Elite_R60000@400",
-            "Elite_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R120000@400",
-            "OrbitrapXL,Velos,VelosPro_R60000@400",
-            "OrbitrapXL,Velos,VelosPro_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R15000@400",
-            "OrbitrapXL,Velos,VelosPro_R7500@400",
-            "Q-Exactive,ExactivePlus_280K@200",
-            "Q-Exactive,ExactivePlus_R140000@200",
-            "Q-Exactive,ExactivePlus_R70000@200",
-            "Q-Exactive,ExactivePlus_R35000@200",
-            "Q-Exactive,ExactivePlus_R17500@200",
-            "Exactive_R100000@200",
-            "Exactive_R50000@200",
-            "Exactive_R25000@200",
-            "Exactive_R12500@200",
-            "OTFusion,QExactiveHF_480000@200",
-            "OTFusion,QExactiveHF_240000@200",
-            "OTFusion,QExactiveHF_120000@200",
-            "OTFusion,QExactiveHF_60000@200",
-            "OTFusion,QExactiveHF_30000@200",
-            "OTFusion,QExactiveHF_15000@200",
-            "TripleTOF5600_R28000@200",
-            "QTOF_XevoG2-S_R25000@200",
-            "TripleTOF6600_R30000@400             "});
-            this.machine_listBox.Location = new System.Drawing.Point(94, 504);
-            this.machine_listBox.Name = "machine_listBox";
-            this.machine_listBox.Size = new System.Drawing.Size(191, 56);
-            this.machine_listBox.TabIndex = 21;
-            this.machine_listBox.SelectedIndexChanged += new System.EventHandler(this.Machine_listBox_SelectedIndexChanged);
-            // 
-            // frag_Label
-            // 
-            this.frag_Label.AutoSize = true;
-            this.frag_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.frag_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.frag_Label.Location = new System.Drawing.Point(3, 8);
-            this.frag_Label.Name = "frag_Label";
-            this.frag_Label.Size = new System.Drawing.Size(56, 13);
-            this.frag_Label.TabIndex = 1;
-            this.frag_Label.Text = "Fragments";
-            // 
-            // M_lstBox
-            // 
-            this.M_lstBox.CheckOnClick = true;
-            this.M_lstBox.ColumnWidth = 57;
-            this.M_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.M_lstBox.FormattingEnabled = true;
-            this.M_lstBox.IntegralHeight = false;
-            this.M_lstBox.Items.AddRange(new object[] {
-            "M",
-            "M-H2O",
-            "M-NH3"});
-            this.M_lstBox.Location = new System.Drawing.Point(3, 210);
-            this.M_lstBox.Name = "M_lstBox";
-            this.M_lstBox.Size = new System.Drawing.Size(65, 50);
-            this.M_lstBox.TabIndex = 9;
-            // 
-            // charge_Label
-            // 
-            this.charge_Label.AutoSize = true;
-            this.charge_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.charge_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.charge_Label.Location = new System.Drawing.Point(3, 341);
-            this.charge_Label.Name = "charge_Label";
-            this.charge_Label.Size = new System.Drawing.Size(41, 13);
-            this.charge_Label.TabIndex = 28;
-            this.charge_Label.Text = "Charge";
-            // 
-            // z_lstBox
-            // 
-            this.z_lstBox.CheckOnClick = true;
-            this.z_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.z_lstBox.FormattingEnabled = true;
-            this.z_lstBox.Items.AddRange(new object[] {
-            "z",
-            "z-1",
-            "z-2",
-            "z+1",
-            "z+2"});
-            this.z_lstBox.Location = new System.Drawing.Point(111, 119);
-            this.z_lstBox.Name = "z_lstBox";
-            this.z_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.z_lstBox.TabIndex = 8;
-            // 
-            // chargeAll_Btn
-            // 
-            this.chargeAll_Btn.BackColor = System.Drawing.Color.Gainsboro;
-            this.chargeAll_Btn.Enabled = false;
-            this.chargeAll_Btn.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.chargeAll_Btn.Location = new System.Drawing.Point(101, 377);
-            this.chargeAll_Btn.Name = "chargeAll_Btn";
-            this.chargeAll_Btn.Size = new System.Drawing.Size(37, 23);
-            this.chargeAll_Btn.TabIndex = 16;
-            this.chargeAll_Btn.Text = "All";
-            this.chargeAll_Btn.UseVisualStyleBackColor = false;
-            this.chargeAll_Btn.Click += new System.EventHandler(this.chargeAll_Btn_Click);
-            // 
-            // machine_Label
-            // 
-            this.machine_Label.AutoSize = true;
-            this.machine_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.machine_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.machine_Label.Location = new System.Drawing.Point(94, 485);
-            this.machine_Label.Name = "machine_Label";
-            this.machine_Label.Size = new System.Drawing.Size(48, 13);
-            this.machine_Label.TabIndex = 37;
-            this.machine_Label.Text = "Machine";
-            // 
-            // calc_Btn
-            // 
-            this.calc_Btn.BackColor = System.Drawing.Color.SteelBlue;
-            this.calc_Btn.Enabled = false;
-            this.calc_Btn.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
-            this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(180, 582);
-            this.calc_Btn.Name = "calc_Btn";
-            this.calc_Btn.Size = new System.Drawing.Size(105, 23);
-            this.calc_Btn.TabIndex = 24;
-            this.calc_Btn.Text = "Calculate";
-            this.calc_Btn.UseVisualStyleBackColor = false;
-            this.calc_Btn.Click += new System.EventHandler(this.Calc_Btn_Click);
-            // 
-            // y_lstBox
-            // 
-            this.y_lstBox.CheckOnClick = true;
-            this.y_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.y_lstBox.FormattingEnabled = true;
-            this.y_lstBox.Items.AddRange(new object[] {
-            "y",
-            "y-1",
-            "y-2",
-            "y+1",
-            "y+2"});
-            this.y_lstBox.Location = new System.Drawing.Point(57, 119);
-            this.y_lstBox.Name = "y_lstBox";
-            this.y_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.y_lstBox.TabIndex = 7;
-            // 
-            // mz_Label
-            // 
-            this.mz_Label.AutoSize = true;
-            this.mz_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mz_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.mz_Label.Location = new System.Drawing.Point(3, 276);
-            this.mz_Label.Name = "mz_Label";
-            this.mz_Label.Size = new System.Drawing.Size(81, 13);
-            this.mz_Label.TabIndex = 25;
-            this.mz_Label.Text = "M/z boundaries";
-            // 
-            // c_lstBox
-            // 
-            this.c_lstBox.CheckOnClick = true;
-            this.c_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.c_lstBox.FormattingEnabled = true;
-            this.c_lstBox.Items.AddRange(new object[] {
-            "c",
-            "c-1",
-            "c-2",
-            "c+1",
-            "c+2"});
-            this.c_lstBox.Location = new System.Drawing.Point(111, 29);
-            this.c_lstBox.Name = "c_lstBox";
-            this.c_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.c_lstBox.TabIndex = 4;
-            // 
-            // mzMax_Label
-            // 
-            this.mzMax_Label.AutoSize = true;
-            this.mzMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mzMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.mzMax_Label.Location = new System.Drawing.Point(67, 294);
-            this.mzMax_Label.Name = "mzMax_Label";
-            this.mzMax_Label.Size = new System.Drawing.Size(26, 13);
-            this.mzMax_Label.TabIndex = 27;
-            this.mzMax_Label.Text = "max";
-            this.mzMax_Label.Click += new System.EventHandler(this.mzMax_Label_Click);
-            // 
-            // resolution_Box
-            // 
-            this.resolution_Box.Enabled = false;
-            this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(4, 504);
-            this.resolution_Box.Name = "resolution_Box";
-            this.resolution_Box.Size = new System.Drawing.Size(81, 20);
-            this.resolution_Box.TabIndex = 20;
-            this.resolution_Box.TextChanged += new System.EventHandler(this.Resolution_Box_TextChanged);
-            // 
-            // mzMin_Label
-            // 
-            this.mzMin_Label.AutoSize = true;
-            this.mzMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mzMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.mzMin_Label.Location = new System.Drawing.Point(3, 294);
-            this.mzMin_Label.Name = "mzMin_Label";
-            this.mzMin_Label.Size = new System.Drawing.Size(23, 13);
-            this.mzMin_Label.TabIndex = 26;
-            this.mzMin_Label.Text = "min";
-            this.mzMin_Label.Click += new System.EventHandler(this.mzMin_Label_Click);
-            // 
-            // x_lstBox
-            // 
-            this.x_lstBox.CheckOnClick = true;
-            this.x_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.x_lstBox.FormattingEnabled = true;
-            this.x_lstBox.Items.AddRange(new object[] {
-            "x",
-            "x-1",
-            "x-2",
-            "x+1",
-            "x+2"});
-            this.x_lstBox.Location = new System.Drawing.Point(3, 119);
-            this.x_lstBox.Name = "x_lstBox";
-            this.x_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.x_lstBox.TabIndex = 6;
-            // 
-            // mzMax_Box
-            // 
-            this.mzMax_Box.Enabled = false;
-            this.mzMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.mzMax_Box.Location = new System.Drawing.Point(67, 310);
-            this.mzMax_Box.Name = "mzMax_Box";
-            this.mzMax_Box.Size = new System.Drawing.Size(56, 20);
-            this.mzMax_Box.TabIndex = 13;
-            this.mzMax_Box.Click += new System.EventHandler(this.mzMax_Box_Click);
-            this.mzMax_Box.TextChanged += new System.EventHandler(this.MzMax_Box_TextChanged);
-            // 
-            // resolution_Label
-            // 
-            this.resolution_Label.AutoSize = true;
-            this.resolution_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.resolution_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.resolution_Label.Location = new System.Drawing.Point(4, 485);
-            this.resolution_Label.Name = "resolution_Label";
-            this.resolution_Label.Size = new System.Drawing.Size(57, 13);
-            this.resolution_Label.TabIndex = 36;
-            this.resolution_Label.Text = "Resolution";
-            // 
-            // mzMin_Box
-            // 
-            this.mzMin_Box.Enabled = false;
-            this.mzMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.mzMin_Box.Location = new System.Drawing.Point(3, 310);
-            this.mzMin_Box.Name = "mzMin_Box";
-            this.mzMin_Box.Size = new System.Drawing.Size(56, 20);
-            this.mzMin_Box.TabIndex = 12;
-            this.mzMin_Box.Click += new System.EventHandler(this.mzMin_Box_Click);
-            this.mzMin_Box.TextChanged += new System.EventHandler(this.MzMin_Box_TextChanged);
-            // 
-            // b_lstBox
-            // 
-            this.b_lstBox.CheckOnClick = true;
-            this.b_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.b_lstBox.FormattingEnabled = true;
-            this.b_lstBox.Items.AddRange(new object[] {
-            "b",
-            "b-1",
-            "b-2",
-            "b+1",
-            "b+2"});
-            this.b_lstBox.Location = new System.Drawing.Point(57, 29);
-            this.b_lstBox.Name = "b_lstBox";
-            this.b_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.b_lstBox.TabIndex = 3;
-            // 
-            // idxTo_Label
-            // 
-            this.idxTo_Label.AutoSize = true;
-            this.idxTo_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxTo_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.idxTo_Label.Location = new System.Drawing.Point(249, 431);
-            this.idxTo_Label.Name = "idxTo_Label";
-            this.idxTo_Label.Size = new System.Drawing.Size(16, 13);
-            this.idxTo_Label.TabIndex = 35;
-            this.idxTo_Label.Text = "to";
-            // 
-            // clearCalc_Btn
-            // 
-            this.clearCalc_Btn.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.clearCalc_Btn.Enabled = false;
-            this.clearCalc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.clearCalc_Btn.ForeColor = System.Drawing.Color.White;
-            this.clearCalc_Btn.Location = new System.Drawing.Point(4, 582);
-            this.clearCalc_Btn.Name = "clearCalc_Btn";
-            this.clearCalc_Btn.Size = new System.Drawing.Size(46, 23);
-            this.clearCalc_Btn.TabIndex = 24;
-            this.clearCalc_Btn.Text = "Clear ";
-            this.toolTip1.SetToolTip(this.clearCalc_Btn, "Clear calculation options");
-            this.clearCalc_Btn.UseVisualStyleBackColor = false;
-            this.clearCalc_Btn.Click += new System.EventHandler(this.ClearCalc_Btn_Click);
-            // 
-            // idxFrom_Label
-            // 
-            this.idxFrom_Label.AutoSize = true;
-            this.idxFrom_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idxFrom_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.idxFrom_Label.Location = new System.Drawing.Point(148, 431);
-            this.idxFrom_Label.Name = "idxFrom_Label";
-            this.idxFrom_Label.Size = new System.Drawing.Size(27, 13);
-            this.idxFrom_Label.TabIndex = 34;
-            this.idxFrom_Label.Text = "from";
-            // 
-            // chargeMax_Label
-            // 
-            this.chargeMax_Label.AutoSize = true;
-            this.chargeMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chargeMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.chargeMax_Label.Location = new System.Drawing.Point(52, 362);
-            this.chargeMax_Label.Name = "chargeMax_Label";
-            this.chargeMax_Label.Size = new System.Drawing.Size(26, 13);
-            this.chargeMax_Label.TabIndex = 30;
-            this.chargeMax_Label.Text = "max";
-            // 
-            // a_lstBox
-            // 
-            this.a_lstBox.CheckOnClick = true;
-            this.a_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.a_lstBox.FormattingEnabled = true;
-            this.a_lstBox.Items.AddRange(new object[] {
-            "a",
-            "a-1",
-            "a-2",
-            "a+1",
-            "a+2"});
-            this.a_lstBox.Location = new System.Drawing.Point(3, 29);
-            this.a_lstBox.Name = "a_lstBox";
-            this.a_lstBox.Size = new System.Drawing.Size(47, 79);
-            this.a_lstBox.TabIndex = 2;
-            // 
-            // chargeMin_Label
-            // 
-            this.chargeMin_Label.AutoSize = true;
-            this.chargeMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chargeMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.chargeMin_Label.Location = new System.Drawing.Point(3, 362);
-            this.chargeMin_Label.Name = "chargeMin_Label";
-            this.chargeMin_Label.Size = new System.Drawing.Size(23, 13);
-            this.chargeMin_Label.TabIndex = 29;
-            this.chargeMin_Label.Text = "min";
-            // 
-            // idxTo_Box
-            // 
-            this.idxTo_Box.Enabled = false;
-            this.idxTo_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxTo_Box.Location = new System.Drawing.Point(184, 447);
-            this.idxTo_Box.Name = "idxTo_Box";
-            this.idxTo_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxTo_Box.TabIndex = 19;
-            this.idxTo_Box.TextChanged += new System.EventHandler(this.IdxTo_Box_TextChanged);
-            // 
-            // chargeMin_Box
-            // 
-            this.chargeMin_Box.Enabled = false;
-            this.chargeMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.chargeMin_Box.Location = new System.Drawing.Point(3, 379);
-            this.chargeMin_Box.Name = "chargeMin_Box";
-            this.chargeMin_Box.Size = new System.Drawing.Size(38, 20);
-            this.chargeMin_Box.TabIndex = 14;
-            this.chargeMin_Box.TextChanged += new System.EventHandler(this.ChargeMin_Box_TextChanged);
-            // 
-            // idxFrom_Box
-            // 
-            this.idxFrom_Box.Enabled = false;
-            this.idxFrom_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxFrom_Box.Location = new System.Drawing.Point(94, 447);
-            this.idxFrom_Box.Name = "idxFrom_Box";
-            this.idxFrom_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxFrom_Box.TabIndex = 18;
-            this.idxFrom_Box.TextChanged += new System.EventHandler(this.IdxFrom_Box_TextChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label7.Location = new System.Drawing.Point(3, 412);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(33, 13);
-            this.label7.TabIndex = 31;
-            this.label7.Text = "Index";
-            // 
-            // idxPr_Box
-            // 
-            this.idxPr_Box.Enabled = false;
-            this.idxPr_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxPr_Box.Location = new System.Drawing.Point(3, 447);
-            this.idxPr_Box.Name = "idxPr_Box";
-            this.idxPr_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxPr_Box.TabIndex = 17;
-            this.idxPr_Box.TextChanged += new System.EventHandler(this.IdxPr_Box_TextChanged);
-            // 
-            // primary_Label
-            // 
-            this.primary_Label.AutoSize = true;
-            this.primary_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.primary_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.primary_Label.Location = new System.Drawing.Point(3, 431);
-            this.primary_Label.Name = "primary_Label";
-            this.primary_Label.Size = new System.Drawing.Size(43, 13);
-            this.primary_Label.TabIndex = 32;
-            this.primary_Label.Text = "primary ";
-            // 
-            // internal_Label
-            // 
-            this.internal_Label.AutoSize = true;
-            this.internal_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.internal_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.internal_Label.Location = new System.Drawing.Point(94, 431);
-            this.internal_Label.Name = "internal_Label";
-            this.internal_Label.Size = new System.Drawing.Size(41, 13);
-            this.internal_Label.TabIndex = 33;
-            this.internal_Label.Text = "internal";
             // 
             // panel2
             // 
@@ -1587,34 +922,17 @@ namespace Isotope_fitting
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel2.Location = new System.Drawing.Point(0, 106);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(369, 340);
+            this.panel2.Size = new System.Drawing.Size(382, 340);
             this.panel2.TabIndex = 116;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.show_Btn);
             this.panel1.Controls.Add(this.toolStrip_fragList);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(369, 106);
+            this.panel1.Size = new System.Drawing.Size(382, 106);
             this.panel1.TabIndex = 115;
-            // 
-            // show_Btn
-            // 
-            this.show_Btn.BackColor = System.Drawing.Color.Transparent;
-            this.show_Btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("show_Btn.BackgroundImage")));
-            this.show_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.show_Btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.show_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.show_Btn.Location = new System.Drawing.Point(3, 3);
-            this.show_Btn.Name = "show_Btn";
-            this.show_Btn.Size = new System.Drawing.Size(35, 31);
-            this.show_Btn.TabIndex = 41;
-            this.toolTip1.SetToolTip(this.show_Btn, "Show calculation box");
-            this.show_Btn.UseVisualStyleBackColor = false;
-            this.show_Btn.Visible = false;
-            this.show_Btn.Click += new System.EventHandler(this.show_Btn_Click);
             // 
             // toolStrip_fragList
             // 
@@ -1642,7 +960,7 @@ namespace Isotope_fitting
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(369, 27);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(382, 27);
             this.toolStrip_fragList.TabIndex = 119;
             // 
             // saveListBtn11
@@ -1805,7 +1123,7 @@ namespace Isotope_fitting
             this.factor_panel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.factor_panel.Location = new System.Drawing.Point(0, 446);
             this.factor_panel.Name = "factor_panel";
-            this.factor_panel.Size = new System.Drawing.Size(369, 30);
+            this.factor_panel.Size = new System.Drawing.Size(382, 30);
             this.factor_panel.TabIndex = 114;
             // 
             // fragStorage_Lbl
@@ -1871,7 +1189,7 @@ namespace Isotope_fitting
             this.fragTypes_tree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fragTypes_tree.Location = new System.Drawing.Point(0, 493);
             this.fragTypes_tree.Name = "fragTypes_tree";
-            this.fragTypes_tree.Size = new System.Drawing.Size(369, 224);
+            this.fragTypes_tree.Size = new System.Drawing.Size(382, 224);
             this.fragTypes_tree.TabIndex = 112;
             this.fragTypes_tree.Visible = false;
             // 
@@ -2156,10 +1474,6 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.Controls.Add(this.fiToolStrip);
             this.fitOptions_grpBox.Controls.Add(this.fit_Btn);
             this.fitOptions_grpBox.Controls.Add(this.fit_sel_Btn);
-            this.fitOptions_grpBox.Controls.Add(this.stepRange_Lbl);
-            this.fitOptions_grpBox.Controls.Add(this.step_rangeBox);
-            this.fitOptions_grpBox.Controls.Add(this.fitStep_Box);
-            this.fitOptions_grpBox.Controls.Add(this.fitStep_Label);
             this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fitOptions_grpBox.ForeColor = System.Drawing.Color.SteelBlue;
             this.fitOptions_grpBox.Location = new System.Drawing.Point(6, 281);
@@ -2276,56 +1590,6 @@ namespace Isotope_fitting
             this.fit_sel_Btn.Text = "Fit select";
             this.fit_sel_Btn.UseVisualStyleBackColor = false;
             this.fit_sel_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
-            // 
-            // stepRange_Lbl
-            // 
-            this.stepRange_Lbl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.stepRange_Lbl.AutoSize = true;
-            this.stepRange_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stepRange_Lbl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.stepRange_Lbl.Location = new System.Drawing.Point(24, 54);
-            this.stepRange_Lbl.Name = "stepRange_Lbl";
-            this.stepRange_Lbl.Size = new System.Drawing.Size(50, 13);
-            this.stepRange_Lbl.TabIndex = 44;
-            this.stepRange_Lbl.Text = "tolerance";
-            this.stepRange_Lbl.Visible = false;
-            // 
-            // step_rangeBox
-            // 
-            this.step_rangeBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.step_rangeBox.ForeColor = System.Drawing.Color.Black;
-            this.step_rangeBox.Location = new System.Drawing.Point(50, 32);
-            this.step_rangeBox.Name = "step_rangeBox";
-            this.step_rangeBox.Size = new System.Drawing.Size(13, 23);
-            this.step_rangeBox.TabIndex = 43;
-            this.step_rangeBox.Visible = false;
-            this.step_rangeBox.TextChanged += new System.EventHandler(this.step_rangeBox_TextChanged);
-            // 
-            // fitStep_Box
-            // 
-            this.fitStep_Box.Enabled = false;
-            this.fitStep_Box.ForeColor = System.Drawing.Color.Black;
-            this.fitStep_Box.Location = new System.Drawing.Point(8, 31);
-            this.fitStep_Box.Name = "fitStep_Box";
-            this.fitStep_Box.Size = new System.Drawing.Size(13, 23);
-            this.fitStep_Box.TabIndex = 38;
-            this.fitStep_Box.Visible = false;
-            this.fitStep_Box.TextChanged += new System.EventHandler(this.FitStep_Box_TextChanged);
-            // 
-            // fitStep_Label
-            // 
-            this.fitStep_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fitStep_Label.AutoSize = true;
-            this.fitStep_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitStep_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.fitStep_Label.Location = new System.Drawing.Point(1, 53);
-            this.fitStep_Label.Name = "fitStep_Label";
-            this.fitStep_Label.Size = new System.Drawing.Size(27, 13);
-            this.fitStep_Label.TabIndex = 37;
-            this.fitStep_Label.Text = "step";
-            this.fitStep_Label.Visible = false;
             // 
             // tabDiagram
             // 
@@ -4746,13 +4010,8 @@ namespace Isotope_fitting
             this.Fit_results_groupBox.PerformLayout();
             this.toolStrip_fit_sort.ResumeLayout(false);
             this.toolStrip_fit_sort.PerformLayout();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.panel_calc.ResumeLayout(false);
-            this.panel_calc.PerformLayout();
+            this.splitContainer2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.toolStrip_fragList.ResumeLayout(false);
@@ -4860,67 +4119,24 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel user_grpBox;
         private System.Windows.Forms.GroupBox fitOptions_grpBox;
         private System.Windows.Forms.Button fit_Btn;
-        private System.Windows.Forms.TextBox fitStep_Box;
-        private System.Windows.Forms.Label fitStep_Label;
-        private System.Windows.Forms.Label idxTo_Label;
-        private System.Windows.Forms.Label idxFrom_Label;
-        private System.Windows.Forms.TextBox idxTo_Box;
-        private System.Windows.Forms.TextBox idxFrom_Box;
-        private System.Windows.Forms.TextBox idxPr_Box;
-        private System.Windows.Forms.Label internal_Label;
-        private System.Windows.Forms.Label primary_Label;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox chargeMin_Box;
-        private System.Windows.Forms.TextBox chargeMax_Box;
-        private System.Windows.Forms.Label chargeMin_Label;
-        private System.Windows.Forms.Label chargeMax_Label;
-        private System.Windows.Forms.Button clearCalc_Btn;
-        private System.Windows.Forms.TextBox mzMin_Box;
-        private System.Windows.Forms.TextBox mzMax_Box;
-        private System.Windows.Forms.Label mzMin_Label;
-        private System.Windows.Forms.Label mzMax_Label;
-        private System.Windows.Forms.Label mz_Label;
-        private System.Windows.Forms.Button calc_Btn;
-        private System.Windows.Forms.Button chargeAll_Btn;
-        private System.Windows.Forms.Label charge_Label;
-        private System.Windows.Forms.Label frag_Label;
         private System.Windows.Forms.Button loadMS_Btn;
-        private System.Windows.Forms.ListBox machine_listBox;
-        private System.Windows.Forms.Label machine_Label;
-        private System.Windows.Forms.TextBox resolution_Box;
-        private System.Windows.Forms.Label resolution_Label;
-        private System.Windows.Forms.CheckedListBox addin_lstBox;
-        private System.Windows.Forms.CheckedListBox M_lstBox;
-        private System.Windows.Forms.CheckedListBox z_lstBox;
-        private System.Windows.Forms.CheckedListBox y_lstBox;
-        private System.Windows.Forms.CheckedListBox c_lstBox;
-        private System.Windows.Forms.CheckedListBox x_lstBox;
-        private System.Windows.Forms.CheckedListBox b_lstBox;
-        private System.Windows.Forms.CheckedListBox a_lstBox;
-        private System.Windows.Forms.CheckedListBox internal_lstBox;
         private System.Windows.Forms.Button loadExp_Btn;
         private System.Windows.Forms.ColumnHeader ionTypeHeader;
         private System.Windows.Forms.ColumnHeader mzHeader;
         private System.Windows.Forms.ColumnHeader zHeader;
         private System.Windows.Forms.ColumnHeader formulaHeader;
-        private System.Windows.Forms.Label stepRange_Lbl;
-        private System.Windows.Forms.TextBox step_rangeBox;
         private System.Windows.Forms.FlowLayoutPanel bigPanel;
-        private System.Windows.Forms.Panel panel_calc;
         private System.Windows.Forms.ColumnHeader codeNoHeader;
         private System.Windows.Forms.ColumnHeader factorHeader;
         private System.Windows.Forms.Button fit_sel_Btn;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Button optionBtn;
         private System.Windows.Forms.ColumnHeader intensityHeader;
         private System.Windows.Forms.Button displayPeakList_btn;
         private System.Windows.Forms.CheckBox plotExp_chkBox;
         private System.Windows.Forms.CheckBox plotCentr_chkBox;
         private System.Windows.Forms.CheckBox plotFragCent_chkBox;
         private System.Windows.Forms.CheckBox plotFragProf_chkBox;
-        private System.Windows.Forms.Button hide_Btn;
         private System.Windows.Forms.TabPage tabDiagram;
-        private System.Windows.Forms.Button show_Btn;
         private System.Windows.Forms.Panel factor_panel;
         private System.Windows.Forms.TreeView fragTypes_tree;
         //private MyTreeView frag_tree;
@@ -5008,7 +4224,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.Panel idxPnl2;
         private System.Windows.Forms.Splitter splitter3;
-        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.Panel splitContainer2;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.ToolStripButton disp_a;
         private System.Windows.Forms.ToolStripButton disp_b;
@@ -5017,7 +4233,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton disp_y;
         private System.Windows.Forms.ToolStripButton disp_z;
         private System.Windows.Forms.ToolStripButton disp_internal;
-        private System.Windows.Forms.CheckedListBox dvw_lstBox;
         private System.Windows.Forms.ToolStripDropDownButton chartFormatBtn;
         private System.Windows.Forms.ToolStripMenuItem styleFormatBtn;
         private System.Windows.Forms.ToolStripMenuItem extractPlotToolStripMenuItem;
@@ -5171,7 +4386,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton ppm_M_NH3;
         private System.Windows.Forms.ToolStripButton ppm_uncheckBtn;
         private System.Windows.Forms.ToolStripButton ppm_checkall_Btn;
-        private System.Windows.Forms.CheckBox sortIdx_chkBx;
         private System.Windows.Forms.ToolStripDropDownButton project_options_toolStripButton;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
