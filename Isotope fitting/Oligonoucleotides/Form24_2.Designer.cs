@@ -30,13 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24_2));
             this.panel_calc = new System.Windows.Forms.Panel();
-            Form24_2.machine_listBox = new System.Windows.Forms.ListBox();
+            this.known_lstBox = new System.Windows.Forms.CheckedListBox();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.calcBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
             this.frag_sort_Btn2 = new System.Windows.Forms.ToolStripButton();
             this.clearBtn = new System.Windows.Forms.ToolStripButton();
             this.w_lstBox = new System.Windows.Forms.CheckedListBox();
+            Form24_2.machine_listBox1 = new System.Windows.Forms.ListBox();
             this.d_lstBox = new System.Windows.Forms.CheckedListBox();
             this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
@@ -79,13 +80,14 @@
             this.panel_calc.AutoScroll = true;
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel_calc.Controls.Add(this.known_lstBox);
             this.panel_calc.Controls.Add(this.toolStrip_fragList);
-            this.panel_calc.Controls.Add(Form24_2.machine_listBox);
             this.panel_calc.Controls.Add(this.w_lstBox);
             this.panel_calc.Controls.Add(this.d_lstBox);
             this.panel_calc.Controls.Add(this.sortIdx_chkBx);
             this.panel_calc.Controls.Add(this.chargeMax_Box);
             this.panel_calc.Controls.Add(this.internal_lstBox);
+            this.panel_calc.Controls.Add(Form24_2.machine_listBox1);
             this.panel_calc.Controls.Add(this.frag_Label);
             this.panel_calc.Controls.Add(this.M_lstBox);
             this.panel_calc.Controls.Add(this.charge_Label);
@@ -119,14 +121,14 @@
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(365, 509);
+            this.panel_calc.Size = new System.Drawing.Size(373, 509);
             this.panel_calc.TabIndex = 5;
             // 
-            // machine_listBox
+            // machine_listBox1
             // 
-            Form24_2.machine_listBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            Form24_2.machine_listBox.FormattingEnabled = true;
-            Form24_2.machine_listBox.Items.AddRange(new object[] {
+            Form24_2.machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            Form24_2.machine_listBox1.FormattingEnabled = true;
+            Form24_2.machine_listBox1.Items.AddRange(new object[] {
             "Elite_R240000@400",
             "Elite_R120000@400",
             "Elite_R60000@400",
@@ -154,11 +156,27 @@
             "TripleTOF5600_R28000@200",
             "QTOF_XevoG2-S_R25000@200",
             "TripleTOF6600_R30000@400             "});
-            Form24_2.machine_listBox.Location = new System.Drawing.Point(102, 406);
-            Form24_2.machine_listBox.Name = "machine_listBox";
-            Form24_2.machine_listBox.Size = new System.Drawing.Size(191, 56);
-            Form24_2.machine_listBox.TabIndex = 21;
-            Form24_2.machine_listBox.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+            Form24_2.machine_listBox1.Location = new System.Drawing.Point(102, 406);
+            Form24_2.machine_listBox1.Name = "machine_listBox";
+            Form24_2.machine_listBox1.Size = new System.Drawing.Size(191, 56);
+            Form24_2.machine_listBox1.TabIndex = 21;
+            Form24_2.machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+            // 
+            // known_lstBox
+            // 
+            this.known_lstBox.CheckOnClick = true;
+            this.known_lstBox.ColumnWidth = 57;
+            this.known_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.known_lstBox.FormattingEnabled = true;
+            this.known_lstBox.IntegralHeight = false;
+            this.known_lstBox.Items.AddRange(new object[] {
+            "known MS2",
+            "known MS2-H2O",
+            "known MS2-2(H2O)"});
+            this.known_lstBox.Location = new System.Drawing.Point(247, 174);
+            this.known_lstBox.Name = "known_lstBox";
+            this.known_lstBox.Size = new System.Drawing.Size(121, 52);
+            this.known_lstBox.TabIndex = 12;
             // 
             // toolStrip_fragList
             // 
@@ -178,8 +196,8 @@
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(365, 30);
-            this.toolStrip_fragList.TabIndex = 121;
+            this.toolStrip_fragList.Size = new System.Drawing.Size(373, 30);
+            this.toolStrip_fragList.TabIndex = 23;
             // 
             // calcBtn
             // 
@@ -231,10 +249,10 @@
             "w+1",
             "w+2",
             "w-B()"});
-            this.w_lstBox.Location = new System.Drawing.Point(188, 132);
+            this.w_lstBox.Location = new System.Drawing.Point(11, 132);
             this.w_lstBox.Name = "w_lstBox";
             this.w_lstBox.Size = new System.Drawing.Size(47, 94);
-            this.w_lstBox.TabIndex = 39;
+            this.w_lstBox.TabIndex = 6;
             // 
             // d_lstBox
             // 
@@ -251,7 +269,7 @@
             this.d_lstBox.Location = new System.Drawing.Point(188, 29);
             this.d_lstBox.Name = "d_lstBox";
             this.d_lstBox.Size = new System.Drawing.Size(47, 94);
-            this.d_lstBox.TabIndex = 38;
+            this.d_lstBox.TabIndex = 5;
             // 
             // sortIdx_chkBx
             // 
@@ -259,7 +277,7 @@
             this.sortIdx_chkBx.Location = new System.Drawing.Point(79, 333);
             this.sortIdx_chkBx.Name = "sortIdx_chkBx";
             this.sortIdx_chkBx.Size = new System.Drawing.Size(15, 14);
-            this.sortIdx_chkBx.TabIndex = 0;
+            this.sortIdx_chkBx.TabIndex = 19;
             this.sortIdx_chkBx.UseVisualStyleBackColor = true;
             // 
             // chargeMax_Box
@@ -268,7 +286,7 @@
             this.chargeMax_Box.Location = new System.Drawing.Point(213, 277);
             this.chargeMax_Box.Name = "chargeMax_Box";
             this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
-            this.chargeMax_Box.TabIndex = 15;
+            this.chargeMax_Box.TabIndex = 16;
             this.chargeMax_Box.TextChanged += new System.EventHandler(this.chargeMax_Box_TextChanged);
             // 
             // internal_lstBox
@@ -283,8 +301,8 @@
             "internal -B()"});
             this.internal_lstBox.Location = new System.Drawing.Point(247, 29);
             this.internal_lstBox.Name = "internal_lstBox";
-            this.internal_lstBox.Size = new System.Drawing.Size(104, 64);
-            this.internal_lstBox.TabIndex = 5;
+            this.internal_lstBox.Size = new System.Drawing.Size(121, 64);
+            this.internal_lstBox.TabIndex = 10;
             // 
             // frag_Label
             // 
@@ -308,11 +326,12 @@
             "M",
             "M-H2O",
             "M-B()",
-            "M-H2O-B()"});
-            this.M_lstBox.Location = new System.Drawing.Point(247, 132);
+            "M-H2O-B()",
+            "B()"});
+            this.M_lstBox.Location = new System.Drawing.Point(247, 94);
             this.M_lstBox.Name = "M_lstBox";
-            this.M_lstBox.Size = new System.Drawing.Size(104, 64);
-            this.M_lstBox.TabIndex = 9;
+            this.M_lstBox.Size = new System.Drawing.Size(121, 80);
+            this.M_lstBox.TabIndex = 11;
             // 
             // charge_Label
             // 
@@ -337,10 +356,10 @@
             "z+1",
             "z+2",
             "z-B()"});
-            this.z_lstBox.Location = new System.Drawing.Point(129, 132);
+            this.z_lstBox.Location = new System.Drawing.Point(188, 132);
             this.z_lstBox.Name = "z_lstBox";
             this.z_lstBox.Size = new System.Drawing.Size(47, 94);
-            this.z_lstBox.TabIndex = 8;
+            this.z_lstBox.TabIndex = 9;
             // 
             // chargeAll_Btn
             // 
@@ -349,7 +368,7 @@
             this.chargeAll_Btn.Location = new System.Drawing.Point(262, 276);
             this.chargeAll_Btn.Name = "chargeAll_Btn";
             this.chargeAll_Btn.Size = new System.Drawing.Size(37, 23);
-            this.chargeAll_Btn.TabIndex = 16;
+            this.chargeAll_Btn.TabIndex = 17;
             this.chargeAll_Btn.Text = "All";
             this.chargeAll_Btn.UseVisualStyleBackColor = false;
             this.chargeAll_Btn.Click += new System.EventHandler(this.chargeAll_Btn_Click);
@@ -377,10 +396,10 @@
             "y+1",
             "y+2",
             "y-B()"});
-            this.y_lstBox.Location = new System.Drawing.Point(70, 132);
+            this.y_lstBox.Location = new System.Drawing.Point(129, 132);
             this.y_lstBox.Name = "y_lstBox";
             this.y_lstBox.Size = new System.Drawing.Size(47, 94);
-            this.y_lstBox.TabIndex = 7;
+            this.y_lstBox.TabIndex = 8;
             // 
             // mz_Label
             // 
@@ -427,7 +446,7 @@
             this.resolution_Box.Location = new System.Drawing.Point(12, 406);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(81, 20);
-            this.resolution_Box.TabIndex = 20;
+            this.resolution_Box.TabIndex = 22;
             this.resolution_Box.TextChanged += new System.EventHandler(this.resolution_Box_TextChanged);
             // 
             // mzMin_Label
@@ -453,10 +472,10 @@
             "x+1",
             "x+2",
             "x-B()"});
-            this.x_lstBox.Location = new System.Drawing.Point(11, 132);
+            this.x_lstBox.Location = new System.Drawing.Point(70, 132);
             this.x_lstBox.Name = "x_lstBox";
             this.x_lstBox.Size = new System.Drawing.Size(47, 94);
-            this.x_lstBox.TabIndex = 6;
+            this.x_lstBox.TabIndex = 7;
             // 
             // mzMax_Box
             // 
@@ -464,7 +483,8 @@
             this.mzMax_Box.Location = new System.Drawing.Point(76, 277);
             this.mzMax_Box.Name = "mzMax_Box";
             this.mzMax_Box.Size = new System.Drawing.Size(56, 20);
-            this.mzMax_Box.TabIndex = 13;
+            this.mzMax_Box.TabIndex = 14;
+            this.mzMax_Box.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mzMax_Box_Click);
             this.mzMax_Box.TextChanged += new System.EventHandler(this.mzMax_Box_TextChanged);
             // 
             // resolution_Label
@@ -484,7 +504,8 @@
             this.mzMin_Box.Location = new System.Drawing.Point(12, 277);
             this.mzMin_Box.Name = "mzMin_Box";
             this.mzMin_Box.Size = new System.Drawing.Size(56, 20);
-            this.mzMin_Box.TabIndex = 12;
+            this.mzMin_Box.TabIndex = 13;
+            this.mzMin_Box.Click += new System.EventHandler(this.mzMin_Box_Click);
             this.mzMin_Box.TextChanged += new System.EventHandler(this.mzMin_Box_TextChanged);
             // 
             // b_lstBox
@@ -571,7 +592,7 @@
             this.idxTo_Box.Location = new System.Drawing.Point(192, 349);
             this.idxTo_Box.Name = "idxTo_Box";
             this.idxTo_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxTo_Box.TabIndex = 19;
+            this.idxTo_Box.TabIndex = 21;
             // 
             // chargeMin_Box
             // 
@@ -579,7 +600,7 @@
             this.chargeMin_Box.Location = new System.Drawing.Point(164, 277);
             this.chargeMin_Box.Name = "chargeMin_Box";
             this.chargeMin_Box.Size = new System.Drawing.Size(38, 20);
-            this.chargeMin_Box.TabIndex = 14;
+            this.chargeMin_Box.TabIndex = 15;
             this.chargeMin_Box.TextChanged += new System.EventHandler(this.chargeMin_Box_TextChanged);
             // 
             // idxFrom_Box
@@ -588,7 +609,7 @@
             this.idxFrom_Box.Location = new System.Drawing.Point(102, 349);
             this.idxFrom_Box.Name = "idxFrom_Box";
             this.idxFrom_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxFrom_Box.TabIndex = 18;
+            this.idxFrom_Box.TabIndex = 20;
             // 
             // label7
             // 
@@ -607,7 +628,7 @@
             this.idxPr_Box.Location = new System.Drawing.Point(11, 349);
             this.idxPr_Box.Name = "idxPr_Box";
             this.idxPr_Box.Size = new System.Drawing.Size(81, 20);
-            this.idxPr_Box.TabIndex = 17;
+            this.idxPr_Box.TabIndex = 18;
             // 
             // primary_Label
             // 
@@ -635,10 +656,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 509);
+            this.ClientSize = new System.Drawing.Size(373, 509);
             this.Controls.Add(this.panel_calc);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form24_2";
-            this.Text = "Form24_2";
+            this.Text = "Calculation Box";
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.toolStrip_fragList.ResumeLayout(false);
@@ -654,7 +678,7 @@
         private System.Windows.Forms.CheckedListBox d_lstBox;
         private System.Windows.Forms.CheckBox sortIdx_chkBx;
         private System.Windows.Forms.TextBox chargeMax_Box;
-        public static System.Windows.Forms.ListBox machine_listBox;
+        public static System.Windows.Forms.ListBox machine_listBox1;
         private System.Windows.Forms.CheckedListBox internal_lstBox;
         private System.Windows.Forms.Label frag_Label;
         private System.Windows.Forms.CheckedListBox M_lstBox;
@@ -690,5 +714,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripButton2;
         private System.Windows.Forms.ToolStripButton frag_sort_Btn2;
         private System.Windows.Forms.ToolStripButton clearBtn;
+        private System.Windows.Forms.CheckedListBox known_lstBox;
     }
 }

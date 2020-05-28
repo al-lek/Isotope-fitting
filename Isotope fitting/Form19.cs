@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Isotope_fitting.Helpers;
+
 
 namespace Isotope_fitting
 {
@@ -93,7 +95,7 @@ namespace Isotope_fitting
         private void update_peakSelection_rule(bool initial=false)
         {
             // update selection rule from all radiobuttons
-            List<RadioButton> rdBtns = Form2.GetControls(entire_grpBx).OfType<RadioButton>().ToList();
+            List<RadioButton> rdBtns = GetControls(entire_grpBx).OfType<RadioButton>().ToList();
             if (initial)
             {
                 foreach (RadioButton rdBtn in rdBtns)

@@ -16,6 +16,8 @@ using static Isotope_fitting.Form2;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.IO;
+using static Isotope_fitting.Helpers;
+
 
 namespace Isotope_fitting
 {
@@ -44,25 +46,43 @@ namespace Isotope_fitting
             frm2 = f;
             InitializeComponent();
             OnCalcFrag3Completed += () => { Fragments3_to_listview(); };
-            ppm9_numUD.TextChanged += new EventHandler(ppm9_numUD_TextChanged);
-            thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
-            ppm9_numUD.Value =(decimal)ppmError9;
+            initialize_calculator_UI();
+            initialize_basic_selection__UI();
+            initialize_riken_selection_UI();
+            initialize_Fragment_List_UI();
+            if (frm2.is_riken){FragCalc_TabControl.TabPages.Remove(chemForm_tab);FragCalc_TabControl.TabPages.Remove(Frag_tab);}
+            else{FragCalc_TabControl.TabPages.Remove(fragTab_riken);}
+        }
+
+        #region Initialisation
+        private void Form9_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            this.PerformAutoScale();
+        }
+        private void initialize_calculator_UI()
+        {
+            ppm9_numUD.MouseClick += (s, e) => { ppm9_numUD.Focus(); };
+            ppm9_numUD.TextChanged += new EventHandler(ppm9_numUD_TextChanged);
+            thre_numUD.TextChanged += new EventHandler(thre_numUD_TextChanged);
+            ppm9_numUD.Value = (decimal)ppmError9;
             thre_numUD.Value = (decimal)thres9;
-            one_rdBtn9.CheckedChanged += (s, e) => { selection_rule9[0]=one_rdBtn9.Checked; };
-            two_rdBtn.CheckedChanged += (s, e) => { selection_rule9[1] =two_rdBtn.Checked; };
-            three_rdBtn.CheckedChanged += (s, e) => { selection_rule9[2] =three_rdBtn.Checked; };
+            one_rdBtn9.CheckedChanged += (s, e) => { selection_rule9[0] = one_rdBtn9.Checked; };
+            two_rdBtn.CheckedChanged += (s, e) => { selection_rule9[1] = two_rdBtn.Checked; };
+            three_rdBtn.CheckedChanged += (s, e) => { selection_rule9[2] = three_rdBtn.Checked; };
             half_rdBtn.CheckedChanged += (s, e) => { selection_rule9[3] = half_rdBtn.Checked; };
-            half_minus_rdBtn.CheckedChanged += (s, e) => { selection_rule9[4] =half_minus_rdBtn.Checked; };
-            half_plus_rdBtn.CheckedChanged += (s, e) => { selection_rule9[5] =half_plus_rdBtn.Checked; };
-            one_rdBtn9.Checked = selection_rule9[0]; 
+            half_minus_rdBtn.CheckedChanged += (s, e) => { selection_rule9[4] = half_minus_rdBtn.Checked; };
+            half_plus_rdBtn.CheckedChanged += (s, e) => { selection_rule9[5] = half_plus_rdBtn.Checked; };
+            one_rdBtn9.Checked = selection_rule9[0];
             two_rdBtn.Checked = selection_rule9[1];
             three_rdBtn.Checked = selection_rule9[2];
             half_rdBtn.Checked = selection_rule9[3];
             half_minus_rdBtn.Checked = selection_rule9[4];
             half_plus_rdBtn.Checked = selection_rule9[5];
-            internal_lstBox.MouseClick += (s, e) => { internal_lstBox.Focus(); };
+        }
+        private void initialize_basic_selection__UI()
+        {
             addin_lstBox.MouseClick += (s, e) => { addin_lstBox.Focus(); };
             a_lstBox.MouseClick += (s, e) => { a_lstBox.Focus(); };
             b_lstBox.MouseClick += (s, e) => { b_lstBox.Focus(); };
@@ -73,7 +93,6 @@ namespace Isotope_fitting
             x_lstBox.MouseClick += (s, e) => { x_lstBox.Focus(); };
             y_lstBox.MouseClick += (s, e) => { y_lstBox.Focus(); };
             z_lstBox.MouseClick += (s, e) => { z_lstBox.Focus(); };
-            ppm9_numUD.MouseClick += (s, e) => { ppm9_numUD.Focus(); };
             chargeMax_Box.MouseClick += (s, e) => { chargeMax_Box.Focus(); };
             chargeMin_Box.MouseClick += (s, e) => { chargeMin_Box.Focus(); };
             idxFrom_Box.MouseClick += (s, e) => { idxFrom_Box.Focus(); };
@@ -81,93 +100,63 @@ namespace Isotope_fitting
             idxTo_Box.MouseClick += (s, e) => { idxTo_Box.Focus(); };
             mzMax_Box.MouseClick += (s, e) => { mzMax_Box.Focus(); };
             mzMin_Box.MouseClick += (s, e) => { mzMin_Box.Focus(); };
-            ContextMenu ctxMn1 = new ContextMenu() { };            
+        }
+        private void initialize_riken_selection_UI()
+        {            
+            a_lstBox_riken.MouseClick += (s, e) => { a_lstBox_riken.Focus(); };
+            b_lstBox_riken.MouseClick += (s, e) => { b_lstBox_riken.Focus(); };
+            c_lstBox_riken.MouseClick += (s, e) => { c_lstBox_riken.Focus(); };
+            d_lstBox_riken.MouseClick += (s, e) => { c_lstBox_riken.Focus(); };
+            w_lstBox_riken.MouseClick += (s, e) => { c_lstBox_riken.Focus(); };
+            x_lstBox_riken.MouseClick += (s, e) => { x_lstBox_riken.Focus(); };
+            y_lstBox_riken.MouseClick += (s, e) => { y_lstBox_riken.Focus(); };
+            z_lstBox_riken.MouseClick += (s, e) => { z_lstBox_riken.Focus(); };
+            M_lstBox_riken.MouseClick += (s, e) => { M_lstBox_riken.Focus(); };
+            known_lstBox.MouseClick += (s, e) => { known_lstBox.Focus(); };
+            internal_lstBox_riken.MouseClick += (s, e) => { internal_lstBox_riken.Focus(); };
+            chargeMax_Box_riken.MouseClick += (s, e) => { chargeMax_Box_riken.Focus(); };
+            chargeMin_Box_riken.MouseClick += (s, e) => { chargeMin_Box_riken.Focus(); };
+            idxFrom_Box_riken.MouseClick += (s, e) => { idxFrom_Box_riken.Focus(); };
+            idxPr_Box_riken.MouseClick += (s, e) => { idxPr_Box_riken.Focus(); };
+            idxTo_Box_riken.MouseClick += (s, e) => { idxTo_Box_riken.Focus(); };
+            mzMax_Box_riken.MouseClick += (s, e) => { mzMax_Box_riken.Focus(); };
+            mzMin_Box_riken.MouseClick += (s, e) => { mzMin_Box_riken.Focus(); };
+        }
+        private void initialize_Fragment_List_UI()
+        {
+            ContextMenu ctxMn1 = new ContextMenu() { };
             MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
             MenuItem remFrag = new MenuItem("Delete fragment", delete_frag);
             MenuItem clearall = new MenuItem("Clear all", delete_all);
-
-
-            ctxMn1.MenuItems.AddRange(new MenuItem[] {colorSelection, remFrag, clearall });
+            ctxMn1.MenuItems.AddRange(new MenuItem[] { colorSelection, remFrag, clearall });
             fragListView9.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
         }
-        private void Form9_DpiChanged(object sender, DpiChangedEventArgs e)
+        #endregion
+
+        #region UI
+        #region calc UI     
+        void ppm9_numUD_TextChanged(object sender, EventArgs e)
         {
-            this.PerformAutoScale();
+            if (ppm9_numUD.ActiveControl != null && !string.IsNullOrEmpty(ppm9_numUD.ActiveControl.Text))
+            {
+                ppmError9 = double.Parse(ppm9_numUD.ActiveControl.Text);
+            }
         }
 
-        private void delete_all(object sender, EventArgs e)
+        private void resolution_Box_TextChanged(object sender, EventArgs e)
         {
-            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
-            during_calc(true);
-            int count = last_plotted.Count;
-            if ((sender as MenuItem).Text == "Clear all" )
+            if (Regex.IsMatch(resolution_Box.Text, "[^0-9]"))
             {
-                //when closing the form public data from this form are restored in their initial values
-                initialize_data();
-                fragListView9.BeginUpdate();
-                fragListView9.Items.Clear();               
-                fragListView9.EndUpdate();
-                if (count != 0)
-                {
-                    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
-                    last_plotted.Clear();
-                    frm2.recalc_frm9(count, last_plotted.Count);
-                }
-                //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
-                //we don't want to refresh fragment trees in the basic form
-                //frm2.ending_frm9();
-                factor_panel9.Visible = false;
+                MessageBox.Show("Please enter only numbers.");
+                resolution_Box.Text = resolution_Box.Text.Remove(resolution_Box.Text.Length - 1);
+                resolution_Box.SelectionStart = resolution_Box.Text.Length;
+                resolution_Box.SelectionLength = 0;
             }
-            during_calc(false);
         }
-        private void delete_frag(object sender, EventArgs e)
+
+        private void ignore_ppm_form9_CheckedChanged(object sender, EventArgs e)
         {
-            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
-            int count_last_plotted = last_plotted.Count;
-            if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
-            during_calc(true);
-            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
-            if ((sender as MenuItem).Text == "Delete fragment" && selectedItems.Count > 0)
-            {
-                now = false;
-                int count = 0;
-                foreach (ListViewItem item in fragListView9.SelectedItems)
-                {
-                    int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
-                    //remove fragment from the current listview
-                    Fragments3.RemoveAt(frag_idx - count); count++;
-                }
-                // sort by mz the fragments list 
-                Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
-                // also restore indexes to match array position
-                for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
-                //refresh listview 
-                Fragments3_to_listview();
-                //if (count_last_plotted != 0)
-                //{
-                //    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
-                //    last_plotted.Clear();
-                //}
-                //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
-                first = true;
-                factor_panel9.Visible = false; selected_idx = 0;
-                //frm2.ending_frm9();                
-            }
-            during_calc(false);
-            plot_checked(true,count_last_plotted);
-        }
-        private void colorSelectionList(object sender, EventArgs e)
-        {
-            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
-            if ((sender as MenuItem).Text == "Fragment color" && selectedItems.Count > 0)
-            {
-                foreach (ListViewItem item in fragListView9.SelectedItems)
-                {
-                    int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
-                    ColorDialog clrDlg = new ColorDialog();
-                    if (clrDlg.ShowDialog() == DialogResult.OK) {  Fragments3[frag_idx].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
-                }
-            }
+            resolution_Box.Enabled = ignore_ppm_form9.Checked;
         }
         void thre_numUD_TextChanged(object sender, EventArgs e)
         {
@@ -176,11 +165,124 @@ namespace Isotope_fitting
                 thres9 = Double.Parse(thre_numUD.ActiveControl.Text);
             }
         }
-        private void initialize_data()
+        #endregion
+
+        #region basic tabs UI
+        private void clear_single_chem_Btn_Click(object sender, EventArgs e)
         {
-            if (Fragments3.Count > 0) Fragments3.Clear();
-            first = true; now = false; selected_idx = 0; 
+            heavy_ChkBox.Checked = false;
+            Light_chkBox.Checked = false;
+            chemForm_txtBox.Text = string.Empty;
+            maxCharge_txtBox.Text = string.Empty;
+            minCharge_txtBox.Text = string.Empty;
+            extensionBox1.Text = string.Empty;
+            ion_txtBox.Text = string.Empty;
+            primary_txtBox.Text = string.Empty;
+            internal_txtBox.Text = string.Empty;
         }
+        private void clear_allBtn_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(Frag_tab);
+            set_textboxes_checks_empty(Frag_tab);
+        }
+        private void check_all_boxBtn_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(Frag_tab, true);
+        }
+
+        private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(Frag_tab);
+        }
+
+        private void minCharge_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(minCharge_txtBox, true, true);
+        }
+
+        private void maxCharge_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(maxCharge_txtBox, true, true);
+        }
+
+        private void internal_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            primary_txtBox.Text = null;
+        }
+        private void primary_txtBox_TextChanged(object sender, EventArgs e)
+        {
+            internal_txtBox.Text = null;
+        }
+        private void mzMin_Box_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(mzMin_Box, false, false);
+        }
+
+        private void mzMax_Box_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(mzMax_Box, false, false);
+        }
+        private void chargeMin_Box_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(chargeMin_Box, true, true);
+        }
+        private void chargeMax_Box_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(chargeMax_Box, true, true);
+        }
+        private void chargeAll_Btn_Click(object sender, EventArgs e)
+        {
+            chargeMin_Box.Text = string.Empty;
+            chargeMax_Box.Text = string.Empty;
+        }
+        #endregion
+
+        #region riken tabs UI
+        private void check_all_boxBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(fragTab_riken, true);
+        }
+        private void uncheck_all_boxBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(fragTab_riken, false);
+        }
+        private void clear_allBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(fragTab_riken, false);
+            set_textboxes_checks_empty(fragTab_riken);
+        }
+
+        private void mzMin_Box_riken_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(mzMin_Box_riken, false, false);
+        }
+
+        private void mzMax_Box_riken_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(mzMax_Box_riken, false, false);
+        }
+
+        private void chargeMin_Box_riken_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(chargeMin_Box_riken, true, true);
+        }
+
+        private void chargeMax_Box_riken_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(chargeMax_Box_riken, true, true);
+        }
+
+        private void chargeAll_Btn_riken_Click(object sender, EventArgs e)
+        {
+            chargeMin_Box_riken.Text = string.Empty;
+            chargeMax_Box_riken.Text = string.Empty;
+        }
+
+        #endregion
+
+       
+
+        #endregion
 
         #region listview UI
         private void Initialize_listviewComparer()
@@ -256,7 +358,6 @@ namespace Isotope_fitting
       
         private void adjust_height()
         {
-
             double frag_intensity = Fragments3[selected_idx].Factor * Fragments3[selected_idx].Max_intensity;
             factor_panel9.Visible = true;
             factor_panel9.Controls.Clear();
@@ -285,6 +386,87 @@ namespace Isotope_fitting
              factor_panel9.Controls.AddRange(new Control[] { factor_lbl, numUD });
             //factor_panel9.Controls.OfType<NumericUpDown>().ToArray()[0].Focus();
         }
+
+        private void delete_all(object sender, EventArgs e)
+        {
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            during_calc(true);
+            int count = last_plotted.Count;
+            if ((sender as MenuItem).Text == "Clear all")
+            {
+                //when closing the form public data from this form are restored in their initial values
+                initialize_data();
+                fragListView9.BeginUpdate();
+                fragListView9.Items.Clear();
+                fragListView9.EndUpdate();
+                if (count != 0)
+                {
+                    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                    last_plotted.Clear();
+                    frm2.recalc_frm9(count, last_plotted.Count);
+                }
+                //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
+                //we don't want to refresh fragment trees in the basic form
+                //frm2.ending_frm9();
+                factor_panel9.Visible = false;
+            }
+            during_calc(false);
+        }
+        private void delete_frag(object sender, EventArgs e)
+        {
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            int count_last_plotted = last_plotted.Count;
+            if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
+            during_calc(true);
+            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
+            if ((sender as MenuItem).Text == "Delete fragment" && selectedItems.Count > 0)
+            {
+                now = false;
+                int count = 0;
+                foreach (ListViewItem item in fragListView9.SelectedItems)
+                {
+                    int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
+                    //remove fragment from the current listview
+                    Fragments3.RemoveAt(frag_idx - count); count++;
+                }
+                // sort by mz the fragments list 
+                Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
+                // also restore indexes to match array position
+                for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
+                //refresh listview 
+                Fragments3_to_listview();
+                //if (count_last_plotted != 0)
+                //{
+                //    all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                //    last_plotted.Clear();
+                //}
+                //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
+                first = true;
+                factor_panel9.Visible = false; selected_idx = 0;
+                //frm2.ending_frm9();                
+            }
+            during_calc(false);
+            plot_checked(true, count_last_plotted);
+        }
+        private void colorSelectionList(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
+            if ((sender as MenuItem).Text == "Fragment color" && selectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in fragListView9.SelectedItems)
+                {
+                    int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
+                    ColorDialog clrDlg = new ColorDialog();
+                    if (clrDlg.ShowDialog() == DialogResult.OK) { Fragments3[frag_idx].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
+                }
+            }
+        }
+        private void initialize_data()
+        {
+            if (Fragments3.Count > 0) Fragments3.Clear();
+            first = true; now = false; selected_idx = 0;
+        }
+
         #endregion
 
         #region isotopic distributions calculations
@@ -307,17 +489,25 @@ namespace Isotope_fitting
             sw1.Reset(); sw1.Start();
             is_res_user_defined = false;
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
-            if (FragCalc_TabControl.SelectedTab == FragCalc_TabControl.TabPages["Frag_tab"])
+            if (frm2.is_riken)
             {
-                if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); during_calc(false); return; }
-                selected_fragments = select_fragments2_frm9();
+                if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an Riken file for this action."); during_calc(false); return; }
+                selected_fragments = select_fragments2_frm9_riken();
             }
-            else if (mult_loaded!=null && mult_loaded.Count>0)
+            else
             {
-                selected_fragments = mult_loaded;
-            }
-            else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); during_calc(false); return; }
-            else { selected_fragments = check_chem_inputs(); }
+                if (FragCalc_TabControl.SelectedTab == FragCalc_TabControl.TabPages["Frag_tab"])
+                {
+                    if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an MS Product file for this action."); during_calc(false); return; }
+                    selected_fragments = select_fragments2_frm9();
+                }
+                else if (mult_loaded != null && mult_loaded.Count > 0)
+                {
+                    selected_fragments = mult_loaded;
+                }
+                else if ((string.IsNullOrEmpty(minCharge_txtBox.Text) && string.IsNullOrEmpty(maxCharge_txtBox.Text)) || string.IsNullOrEmpty(ion_txtBox.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); during_calc(false); return; }
+                else { selected_fragments = check_chem_inputs(); }
+            }           
 
             if (selected_fragments.Count == 0) { MessageBox.Show("No fragments found"); during_calc(false); return; } 
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
@@ -696,8 +886,330 @@ namespace Isotope_fitting
                 }
             }
             return res;
-        }
+        }       
+        private List<ChemiForm> select_fragments2_frm9_riken()
+        {
+            List<ChemiForm> res = new List<ChemiForm>();
+            List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
+            //other types are M, internal and known MS2
+            // 1. get mz and charge limits (if any)
+            double mzMin = txt_to_d(mzMin_Box);
+            if (double.IsNaN(mzMin)) mzMin = dParser(ChemFormulas.First().Mz);
 
+            double mzMax = txt_to_d(mzMax_Box);
+            if (double.IsNaN(mzMax)) mzMax = dParser(ChemFormulas.Last().Mz);
+
+            double qMin = txt_to_d(chargeMin_Box);
+            if (double.IsNaN(qMin)) qMin = -100.0;
+
+            double qMax = txt_to_d(chargeMax_Box);
+            if (double.IsNaN(qMax)) qMax = 100.0;
+
+            if (frm2.is_exp_deconvoluted) { qMax = 1; }
+            // 2. get checked types
+            List<string> types = new List<string>();
+            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
+                foreach (var item in lstBox.CheckedItems)
+                    types.Add(item.ToString());
+
+            // 3. seperate checked types by type
+            List<string> types_precursor = types.Where(t => t.StartsWith("M")).ToList();// M, M-H2O...
+            List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();// internal a, internal b-2H2O...
+            List<string> types_B_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("B")).ToList();// primary with neutral loss a-H2O, b-NH3, ...
+            List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();// a, b, y.....
+            List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 3).ToList();  // a+1, y-2....
+            List<string> types_known_MS2 = types.Where(t => t.StartsWith("known")).ToList();  // known MS2 fragments....
+            List<string> types_B = types.Where(t => t.StartsWith("B(")).ToList();  // known MS2 fragments....
+
+            //4.index primary
+            List<int[]> primary_indexes = new List<int[]>();
+            if (!string.IsNullOrEmpty(idxPr_Box.Text.ToString())) add_to_indexes_list(idxPr_Box.Text, primary_indexes);
+
+            //5. index internal
+            List<int[]> internal_indexesFrom = new List<int[]>();
+            List<int[]> internal_indexesTo = new List<int[]>();
+            if (!string.IsNullOrEmpty(idxFrom_Box.Text.ToString())) add_to_indexes_list(idxFrom_Box.Text, internal_indexesFrom);
+            if (!string.IsNullOrEmpty(idxTo_Box.Text.ToString())) add_to_indexes_list(idxTo_Box.Text, internal_indexesTo);
+            // main selection routine
+            foreach (ChemiForm chem in ChemFormulas)
+            {
+                double curr_mz = dParser(chem.Mz);
+                double curr_q = chem.Charge;
+                string curr_type = chem.Ion_type;
+                string curr_type_first = curr_type.Substring(0, 1);
+
+                bool is_precursor = curr_type.StartsWith("M");
+                bool is_internal = curr_type.StartsWith("internal");
+                bool is_B_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("B(");
+                bool is_primary = primary.Contains(curr_type.ToArray()[0].ToString()) && curr_type.Length == 1;
+                bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("B(") && curr_type.Length > 1;
+                bool is_known_MS2 = curr_type.StartsWith("known"); ;
+                bool is_B = curr_type.StartsWith("B("); ;
+
+
+                // drop frag by mz and charge rules
+                if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+
+                if (is_internal)
+                {
+                    bool in_bounds = true;
+                    int index1 = Int32.Parse(chem.Index);
+                    int index2 = Int32.Parse(chem.IndexTo);
+                    if (internal_indexesTo.Count > 0 && internal_indexesTo.Count > 0)
+                    {
+                        in_bounds = false;
+                        for (int k = 0; k < internal_indexesTo.Count; k++)
+                        {
+                            if (index2 >= internal_indexesTo[k][0] && index2 <= internal_indexesTo[k][1] && index1 >= internal_indexesFrom[k][0] && index1 <= internal_indexesFrom[k][1])
+                            {
+                                in_bounds = true; break;
+                            }
+                        }
+                        if (!in_bounds) continue;
+                    }
+                    if (frm2.exclude_internal_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_internal_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index2 >= ext.Index2[k][0] && index2 <= ext.Index2[k][1] && index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (!in_bounds) continue;
+
+                }
+                else if (!is_precursor && !is_known_MS2 && !is_B)
+                {
+                    int index1 = chem.SortIdx;
+                    bool in_bounds = true;
+                    if (primary_indexes.Count > 0)
+                    {
+                        in_bounds = false;
+                        if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }
+                        for (int k = 0; k < primary_indexes.Count; k++)
+                        {
+                            if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
+                            {
+                                in_bounds = true; break;
+                            }
+                        }
+                        if (!in_bounds) continue;
+                    }
+                    index1 = Int32.Parse(chem.Index);
+                    if (chem.Ion.StartsWith("a") && frm2.exclude_a_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_a_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("b") && frm2.exclude_b_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_b_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("c") && frm2.exclude_c_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_c_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("x") && frm2.exclude_x_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_x_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("y") && frm2.exclude_y_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_y_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("z") && frm2.exclude_z_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_z_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("d") && frm2.exclude_d_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_d_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if (chem.Ion.StartsWith("w") && frm2.exclude_w_indexes.Count > 0)
+                    {
+                        foreach (ExcludeTypes ext in frm2.exclude_w_indexes)
+                        {
+                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            {
+                                for (int k = 0; k < ext.Index1.Count; k++)
+                                {
+                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                                    {
+                                        in_bounds = false; break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (!in_bounds) continue;
+                }
+
+                //// drop frag if type is not selected, 
+                //if (!types.Contains(curr_type) && !types.Any(t => t.StartsWith(curr_type_first))) continue;
+
+                if (is_precursor)
+                {
+                    if (types_precursor.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+
+                if (is_internal)
+                {
+                    if (types_internal.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+                if (is_B)
+                {
+                    if (types_B.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+                if (is_B_loss)
+                {
+                    if (types_B_loss.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+                if (is_known_MS2)
+                {
+                    if (types_known_MS2.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+                if (is_primary_Hyd) // this should hit, we do not request this type from riken
+                {
+                    if (types_primary_Hyd.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    continue;
+                }
+
+                if (is_primary)
+                {
+                    if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
+
+                    // this code is only for MSProduct that does not provide primary with H gain/loss by default.
+                    // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
+                    if (types_primary_Hyd.Any(t => t.StartsWith(curr_type)))
+                    {
+                        foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
+                        {
+                            // add the primary and modify it according to gain or loss of H
+                            res.Add(chem.DeepCopy());
+                            int curr_idx = res.Count - 1;
+
+                            string new_type = "(" + hyd_mod + ")";
+                            res[curr_idx].Ion_type = new_type;
+                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+
+                            double hyd_num = 0.0;
+                            if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
+                            else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
+
+                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
+                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                        }
+                    }
+                }
+            }
+            return res;
+        }
         private void calculate_fragments_resolution_frm9(List<ChemiForm> selected_fragments)
         {
             if (!string.IsNullOrEmpty(resolution_Box.Text) && resolution_Box.Enabled)
@@ -819,7 +1331,7 @@ namespace Isotope_fitting
             List<PointPlot> cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
             chem.Centroid.Clear(); chem.Intensoid.Clear();
             chem.Points= chem.Points.OrderBy(p => p.X).ToList();
-            chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / chem.Charge, 4).ToString();
+            chem.Mz = Math.Round((chem.Monoisotopic.Mass-emass*chem.Charge) / Math.Abs(chem.Charge), 4).ToString();
             if (!insert_exp ) { add_fragment_to_Fragments3(chem, cen); return; }
             // MAIN decesion algorithm 
             bool fragment_is_canditate = decision_algorithm_frm9(chem, cen);          
@@ -1072,240 +1584,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-
-        #region UI
-        private void clear_single_chem_Btn_Click(object sender, EventArgs e)
-        {
-            heavy_ChkBox.Checked = false;
-            Light_chkBox.Checked = false;
-            chemForm_txtBox.Text = string.Empty;
-            maxCharge_txtBox.Text = string.Empty;
-            minCharge_txtBox.Text = string.Empty;
-            extensionBox1.Text = string.Empty;
-            ion_txtBox.Text = string.Empty;
-            primary_txtBox.Text = string.Empty;
-            internal_txtBox.Text = string.Empty;
-        }
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
-            {
-                foreach (int i in lstBox.CheckedIndices)
-                {
-                    lstBox.SetItemCheckState(i, CheckState.Unchecked);
-                }
-            }
-            mzMin_Box.Text = string.Empty;
-            mzMax_Box.Text = string.Empty;
-            chargeMin_Box.Text = string.Empty;
-            chargeMax_Box.Text = string.Empty;
-            idxPr_Box.Text = string.Empty;
-            idxFrom_Box.Text = string.Empty;
-            idxTo_Box.Text = string.Empty;
-            sortIdx_chkBx.Checked = false;
-        }
-        private void check_all_boxBtn_Click(object sender, EventArgs e)
-        {
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
-            {
-                for (int i = 0; i < lstBox.Items.Count; i++)
-                {
-                    lstBox.SetItemCheckState(i, CheckState.Checked);
-                }
-            }
-        }
-
-        private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
-        {
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
-            {
-                foreach (int i in lstBox.CheckedIndices)
-                {
-                    lstBox.SetItemCheckState(i, CheckState.Unchecked);
-                }
-            }
-        }
-             
-        private void minCharge_txtBox_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(minCharge_txtBox.Text))
-            {
-                if (minCharge_txtBox.Text != "-")
-                {
-                    try
-                    {
-                        double.Parse(minCharge_txtBox.Text, NumberStyles.Integer);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please enter only numbers.");
-                        minCharge_txtBox.Text = minCharge_txtBox.Text.Remove(minCharge_txtBox.Text.Length - 1);
-                        minCharge_txtBox.SelectionStart = minCharge_txtBox.Text.Length;
-                        minCharge_txtBox.SelectionLength = 0;
-                    }
-                }
-            }
-        }
-
-        private void maxCharge_txtBox_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(maxCharge_txtBox.Text))
-            {
-                if (maxCharge_txtBox.Text != "-")
-                {
-
-                    try
-                    {
-                        double.Parse(maxCharge_txtBox.Text, NumberStyles.Integer);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please enter only numbers.");
-                        maxCharge_txtBox.Text = maxCharge_txtBox.Text.Remove(maxCharge_txtBox.Text.Length - 1);
-                        maxCharge_txtBox.SelectionStart = maxCharge_txtBox.Text.Length;
-                        maxCharge_txtBox.SelectionLength = 0;
-                    }
-                }
-            }
-        }
-
-        private void internal_txtBox_TextChanged(object sender, EventArgs e)
-        {
-            primary_txtBox.Text = null;
-        }
-
-        private void ion_txtBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chargeMin_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(chargeMin_Box.Text))
-            {
-                if (chargeMin_Box.Text != "-")
-                {
-                    try
-                    {
-                        double.Parse(chargeMin_Box.Text, NumberStyles.Integer);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please enter only numbers.");
-                        chargeMin_Box.Text = chargeMin_Box.Text.Remove(chargeMin_Box.Text.Length - 1);
-                        chargeMin_Box.SelectionStart = chargeMin_Box.Text.Length;
-                        chargeMin_Box.SelectionLength = 0;
-                    }
-                }
-            }
-        }
-
-        private void mzMin_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(mzMin_Box.Text))
-            {
-                try
-                {
-                    double.Parse(mzMin_Box.Text, NumberStyles.AllowDecimalPoint);
-                }
-                catch (FormatException ex)
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    mzMin_Box.Text = mzMin_Box.Text.Remove(mzMin_Box.Text.Length - 1);
-                    mzMin_Box.SelectionStart = mzMin_Box.Text.Length;
-                    mzMin_Box.SelectionLength = 0;
-                }
-            }
-
-        }
-
-        private void mzMax_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(mzMax_Box.Text))
-            {
-                try
-                {
-                    double.Parse(mzMax_Box.Text, NumberStyles.AllowDecimalPoint);
-                }
-                catch
-                {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
-                    mzMax_Box.Text = mzMax_Box.Text.Remove(mzMax_Box.Text.Length - 1);
-                    mzMax_Box.SelectionStart = mzMax_Box.Text.Length;
-                    mzMax_Box.SelectionLength = 0;
-                }
-            }
-        }
-
-        private void chargeMax_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(chargeMax_Box.Text))
-            {
-                if (chargeMax_Box.Text != "-")
-                {
-                    try
-                    {
-                        double.Parse(chargeMax_Box.Text, NumberStyles.Integer);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please enter only numbers.");
-                        chargeMax_Box.Text = chargeMax_Box.Text.Remove(chargeMax_Box.Text.Length - 1);
-                        chargeMax_Box.SelectionStart = chargeMax_Box.Text.Length;
-                        chargeMax_Box.SelectionLength = 0;
-                    }
-                }
-            }
-        }
-
-        private void primary_txtBox_TextChanged(object sender, EventArgs e)
-        {
-            internal_txtBox.Text = null;
-        }      
-
-        #endregion
-
-
-        private void Form9_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            int count = last_plotted.Count;
-            //when closing the form public data from this form are restored in their initial values
-            initialize_data();
-            if (count != 0)
-            {
-                all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
-                last_plotted.Clear();
-                frm2.recalc_frm9(count, last_plotted.Count);
-            }
-            ////when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
-            ////we don't want to refresh fragment trees in the basic form
-            //frm2.ending_frm9();
-        }
-                
-        void ppm9_numUD_TextChanged(object sender, EventArgs e)
-        {
-            if (ppm9_numUD.ActiveControl!=null && !string.IsNullOrEmpty(ppm9_numUD.ActiveControl.Text))
-            {
-                ppmError9 = double.Parse(ppm9_numUD.ActiveControl.Text);
-            }
-        }
-
-        private void resolution_Box_TextChanged(object sender, EventArgs e)
-        {
-            if (Regex.IsMatch(resolution_Box.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                resolution_Box.Text = resolution_Box.Text.Remove(resolution_Box.Text.Length - 1);
-                resolution_Box.SelectionStart = resolution_Box.Text.Length;
-                resolution_Box.SelectionLength = 0;
-            }
-        }
-
-        private void ignore_ppm_form9_CheckedChanged(object sender, EventArgs e)
-        {
-            resolution_Box.Enabled = ignore_ppm_form9.Checked;
-        }
-
+        
 
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
@@ -1511,5 +1790,20 @@ namespace Isotope_fitting
 
         #endregion
 
+        private void Form9_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            int count = last_plotted.Count;
+            //when closing the form public data from this form are restored in their initial values
+            initialize_data();
+            if (count != 0)
+            {
+                all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
+                last_plotted.Clear();
+                frm2.recalc_frm9(count, last_plotted.Count);
+            }
+            ////when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
+            ////we don't want to refresh fragment trees in the basic form
+            //frm2.ending_frm9();
+        }
     }
 }

@@ -29,39 +29,15 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChangeStateForm));
-            this.oligonoucl_state_Btn = new System.Windows.Forms.PictureBox();
-            this.peptide_state_Btn = new System.Windows.Forms.PictureBox();
             this.peptide_state_Lbl = new System.Windows.Forms.Label();
             this.oligonoucl_state_Lbl = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.oligonoucl_state_Btn)).BeginInit();
+            this.peptide_state_Btn = new System.Windows.Forms.PictureBox();
+            this.oligonoucl_state_Btn = new System.Windows.Forms.PictureBox();
+            this.save_stateBtn = new System.Windows.Forms.Button();
+            this.cancelBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.peptide_state_Btn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.oligonoucl_state_Btn)).BeginInit();
             this.SuspendLayout();
-            // 
-            // oligonoucl_state_Btn
-            // 
-            this.oligonoucl_state_Btn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.oligonoucl_state_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.oligonoucl_state_Btn.Image = ((System.Drawing.Image)(resources.GetObject("oligonoucl_state_Btn.Image")));
-            this.oligonoucl_state_Btn.Location = new System.Drawing.Point(293, 29);
-            this.oligonoucl_state_Btn.Name = "oligonoucl_state_Btn";
-            this.oligonoucl_state_Btn.Size = new System.Drawing.Size(150, 150);
-            this.oligonoucl_state_Btn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.oligonoucl_state_Btn.TabIndex = 0;
-            this.oligonoucl_state_Btn.TabStop = false;
-            this.oligonoucl_state_Btn.Click += new System.EventHandler(this.oligonoucl_state_Btn_Click);
-            // 
-            // peptide_state_Btn
-            // 
-            this.peptide_state_Btn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.peptide_state_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.peptide_state_Btn.Image = ((System.Drawing.Image)(resources.GetObject("peptide_state_Btn.Image")));
-            this.peptide_state_Btn.Location = new System.Drawing.Point(59, 29);
-            this.peptide_state_Btn.Name = "peptide_state_Btn";
-            this.peptide_state_Btn.Size = new System.Drawing.Size(150, 150);
-            this.peptide_state_Btn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.peptide_state_Btn.TabIndex = 1;
-            this.peptide_state_Btn.TabStop = false;
-            this.peptide_state_Btn.Click += new System.EventHandler(this.peptide_state_Btn_Click);
             // 
             // peptide_state_Lbl
             // 
@@ -87,21 +63,82 @@
             this.oligonoucl_state_Lbl.Text = "Oligonucleotides analysis";
             this.oligonoucl_state_Lbl.Click += new System.EventHandler(this.oligonoucl_state_Lbl_Click);
             // 
+            // peptide_state_Btn
+            // 
+            this.peptide_state_Btn.BackColor = System.Drawing.Color.Transparent;
+            this.peptide_state_Btn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.peptide_state_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.peptide_state_Btn.Image = ((System.Drawing.Image)(resources.GetObject("peptide_state_Btn.Image")));
+            this.peptide_state_Btn.Location = new System.Drawing.Point(59, 29);
+            this.peptide_state_Btn.Name = "peptide_state_Btn";
+            this.peptide_state_Btn.Size = new System.Drawing.Size(150, 150);
+            this.peptide_state_Btn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.peptide_state_Btn.TabIndex = 1;
+            this.peptide_state_Btn.TabStop = false;
+            this.peptide_state_Btn.Click += new System.EventHandler(this.peptide_state_Btn_Click);
+            // 
+            // oligonoucl_state_Btn
+            // 
+            this.oligonoucl_state_Btn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.oligonoucl_state_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.oligonoucl_state_Btn.Image = ((System.Drawing.Image)(resources.GetObject("oligonoucl_state_Btn.Image")));
+            this.oligonoucl_state_Btn.Location = new System.Drawing.Point(293, 29);
+            this.oligonoucl_state_Btn.Name = "oligonoucl_state_Btn";
+            this.oligonoucl_state_Btn.Size = new System.Drawing.Size(150, 150);
+            this.oligonoucl_state_Btn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.oligonoucl_state_Btn.TabIndex = 0;
+            this.oligonoucl_state_Btn.TabStop = false;
+            this.oligonoucl_state_Btn.Click += new System.EventHandler(this.oligonoucl_state_Btn_Click);
+            // 
+            // save_stateBtn
+            // 
+            this.save_stateBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.save_stateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.save_stateBtn.Location = new System.Drawing.Point(368, 234);
+            this.save_stateBtn.Name = "save_stateBtn";
+            this.save_stateBtn.Size = new System.Drawing.Size(75, 23);
+            this.save_stateBtn.TabIndex = 4;
+            this.save_stateBtn.Text = "Save";
+            this.save_stateBtn.UseVisualStyleBackColor = true;
+            this.save_stateBtn.Click += new System.EventHandler(this.save_stateBtn_Click);
+            // 
+            // cancelBtn
+            // 
+            this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelBtn.Location = new System.Drawing.Point(275, 234);
+            this.cancelBtn.Name = "cancelBtn";
+            this.cancelBtn.Size = new System.Drawing.Size(75, 23);
+            this.cancelBtn.TabIndex = 5;
+            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.UseVisualStyleBackColor = true;
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            // 
             // ChangeStateForm
             // 
+            this.AcceptButton = this.save_stateBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 236);
-            this.ControlBox = false;
+            this.BackColor = System.Drawing.Color.CadetBlue;
+            this.CancelButton = this.cancelBtn;
+            this.ClientSize = new System.Drawing.Size(505, 269);
+            this.Controls.Add(this.cancelBtn);
+            this.Controls.Add(this.save_stateBtn);
             this.Controls.Add(this.oligonoucl_state_Lbl);
             this.Controls.Add(this.peptide_state_Lbl);
             this.Controls.Add(this.peptide_state_Btn);
             this.Controls.Add(this.oligonoucl_state_Btn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ChangeStateForm";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Change State";
-            ((System.ComponentModel.ISupportInitialize)(this.oligonoucl_state_Btn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.peptide_state_Btn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.oligonoucl_state_Btn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -113,5 +150,7 @@
         private System.Windows.Forms.PictureBox peptide_state_Btn;
         private System.Windows.Forms.Label peptide_state_Lbl;
         private System.Windows.Forms.Label oligonoucl_state_Lbl;
+        private System.Windows.Forms.Button save_stateBtn;
+        private System.Windows.Forms.Button cancelBtn;
     }
 }

@@ -75,10 +75,10 @@
             this.chemForm_Lbl = new System.Windows.Forms.Label();
             this.Frag_tab = new System.Windows.Forms.TabPage();
             this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip_basic = new System.Windows.Forms.ToolStrip();
             this.check_all_boxBtn = new System.Windows.Forms.ToolStripButton();
             this.uncheck_all_boxBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.clear_allBtn = new System.Windows.Forms.ToolStripButton();
             this.frag_Label = new System.Windows.Forms.Label();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.M_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -109,6 +109,43 @@
             this.idxPr_Box = new System.Windows.Forms.TextBox();
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
+            this.fragTab_riken = new System.Windows.Forms.TabPage();
+            this.M_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.known_lstBox = new System.Windows.Forms.CheckedListBox();
+            this.w_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.d_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.internal_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.z_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.y_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.c_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.x_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.b_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.a_lstBox_riken = new System.Windows.Forms.CheckedListBox();
+            this.sortIdx_chkBx_riken = new System.Windows.Forms.CheckBox();
+            this.toolStrip_riken = new System.Windows.Forms.ToolStrip();
+            this.check_all_boxBtn_riken = new System.Windows.Forms.ToolStripButton();
+            this.uncheck_all_boxBtn_riken = new System.Windows.Forms.ToolStripButton();
+            this.clear_allBtn_riken = new System.Windows.Forms.ToolStripButton();
+            this.label10 = new System.Windows.Forms.Label();
+            this.chargeMax_Box_riken = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.chargeAll_Btn_riken = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.mzMax_Box_riken = new System.Windows.Forms.TextBox();
+            this.mzMin_Box_riken = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.idxTo_Box_riken = new System.Windows.Forms.TextBox();
+            this.chargeMin_Box_riken = new System.Windows.Forms.TextBox();
+            this.idxFrom_Box_riken = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.idxPr_Box_riken = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.calc_Btn = new System.Windows.Forms.Button();
             this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
             this.calc_param9Lbl = new System.Windows.Forms.Label();
@@ -145,7 +182,9 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.Frag_tab.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip_basic.SuspendLayout();
+            this.fragTab_riken.SuspendLayout();
+            this.toolStrip_riken.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.statusStrpFrm9.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -182,7 +221,7 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(363, 677);
+            this.panel_calc.Size = new System.Drawing.Size(377, 677);
             this.panel_calc.TabIndex = 4;
             // 
             // label8
@@ -268,10 +307,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FragCalc_TabControl.Controls.Add(this.chemForm_tab);
             this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
+            this.FragCalc_TabControl.Controls.Add(this.fragTab_riken);
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(363, 415);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(374, 415);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // chemForm_tab
@@ -305,7 +345,7 @@
             this.chemForm_tab.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab.Name = "chemForm_tab";
             this.chemForm_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab.Size = new System.Drawing.Size(355, 389);
+            this.chemForm_tab.Size = new System.Drawing.Size(366, 389);
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
@@ -551,7 +591,6 @@
             this.ion_txtBox.Name = "ion_txtBox";
             this.ion_txtBox.Size = new System.Drawing.Size(87, 20);
             this.ion_txtBox.TabIndex = 47;
-            this.ion_txtBox.TextChanged += new System.EventHandler(this.ion_txtBox_TextChanged);
             // 
             // chem_ion_Lbl
             // 
@@ -690,7 +729,7 @@
             // 
             this.Frag_tab.AutoScroll = true;
             this.Frag_tab.Controls.Add(this.sortIdx_chkBx);
-            this.Frag_tab.Controls.Add(this.toolStrip1);
+            this.Frag_tab.Controls.Add(this.toolStrip_basic);
             this.Frag_tab.Controls.Add(this.frag_Label);
             this.Frag_tab.Controls.Add(this.dvw_lstBox);
             this.Frag_tab.Controls.Add(this.M_lstBox);
@@ -724,7 +763,7 @@
             this.Frag_tab.Location = new System.Drawing.Point(4, 22);
             this.Frag_tab.Name = "Frag_tab";
             this.Frag_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.Frag_tab.Size = new System.Drawing.Size(355, 389);
+            this.Frag_tab.Size = new System.Drawing.Size(366, 389);
             this.Frag_tab.TabIndex = 0;
             this.Frag_tab.Text = "Fragments";
             this.Frag_tab.UseVisualStyleBackColor = true;
@@ -740,21 +779,21 @@
         " a,b,c fragments.");
             this.sortIdx_chkBx.UseVisualStyleBackColor = true;
             // 
-            // toolStrip1
+            // toolStrip_basic
             // 
-            this.toolStrip1.BackColor = System.Drawing.Color.White;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip_basic.BackColor = System.Drawing.Color.White;
+            this.toolStrip_basic.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip_basic.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip_basic.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip_basic.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.check_all_boxBtn,
             this.uncheck_all_boxBtn,
-            this.toolStripButton1});
-            this.toolStrip1.Location = new System.Drawing.Point(75, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(236, 27);
-            this.toolStrip1.TabIndex = 56;
-            this.toolStrip1.Text = "Clear Data";
+            this.clear_allBtn});
+            this.toolStrip_basic.Location = new System.Drawing.Point(75, 0);
+            this.toolStrip_basic.Name = "toolStrip_basic";
+            this.toolStrip_basic.Size = new System.Drawing.Size(236, 27);
+            this.toolStrip_basic.TabIndex = 56;
+            this.toolStrip_basic.Text = "Clear Data";
             // 
             // check_all_boxBtn
             // 
@@ -774,17 +813,17 @@
             this.uncheck_all_boxBtn.Text = "uncheck all";
             this.uncheck_all_boxBtn.Click += new System.EventHandler(this.uncheck_all_boxBtn_Click);
             // 
-            // toolStripButton1
+            // clear_allBtn
             // 
-            this.toolStripButton1.BackColor = System.Drawing.Color.SteelBlue;
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(65, 24);
-            this.toolStripButton1.Text = "Clear Data";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.clear_allBtn.BackColor = System.Drawing.Color.SteelBlue;
+            this.clear_allBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.clear_allBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clear_allBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_allBtn.Image")));
+            this.clear_allBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_allBtn.Name = "clear_allBtn";
+            this.clear_allBtn.Size = new System.Drawing.Size(65, 24);
+            this.clear_allBtn.Text = "Clear Data";
+            this.clear_allBtn.Click += new System.EventHandler(this.clear_allBtn_Click);
             // 
             // frag_Label
             // 
@@ -918,6 +957,7 @@
             this.chargeAll_Btn.TabIndex = 34;
             this.chargeAll_Btn.Text = "All";
             this.chargeAll_Btn.UseVisualStyleBackColor = false;
+            this.chargeAll_Btn.Click += new System.EventHandler(this.chargeAll_Btn_Click);
             // 
             // y_lstBox
             // 
@@ -1160,6 +1200,496 @@
             this.internal_Label.TabIndex = 19;
             this.internal_Label.Text = "internal";
             // 
+            // fragTab_riken
+            // 
+            this.fragTab_riken.AutoScroll = true;
+            this.fragTab_riken.Controls.Add(this.M_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.known_lstBox);
+            this.fragTab_riken.Controls.Add(this.w_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.d_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.internal_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.z_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.y_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.c_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.x_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.b_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.a_lstBox_riken);
+            this.fragTab_riken.Controls.Add(this.sortIdx_chkBx_riken);
+            this.fragTab_riken.Controls.Add(this.toolStrip_riken);
+            this.fragTab_riken.Controls.Add(this.label10);
+            this.fragTab_riken.Controls.Add(this.chargeMax_Box_riken);
+            this.fragTab_riken.Controls.Add(this.label11);
+            this.fragTab_riken.Controls.Add(this.chargeAll_Btn_riken);
+            this.fragTab_riken.Controls.Add(this.label12);
+            this.fragTab_riken.Controls.Add(this.label13);
+            this.fragTab_riken.Controls.Add(this.label14);
+            this.fragTab_riken.Controls.Add(this.mzMax_Box_riken);
+            this.fragTab_riken.Controls.Add(this.mzMin_Box_riken);
+            this.fragTab_riken.Controls.Add(this.label15);
+            this.fragTab_riken.Controls.Add(this.label16);
+            this.fragTab_riken.Controls.Add(this.label17);
+            this.fragTab_riken.Controls.Add(this.label18);
+            this.fragTab_riken.Controls.Add(this.idxTo_Box_riken);
+            this.fragTab_riken.Controls.Add(this.chargeMin_Box_riken);
+            this.fragTab_riken.Controls.Add(this.idxFrom_Box_riken);
+            this.fragTab_riken.Controls.Add(this.label19);
+            this.fragTab_riken.Controls.Add(this.idxPr_Box_riken);
+            this.fragTab_riken.Controls.Add(this.label20);
+            this.fragTab_riken.Controls.Add(this.label21);
+            this.fragTab_riken.Location = new System.Drawing.Point(4, 22);
+            this.fragTab_riken.Name = "fragTab_riken";
+            this.fragTab_riken.Padding = new System.Windows.Forms.Padding(3);
+            this.fragTab_riken.Size = new System.Drawing.Size(366, 389);
+            this.fragTab_riken.TabIndex = 2;
+            this.fragTab_riken.Text = "Fragments";
+            this.fragTab_riken.UseVisualStyleBackColor = true;
+            // 
+            // M_lstBox_riken
+            // 
+            this.M_lstBox_riken.CheckOnClick = true;
+            this.M_lstBox_riken.ColumnWidth = 57;
+            this.M_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.M_lstBox_riken.FormattingEnabled = true;
+            this.M_lstBox_riken.IntegralHeight = false;
+            this.M_lstBox_riken.Items.AddRange(new object[] {
+            "M",
+            "M-H2O",
+            "M-B()",
+            "M-H2O-B()",
+            "B()"});
+            this.M_lstBox_riken.Location = new System.Drawing.Point(242, 99);
+            this.M_lstBox_riken.Name = "M_lstBox_riken";
+            this.M_lstBox_riken.Size = new System.Drawing.Size(121, 80);
+            this.M_lstBox_riken.TabIndex = 124;
+            // 
+            // known_lstBox
+            // 
+            this.known_lstBox.CheckOnClick = true;
+            this.known_lstBox.ColumnWidth = 57;
+            this.known_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.known_lstBox.FormattingEnabled = true;
+            this.known_lstBox.IntegralHeight = false;
+            this.known_lstBox.Items.AddRange(new object[] {
+            "known MS2",
+            "known MS2-H2O",
+            "known MS2-2(H2O)"});
+            this.known_lstBox.Location = new System.Drawing.Point(242, 179);
+            this.known_lstBox.Name = "known_lstBox";
+            this.known_lstBox.Size = new System.Drawing.Size(121, 52);
+            this.known_lstBox.TabIndex = 123;
+            // 
+            // w_lstBox_riken
+            // 
+            this.w_lstBox_riken.CheckOnClick = true;
+            this.w_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.w_lstBox_riken.FormattingEnabled = true;
+            this.w_lstBox_riken.Items.AddRange(new object[] {
+            "w",
+            "w-1",
+            "w-2",
+            "w+1",
+            "w+2",
+            "w-B()"});
+            this.w_lstBox_riken.Location = new System.Drawing.Point(6, 138);
+            this.w_lstBox_riken.Name = "w_lstBox_riken";
+            this.w_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.w_lstBox_riken.TabIndex = 67;
+            // 
+            // d_lstBox_riken
+            // 
+            this.d_lstBox_riken.CheckOnClick = true;
+            this.d_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.d_lstBox_riken.FormattingEnabled = true;
+            this.d_lstBox_riken.Items.AddRange(new object[] {
+            "d",
+            "d-1",
+            "d-2",
+            "d+1",
+            "d+2",
+            "d-B()"});
+            this.d_lstBox_riken.Location = new System.Drawing.Point(183, 35);
+            this.d_lstBox_riken.Name = "d_lstBox_riken";
+            this.d_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.d_lstBox_riken.TabIndex = 66;
+            // 
+            // internal_lstBox_riken
+            // 
+            this.internal_lstBox_riken.CheckOnClick = true;
+            this.internal_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.internal_lstBox_riken.FormattingEnabled = true;
+            this.internal_lstBox_riken.Items.AddRange(new object[] {
+            "internal ",
+            "internal -H2O",
+            "internal -2(H2O)",
+            "internal -B()"});
+            this.internal_lstBox_riken.Location = new System.Drawing.Point(242, 35);
+            this.internal_lstBox_riken.Name = "internal_lstBox_riken";
+            this.internal_lstBox_riken.Size = new System.Drawing.Size(121, 64);
+            this.internal_lstBox_riken.TabIndex = 61;
+            // 
+            // z_lstBox_riken
+            // 
+            this.z_lstBox_riken.CheckOnClick = true;
+            this.z_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.z_lstBox_riken.FormattingEnabled = true;
+            this.z_lstBox_riken.Items.AddRange(new object[] {
+            "z",
+            "z-1",
+            "z-2",
+            "z+1",
+            "z+2",
+            "z-B()"});
+            this.z_lstBox_riken.Location = new System.Drawing.Point(183, 138);
+            this.z_lstBox_riken.Name = "z_lstBox_riken";
+            this.z_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.z_lstBox_riken.TabIndex = 64;
+            // 
+            // y_lstBox_riken
+            // 
+            this.y_lstBox_riken.CheckOnClick = true;
+            this.y_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.y_lstBox_riken.FormattingEnabled = true;
+            this.y_lstBox_riken.Items.AddRange(new object[] {
+            "y",
+            "y-1",
+            "y-2",
+            "y+1",
+            "y+2",
+            "y-B()"});
+            this.y_lstBox_riken.Location = new System.Drawing.Point(124, 138);
+            this.y_lstBox_riken.Name = "y_lstBox_riken";
+            this.y_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.y_lstBox_riken.TabIndex = 63;
+            // 
+            // c_lstBox_riken
+            // 
+            this.c_lstBox_riken.CheckOnClick = true;
+            this.c_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.c_lstBox_riken.FormattingEnabled = true;
+            this.c_lstBox_riken.Items.AddRange(new object[] {
+            "c",
+            "c-1",
+            "c-2",
+            "c+1",
+            "c+2",
+            "c-B()"});
+            this.c_lstBox_riken.Location = new System.Drawing.Point(124, 35);
+            this.c_lstBox_riken.Name = "c_lstBox_riken";
+            this.c_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.c_lstBox_riken.TabIndex = 60;
+            // 
+            // x_lstBox_riken
+            // 
+            this.x_lstBox_riken.CheckOnClick = true;
+            this.x_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.x_lstBox_riken.FormattingEnabled = true;
+            this.x_lstBox_riken.Items.AddRange(new object[] {
+            "x",
+            "x-1",
+            "x-2",
+            "x+1",
+            "x+2",
+            "x-B()"});
+            this.x_lstBox_riken.Location = new System.Drawing.Point(65, 138);
+            this.x_lstBox_riken.Name = "x_lstBox_riken";
+            this.x_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.x_lstBox_riken.TabIndex = 62;
+            // 
+            // b_lstBox_riken
+            // 
+            this.b_lstBox_riken.CheckOnClick = true;
+            this.b_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.b_lstBox_riken.FormattingEnabled = true;
+            this.b_lstBox_riken.Items.AddRange(new object[] {
+            "b",
+            "b-1",
+            "b-2",
+            "b+1",
+            "b+2",
+            "b-B()"});
+            this.b_lstBox_riken.Location = new System.Drawing.Point(65, 35);
+            this.b_lstBox_riken.Name = "b_lstBox_riken";
+            this.b_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.b_lstBox_riken.TabIndex = 59;
+            // 
+            // a_lstBox_riken
+            // 
+            this.a_lstBox_riken.CheckOnClick = true;
+            this.a_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.a_lstBox_riken.FormattingEnabled = true;
+            this.a_lstBox_riken.Items.AddRange(new object[] {
+            "a",
+            "a-1",
+            "a-2",
+            "a+1",
+            "a+2",
+            "a-B()"});
+            this.a_lstBox_riken.Location = new System.Drawing.Point(6, 35);
+            this.a_lstBox_riken.Name = "a_lstBox_riken";
+            this.a_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.a_lstBox_riken.TabIndex = 58;
+            // 
+            // sortIdx_chkBx_riken
+            // 
+            this.sortIdx_chkBx_riken.AutoSize = true;
+            this.sortIdx_chkBx_riken.Location = new System.Drawing.Point(74, 336);
+            this.sortIdx_chkBx_riken.Name = "sortIdx_chkBx_riken";
+            this.sortIdx_chkBx_riken.Size = new System.Drawing.Size(15, 14);
+            this.sortIdx_chkBx_riken.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.sortIdx_chkBx_riken, "#index in AA sequence. \r\nWhen checked :\r\nthe index of x,y,z is counted as for the" +
+        " a,b,c fragments.");
+            this.sortIdx_chkBx_riken.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip_riken
+            // 
+            this.toolStrip_riken.BackColor = System.Drawing.Color.White;
+            this.toolStrip_riken.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip_riken.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip_riken.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip_riken.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.check_all_boxBtn_riken,
+            this.uncheck_all_boxBtn_riken,
+            this.clear_allBtn_riken});
+            this.toolStrip_riken.Location = new System.Drawing.Point(114, 4);
+            this.toolStrip_riken.Name = "toolStrip_riken";
+            this.toolStrip_riken.Size = new System.Drawing.Size(236, 27);
+            this.toolStrip_riken.TabIndex = 56;
+            this.toolStrip_riken.Text = "Clear Data";
+            // 
+            // check_all_boxBtn_riken
+            // 
+            this.check_all_boxBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("check_all_boxBtn_riken.Image")));
+            this.check_all_boxBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_all_boxBtn_riken.Name = "check_all_boxBtn_riken";
+            this.check_all_boxBtn_riken.Size = new System.Drawing.Size(77, 24);
+            this.check_all_boxBtn_riken.Text = "check all";
+            this.check_all_boxBtn_riken.Click += new System.EventHandler(this.check_all_boxBtn_riken_Click);
+            // 
+            // uncheck_all_boxBtn_riken
+            // 
+            this.uncheck_all_boxBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_boxBtn_riken.Image")));
+            this.uncheck_all_boxBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheck_all_boxBtn_riken.Name = "uncheck_all_boxBtn_riken";
+            this.uncheck_all_boxBtn_riken.Size = new System.Drawing.Size(91, 24);
+            this.uncheck_all_boxBtn_riken.Text = "uncheck all";
+            this.uncheck_all_boxBtn_riken.Click += new System.EventHandler(this.uncheck_all_boxBtn_riken_Click);
+            // 
+            // clear_allBtn_riken
+            // 
+            this.clear_allBtn_riken.BackColor = System.Drawing.Color.SteelBlue;
+            this.clear_allBtn_riken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.clear_allBtn_riken.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clear_allBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("clear_allBtn_riken.Image")));
+            this.clear_allBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_allBtn_riken.Name = "clear_allBtn_riken";
+            this.clear_allBtn_riken.Size = new System.Drawing.Size(65, 24);
+            this.clear_allBtn_riken.Text = "Clear Data";
+            this.clear_allBtn_riken.Click += new System.EventHandler(this.clear_allBtn_riken_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label10.Location = new System.Drawing.Point(3, 3);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(75, 17);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Fragments";
+            // 
+            // chargeMax_Box_riken
+            // 
+            this.chargeMax_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.chargeMax_Box_riken.Location = new System.Drawing.Point(206, 279);
+            this.chargeMax_Box_riken.Name = "chargeMax_Box_riken";
+            this.chargeMax_Box_riken.Size = new System.Drawing.Size(38, 20);
+            this.chargeMax_Box_riken.TabIndex = 33;
+            this.chargeMax_Box_riken.TextChanged += new System.EventHandler(this.chargeMax_Box_riken_TextChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label11.Location = new System.Drawing.Point(157, 245);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(41, 13);
+            this.label11.TabIndex = 14;
+            this.label11.Text = "Charge";
+            // 
+            // chargeAll_Btn_riken
+            // 
+            this.chargeAll_Btn_riken.BackColor = System.Drawing.Color.Gainsboro;
+            this.chargeAll_Btn_riken.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.chargeAll_Btn_riken.Location = new System.Drawing.Point(255, 278);
+            this.chargeAll_Btn_riken.Name = "chargeAll_Btn_riken";
+            this.chargeAll_Btn_riken.Size = new System.Drawing.Size(37, 23);
+            this.chargeAll_Btn_riken.TabIndex = 34;
+            this.chargeAll_Btn_riken.Text = "All";
+            this.chargeAll_Btn_riken.UseVisualStyleBackColor = false;
+            this.chargeAll_Btn_riken.Click += new System.EventHandler(this.chargeAll_Btn_riken_Click);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label12.Location = new System.Drawing.Point(6, 245);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(81, 13);
+            this.label12.TabIndex = 11;
+            this.label12.Text = "M/z boundaries";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.SlateGray;
+            this.label13.Location = new System.Drawing.Point(70, 263);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(26, 13);
+            this.label13.TabIndex = 12;
+            this.label13.Text = "max";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.SlateGray;
+            this.label14.Location = new System.Drawing.Point(6, 263);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(23, 13);
+            this.label14.TabIndex = 13;
+            this.label14.Text = "min";
+            // 
+            // mzMax_Box_riken
+            // 
+            this.mzMax_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.mzMax_Box_riken.Location = new System.Drawing.Point(70, 279);
+            this.mzMax_Box_riken.Name = "mzMax_Box_riken";
+            this.mzMax_Box_riken.Size = new System.Drawing.Size(56, 20);
+            this.mzMax_Box_riken.TabIndex = 31;
+            this.mzMax_Box_riken.TextChanged += new System.EventHandler(this.mzMax_Box_riken_TextChanged);
+            // 
+            // mzMin_Box_riken
+            // 
+            this.mzMin_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.mzMin_Box_riken.Location = new System.Drawing.Point(6, 279);
+            this.mzMin_Box_riken.Name = "mzMin_Box_riken";
+            this.mzMin_Box_riken.Size = new System.Drawing.Size(56, 20);
+            this.mzMin_Box_riken.TabIndex = 30;
+            this.mzMin_Box_riken.TextChanged += new System.EventHandler(this.mzMin_Box_riken_TextChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.SlateGray;
+            this.label15.Location = new System.Drawing.Point(251, 336);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(16, 13);
+            this.label15.TabIndex = 21;
+            this.label15.Text = "to";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.SlateGray;
+            this.label16.Location = new System.Drawing.Point(150, 336);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(27, 13);
+            this.label16.TabIndex = 20;
+            this.label16.Text = "from";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.ForeColor = System.Drawing.Color.SlateGray;
+            this.label17.Location = new System.Drawing.Point(206, 263);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(26, 13);
+            this.label17.TabIndex = 16;
+            this.label17.Text = "max";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.SlateGray;
+            this.label18.Location = new System.Drawing.Point(157, 263);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(23, 13);
+            this.label18.TabIndex = 15;
+            this.label18.Text = "min";
+            // 
+            // idxTo_Box_riken
+            // 
+            this.idxTo_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.idxTo_Box_riken.Location = new System.Drawing.Point(186, 352);
+            this.idxTo_Box_riken.Name = "idxTo_Box_riken";
+            this.idxTo_Box_riken.Size = new System.Drawing.Size(81, 20);
+            this.idxTo_Box_riken.TabIndex = 37;
+            // 
+            // chargeMin_Box_riken
+            // 
+            this.chargeMin_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.chargeMin_Box_riken.Location = new System.Drawing.Point(157, 279);
+            this.chargeMin_Box_riken.Name = "chargeMin_Box_riken";
+            this.chargeMin_Box_riken.Size = new System.Drawing.Size(38, 20);
+            this.chargeMin_Box_riken.TabIndex = 32;
+            this.chargeMin_Box_riken.TextChanged += new System.EventHandler(this.chargeMin_Box_riken_TextChanged);
+            // 
+            // idxFrom_Box_riken
+            // 
+            this.idxFrom_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.idxFrom_Box_riken.Location = new System.Drawing.Point(96, 352);
+            this.idxFrom_Box_riken.Name = "idxFrom_Box_riken";
+            this.idxFrom_Box_riken.Size = new System.Drawing.Size(81, 20);
+            this.idxFrom_Box_riken.TabIndex = 36;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label19.Location = new System.Drawing.Point(6, 317);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(33, 13);
+            this.label19.TabIndex = 17;
+            this.label19.Text = "Index";
+            // 
+            // idxPr_Box_riken
+            // 
+            this.idxPr_Box_riken.ForeColor = System.Drawing.Color.Black;
+            this.idxPr_Box_riken.Location = new System.Drawing.Point(6, 352);
+            this.idxPr_Box_riken.Name = "idxPr_Box_riken";
+            this.idxPr_Box_riken.Size = new System.Drawing.Size(81, 20);
+            this.idxPr_Box_riken.TabIndex = 35;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.Color.SlateGray;
+            this.label20.Location = new System.Drawing.Point(6, 336);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(43, 13);
+            this.label20.TabIndex = 18;
+            this.label20.Text = "primary ";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.SlateGray;
+            this.label21.Location = new System.Drawing.Point(96, 336);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(41, 13);
+            this.label21.TabIndex = 19;
+            this.label21.Text = "internal";
+            // 
             // calc_Btn
             // 
             this.calc_Btn.BackColor = System.Drawing.Color.MidnightBlue;
@@ -1297,7 +1827,7 @@
             this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(240, 17);
+            this.insert_Btn.Location = new System.Drawing.Point(263, 17);
             this.insert_Btn.Name = "insert_Btn";
             this.insert_Btn.Size = new System.Drawing.Size(138, 30);
             this.insert_Btn.TabIndex = 53;
@@ -1334,9 +1864,9 @@
             // 
             this.factor_panel9.BackColor = System.Drawing.Color.White;
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
-            this.factor_panel9.Location = new System.Drawing.Point(363, 0);
+            this.factor_panel9.Location = new System.Drawing.Point(377, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(406, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(421, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -1357,10 +1887,10 @@
             this.fragListView9.FullRowSelect = true;
             this.fragListView9.GridLines = true;
             this.fragListView9.HideSelection = false;
-            this.fragListView9.Location = new System.Drawing.Point(363, 37);
+            this.fragListView9.Location = new System.Drawing.Point(377, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(406, 569);
+            this.fragListView9.Size = new System.Drawing.Size(421, 569);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -1373,7 +1903,7 @@
             // 
             // slice_clmn
             // 
-            this.slice_clmn.Text = "slice";
+            this.slice_clmn.Text = "Position";
             // 
             // mz_clmn
             // 
@@ -1381,7 +1911,7 @@
             // 
             // seq_clmn
             // 
-            this.seq_clmn.Text = "sequence";
+            this.seq_clmn.Text = "Formula";
             // 
             // code_clmn
             // 
@@ -1397,9 +1927,9 @@
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.insert_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(363, 606);
+            this.panel1.Location = new System.Drawing.Point(377, 606);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(406, 71);
+            this.panel1.Size = new System.Drawing.Size(421, 71);
             this.panel1.TabIndex = 56;
             // 
             // groupBox1
@@ -1449,7 +1979,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(769, 677);
+            this.ClientSize = new System.Drawing.Size(798, 677);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
             this.Controls.Add(this.panel1);
@@ -1476,8 +2006,12 @@
             this.groupBox3.PerformLayout();
             this.Frag_tab.ResumeLayout(false);
             this.Frag_tab.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip_basic.ResumeLayout(false);
+            this.toolStrip_basic.PerformLayout();
+            this.fragTab_riken.ResumeLayout(false);
+            this.fragTab_riken.PerformLayout();
+            this.toolStrip_riken.ResumeLayout(false);
+            this.toolStrip_riken.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
@@ -1543,7 +2077,7 @@
         private System.Windows.Forms.ColumnHeader seq_clmn;
         private System.Windows.Forms.ColumnHeader code_clmn;
         private System.Windows.Forms.ColumnHeader ppm_clmn;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip_basic;
         private System.Windows.Forms.ToolStripButton check_all_boxBtn;
         private System.Windows.Forms.ToolStripButton uncheck_all_boxBtn;
         private System.Windows.Forms.TabControl FragCalc_TabControl;
@@ -1581,7 +2115,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.TextBox filename_txtBx;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton clear_allBtn;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown thre_numUD;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -1596,5 +2130,42 @@
         private System.Windows.Forms.RadioButton Light_chkBox;
         private System.Windows.Forms.RadioButton heavy_ChkBox;
         private System.Windows.Forms.CheckBox sortIdx_chkBx;
+        private System.Windows.Forms.TabPage fragTab_riken;
+        private System.Windows.Forms.CheckBox sortIdx_chkBx_riken;
+        private System.Windows.Forms.ToolStrip toolStrip_riken;
+        private System.Windows.Forms.ToolStripButton check_all_boxBtn_riken;
+        private System.Windows.Forms.ToolStripButton uncheck_all_boxBtn_riken;
+        private System.Windows.Forms.ToolStripButton clear_allBtn_riken;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox chargeMax_Box_riken;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button chargeAll_Btn_riken;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox mzMax_Box_riken;
+        private System.Windows.Forms.TextBox mzMin_Box_riken;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox idxTo_Box_riken;
+        private System.Windows.Forms.TextBox chargeMin_Box_riken;
+        private System.Windows.Forms.TextBox idxFrom_Box_riken;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox idxPr_Box_riken;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.CheckedListBox w_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox d_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox internal_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox z_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox y_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox c_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox x_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox b_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox a_lstBox_riken;
+        private System.Windows.Forms.CheckedListBox known_lstBox;
+        private System.Windows.Forms.CheckedListBox M_lstBox_riken;
     }
 }
