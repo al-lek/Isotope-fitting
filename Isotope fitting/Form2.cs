@@ -471,9 +471,9 @@ namespace Isotope_fitting
             //deconvolution
             _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
             _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
+            change_state(true);
             //call change state window
             initiate_change_state_form();
-            change_state(true);
         }
 
         #region save load bw
@@ -618,16 +618,25 @@ namespace Isotope_fitting
             if (changed)
             {
                 Clear_all();
-                disp_d.Visible = disp_w.Visible = groupBoxIntensity4.Visible = groupBoxCharge4.Visible = is_riken;
+                disp_d.Visible = disp_w.Visible = groupBoxIntensity4.Visible = groupBoxCharge4.Visible= is_riken;
+                ppm_toolStrip4.Visible = !is_riken;
                 foreach (ToolStrip strip in GetControls(panel2_tab2).OfType<ToolStrip>().Where(l => l.Name.Contains("ppm")))
                 {
-                    if (strip.Name.Contains("_riken")) strip.Visible = is_riken;
-                    else strip.Visible = !is_riken;
+                    foreach (ToolStripButton btn in strip.Items.OfType<ToolStripButton>())
+                    {
+                        if(btn.Name.Contains("ppm_B_") || btn.Name.Contains("w")|| btn.Name.Contains("d"))btn.Visible=is_riken;
+                        if (is_riken && btn.Text.Contains("NH3")) { btn.Text = btn.Text.Replace("NH3","B()"); }
+                        if (is_riken && btn.Text.Contains("internal a")) { btn.Text = btn.Text.Replace("internal a", "internal"); }
+                        if (!is_riken && btn.Text.Contains("internal")&&!btn.Text.Contains("internal a")) { btn.Text = btn.Text.Replace("internal", "internal a"); }
+                        if (!is_riken && btn.Visible && btn.Text.Contains("B()")) { btn.Text = btn.Text.Replace("B()", "NH3"); }
+                    }
                 }
                 if (is_riken)
                 {
                     //isoplot display checkboxes
-                    disp_x.ForeColor = Color.DodgerBlue; disp_y.ForeColor = Color.Tomato; disp_z.ForeColor = Color.HotPink;
+                    disp_x.ForeColor = ppm_x.ForeColor= ppm_x_H2O.ForeColor = ppm_x_NH3.ForeColor = Color.DodgerBlue;
+                    disp_y.ForeColor = ppm_y.ForeColor = ppm_y_H2O.ForeColor = ppm_y_NH3.ForeColor = Color.Tomato;
+                    disp_z.ForeColor = ppm_z.ForeColor = ppm_z_H2O.ForeColor = ppm_z_NH3.ForeColor = Color.HotPink;
                     //charge diagramms
                     down1_Btn.Text = "w"; down2_Btn.Text = "x"; down3_Btn.Text = "y";
                     ax_chBx.Text = "a-w"; by_chBx.Text = "b-x"; cz_chBx.Text = "c-y"; intA_chBx.Text = "d-z"; intB_chBx.Text = "internal";
@@ -637,7 +646,9 @@ namespace Isotope_fitting
                 else
                 {
                     //isoplot display checkboxes
-                    disp_x.ForeColor = Color.LimeGreen; disp_y.ForeColor = Color.DodgerBlue; disp_z.ForeColor = Color.Tomato;
+                    disp_x.ForeColor = ppm_x.ForeColor = ppm_x_H2O.ForeColor = ppm_x_NH3.ForeColor = Color.LimeGreen;
+                    disp_y.ForeColor = ppm_y.ForeColor = ppm_y_H2O.ForeColor = ppm_y_NH3.ForeColor = Color.DodgerBlue;
+                    disp_z.ForeColor = ppm_z.ForeColor = ppm_z_H2O.ForeColor = ppm_z_NH3.ForeColor = Color.Tomato;
                     //charge diagramms
                     down1_Btn.Text = "x"; down2_Btn.Text = "y"; down3_Btn.Text = "z";
                     ax_chBx.Text = "a-x"; by_chBx.Text = "b-y"; cz_chBx.Text = "c-y"; intA_chBx.Text = "internal a"; intB_chBx.Text = "internal b";
@@ -14008,8 +14019,5 @@ namespace Isotope_fitting
         {
 
         }
-
-        
-        
     }
 }
