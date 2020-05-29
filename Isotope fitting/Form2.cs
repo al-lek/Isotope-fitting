@@ -471,14 +471,12 @@ namespace Isotope_fitting
             //deconvolution
             _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
             _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
-            ////call change state window
-            //initiate_change_state_form();
+            //call change state window
+            initiate_change_state_form();
             change_state(true);
         }
 
-
         #region save load bw
-
         void _bw_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
@@ -552,7 +550,6 @@ namespace Isotope_fitting
             }
         }
         #endregion
-
         private void Form2_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
@@ -568,7 +565,6 @@ namespace Isotope_fitting
                 SendMessage(frag_tree.Handle, WM_HSCROLL, SB_LEFT, 0);
             }
         }
-
         /// <summary>
         /// TreeView class that disables double click in checkboxes
         /// </summary>
@@ -622,7 +618,7 @@ namespace Isotope_fitting
             if (changed)
             {
                 Clear_all();
-                disp_d.Visible = disp_w.Visible = groupBox_dz.Visible = groupBox_dz_charge.Visible = is_riken;
+                disp_d.Visible = disp_w.Visible = groupBoxIntensity4.Visible = groupBoxCharge4.Visible = is_riken;
                 foreach (ToolStrip strip in GetControls(panel2_tab2).OfType<ToolStrip>().Where(l => l.Name.Contains("ppm")))
                 {
                     if (strip.Name.Contains("_riken")) strip.Visible = is_riken;
@@ -633,7 +629,7 @@ namespace Isotope_fitting
                     //isoplot display checkboxes
                     disp_x.ForeColor = Color.DodgerBlue; disp_y.ForeColor = Color.Tomato; disp_z.ForeColor = Color.HotPink;
                     //charge diagramms
-                    x_Btn.Text = "w"; y_Btn.Text = "x"; z_Btn.Text = "y";
+                    down1_Btn.Text = "w"; down2_Btn.Text = "x"; down3_Btn.Text = "y";
                     ax_chBx.Text = "a-w"; by_chBx.Text = "b-x"; cz_chBx.Text = "c-y"; intA_chBx.Text = "d-z"; intB_chBx.Text = "internal";
                     ax_chBxCopy1.Text = "a-w"; by_chBxCopy1.Text = "b-x"; cz_chBxCopy1.Text = "c-y"; intA_chBxCopy1.Text = "d-z"; intB_chBxCopy1.Text = "internal";
                     ax_chBxCopy2.Text = "a-w"; by_chBxCopy2.Text = "b-x"; cz_chBxCopy2.Text = "c-y"; intA_chBxCopy2.Text = "d-z"; intB_chBxCopy2.Text = "internal";
@@ -643,7 +639,7 @@ namespace Isotope_fitting
                     //isoplot display checkboxes
                     disp_x.ForeColor = Color.LimeGreen; disp_y.ForeColor = Color.DodgerBlue; disp_z.ForeColor = Color.Tomato;
                     //charge diagramms
-                    x_Btn.Text = "x"; y_Btn.Text = "y"; z_Btn.Text = "z";
+                    down1_Btn.Text = "x"; down2_Btn.Text = "y"; down3_Btn.Text = "z";
                     ax_chBx.Text = "a-x"; by_chBx.Text = "b-y"; cz_chBx.Text = "c-y"; intA_chBx.Text = "internal a"; intB_chBx.Text = "internal b";
                     ax_chBxCopy1.Text = "a-x"; by_chBxCopy1.Text = "b-y"; cz_chBxCopy1.Text = "c-z"; intA_chBxCopy1.Text = "internal a"; intB_chBxCopy1.Text = "internal b";
                     ax_chBxCopy2.Text = "a-x"; by_chBxCopy2.Text = "b-y"; cz_chBxCopy2.Text = "c-z"; intA_chBxCopy2.Text = "internal a"; intB_chBxCopy2.Text = "internal b";
@@ -8893,7 +8889,6 @@ namespace Isotope_fitting
         {
             check_un_check_ppm(true);
         }
-
         private void ppm_uncheckBtn_Click(object sender, EventArgs e)
         {
             check_un_check_ppm(false);
@@ -10711,6 +10706,19 @@ namespace Isotope_fitting
             cz_plot.MouseDoubleClick += (s, e) => { cz_model.ResetAllAxes(); cz_plot.InvalidatePlot(true); };
             cz_plot.Controller = new CustomPlotController();
 
+            // cz plot
+            if (dz_plot != null) dz_plot.Dispose();
+            dz_plot = new PlotView() { Name = "dz_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
+            dz_Pnl.Controls.Add(dz_plot);
+            PlotModel dz_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "d - z  fragments", TitleColor = OxyColors.DeepPink };
+            dz_plot.Model = dz_model;
+            var linearAxis115 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
+            dz_model.Axes.Add(linearAxis115);
+            var linearAxis116 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12, MinorGridlineStyle = Xminor_grid12, TickStyle = X_tick12, MinimumMinorStep = 1.0, MajorStep = x_majorStep12, MinorStep = x_minorStep12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            dz_model.Axes.Add(linearAxis116);
+            dz_plot.MouseDoubleClick += (s, e) => { dz_model.ResetAllAxes(); dz_plot.InvalidatePlot(true); };
+            dz_plot.Controller = new CustomPlotController();
+
             // ax charge plot
             if (axCharge_plot != null) axCharge_plot.Dispose();
             axCharge_plot = new PlotView() { Name = "axCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
@@ -10750,6 +10758,18 @@ namespace Isotope_fitting
             czCharge_plot.MouseDoubleClick += (s, e) => { czCharge_model.ResetAllAxes(); czCharge_plot.InvalidatePlot(true); };
             czCharge_plot.Controller = new CustomPlotController();
 
+            // dz charge plot
+            if (dzCharge_plot != null) dzCharge_plot.Dispose();
+            dzCharge_plot = new PlotView() { Name = "dzCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
+            czCharge_Pnl.Controls.Add(dzCharge_plot);
+            PlotModel dzCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "d - z  fragments", TitleColor = OxyColors.DeepPink };
+            dzCharge_plot.Model = dzCharge_model;
+            var linearAxis119 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_charge_grid12, MinorGridlineStyle = Yminor_charge_grid12, TickStyle = Y_charge_tick12, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
+            dzCharge_model.Axes.Add(linearAxis119);
+            var linearAxis210 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_charge_grid12, MinorGridlineStyle = Xminor_charge_grid12, TickStyle = X_charge_tick12, MinimumMinorStep = 1.0, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            dzCharge_model.Axes.Add(linearAxis210);
+            dzCharge_plot.MouseDoubleClick += (s, e) => { dzCharge_model.ResetAllAxes(); dzCharge_plot.InvalidatePlot(true); };
+            dzCharge_plot.Controller = new CustomPlotController();
             //internal fragments plots
             // index plot
             if (index_plot != null) index_plot.Dispose();
@@ -10831,19 +10851,22 @@ namespace Isotope_fitting
             axSave_Btn.Click += (s, e) => { export_copy_plot(false, ax_plot); }; axCopy_Btn.Click += (s, e) => { export_copy_plot(true, ax_plot); };
             bySave_Btn.Click += (s, e) => { export_copy_plot(false, by_plot); }; byCopy_Btn.Click += (s, e) => { export_copy_plot(true, by_plot); };
             czSave_Btn.Click += (s, e) => { export_copy_plot(false, cz_plot); }; czCopy_Btn.Click += (s, e) => { export_copy_plot(true, cz_plot); };
+            dzSave_Btn.Click += (s, e) => { export_copy_plot(false, dz_plot); }; dzCopy_Btn.Click += (s, e) => { export_copy_plot(true, dz_plot); };
 
             axChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, axCharge_plot); }; axChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, axCharge_plot); };
             byChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, byCharge_plot); }; byChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, byCharge_plot); };
             czChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, czCharge_plot); }; czChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, czCharge_plot); };
-
-
-            a_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
-            b_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
-            c_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
-            x_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
-            y_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
-            z_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
-
+            dzChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, dzCharge_plot); }; dzChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, dzCharge_plot); };
+            
+            up1_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            up2_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            up3_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            up4_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            down1_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            down2_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            down3_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            down4_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
+            
             //sequence
             seqSave_Btn.Click += (s, e) => { export_panel(false, sequence_Pnl); };
             seqCopy_Btn.Click += (s, e) => { export_panel(true, sequence_Pnl); };
@@ -10902,788 +10925,38 @@ namespace Isotope_fitting
         }
 
         private void initialize_plot_tabs()
-        {
-            string s_ext = "";
-            string s_chain = Peptide;
-            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
-            {
-                foreach (SequenceTab seq in sequenceList)
-                {
-                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
-                    {
-                        s_chain = seq.Sequence; s_ext = seq.Extension; break;
-                    }
-                }
-            }
-
-            #region initialize graphics
+        {           
             if (ax_plot.Model.Series != null) { ppm_plot.Model.Series.Clear(); ax_plot.Model.Series.Clear(); by_plot.Model.Series.Clear(); cz_plot.Model.Series.Clear(); axCharge_plot.Model.Series.Clear(); byCharge_plot.Model.Series.Clear(); czCharge_plot.Model.Series.Clear(); }
 
             if (index_plot.Model.Series != null) { ppm_plot.Model.Series.Clear(); index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
-            //
-            LinearBarSeries a_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Green, FillColor = OxyColors.Green, BarWidth = bar_width };
-            LinearBarSeries x_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.LimeGreen, FillColor = OxyColors.LimeGreen, BarWidth = bar_width };
-            LinearBarSeries b_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Blue, FillColor = OxyColors.Blue, BarWidth = bar_width };
-            LinearBarSeries y_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.DodgerBlue, FillColor = OxyColors.DodgerBlue, BarWidth = bar_width };
-            LinearBarSeries c_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Firebrick, FillColor = OxyColors.Firebrick, BarWidth = bar_width };
-            LinearBarSeries z_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = OxyColors.Tomato, FillColor = OxyColors.Tomato, BarWidth = bar_width };
-            ax_plot.Model.Series.Add(a_bar); ax_plot.Model.Series.Add(x_bar); by_plot.Model.Series.Add(b_bar); by_plot.Model.Series.Add(y_bar); cz_plot.Model.Series.Add(c_bar); cz_plot.Model.Series.Add(z_bar);
-            ////
-            ////ScatterSeries ppm_series = new ScatterSeries() { MarkerSize = 2, Title = "ppm_series", MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Teal };
-            //ScatterSeries ppm_a_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_a_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
-            //ScatterSeries ppm_b_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_b_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
-            //ScatterSeries ppm_c_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_c_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
-            //ScatterSeries ppm_x_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_x_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
-            //ScatterSeries ppm_y_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_y_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
-            //ScatterSeries ppm_z_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_z_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
-            //ScatterSeries ppm_intA_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "int.a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "int.a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "int.a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "int.a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "int.a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "int.a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "int.a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "int.a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "int.a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intA_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "int.a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DarkViolet).ToOxyColor() };
-            //ScatterSeries ppm_intB_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "int.b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "int.b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "int.b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "int.b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "int.b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "int.b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "int.b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "int.b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "int.b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_intB_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "int.b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.MediumOrchid).ToOxyColor() };
-            //ScatterSeries ppm_M_10 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 2, Title = "M 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_100 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 3, Title = "M 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_1000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 4, Title = "M 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_10000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 5, Title = "M 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_100000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 6, Title = "M 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_1000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 7, Title = "M 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_10000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 8, Title = "M 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_100000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 9, Title = "M 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_1000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 10, Title = "M 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Crimson).ToOxyColor() };
-            //ScatterSeries ppm_M_10000000000 = new ScatterSeries() { MarkerSize = ppm_bullet_size * 11, Title = "M 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Crimson).ToOxyColor() };
 
-            //
-            ScatterSeries a_10 = new ScatterSeries() { MarkerSize = 2, Title = "a 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Green).ToOxyColor() };
-            ScatterSeries a_100 = new ScatterSeries() { MarkerSize = 3, Title = "a 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000 = new ScatterSeries() { MarkerSize = 4, Title = "a 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000 = new ScatterSeries() { MarkerSize = 5, Title = "a 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Green).ToOxyColor() };
-            ScatterSeries a_100000 = new ScatterSeries() { MarkerSize = 6, Title = "a 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "a 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "a 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Green).ToOxyColor() };
-            ScatterSeries a_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "a 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Green).ToOxyColor() };
-            ScatterSeries a_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "a 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Green).ToOxyColor() };
-            ScatterSeries a_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "a 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Green).ToOxyColor() };
-            ScatterSeries b_10 = new ScatterSeries() { MarkerSize = 2, Title = "b 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100 = new ScatterSeries() { MarkerSize = 3, Title = "b 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000 = new ScatterSeries() { MarkerSize = 4, Title = "b 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000 = new ScatterSeries() { MarkerSize = 5, Title = "b 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100000 = new ScatterSeries() { MarkerSize = 6, Title = "b 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "b 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "b 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Blue).ToOxyColor() };
-            ScatterSeries b_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "b 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Blue).ToOxyColor() };
-            ScatterSeries b_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "b 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Blue).ToOxyColor() };
-            ScatterSeries b_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "b 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Blue).ToOxyColor() };
-            ScatterSeries c_10 = new ScatterSeries() { MarkerSize = 2, Title = "c 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100 = new ScatterSeries() { MarkerSize = 3, Title = "c 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000 = new ScatterSeries() { MarkerSize = 4, Title = "c 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000 = new ScatterSeries() { MarkerSize = 5, Title = "c 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100000 = new ScatterSeries() { MarkerSize = 6, Title = "c 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "c 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "c 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "c 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "c 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Firebrick).ToOxyColor() };
-            ScatterSeries c_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "c 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Firebrick).ToOxyColor() };
-            ScatterSeries x_10 = new ScatterSeries() { MarkerSize = 2, Title = "x 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100 = new ScatterSeries() { MarkerSize = 3, Title = "x 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000 = new ScatterSeries() { MarkerSize = 4, Title = "x 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000 = new ScatterSeries() { MarkerSize = 5, Title = "x 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100000 = new ScatterSeries() { MarkerSize = 6, Title = "x 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "x 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "x 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "x 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "x 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries x_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "x 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.LimeGreen).ToOxyColor() };
-            ScatterSeries y_10 = new ScatterSeries() { MarkerSize = 2, Title = "y 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100 = new ScatterSeries() { MarkerSize = 3, Title = "y 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000 = new ScatterSeries() { MarkerSize = 4, Title = "y 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000 = new ScatterSeries() { MarkerSize = 5, Title = "y 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100000 = new ScatterSeries() { MarkerSize = 6, Title = "y 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "y 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "y 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "y 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "y 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries y_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "y 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.DodgerBlue).ToOxyColor() };
-            ScatterSeries z_10 = new ScatterSeries() { MarkerSize = 2, Title = "z 10^1", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(255, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100 = new ScatterSeries() { MarkerSize = 3, Title = "z 10^2", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(230, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000 = new ScatterSeries() { MarkerSize = 4, Title = "z 10^3", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(205, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000 = new ScatterSeries() { MarkerSize = 5, Title = "z 10^4", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(180, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100000 = new ScatterSeries() { MarkerSize = 6, Title = "z 10^5", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(155, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000000 = new ScatterSeries() { MarkerSize = 7, Title = "z 10^6", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(130, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000000 = new ScatterSeries() { MarkerSize = 8, Title = "z 10^7", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(105, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_100000000 = new ScatterSeries() { MarkerSize = 9, Title = "z 10^8", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(80, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_1000000000 = new ScatterSeries() { MarkerSize = 10, Title = "z 10^9", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(55, Color.Tomato).ToOxyColor() };
-            ScatterSeries z_10000000000 = new ScatterSeries() { MarkerSize = 11, Title = "z 10^10", MarkerType = MarkerType.Circle, MarkerFill = Color.FromArgb(30, Color.Tomato).ToOxyColor() };
-            #endregion
-
-            #region initialize lists
-            int iondraw_count = IonDraw.Count;
-            double max_i = 0.0;
-            List<CustomDataPoint> points_index = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_indexTo = new List<CustomDataPoint>();
-            List<double[]> merged_a = new List<double[]>();
-            List<double[]> merged_b = new List<double[]>();
-            List<double[]> merged_c = new List<double[]>();
-            List<double[]> merged_x = new List<double[]>();
-            List<double[]> merged_y = new List<double[]>();
-            List<double[]> merged_z = new List<double[]>();
-            List<ion> charge_merged_a = new List<ion>();
-            List<ion> charge_merged_b = new List<ion>();
-            List<ion> charge_merged_c = new List<ion>();
-            List<ion> charge_merged_x = new List<ion>();
-            List<ion> charge_merged_y = new List<ion>();
-            List<ion> charge_merged_z = new List<ion>();
-            if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
-            double max_a = 5000, max_b = 5000, max_c = 5000;
-            double maxcharge_a = 0, maxcharge_b = 0, maxcharge_c = 0;
-            ////List<CustomDataPoint> ppmpoints = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_a_10 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_100 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_a_10000000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_b_10 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_100 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_b_10000000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_c_10 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_100 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_c_10000000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_x_10 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_100 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_x_10000000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_y_10 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_100 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_y_10000000000 = new List<CustomDataPoint>();
-            List<CustomDataPoint> points_z_10 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_100 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> points_z_10000000000 = new List<CustomDataPoint>();
-
-            ////ppm points
-            //List<CustomDataPoint> ppm_points_a_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_a_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_b_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_b_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_c_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_c_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_x_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_x_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_y_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_y_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_z_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_z_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_intB_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intB_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_intA_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_intA_10000000000 = new List<CustomDataPoint>();
-            //List<CustomDataPoint> ppm_points_M_10 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_100000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_1000000000 = new List<CustomDataPoint>(); List<CustomDataPoint> ppm_points_M_10000000000 = new List<CustomDataPoint>();
-            #endregion
-
-            CI ion_comp = new CI();
-            IonDraw.Sort(ion_comp);
-            //fill the list with the correct ions            
-            for (int i = 0; i < iondraw_count; i++)
+            if (dz_plot.Model.Series != null){dz_plot.Model.Series.Clear();dzCharge_plot.Model.Series.Clear();}
+            if (is_riken)
             {
-                ion nn = IonDraw[i];
-                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("a", nn.SortIdx, s_ext))
-                    {
-                        if (merged_a.Count == 0 || (int)merged_a.Last()[0] != nn.SortIdx)
-                        {
-                            merged_a.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                            charge_merged_a.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
-                        }
-                        else
-                        {
-                            merged_a.Last()[1] += nn.Max_intensity;
-                            if (charge_merged_a.Last().Charge == nn.Charge) { charge_merged_a.Last().Max_intensity += nn.Max_intensity; charge_merged_a.Last().Mz += " , " + nn.Mz; charge_merged_a.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_a.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
-                        }
-                        if (max_a < merged_a.Last()[1]) { max_a = merged_a.Last()[1]; }
-                        if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("b", nn.SortIdx, s_ext))
-                    {
-                        if (merged_b.Count == 0 || (int)merged_b.Last()[0] != nn.SortIdx)
-                        {
-                            merged_b.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                            charge_merged_b.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
-                        }
-                        else
-                        {
-                            merged_b.Last()[1] += nn.Max_intensity;
-                            if (charge_merged_b.Last().Charge == nn.Charge) { charge_merged_b.Last().Max_intensity += nn.Max_intensity; charge_merged_b.Last().Mz += " , " + nn.Mz; charge_merged_b.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_b.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
-                        }
-                        if (max_b < merged_b.Last()[1]) { max_b = merged_b.Last()[1]; }
-                        if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("c", nn.SortIdx, s_ext))
-                    {
-                        if (merged_c.Count == 0 || (int)merged_c.Last()[0] != nn.SortIdx)
-                        {
-                            merged_c.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                            charge_merged_c.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
-                        }
-                        else
-                        {
-                            merged_c.Last()[1] += nn.Max_intensity;
-                            if (charge_merged_c.Last().Charge == nn.Charge) { charge_merged_c.Last().Max_intensity += nn.Max_intensity; charge_merged_c.Last().Mz += " , " + nn.Mz; charge_merged_c.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_c.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
-                        }
-                        if (max_c < merged_c.Last()[1]) { max_c = merged_c.Last()[1]; }
-                        if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("x", nn.SortIdx, s_ext))
-                    {
-                        if (merged_x.Count == 0 || (int)merged_x.Last()[0] != nn.SortIdx)
-                        {
-                            merged_x.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
-                            charge_merged_x.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
-                        }
-                        else
-                        {
-                            merged_x.Last()[1] -= nn.Max_intensity;
-                            if (charge_merged_x.Last().Charge == nn.Charge) { charge_merged_x.Last().Max_intensity += nn.Max_intensity; charge_merged_x.Last().Mz += " , " + nn.Mz; charge_merged_x.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_x.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
-                        }
-                        if (max_a < -merged_x.Last()[1]) { max_a = -merged_x.Last()[1]; }
-                        if (maxcharge_a < nn.Charge) { maxcharge_a = nn.Charge; }
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("y", nn.SortIdx, s_ext))
-                    {
-                        if (merged_y.Count == 0 || (int)merged_y.Last()[0] != nn.SortIdx)
-                        {
-                            merged_y.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
-                            charge_merged_y.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
-                        }
-                        else
-                        {
-                            merged_y.Last()[1] -= nn.Max_intensity;
-                            if (charge_merged_y.Last().Charge == nn.Charge) { charge_merged_y.Last().Max_intensity += nn.Max_intensity; charge_merged_y.Last().Mz += " , " + nn.Mz; charge_merged_y.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_y.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
-                        }
-                        if (max_b < -merged_y.Last()[1]) { max_b = -merged_y.Last()[1]; }
-                        if (maxcharge_b < nn.Charge) { maxcharge_b = nn.Charge; }
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
-                {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary("z", nn.SortIdx, s_ext))
-                    {
-                        if (merged_z.Count == 0 || (int)merged_z.Last()[0] != nn.SortIdx)
-                        {
-                            merged_z.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
-                            charge_merged_z.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
-                        }
-                        else
-                        {
-                            merged_z.Last()[1] -= nn.Max_intensity;
-                            if (charge_merged_z.Last().Charge == nn.Charge) { charge_merged_z.Last().Max_intensity += nn.Max_intensity; charge_merged_z.Last().Mz += " , " + nn.Mz; charge_merged_z.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_z.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
-                        }
-                        if (max_c < -merged_z.Last()[1]) { max_c = -merged_z.Last()[1]; }
-                        if (maxcharge_c < nn.Charge) { maxcharge_c = nn.Charge; }
-                    }
-                }
-                else if (nn.Ion_type.StartsWith("int"))
-                {
-                    if (nn.Ion_type.Contains("b"))
-                    {
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = Color.Blue, Max_intensity = nn.Max_intensity });
-                    }
-                    else
-                    {
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = Color.Green, Charge = nn.Charge, Max_intensity = nn.Max_intensity });
-                    }
-                }
-            }
-            foreach (ion nn in charge_merged_a)
-            {
-                if (nn.Max_intensity / 10 < 10) { points_a_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100 < 10) { points_a_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000 < 10) { points_a_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000 < 10) { points_a_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000 < 10) { points_a_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000 < 10) { points_a_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000000 < 10) { points_a_10000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000000 < 10) { points_a_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000000 < 10) { points_a_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else { points_a_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-            }
-            foreach (ion nn in charge_merged_b)
-            {
-                if (nn.Max_intensity / 10 < 10) { points_b_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100 < 10) { points_b_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000 < 10) { points_b_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000 < 10) { points_b_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000 < 10) { points_b_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000 < 10) { points_b_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000000 < 10) { points_b_10000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000000 < 10) { points_b_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000000 < 10) { points_b_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else { points_b_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-            }
-            foreach (ion nn in charge_merged_c)
-            {
-                if (nn.Max_intensity / 10 < 10) { points_c_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100 < 10) { points_c_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000 < 10) { points_c_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000 < 10) { points_c_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000 < 10) { points_c_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000 < 10) { points_c_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000000 < 10) { points_c_10000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000000 < 10) { points_c_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000000 < 10) { points_c_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else { points_c_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-            }
-            foreach (ion nn in charge_merged_x)
-            {
-                if (nn.Max_intensity / 10 < 10) { points_x_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100 < 10) { points_x_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000 < 10) { points_x_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000 < 10) { points_x_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000 < 10) { points_x_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000 < 10) { points_x_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000000 < 10) { points_x_10000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000000 < 10) { points_x_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000000 < 10) { points_x_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else { points_x_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-            }
-            foreach (ion nn in charge_merged_y)
-            {
-                if (nn.Max_intensity / 10 < 10) { points_y_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100 < 10) { points_y_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000 < 10) { points_y_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000 < 10) { points_y_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000 < 10) { points_y_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000 < 10) { points_y_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000000 < 10) { points_y_10000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000000 < 10) { points_y_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000000 < 10) { points_y_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else { points_y_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-            }
-            foreach (ion nn in charge_merged_z)
-            {
-                if (nn.Max_intensity / 10 < 10) { points_z_10.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100 < 10) { points_z_100.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000 < 10) { points_z_1000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000 < 10) { points_z_10000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000 < 10) { points_z_100000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000 < 10) { points_z_1000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 10000000 < 10) { points_z_10000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 100000000 < 10) { points_z_100000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else if (nn.Max_intensity / 1000000000 < 10) { points_z_1000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-                else { points_z_10000000000.Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name)); }
-            }
-            ppm_plot_init(ppm_plot);          
-
-            #region  charge plots
-            a_10.ItemsSource = points_a_10; a_100.ItemsSource = points_a_100; a_1000.ItemsSource = points_a_1000; a_10000.ItemsSource = points_a_10000; a_100000.ItemsSource = points_a_100000; a_1000000.ItemsSource = points_a_1000000; a_10000000.ItemsSource = points_a_10000000; a_100000000.ItemsSource = points_a_100000000; a_1000000000.ItemsSource = points_a_1000000000; a_10000000000.ItemsSource = points_a_10000000000;
-            b_10.ItemsSource = points_b_10; b_100.ItemsSource = points_b_100; b_1000.ItemsSource = points_b_1000; b_10000.ItemsSource = points_b_10000; b_100000.ItemsSource = points_b_100000; b_1000000.ItemsSource = points_b_1000000; b_10000000.ItemsSource = points_b_10000000; b_100000000.ItemsSource = points_b_100000000; b_1000000000.ItemsSource = points_b_1000000000; b_10000000000.ItemsSource = points_b_10000000000;
-            c_10.ItemsSource = points_c_10; c_100.ItemsSource = points_c_100; c_1000.ItemsSource = points_c_1000; c_10000.ItemsSource = points_c_10000; c_100000.ItemsSource = points_c_100000; c_1000000.ItemsSource = points_c_1000000; c_10000000.ItemsSource = points_c_10000000; c_100000000.ItemsSource = points_c_100000000; c_1000000000.ItemsSource = points_c_1000000000; c_10000000000.ItemsSource = points_c_10000000000;
-            x_10.ItemsSource = points_x_10; x_100.ItemsSource = points_x_100; x_1000.ItemsSource = points_x_1000; x_10000.ItemsSource = points_x_10000; x_100000.ItemsSource = points_x_100000; x_1000000.ItemsSource = points_x_1000000; x_10000000.ItemsSource = points_x_10000000; x_100000000.ItemsSource = points_x_100000000; x_1000000000.ItemsSource = points_x_1000000000; x_10000000000.ItemsSource = points_x_10000000000;
-            y_10.ItemsSource = points_y_10; y_100.ItemsSource = points_y_100; y_1000.ItemsSource = points_y_1000; y_10000.ItemsSource = points_y_10000; y_100000.ItemsSource = points_y_100000; y_1000000.ItemsSource = points_y_1000000; y_10000000.ItemsSource = points_y_10000000; y_100000000.ItemsSource = points_y_100000000; y_1000000000.ItemsSource = points_y_1000000000; y_10000000000.ItemsSource = points_y_10000000000;
-            z_10.ItemsSource = points_z_10; z_100.ItemsSource = points_z_100; z_1000.ItemsSource = points_z_1000; z_10000.ItemsSource = points_z_10000; z_100000.ItemsSource = points_z_100000; z_1000000.ItemsSource = points_z_1000000; z_10000000.ItemsSource = points_z_10000000; z_100000000.ItemsSource = points_z_100000000; z_1000000000.ItemsSource = points_z_1000000000; z_10000000000.ItemsSource = points_z_10000000000;
-
-            a_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; a_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}";
-            b_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; b_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}";
-            c_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; c_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}";
-            x_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; x_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}";
-            y_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; y_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}";
-            z_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; z_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}";
-
-            if (a_Btn.Checked && x_Btn.Checked)
-            {
-                axCharge_plot.Model.Title = "a - x  fragments";
-                if (points_a_10000000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000000);
-                if (points_x_10000000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000000);
-                if (points_a_1000000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000000);
-                if (points_x_1000000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000000);
-                if (points_a_100000000.Count > 0) axCharge_plot.Model.Series.Add(a_100000000);
-                if (points_x_100000000.Count > 0) axCharge_plot.Model.Series.Add(x_100000000);
-                if (points_a_10000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000);
-                if (points_x_10000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000);
-                if (points_a_1000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000);
-                if (points_x_1000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
-                if (points_a_100000.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
-                if (points_x_100000.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
-                if (points_a_10000.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
-                if (points_x_10000.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
-                if (points_a_1000.Count > 0) axCharge_plot.Model.Series.Add(a_1000);
-                if (points_x_1000.Count > 0) axCharge_plot.Model.Series.Add(x_1000);
-                if (points_a_100.Count > 0) axCharge_plot.Model.Series.Add(a_100);
-                if (points_x_100.Count > 0) axCharge_plot.Model.Series.Add(x_100);
-                if (points_a_10.Count > 0) axCharge_plot.Model.Series.Add(a_10);
-                if (points_x_10.Count > 0) axCharge_plot.Model.Series.Add(x_10);
-            }
-            else if (a_Btn.Checked)
-            {
-                axCharge_plot.Model.Title = "a fragments";
-                if (points_a_10000000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000000);
-                if (points_a_1000000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000000);
-                if (points_a_100000000.Count > 0) axCharge_plot.Model.Series.Add(a_100000000);
-                if (points_a_10000000.Count > 0) axCharge_plot.Model.Series.Add(a_10000000);
-                if (points_a_1000000.Count > 0) axCharge_plot.Model.Series.Add(a_1000000);
-                if (points_a_100000.Count > 0) axCharge_plot.Model.Series.Add(a_100000);
-                if (points_a_10000.Count > 0) axCharge_plot.Model.Series.Add(a_10000);
-                if (points_a_1000.Count > 0) axCharge_plot.Model.Series.Add(a_1000);
-                if (points_a_100.Count > 0) axCharge_plot.Model.Series.Add(a_100);
-                if (points_a_10.Count > 0) axCharge_plot.Model.Series.Add(a_10);
-            }
-            else if (x_Btn.Checked)
-            {
-                axCharge_plot.Model.Title = "x fragments";
-                if (points_x_10000000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000000);
-                if (points_x_1000000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000000);
-                if (points_x_100000000.Count > 0) axCharge_plot.Model.Series.Add(x_100000000);
-                if (points_x_10000000.Count > 0) axCharge_plot.Model.Series.Add(x_10000000);
-                if (points_x_1000000.Count > 0) axCharge_plot.Model.Series.Add(x_1000000);
-                if (points_x_100000.Count > 0) axCharge_plot.Model.Series.Add(x_100000);
-                if (points_x_10000.Count > 0) axCharge_plot.Model.Series.Add(x_10000);
-                if (points_x_1000.Count > 0) axCharge_plot.Model.Series.Add(x_1000);
-                if (points_x_100.Count > 0) axCharge_plot.Model.Series.Add(x_100);
-                if (points_x_10.Count > 0) axCharge_plot.Model.Series.Add(x_10);
+                charge_plot_init(axCharge_plot, "a", "w", 1, Color.Green, Color.LimeGreen);
+                charge_plot_init(byCharge_plot, "b", "x", 2, Color.Blue, Color.DodgerBlue);
+                charge_plot_init(czCharge_plot, "c", "y", 3, Color.Firebrick, Color.Tomato);
+                charge_plot_init(dzCharge_plot, "d", "z", 4, Color.DeepPink, Color.HotPink);
+                intensity_plot_init(ax_plot, "a", "w", 1, OxyColors.Green, OxyColors.LimeGreen);
+                intensity_plot_init(by_plot, "b", "x", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                intensity_plot_init(cz_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                intensity_plot_init(dz_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
+                ppm_plot_init(ppm_plot);
+                create_internal_plot(index_plot, indexIntensity_plot, 1, Color.Green, Color.Blue);
+                create_internal_plot(indexto_plot, indextoIntensity_plot, 2, Color.Green, Color.Blue);
             }
             else
             {
-                axCharge_plot.Model.Title = "a - x  fragments";
+                charge_plot_init(axCharge_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
+                charge_plot_init(byCharge_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
+                charge_plot_init(czCharge_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
+                intensity_plot_init(ax_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
+                intensity_plot_init(by_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                intensity_plot_init(cz_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                ppm_plot_init(ppm_plot);
+                create_internal_plot(index_plot, indexIntensity_plot, 2, Color.Green, Color.Blue);
+                create_internal_plot(indexto_plot, indextoIntensity_plot, 1, Color.Green, Color.Blue);
             }
-            if (b_Btn.Checked && y_Btn.Checked)
-            {
-                byCharge_plot.Model.Title = "b - y  fragments";
-                if (points_b_10000000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000000);
-                if (points_y_10000000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000000);
-                if (points_b_1000000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000000);
-                if (points_y_1000000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000000);
-                if (points_b_100000000.Count > 0) byCharge_plot.Model.Series.Add(b_100000000);
-                if (points_y_100000000.Count > 0) byCharge_plot.Model.Series.Add(y_100000000);
-                if (points_b_10000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000);
-                if (points_y_10000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000);
-                if (points_b_1000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
-                if (points_y_1000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
-                if (points_b_100000.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
-                if (points_y_100000.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
-                if (points_b_10000.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
-                if (points_y_10000.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
-                if (points_b_1000.Count > 0) byCharge_plot.Model.Series.Add(b_1000);
-                if (points_y_1000.Count > 0) byCharge_plot.Model.Series.Add(y_1000);
-                if (points_b_100.Count > 0) byCharge_plot.Model.Series.Add(b_100);
-                if (points_y_100.Count > 0) byCharge_plot.Model.Series.Add(y_100);
-                if (points_b_10.Count > 0) byCharge_plot.Model.Series.Add(b_10);
-                if (points_y_10.Count > 0) byCharge_plot.Model.Series.Add(y_10);
-            }
-            else if (b_Btn.Checked)
-            {
-                byCharge_plot.Model.Title = "b  fragments";
-                if (points_b_10000000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000000);
-                if (points_b_1000000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000000);
-                if (points_b_100000000.Count > 0) byCharge_plot.Model.Series.Add(b_100000000);
-                if (points_b_10000000.Count > 0) byCharge_plot.Model.Series.Add(b_10000000);
-                if (points_b_1000000.Count > 0) byCharge_plot.Model.Series.Add(b_1000000);
-                if (points_b_100000.Count > 0) byCharge_plot.Model.Series.Add(b_100000);
-                if (points_b_10000.Count > 0) byCharge_plot.Model.Series.Add(b_10000);
-                if (points_b_1000.Count > 0) byCharge_plot.Model.Series.Add(b_1000);
-                if (points_b_100.Count > 0) byCharge_plot.Model.Series.Add(b_100);
-                if (points_b_10.Count > 0) byCharge_plot.Model.Series.Add(b_10);
-            }
-            else if (y_Btn.Checked)
-            {
-                byCharge_plot.Model.Title = "y  fragments";
-                if (points_y_10000000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000000);
-                if (points_y_1000000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000000);
-                if (points_y_100000000.Count > 0) byCharge_plot.Model.Series.Add(y_100000000);
-                if (points_y_10000000.Count > 0) byCharge_plot.Model.Series.Add(y_10000000);
-                if (points_y_1000000.Count > 0) byCharge_plot.Model.Series.Add(y_1000000);
-                if (points_y_100000.Count > 0) byCharge_plot.Model.Series.Add(y_100000);
-                if (points_y_10000.Count > 0) byCharge_plot.Model.Series.Add(y_10000);
-                if (points_y_1000.Count > 0) byCharge_plot.Model.Series.Add(y_1000);
-                if (points_y_100.Count > 0) byCharge_plot.Model.Series.Add(y_100);
-                if (points_y_10.Count > 0) byCharge_plot.Model.Series.Add(y_10);
-            }
-            else
-            {
-                byCharge_plot.Model.Title = "b - y  fragments";
-            }
-            if (c_Btn.Checked && z_Btn.Checked)
-            {
-                czCharge_plot.Model.Title = "c - z  fragments";
-                if (points_c_10000000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000000);
-                if (points_z_10000000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000000);
-                if (points_c_1000000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000000);
-                if (points_z_1000000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000000);
-                if (points_c_100000000.Count > 0) czCharge_plot.Model.Series.Add(c_100000000);
-                if (points_z_100000000.Count > 0) czCharge_plot.Model.Series.Add(z_100000000);
-                if (points_c_10000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000);
-                if (points_z_10000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000);
-                if (points_c_1000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
-                if (points_z_1000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
-                if (points_c_100000.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
-                if (points_z_100000.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
-                if (points_c_10000.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
-                if (points_z_10000.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
-                if (points_c_1000.Count > 0) czCharge_plot.Model.Series.Add(c_1000);
-                if (points_z_1000.Count > 0) czCharge_plot.Model.Series.Add(z_1000);
-                if (points_c_100.Count > 0) czCharge_plot.Model.Series.Add(c_100);
-                if (points_z_100.Count > 0) czCharge_plot.Model.Series.Add(z_100);
-                if (points_c_10.Count > 0) czCharge_plot.Model.Series.Add(c_10);
-                if (points_z_10.Count > 0) czCharge_plot.Model.Series.Add(z_10);
-            }
-            else if (c_Btn.Checked)
-            {
-                czCharge_plot.Model.Title = "c fragments";
-                if (points_c_10000000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000000);
-                if (points_c_1000000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000000);
-                if (points_c_100000000.Count > 0) czCharge_plot.Model.Series.Add(c_100000000);
-                if (points_c_10000000.Count > 0) czCharge_plot.Model.Series.Add(c_10000000);
-                if (points_c_1000000.Count > 0) czCharge_plot.Model.Series.Add(c_1000000);
-                if (points_c_100000.Count > 0) czCharge_plot.Model.Series.Add(c_100000);
-                if (points_c_10000.Count > 0) czCharge_plot.Model.Series.Add(c_10000);
-                if (points_c_1000.Count > 0) czCharge_plot.Model.Series.Add(c_1000);
-                if (points_c_100.Count > 0) czCharge_plot.Model.Series.Add(c_100);
-                if (points_c_10.Count > 0) czCharge_plot.Model.Series.Add(c_10);
-            }
-            else if (z_Btn.Checked)
-            {
-                czCharge_plot.Model.Title = "z fragments";
-                if (points_z_10000000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000000);
-                if (points_z_1000000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000000);
-                if (points_z_100000000.Count > 0) czCharge_plot.Model.Series.Add(z_100000000);
-                if (points_z_10000000.Count > 0) czCharge_plot.Model.Series.Add(z_10000000);
-                if (points_z_1000000.Count > 0) czCharge_plot.Model.Series.Add(z_1000000);
-                if (points_z_100000.Count > 0) czCharge_plot.Model.Series.Add(z_100000);
-                if (points_z_10000.Count > 0) czCharge_plot.Model.Series.Add(z_10000);
-                if (points_z_1000.Count > 0) czCharge_plot.Model.Series.Add(z_1000);
-                if (points_z_100.Count > 0) czCharge_plot.Model.Series.Add(z_100);
-                if (points_z_10.Count > 0) czCharge_plot.Model.Series.Add(z_10);
-            }
-            else
-            {
-                czCharge_plot.Model.Title = "c - z  fragments";
-            }
-
-            #endregion
-
-            #region intesity plots
-            foreach (double[] pp in merged_a) { (ax_plot.Model.Series[0] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-            foreach (double[] pp in merged_b) { (by_plot.Model.Series[0] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-            foreach (double[] pp in merged_c) { (cz_plot.Model.Series[0] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-            foreach (double[] pp in merged_x) { (ax_plot.Model.Series[1] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-            foreach (double[] pp in merged_y) { (by_plot.Model.Series[1] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-            foreach (double[] pp in merged_z) { (cz_plot.Model.Series[1] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
-
-            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red }; var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            var s1c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red }; var s2c = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            for (int cc = 0; cc < s_chain.Length; cc++)
-            {
-                if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
-                {
-                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_a * 1.3)); s1b.Points.Add(new ScatterPoint(cc + 1, -max_b * 1.3)); s1c.Points.Add(new ScatterPoint(cc + 1, -max_c * 1.3));
-                }
-                else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
-                {
-                    s2a.Points.Add(new ScatterPoint(cc + 1, max_a * 1.3)); s2b.Points.Add(new ScatterPoint(cc + 1, max_b * 1.3)); s2c.Points.Add(new ScatterPoint(cc + 1, max_c * 1.3));
-                }
-            }
-            #endregion
-
-            ax_plot.Model.Series.Add(s1a); ax_plot.Model.Series.Add(s2a); by_plot.Model.Series.Add(s1b); by_plot.Model.Series.Add(s2b); cz_plot.Model.Series.Add(s1c); cz_plot.Model.Series.Add(s2c);
-            ax_plot.Model.Axes[0].AxisChanged += (s, e) =>
-            {
-                s1a.Points.Clear(); s2a.Points.Clear();
-                for (int cc = 0; cc < s_chain.Length; cc++)
-                {
-                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
-                    {
-                        s1a.Points.Add(new ScatterPoint(cc + 1, ax_plot.Model.Axes[0].ActualMinimum));
-                    }
-                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
-                    {
-                        s2a.Points.Add(new ScatterPoint(cc + 1, ax_plot.Model.Axes[0].ActualMaximum));
-                    }
-                }
-                ax_plot.Model.Series[2] = s1a; ax_plot.Model.Series[3] = s2a; ax_plot.InvalidatePlot(true);
-            };
-            by_plot.Model.Axes[0].AxisChanged += (s, e) =>
-            {
-                s1b.Points.Clear(); s2b.Points.Clear();
-                for (int cc = 0; cc < s_chain.Length; cc++)
-                {
-                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
-                    {
-                        s1b.Points.Add(new ScatterPoint(cc + 1, by_plot.Model.Axes[0].ActualMinimum));
-                    }
-                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
-                    {
-                        s2b.Points.Add(new ScatterPoint(cc + 1, by_plot.Model.Axes[0].ActualMaximum));
-                    }
-                }
-                by_plot.Model.Series[2] = s1b; by_plot.Model.Series[3] = s2b; by_plot.InvalidatePlot(true);
-            };
-            cz_plot.Model.Axes[0].AxisChanged += (s, e) =>
-            {
-                s1c.Points.Clear(); s2c.Points.Clear();
-                for (int cc = 0; cc < s_chain.Length; cc++)
-                {
-                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
-                    {
-                        s1c.Points.Add(new ScatterPoint(cc + 1, cz_plot.Model.Axes[0].ActualMinimum));
-                    }
-                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
-                    {
-                        s2c.Points.Add(new ScatterPoint(cc + 1, cz_plot.Model.Axes[0].ActualMaximum));
-                    }
-                }
-                cz_plot.Model.Series[2] = s1c; cz_plot.Model.Series[3] = s2c; cz_plot.InvalidatePlot(true);
-            };
-            ax_plot.Model.Axes[1].Minimum = by_plot.Model.Axes[1].Minimum = cz_plot.Model.Axes[1].Minimum = 0;
-            axCharge_plot.Model.Axes[1].Minimum = byCharge_plot.Model.Axes[1].Minimum = czCharge_plot.Model.Axes[1].Minimum = 0;
-            ax_plot.Model.Axes[1].Maximum = by_plot.Model.Axes[1].Maximum = cz_plot.Model.Axes[1].Maximum = axCharge_plot.Model.Axes[1].Maximum = byCharge_plot.Model.Axes[1].Maximum = czCharge_plot.Model.Axes[1].Maximum = s_chain.Length;
-            axCharge_plot.Model.Axes[0].Minimum = byCharge_plot.Model.Axes[0].Minimum = czCharge_plot.Model.Axes[0].Minimum = 0;
-            axCharge_plot.Model.Axes[0].Maximum = maxcharge_a + 1; byCharge_plot.Model.Axes[0].Maximum = maxcharge_b + 1; czCharge_plot.Model.Axes[0].Maximum = maxcharge_c + 1;
-            axCharge_plot.InvalidatePlot(true); byCharge_plot.InvalidatePlot(true); czCharge_plot.InvalidatePlot(true); ax_plot.InvalidatePlot(true); by_plot.InvalidatePlot(true); cz_plot.InvalidatePlot(true);
-
-            #region internal plots 
-            if (IonDrawIndexTo.Count() > 0)
-            {
-                CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
-                int k = 1;
-                foreach (ion nn in IonDrawIndexTo)
-                {
-                    List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
-                    List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
-                    if (nn.Charge > 0)
-                    {
-                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    }
-                    else
-                    {
-                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    }
-                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                    tmp.ItemsSource = custom_Index;
-                    tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-
-                    indexto_plot.Model.Series.Add(tmp);
-
-                    custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                    bar.ItemsSource = custom_IndIntensity;
-                    bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-                    indextoIntensity_plot.Model.Series.Add(bar);
-                    k++;
-                    if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
-                }
-                CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
-                k = 1;
-                foreach (ion nn in IonDrawIndexTo)
-                {
-                    List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
-                    List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
-                    if (nn.Charge > 0)
-                    {
-                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    }
-                    else
-                    {
-                        custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    }
-
-                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                    tmp.ItemsSource = custom_Index;
-                    tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-
-                    index_plot.Model.Series.Add(tmp);
-
-                    custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                    bar.ItemsSource = custom_IndIntensity;
-                    bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-                    indexIntensity_plot.Model.Series.Add(bar);
-                    k++;
-                }
-                indexIntensity_plot.Model.Axes[1].Maximum = indextoIntensity_plot.Model.Axes[1].Maximum = max_i * 1.2;
-                indexIntensity_plot.Model.Axes[0].Minimum = indextoIntensity_plot.Model.Axes[0].Minimum = 0;
-                indexto_plot.Model.Axes[1].Minimum = index_plot.Model.Axes[1].Minimum = 0;
-                indexto_plot.Model.Axes[1].Maximum = index_plot.Model.Axes[1].Maximum = s_chain.Length;
-                indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = 0;
-                if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; internal_plots_refresh(); }
-                else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; internal_plots_refresh(); }
-                else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; internal_plots_refresh(); }
-                else if (IonDrawIndexTo.Count > 50) { yINT_minorStep13 = 5; yINT_majorStep13 = 10; internal_plots_refresh(); }
-                indexto_plot.Model.Axes[0].Maximum = index_plot.Model.Axes[0].Maximum = indexIntensity_plot.Model.Axes[0].Maximum = indextoIntensity_plot.Model.Axes[0].Maximum = IonDrawIndexTo.Count + yINT_minorStep13 / 2;
-                indexto_plot.Model.Axes[0].Minimum = index_plot.Model.Axes[0].Minimum = indexIntensity_plot.Model.Axes[0].Minimum = indextoIntensity_plot.Model.Axes[0].Minimum = -yINT_minorStep13 / 2;
-            }
-            indexto_plot.InvalidatePlot(true); indextoIntensity_plot.InvalidatePlot(true); indexIntensity_plot.InvalidatePlot(true); index_plot.InvalidatePlot(true);
-            #endregion
-
             paint_annotations_in_graphs();
         }
         private bool search_primary(string type, int idx, string s_ext)
@@ -11718,6 +10991,11 @@ namespace Isotope_fitting
         {
             string s_ext = "";
             string s_chain = Peptide;
+            List<ion> temp_iondraw = IonDraw.ToList();
+            List<Color> clr_list = new List<Color>() {  Color.LimeGreen, Color.DodgerBlue, Color.Tomato, Color.HotPink };
+            int count = 0;
+            string int_str = "int.a";
+            if (is_riken) { count = 1; int_str = "int."; }            
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
@@ -11731,42 +11009,50 @@ namespace Isotope_fitting
             List<ScatterSeries> a = create_scatterseries(Color.Green, "a", "ppm", ppm_bullet_size);
             List<ScatterSeries> b = create_scatterseries(Color.Blue, "b", "ppm", ppm_bullet_size);
             List<ScatterSeries> c = create_scatterseries(Color.Firebrick, "c", "ppm", ppm_bullet_size);
-            List<ScatterSeries> x = create_scatterseries(Color.LimeGreen, "x", "ppm", ppm_bullet_size);
-            List<ScatterSeries> y = create_scatterseries(Color.DodgerBlue, "y", "ppm", ppm_bullet_size);
-            List<ScatterSeries> z = create_scatterseries(Color.Tomato, "z", "ppm", ppm_bullet_size);
-            List<ScatterSeries> internala = create_scatterseries(Color.DarkViolet, "int.a", "ppm", ppm_bullet_size);
+            List<ScatterSeries> d = create_scatterseries(Color.DeepPink, "d", "ppm", ppm_bullet_size);
+            List<ScatterSeries> w = create_scatterseries(Color.LimeGreen, "w", "ppm", ppm_bullet_size);
+            List<ScatterSeries> x = create_scatterseries(clr_list[count++], "x", "ppm", ppm_bullet_size);
+            List<ScatterSeries> y = create_scatterseries(clr_list[count++], "y", "ppm", ppm_bullet_size);
+            List<ScatterSeries> z = create_scatterseries(clr_list[count++], "z", "ppm", ppm_bullet_size);  
+            List<ScatterSeries> B = create_scatterseries(Color.Orange, "B", "ppm", ppm_bullet_size);
+            List<ScatterSeries> internala = create_scatterseries(Color.DarkViolet, int_str, "ppm", ppm_bullet_size);
             List<ScatterSeries> internalb = create_scatterseries(Color.MediumOrchid, "int.b", "ppm", ppm_bullet_size);
             List<ScatterSeries> M = create_scatterseries(Color.Crimson, "M", "ppm", ppm_bullet_size);
             List<List<CustomDataPoint>> a_list = create_datapoint_list();
             List<List<CustomDataPoint>> b_list = create_datapoint_list();
             List<List<CustomDataPoint>> c_list = create_datapoint_list();
+            List<List<CustomDataPoint>> d_list = create_datapoint_list();
+            List<List<CustomDataPoint>> w_list = create_datapoint_list();
             List<List<CustomDataPoint>> x_list = create_datapoint_list();
             List<List<CustomDataPoint>> y_list = create_datapoint_list();
             List<List<CustomDataPoint>> z_list = create_datapoint_list();
+            List<List<CustomDataPoint>> B_list = create_datapoint_list();
             List<List<CustomDataPoint>> internala_list = create_datapoint_list();
             List<List<CustomDataPoint>> internalb_list = create_datapoint_list();
             List<List<CustomDataPoint>> M_list = create_datapoint_list();
 
-            int iondraw_count = IonDraw.Count;
-            CI_mass comMass = new CI_mass(); IonDraw.Sort(comMass);
+            int iondraw_count = temp_iondraw.Count;
+            CI_mass comMass = new CI_mass(); temp_iondraw.Sort(comMass);
             int ppm_points = 0;
             double temp_first_m_z = 0.0;
             double temp_last_m_z = 0.0;
             string ppm_range = "";
+            string loss = "NH3";
+            if (is_riken) loss = "B()";
             if (ppm_graph_type == 1)
             {
                 plot.Model.Axes[1].Title = "# fragments";
                 for (int i = 0; i < iondraw_count; i++)
                 {
                     int list_index = 0;
-                    ion nn = IonDraw[i];
+                    ion nn = temp_iondraw[i];
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
                     else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_a_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             a_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11775,7 +11061,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_b_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             b_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11784,16 +11070,34 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_c_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             c_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
                             ppm_points++;
                         }
                     }
+                    else if (is_riken &&(nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_d.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_d_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_d_B.Checked))
+                        {
+                            list_index = return_list_index(nn.Max_intensity);
+                            d_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
+                            ppm_points++;
+                        }
+                    }
+                    else if (is_riken && (nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_w.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_w_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_w_B.Checked))
+                        {
+                            list_index = return_list_index(nn.Max_intensity);
+                            w_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
+                            ppm_points++;
+                        }
+                    }
                     else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_x_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             x_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11802,7 +11106,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_y_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             y_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11811,7 +11115,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_z_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             z_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11822,7 +11126,7 @@ namespace Isotope_fitting
                     {
                         if (nn.Ion_type.Contains("b"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
                             {
                                 list_index = return_list_index(nn.Max_intensity);
                                 internalb_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11831,7 +11135,7 @@ namespace Isotope_fitting
                         }
                         else
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
                             {
                                 list_index = return_list_index(nn.Max_intensity);
                                 internala_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11841,10 +11145,19 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_M_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             M_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
+                            ppm_points++;
+                        }
+                    }
+                    else if (is_riken && (nn.Ion_type.StartsWith("B(") || nn.Ion_type.StartsWith("(B(")))
+                    {
+                        if (ppm_B_.Checked)
+                        {
+                            list_index = return_list_index(nn.Max_intensity);
+                            B_list[list_index].Add(new CustomDataPoint(ppm_points + 1, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
                             ppm_points++;
                         }
                     }
@@ -11853,11 +11166,10 @@ namespace Isotope_fitting
             else
             {
                 plot.Model.Axes[1].Title = "m/z";
-
                 for (int i = 0; i < iondraw_count; i++)
                 {
                     int list_index = 0;
-                    ion nn = IonDraw[i];
+                    ion nn = temp_iondraw[i];
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     double m_z = dParser(nn.Mz);
@@ -11865,7 +11177,7 @@ namespace Isotope_fitting
                     else ppm_range = "(" + Math.Round(nn.minPPM_Error, 4).ToString() + ") - (" + Math.Round(nn.maxPPM_Error, 4).ToString() + ")";
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_a_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_a_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             a_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11876,7 +11188,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_b_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_b_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             b_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11887,7 +11199,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_c_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_c.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_c_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_c_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             c_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11896,9 +11208,31 @@ namespace Isotope_fitting
                             temp_last_m_z = m_z;
                         }
                     }
+                    else if (is_riken && (nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_d.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_d_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_d_B.Checked))
+                        {
+                            list_index = return_list_index(nn.Max_intensity);
+                            d_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
+                            ppm_points++;
+                            if (temp_first_m_z == 0) { temp_first_m_z = m_z; }
+                            temp_last_m_z = m_z;
+                        }
+                    }
+                    else if (is_riken && (nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_w.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_w_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_w_B.Checked))
+                        {
+                            list_index = return_list_index(nn.Max_intensity);
+                            w_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
+                            ppm_points++;
+                            if (temp_first_m_z == 0) { temp_first_m_z = m_z; }
+                            temp_last_m_z = m_z;
+                        }
+                    }
                     else if (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_x_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_x.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_x_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_x_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             x_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11909,7 +11243,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_y_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_y.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_y_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_y_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             y_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11920,7 +11254,7 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_z_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_z.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_z_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_z_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             z_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11933,7 +11267,7 @@ namespace Isotope_fitting
                     {
                         if (nn.Ion_type.Contains("b"))
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_b.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_b_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_internal_b_NH3.Checked))
                             {
                                 list_index = return_list_index(nn.Max_intensity);
                                 internalb_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11944,7 +11278,7 @@ namespace Isotope_fitting
                         }
                         else
                         {
-                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_a.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_internal_a_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_internal_a_NH3.Checked))
                             {
                                 list_index = return_list_index(nn.Max_intensity);
                                 internala_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
@@ -11956,10 +11290,21 @@ namespace Isotope_fitting
                     }
                     else if (nn.Ion_type.StartsWith("M") || nn.Ion_type.StartsWith("(M"))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && ppm_M_H2O.Checked) || (nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_M.Checked) || (nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains(loss) && ppm_M_H2O.Checked) || (nn.Ion_type.Contains(loss) && !nn.Ion_type.Contains("H2O") && ppm_M_NH3.Checked))
                         {
                             list_index = return_list_index(nn.Max_intensity);
                             M_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
+                            ppm_points++;
+                            if (temp_first_m_z == 0) { temp_first_m_z = m_z; }
+                            temp_last_m_z = m_z;
+                        }
+                    }
+                    else if (is_riken && (nn.Ion_type.StartsWith("B(") || nn.Ion_type.StartsWith("(B(")))
+                    {
+                        if (ppm_B_.Checked)
+                        {
+                            list_index = return_list_index(nn.Max_intensity);
+                            B_list[list_index].Add(new CustomDataPoint(m_z, nn.PPM_Error, ppm_range, nn.Mz, nn.Name));
                             ppm_points++;
                             if (temp_first_m_z == 0) { temp_first_m_z = m_z; }
                             temp_last_m_z = m_z;
@@ -11976,13 +11321,16 @@ namespace Isotope_fitting
                 if (a_list[i].Count>0) { a[i].ItemsSource = a_list[i]; a[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(a[i]); }
                 if (b_list[i].Count > 0) { b[i].ItemsSource = b_list[i]; b[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(b[i]); }
                 if (c_list[i].Count > 0) { c[i].ItemsSource = c_list[i]; c[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(c[i]); }
+                if (d_list[i].Count > 0) { d[i].ItemsSource = d_list[i]; d[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(d[i]); }
+                if (w_list[i].Count > 0) { w[i].ItemsSource = w_list[i]; w[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(w[i]); }
                 if (x_list[i].Count > 0) { x[i].ItemsSource = x_list[i]; x[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(x[i]); } 
                 if (y_list[i].Count > 0) { y[i].ItemsSource = y_list[i]; y[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(y[i]); }
                 if (z_list[i].Count > 0) { z[i].ItemsSource = z_list[i]; z[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(z[i]); }
                 if (internala_list[i].Count > 0) { internala[i].ItemsSource = internala_list[i]; internala[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(internala[i]); }
                 if (internalb_list[i].Count > 0) { internalb[i].ItemsSource = internalb_list[i]; internalb[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(internalb[i]); }
                 if (M_list[i].Count > 0) { M[i].ItemsSource = M_list[i]; M[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(M[i]); }
-            }           
+                if (B_list[i].Count > 0) { B[i].ItemsSource =B_list[i]; B[i].TrackerFormatString = "Monoisopic Mass:{Text}" + "\nppm:{4:0.###}" + "\nppm range:{Xreal}" + "\nName:{Name}"; plot.Model.Series.Add(B[i]); }
+            }
             if (last_m_z == 0 && first_m_z == 0)
             {
                 last_m_z = temp_last_m_z; first_m_z = temp_first_m_z;
@@ -11998,6 +11346,330 @@ namespace Isotope_fitting
             };
             if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0; }
             else { plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; }
+            plot.InvalidatePlot(true);
+            temp_iondraw.Clear();
+
+        }
+       
+        private void charge_plot_init(PlotView plot,string up_type, string down_type, int  t,Color up_clr, Color down_clr)
+        {
+            string s_ext = "";
+            string s_chain = Peptide;
+            List<ion> temp_iondraw = IonDraw.ToList();
+
+            int iondraw_count = temp_iondraw.Count;
+            double max_ = 5000;
+            double maxcharge_ = 0;
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+            {
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    {
+                        s_chain = seq.Sequence; s_ext = seq.Extension; break;
+                    }
+                }
+            }            
+            List<double[]> merged_up = new List<double[]>();
+            List<double[]> merged_down = new List<double[]>();
+            List<ion> charge_merged_up = new List<ion>();
+            List<ion> charge_merged_down = new List<ion>();            
+            List<ScatterSeries> up = create_scatterseries(up_clr, up_type, "charge", 1);
+            List<ScatterSeries> down = create_scatterseries(down_clr, down_type, "charge", 1);
+            List<List<CustomDataPoint>> up_list = create_datapoint_list();
+            List<List<CustomDataPoint>> down_list = create_datapoint_list();
+            CI ion_comp = new CI();
+            temp_iondraw.Sort(ion_comp);
+            //fill the list with the correct ions            
+            for (int i = 0; i < iondraw_count; i++)
+            {
+                ion nn = temp_iondraw[i];
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                if (nn.Ion_type.StartsWith(up_type) || nn.Ion_type.StartsWith("("+ up_type))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary(up_type, nn.SortIdx, s_ext))
+                    {
+                        if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
+                        {
+                            merged_up.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                            charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                        }
+                        else
+                        {
+                            merged_up.Last()[1] += nn.Max_intensity;
+                            if (charge_merged_up.Last().Charge == nn.Charge) { charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz; charge_merged_up.Last().Name += " , " + nn.Name; }
+                            else { charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
+                        }
+                        if (max_ < merged_up.Last()[1]) { max_= merged_up.Last()[1]; }
+                        if (maxcharge_ < Math.Abs( nn.Charge)) { maxcharge_ = Math.Abs(nn.Charge); }
+                    }
+                }
+                else if (nn.Ion_type.StartsWith(down_type) || nn.Ion_type.StartsWith("("+ down_type))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary(down_type, nn.SortIdx, s_ext))
+                    {
+                        if (merged_down.Count == 0 || (int)merged_down.Last()[0] != nn.SortIdx)
+                        {
+                            merged_down.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                            charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                        }
+                        else
+                        {
+                            merged_down.Last()[1] += nn.Max_intensity;
+                            if (charge_merged_down.Last().Charge == nn.Charge) { charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz; charge_merged_down.Last().Name += " , " + nn.Name; }
+                            else { charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
+                        }
+                        if (max_ < merged_down.Last()[1]) { max_ = merged_down.Last()[1]; }
+                        if (maxcharge_ < Math.Abs(nn.Charge)) { maxcharge_ = Math.Abs(nn.Charge); }
+                    }
+                }
+            }
+            int list_index = 0;
+            foreach (ion nn in charge_merged_up)
+            {
+                list_index = return_list_index(nn.Max_intensity);
+                up_list[list_index].Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name));
+            }
+            foreach (ion nn in charge_merged_down)
+            {
+                list_index = return_list_index(nn.Max_intensity);
+                down_list[list_index].Add(new CustomDataPoint(nn.SortIdx, nn.Charge, nn.Index.ToString(), nn.Mz, nn.Name));
+            }
+            ToolStrip strip = GetControls(panel2_tab3).OfType<ToolStrip>().Where(l => l.Name.Equals("Charge_toolStrip" + t.ToString())).FirstOrDefault();
+            ToolStripButton btn_up =strip.Items.OfType<ToolStripButton>().Where(l => l.Name.Equals("up" + t.ToString() + "_Btn")).FirstOrDefault();
+            ToolStripButton btn_down = strip.Items.OfType<ToolStripButton>().Where(l => l.Name.Equals("down" + t.ToString() + "_Btn")).FirstOrDefault() ;
+            for (int i = 9; i >= 0; i--)
+            {
+                if (up_list[i].Count > 0 && btn_up.Checked) { up[i].ItemsSource = up_list[i]; up[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; ; plot.Model.Series.Add(up[i]); }
+                if (down_list[i].Count > 0 && btn_down.Checked) { down[i].ItemsSource = down_list[i]; down[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}\n{Name}"; plot.Model.Series.Add(down[i]); }
+            }
+            if (btn_up.Checked && btn_down.Checked)plot.Model.Title = up_type+ " - "+ down_type+"  fragments";            
+            else if (btn_up.Checked) plot.Model.Title = up_type + " fragments";
+            else if (btn_down.Checked) plot.Model.Title = down_type + " fragments";            
+            else plot.Model.Title = up_type + " - " + down_type + "  fragments";
+            plot.Model.Axes[1].Minimum =  0;
+            plot.Model.Axes[1].Maximum = s_chain.Length;
+            if(is_polarity_negative)plot.Model.Axes[0].Minimum = -maxcharge_ - 1;
+            else plot.Model.Axes[0].Minimum = 0;
+            plot.Model.Axes[0].Maximum = maxcharge_ + 1;
+            plot.InvalidatePlot(true);
+            temp_iondraw.Clear();
+        }
+        private void intensity_plot_init(PlotView plot, string up_type, string down_type, int t, OxyColor up_clr, OxyColor down_clr)
+        {
+            string s_ext = "";
+            string s_chain = Peptide;
+            List<ion> temp_iondraw = IonDraw.ToList();
+            int iondraw_count = temp_iondraw.Count;
+            double max_ = 5000;
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+            {
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    {
+                        s_chain = seq.Sequence; s_ext = seq.Extension; break;
+                    }
+                }
+            }
+            LinearBarSeries up_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = up_clr, FillColor = up_clr, BarWidth = bar_width };
+            LinearBarSeries down_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = down_clr, FillColor = down_clr, BarWidth = bar_width };
+            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            
+            plot.Model.Series.Add(up_bar); plot.Model.Series.Add(down_bar);
+            List<double[]> merged_up = new List<double[]>();
+            List<double[]> merged_down = new List<double[]>();
+            CI ion_comp = new CI();
+            temp_iondraw.Sort(ion_comp);
+            //fill the list with the correct ions            
+            for (int i = 0; i < iondraw_count; i++)
+            {
+                ion nn = temp_iondraw[i];
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                if (nn.Ion_type.StartsWith(up_type) || nn.Ion_type.StartsWith("(" + up_type))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary(up_type, nn.SortIdx, s_ext))
+                    {
+                        if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
+                        {
+                            merged_up.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_up.Last()[1] += nn.Max_intensity;
+                        }
+                        if (max_ < merged_up.Last()[1]) { max_ = merged_up.Last()[1]; }
+                    }
+                }
+                else if (nn.Ion_type.StartsWith(down_type) || nn.Ion_type.StartsWith("(" + down_type))
+                {
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3")) || search_primary(down_type, nn.SortIdx, s_ext))
+                    {
+                        if (merged_down.Count == 0 || (int)merged_down.Last()[0] != nn.SortIdx)
+                        {
+                            merged_down.Add(new double[] { nn.SortIdx, -nn.Max_intensity });
+                        }
+                        else
+                        {
+                            merged_down.Last()[1] -= nn.Max_intensity;
+                        }
+                        if (max_ < -merged_down.Last()[1]) { max_ =- merged_down.Last()[1]; }                        
+                    }
+                }
+            }
+            foreach (double[] pp in merged_up) { (plot.Model.Series[0] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
+            foreach (double[] pp in merged_down) { (plot.Model.Series[1] as LinearBarSeries).Points.Add(new DataPoint(pp[0], pp[1])); }
+            for (int cc = 0; cc < s_chain.Length; cc++)
+            {
+                if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                {
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -max_ * 1.3));
+                }
+                else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                {
+                    s2a.Points.Add(new ScatterPoint(cc + 1, max_ * 1.3));
+                }
+            }
+            plot.Model.Series.Add(s1a); plot.Model.Series.Add(s2a);
+            plot.Model.Axes[0].AxisChanged += (s, e) =>
+            {
+                s1a.Points.Clear(); s2a.Points.Clear();
+                for (int cc = 0; cc < s_chain.Length; cc++)
+                {
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                    {
+                        s1a.Points.Add(new ScatterPoint(cc + 1, plot.Model.Axes[0].ActualMinimum));
+                    }
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                    {
+                        s2a.Points.Add(new ScatterPoint(cc + 1, plot.Model.Axes[0].ActualMaximum));
+                    }
+                }
+                plot.Model.Series[2] = s1a; plot.Model.Series[3] = s2a; plot.InvalidatePlot(true);
+            };
+            plot.Model.Axes[1].Minimum =  0;
+            plot.Model.Axes[1].Maximum =s_chain.Length;
+            plot.InvalidatePlot(true);
+            temp_iondraw.Clear();
+        }
+        
+        private void create_internal_plot(PlotView plot, PlotView plotIntensity, int t, Color clr1, Color clr2)
+        {
+            if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
+            string s_ext = "";
+            string s_chain = Peptide;
+            List<ion> temp_iondraw = IonDraw.ToList();
+            int iondraw_count = temp_iondraw.Count;
+            double max_i = 0.0;
+            List<CustomDataPoint> points_index = new List<CustomDataPoint>();
+            List<CustomDataPoint> points_indexTo = new List<CustomDataPoint>();
+            if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
+            CI ion_comp = new CI();
+            IonDraw.Sort(ion_comp);
+            //fill the list with the correct ions            
+            for (int i = 0; i < iondraw_count; i++)
+            {
+                ion nn = IonDraw[i];
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                if (nn.Ion_type.StartsWith("int"))
+                {
+                    if (nn.Ion_type.Contains("b"))
+                    {
+                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = clr2, Max_intensity = nn.Max_intensity });
+                    }
+                    else
+                    {
+                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = clr1, Charge = nn.Charge, Max_intensity = nn.Max_intensity });
+                    }
+                }
+            }
+            if (IonDrawIndexTo.Count() > 0)
+            {
+                if (t==1)
+                {
+                    CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
+                    int k = 1;
+                    foreach (ion nn in IonDrawIndexTo)
+                    {
+                        List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
+                        List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
+                        if (nn.Charge > 0)
+                        {
+                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        }
+                        else
+                        {
+                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        }
+                        LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        tmp.ItemsSource = custom_Index;
+                        tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
+
+                        plot.Model.Series.Add(tmp);
+
+                        custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        bar.ItemsSource = custom_IndIntensity;
+                        bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
+                        plotIntensity.Model.Series.Add(bar);
+                        k++;
+                        if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
+                    }
+                }
+                else
+                {
+                    CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
+                    int k = 1;
+                    foreach (ion nn in IonDrawIndexTo)
+                    {
+                        List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
+                        List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
+                        if (nn.Charge > 0)
+                        {
+                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        }
+                        else
+                        {
+                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        }
+
+                        LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        tmp.ItemsSource = custom_Index;
+                        tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
+
+                        plot.Model.Series.Add(tmp);
+
+                        custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
+                        LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        bar.ItemsSource = custom_IndIntensity;
+                        bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
+                        plotIntensity.Model.Series.Add(bar);
+                        k++;
+                        if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
+
+                    }
+                }  
+                 plotIntensity.Model.Axes[1].Maximum = max_i * 1.2;
+                plotIntensity.Model.Axes[0].Minimum = 0;
+                plot.Model.Axes[1].Minimum =  0;
+                plot.Model.Axes[1].Maximum = s_chain.Length;
+                plot.Model.Axes[0].Minimum =  0;
+                if (IonDrawIndexTo.Count > 200) { yINT_minorStep13 = 25; yINT_majorStep13 = 50; internal_plots_refresh(); }
+                else if (IonDrawIndexTo.Count > 150) { yINT_minorStep13 = 15; yINT_majorStep13 = 30; internal_plots_refresh(); }
+                else if (IonDrawIndexTo.Count > 100) { yINT_minorStep13 = 10; yINT_majorStep13 = 20; internal_plots_refresh(); }
+                else if (IonDrawIndexTo.Count > 50) { yINT_minorStep13 = 5; yINT_majorStep13 = 10; internal_plots_refresh(); }
+                plot.Model.Axes[0].Maximum =  plotIntensity.Model.Axes[0].Maximum = IonDrawIndexTo.Count + yINT_minorStep13 / 2;
+                plot.Model.Axes[0].Minimum =  plotIntensity.Model.Axes[0].Minimum = -yINT_minorStep13 / 2;
+            }
             plot.InvalidatePlot(true);
         }
         private List<ScatterSeries> create_scatterseries(Color clr,string frag, string plot_type, double _size)
@@ -12038,6 +11710,7 @@ namespace Isotope_fitting
             else { list_index = 9; }
             return list_index;
         }
+
         #region export and resize panels
 
         private void export_panel(bool copy, Panel pnl)
@@ -12259,20 +11932,18 @@ namespace Isotope_fitting
             indextoIntensity_plot.Model.Axes[1].IntervalLength = x_interval13;
             indextoIntensity_plot.InvalidatePlot(true);
         }
-
-
+        
         #endregion
 
         #endregion
         
         #region EXTRACT PLOTS
-        #region extract ppm_plot
 
+        #region extract ppm_plot
         private void extractPlotToolStripMenuItem9_Click(object sender, EventArgs e)
         {
             ppm_plotview_rebuild();
         }
-
         public void ppm_plotview_rebuild()
         {
             PlotView temp_plot = new PlotView() { Name = "temp_plot ", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
@@ -12584,7 +12255,7 @@ namespace Isotope_fitting
             temp_indexModel.Updated += (s, e) => { tempindex_Intensity_plot.Model.Axes[0].Zoom(temp_index_plot.Model.Axes[0].ActualMinimum, temp_index_plot.Model.Axes[0].ActualMaximum); };
             if (indexTo)
             {
-                CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
+                create_internal_plot(temp_index_plot, tempindex_Intensity_plot, 2, Color.Green, Color.Blue);
                 temp_indexModel.Title = "internal  fragments' plot sorted by #AA terminal";
                 temp_index_plot.Model.Axes[1].Zoom(indexto_plot.Model.Axes[1].ActualMinimum, indexto_plot.Model.Axes[1].ActualMaximum);
                 temp_index_plot.Model.Axes[0].Zoom(indexto_plot.Model.Axes[0].ActualMinimum, indexto_plot.Model.Axes[0].ActualMaximum);
@@ -12593,14 +12264,13 @@ namespace Isotope_fitting
             }
             else
             {
-                CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
+                create_internal_plot(temp_index_plot, tempindex_Intensity_plot, 2, Color.Green, Color.Blue);
                 temp_index_plot.Model.Axes[1].Zoom(index_plot.Model.Axes[1].ActualMinimum, index_plot.Model.Axes[1].ActualMaximum);
                 temp_index_plot.Model.Axes[0].Zoom(index_plot.Model.Axes[0].ActualMinimum, index_plot.Model.Axes[0].ActualMaximum);
                 tempindex_Intensity_plot.Model.Axes[1].Zoom(indexIntensity_plot.Model.Axes[1].ActualMinimum, indexIntensity_plot.Model.Axes[1].ActualMaximum);
                 tempindex_Intensity_plot.Model.Axes[0].Zoom(indexIntensity_plot.Model.Axes[0].ActualMinimum, indexIntensity_plot.Model.Axes[0].ActualMaximum);
-            }          
-
-            refresh_temp_internal(temp_index_plot, tempindex_Intensity_plot);
+            }
+            //refresh_temp_internal(temp_index_plot, tempindex_Intensity_plot);
             Form15 frm15 = new Form15(temp_index_plot, tempindex_Intensity_plot);
             frm15.Show();
         }
@@ -12660,15 +12330,16 @@ namespace Isotope_fitting
             //plot type 1=ax intensity plot, 2=by intensity plot,3=cz intensity plot, 4=ax charge plot ,5= by charge plot,6=cz charge plot
             PlotView temp_plot = new PlotView() { Name = "temp_plot ", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             PlotModel temp_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial" };
-            if (fplot_type > 3)
+            if (fplot_type > 4)
             {
                 temp_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial" };
             }
-            if (fplot_type == 1|| fplot_type == 4) { temp_model.Title = "a - x  fragments"; temp_model.TitleColor = OxyColors.Green; }
-            else if (fplot_type == 2|| fplot_type == 5) { temp_model.Title = "b - y  fragments"; temp_model.TitleColor = OxyColors.Blue; }
-            else { temp_model.Title = "c - z  fragments"; temp_model.TitleColor = OxyColors.Red; }           
+            if (fplot_type == 1 || fplot_type == 5) { temp_model.Title = "a - x  fragments"; temp_model.TitleColor = OxyColors.Green; }
+            else if (fplot_type == 2 || fplot_type == 6) { temp_model.Title = "b - y  fragments"; temp_model.TitleColor = OxyColors.Blue; }
+            else if (fplot_type == 3 || fplot_type == 7) { temp_model.Title = "c - z  fragments"; temp_model.TitleColor = OxyColors.Red; }
+            else { temp_model.Title = "d - z  fragments"; temp_model.TitleColor = OxyColors.DeepPink; }
             temp_plot.Model = temp_model;
-            if (fplot_type<4)
+            if (fplot_type<5)
             {  
                 var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
                 temp_model.Axes.Add(linearAxis1);
@@ -12684,7 +12355,27 @@ namespace Isotope_fitting
             }
             temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
             temp_plot.Controller = new CustomPlotController();
-            refresh_temp_primary_plots(temp_plot, fplot_type);
+            if (is_riken)
+            {
+                if(fplot_type == 1) charge_plot_init(temp_plot, "a", "w", 1, Color.Green, Color.LimeGreen);
+                else if(fplot_type == 2) charge_plot_init(temp_plot, "b", "x", 2, Color.Blue, Color.DodgerBlue);
+                else if (fplot_type == 3) charge_plot_init(temp_plot, "c", "y", 3, Color.Firebrick, Color.Tomato);
+                else if (fplot_type == 4) charge_plot_init(temp_plot, "d", "z", 4, Color.DeepPink, Color.HotPink);
+                else if (fplot_type == 5) intensity_plot_init(temp_plot, "a", "w", 1, OxyColors.Green, OxyColors.LimeGreen);
+                else if (fplot_type == 6) intensity_plot_init(temp_plot, "b", "x", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                else if (fplot_type == 7) intensity_plot_init(temp_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                else if (fplot_type == 8) intensity_plot_init(temp_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
+            }
+            else
+            {
+                if (fplot_type == 1) charge_plot_init(temp_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
+                else if (fplot_type == 2) charge_plot_init(temp_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
+                else if (fplot_type == 3) charge_plot_init(temp_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
+                else if (fplot_type == 6) intensity_plot_init(temp_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
+                else if (fplot_type == 7) intensity_plot_init(temp_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                else if (fplot_type == 8) intensity_plot_init(temp_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
+            }
+            //refresh_temp_primary_plots(temp_plot, fplot_type);
             temp_plot.Model.Axes[1].Zoom(original_plotview.Model.Axes[1].ActualMinimum, original_plotview.Model.Axes[1].ActualMaximum);
             temp_plot.Model.Axes[0].Zoom(original_plotview.Model.Axes[0].ActualMinimum, original_plotview.Model.Axes[0].ActualMaximum);
             Form11 frm11 = new Form11(temp_plot);
@@ -12970,7 +12661,7 @@ namespace Isotope_fitting
                     tempDown_10.ItemsSource = points_down_10; tempDown_100.ItemsSource = points_down_100; tempDown_1000.ItemsSource = points_down_1000; tempDown_10000.ItemsSource = points_down_10000; tempDown_100000.ItemsSource = points_down_100000; tempDown_1000000.ItemsSource = points_down_1000000; tempDown_10000000.ItemsSource = points_down_10000000; tempDown_100000000.ItemsSource = points_down_100000000; tempDown_1000000000.ItemsSource = points_down_1000000000; tempDown_10000000000.ItemsSource = points_down_10000000000;
                     tempUp_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
                     tempDown_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
-                    if (a_Btn.Checked && x_Btn.Checked)
+                    if (up1_Btn.Checked && down1_Btn.Checked)
                     {
                         temp_plot.Model.Title = "a - x  fragments";
                         if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
@@ -12994,7 +12685,7 @@ namespace Isotope_fitting
                         if (points_up_10.Count > 0) temp_plot.Model.Series.Add(tempUp_10);
                         if (points_down_10.Count > 0) temp_plot.Model.Series.Add(tempDown_10);
                     }
-                    else if (a_Btn.Checked)
+                    else if (up1_Btn.Checked)
                     {
                         temp_plot.Model.Title = "a fragments";
                         if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
@@ -13009,7 +12700,7 @@ namespace Isotope_fitting
                         if (points_up_100.Count > 0) temp_plot.Model.Series.Add(tempUp_100);
                         if (points_up_10.Count > 0) temp_plot.Model.Series.Add(tempUp_10);
                     }
-                    else if (x_Btn.Checked)
+                    else if (down1_Btn.Checked)
                     {
                         temp_plot.Model.Title = "x fragments";
                         if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
@@ -13123,7 +12814,7 @@ namespace Isotope_fitting
                     tempDown_10.ItemsSource = points_down_10; tempDown_100.ItemsSource = points_down_100; tempDown_1000.ItemsSource = points_down_1000; tempDown_10000.ItemsSource = points_down_10000; tempDown_100000.ItemsSource = points_down_100000; tempDown_1000000.ItemsSource = points_down_1000000; tempDown_10000000.ItemsSource = points_down_10000000; tempDown_100000000.ItemsSource = points_down_100000000; tempDown_1000000000.ItemsSource = points_down_1000000000; tempDown_10000000000.ItemsSource = points_down_10000000000;
                     tempUp_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
                     tempDown_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
-                    if (b_Btn.Checked && y_Btn.Checked)
+                    if (up2_Btn.Checked && down2_Btn.Checked)
                     {
                         temp_plot.Model.Title = "b - y  fragments";
                         if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
@@ -13148,7 +12839,7 @@ namespace Isotope_fitting
                         if (points_up_10.Count > 0) temp_plot.Model.Series.Add(tempUp_10);
                         if (points_down_10.Count > 0) temp_plot.Model.Series.Add(tempDown_10);
                     }
-                    else if (b_Btn.Checked)
+                    else if (up2_Btn.Checked)
                     {
                         temp_plot.Model.Title = "b  fragments";
                         if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
@@ -13163,7 +12854,7 @@ namespace Isotope_fitting
                         if (points_up_100.Count > 0) temp_plot.Model.Series.Add(tempUp_100);
                         if (points_up_10.Count > 0) temp_plot.Model.Series.Add(tempUp_10);
                     }
-                    else if (y_Btn.Checked)
+                    else if (down2_Btn.Checked)
                     {
                         temp_plot.Model.Title = "y  fragments";
                         if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
@@ -13274,7 +12965,7 @@ namespace Isotope_fitting
                     tempDown_10.ItemsSource = points_down_10; tempDown_100.ItemsSource = points_down_100; tempDown_1000.ItemsSource = points_down_1000; tempDown_10000.ItemsSource = points_down_10000; tempDown_100000.ItemsSource = points_down_100000; tempDown_1000000.ItemsSource = points_down_1000000; tempDown_10000000.ItemsSource = points_down_10000000; tempDown_100000000.ItemsSource = points_down_100000000; tempDown_1000000000.ItemsSource = points_down_1000000000; tempDown_10000000000.ItemsSource = points_down_10000000000;
                     tempUp_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}"; tempUp_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}";
                     tempDown_10.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_100000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_1000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}"; tempDown_10000000000.TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nResidue Number: {Xreal}\nMonoisotopic Mass: {Text}";
-                    if (c_Btn.Checked && z_Btn.Checked)
+                    if (up3_Btn.Checked && down3_Btn.Checked)
                     {
                         temp_plot.Model.Title = "c - z  fragments";
                         if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
@@ -13298,7 +12989,7 @@ namespace Isotope_fitting
                         if (points_up_10.Count > 0) temp_plot.Model.Series.Add(tempUp_10);
                         if (points_down_10.Count > 0) temp_plot.Model.Series.Add(tempDown_10);
                     }
-                    else if (c_Btn.Checked)
+                    else if (up3_Btn.Checked)
                     {
                         temp_plot.Model.Title = "c fragments";
                         if (points_up_10000000000.Count > 0) temp_plot.Model.Series.Add(tempUp_10000000000);
@@ -13313,7 +13004,7 @@ namespace Isotope_fitting
                         if (points_up_100.Count > 0) temp_plot.Model.Series.Add(tempUp_100);
                         if (points_up_10.Count > 0) temp_plot.Model.Series.Add(tempUp_10);
                     }
-                    else if (z_Btn.Checked)
+                    else if (down3_Btn.Checked)
                     {
                         temp_plot.Model.Title = "z fragments";
                         if (points_down_10000000000.Count > 0) temp_plot.Model.Series.Add(tempDown_10000000000);
@@ -13353,18 +13044,28 @@ namespace Isotope_fitting
 
         private void extractPlotToolStripMenuItem7_Click(object sender, EventArgs e)
         {
-            primary_plotview_rebuild(4, axCharge_plot);
+            primary_plotview_rebuild(5, axCharge_plot);
         }
 
         private void extractPlotToolStripMenuItem5_Click(object sender, EventArgs e)
         {
-            primary_plotview_rebuild(5, byCharge_plot);
+            primary_plotview_rebuild(6, byCharge_plot);
         }
 
         private void extractPlotToolStripMenuItem6_Click(object sender, EventArgs e)
         {
-            primary_plotview_rebuild(6, czCharge_plot);
+            primary_plotview_rebuild(7, czCharge_plot);
         }
+        private void extractPlotToolStripMenuItem_charge_dz_Click(object sender, EventArgs e)
+        {
+            primary_plotview_rebuild(8, dzCharge_plot);
+        }
+
+        private void extractPlotToolStripMenuItem_dz_Click(object sender, EventArgs e)
+        {
+            primary_plotview_rebuild(4, dz_plot);
+        }
+
         #endregion
 
         public void paint_annotations_in_temp_graphs(int code, PlotView temp)
@@ -14307,5 +14008,8 @@ namespace Isotope_fitting
         {
 
         }
+
+        
+        
     }
 }
