@@ -56,12 +56,7 @@ namespace Isotope_fitting
                 SequenceTab seq = frm2.sequenceList[k];
                 lastIndex = seq_tabControl.TabCount - 1;
                 seq_tabControl.TabPages.Insert(lastIndex, seq.Extension.ToString());
-                seq_tabControl.SelectedIndex = lastIndex;
-                GroupBox grp = new GroupBox() { Text = "", Dock = DockStyle.Bottom, Size = new Size(600, 40) };
-                RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 10)/*new Point(9, 280)*/, TabIndex = 1,  AutoSize = true };
-                RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 10)/*new Point(101, 280)*/, TabIndex = 2, AutoSize = true };
-                if (seq.Type == 1) { bH.Checked = true; }
-                else { bL.Checked = true; }                
+                seq_tabControl.SelectedIndex = lastIndex;                             
                 RichTextBox box = new RichTextBox() { TabIndex = 3, Dock = DockStyle.Fill, Size = new Size(692, 271), ShowSelectionMargin = true, ScrollBars=RichTextBoxScrollBars.Vertical,
                    Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)))};
                 if (string.IsNullOrEmpty(seq.Rtf)) box.Text = Regex.Replace(seq.Sequence, @".{10}(?!$)", "$0  ");
@@ -102,8 +97,20 @@ namespace Isotope_fitting
                         }                        
                     }
                 };
-                grp.Controls.AddRange(new Control[] { bH, bL });
-                this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { grp, box });       
+                if (frm2.is_riken)
+                {
+                    this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { box });
+                }
+                else
+                {
+                    GroupBox grp = new GroupBox() { Text = "", Dock = DockStyle.Bottom, Size = new Size(600, 40) };
+                    RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 10)/*new Point(9, 280)*/, TabIndex = 1, AutoSize = true };
+                    RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 10)/*new Point(101, 280)*/, TabIndex = 2, AutoSize = true };
+                    if (seq.Type == 1) { bH.Checked = true; }
+                    else if (!frm2.is_riken) { bL.Checked = true; }
+                    grp.Controls.AddRange(new Control[] { bH, bL });
+                    this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { grp, box });
+                }
             }            
             if (frm2.sequenceList.Count > 0) { seq_tabControl.SelectedIndex = 1; }
         }
@@ -133,7 +140,8 @@ namespace Isotope_fitting
                 s = s.Replace(" ", "");
                 string rtf_s = txtbox.Rtf.Replace(Environment.NewLine, "").ToString();
                 rtf_s = rtf_s.Replace("\t", "");
-                if (k == 0) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s });
+                if (k == 0 ) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s });
+                else if (frm2.is_riken) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = rtf_s }); }
                 else
                 {
                     frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = rtf_s });
@@ -216,10 +224,7 @@ namespace Isotope_fitting
         {
             this.seq_tabControl.TabPages.Insert(lastIndex, "New Tab");
             this.seq_tabControl.SelectedIndex = lastIndex;
-            GroupBox grp = new GroupBox() { Text = "", Dock = DockStyle.Bottom, Size = new Size(600, 40) };
-            RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 10)/*new Point(9, 280)*/, Checked = true, TabIndex = 1, AutoSize = true };
-            RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 10)/*new Point(101, 280)*/, TabIndex = 2, AutoSize = true };
-            RichTextBox box = new RichTextBox()
+           RichTextBox box = new RichTextBox()
             {
                 TabIndex = 3,
                 Dock = DockStyle.Fill,
@@ -256,8 +261,16 @@ namespace Isotope_fitting
                     box.ContextMenu = cm_box;
                 }
             };
-            grp.Controls.AddRange(new Control[] { bH, bL });
-            this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { grp,box });
+            if (frm2.is_riken) this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { box });
+            else
+            {
+                GroupBox grp = new GroupBox() { Text = "", Dock = DockStyle.Bottom, Size = new Size(600, 40) };
+                RadioButton bH = new RadioButton() { Text = "Heavy", Location = new Point(9, 10)/*new Point(9, 280)*/, Checked = true, TabIndex = 1, AutoSize = true };
+                RadioButton bL = new RadioButton() { Text = "Light", Location = new Point(101, 10)/*new Point(101, 280)*/, TabIndex = 2, AutoSize = true };
+                grp.Controls.AddRange(new Control[] { bH, bL });
+                this.seq_tabControl.TabPages[lastIndex].Controls.AddRange(new Control[] { grp, box });
+            }
+           
             //foreach (RadioButton rdBtn in seq_tabControl.TabPages[lastIndex].Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e1) => { if (rdBtn.Checked) frm2.sequenceList[lastIndex-1].Type= rdBtn.TabIndex; };
 
         }
