@@ -295,10 +295,10 @@
             this.internal_lstBox.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.internal_lstBox.FormattingEnabled = true;
             this.internal_lstBox.Items.AddRange(new object[] {
-            "internal ",
-            "internal -H2O",
-            "internal -2(H2O)",
-            "internal -B()"});
+            "internal",
+            "internal-H2O",
+            "internal-2(H2O)",
+            "internal-B()"});
             this.internal_lstBox.Location = new System.Drawing.Point(247, 29);
             this.internal_lstBox.Name = "internal_lstBox";
             this.internal_lstBox.Size = new System.Drawing.Size(121, 64);

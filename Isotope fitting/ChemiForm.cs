@@ -3421,7 +3421,7 @@ namespace Isotope_fitting
                         endIndex = i; break;
                     }
                 }
-                if (endIndex == 0)
+                if (endIndex != 0)
                 {
                     H_minus = Int32.Parse(sub[1].Substring(0, endIndex));
                     final_formula += sub[1].Remove(0, endIndex);

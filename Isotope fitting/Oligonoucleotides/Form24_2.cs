@@ -12,8 +12,6 @@ using System.Windows.Forms;
 using static Isotope_fitting.Form2;
 using static Isotope_fitting.Helpers;
 
-
-
 namespace Isotope_fitting
 {
     public partial class Form24_2 : Form

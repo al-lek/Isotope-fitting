@@ -2117,14 +2117,14 @@ namespace Isotope_fitting
                     bool is_number = Int32.TryParse(substring[0].Remove(0, 1), out int index);
                     if (is_number)
                     {
-                        ChemFormulas[i].SortIdx = index;
+                        ChemFormulas[i].Index = index.ToString();                       
                         if (ChemFormulas[i].Ion.StartsWith("w") || ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(w") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z"))
                         {
-                            ChemFormulas[i].Index = (ms_sequence.Length - ChemFormulas[i].SortIdx).ToString();
+                            ChemFormulas[i].SortIdx = ms_sequence.Length -index;
                         }
                         else
                         {
-                            ChemFormulas[i].Index = ChemFormulas[i].SortIdx.ToString();
+                            ChemFormulas[i].SortIdx = index;
                         }
                         ChemFormulas[i].IndexTo = ChemFormulas[i].Index;
                     }
@@ -2140,6 +2140,7 @@ namespace Isotope_fitting
                         else ion_type += "-" + substring[c];
                     }
                     ChemFormulas[i].Ion_type = ion_type;
+                    ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = fix_formula_temporary_only_O(ChemFormulas[i].InputFormula,3);
                 }
                 else if (primary_present)
                 {
@@ -2151,7 +2152,6 @@ namespace Isotope_fitting
                         bool is_number = Int32.TryParse(substring[c].Remove(0, 1), out int index);
                         if (is_number)
                         {
-                            if (c == 0) ChemFormulas[i].SortIdx = index;
                             index_values[c] = index;
                             if (substring[c].StartsWith("w") || substring[c].StartsWith("x") || substring[c].StartsWith("y") || substring[c].StartsWith("z") || substring[c].StartsWith("(w") || substring[c].StartsWith("(x") || substring[c].StartsWith("(y") || substring[c].StartsWith("(z"))
                             {
@@ -2164,6 +2164,7 @@ namespace Isotope_fitting
                             ChemFormulas.RemoveAt(i); return;
                         }
                     }
+                    ChemFormulas[i].SortIdx = index_values[0];
                     ChemFormulas[i].Index = index_values[0].ToString();
                     ChemFormulas[i].IndexTo = index_values[1].ToString();
                     for (int c = 2; c < substring.Length; c++)
@@ -10537,7 +10538,7 @@ namespace Isotope_fitting
             cz_plot.MouseDoubleClick += (s, e) => { cz_model.ResetAllAxes(); cz_plot.InvalidatePlot(true); };
             cz_plot.Controller = new CustomPlotController();
 
-            // cz plot
+            // dz plot
             if (dz_plot != null) dz_plot.Dispose();
             dz_plot = new PlotView() { Name = "dz_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
             dz_Pnl.Controls.Add(dz_plot);
@@ -10592,7 +10593,7 @@ namespace Isotope_fitting
             // dz charge plot
             if (dzCharge_plot != null) dzCharge_plot.Dispose();
             dzCharge_plot = new PlotView() { Name = "dzCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            czCharge_Pnl.Controls.Add(dzCharge_plot);
+            dzCharge_Pnl.Controls.Add(dzCharge_plot);
             PlotModel dzCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "d - z  fragments", TitleColor = OxyColors.DeepPink };
             dzCharge_plot.Model = dzCharge_model;
             var linearAxis119 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_charge_grid12, MinorGridlineStyle = Yminor_charge_grid12, TickStyle = Y_charge_tick12, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
@@ -11191,6 +11192,7 @@ namespace Isotope_fitting
             int iondraw_count = temp_iondraw.Count;
             double max_ = 5000;
             double maxcharge_ = 0;
+            double mincharge_ = 0;
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
@@ -11233,7 +11235,9 @@ namespace Isotope_fitting
                             else { charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
                         }
                         if (max_ < merged_up.Last()[1]) { max_= merged_up.Last()[1]; }
-                        if (maxcharge_ < Math.Abs( nn.Charge)) { maxcharge_ = Math.Abs(nn.Charge); }
+                        if (maxcharge_ <  nn.Charge) { maxcharge_ =nn.Charge; }
+                        if (mincharge_ > nn.Charge) { mincharge_ = nn.Charge; }
+
                     }
                 }
                 else if (nn.Ion_type.StartsWith(down_type) || nn.Ion_type.StartsWith("("+ down_type))
@@ -11252,7 +11256,8 @@ namespace Isotope_fitting
                             else { charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
                         }
                         if (max_ < merged_down.Last()[1]) { max_ = merged_down.Last()[1]; }
-                        if (maxcharge_ < Math.Abs(nn.Charge)) { maxcharge_ = Math.Abs(nn.Charge); }
+                        if (maxcharge_ < nn.Charge) { maxcharge_ = nn.Charge; }
+                        if (mincharge_ > nn.Charge) { mincharge_ = nn.Charge; }
                     }
                 }
             }
@@ -11281,8 +11286,7 @@ namespace Isotope_fitting
             else plot.Model.Title = up_type + " - " + down_type + "  fragments";
             plot.Model.Axes[1].Minimum =  0;
             plot.Model.Axes[1].Maximum = s_chain.Length;
-            if(is_polarity_negative)plot.Model.Axes[0].Minimum = -maxcharge_ - 1;
-            else plot.Model.Axes[0].Minimum = 0;
+            plot.Model.Axes[0].Minimum = mincharge_ - 1; 
             plot.Model.Axes[0].Maximum = maxcharge_ + 1;
             plot.InvalidatePlot(true);
             temp_iondraw.Clear();
@@ -11382,6 +11386,9 @@ namespace Isotope_fitting
             };
             plot.Model.Axes[1].Minimum =  0;
             plot.Model.Axes[1].Maximum =s_chain.Length;
+            plot.Model.Axes[0].Minimum =-max_ * 1.3;
+            plot.Model.Axes[0].Maximum = max_ * 1.3;
+
             plot.InvalidatePlot(true);
             temp_iondraw.Clear();
         }

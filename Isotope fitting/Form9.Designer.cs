@@ -1318,10 +1318,10 @@
             this.internal_lstBox_riken.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.internal_lstBox_riken.FormattingEnabled = true;
             this.internal_lstBox_riken.Items.AddRange(new object[] {
-            "internal ",
-            "internal -H2O",
-            "internal -2(H2O)",
-            "internal -B()"});
+            "internal",
+            "internal-H2O",
+            "internal-2(H2O)",
+            "internal-B()"});
             this.internal_lstBox_riken.Location = new System.Drawing.Point(242, 35);
             this.internal_lstBox_riken.Name = "internal_lstBox_riken";
             this.internal_lstBox_riken.Size = new System.Drawing.Size(121, 64);

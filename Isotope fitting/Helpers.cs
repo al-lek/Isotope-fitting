@@ -140,6 +140,10 @@ namespace Isotope_fitting
             Int32.TryParse(theString.Substring(sub_index, sub_length), out int result);
             aStringBuilder.Remove(sub_index, sub_length);
             aStringBuilder.Insert(sub_index, (result + amount).ToString());
+            if (result+amount<0)
+            {
+                MessageBox.Show(" ");
+            }
             theString = aStringBuilder.ToString();
             input = theString;
             return input;
@@ -238,6 +242,17 @@ namespace Isotope_fitting
                     }
                 }
             }
+        }
+
+
+
+        public static string fix_formula_temporary_only_O(string input,int h2o )
+        {
+            string formula = "";
+            input = find_index_fix_formula(input, -h2o, 'O');
+
+            formula = input;
+            return formula;
         }
     }
 }
