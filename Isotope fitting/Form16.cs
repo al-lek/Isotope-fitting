@@ -39,6 +39,7 @@ namespace Isotope_fitting
                 create_tabPages();
             }
             initial_set = false;
+            if (frm2.is_riken) this.Text = "Base sequence Editor";
         }
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);

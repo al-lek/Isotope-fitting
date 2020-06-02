@@ -134,7 +134,6 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChangeStateForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Change State";
             ((System.ComponentModel.ISupportInitialize)(this.peptide_state_Btn)).EndInit();

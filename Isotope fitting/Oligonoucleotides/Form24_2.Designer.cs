@@ -37,10 +37,10 @@
             this.frag_sort_Btn2 = new System.Windows.Forms.ToolStripButton();
             this.clearBtn = new System.Windows.Forms.ToolStripButton();
             this.w_lstBox = new System.Windows.Forms.CheckedListBox();
-            Form24_2.machine_listBox1 = new System.Windows.Forms.ListBox();
             this.d_lstBox = new System.Windows.Forms.CheckedListBox();
             this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
+            Form24_2.machine_listBox1 = new System.Windows.Forms.ListBox();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
             this.frag_Label = new System.Windows.Forms.Label();
             this.M_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -86,8 +86,8 @@
             this.panel_calc.Controls.Add(this.d_lstBox);
             this.panel_calc.Controls.Add(this.sortIdx_chkBx);
             this.panel_calc.Controls.Add(this.chargeMax_Box);
-            this.panel_calc.Controls.Add(this.internal_lstBox);
             this.panel_calc.Controls.Add(Form24_2.machine_listBox1);
+            this.panel_calc.Controls.Add(this.internal_lstBox);
             this.panel_calc.Controls.Add(this.frag_Label);
             this.panel_calc.Controls.Add(this.M_lstBox);
             this.panel_calc.Controls.Add(this.charge_Label);
@@ -121,46 +121,8 @@
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(373, 509);
+            this.panel_calc.Size = new System.Drawing.Size(385, 509);
             this.panel_calc.TabIndex = 5;
-            // 
-            // machine_listBox1
-            // 
-            Form24_2.machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            Form24_2.machine_listBox1.FormattingEnabled = true;
-            Form24_2.machine_listBox1.Items.AddRange(new object[] {
-            "Elite_R240000@400",
-            "Elite_R120000@400",
-            "Elite_R60000@400",
-            "Elite_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R120000@400",
-            "OrbitrapXL,Velos,VelosPro_R60000@400",
-            "OrbitrapXL,Velos,VelosPro_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R15000@400",
-            "OrbitrapXL,Velos,VelosPro_R7500@400",
-            "Q-Exactive,ExactivePlus_280K@200",
-            "Q-Exactive,ExactivePlus_R140000@200",
-            "Q-Exactive,ExactivePlus_R70000@200",
-            "Q-Exactive,ExactivePlus_R35000@200",
-            "Q-Exactive,ExactivePlus_R17500@200",
-            "Exactive_R100000@200",
-            "Exactive_R50000@200",
-            "Exactive_R25000@200",
-            "Exactive_R12500@200",
-            "OTFusion,QExactiveHF_480000@200",
-            "OTFusion,QExactiveHF_240000@200",
-            "OTFusion,QExactiveHF_120000@200",
-            "OTFusion,QExactiveHF_60000@200",
-            "OTFusion,QExactiveHF_30000@200",
-            "OTFusion,QExactiveHF_15000@200",
-            "TripleTOF5600_R28000@200",
-            "QTOF_XevoG2-S_R25000@200",
-            "TripleTOF6600_R30000@400             "});
-            Form24_2.machine_listBox1.Location = new System.Drawing.Point(102, 406);
-            Form24_2.machine_listBox1.Name = "machine_listBox";
-            Form24_2.machine_listBox1.Size = new System.Drawing.Size(191, 56);
-            Form24_2.machine_listBox1.TabIndex = 21;
-            Form24_2.machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
             // 
             // known_lstBox
             // 
@@ -173,7 +135,7 @@
             "known MS2",
             "known MS2-H2O",
             "known MS2-2(H2O)"});
-            this.known_lstBox.Location = new System.Drawing.Point(247, 174);
+            this.known_lstBox.Location = new System.Drawing.Point(251, 199);
             this.known_lstBox.Name = "known_lstBox";
             this.known_lstBox.Size = new System.Drawing.Size(121, 52);
             this.known_lstBox.TabIndex = 12;
@@ -196,7 +158,7 @@
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(373, 30);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(385, 30);
             this.toolStrip_fragList.TabIndex = 23;
             // 
             // calcBtn
@@ -248,10 +210,11 @@
             "w-2",
             "w+1",
             "w+2",
+            "w-H2O",
             "w-B()"});
-            this.w_lstBox.Location = new System.Drawing.Point(11, 132);
+            this.w_lstBox.Location = new System.Drawing.Point(11, 142);
             this.w_lstBox.Name = "w_lstBox";
-            this.w_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.w_lstBox.Size = new System.Drawing.Size(58, 109);
             this.w_lstBox.TabIndex = 6;
             // 
             // d_lstBox
@@ -265,16 +228,17 @@
             "d-2",
             "d+1",
             "d+2",
+            "d-H2O",
             "d-B()"});
-            this.d_lstBox.Location = new System.Drawing.Point(188, 29);
+            this.d_lstBox.Location = new System.Drawing.Point(191, 29);
             this.d_lstBox.Name = "d_lstBox";
-            this.d_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.d_lstBox.Size = new System.Drawing.Size(58, 109);
             this.d_lstBox.TabIndex = 5;
             // 
             // sortIdx_chkBx
             // 
             this.sortIdx_chkBx.AutoSize = true;
-            this.sortIdx_chkBx.Location = new System.Drawing.Point(79, 333);
+            this.sortIdx_chkBx.Location = new System.Drawing.Point(79, 353);
             this.sortIdx_chkBx.Name = "sortIdx_chkBx";
             this.sortIdx_chkBx.Size = new System.Drawing.Size(15, 14);
             this.sortIdx_chkBx.TabIndex = 19;
@@ -283,11 +247,49 @@
             // chargeMax_Box
             // 
             this.chargeMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.chargeMax_Box.Location = new System.Drawing.Point(213, 277);
+            this.chargeMax_Box.Location = new System.Drawing.Point(213, 297);
             this.chargeMax_Box.Name = "chargeMax_Box";
             this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMax_Box.TabIndex = 16;
             this.chargeMax_Box.TextChanged += new System.EventHandler(this.chargeMax_Box_TextChanged);
+            // 
+            // machine_listBox1
+            // 
+            Form24_2.machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            Form24_2.machine_listBox1.FormattingEnabled = true;
+            Form24_2.machine_listBox1.Items.AddRange(new object[] {
+            "Elite_R240000@400",
+            "Elite_R120000@400",
+            "Elite_R60000@400",
+            "Elite_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R120000@400",
+            "OrbitrapXL,Velos,VelosPro_R60000@400",
+            "OrbitrapXL,Velos,VelosPro_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R15000@400",
+            "OrbitrapXL,Velos,VelosPro_R7500@400",
+            "Q-Exactive,ExactivePlus_280K@200",
+            "Q-Exactive,ExactivePlus_R140000@200",
+            "Q-Exactive,ExactivePlus_R70000@200",
+            "Q-Exactive,ExactivePlus_R35000@200",
+            "Q-Exactive,ExactivePlus_R17500@200",
+            "Exactive_R100000@200",
+            "Exactive_R50000@200",
+            "Exactive_R25000@200",
+            "Exactive_R12500@200",
+            "OTFusion,QExactiveHF_480000@200",
+            "OTFusion,QExactiveHF_240000@200",
+            "OTFusion,QExactiveHF_120000@200",
+            "OTFusion,QExactiveHF_60000@200",
+            "OTFusion,QExactiveHF_30000@200",
+            "OTFusion,QExactiveHF_15000@200",
+            "TripleTOF5600_R28000@200",
+            "QTOF_XevoG2-S_R25000@200",
+            "TripleTOF6600_R30000@400             "});
+            Form24_2.machine_listBox1.Location = new System.Drawing.Point(102, 426);
+            Form24_2.machine_listBox1.Name = "machine_listBox";
+            Form24_2.machine_listBox1.Size = new System.Drawing.Size(191, 56);
+            Form24_2.machine_listBox1.TabIndex = 21;
+            Form24_2.machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
             // 
             // internal_lstBox
             // 
@@ -299,7 +301,7 @@
             "internal-H2O",
             "internal-2(H2O)",
             "internal-B()"});
-            this.internal_lstBox.Location = new System.Drawing.Point(247, 29);
+            this.internal_lstBox.Location = new System.Drawing.Point(251, 29);
             this.internal_lstBox.Name = "internal_lstBox";
             this.internal_lstBox.Size = new System.Drawing.Size(121, 64);
             this.internal_lstBox.TabIndex = 10;
@@ -328,7 +330,7 @@
             "M-B()",
             "M-H2O-B()",
             "B()"});
-            this.M_lstBox.Location = new System.Drawing.Point(247, 94);
+            this.M_lstBox.Location = new System.Drawing.Point(251, 106);
             this.M_lstBox.Name = "M_lstBox";
             this.M_lstBox.Size = new System.Drawing.Size(121, 80);
             this.M_lstBox.TabIndex = 11;
@@ -338,7 +340,7 @@
             this.charge_Label.AutoSize = true;
             this.charge_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.charge_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.charge_Label.Location = new System.Drawing.Point(164, 243);
+            this.charge_Label.Location = new System.Drawing.Point(164, 263);
             this.charge_Label.Name = "charge_Label";
             this.charge_Label.Size = new System.Drawing.Size(41, 13);
             this.charge_Label.TabIndex = 28;
@@ -355,17 +357,18 @@
             "z-2",
             "z+1",
             "z+2",
+            "z-H2O",
             "z-B()"});
-            this.z_lstBox.Location = new System.Drawing.Point(188, 132);
+            this.z_lstBox.Location = new System.Drawing.Point(188, 142);
             this.z_lstBox.Name = "z_lstBox";
-            this.z_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.z_lstBox.Size = new System.Drawing.Size(58, 109);
             this.z_lstBox.TabIndex = 9;
             // 
             // chargeAll_Btn
             // 
             this.chargeAll_Btn.BackColor = System.Drawing.Color.Gainsboro;
             this.chargeAll_Btn.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.chargeAll_Btn.Location = new System.Drawing.Point(262, 276);
+            this.chargeAll_Btn.Location = new System.Drawing.Point(262, 296);
             this.chargeAll_Btn.Name = "chargeAll_Btn";
             this.chargeAll_Btn.Size = new System.Drawing.Size(37, 23);
             this.chargeAll_Btn.TabIndex = 17;
@@ -378,7 +381,7 @@
             this.machine_Label.AutoSize = true;
             this.machine_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.machine_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.machine_Label.Location = new System.Drawing.Point(102, 387);
+            this.machine_Label.Location = new System.Drawing.Point(102, 407);
             this.machine_Label.Name = "machine_Label";
             this.machine_Label.Size = new System.Drawing.Size(48, 13);
             this.machine_Label.TabIndex = 37;
@@ -395,10 +398,11 @@
             "y-2",
             "y+1",
             "y+2",
+            "y-H2O",
             "y-B()"});
-            this.y_lstBox.Location = new System.Drawing.Point(129, 132);
+            this.y_lstBox.Location = new System.Drawing.Point(129, 142);
             this.y_lstBox.Name = "y_lstBox";
-            this.y_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.y_lstBox.Size = new System.Drawing.Size(58, 109);
             this.y_lstBox.TabIndex = 8;
             // 
             // mz_Label
@@ -406,7 +410,7 @@
             this.mz_Label.AutoSize = true;
             this.mz_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mz_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.mz_Label.Location = new System.Drawing.Point(12, 243);
+            this.mz_Label.Location = new System.Drawing.Point(12, 263);
             this.mz_Label.Name = "mz_Label";
             this.mz_Label.Size = new System.Drawing.Size(81, 13);
             this.mz_Label.TabIndex = 25;
@@ -423,10 +427,11 @@
             "c-2",
             "c+1",
             "c+2",
+            "c-H2O",
             "c-B()"});
-            this.c_lstBox.Location = new System.Drawing.Point(129, 29);
+            this.c_lstBox.Location = new System.Drawing.Point(131, 29);
             this.c_lstBox.Name = "c_lstBox";
-            this.c_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.c_lstBox.Size = new System.Drawing.Size(58, 109);
             this.c_lstBox.TabIndex = 4;
             // 
             // mzMax_Label
@@ -434,7 +439,7 @@
             this.mzMax_Label.AutoSize = true;
             this.mzMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mzMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.mzMax_Label.Location = new System.Drawing.Point(76, 261);
+            this.mzMax_Label.Location = new System.Drawing.Point(76, 281);
             this.mzMax_Label.Name = "mzMax_Label";
             this.mzMax_Label.Size = new System.Drawing.Size(26, 13);
             this.mzMax_Label.TabIndex = 27;
@@ -443,7 +448,7 @@
             // resolution_Box
             // 
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(12, 406);
+            this.resolution_Box.Location = new System.Drawing.Point(12, 426);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(81, 20);
             this.resolution_Box.TabIndex = 22;
@@ -454,7 +459,7 @@
             this.mzMin_Label.AutoSize = true;
             this.mzMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mzMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.mzMin_Label.Location = new System.Drawing.Point(12, 261);
+            this.mzMin_Label.Location = new System.Drawing.Point(12, 281);
             this.mzMin_Label.Name = "mzMin_Label";
             this.mzMin_Label.Size = new System.Drawing.Size(23, 13);
             this.mzMin_Label.TabIndex = 26;
@@ -471,16 +476,17 @@
             "x-2",
             "x+1",
             "x+2",
+            "x-H2O",
             "x-B()"});
-            this.x_lstBox.Location = new System.Drawing.Point(70, 132);
+            this.x_lstBox.Location = new System.Drawing.Point(70, 142);
             this.x_lstBox.Name = "x_lstBox";
-            this.x_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.x_lstBox.Size = new System.Drawing.Size(58, 109);
             this.x_lstBox.TabIndex = 7;
             // 
             // mzMax_Box
             // 
             this.mzMax_Box.ForeColor = System.Drawing.Color.Black;
-            this.mzMax_Box.Location = new System.Drawing.Point(76, 277);
+            this.mzMax_Box.Location = new System.Drawing.Point(76, 297);
             this.mzMax_Box.Name = "mzMax_Box";
             this.mzMax_Box.Size = new System.Drawing.Size(56, 20);
             this.mzMax_Box.TabIndex = 14;
@@ -492,7 +498,7 @@
             this.resolution_Label.AutoSize = true;
             this.resolution_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resolution_Label.ForeColor = System.Drawing.Color.SteelBlue;
-            this.resolution_Label.Location = new System.Drawing.Point(12, 387);
+            this.resolution_Label.Location = new System.Drawing.Point(12, 407);
             this.resolution_Label.Name = "resolution_Label";
             this.resolution_Label.Size = new System.Drawing.Size(57, 13);
             this.resolution_Label.TabIndex = 36;
@@ -501,7 +507,7 @@
             // mzMin_Box
             // 
             this.mzMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.mzMin_Box.Location = new System.Drawing.Point(12, 277);
+            this.mzMin_Box.Location = new System.Drawing.Point(12, 297);
             this.mzMin_Box.Name = "mzMin_Box";
             this.mzMin_Box.Size = new System.Drawing.Size(56, 20);
             this.mzMin_Box.TabIndex = 13;
@@ -519,10 +525,11 @@
             "b-2",
             "b+1",
             "b+2",
+            "b-H2O",
             "b-B()"});
-            this.b_lstBox.Location = new System.Drawing.Point(70, 29);
+            this.b_lstBox.Location = new System.Drawing.Point(71, 29);
             this.b_lstBox.Name = "b_lstBox";
-            this.b_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.b_lstBox.Size = new System.Drawing.Size(58, 109);
             this.b_lstBox.TabIndex = 3;
             // 
             // idxTo_Label
@@ -530,7 +537,7 @@
             this.idxTo_Label.AutoSize = true;
             this.idxTo_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxTo_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.idxTo_Label.Location = new System.Drawing.Point(257, 333);
+            this.idxTo_Label.Location = new System.Drawing.Point(257, 353);
             this.idxTo_Label.Name = "idxTo_Label";
             this.idxTo_Label.Size = new System.Drawing.Size(16, 13);
             this.idxTo_Label.TabIndex = 35;
@@ -541,7 +548,7 @@
             this.idxFrom_Label.AutoSize = true;
             this.idxFrom_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxFrom_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.idxFrom_Label.Location = new System.Drawing.Point(156, 333);
+            this.idxFrom_Label.Location = new System.Drawing.Point(156, 353);
             this.idxFrom_Label.Name = "idxFrom_Label";
             this.idxFrom_Label.Size = new System.Drawing.Size(27, 13);
             this.idxFrom_Label.TabIndex = 34;
@@ -552,7 +559,7 @@
             this.chargeMax_Label.AutoSize = true;
             this.chargeMax_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chargeMax_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.chargeMax_Label.Location = new System.Drawing.Point(213, 261);
+            this.chargeMax_Label.Location = new System.Drawing.Point(213, 281);
             this.chargeMax_Label.Name = "chargeMax_Label";
             this.chargeMax_Label.Size = new System.Drawing.Size(26, 13);
             this.chargeMax_Label.TabIndex = 30;
@@ -569,10 +576,11 @@
             "a-2",
             "a+1",
             "a+2",
+            "a-H2O",
             "a-B()"});
             this.a_lstBox.Location = new System.Drawing.Point(11, 29);
             this.a_lstBox.Name = "a_lstBox";
-            this.a_lstBox.Size = new System.Drawing.Size(47, 94);
+            this.a_lstBox.Size = new System.Drawing.Size(58, 109);
             this.a_lstBox.TabIndex = 2;
             // 
             // chargeMin_Label
@@ -580,7 +588,7 @@
             this.chargeMin_Label.AutoSize = true;
             this.chargeMin_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chargeMin_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.chargeMin_Label.Location = new System.Drawing.Point(164, 261);
+            this.chargeMin_Label.Location = new System.Drawing.Point(164, 281);
             this.chargeMin_Label.Name = "chargeMin_Label";
             this.chargeMin_Label.Size = new System.Drawing.Size(23, 13);
             this.chargeMin_Label.TabIndex = 29;
@@ -589,7 +597,7 @@
             // idxTo_Box
             // 
             this.idxTo_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxTo_Box.Location = new System.Drawing.Point(192, 349);
+            this.idxTo_Box.Location = new System.Drawing.Point(192, 369);
             this.idxTo_Box.Name = "idxTo_Box";
             this.idxTo_Box.Size = new System.Drawing.Size(81, 20);
             this.idxTo_Box.TabIndex = 21;
@@ -597,7 +605,7 @@
             // chargeMin_Box
             // 
             this.chargeMin_Box.ForeColor = System.Drawing.Color.Black;
-            this.chargeMin_Box.Location = new System.Drawing.Point(164, 277);
+            this.chargeMin_Box.Location = new System.Drawing.Point(164, 297);
             this.chargeMin_Box.Name = "chargeMin_Box";
             this.chargeMin_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMin_Box.TabIndex = 15;
@@ -606,7 +614,7 @@
             // idxFrom_Box
             // 
             this.idxFrom_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxFrom_Box.Location = new System.Drawing.Point(102, 349);
+            this.idxFrom_Box.Location = new System.Drawing.Point(102, 369);
             this.idxFrom_Box.Name = "idxFrom_Box";
             this.idxFrom_Box.Size = new System.Drawing.Size(81, 20);
             this.idxFrom_Box.TabIndex = 20;
@@ -616,7 +624,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label7.Location = new System.Drawing.Point(11, 314);
+            this.label7.Location = new System.Drawing.Point(11, 334);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(33, 13);
             this.label7.TabIndex = 31;
@@ -625,7 +633,7 @@
             // idxPr_Box
             // 
             this.idxPr_Box.ForeColor = System.Drawing.Color.Black;
-            this.idxPr_Box.Location = new System.Drawing.Point(11, 349);
+            this.idxPr_Box.Location = new System.Drawing.Point(11, 369);
             this.idxPr_Box.Name = "idxPr_Box";
             this.idxPr_Box.Size = new System.Drawing.Size(81, 20);
             this.idxPr_Box.TabIndex = 18;
@@ -635,7 +643,7 @@
             this.primary_Label.AutoSize = true;
             this.primary_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.primary_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.primary_Label.Location = new System.Drawing.Point(11, 333);
+            this.primary_Label.Location = new System.Drawing.Point(11, 353);
             this.primary_Label.Name = "primary_Label";
             this.primary_Label.Size = new System.Drawing.Size(43, 13);
             this.primary_Label.TabIndex = 32;
@@ -646,7 +654,7 @@
             this.internal_Label.AutoSize = true;
             this.internal_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.internal_Label.ForeColor = System.Drawing.Color.SlateGray;
-            this.internal_Label.Location = new System.Drawing.Point(102, 333);
+            this.internal_Label.Location = new System.Drawing.Point(102, 353);
             this.internal_Label.Name = "internal_Label";
             this.internal_Label.Size = new System.Drawing.Size(41, 13);
             this.internal_Label.TabIndex = 33;
@@ -656,7 +664,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(373, 509);
+            this.ClientSize = new System.Drawing.Size(395, 515);
             this.Controls.Add(this.panel_calc);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

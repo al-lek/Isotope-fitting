@@ -221,7 +221,7 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(400, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(377, 677);
+            this.panel_calc.Size = new System.Drawing.Size(396, 677);
             this.panel_calc.TabIndex = 4;
             // 
             // label8
@@ -311,7 +311,7 @@
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(374, 415);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(393, 415);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // chemForm_tab
@@ -763,7 +763,7 @@
             this.Frag_tab.Location = new System.Drawing.Point(4, 22);
             this.Frag_tab.Name = "Frag_tab";
             this.Frag_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.Frag_tab.Size = new System.Drawing.Size(366, 389);
+            this.Frag_tab.Size = new System.Drawing.Size(385, 389);
             this.Frag_tab.TabIndex = 0;
             this.Frag_tab.Text = "Fragments";
             this.Frag_tab.UseVisualStyleBackColor = true;
@@ -1239,7 +1239,7 @@
             this.fragTab_riken.Location = new System.Drawing.Point(4, 22);
             this.fragTab_riken.Name = "fragTab_riken";
             this.fragTab_riken.Padding = new System.Windows.Forms.Padding(3);
-            this.fragTab_riken.Size = new System.Drawing.Size(366, 389);
+            this.fragTab_riken.Size = new System.Drawing.Size(385, 389);
             this.fragTab_riken.TabIndex = 2;
             this.fragTab_riken.Text = "Fragments";
             this.fragTab_riken.UseVisualStyleBackColor = true;
@@ -1257,7 +1257,7 @@
             "M-B()",
             "M-H2O-B()",
             "B()"});
-            this.M_lstBox_riken.Location = new System.Drawing.Point(242, 99);
+            this.M_lstBox_riken.Location = new System.Drawing.Point(242, 113);
             this.M_lstBox_riken.Name = "M_lstBox_riken";
             this.M_lstBox_riken.Size = new System.Drawing.Size(121, 80);
             this.M_lstBox_riken.TabIndex = 124;
@@ -1273,7 +1273,7 @@
             "known MS2",
             "known MS2-H2O",
             "known MS2-2(H2O)"});
-            this.known_lstBox.Location = new System.Drawing.Point(242, 179);
+            this.known_lstBox.Location = new System.Drawing.Point(242, 207);
             this.known_lstBox.Name = "known_lstBox";
             this.known_lstBox.Size = new System.Drawing.Size(121, 52);
             this.known_lstBox.TabIndex = 123;
@@ -1289,10 +1289,11 @@
             "w-2",
             "w+1",
             "w+2",
+            "w-H2O",
             "w-B()"});
-            this.w_lstBox_riken.Location = new System.Drawing.Point(6, 138);
+            this.w_lstBox_riken.Location = new System.Drawing.Point(6, 150);
             this.w_lstBox_riken.Name = "w_lstBox_riken";
-            this.w_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.w_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.w_lstBox_riken.TabIndex = 67;
             // 
             // d_lstBox_riken
@@ -1306,10 +1307,11 @@
             "d-2",
             "d+1",
             "d+2",
+            "d-H2O",
             "d-B()"});
             this.d_lstBox_riken.Location = new System.Drawing.Point(183, 35);
             this.d_lstBox_riken.Name = "d_lstBox_riken";
-            this.d_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.d_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.d_lstBox_riken.TabIndex = 66;
             // 
             // internal_lstBox_riken
@@ -1338,10 +1340,11 @@
             "z-2",
             "z+1",
             "z+2",
+            "z-H2O",
             "z-B()"});
-            this.z_lstBox_riken.Location = new System.Drawing.Point(183, 138);
+            this.z_lstBox_riken.Location = new System.Drawing.Point(183, 150);
             this.z_lstBox_riken.Name = "z_lstBox_riken";
-            this.z_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.z_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.z_lstBox_riken.TabIndex = 64;
             // 
             // y_lstBox_riken
@@ -1355,10 +1358,11 @@
             "y-2",
             "y+1",
             "y+2",
+            "y-H2O",
             "y-B()"});
-            this.y_lstBox_riken.Location = new System.Drawing.Point(124, 138);
+            this.y_lstBox_riken.Location = new System.Drawing.Point(124, 150);
             this.y_lstBox_riken.Name = "y_lstBox_riken";
-            this.y_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.y_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.y_lstBox_riken.TabIndex = 63;
             // 
             // c_lstBox_riken
@@ -1372,10 +1376,11 @@
             "c-2",
             "c+1",
             "c+2",
+            "c-H2O",
             "c-B()"});
             this.c_lstBox_riken.Location = new System.Drawing.Point(124, 35);
             this.c_lstBox_riken.Name = "c_lstBox_riken";
-            this.c_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.c_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.c_lstBox_riken.TabIndex = 60;
             // 
             // x_lstBox_riken
@@ -1389,10 +1394,11 @@
             "x-2",
             "x+1",
             "x+2",
+            "x-H2O",
             "x-B()"});
-            this.x_lstBox_riken.Location = new System.Drawing.Point(65, 138);
+            this.x_lstBox_riken.Location = new System.Drawing.Point(65, 150);
             this.x_lstBox_riken.Name = "x_lstBox_riken";
-            this.x_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.x_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.x_lstBox_riken.TabIndex = 62;
             // 
             // b_lstBox_riken
@@ -1406,10 +1412,11 @@
             "b-2",
             "b+1",
             "b+2",
+            "b-H2O",
             "b-B()"});
             this.b_lstBox_riken.Location = new System.Drawing.Point(65, 35);
             this.b_lstBox_riken.Name = "b_lstBox_riken";
-            this.b_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.b_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.b_lstBox_riken.TabIndex = 59;
             // 
             // a_lstBox_riken
@@ -1423,16 +1430,17 @@
             "a-2",
             "a+1",
             "a+2",
+            "a-H2O",
             "a-B()"});
             this.a_lstBox_riken.Location = new System.Drawing.Point(6, 35);
             this.a_lstBox_riken.Name = "a_lstBox_riken";
-            this.a_lstBox_riken.Size = new System.Drawing.Size(47, 94);
+            this.a_lstBox_riken.Size = new System.Drawing.Size(56, 109);
             this.a_lstBox_riken.TabIndex = 58;
             // 
             // sortIdx_chkBx_riken
             // 
             this.sortIdx_chkBx_riken.AutoSize = true;
-            this.sortIdx_chkBx_riken.Location = new System.Drawing.Point(74, 336);
+            this.sortIdx_chkBx_riken.Location = new System.Drawing.Point(74, 357);
             this.sortIdx_chkBx_riken.Name = "sortIdx_chkBx_riken";
             this.sortIdx_chkBx_riken.Size = new System.Drawing.Size(15, 14);
             this.sortIdx_chkBx_riken.TabIndex = 57;
@@ -1500,7 +1508,7 @@
             // chargeMax_Box_riken
             // 
             this.chargeMax_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.chargeMax_Box_riken.Location = new System.Drawing.Point(206, 279);
+            this.chargeMax_Box_riken.Location = new System.Drawing.Point(206, 300);
             this.chargeMax_Box_riken.Name = "chargeMax_Box_riken";
             this.chargeMax_Box_riken.Size = new System.Drawing.Size(38, 20);
             this.chargeMax_Box_riken.TabIndex = 33;
@@ -1511,7 +1519,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label11.Location = new System.Drawing.Point(157, 245);
+            this.label11.Location = new System.Drawing.Point(157, 266);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(41, 13);
             this.label11.TabIndex = 14;
@@ -1521,7 +1529,7 @@
             // 
             this.chargeAll_Btn_riken.BackColor = System.Drawing.Color.Gainsboro;
             this.chargeAll_Btn_riken.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.chargeAll_Btn_riken.Location = new System.Drawing.Point(255, 278);
+            this.chargeAll_Btn_riken.Location = new System.Drawing.Point(255, 299);
             this.chargeAll_Btn_riken.Name = "chargeAll_Btn_riken";
             this.chargeAll_Btn_riken.Size = new System.Drawing.Size(37, 23);
             this.chargeAll_Btn_riken.TabIndex = 34;
@@ -1534,7 +1542,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label12.Location = new System.Drawing.Point(6, 245);
+            this.label12.Location = new System.Drawing.Point(6, 266);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(81, 13);
             this.label12.TabIndex = 11;
@@ -1545,7 +1553,7 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.SlateGray;
-            this.label13.Location = new System.Drawing.Point(70, 263);
+            this.label13.Location = new System.Drawing.Point(70, 284);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(26, 13);
             this.label13.TabIndex = 12;
@@ -1556,7 +1564,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.SlateGray;
-            this.label14.Location = new System.Drawing.Point(6, 263);
+            this.label14.Location = new System.Drawing.Point(6, 284);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(23, 13);
             this.label14.TabIndex = 13;
@@ -1565,7 +1573,7 @@
             // mzMax_Box_riken
             // 
             this.mzMax_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.mzMax_Box_riken.Location = new System.Drawing.Point(70, 279);
+            this.mzMax_Box_riken.Location = new System.Drawing.Point(70, 300);
             this.mzMax_Box_riken.Name = "mzMax_Box_riken";
             this.mzMax_Box_riken.Size = new System.Drawing.Size(56, 20);
             this.mzMax_Box_riken.TabIndex = 31;
@@ -1574,7 +1582,7 @@
             // mzMin_Box_riken
             // 
             this.mzMin_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.mzMin_Box_riken.Location = new System.Drawing.Point(6, 279);
+            this.mzMin_Box_riken.Location = new System.Drawing.Point(6, 300);
             this.mzMin_Box_riken.Name = "mzMin_Box_riken";
             this.mzMin_Box_riken.Size = new System.Drawing.Size(56, 20);
             this.mzMin_Box_riken.TabIndex = 30;
@@ -1585,7 +1593,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.SlateGray;
-            this.label15.Location = new System.Drawing.Point(251, 336);
+            this.label15.Location = new System.Drawing.Point(251, 357);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(16, 13);
             this.label15.TabIndex = 21;
@@ -1596,7 +1604,7 @@
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.SlateGray;
-            this.label16.Location = new System.Drawing.Point(150, 336);
+            this.label16.Location = new System.Drawing.Point(150, 357);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(27, 13);
             this.label16.TabIndex = 20;
@@ -1607,7 +1615,7 @@
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.SlateGray;
-            this.label17.Location = new System.Drawing.Point(206, 263);
+            this.label17.Location = new System.Drawing.Point(206, 284);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(26, 13);
             this.label17.TabIndex = 16;
@@ -1618,7 +1626,7 @@
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.SlateGray;
-            this.label18.Location = new System.Drawing.Point(157, 263);
+            this.label18.Location = new System.Drawing.Point(157, 284);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(23, 13);
             this.label18.TabIndex = 15;
@@ -1627,7 +1635,7 @@
             // idxTo_Box_riken
             // 
             this.idxTo_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.idxTo_Box_riken.Location = new System.Drawing.Point(186, 352);
+            this.idxTo_Box_riken.Location = new System.Drawing.Point(186, 373);
             this.idxTo_Box_riken.Name = "idxTo_Box_riken";
             this.idxTo_Box_riken.Size = new System.Drawing.Size(81, 20);
             this.idxTo_Box_riken.TabIndex = 37;
@@ -1635,7 +1643,7 @@
             // chargeMin_Box_riken
             // 
             this.chargeMin_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.chargeMin_Box_riken.Location = new System.Drawing.Point(157, 279);
+            this.chargeMin_Box_riken.Location = new System.Drawing.Point(157, 300);
             this.chargeMin_Box_riken.Name = "chargeMin_Box_riken";
             this.chargeMin_Box_riken.Size = new System.Drawing.Size(38, 20);
             this.chargeMin_Box_riken.TabIndex = 32;
@@ -1644,7 +1652,7 @@
             // idxFrom_Box_riken
             // 
             this.idxFrom_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.idxFrom_Box_riken.Location = new System.Drawing.Point(96, 352);
+            this.idxFrom_Box_riken.Location = new System.Drawing.Point(96, 373);
             this.idxFrom_Box_riken.Name = "idxFrom_Box_riken";
             this.idxFrom_Box_riken.Size = new System.Drawing.Size(81, 20);
             this.idxFrom_Box_riken.TabIndex = 36;
@@ -1654,7 +1662,7 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label19.Location = new System.Drawing.Point(6, 317);
+            this.label19.Location = new System.Drawing.Point(6, 338);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(33, 13);
             this.label19.TabIndex = 17;
@@ -1663,7 +1671,7 @@
             // idxPr_Box_riken
             // 
             this.idxPr_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.idxPr_Box_riken.Location = new System.Drawing.Point(6, 352);
+            this.idxPr_Box_riken.Location = new System.Drawing.Point(6, 373);
             this.idxPr_Box_riken.Name = "idxPr_Box_riken";
             this.idxPr_Box_riken.Size = new System.Drawing.Size(81, 20);
             this.idxPr_Box_riken.TabIndex = 35;
@@ -1673,7 +1681,7 @@
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.SlateGray;
-            this.label20.Location = new System.Drawing.Point(6, 336);
+            this.label20.Location = new System.Drawing.Point(6, 357);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(43, 13);
             this.label20.TabIndex = 18;
@@ -1684,7 +1692,7 @@
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.ForeColor = System.Drawing.Color.SlateGray;
-            this.label21.Location = new System.Drawing.Point(96, 336);
+            this.label21.Location = new System.Drawing.Point(96, 357);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(41, 13);
             this.label21.TabIndex = 19;
@@ -1864,9 +1872,9 @@
             // 
             this.factor_panel9.BackColor = System.Drawing.Color.White;
             this.factor_panel9.Dock = System.Windows.Forms.DockStyle.Top;
-            this.factor_panel9.Location = new System.Drawing.Point(377, 0);
+            this.factor_panel9.Location = new System.Drawing.Point(396, 0);
             this.factor_panel9.Name = "factor_panel9";
-            this.factor_panel9.Size = new System.Drawing.Size(421, 37);
+            this.factor_panel9.Size = new System.Drawing.Size(402, 37);
             this.factor_panel9.TabIndex = 54;
             this.factor_panel9.Visible = false;
             // 
@@ -1887,10 +1895,10 @@
             this.fragListView9.FullRowSelect = true;
             this.fragListView9.GridLines = true;
             this.fragListView9.HideSelection = false;
-            this.fragListView9.Location = new System.Drawing.Point(377, 37);
+            this.fragListView9.Location = new System.Drawing.Point(396, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(421, 569);
+            this.fragListView9.Size = new System.Drawing.Size(402, 569);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -1927,9 +1935,9 @@
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.insert_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(377, 606);
+            this.panel1.Location = new System.Drawing.Point(396, 606);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(421, 71);
+            this.panel1.Size = new System.Drawing.Size(402, 71);
             this.panel1.TabIndex = 56;
             // 
             // groupBox1
