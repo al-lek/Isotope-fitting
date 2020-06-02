@@ -102,7 +102,7 @@ namespace Isotope_fitting
             double qMax = txt_to_d(chargeMax_Box);
             if (double.IsNaN(qMax)) qMax = 100.0;
 
-            if (frm2.is_exp_deconvoluted) { qMax = 1; }
+            if (frm2.is_exp_deconvoluted) { qMin = 0; qMax = 1; }
             // 2. get checked types
             List<string> types = new List<string>();
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
@@ -115,8 +115,9 @@ namespace Isotope_fitting
             List<string> types_B_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("B")).ToList();// primary with neutral loss a-H2O, b-NH3, ...
             List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();// a, b, y.....
             List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 3).ToList();  // a+1, y-2....
+            List<string> types_primary_H2O = types.Where(t => primary.Contains(t[0].ToString()) && t.Length ==5).ToList();  // a+H2O, y-H2O....
             List<string> types_known_MS2 = types.Where(t => t.StartsWith("known")).ToList();  // known MS2 fragments....
-            List<string> types_B = types.Where(t => t.StartsWith("B(")).ToList();  // known MS2 fragments....
+            List<string> types_B = types.Where(t => t.StartsWith("B(")).ToList();  // B() fragments....
 
             //4.index primary
             List<int[]> primary_indexes = new List<int[]>();
@@ -144,8 +145,8 @@ namespace Isotope_fitting
                 bool is_B_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("B(");
                 bool is_primary = primary.Contains(curr_type.ToArray()[0].ToString()) && curr_type.Length == 1;
                 bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("B(") && curr_type.Length > 1;
-                bool is_known_MS2 = curr_type.StartsWith("known"); ;
-                bool is_B= curr_type.StartsWith("B("); ;
+                bool is_known_MS2 = curr_type.StartsWith("known"); 
+                bool is_B= curr_type.StartsWith("B("); 
 
 
                 // drop frag by mz and charge rules
@@ -374,12 +375,7 @@ namespace Isotope_fitting
                     if (types_known_MS2.Contains(curr_type)) res.Add(chem.DeepCopy());
                     continue;
                 }
-                if (is_primary_Hyd) // this should hit, we do not request this type from riken
-                {
-                    if (types_primary_Hyd.Contains(curr_type)) res.Add(chem.DeepCopy());
-                    continue;
-                }
-
+                
                 if (is_primary)
                 {
                     if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
@@ -390,7 +386,7 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
-                            // add the primary and modify it according to gain or loss of H
+                            // add the primary and modify it according to gain or loss of H2O
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
 
@@ -403,8 +399,33 @@ namespace Isotope_fitting
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
 
-                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
+                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4).ToString();
                             res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                        }
+                    }
+                    if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
+                    {
+                        foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
+                        {
+                            // add the primary and modify it according to gain or loss of H
+                            res.Add(chem.DeepCopy());
+                            int curr_idx = res.Count - 1;
+
+                            string new_type ="("+hyd_mod+")";
+                            res[curr_idx].Ion_type = new_type;
+                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+
+                            if (hyd_mod.Contains('+'))
+                            {
+                                res[curr_idx].Mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4).ToString();
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, false, 0,1);
+                            }
+                            else
+                            {
+                                res[curr_idx].Mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4).ToString();
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, false, 0,-1);
+                            }                           
                         }
                     }
                 }

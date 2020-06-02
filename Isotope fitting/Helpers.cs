@@ -77,15 +77,15 @@ namespace Isotope_fitting
         {
             string formula = "";
             if (simple == true) { formula = find_index_fix_formula(input, h); return formula; }
-            if (h2o > 0)
+            if (h2o != 0)
             {
-                input = find_index_fix_formula(input, -2 * h2o, 'H');
-                input = find_index_fix_formula(input, -h2o, 'O');
+                input = find_index_fix_formula(input, 2 * h2o, 'H');
+                input = find_index_fix_formula(input, h2o, 'O');
             }
-            if (nh3 > 0)
+            if (nh3 != 0)
             {
-                input = find_index_fix_formula(input, -3 * h2o, 'H');
-                input = find_index_fix_formula(input, -nh3, 'N');
+                input = find_index_fix_formula(input, 3 * nh3, 'H');
+                input = find_index_fix_formula(input, nh3, 'N');
             }
             formula = input;
             return formula;

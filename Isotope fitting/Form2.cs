@@ -39,7 +39,6 @@ namespace Isotope_fitting
     {
         public bool is_riken = false;
         bool is_polarity_negative = false;
-        string keyword = "amino acid";
 
         #region PARAMETER SET TAB FIT
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();
@@ -640,9 +639,9 @@ namespace Isotope_fitting
                     disp_z.ForeColor = ppm_z.ForeColor = ppm_z_H2O.ForeColor = ppm_z_NH3.ForeColor = Color.HotPink;
                     //charge diagramms
                     down1_Btn.Text = "w"; down2_Btn.Text = "x"; down3_Btn.Text = "y";
-                    ax_chBx.Text = "a-w"; by_chBx.Text = "b-x"; cz_chBx.Text = "c-y"; intA_chBx.Text = "d-z"; intB_chBx.Text = "internal";
-                    ax_chBxCopy1.Text = "a-w"; by_chBxCopy1.Text = "b-x"; cz_chBxCopy1.Text = "c-y"; intA_chBxCopy1.Text = "d-z"; intB_chBxCopy1.Text = "internal";
-                    ax_chBxCopy2.Text = "a-w"; by_chBxCopy2.Text = "b-x"; cz_chBxCopy2.Text = "c-y"; intA_chBxCopy2.Text = "d-z"; intB_chBxCopy2.Text = "internal";
+                    ax_chBx.Text = "a - w"; by_chBx.Text = "b - x"; cz_chBx.Text = "c - y"; intA_chBx.Text = "d - z"; intB_chBx.Text = "internal";
+                    ax_chBxCopy1.Text = "a - w"; by_chBxCopy1.Text = "b - x"; cz_chBxCopy1.Text = "c - y"; intA_chBxCopy1.Text = "d - z"; intB_chBxCopy1.Text = "internal";
+                    ax_chBxCopy2.Text = "a - w"; by_chBxCopy2.Text = "b - x"; cz_chBxCopy2.Text = "c - y"; intA_chBxCopy2.Text = "d - z"; intB_chBxCopy2.Text = "internal";
                 }
                 else
                 {
@@ -652,9 +651,9 @@ namespace Isotope_fitting
                     disp_z.ForeColor = ppm_z.ForeColor = ppm_z_H2O.ForeColor = ppm_z_NH3.ForeColor = Color.Tomato;
                     //charge diagramms
                     down1_Btn.Text = "x"; down2_Btn.Text = "y"; down3_Btn.Text = "z";
-                    ax_chBx.Text = "a-x"; by_chBx.Text = "b-y"; cz_chBx.Text = "c-y"; intA_chBx.Text = "internal a"; intB_chBx.Text = "internal b";
-                    ax_chBxCopy1.Text = "a-x"; by_chBxCopy1.Text = "b-y"; cz_chBxCopy1.Text = "c-z"; intA_chBxCopy1.Text = "internal a"; intB_chBxCopy1.Text = "internal b";
-                    ax_chBxCopy2.Text = "a-x"; by_chBxCopy2.Text = "b-y"; cz_chBxCopy2.Text = "c-z"; intA_chBxCopy2.Text = "internal a"; intB_chBxCopy2.Text = "internal b";
+                    ax_chBx.Text = "a - x"; by_chBx.Text = "b - y"; cz_chBx.Text = "c - y"; intA_chBx.Text = "internal a"; intB_chBx.Text = "internal b";
+                    ax_chBxCopy1.Text = "a - x"; by_chBxCopy1.Text = "b - y"; cz_chBxCopy1.Text = "c - z"; intA_chBxCopy1.Text = "internal a"; intB_chBxCopy1.Text = "internal b";
+                    ax_chBxCopy2.Text = "a - x"; by_chBxCopy2.Text = "b - y"; cz_chBxCopy2.Text = "c - z"; intA_chBxCopy2.Text = "internal a"; intB_chBxCopy2.Text = "internal b";
                 }
             }
         }
@@ -8837,8 +8836,7 @@ namespace Isotope_fitting
             }
         }
         #endregion
-
-
+        
         #endregion
 
         #region TAB DIAGRAMS
@@ -10331,7 +10329,7 @@ namespace Isotope_fitting
         }
         private void los_chkBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; intB_chBx.Enabled = false; intA_chBx.Enabled = false; }
+            if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; intB_chBx.Enabled = false;if (!is_riken) { intA_chBx.Enabled = false; } }
             else { intB_chBx.Enabled = true; intA_chBx.Enabled = true; }
 
         }
@@ -10432,7 +10430,7 @@ namespace Isotope_fitting
         }
         private void los_chkBoxCopy1_CheckedChanged(object sender, EventArgs e)
         {
-            if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; intB_chBxCopy1.Enabled = false; intA_chBxCopy1.Enabled = false; }
+            if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; intB_chBxCopy1.Enabled = false; if (!is_riken) { intA_chBxCopy1.Enabled = false; } }
             else { intB_chBxCopy1.Enabled = true; intA_chBxCopy1.Enabled = true; }
         }
 
@@ -10535,7 +10533,7 @@ namespace Isotope_fitting
 
         private void los_chkBoxCopy2_CheckedChanged(object sender, EventArgs e)
         {
-            if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; intB_chBxCopy2.Enabled = false; intA_chBxCopy2.Enabled = false; }
+            if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; intB_chBxCopy2.Enabled = false; if (!is_riken) { intA_chBxCopy2.Enabled = false; } }
             else { intB_chBxCopy2.Enabled = true; intA_chBxCopy2.Enabled = true; }
         }
 
@@ -11371,7 +11369,7 @@ namespace Isotope_fitting
             LinearBarSeries up_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = up_clr, FillColor = up_clr, BarWidth = bar_width };
             LinearBarSeries down_bar = new LinearBarSeries() { CanTrackerInterpolatePoints = false, StrokeThickness = 2, StrokeColor = down_clr, FillColor = down_clr, BarWidth = bar_width };
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-            
+            plot.Model.Title = up_type + " - " + down_type + "  fragments";
             plot.Model.Series.Add(up_bar); plot.Model.Series.Add(down_bar);
             List<double[]> merged_up = new List<double[]>();
             List<double[]> merged_down = new List<double[]>();
@@ -12176,23 +12174,23 @@ namespace Isotope_fitting
             temp_plot.Controller = new CustomPlotController();
             if (is_riken)
             {
-                if(fplot_type == 1) charge_plot_init(temp_plot, "a", "w", 1, Color.Green, Color.LimeGreen);
-                else if(fplot_type == 2) charge_plot_init(temp_plot, "b", "x", 2, Color.Blue, Color.DodgerBlue);
-                else if (fplot_type == 3) charge_plot_init(temp_plot, "c", "y", 3, Color.Firebrick, Color.Tomato);
-                else if (fplot_type == 4) charge_plot_init(temp_plot, "d", "z", 4, Color.DeepPink, Color.HotPink);
-                else if (fplot_type == 5) intensity_plot_init(temp_plot, "a", "w", 1, OxyColors.Green, OxyColors.LimeGreen);
-                else if (fplot_type == 6) intensity_plot_init(temp_plot, "b", "x", 2, OxyColors.Blue, OxyColors.DodgerBlue);
-                else if (fplot_type == 7) intensity_plot_init(temp_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
-                else if (fplot_type == 8) intensity_plot_init(temp_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
+                if(fplot_type == 1) intensity_plot_init(temp_plot, "a", "w", 1, OxyColors.Green, OxyColors.LimeGreen);
+                else if(fplot_type == 2) intensity_plot_init(temp_plot, "b", "x", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                else if (fplot_type == 3) intensity_plot_init(temp_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                else if (fplot_type == 4) intensity_plot_init(temp_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
+                else if (fplot_type == 5) charge_plot_init(temp_plot, "a", "w", 1, Color.Green, Color.LimeGreen);
+                else if (fplot_type == 6) charge_plot_init(temp_plot, "b", "x", 2, Color.Blue, Color.DodgerBlue);
+                else if (fplot_type == 7) charge_plot_init(temp_plot, "c", "y", 3, Color.Firebrick, Color.Tomato);
+                else if (fplot_type == 8) charge_plot_init(temp_plot, "d", "z", 4, Color.DeepPink, Color.HotPink);
             }
             else
             {
-                if (fplot_type == 1) charge_plot_init(temp_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
-                else if (fplot_type == 2) charge_plot_init(temp_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
-                else if (fplot_type == 3) charge_plot_init(temp_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
-                else if (fplot_type == 6) intensity_plot_init(temp_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
-                else if (fplot_type == 7) intensity_plot_init(temp_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
-                else if (fplot_type == 8) intensity_plot_init(temp_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                if (fplot_type == 1) intensity_plot_init(temp_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
+                else if (fplot_type == 2) intensity_plot_init(temp_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                else if (fplot_type == 3) intensity_plot_init(temp_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                else if (fplot_type == 6) charge_plot_init(temp_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
+                else if (fplot_type == 7) charge_plot_init(temp_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
+                else if (fplot_type == 8) charge_plot_init(temp_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
             }
             //refresh_temp_primary_plots(temp_plot, fplot_type);
             temp_plot.Model.Axes[1].Zoom(original_plotview.Model.Axes[1].ActualMinimum, original_plotview.Model.Axes[1].ActualMaximum);

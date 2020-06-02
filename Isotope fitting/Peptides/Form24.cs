@@ -93,7 +93,7 @@ namespace Isotope_fitting
             double qMax = txt_to_d(chargeMax_Box);
             if (double.IsNaN(qMax)) qMax = 100.0;
 
-            if (frm2.is_exp_deconvoluted) { qMax = 1; }
+            if (frm2.is_exp_deconvoluted) { qMin = 0; qMax = 1; }
             // 2. get checked types
             List<string> types = new List<string>();
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
