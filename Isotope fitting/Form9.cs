@@ -917,10 +917,17 @@ namespace Isotope_fitting
                 string lbl = "";
                 lbl = ion;
                 res.Last().Radio_label = lbl + extension;
-                if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+" + extension;
-                else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-" + extension;
-            }
-            
+                if (res.Last().Charge > 0)
+                {
+                    res.Last().Adduct = res.Last().Charge.ToString() + "H";
+                    res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+" + extension;
+                }
+                else
+                {
+                    if(res.Last().Charge!=0) res.Last().Deduct =Math.Abs( res.Last().Charge).ToString() + "H";
+                    res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-" + extension;
+                }
+            }            
             return res;
         }
         private List<ChemiForm> select_fragments2_frm9()
