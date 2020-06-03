@@ -972,7 +972,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_internal_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1010,7 +1010,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_a_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1027,7 +1027,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_b_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1044,7 +1044,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_c_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1061,7 +1061,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_x_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1078,7 +1078,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_y_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1095,7 +1095,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_z_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1112,7 +1112,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_d_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -1129,7 +1129,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_w_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {

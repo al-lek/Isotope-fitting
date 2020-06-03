@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static Isotope_fitting.Form2;
 using System.Windows.Forms;
+using static Isotope_fitting.Helpers;
+
 
 namespace Isotope_fitting
 {
@@ -21,17 +23,32 @@ namespace Isotope_fitting
             InitializeComponent();
             _lvwItemComparer = new ListViewItemComparer();
             Initialize_listviewComparer();
-
             sequence_box_init();
             list_21_init();
+            listBox_addRange_riken();
         }
         private void Initialize_listviewComparer()
         {
             listView_21.ListViewItemSorter = _lvwItemComparer;
         }
+        private void listBox_addRange_riken()
+        {
+            if (!frm2.is_riken) return;
+            ionType_box.Items.Clear();
+            ionType_box.Items.AddRange(new object[] {
+            "internal",
+            "a",
+            "b",
+            "c",
+            "d",
+            "w",
+            "x",
+            "y",
+            "z"});
+        }
         private void sequence_box_init()
         {
-            if (frm2.sequenceList != null && frm2.sequenceList.Count > 1)
+            if (frm2.sequenceList != null && frm2.sequenceList.Count > 0)
             {
                 if (seq_extensionBox.Items == null || seq_extensionBox.Items.Count == 0)
                 {
@@ -59,7 +76,7 @@ namespace Isotope_fitting
                         else k++;
                     }
                 }
-
+                if (frm2.sequenceList.Count==1) { seq_extensionBox.SelectedIndex = 0; }
             }
         }
         private void list_21_init()
@@ -123,6 +140,8 @@ namespace Isotope_fitting
             frm2.exclude_x_indexes.Clear();
             frm2.exclude_y_indexes.Clear();
             frm2.exclude_z_indexes.Clear();
+            frm2.exclude_d_indexes.Clear();
+            frm2.exclude_w_indexes.Clear();
             frm2.exclude_internal_indexes.Clear();
             frm2.list_21.Clear();
 
@@ -130,182 +149,46 @@ namespace Isotope_fitting
             {
                 frm2.list_21.Add(new string[] { item.SubItems[0].Text.ToString(), item.SubItems[1].Text.ToString(), item.SubItems[2].Text.ToString(), item.SubItems[3].Text.ToString() });
                 if (item.SubItems[0].Text.ToString().Equals("internal"))
-                {                   
-                    string text1 = item.SubItems[1].Text.ToString();
-                    string text2 = item.SubItems[2].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t= 0;t< frm2.exclude_internal_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_internal_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index<0) { frm2.exclude_internal_indexes.Add(new ExcludeTypes() {Extension=exte, Index2 = new List<int[]>(), Index1 = new List<int[]>() }); index = frm2.exclude_internal_indexes.Count-1; }
-                    if (!string.IsNullOrEmpty(text1))
-                    {
-                        text1 = text1.Replace(" ", "");
-                        string[] str = text1.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');                            
-                            if (str2.Length == 2) { frm2.exclude_internal_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_internal_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) });}
-                           
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(text2))
-                    {
-                        text2 = text2.Replace(" ", "");
-                        string[] str = text2.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_internal_indexes[index].Index2.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_internal_indexes[index].Index2.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                {
+                    check_item(item, frm2.exclude_internal_indexes,true);
                 }
                 else if(item.SubItems[0].Text.ToString().Equals("a"))
                 {
-                    string text = item.SubItems[1].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t = 0; t < frm2.exclude_a_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_a_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { frm2.exclude_a_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = frm2.exclude_a_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_a_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_a_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, frm2.exclude_a_indexes);
                 }
                 else if (item.SubItems[0].Text.ToString().Equals("b"))
                 {
-                    string text = item.SubItems[1].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t = 0; t < frm2.exclude_b_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_b_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { frm2.exclude_b_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = frm2.exclude_b_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_b_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_b_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, frm2.exclude_b_indexes);
                 }
                 else if (item.SubItems[0].Text.ToString().Equals("c"))
                 {
-                    string text = item.SubItems[1].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t = 0; t < frm2.exclude_c_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_c_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { frm2.exclude_c_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = frm2.exclude_c_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_c_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_c_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, frm2.exclude_c_indexes);
                 }
                 else if (item.SubItems[0].Text.ToString().Equals("x"))
                 {
-                    string text = item.SubItems[1].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t = 0; t < frm2.exclude_x_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_x_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { frm2.exclude_x_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = frm2.exclude_x_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_x_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_x_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, frm2.exclude_x_indexes);
                 }
                 else if (item.SubItems[0].Text.ToString().Equals("y"))
                 {
-                    string text = item.SubItems[1].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t = 0; t < frm2.exclude_y_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_y_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { frm2.exclude_y_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = frm2.exclude_y_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_y_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_y_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, frm2.exclude_y_indexes);
                 }
                 else if (item.SubItems[0].Text.ToString().Equals("z"))
                 {
-                    string text = item.SubItems[1].Text.ToString();
-                    int index = -1;
-                    string exte = item.SubItems[3].Text.ToString();
-                    for (int t = 0; t < frm2.exclude_z_indexes.Count; t++)
-                    {
-                        if (frm2.exclude_z_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { frm2.exclude_z_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = frm2.exclude_z_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { frm2.exclude_z_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { frm2.exclude_z_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, frm2.exclude_z_indexes);
+                }
+                else if (frm2.is_riken && item.SubItems[0].Text.ToString().Equals("d"))
+                {
+                    check_item(item, frm2.exclude_d_indexes);
+                }
+                else if (frm2.is_riken && item.SubItems[0].Text.ToString().Equals("w"))
+                {
+                    check_item(item, frm2.exclude_w_indexes);
                 }
             }
             
         }
-
+       
+       
         private void listView_21_ColumnClick(object sender, ColumnClickEventArgs e)
         {            
             // Determine if clicked column is already the column that is being sorted.

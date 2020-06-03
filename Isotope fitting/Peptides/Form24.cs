@@ -18,7 +18,7 @@ namespace Isotope_fitting
     public partial class Form24 : Form
     {
         Form2 frm2;
-
+        //ListBox temp_machine;
         public Form24(Form2 f)
         {
             frm2 = f;
@@ -26,10 +26,14 @@ namespace Isotope_fitting
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
             mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
             if (!string.IsNullOrEmpty(frm2.res_string_24)) resolution_Box.Text = frm2.res_string_24;
-            else if(frm2.machine_sel_index!=-1) machine_listBox.SelectedIndex = frm2.machine_sel_index;
-            else machine_listBox.SelectedIndex = 9;
+            //else if(frm2.machine_sel_index!=-1) machine_listBox.SelectedIndex = frm2.machine_sel_index;
+            //else machine_listBox.SelectedIndex = 9;
+            //temp_machine = machine_listBox;
+            panel_calc.Controls.Add(machine_listBox);
+            machine_listBox.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+
         }
-        
+
         private void mzMin_Box_TextChanged(object sender, EventArgs e)
         {
             check_textBox_entry(mzMin_Box, false, false);
@@ -52,20 +56,20 @@ namespace Isotope_fitting
 
         private void chargeAll_Btn_Click(object sender, EventArgs e)
         {
-            chargeMin_Box.Text = null;
-            chargeMax_Box.Text = null;
+            chargeMin_Box.Text = string.Empty;
+            chargeMax_Box.Text = string.Empty;
         }
 
         private void resolution_Box_TextChanged(object sender, EventArgs e)
         {
-            Form24.machine_listBox.ClearSelected();
+            machine_listBox.ClearSelected();
             check_textBox_entry(resolution_Box, false, false);
             frm2.res_string_24 = resolution_Box.Text;
         }
 
         private void machine_listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            resolution_Box.Text = null;
+            if (resolution_Box.Text != string.Empty) resolution_Box.Text = string.Empty;
             frm2.machine_sel_index = machine_listBox.SelectedIndex;
         }
         private void UncheckAll_calculationPanel()
@@ -160,7 +164,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_internal_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -198,7 +202,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_a_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -215,7 +219,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_b_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -232,7 +236,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_c_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -249,7 +253,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_x_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -266,7 +270,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_y_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {
@@ -283,7 +287,7 @@ namespace Isotope_fitting
                     {
                         foreach (ExcludeTypes ext in frm2.exclude_z_indexes)
                         {
-                            if ((ext.Extension != "" && frm2.recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
                             {
                                 for (int k = 0; k < ext.Index1.Count; k++)
                                 {

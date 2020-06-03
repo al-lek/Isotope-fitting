@@ -717,7 +717,7 @@ namespace Isotope_fitting
             // styleToolStripMenuItem3
             // 
             this.styleToolStripMenuItem3.Name = "styleToolStripMenuItem3";
-            this.styleToolStripMenuItem3.Size = new System.Drawing.Size(134, 22);
+            this.styleToolStripMenuItem3.Size = new System.Drawing.Size(133, 22);
             this.styleToolStripMenuItem3.Text = "Style";
             this.styleToolStripMenuItem3.ToolTipText = "Format the style of the plots in this tab";
             this.styleToolStripMenuItem3.Click += new System.EventHandler(this.styleToolStripMenuItem3_Click);
@@ -725,7 +725,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem1
             // 
             this.extractPlotToolStripMenuItem1.Name = "extractPlotToolStripMenuItem1";
-            this.extractPlotToolStripMenuItem1.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem1.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem1.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem1.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem1.Click += new System.EventHandler(this.extractPlotToolStripMenuItem1_Click);
@@ -816,7 +816,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem2
             // 
             this.extractPlotToolStripMenuItem2.Name = "extractPlotToolStripMenuItem2";
-            this.extractPlotToolStripMenuItem2.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem2.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem2.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem2.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem2.Click += new System.EventHandler(this.extractPlotToolStripMenuItem2_Click);
@@ -916,7 +916,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem_charge_dz
             // 
             this.extractPlotToolStripMenuItem_charge_dz.Name = "extractPlotToolStripMenuItem_charge_dz";
-            this.extractPlotToolStripMenuItem_charge_dz.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem_charge_dz.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem_charge_dz.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem_charge_dz.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem_charge_dz.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_charge_dz_Click);
@@ -1035,7 +1035,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem6
             // 
             this.extractPlotToolStripMenuItem6.Name = "extractPlotToolStripMenuItem6";
-            this.extractPlotToolStripMenuItem6.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem6.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem6.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem6.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem6.Click += new System.EventHandler(this.extractPlotToolStripMenuItem6_Click);
@@ -1154,7 +1154,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem5
             // 
             this.extractPlotToolStripMenuItem5.Name = "extractPlotToolStripMenuItem5";
-            this.extractPlotToolStripMenuItem5.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem5.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem5.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem5.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem5.Click += new System.EventHandler(this.extractPlotToolStripMenuItem5_Click);
@@ -1278,7 +1278,7 @@ namespace Isotope_fitting
             // 
             this.style_toolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.style_toolStripMenuItem.Name = "style_toolStripMenuItem";
-            this.style_toolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.style_toolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.style_toolStripMenuItem.Text = "Style";
             this.style_toolStripMenuItem.ToolTipText = "Format the style of the plots in this tab";
             this.style_toolStripMenuItem.Click += new System.EventHandler(this.style_toolStripMenuItem_Click);
@@ -1286,7 +1286,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem7
             // 
             this.extractPlotToolStripMenuItem7.Name = "extractPlotToolStripMenuItem7";
-            this.extractPlotToolStripMenuItem7.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem7.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem7.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem7.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem7.Click += new System.EventHandler(this.extractPlotToolStripMenuItem7_Click);
@@ -1425,7 +1425,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem_dz
             // 
             this.extractPlotToolStripMenuItem_dz.Name = "extractPlotToolStripMenuItem_dz";
-            this.extractPlotToolStripMenuItem_dz.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem_dz.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem_dz.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem_dz.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem_dz.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_dz_Click);
@@ -1516,7 +1516,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem8
             // 
             this.extractPlotToolStripMenuItem8.Name = "extractPlotToolStripMenuItem8";
-            this.extractPlotToolStripMenuItem8.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem8.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem8.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem8.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem8.Click += new System.EventHandler(this.extractPlotToolStripMenuItem8_Click);
@@ -1607,7 +1607,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem4
             // 
             this.extractPlotToolStripMenuItem4.Name = "extractPlotToolStripMenuItem4";
-            this.extractPlotToolStripMenuItem4.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem4.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem4.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem4.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem4.Click += new System.EventHandler(this.extractPlotToolStripMenuItem4_Click);
@@ -1701,7 +1701,7 @@ namespace Isotope_fitting
             // styleToolStripMenuItem
             // 
             this.styleToolStripMenuItem.Name = "styleToolStripMenuItem";
-            this.styleToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.styleToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.styleToolStripMenuItem.Text = "Style";
             this.styleToolStripMenuItem.ToolTipText = "Format the style of the plots in this tab";
             this.styleToolStripMenuItem.Click += new System.EventHandler(this.styleToolStripMenuItem_Click);
@@ -1709,7 +1709,7 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem3
             // 
             this.extractPlotToolStripMenuItem3.Name = "extractPlotToolStripMenuItem3";
-            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem3.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem3.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem3.Click += new System.EventHandler(this.extractPlotToolStripMenuItem3_Click);
@@ -2418,14 +2418,14 @@ namespace Isotope_fitting
             // extractPlotToolStripMenuItem9
             // 
             this.extractPlotToolStripMenuItem9.Name = "extractPlotToolStripMenuItem9";
-            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem9.Text = "Extract plot";
             this.extractPlotToolStripMenuItem9.Click += new System.EventHandler(this.extractPlotToolStripMenuItem9_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.settingsToolStripMenuItem.Text = "Properties";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -2624,6 +2624,7 @@ namespace Isotope_fitting
             this.intA_chBxCopy2.TabIndex = 4;
             this.intA_chBxCopy2.Text = "internal a";
             this.intA_chBxCopy2.UseVisualStyleBackColor = true;
+            this.intA_chBxCopy2.CheckedChanged += new System.EventHandler(this.intA_chBxCopy2_CheckedChanged);
             // 
             // intB_chBxCopy2
             // 
@@ -2884,6 +2885,7 @@ namespace Isotope_fitting
             this.intA_chBxCopy1.TabIndex = 4;
             this.intA_chBxCopy1.Text = "internal a";
             this.intA_chBxCopy1.UseVisualStyleBackColor = true;
+            this.intA_chBxCopy1.CheckedChanged += new System.EventHandler(this.intA_chBxCopy1_CheckedChanged);
             // 
             // intB_chBxCopy1
             // 
@@ -3164,6 +3166,7 @@ namespace Isotope_fitting
             this.intA_chBx.TabIndex = 4;
             this.intA_chBx.Text = "internal a";
             this.intA_chBx.UseVisualStyleBackColor = true;
+            this.intA_chBx.CheckedChanged += new System.EventHandler(this.intA_chBx_CheckedChanged);
             // 
             // intB_chBx
             // 

@@ -39,6 +39,9 @@ namespace Isotope_fitting
     {
         public bool is_riken = false;
         bool is_polarity_negative = false;
+        public static ListBox machine_listBox=new ListBox();
+        public static ListBox machine_listBox1 = new ListBox();
+
 
         #region PARAMETER SET TAB FIT
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();
@@ -439,6 +442,7 @@ namespace Isotope_fitting
         {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             InitializeComponent();
+            initialize_machine_listboxes();
             // declare event to continue calculations after Fragments2 are complete
             OnEnvelopeCalcCompleted += () => { fragments_and_calculations_sequence_B(); };
             // declare event to plot fit results after fitting calculations are complete
@@ -449,28 +453,7 @@ namespace Isotope_fitting
             load_preferences();
             reset_all();
             panel2.Controls.Add(frag_tree);
-            //save .fit file
-            _bw_save_envipat.DoWork += new DoWorkEventHandler(Save_frag_envipat);
-            _bw_save_envipat.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_save_envipat_RunWorkerCompleted);
-            //save project
-            _bw_save_project_frag.DoWork += new DoWorkEventHandler(Project_save_fragments);
-            _bw_save_project_frag.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_frag_RunWorkerCompleted);
-            _bw_save_project_peaks.DoWork += new DoWorkEventHandler(Project_save_peaks);
-            _bw_save_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_peaks_RunWorkerCompleted);
-            _bw_save_project_fit_results.DoWork += new DoWorkEventHandler(Project_save_fit_results);
-            _bw_save_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_fitResults_RunWorkerCompleted);
-            //load project
-            _bw_load_project_exp.DoWork += new DoWorkEventHandler(Project_load_experimental);
-            _bw_load_project_exp.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_exp_RunWorkerCompleted);
-            _bw_load_project_peaks.DoWork += new DoWorkEventHandler(Project_load_peaks);
-            _bw_load_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_peaks_RunWorkerCompleted);
-            _bw_load_project_fragments.DoWork += new DoWorkEventHandler(Project_load_fragments);
-            _bw_load_project_fragments.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fragments_RunWorkerCompleted);
-            _bw_load_project_fit_results.DoWork += new DoWorkEventHandler(Project_load_fit_results);
-            _bw_load_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fit_RunWorkerCompleted);
-            //deconvolution
-            _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
-            _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
+            initialize_BW();
             change_state(true);
             //call change state window
             initiate_change_state_form();
@@ -600,12 +583,115 @@ namespace Isotope_fitting
             }
 
         }
-
+        private void initialize_machine_listboxes()
+        {
+            // 
+            // machine_listBox
+            // 
+            machine_listBox.ForeColor = System.Drawing.Color.DarkSlateGray;
+            machine_listBox.FormattingEnabled = true;
+            machine_listBox.Items.AddRange(new object[] {
+            "Elite_R240000@400",
+            "Elite_R120000@400",
+            "Elite_R60000@400",
+            "Elite_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R120000@400",
+            "OrbitrapXL,Velos,VelosPro_R60000@400",
+            "OrbitrapXL,Velos,VelosPro_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R15000@400",
+            "OrbitrapXL,Velos,VelosPro_R7500@400",
+            "Q-Exactive,ExactivePlus_280K@200",
+            "Q-Exactive,ExactivePlus_R140000@200",
+            "Q-Exactive,ExactivePlus_R70000@200",
+            "Q-Exactive,ExactivePlus_R35000@200",
+            "Q-Exactive,ExactivePlus_R17500@200",
+            "Exactive_R100000@200",
+            "Exactive_R50000@200",
+            "Exactive_R25000@200",
+            "Exactive_R12500@200",
+            "OTFusion,QExactiveHF_480000@200",
+            "OTFusion,QExactiveHF_240000@200",
+            "OTFusion,QExactiveHF_120000@200",
+            "OTFusion,QExactiveHF_60000@200",
+            "OTFusion,QExactiveHF_30000@200",
+            "OTFusion,QExactiveHF_15000@200",
+            "TripleTOF5600_R28000@200",
+            "QTOF_XevoG2-S_R25000@200",
+            "TripleTOF6600_R30000@400             "});
+            machine_listBox.Location = new System.Drawing.Point(94, 504);
+            machine_listBox.Name = "machine_listBox";
+            machine_listBox.Size = new System.Drawing.Size(191, 56);
+            machine_listBox.TabIndex = 21;
+            machine_listBox.SelectedIndex = machine_sel_index;
+            // 
+            // machine_listBox1
+            // 
+            machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            machine_listBox1.FormattingEnabled = true;
+            machine_listBox1.Items.AddRange(new object[] {
+            "Elite_R240000@400",
+            "Elite_R120000@400",
+            "Elite_R60000@400",
+            "Elite_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R120000@400",
+            "OrbitrapXL,Velos,VelosPro_R60000@400",
+            "OrbitrapXL,Velos,VelosPro_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R15000@400",
+            "OrbitrapXL,Velos,VelosPro_R7500@400",
+            "Q-Exactive,ExactivePlus_280K@200",
+            "Q-Exactive,ExactivePlus_R140000@200",
+            "Q-Exactive,ExactivePlus_R70000@200",
+            "Q-Exactive,ExactivePlus_R35000@200",
+            "Q-Exactive,ExactivePlus_R17500@200",
+            "Exactive_R100000@200",
+            "Exactive_R50000@200",
+            "Exactive_R25000@200",
+            "Exactive_R12500@200",
+            "OTFusion,QExactiveHF_480000@200",
+            "OTFusion,QExactiveHF_240000@200",
+            "OTFusion,QExactiveHF_120000@200",
+            "OTFusion,QExactiveHF_60000@200",
+            "OTFusion,QExactiveHF_30000@200",
+            "OTFusion,QExactiveHF_15000@200",
+            "TripleTOF5600_R28000@200",
+            "QTOF_XevoG2-S_R25000@200",
+            "TripleTOF6600_R30000@400             "});
+            machine_listBox1.Location = new System.Drawing.Point(94, 504);
+            machine_listBox1.Name = "machine_listBox1";
+            machine_listBox1.Size = new System.Drawing.Size(191, 56);
+            machine_listBox1.TabIndex = 21;
+            machine_listBox1.SelectedIndex = machine_sel_index;
+        }
+        private void initialize_BW()
+        {
+            //save .fit file
+            _bw_save_envipat.DoWork += new DoWorkEventHandler(Save_frag_envipat);
+            _bw_save_envipat.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_save_envipat_RunWorkerCompleted);
+            //save project
+            _bw_save_project_frag.DoWork += new DoWorkEventHandler(Project_save_fragments);
+            _bw_save_project_frag.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_frag_RunWorkerCompleted);
+            _bw_save_project_peaks.DoWork += new DoWorkEventHandler(Project_save_peaks);
+            _bw_save_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_peaks_RunWorkerCompleted);
+            _bw_save_project_fit_results.DoWork += new DoWorkEventHandler(Project_save_fit_results);
+            _bw_save_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_fitResults_RunWorkerCompleted);
+            //load project
+            _bw_load_project_exp.DoWork += new DoWorkEventHandler(Project_load_experimental);
+            _bw_load_project_exp.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_exp_RunWorkerCompleted);
+            _bw_load_project_peaks.DoWork += new DoWorkEventHandler(Project_load_peaks);
+            _bw_load_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_peaks_RunWorkerCompleted);
+            _bw_load_project_fragments.DoWork += new DoWorkEventHandler(Project_load_fragments);
+            _bw_load_project_fragments.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fragments_RunWorkerCompleted);
+            _bw_load_project_fit_results.DoWork += new DoWorkEventHandler(Project_load_fit_results);
+            _bw_load_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fit_RunWorkerCompleted);
+            //deconvolution
+            _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
+            _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
+        }
         #region riken state change
         private void chageStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //if any other form rather than the main is open, it must close
-            foreach (Form frm in Application.OpenForms) { if (frm.Name != "Form2") frm.Close(); }
+            CloseAllOpenForm("Form2");
             initiate_change_state_form();
         }
         private void initiate_change_state_form()
@@ -7388,181 +7474,47 @@ namespace Isotope_fitting
             exclude_x_indexes.Clear();
             exclude_y_indexes.Clear();
             exclude_z_indexes.Clear();
+            exclude_d_indexes.Clear();
+            exclude_w_indexes.Clear();
             exclude_internal_indexes.Clear();
             foreach (string[] item in list_21)
             {
                 if (item[0].Equals("internal"))
                 {
-                    string text1 = item[1];
-                    string text2 = item[2];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_internal_indexes.Count; t++)
-                    {
-                        if (exclude_internal_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_internal_indexes.Add(new ExcludeTypes() { Extension = exte, Index2 = new List<int[]>(), Index1 = new List<int[]>() }); index = exclude_internal_indexes.Count - 1; }
-                    if (!string.IsNullOrEmpty(text1))
-                    {
-                        text1 = text1.Replace(" ", "");
-                        string[] str = text1.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_internal_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_internal_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(text2))
-                    {
-                        text2 = text2.Replace(" ", "");
-                        string[] str = text2.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_internal_indexes[index].Index2.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_internal_indexes[index].Index2.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, exclude_internal_indexes, true);
                 }
                 else if (item[0].Equals("a"))
                 {
-                    string text = item[1];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_a_indexes.Count; t++)
-                    {
-                        if (exclude_a_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_a_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = exclude_a_indexes.Count - 1; }
+                    check_item(item, exclude_a_indexes);
 
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_a_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_a_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
                 }
                 else if (item[0].Equals("b"))
                 {
-                    string text = item[1];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_b_indexes.Count; t++)
-                    {
-                        if (exclude_b_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_b_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = exclude_b_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_b_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_b_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, exclude_b_indexes);
                 }
                 else if (item[0].Equals("c"))
                 {
-                    string text = item[1];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_c_indexes.Count; t++)
-                    {
-                        if (exclude_c_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_c_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = exclude_c_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_c_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_c_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, exclude_c_indexes);
                 }
                 else if (item[0].Equals("x"))
                 {
-                    string text = item[1];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_x_indexes.Count; t++)
-                    {
-                        if (exclude_x_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_x_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = exclude_x_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_x_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_x_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, exclude_x_indexes);
                 }
                 else if (item[0].Equals("y"))
                 {
-                    string text = item[1];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_y_indexes.Count; t++)
-                    {
-                        if (exclude_y_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_y_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = exclude_y_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_y_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_y_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, exclude_y_indexes);
                 }
                 else if (item[0].Equals("z"))
                 {
-                    string text = item[1];
-                    int index = -1;
-                    string exte = item[3];
-                    for (int t = 0; t < exclude_z_indexes.Count; t++)
-                    {
-                        if (exclude_z_indexes[t].Extension.Equals(exte)) { index = t; break; }
-                    }
-                    if (index < 0) { exclude_z_indexes.Add(new ExcludeTypes() { Extension = exte, Index1 = new List<int[]>() }); index = exclude_z_indexes.Count - 1; }
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        text = text.Replace(" ", "");
-                        string[] str = text.Split(',');
-                        for (int a = 0; a < str.Length; a++)
-                        {
-                            string[] str2 = str[a].Split('-');
-                            if (str2.Length == 2) { exclude_z_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                            if (str2.Length == 1) { exclude_z_indexes[index].Index1.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
-                        }
-                    }
+                    check_item(item, exclude_z_indexes);
+                }
+                else if (item[0].Equals("d"))
+                {
+                    check_item(item, exclude_d_indexes);
+                }
+                else if (item[0].Equals("w"))
+                {
+                    check_item(item, exclude_w_indexes);
                 }
             }
         }
@@ -7721,29 +7673,17 @@ namespace Isotope_fitting
         #endregion
 
         #region FORM 9 fragment calculator
-        private void fragCalc_Btn1_Click(object sender, EventArgs e)
+        private void fragCalc_Btn2_Click(object sender, EventArgs e)
         {
-            FormCollection fc = Application.OpenForms;
-            bool open = false;
-            foreach (Form frm in fc)
-            {
-                //iterate through
+            foreach (Form frm in Application.OpenForms)
                 if (frm.Name == "Form9")
                 {
-                    open = true; frm.BringToFront(); break;
+                    frm.BringToFront(); return;
                 }
-            }
-            if (!open)
-            {
-                Form9 frag_Calc_form = new Form9(this);
-                frag_Calc_form.Show();
-            }
-            else
-            {
 
-                return;
-            }
-        }
+            Form9 frag_Calc_form = new Form9(this);
+            frag_Calc_form.Show();
+        }       
         public void recalc_frm9(int prev_count, int curr_count)
         {
             if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
@@ -8325,17 +8265,7 @@ namespace Isotope_fitting
             coverage = sumFrag / sumExp;
             MessageBox.Show("The experimental is covered by " + Math.Round(coverage * 100, 2) + "%");
         }
-        private void fragCalc_Btn2_Click(object sender, EventArgs e)
-        {
-            foreach (Form frm in Application.OpenForms)
-                if (frm.Name == "Form9")
-                {
-                    frm.BringToFront(); return;
-                }
-
-            Form9 frag_Calc_form = new Form9(this);
-            frag_Calc_form.Show();
-        }
+        
         private void refresh_frag_Btn2_Click(object sender, EventArgs e)
         {
             if (experimental.Count == 0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_internal_indexes.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!"); return; }
@@ -8423,110 +8353,41 @@ namespace Isotope_fitting
                 bool in_bounds = true;
                 if ((fra.Ion_type.StartsWith("a") || fra.Ion_type.StartsWith("(a")) && exclude_a_indexes.Count > 0)
                 {
-                    foreach (ExcludeTypes ext in exclude_a_indexes)
-                    {
-                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
-                        {
-                            for (int k = 0; k < ext.Index1.Count; k++)
-                            {
-                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                {
-                                    in_bounds = false; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_a_indexes);
                 }
                 else if ((fra.Ion_type.StartsWith("b") || fra.Ion_type.StartsWith("(b")) && exclude_b_indexes.Count > 0)
                 {
-                    foreach (ExcludeTypes ext in exclude_b_indexes)
-                    {
-                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
-                        {
-                            for (int k = 0; k < ext.Index1.Count; k++)
-                            {
-                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                {
-                                    in_bounds = false; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_b_indexes);
                 }
                 else if ((fra.Ion_type.StartsWith("c") || fra.Ion_type.StartsWith("(c")) && exclude_c_indexes.Count > 0)
                 {
-                    foreach (ExcludeTypes ext in exclude_c_indexes)
-                    {
-                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
-                        {
-                            for (int k = 0; k < ext.Index1.Count; k++)
-                            {
-                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                {
-                                    in_bounds = false; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_c_indexes);
                 }
                 else if ((fra.Ion_type.StartsWith("x") || fra.Ion_type.StartsWith("(x")) && exclude_x_indexes.Count > 0)
                 {
-                    foreach (ExcludeTypes ext in exclude_x_indexes)
-                    {
-                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
-                        {
-                            for (int k = 0; k < ext.Index1.Count; k++)
-                            {
-                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                {
-                                    in_bounds = false; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_x_indexes);
                 }
                 else if ((fra.Ion_type.StartsWith("y") || fra.Ion_type.StartsWith("(y")) && exclude_y_indexes.Count > 0)
                 {
-                    foreach (ExcludeTypes ext in exclude_y_indexes)
-                    {
-                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
-                        {
-                            for (int k = 0; k < ext.Index1.Count; k++)
-                            {
-                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                {
-                                    in_bounds = false; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    in_bounds = check_if_frag_included_exclude_list(index1,  fra, exclude_y_indexes);                   
                 }
                 else if ((fra.Ion_type.StartsWith("z") || fra.Ion_type.StartsWith("(z")) && exclude_z_indexes.Count > 0)
                 {
-                    foreach (ExcludeTypes ext in exclude_z_indexes)
-                    {
-                        if ((ext.Extension != "" && recognise_extension(fra.Extension, ext.Extension)) || (ext.Extension == "" && fra.Extension == ""))
-                        {
-                            for (int k = 0; k < ext.Index1.Count; k++)
-                            {
-                                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                {
-                                    in_bounds = false; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_z_indexes);                   
+                }
+                else if (is_riken&&(fra.Ion_type.StartsWith("d") || fra.Ion_type.StartsWith("(d")) && exclude_d_indexes.Count > 0)
+                {
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_d_indexes);
+                }
+                else if (is_riken && (fra.Ion_type.StartsWith("w") || fra.Ion_type.StartsWith("(w")) && exclude_w_indexes.Count > 0)
+                {
+                    in_bounds = check_if_frag_included_exclude_list(index1, fra, exclude_w_indexes);
                 }
                 if (!in_bounds) return true;
             }
             return false;
         }
+       
         private void frag_sort_Btn2_Click(object sender, EventArgs e)
         {
             Form19 frm19 = new Form19(this);
@@ -8803,36 +8664,32 @@ namespace Isotope_fitting
         private void add_machine(bool exp_resolution = false)
         {
             string name = "";
-            if (exp_resolution == true)
-            {
-                name = "resolution from file" + exp_res.ToString();
-            }
-            else if (!Form4.new_machine.Equals("no"))
-            {
-                name = Form4.new_machine;
-            }
+            if (exp_resolution == true)  name = "resolution from file" + exp_res.ToString();            
+            else if (!Form4.new_machine.Equals("no"))name = Form4.new_machine;
             else return;
             if (is_riken)
             {
-                for (int i1 = 0; i1 < Form24_2.machine_listBox1.Items.Count; i1++)
+                for (int i1 = 0; i1 < machine_listBox1.Items.Count; i1++)
                 {
                     string m = (string)Form24_2.machine_listBox1.Items[i1];
                     if (m.Equals(name)) { return; }
                 }
-                Form24_2.machine_listBox1.Invoke(new Action(() => Form24_2.machine_listBox1.ClearSelected()));   //thread safe call
-                Form24_2.machine_listBox1.Invoke(new Action(() => Form24_2.machine_listBox1.Items.Add(name)));   //thread safe call
-                Form24_2.machine_listBox1.Invoke(new Action(() => Form24_2.machine_listBox1.SelectedItem = name));   //thread safe call
+                machine_listBox1.ClearSelected();
+                machine_listBox1.Items.Add(name);  
+                machine_listBox1.SelectedItem = name;
+                machine_sel_index = machine_listBox.SelectedIndex;
             }
             else
             {
-                for (int i1 = 0; i1 < Form24.machine_listBox.Items.Count; i1++)
+                for (int i1 = 0; i1 < machine_listBox.Items.Count; i1++)
                 {
-                    string m = (string)Form24.machine_listBox.Items[i1];
+                    string m = (string)machine_listBox.Items[i1];
                     if (m.Equals(name)) { return; }
                 }
-                Form24.machine_listBox.Invoke(new Action(() => Form24.machine_listBox.ClearSelected()));   //thread safe call
-                Form24.machine_listBox.Invoke(new Action(() => Form24.machine_listBox.Items.Add(name)));   //thread safe call
-                Form24.machine_listBox.Invoke(new Action(() => Form24.machine_listBox.SelectedItem = name));   //thread safe call
+                machine_listBox.ClearSelected();
+                machine_listBox.Items.Add(name);
+                machine_listBox.SelectedItem = name;
+                machine_sel_index = machine_listBox.SelectedIndex;
             }
         }
         #endregion
@@ -10311,6 +10168,15 @@ namespace Isotope_fitting
                 cz_chBx.ForeColor = Control.DefaultForeColor;
             }
         }
+        private void intA_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (intA_chBx.Checked && is_riken)
+            {
+                intA_chBx.ForeColor = Color.HotPink;
+                if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; }
+            }
+            else intA_chBx.ForeColor = Control.DefaultForeColor;
+        }
         private void draw_Btn_Click(object sender, EventArgs e)
         {
             sequence_Pnl.Refresh(); color_range_panel.Refresh(); seq_lbl_panel.Refresh();
@@ -10394,7 +10260,15 @@ namespace Isotope_fitting
         {
             sequence_PnlCopy1.Refresh();
         }
-
+        private void intA_chBxCopy1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (intA_chBxCopy1.Checked && is_riken)
+            {
+                intA_chBxCopy1.ForeColor = Color.HotPink;
+                if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; }
+            }
+            else intA_chBxCopy1.ForeColor = Control.DefaultForeColor;
+        }
         private void rdBtn50Copy1_CheckedChanged(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh();
@@ -10498,7 +10372,15 @@ namespace Isotope_fitting
         {
             sequence_PnlCopy2.Refresh();
         }
-
+        private void intA_chBxCopy2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (intA_chBxCopy2.Checked && is_riken)
+            {
+                intA_chBxCopy2.ForeColor = Color.HotPink;
+                if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; }
+            }
+            else intA_chBxCopy2.ForeColor = Control.DefaultForeColor;
+        }
         private void sequence_PnlCopy2_Paint(object sender, PaintEventArgs e)
         {
             if (is_riken)
@@ -13030,56 +12912,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region extension
-        public bool recognise_extension(string fra_exte, string Extension)
-        {
-            string[] str = fra_exte.Split('_');
-            for (int k = 1; k < str.Length; k++)
-            {
-                if (str[k].Equals(Extension)) { return true; }
-            }                      
-            return false;
-        }
-        private int recognise_extension_frag(string fra_exte, string Extension)
-        {
-            string[] exte_str = Extension.Split('_');
-            string[] str = fra_exte.Split('_');
-            int length1 = str.Length;
-            int length2 = exte_str.Length;
-            int count = 0;
-            string name_exte = fra_exte;
-            
-            for (int k = 1; k < length1; k++)
-            {
-                for (int m = 1; m < length2; m++)
-                {
-                    if (str[k].Equals(exte_str[m])) { count++; }
-                }
-            }
-            if (count==0) return 5;
-            else if (length1 == length2 && length1 == count) return 1;    
-            else if (length1>length2 && length2 == count) return 2;   
-            else if (length1 < length2 && length1 == count) return 3;    
-            else return 4;
-        }
-        private string find_common_extensions(string fra_exte, string Extension)
-        {
-            string[] str = fra_exte.Split('_');
-            string[] exte_str = Extension.Split('_');
-            int count = 0;
-            string name_exte= Extension;
-            for (int k = 1; k < str.Length; k++)
-            {
-                count = 0;
-                for (int m = 1; m < exte_str.Length; m++)
-                {
-                    if (str[k].Equals(exte_str[m])) { count++; }
-                }
-                if (count == 0) { name_exte +="_"+ str[k]; }
-            }
-            return name_exte;
-        }
-        #endregion
+        
        
         public void read_rtf_find_color(SequenceTab seq)
         {
@@ -13176,5 +13009,6 @@ namespace Isotope_fitting
         {
 
         }
+
     }
 }
