@@ -47,6 +47,7 @@ namespace Isotope_fitting
 
             return double.NaN;
         }
+
         /// <summary>
         /// Turn a string into a bool
         /// </summary>
@@ -55,6 +56,7 @@ namespace Isotope_fitting
             if (str == "True") return true;
             else return false;
         }
+
         /// <summary>
         /// Estimates memory size of objects. Returns size in MB
         /// </summary>
@@ -70,6 +72,7 @@ namespace Isotope_fitting
             }
             return size / 1048576;
         }
+
         /// <summary>
         /// Fix chemical formula, add or subduct 'H' 'H2O' 'NH3'
         /// </summary>
@@ -90,6 +93,7 @@ namespace Isotope_fitting
             formula = input;
             return formula;
         }
+
         /// <summary>
         /// Find the element's index in the chemical formula
         /// </summary>
@@ -130,6 +134,7 @@ namespace Isotope_fitting
             }
             return input;
         }
+
         /// <summary>
         ///Given the index of the number that indicates the amount of an element in the chemical formula, set the desired amount
         /// </summary>
@@ -148,6 +153,7 @@ namespace Isotope_fitting
             input = theString;
             return input;
         }
+
         /// <summary>
         /// check the input of the desired indexes range in the textbox and create the indexes Lists with the desired indexes for the selected fragments
         /// </summary>
@@ -162,6 +168,7 @@ namespace Isotope_fitting
                 if (str2.Length == 1) { indexes.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
             }
         }
+
         /// <summary>
         /// Uncheck all checked Lists in the calculation filter areas
         /// </summary>
@@ -189,6 +196,7 @@ namespace Isotope_fitting
                 }
             }
         }
+
         /// <summary>
         /// check if the the textbox entry is a number
         /// </summary>
@@ -213,6 +221,7 @@ namespace Isotope_fitting
                 }
             }
         }
+
         /// <summary>
         /// Empty textboxes and uncheck checkboxes in the container
         /// </summary>
@@ -227,6 +236,7 @@ namespace Isotope_fitting
                 Box.CheckState = CheckState.Unchecked;
             }
         }
+
         /// <summary>
         /// Check and uncheck checkboxes in the toolstrip container
         /// </summary>
@@ -243,6 +253,7 @@ namespace Isotope_fitting
                 }
             }
         }
+
         /// <summary>
         /// Temporary for riken check, will delete it later
         /// </summary>
@@ -254,6 +265,7 @@ namespace Isotope_fitting
             formula = input;
             return formula;
         }
+
         /// <summary>
         /// For Exclude types feature, checks each input and add it in the list
         /// </summary>
@@ -304,6 +316,7 @@ namespace Isotope_fitting
                 }
             }
         }
+
         /// <summary>
         /// For Exclude types feature, checks each input and add it in the list
         /// </summary>
@@ -318,23 +331,10 @@ namespace Isotope_fitting
                 if (str2.Length == 1) { list.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[0]) }); }
             }
         }
+
         /// <summary>
-        /// Closes all open forms except the (parameter)
+        /// For Exclude types feature, checks if an ion is in the exlusion list
         /// </summary>
-        public static void CloseAllOpenForm(string currentForm)
-        {
-            // temp list
-            var list = new List<Form>();
-
-            // fill list
-            foreach (Form form in Application.OpenForms)
-                if (!currentForm.Equals(form.Name))
-                    list.Add(form);
-
-            // close selected forms
-            foreach (Form form in list)
-                form.Close();
-        }
         public static bool check_if_frag_included_exclude_list(int index1, FragForm fra, List<ExcludeTypes> list)
         {
             bool in_bounds = true;
@@ -354,6 +354,25 @@ namespace Isotope_fitting
             }
             return in_bounds;
         }
+
+        /// <summary>
+        /// Closes all open forms except the (parameter)
+        /// </summary>
+        public static void CloseAllOpenForm(string currentForm)
+        {
+            // temp list
+            var list = new List<Form>();
+
+            // fill list
+            foreach (Form form in Application.OpenForms)
+                if (!currentForm.Equals(form.Name))
+                    list.Add(form);
+
+            // close selected forms
+            foreach (Form form in list)
+                form.Close();
+        }
+       
         #region extension
         public static bool recognise_extension(string fra_exte, string Extension)
         {
@@ -403,6 +422,11 @@ namespace Isotope_fitting
             }
             return name_exte;
         }
+        #endregion
+
+        /// <summary>
+        /// Find the amount of C in the input formula, if >12 then it is a precursor ion
+        /// </summary>
         public static bool c_is_precursor(string initial_formula)
         {
             bool is_precursor = false;
@@ -471,6 +495,5 @@ namespace Isotope_fitting
             }
             return is_precursor;
         }
-        #endregion
     }
 }

@@ -751,8 +751,7 @@ namespace Isotope_fitting
             chem_form = chem_form.Replace(" ", "");
             ion = ion_txtBox_riken.Text.Replace(Environment.NewLine, " ").ToString();
             ion = ion.Replace("\t", "");
-            ion = ion.Replace(" ", "");         
-
+            ion = ion.Replace(" ", "");     
             double qMin = txt_to_d(minCharge_txtBox_riken);
             if (double.IsNaN(qMin)) qMin = 1;
             double qMax = txt_to_d(maxCharge_txtBox_riken);
@@ -917,14 +916,13 @@ namespace Isotope_fitting
                 string lbl = "";
                 lbl = ion;
                 res.Last().Radio_label = lbl + extension;
+                res.Last().InputFormula= res.Last().PrintFormula= fix_formula(chem_form, true, res.Last().Charge);
                 if (res.Last().Charge > 0)
                 {
-                    res.Last().Adduct = res.Last().Charge.ToString() + "H";
                     res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+" + extension;
                 }
                 else
                 {
-                    if(res.Last().Charge!=0) res.Last().Deduct =Math.Abs( res.Last().Charge).ToString() + "H";
                     res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-" + extension;
                 }
             }            
