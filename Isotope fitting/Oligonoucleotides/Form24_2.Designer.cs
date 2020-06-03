@@ -40,7 +40,7 @@
             this.d_lstBox = new System.Windows.Forms.CheckedListBox();
             this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
-            Form24_2.machine_listBox1 = new System.Windows.Forms.ListBox();
+            //Form24_2.machine_listBox1 = new System.Windows.Forms.ListBox();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
             this.frag_Label = new System.Windows.Forms.Label();
             this.M_lstBox = new System.Windows.Forms.CheckedListBox();
@@ -86,7 +86,7 @@
             this.panel_calc.Controls.Add(this.d_lstBox);
             this.panel_calc.Controls.Add(this.sortIdx_chkBx);
             this.panel_calc.Controls.Add(this.chargeMax_Box);
-            this.panel_calc.Controls.Add(Form24_2.machine_listBox1);
+            //this.panel_calc.Controls.Add(Form24_2.machine_listBox1);
             this.panel_calc.Controls.Add(this.internal_lstBox);
             this.panel_calc.Controls.Add(this.frag_Label);
             this.panel_calc.Controls.Add(this.M_lstBox);
@@ -252,44 +252,44 @@
             this.chargeMax_Box.Size = new System.Drawing.Size(38, 20);
             this.chargeMax_Box.TabIndex = 16;
             this.chargeMax_Box.TextChanged += new System.EventHandler(this.chargeMax_Box_TextChanged);
-            // 
-            // machine_listBox1
-            // 
-            Form24_2.machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            Form24_2.machine_listBox1.FormattingEnabled = true;
-            Form24_2.machine_listBox1.Items.AddRange(new object[] {
-            "Elite_R240000@400",
-            "Elite_R120000@400",
-            "Elite_R60000@400",
-            "Elite_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R120000@400",
-            "OrbitrapXL,Velos,VelosPro_R60000@400",
-            "OrbitrapXL,Velos,VelosPro_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R15000@400",
-            "OrbitrapXL,Velos,VelosPro_R7500@400",
-            "Q-Exactive,ExactivePlus_280K@200",
-            "Q-Exactive,ExactivePlus_R140000@200",
-            "Q-Exactive,ExactivePlus_R70000@200",
-            "Q-Exactive,ExactivePlus_R35000@200",
-            "Q-Exactive,ExactivePlus_R17500@200",
-            "Exactive_R100000@200",
-            "Exactive_R50000@200",
-            "Exactive_R25000@200",
-            "Exactive_R12500@200",
-            "OTFusion,QExactiveHF_480000@200",
-            "OTFusion,QExactiveHF_240000@200",
-            "OTFusion,QExactiveHF_120000@200",
-            "OTFusion,QExactiveHF_60000@200",
-            "OTFusion,QExactiveHF_30000@200",
-            "OTFusion,QExactiveHF_15000@200",
-            "TripleTOF5600_R28000@200",
-            "QTOF_XevoG2-S_R25000@200",
-            "TripleTOF6600_R30000@400             "});
-            Form24_2.machine_listBox1.Location = new System.Drawing.Point(102, 426);
-            Form24_2.machine_listBox1.Name = "machine_listBox";
-            Form24_2.machine_listBox1.Size = new System.Drawing.Size(191, 56);
-            Form24_2.machine_listBox1.TabIndex = 21;
-            Form24_2.machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+            //// 
+            //// machine_listBox1
+            //// 
+            //Form24_2.machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            //Form24_2.machine_listBox1.FormattingEnabled = true;
+            //Form24_2.machine_listBox1.Items.AddRange(new object[] {
+            //"Elite_R240000@400",
+            //"Elite_R120000@400",
+            //"Elite_R60000@400",
+            //"Elite_R30000@400",
+            //"OrbitrapXL,Velos,VelosPro_R120000@400",
+            //"OrbitrapXL,Velos,VelosPro_R60000@400",
+            //"OrbitrapXL,Velos,VelosPro_R30000@400",
+            //"OrbitrapXL,Velos,VelosPro_R15000@400",
+            //"OrbitrapXL,Velos,VelosPro_R7500@400",
+            //"Q-Exactive,ExactivePlus_280K@200",
+            //"Q-Exactive,ExactivePlus_R140000@200",
+            //"Q-Exactive,ExactivePlus_R70000@200",
+            //"Q-Exactive,ExactivePlus_R35000@200",
+            //"Q-Exactive,ExactivePlus_R17500@200",
+            //"Exactive_R100000@200",
+            //"Exactive_R50000@200",
+            //"Exactive_R25000@200",
+            //"Exactive_R12500@200",
+            //"OTFusion,QExactiveHF_480000@200",
+            //"OTFusion,QExactiveHF_240000@200",
+            //"OTFusion,QExactiveHF_120000@200",
+            //"OTFusion,QExactiveHF_60000@200",
+            //"OTFusion,QExactiveHF_30000@200",
+            //"OTFusion,QExactiveHF_15000@200",
+            //"TripleTOF5600_R28000@200",
+            //"QTOF_XevoG2-S_R25000@200",
+            //"TripleTOF6600_R30000@400             "});
+            //Form24_2.machine_listBox1.Location = new System.Drawing.Point(102, 426);
+            //Form24_2.machine_listBox1.Name = "machine_listBox1";
+            //Form24_2.machine_listBox1.Size = new System.Drawing.Size(191, 56);
+            //Form24_2.machine_listBox1.TabIndex = 21;
+            //Form24_2.machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
             // 
             // internal_lstBox
             // 
@@ -686,7 +686,7 @@
         private System.Windows.Forms.CheckedListBox d_lstBox;
         private System.Windows.Forms.CheckBox sortIdx_chkBx;
         private System.Windows.Forms.TextBox chargeMax_Box;
-        public static System.Windows.Forms.ListBox machine_listBox1;
+        //public static System.Windows.Forms.ListBox machine_listBox1;
         private System.Windows.Forms.CheckedListBox internal_lstBox;
         private System.Windows.Forms.Label frag_Label;
         private System.Windows.Forms.CheckedListBox M_lstBox;

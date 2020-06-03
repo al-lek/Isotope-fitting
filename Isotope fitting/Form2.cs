@@ -8671,13 +8671,13 @@ namespace Isotope_fitting
             {
                 for (int i1 = 0; i1 < machine_listBox1.Items.Count; i1++)
                 {
-                    string m = (string)Form24_2.machine_listBox1.Items[i1];
+                    string m = (string)machine_listBox1.Items[i1];
                     if (m.Equals(name)) { return; }
                 }
                 machine_listBox1.ClearSelected();
                 machine_listBox1.Items.Add(name);  
                 machine_listBox1.SelectedItem = name;
-                machine_sel_index = machine_listBox.SelectedIndex;
+                machine_sel_index = machine_listBox1.SelectedIndex;
             }
             else
             {
@@ -12911,8 +12911,7 @@ namespace Isotope_fitting
             File.WriteAllLines(path, fragText);
         }
         #endregion
-
-        
+               
        
         public void read_rtf_find_color(SequenceTab seq)
         {
