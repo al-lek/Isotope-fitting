@@ -174,6 +174,19 @@
             this.rem_Btn = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.chemForm_tab_riken = new System.Windows.Forms.TabPage();
+            this.extensionBox1_riken = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.clear_single_chem_Btn_riken = new System.Windows.Forms.Button();
+            this.ion_txtBox_riken = new System.Windows.Forms.TextBox();
+            this.chem_ion_Lbl_riken = new System.Windows.Forms.Label();
+            this.maxCharge_txtBox_riken = new System.Windows.Forms.TextBox();
+            this.chem_charge_Lbl_riken = new System.Windows.Forms.Label();
+            this.chem_chargeMax_Lbl_riken = new System.Windows.Forms.Label();
+            this.chem_chargeMin_Lbl_riken = new System.Windows.Forms.Label();
+            this.minCharge_txtBox_riken = new System.Windows.Forms.TextBox();
+            this.chemForm_txtBox_riken = new System.Windows.Forms.TextBox();
+            this.chemForm_Lbl_riken = new System.Windows.Forms.Label();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
@@ -189,6 +202,7 @@
             this.statusStrpFrm9.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.chemForm_tab_riken.SuspendLayout();
             this.SuspendLayout();
             // 
             // z_clmn
@@ -308,6 +322,7 @@
             this.FragCalc_TabControl.Controls.Add(this.chemForm_tab);
             this.FragCalc_TabControl.Controls.Add(this.Frag_tab);
             this.FragCalc_TabControl.Controls.Add(this.fragTab_riken);
+            this.FragCalc_TabControl.Controls.Add(this.chemForm_tab_riken);
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
@@ -345,7 +360,7 @@
             this.chemForm_tab.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab.Name = "chemForm_tab";
             this.chemForm_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab.Size = new System.Drawing.Size(366, 389);
+            this.chemForm_tab.Size = new System.Drawing.Size(385, 389);
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
@@ -356,7 +371,7 @@
             this.groupBox2.Controls.Add(this.mult_heavy_ChkBox);
             this.groupBox2.Controls.Add(this.extensionBox2);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Location = new System.Drawing.Point(153, 276);
+            this.groupBox2.Location = new System.Drawing.Point(182, 276);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(184, 65);
             this.groupBox2.TabIndex = 64;
@@ -411,7 +426,7 @@
             this.groupBox3.Controls.Add(this.heavy_ChkBox);
             this.groupBox3.Controls.Add(this.extensionBox1);
             this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Location = new System.Drawing.Point(153, 52);
+            this.groupBox3.Location = new System.Drawing.Point(182, 52);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(184, 65);
             this.groupBox3.TabIndex = 63;
@@ -470,7 +485,7 @@
             this.filename_txtBx.Location = new System.Drawing.Point(3, 259);
             this.filename_txtBx.Name = "filename_txtBx";
             this.filename_txtBx.ReadOnly = true;
-            this.filename_txtBx.Size = new System.Drawing.Size(332, 11);
+            this.filename_txtBx.Size = new System.Drawing.Size(360, 11);
             this.filename_txtBx.TabIndex = 59;
             // 
             // clear_single_chem_Btn
@@ -479,7 +494,7 @@
             this.clear_single_chem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.clear_single_chem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clear_single_chem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.clear_single_chem_Btn.Location = new System.Drawing.Point(247, 195);
+            this.clear_single_chem_Btn.Location = new System.Drawing.Point(276, 195);
             this.clear_single_chem_Btn.Name = "clear_single_chem_Btn";
             this.clear_single_chem_Btn.Size = new System.Drawing.Size(90, 24);
             this.clear_single_chem_Btn.TabIndex = 58;
@@ -494,7 +509,7 @@
             this.clear_multiple_chem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.clear_multiple_chem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clear_multiple_chem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.clear_multiple_chem_Btn.Location = new System.Drawing.Point(247, 346);
+            this.clear_multiple_chem_Btn.Location = new System.Drawing.Point(276, 346);
             this.clear_multiple_chem_Btn.Name = "clear_multiple_chem_Btn";
             this.clear_multiple_chem_Btn.Size = new System.Drawing.Size(90, 24);
             this.clear_multiple_chem_Btn.TabIndex = 57;
@@ -711,7 +726,7 @@
             // 
             this.chemForm_txtBox.Location = new System.Drawing.Point(3, 26);
             this.chemForm_txtBox.Name = "chemForm_txtBox";
-            this.chemForm_txtBox.Size = new System.Drawing.Size(334, 20);
+            this.chemForm_txtBox.Size = new System.Drawing.Size(360, 20);
             this.chemForm_txtBox.TabIndex = 3;
             // 
             // chemForm_Lbl
@@ -1837,7 +1852,7 @@
             this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.insert_Btn.Location = new System.Drawing.Point(263, 17);
             this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(138, 30);
+            this.insert_Btn.Size = new System.Drawing.Size(127, 30);
             this.insert_Btn.TabIndex = 53;
             this.insert_Btn.Text = "Insert to Frag.List";
             this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
@@ -1983,6 +1998,152 @@
             this.rem_Btn.UseVisualStyleBackColor = false;
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
+            // chemForm_tab_riken
+            // 
+            this.chemForm_tab_riken.Controls.Add(this.extensionBox1_riken);
+            this.chemForm_tab_riken.Controls.Add(this.label23);
+            this.chemForm_tab_riken.Controls.Add(this.clear_single_chem_Btn_riken);
+            this.chemForm_tab_riken.Controls.Add(this.ion_txtBox_riken);
+            this.chemForm_tab_riken.Controls.Add(this.chem_ion_Lbl_riken);
+            this.chemForm_tab_riken.Controls.Add(this.maxCharge_txtBox_riken);
+            this.chemForm_tab_riken.Controls.Add(this.chem_charge_Lbl_riken);
+            this.chemForm_tab_riken.Controls.Add(this.chem_chargeMax_Lbl_riken);
+            this.chemForm_tab_riken.Controls.Add(this.chem_chargeMin_Lbl_riken);
+            this.chemForm_tab_riken.Controls.Add(this.minCharge_txtBox_riken);
+            this.chemForm_tab_riken.Controls.Add(this.chemForm_txtBox_riken);
+            this.chemForm_tab_riken.Controls.Add(this.chemForm_Lbl_riken);
+            this.chemForm_tab_riken.Location = new System.Drawing.Point(4, 22);
+            this.chemForm_tab_riken.Name = "chemForm_tab_riken";
+            this.chemForm_tab_riken.Padding = new System.Windows.Forms.Padding(3);
+            this.chemForm_tab_riken.Size = new System.Drawing.Size(385, 389);
+            this.chemForm_tab_riken.TabIndex = 3;
+            this.chemForm_tab_riken.Text = "Chemical formula";
+            this.chemForm_tab_riken.UseVisualStyleBackColor = true;
+            // 
+            // extensionBox1_riken
+            // 
+            this.extensionBox1_riken.ForeColor = System.Drawing.Color.Black;
+            this.extensionBox1_riken.Location = new System.Drawing.Point(252, 67);
+            this.extensionBox1_riken.Name = "extensionBox1_riken";
+            this.extensionBox1_riken.Size = new System.Drawing.Size(111, 20);
+            this.extensionBox1_riken.TabIndex = 61;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.ForeColor = System.Drawing.Color.Sienna;
+            this.label23.Location = new System.Drawing.Point(183, 71);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(53, 13);
+            this.label23.TabIndex = 60;
+            this.label23.Text = "Extension";
+            // 
+            // clear_single_chem_Btn_riken
+            // 
+            this.clear_single_chem_Btn_riken.BackColor = System.Drawing.Color.OrangeRed;
+            this.clear_single_chem_Btn_riken.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.clear_single_chem_Btn_riken.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clear_single_chem_Btn_riken.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clear_single_chem_Btn_riken.Location = new System.Drawing.Point(273, 133);
+            this.clear_single_chem_Btn_riken.Name = "clear_single_chem_Btn_riken";
+            this.clear_single_chem_Btn_riken.Size = new System.Drawing.Size(90, 24);
+            this.clear_single_chem_Btn_riken.TabIndex = 58;
+            this.clear_single_chem_Btn_riken.Text = "Clear Data";
+            this.toolTip1.SetToolTip(this.clear_single_chem_Btn_riken, "Load a file with chemical formulas and names of fragments");
+            this.clear_single_chem_Btn_riken.UseVisualStyleBackColor = false;
+            this.clear_single_chem_Btn_riken.Click += new System.EventHandler(this.clear_single_chem_Btn_riken_Click);
+            // 
+            // ion_txtBox_riken
+            // 
+            this.ion_txtBox_riken.ForeColor = System.Drawing.Color.Black;
+            this.ion_txtBox_riken.Location = new System.Drawing.Point(3, 135);
+            this.ion_txtBox_riken.Name = "ion_txtBox_riken";
+            this.ion_txtBox_riken.Size = new System.Drawing.Size(87, 20);
+            this.ion_txtBox_riken.TabIndex = 47;
+            // 
+            // chem_ion_Lbl_riken
+            // 
+            this.chem_ion_Lbl_riken.AutoSize = true;
+            this.chem_ion_Lbl_riken.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_ion_Lbl_riken.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chem_ion_Lbl_riken.Location = new System.Drawing.Point(3, 116);
+            this.chem_ion_Lbl_riken.Name = "chem_ion_Lbl_riken";
+            this.chem_ion_Lbl_riken.Size = new System.Drawing.Size(22, 13);
+            this.chem_ion_Lbl_riken.TabIndex = 46;
+            this.chem_ion_Lbl_riken.Text = "Ion";
+            this.toolTip1.SetToolTip(this.chem_ion_Lbl_riken, "Set ion type (for internal fragments insert \'internal\')");
+            // 
+            // maxCharge_txtBox_riken
+            // 
+            this.maxCharge_txtBox_riken.ForeColor = System.Drawing.Color.Black;
+            this.maxCharge_txtBox_riken.Location = new System.Drawing.Point(55, 90);
+            this.maxCharge_txtBox_riken.Name = "maxCharge_txtBox_riken";
+            this.maxCharge_txtBox_riken.Size = new System.Drawing.Size(38, 20);
+            this.maxCharge_txtBox_riken.TabIndex = 38;
+            this.maxCharge_txtBox_riken.TextChanged += new System.EventHandler(this.maxCharge_txtBox_riken_TextChanged);
+            // 
+            // chem_charge_Lbl_riken
+            // 
+            this.chem_charge_Lbl_riken.AutoSize = true;
+            this.chem_charge_Lbl_riken.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_charge_Lbl_riken.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chem_charge_Lbl_riken.Location = new System.Drawing.Point(3, 52);
+            this.chem_charge_Lbl_riken.Name = "chem_charge_Lbl_riken";
+            this.chem_charge_Lbl_riken.Size = new System.Drawing.Size(41, 13);
+            this.chem_charge_Lbl_riken.TabIndex = 34;
+            this.chem_charge_Lbl_riken.Text = "Charge";
+            this.toolTip1.SetToolTip(this.chem_charge_Lbl_riken, "Set charge range for the calculations");
+            // 
+            // chem_chargeMax_Lbl_riken
+            // 
+            this.chem_chargeMax_Lbl_riken.AutoSize = true;
+            this.chem_chargeMax_Lbl_riken.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_chargeMax_Lbl_riken.ForeColor = System.Drawing.Color.Sienna;
+            this.chem_chargeMax_Lbl_riken.Location = new System.Drawing.Point(55, 71);
+            this.chem_chargeMax_Lbl_riken.Name = "chem_chargeMax_Lbl_riken";
+            this.chem_chargeMax_Lbl_riken.Size = new System.Drawing.Size(26, 13);
+            this.chem_chargeMax_Lbl_riken.TabIndex = 36;
+            this.chem_chargeMax_Lbl_riken.Text = "max";
+            // 
+            // chem_chargeMin_Lbl_riken
+            // 
+            this.chem_chargeMin_Lbl_riken.AutoSize = true;
+            this.chem_chargeMin_Lbl_riken.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chem_chargeMin_Lbl_riken.ForeColor = System.Drawing.Color.Sienna;
+            this.chem_chargeMin_Lbl_riken.Location = new System.Drawing.Point(3, 71);
+            this.chem_chargeMin_Lbl_riken.Name = "chem_chargeMin_Lbl_riken";
+            this.chem_chargeMin_Lbl_riken.Size = new System.Drawing.Size(23, 13);
+            this.chem_chargeMin_Lbl_riken.TabIndex = 35;
+            this.chem_chargeMin_Lbl_riken.Text = "min";
+            // 
+            // minCharge_txtBox_riken
+            // 
+            this.minCharge_txtBox_riken.ForeColor = System.Drawing.Color.Black;
+            this.minCharge_txtBox_riken.Location = new System.Drawing.Point(3, 90);
+            this.minCharge_txtBox_riken.Name = "minCharge_txtBox_riken";
+            this.minCharge_txtBox_riken.Size = new System.Drawing.Size(38, 20);
+            this.minCharge_txtBox_riken.TabIndex = 37;
+            this.minCharge_txtBox_riken.TextChanged += new System.EventHandler(this.minCharge_txtBox_riken_TextChanged);
+            // 
+            // chemForm_txtBox_riken
+            // 
+            this.chemForm_txtBox_riken.Location = new System.Drawing.Point(3, 26);
+            this.chemForm_txtBox_riken.Name = "chemForm_txtBox_riken";
+            this.chemForm_txtBox_riken.Size = new System.Drawing.Size(360, 20);
+            this.chemForm_txtBox_riken.TabIndex = 3;
+            // 
+            // chemForm_Lbl_riken
+            // 
+            this.chemForm_Lbl_riken.AutoSize = true;
+            this.chemForm_Lbl_riken.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chemForm_Lbl_riken.ForeColor = System.Drawing.Color.OrangeRed;
+            this.chemForm_Lbl_riken.Location = new System.Drawing.Point(3, 3);
+            this.chemForm_Lbl_riken.Name = "chemForm_Lbl_riken";
+            this.chemForm_Lbl_riken.Size = new System.Drawing.Size(120, 17);
+            this.chemForm_Lbl_riken.TabIndex = 2;
+            this.chemForm_Lbl_riken.Text = "Chemical Formula";
+            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -2025,6 +2186,8 @@
             this.statusStrpFrm9.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.chemForm_tab_riken.ResumeLayout(false);
+            this.chemForm_tab_riken.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2175,5 +2338,18 @@
         private System.Windows.Forms.CheckedListBox a_lstBox_riken;
         private System.Windows.Forms.CheckedListBox known_lstBox;
         private System.Windows.Forms.CheckedListBox M_lstBox_riken;
+        private System.Windows.Forms.TabPage chemForm_tab_riken;
+        private System.Windows.Forms.TextBox extensionBox1_riken;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Button clear_single_chem_Btn_riken;
+        private System.Windows.Forms.TextBox ion_txtBox_riken;
+        private System.Windows.Forms.Label chem_ion_Lbl_riken;
+        private System.Windows.Forms.TextBox maxCharge_txtBox_riken;
+        private System.Windows.Forms.Label chem_charge_Lbl_riken;
+        private System.Windows.Forms.Label chem_chargeMax_Lbl_riken;
+        private System.Windows.Forms.Label chem_chargeMin_Lbl_riken;
+        private System.Windows.Forms.TextBox minCharge_txtBox_riken;
+        private System.Windows.Forms.TextBox chemForm_txtBox_riken;
+        private System.Windows.Forms.Label chemForm_Lbl_riken;
     }
 }

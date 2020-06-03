@@ -53,7 +53,7 @@ namespace Isotope_fitting
             initialize_riken_selection_UI();
             initialize_Fragment_List_UI();
             if (frm2.is_riken){FragCalc_TabControl.TabPages.Remove(chemForm_tab);FragCalc_TabControl.TabPages.Remove(Frag_tab);}
-            else{FragCalc_TabControl.TabPages.Remove(fragTab_riken);}
+            else{FragCalc_TabControl.TabPages.Remove(fragTab_riken); FragCalc_TabControl.TabPages.Remove(chemForm_tab_riken); }
         }
 
         #region Initialisation
@@ -277,10 +277,21 @@ namespace Isotope_fitting
             chargeMin_Box_riken.Text = string.Empty;
             chargeMax_Box_riken.Text = string.Empty;
         }
+        private void minCharge_txtBox_riken_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(minCharge_txtBox_riken, true, true);
+        }
 
+        private void maxCharge_txtBox_riken_TextChanged(object sender, EventArgs e)
+        {
+            check_textBox_entry(maxCharge_txtBox_riken, true, true);
+        }
+
+        private void clear_single_chem_Btn_riken_Click(object sender, EventArgs e)
+        {
+            set_textboxes_checks_empty(chemForm_tab_riken);
+        }
         #endregion
-
-       
 
         #endregion
 
@@ -491,8 +502,16 @@ namespace Isotope_fitting
             List<ChemiForm> selected_fragments = new List<ChemiForm>();
             if (frm2.is_riken)
             {
-                if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an Riken file for this action."); during_calc(false); return; }
-                selected_fragments = select_fragments2_frm9_riken();
+                if (FragCalc_TabControl.SelectedTab == FragCalc_TabControl.TabPages["chemForm_tab_riken"])
+                {
+                    if ((string.IsNullOrEmpty(minCharge_txtBox_riken.Text) && string.IsNullOrEmpty(maxCharge_txtBox_riken.Text)) || string.IsNullOrEmpty(ion_txtBox_riken.Text)) { MessageBox.Show("You must first set the charge range and the ion type or name of the fragment for this action.", "Chemical Formula Calculation"); during_calc(false); return; }
+                    else { selected_fragments = check_chem_inputs_riken(); }
+                }
+                else
+                {
+                    if (ChemFormulas == null || ChemFormulas.Count == 0) { MessageBox.Show("You must first load an Riken file for this action."); during_calc(false); return; }
+                    selected_fragments = select_fragments2_frm9_riken();
+                }                    
             }
             else
             {
@@ -697,7 +716,213 @@ namespace Isotope_fitting
             }
             return res;
         }
-        
+        private List<ChemiForm> check_chem_inputs_riken()
+        {
+            List<string> other_frag_types = new List<string> { "acp3Y", "dRp" };
+            List<ChemiForm> res = new List<ChemiForm>();
+            bool ext_exists = true;
+            string chem_form = string.Empty;
+            List<int> charge = new List<int>();
+            string ion = string.Empty;
+            string ion_type = string.Empty;
+            string s = frm2.Peptide;
+            string extension = extensionBox1_riken.Text.ToString();
+            string Index = "0";
+            string IndexTo = "0";
+            int sortIdx = 0;
+            int chain_type = 0;
+            OxyColor clr = OxyColors.Orange; 
+            if (!string.IsNullOrEmpty(extension))
+            {
+                ext_exists = false;
+                foreach (SequenceTab seq in frm2.sequenceList)
+                {
+                    if (seq.Extension.Equals(extension)) { s = seq.Sequence; ext_exists = true; break; }
+                }
+                extension = "_" + extension;
+            }
+            if (!ext_exists)
+            {
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted.", "Wrong Input", MessageBoxButtons.YesNo);
+                return res;
+            }
+            chem_form = chemForm_txtBox_riken.Text.Replace(Environment.NewLine, " ").ToString();
+            chem_form = chem_form.Replace("\t", "");
+            chem_form = chem_form.Replace(" ", "");
+            ion = ion_txtBox_riken.Text.Replace(Environment.NewLine, " ").ToString();
+            ion = ion.Replace("\t", "");
+            ion = ion.Replace(" ", "");         
+
+            double qMin = txt_to_d(minCharge_txtBox_riken);
+            if (double.IsNaN(qMin)) qMin = 1;
+            double qMax = txt_to_d(maxCharge_txtBox_riken);
+            if (double.IsNaN(qMax)) qMax = qMin;
+            string[] substring = ion.Split('-');
+            if (char.IsLower(ion[0]))
+            {
+                // normal fragment
+                bool primary_present = false;
+                if (ion.StartsWith("a") && !ion.StartsWith("acp3Y")) { clr = OxyColors.Green; primary_present = true; }
+                else if (ion.StartsWith("b")) { clr = OxyColors.Blue; primary_present = true; }
+                else if (ion.StartsWith("c")) { clr = OxyColors.Firebrick; primary_present = true; }
+                else if (ion.StartsWith("d") && !ion.StartsWith("dRp")) { clr = OxyColors.DeepPink; primary_present = true; }
+                else if (ion.StartsWith("w")) { clr = OxyColors.LimeGreen; primary_present = true; }
+                else if (ion.StartsWith("x")) { clr = OxyColors.DodgerBlue; primary_present = true; }
+                else if (ion.StartsWith("y")) { clr = OxyColors.Tomato; primary_present = true; }
+                else if (ion.StartsWith("z")) { clr = OxyColors.HotPink; primary_present = true; }
+                else clr = OxyColors.Orange;
+                if (primary_present && (substring.Length == 1 || (substring.Length == 2 && substring[1].StartsWith("B("))))
+                {
+                    ion_type = substring[0][0].ToString();
+                    bool is_number = Int32.TryParse(substring[0].Remove(0, 1), out int index);
+                    if (is_number)
+                    {
+                        Index = index.ToString();
+                        if (ion.StartsWith("w") || ion.StartsWith("x") || ion.StartsWith("y") || ion.StartsWith("z") || ion.StartsWith("(w") || ion.StartsWith("(x") || ion.StartsWith("(y") || ion.StartsWith("(z"))
+                        {
+                            sortIdx = s.Length - index;
+                        }
+                        else
+                        {
+                            sortIdx = index;
+                        }
+                        IndexTo = Index;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error with fragment " + ion + ".No index found. ");
+                        return res;
+                    }
+
+                    for (int c = 1; c < substring.Length; c++)
+                    {
+                        if (substring[c].StartsWith("B")) ion_type += "-B()";
+                        else ion_type += "-" + substring[c];
+                    }
+                }
+                else if (primary_present)
+                {
+                    clr = OxyColors.Violet;
+                    ion_type = "internal";
+                    int[] index_values = new int[2];
+                    for (int c = 0; c < 2; c++)
+                    {
+                        bool is_number = Int32.TryParse(substring[c].Remove(0, 1), out int index);
+                        if (is_number)
+                        {
+                            index_values[c] = index;
+                            if (substring[c].StartsWith("w") || substring[c].StartsWith("x") || substring[c].StartsWith("y") || substring[c].StartsWith("z") || substring[c].StartsWith("(w") || substring[c].StartsWith("(x") || substring[c].StartsWith("(y") || substring[c].StartsWith("(z"))
+                            {
+                                index_values[c] = (s.Length - index_values[c]);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error with fragment " + ion + ".No index found. ");
+                            return res;
+                        }
+                    }
+                    sortIdx = index_values[0];
+                    Index = index_values[0].ToString();
+                    IndexTo = index_values[1].ToString();
+                    for (int c = 2; c < substring.Length; c++)
+                    {
+                        if (substring[c].StartsWith("B")) ion_type += "-B()";
+                        else ion_type += "-" + substring[c];
+                    }
+                }
+                else
+                {
+                    ion_type = "known MS2";
+                    sortIdx = 0;
+                    Index = "0";
+                    IndexTo = "0";
+                    for (int c = 1; c < substring.Length; c++)
+                    {
+                        if (substring[c].StartsWith("B")) ion_type += "-B()";
+                        else ion_type += "-" + substring[c];
+                    }
+                }
+            }
+            else if (ion.StartsWith("B("))//base fragments are not followed by losses ex B(G) or B(m7G)
+            {
+                string sub = ion.Substring(2, ion.Length - 2);
+                ion_type = "B()";
+                clr = OxyColors.DarkSalmon;
+                sortIdx = 0;
+                Index = "0";
+                IndexTo = "0";
+            }
+            else
+            {
+                if (substring[0].StartsWith("M") && c_is_precursor(chem_form))
+                {
+                    ion_type = "M";
+                    clr = OxyColors.DarkRed;
+                    sortIdx = 0;
+                    Index = "0";
+                    IndexTo = (s.Length - 1).ToString();
+                }
+                else
+                {
+                    ion_type = "known MS2";
+                    clr = OxyColors.Orange;
+                    sortIdx = 0;
+                    Index = "0";
+                    IndexTo = "0";
+
+                }
+                for (int c = 1; c < substring.Length; c++)
+                {
+                    if (substring[c].StartsWith("B")) ion_type += "-B()";
+                    else ion_type += "-" + substring[c];
+                }
+            }
+            for (int c = (int)qMin; c <= qMax; c++)
+            {
+                res.Add(new ChemiForm
+                {
+                    InputFormula = chem_form,
+                    Adduct = string.Empty,
+                    Deduct = string.Empty,
+                    Multiplier = 1,
+                    Mz = string.Empty,
+                    Ion = ion,
+                    Index = Index,
+                    IndexTo = IndexTo,
+                    Error = false,
+                    Elements_set = new List<Element_set>(),
+                    Iso_total_amount = 0,
+                    Monoisotopic = new CompoundMulti(),
+                    Points = new List<PointPlot>(),
+                    Machine = string.Empty,
+                    Resolution = new double(),
+                    Combinations = new List<Combination_1>(),
+                    Profile = new List<PointPlot>(),
+                    Centroid = new List<PointPlot>(),
+                    Intensoid = new List<PointPlot>(),
+                    Combinations4 = new List<Combination_4>(),
+                    FinalFormula = string.Empty,
+                    Factor = 1.0,
+                    Fixed = false,
+                    PrintFormula = chem_form,
+                    Max_man_int = 0,
+                    Charge = c,
+                    Ion_type = ion_type,
+                    Extension = extension,
+                    Chain_type = chain_type,
+                    Color=clr,
+                    SortIdx=sortIdx
+                });
+                string lbl = "";
+                lbl = ion;
+                res.Last().Radio_label = lbl + extension;
+                if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+" + extension;
+                else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-" + extension;
+            }
+            
+            return res;
+        }
         private List<ChemiForm> select_fragments2_frm9()
         {
             List<ChemiForm> res = new List<ChemiForm>();            
@@ -1609,8 +1834,7 @@ namespace Isotope_fitting
             factor_panel9.Visible = false; selected_idx = 0;
         }
         #endregion
-
-        
+              
 
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
@@ -1831,5 +2055,7 @@ namespace Isotope_fitting
             ////we don't want to refresh fragment trees in the basic form
             //frm2.ending_frm9();
         }
+
+        
     }
 }

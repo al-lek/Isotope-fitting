@@ -570,10 +570,6 @@ namespace Isotope_fitting
             this.toolTip1.SetToolTip(this.fragStorage_Lbl, "Select all fragments presented in the list");
             this.fragStorage_Lbl.Visible = false;
             // 
-            // folderBrowserDialog1
-            // 
-            this.folderBrowserDialog1.HelpRequest += new System.EventHandler(this.folderBrowserDialog1_HelpRequest);
-            // 
             // toolStripButton4
             // 
             this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -842,9 +838,9 @@ namespace Isotope_fitting
             this.panel2_tab3.Controls.Add(this.groupBoxCharge2);
             this.panel2_tab3.Controls.Add(this.groupBoxCharge1);
             this.panel2_tab3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2_tab3.Location = new System.Drawing.Point(756, 3);
+            this.panel2_tab3.Location = new System.Drawing.Point(751, 3);
             this.panel2_tab3.Name = "panel2_tab3";
-            this.panel2_tab3.Size = new System.Drawing.Size(603, 717);
+            this.panel2_tab3.Size = new System.Drawing.Size(608, 717);
             this.panel2_tab3.TabIndex = 26;
             // 
             // groupBoxCharge4
@@ -854,7 +850,7 @@ namespace Isotope_fitting
             this.groupBoxCharge4.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge4.Location = new System.Drawing.Point(0, 768);
             this.groupBoxCharge4.Name = "groupBoxCharge4";
-            this.groupBoxCharge4.Size = new System.Drawing.Size(586, 256);
+            this.groupBoxCharge4.Size = new System.Drawing.Size(591, 256);
             this.groupBoxCharge4.TabIndex = 33;
             this.groupBoxCharge4.TabStop = false;
             // 
@@ -863,7 +859,7 @@ namespace Isotope_fitting
             this.dzCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dzCharge_Pnl.Location = new System.Drawing.Point(3, 16);
             this.dzCharge_Pnl.Name = "dzCharge_Pnl";
-            this.dzCharge_Pnl.Size = new System.Drawing.Size(537, 237);
+            this.dzCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.dzCharge_Pnl.TabIndex = 29;
             // 
             // Charge_toolStrip4
@@ -880,7 +876,7 @@ namespace Isotope_fitting
             this.dzcharge_X_Box,
             this.dzcharge_Y_Box});
             this.Charge_toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.Charge_toolStrip4.Location = new System.Drawing.Point(540, 16);
+            this.Charge_toolStrip4.Location = new System.Drawing.Point(545, 16);
             this.Charge_toolStrip4.Name = "Charge_toolStrip4";
             this.Charge_toolStrip4.Size = new System.Drawing.Size(43, 237);
             this.Charge_toolStrip4.TabIndex = 24;
@@ -972,7 +968,7 @@ namespace Isotope_fitting
             this.groupBoxCharge3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge3.Location = new System.Drawing.Point(0, 512);
             this.groupBoxCharge3.Name = "groupBoxCharge3";
-            this.groupBoxCharge3.Size = new System.Drawing.Size(586, 256);
+            this.groupBoxCharge3.Size = new System.Drawing.Size(591, 256);
             this.groupBoxCharge3.TabIndex = 32;
             this.groupBoxCharge3.TabStop = false;
             // 
@@ -981,7 +977,7 @@ namespace Isotope_fitting
             this.czCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.czCharge_Pnl.Location = new System.Drawing.Point(3, 16);
             this.czCharge_Pnl.Name = "czCharge_Pnl";
-            this.czCharge_Pnl.Size = new System.Drawing.Size(537, 237);
+            this.czCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.czCharge_Pnl.TabIndex = 29;
             this.czCharge_Pnl.Resize += new System.EventHandler(this.czCharge_Pnl_Resize);
             // 
@@ -999,7 +995,7 @@ namespace Isotope_fitting
             this.czcharge_X_Box,
             this.czcharge_Y_Box});
             this.Charge_toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.Charge_toolStrip3.Location = new System.Drawing.Point(540, 16);
+            this.Charge_toolStrip3.Location = new System.Drawing.Point(545, 16);
             this.Charge_toolStrip3.Name = "Charge_toolStrip3";
             this.Charge_toolStrip3.Size = new System.Drawing.Size(43, 237);
             this.Charge_toolStrip3.TabIndex = 24;
@@ -1091,7 +1087,7 @@ namespace Isotope_fitting
             this.groupBoxCharge2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge2.Location = new System.Drawing.Point(0, 256);
             this.groupBoxCharge2.Name = "groupBoxCharge2";
-            this.groupBoxCharge2.Size = new System.Drawing.Size(586, 256);
+            this.groupBoxCharge2.Size = new System.Drawing.Size(591, 256);
             this.groupBoxCharge2.TabIndex = 31;
             this.groupBoxCharge2.TabStop = false;
             // 
@@ -1100,7 +1096,7 @@ namespace Isotope_fitting
             this.byCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.byCharge_Pnl.Location = new System.Drawing.Point(3, 16);
             this.byCharge_Pnl.Name = "byCharge_Pnl";
-            this.byCharge_Pnl.Size = new System.Drawing.Size(537, 237);
+            this.byCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.byCharge_Pnl.TabIndex = 28;
             this.byCharge_Pnl.Resize += new System.EventHandler(this.byCharge_Pnl_Resize);
             // 
@@ -1118,7 +1114,7 @@ namespace Isotope_fitting
             this.bycharge_X_Box,
             this.bycharge_Y_Box});
             this.Charge_toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.Charge_toolStrip2.Location = new System.Drawing.Point(540, 16);
+            this.Charge_toolStrip2.Location = new System.Drawing.Point(545, 16);
             this.Charge_toolStrip2.Name = "Charge_toolStrip2";
             this.Charge_toolStrip2.Size = new System.Drawing.Size(43, 237);
             this.Charge_toolStrip2.TabIndex = 25;
@@ -1210,7 +1206,7 @@ namespace Isotope_fitting
             this.groupBoxCharge1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge1.Location = new System.Drawing.Point(0, 0);
             this.groupBoxCharge1.Name = "groupBoxCharge1";
-            this.groupBoxCharge1.Size = new System.Drawing.Size(586, 256);
+            this.groupBoxCharge1.Size = new System.Drawing.Size(591, 256);
             this.groupBoxCharge1.TabIndex = 30;
             this.groupBoxCharge1.TabStop = false;
             // 
@@ -1219,7 +1215,7 @@ namespace Isotope_fitting
             this.axCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.axCharge_Pnl.Location = new System.Drawing.Point(3, 16);
             this.axCharge_Pnl.Name = "axCharge_Pnl";
-            this.axCharge_Pnl.Size = new System.Drawing.Size(537, 237);
+            this.axCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.axCharge_Pnl.TabIndex = 27;
             this.axCharge_Pnl.Resize += new System.EventHandler(this.axCharge_Pnl_Resize);
             // 
@@ -1237,7 +1233,7 @@ namespace Isotope_fitting
             this.axcharge_X_Box,
             this.axcharge_Y_Box});
             this.Charge_toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.Charge_toolStrip1.Location = new System.Drawing.Point(540, 16);
+            this.Charge_toolStrip1.Location = new System.Drawing.Point(545, 16);
             this.Charge_toolStrip1.Name = "Charge_toolStrip1";
             this.Charge_toolStrip1.Size = new System.Drawing.Size(43, 237);
             this.Charge_toolStrip1.TabIndex = 26;
@@ -1339,7 +1335,7 @@ namespace Isotope_fitting
             // 
             this.splitter1.Location = new System.Drawing.Point(746, 3);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(10, 717);
+            this.splitter1.Size = new System.Drawing.Size(5, 717);
             this.splitter1.TabIndex = 25;
             this.splitter1.TabStop = false;
             // 
@@ -1747,7 +1743,7 @@ namespace Isotope_fitting
             // 
             this.splitter4.Location = new System.Drawing.Point(780, 3);
             this.splitter4.Name = "splitter4";
-            this.splitter4.Size = new System.Drawing.Size(10, 717);
+            this.splitter4.Size = new System.Drawing.Size(5, 717);
             this.splitter4.TabIndex = 25;
             this.splitter4.TabStop = false;
             // 
@@ -2332,7 +2328,7 @@ namespace Isotope_fitting
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.ppm_panel);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(537, 351);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(537, 376);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -2357,7 +2353,7 @@ namespace Isotope_fitting
             this.ppm_panel.Location = new System.Drawing.Point(0, 0);
             this.ppm_panel.Name = "ppm_panel";
             this.ppm_panel.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            this.ppm_panel.Size = new System.Drawing.Size(537, 351);
+            this.ppm_panel.Size = new System.Drawing.Size(537, 376);
             this.ppm_panel.TabIndex = 3;
             // 
             // ppm_toolStrip

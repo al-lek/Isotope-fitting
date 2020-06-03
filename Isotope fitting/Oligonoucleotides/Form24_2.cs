@@ -28,7 +28,11 @@ namespace Isotope_fitting
             //else if (frm2.machine_sel_index != -1) Form24_2.machine_listBox1.SelectedIndex = frm2.machine_sel_index;
             //else Form24_2.machine_listBox1.SelectedIndex = 9;
             panel_calc.Controls.Add(machine_listBox1);
-            machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+            if (!machine_listBox1_eventAddedFlag)
+            {
+                machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+                machine_listBox1_eventAddedFlag = true;
+            }
         }
 
         #region UI    

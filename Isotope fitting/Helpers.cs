@@ -403,6 +403,74 @@ namespace Isotope_fitting
             }
             return name_exte;
         }
+        public static bool c_is_precursor(string initial_formula)
+        {
+            bool is_precursor = false;
+            List<string> element1 = new List<string>();
+            List<int> number1 = new List<int>();
+            int i = 0;
+            do
+            { //check for elements with their atomic number in []
+                int startIndex = 0;
+                int endIndex = 0;
+                int length = 0;
+                if (initial_formula[i] == '[')
+                {
+                    startIndex = i;
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (initial_formula[i] != ']'));
+
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) != true));
+                    endIndex = i - 1;
+                    length = endIndex - startIndex + 1;
+                    element1.Add(initial_formula.Substring(startIndex, length));
+                }
+                if (Char.IsNumber(initial_formula[i]) != true)
+                {
+                    startIndex = i;
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) != true));
+                    i = i - 1;
+                    endIndex = i;
+                    length = endIndex - startIndex + 1;
+                    element1.Add(initial_formula.Substring(startIndex, length));
+                }
+                if (Char.IsNumber(initial_formula[i]))
+                {
+                    startIndex = i;
+                    do
+                    {
+                        i++;
+                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) == true));
+                    i = i - 1;
+                    endIndex = i;
+                    length = endIndex - startIndex + 1;
+                    number1.Add(Int32.Parse(initial_formula.Substring(startIndex, length)));
+                }
+                if (element1.Count > 1)
+                {
+                    break;
+                }
+                i++;
+            } while (i < initial_formula.Length);
+            //end while loop
+            if (number1.Count == 0)
+            {
+                MessageBox.Show("Couldn't read chemical formula in fragment of ion type 'MH'"); return is_precursor;
+            }
+            if (number1[0] > 12)
+            {
+                is_precursor = true;
+            }
+            return is_precursor;
+        }
         #endregion
     }
 }

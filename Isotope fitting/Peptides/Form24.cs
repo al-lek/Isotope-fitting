@@ -30,7 +30,11 @@ namespace Isotope_fitting
             //else machine_listBox.SelectedIndex = 9;
             //temp_machine = machine_listBox;
             panel_calc.Controls.Add(machine_listBox);
-            machine_listBox.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+            if (!machine_listBox_eventAddedFlag)
+            {
+                machine_listBox.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+                machine_listBox_eventAddedFlag = true;
+            }
 
         }
 

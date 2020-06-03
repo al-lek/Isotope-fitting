@@ -37,13 +37,14 @@ namespace Isotope_fitting
 {
     public partial class Form2 : Form
     {
+        #region PARAMETER SET TAB FIT
         public bool is_riken = false;
         bool is_polarity_negative = false;
-        public static ListBox machine_listBox=new ListBox();
+        public static ListBox machine_listBox = new ListBox();
         public static ListBox machine_listBox1 = new ListBox();
+        public static bool machine_listBox_eventAddedFlag = false;
+        public static bool machine_listBox1_eventAddedFlag = false;
 
-
-        #region PARAMETER SET TAB FIT
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
@@ -458,7 +459,111 @@ namespace Isotope_fitting
             //call change state window
             initiate_change_state_form();
         }
-
+        #region init
+        private void initialize_machine_listboxes()
+        {
+            // 
+            // machine_listBox
+            // 
+            machine_listBox.ForeColor = System.Drawing.Color.DarkSlateGray;
+            machine_listBox.FormattingEnabled = true;
+            machine_listBox.Items.AddRange(new object[] {
+            "Elite_R240000@400",
+            "Elite_R120000@400",
+            "Elite_R60000@400",
+            "Elite_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R120000@400",
+            "OrbitrapXL,Velos,VelosPro_R60000@400",
+            "OrbitrapXL,Velos,VelosPro_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R15000@400",
+            "OrbitrapXL,Velos,VelosPro_R7500@400",
+            "Q-Exactive,ExactivePlus_280K@200",
+            "Q-Exactive,ExactivePlus_R140000@200",
+            "Q-Exactive,ExactivePlus_R70000@200",
+            "Q-Exactive,ExactivePlus_R35000@200",
+            "Q-Exactive,ExactivePlus_R17500@200",
+            "Exactive_R100000@200",
+            "Exactive_R50000@200",
+            "Exactive_R25000@200",
+            "Exactive_R12500@200",
+            "OTFusion,QExactiveHF_480000@200",
+            "OTFusion,QExactiveHF_240000@200",
+            "OTFusion,QExactiveHF_120000@200",
+            "OTFusion,QExactiveHF_60000@200",
+            "OTFusion,QExactiveHF_30000@200",
+            "OTFusion,QExactiveHF_15000@200",
+            "TripleTOF5600_R28000@200",
+            "QTOF_XevoG2-S_R25000@200",
+            "TripleTOF6600_R30000@400             "});
+            machine_listBox.Location = new System.Drawing.Point(94, 504);
+            machine_listBox.Name = "machine_listBox";
+            machine_listBox.Size = new System.Drawing.Size(191, 56);
+            machine_listBox.TabIndex = 21;
+            machine_listBox.SelectedIndex = machine_sel_index;
+            // 
+            // machine_listBox1
+            // 
+            machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            machine_listBox1.FormattingEnabled = true;
+            machine_listBox1.Items.AddRange(new object[] {
+            "Elite_R240000@400",
+            "Elite_R120000@400",
+            "Elite_R60000@400",
+            "Elite_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R120000@400",
+            "OrbitrapXL,Velos,VelosPro_R60000@400",
+            "OrbitrapXL,Velos,VelosPro_R30000@400",
+            "OrbitrapXL,Velos,VelosPro_R15000@400",
+            "OrbitrapXL,Velos,VelosPro_R7500@400",
+            "Q-Exactive,ExactivePlus_280K@200",
+            "Q-Exactive,ExactivePlus_R140000@200",
+            "Q-Exactive,ExactivePlus_R70000@200",
+            "Q-Exactive,ExactivePlus_R35000@200",
+            "Q-Exactive,ExactivePlus_R17500@200",
+            "Exactive_R100000@200",
+            "Exactive_R50000@200",
+            "Exactive_R25000@200",
+            "Exactive_R12500@200",
+            "OTFusion,QExactiveHF_480000@200",
+            "OTFusion,QExactiveHF_240000@200",
+            "OTFusion,QExactiveHF_120000@200",
+            "OTFusion,QExactiveHF_60000@200",
+            "OTFusion,QExactiveHF_30000@200",
+            "OTFusion,QExactiveHF_15000@200",
+            "TripleTOF5600_R28000@200",
+            "QTOF_XevoG2-S_R25000@200",
+            "TripleTOF6600_R30000@400             "});
+            machine_listBox1.Location = new System.Drawing.Point(102,426);
+            machine_listBox1.Name = "machine_listBox1";
+            machine_listBox1.Size = new System.Drawing.Size(191, 56);
+            machine_listBox1.TabIndex = 21;
+            machine_listBox1.SelectedIndex = machine_sel_index;
+        }
+        private void initialize_BW()
+        {
+            //save .fit file
+            _bw_save_envipat.DoWork += new DoWorkEventHandler(Save_frag_envipat);
+            _bw_save_envipat.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_save_envipat_RunWorkerCompleted);
+            //save project
+            _bw_save_project_frag.DoWork += new DoWorkEventHandler(Project_save_fragments);
+            _bw_save_project_frag.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_frag_RunWorkerCompleted);
+            _bw_save_project_peaks.DoWork += new DoWorkEventHandler(Project_save_peaks);
+            _bw_save_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_peaks_RunWorkerCompleted);
+            _bw_save_project_fit_results.DoWork += new DoWorkEventHandler(Project_save_fit_results);
+            _bw_save_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_fitResults_RunWorkerCompleted);
+            //load project
+            _bw_load_project_exp.DoWork += new DoWorkEventHandler(Project_load_experimental);
+            _bw_load_project_exp.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_exp_RunWorkerCompleted);
+            _bw_load_project_peaks.DoWork += new DoWorkEventHandler(Project_load_peaks);
+            _bw_load_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_peaks_RunWorkerCompleted);
+            _bw_load_project_fragments.DoWork += new DoWorkEventHandler(Project_load_fragments);
+            _bw_load_project_fragments.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fragments_RunWorkerCompleted);
+            _bw_load_project_fit_results.DoWork += new DoWorkEventHandler(Project_load_fit_results);
+            _bw_load_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fit_RunWorkerCompleted);
+            //deconvolution
+            _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
+            _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
+        }
         #region save load bw
         void _bw_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -583,110 +688,8 @@ namespace Isotope_fitting
             }
 
         }
-        private void initialize_machine_listboxes()
-        {
-            // 
-            // machine_listBox
-            // 
-            machine_listBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            machine_listBox.FormattingEnabled = true;
-            machine_listBox.Items.AddRange(new object[] {
-            "Elite_R240000@400",
-            "Elite_R120000@400",
-            "Elite_R60000@400",
-            "Elite_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R120000@400",
-            "OrbitrapXL,Velos,VelosPro_R60000@400",
-            "OrbitrapXL,Velos,VelosPro_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R15000@400",
-            "OrbitrapXL,Velos,VelosPro_R7500@400",
-            "Q-Exactive,ExactivePlus_280K@200",
-            "Q-Exactive,ExactivePlus_R140000@200",
-            "Q-Exactive,ExactivePlus_R70000@200",
-            "Q-Exactive,ExactivePlus_R35000@200",
-            "Q-Exactive,ExactivePlus_R17500@200",
-            "Exactive_R100000@200",
-            "Exactive_R50000@200",
-            "Exactive_R25000@200",
-            "Exactive_R12500@200",
-            "OTFusion,QExactiveHF_480000@200",
-            "OTFusion,QExactiveHF_240000@200",
-            "OTFusion,QExactiveHF_120000@200",
-            "OTFusion,QExactiveHF_60000@200",
-            "OTFusion,QExactiveHF_30000@200",
-            "OTFusion,QExactiveHF_15000@200",
-            "TripleTOF5600_R28000@200",
-            "QTOF_XevoG2-S_R25000@200",
-            "TripleTOF6600_R30000@400             "});
-            machine_listBox.Location = new System.Drawing.Point(94, 504);
-            machine_listBox.Name = "machine_listBox";
-            machine_listBox.Size = new System.Drawing.Size(191, 56);
-            machine_listBox.TabIndex = 21;
-            machine_listBox.SelectedIndex = machine_sel_index;
-            // 
-            // machine_listBox1
-            // 
-            machine_listBox1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            machine_listBox1.FormattingEnabled = true;
-            machine_listBox1.Items.AddRange(new object[] {
-            "Elite_R240000@400",
-            "Elite_R120000@400",
-            "Elite_R60000@400",
-            "Elite_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R120000@400",
-            "OrbitrapXL,Velos,VelosPro_R60000@400",
-            "OrbitrapXL,Velos,VelosPro_R30000@400",
-            "OrbitrapXL,Velos,VelosPro_R15000@400",
-            "OrbitrapXL,Velos,VelosPro_R7500@400",
-            "Q-Exactive,ExactivePlus_280K@200",
-            "Q-Exactive,ExactivePlus_R140000@200",
-            "Q-Exactive,ExactivePlus_R70000@200",
-            "Q-Exactive,ExactivePlus_R35000@200",
-            "Q-Exactive,ExactivePlus_R17500@200",
-            "Exactive_R100000@200",
-            "Exactive_R50000@200",
-            "Exactive_R25000@200",
-            "Exactive_R12500@200",
-            "OTFusion,QExactiveHF_480000@200",
-            "OTFusion,QExactiveHF_240000@200",
-            "OTFusion,QExactiveHF_120000@200",
-            "OTFusion,QExactiveHF_60000@200",
-            "OTFusion,QExactiveHF_30000@200",
-            "OTFusion,QExactiveHF_15000@200",
-            "TripleTOF5600_R28000@200",
-            "QTOF_XevoG2-S_R25000@200",
-            "TripleTOF6600_R30000@400             "});
-            machine_listBox1.Location = new System.Drawing.Point(94, 504);
-            machine_listBox1.Name = "machine_listBox1";
-            machine_listBox1.Size = new System.Drawing.Size(191, 56);
-            machine_listBox1.TabIndex = 21;
-            machine_listBox1.SelectedIndex = machine_sel_index;
-        }
-        private void initialize_BW()
-        {
-            //save .fit file
-            _bw_save_envipat.DoWork += new DoWorkEventHandler(Save_frag_envipat);
-            _bw_save_envipat.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_save_envipat_RunWorkerCompleted);
-            //save project
-            _bw_save_project_frag.DoWork += new DoWorkEventHandler(Project_save_fragments);
-            _bw_save_project_frag.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_frag_RunWorkerCompleted);
-            _bw_save_project_peaks.DoWork += new DoWorkEventHandler(Project_save_peaks);
-            _bw_save_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_peaks_RunWorkerCompleted);
-            _bw_save_project_fit_results.DoWork += new DoWorkEventHandler(Project_save_fit_results);
-            _bw_save_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_fitResults_RunWorkerCompleted);
-            //load project
-            _bw_load_project_exp.DoWork += new DoWorkEventHandler(Project_load_experimental);
-            _bw_load_project_exp.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_exp_RunWorkerCompleted);
-            _bw_load_project_peaks.DoWork += new DoWorkEventHandler(Project_load_peaks);
-            _bw_load_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_peaks_RunWorkerCompleted);
-            _bw_load_project_fragments.DoWork += new DoWorkEventHandler(Project_load_fragments);
-            _bw_load_project_fragments.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fragments_RunWorkerCompleted);
-            _bw_load_project_fit_results.DoWork += new DoWorkEventHandler(Project_load_fit_results);
-            _bw_load_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_fit_RunWorkerCompleted);
-            //deconvolution
-            _bw_deconcoluted_exp_resolution.DoWork += new DoWorkEventHandler(find_resolution);
-            _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
-        }
+        #endregion
+
         #region riken state change
         private void chageStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -713,7 +716,7 @@ namespace Isotope_fitting
                         if(btn.Name.Contains("ppm_B_") || btn.Name.Contains("w")|| btn.Name.Contains("d"))btn.Visible=is_riken;
                         if (is_riken && btn.Text.Contains("NH3")) { btn.Text = btn.Text.Replace("NH3","B()"); }
                         if (is_riken && btn.Text.Contains("internal a")) { btn.Text = btn.Text.Replace("internal a", "internal"); }
-                        if (!is_riken && btn.Text.Contains("internal")&&!btn.Text.Contains("internal a")) { btn.Text = btn.Text.Replace("internal", "internal a"); }
+                        if (!is_riken && btn.Text.Contains("internal")&&!btn.Text.Contains("internal a") && !btn.Text.Contains("internal b")) { btn.Text = btn.Text.Replace("internal", "internal a"); }
                         if (!is_riken && btn.Visible && btn.Text.Contains("B()")) { btn.Text = btn.Text.Replace("B()", "NH3"); }
                     }
                 }
@@ -744,7 +747,7 @@ namespace Isotope_fitting
             }
         }
         #endregion
-
+        
         #region TAB FIT
         // UI UncheckAll()
         // UI Initialize_fit_UI()
@@ -1266,14 +1269,13 @@ namespace Isotope_fitting
                 {
                     displayPeakList_btn.Invoke(new Action(() => displayPeakList_btn.Enabled = true));   //thread safe call
                     plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
-
                     exp_res++;
                     //plot_peak(); 
                     List<double> tmp1 = new List<double>();
                     List<double> tmp2 = new List<double>();
                     foreach (double[] peak in peak_points)
                     {
-                        if (peak[5] > 200000)
+                        if (peak[5] > 10000)
                         {
                             tmp1.Add((double)(peak[1] + peak[4]));
                             tmp2.Add((double)peak[3]);
@@ -1298,7 +1300,6 @@ namespace Isotope_fitting
                     for (int g = 0; g < experimental_dec[exp].Count; g++)
                     {
                         peak_points.Add(new double[] { exp, experimental_dec[exp][g][0], experimental_dec[exp][g][1], 10000, 0, experimental_dec[exp][g][1] });
-
                     }
                 }
                 plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
@@ -1845,74 +1846,7 @@ namespace Isotope_fitting
                 ChemFormulas[i].SortIdx = Int32.Parse(ChemFormulas[i].Index);
             }
         }
-        private bool c_is_precursor(string initial_formula)
-        {
-            bool is_precursor = false;
-            List<string> element1 = new List<string>();
-            List<int> number1 = new List<int>();
-            int i = 0;
-            do
-            { //check for elements with their atomic number in []
-                int startIndex = 0;
-                int endIndex = 0;
-                int length = 0;
-                if (initial_formula[i] == '[')
-                {
-                    startIndex = i;
-                    do
-                    {
-                        i++;
-                    } while ((i < initial_formula.Length) && (initial_formula[i] != ']'));
-
-                    do
-                    {
-                        i++;
-                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) != true));
-                    endIndex = i - 1;
-                    length = endIndex - startIndex + 1;
-                    element1.Add(initial_formula.Substring(startIndex, length));
-                }
-                if (Char.IsNumber(initial_formula[i]) != true)
-                {
-                    startIndex = i;
-                    do
-                    {
-                        i++;
-                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) != true));
-                    i = i - 1;
-                    endIndex = i;
-                    length = endIndex - startIndex + 1;
-                    element1.Add(initial_formula.Substring(startIndex, length));
-                }
-                if (Char.IsNumber(initial_formula[i]))
-                {
-                    startIndex = i;
-                    do
-                    {
-                        i++;
-                    } while ((i < initial_formula.Length) && (Char.IsNumber(initial_formula[i]) == true));
-                    i = i - 1;
-                    endIndex = i;
-                    length = endIndex - startIndex + 1;
-                    number1.Add(Int32.Parse(initial_formula.Substring(startIndex, length)));
-                }
-                if (element1.Count > 1)
-                {
-                    break;
-                }
-                i++;
-            } while (i < initial_formula.Length);
-            //end while loop
-            if (number1.Count == 0)
-            {
-                MessageBox.Show("Couldn't read chemical formula in fragment of ion type 'MH'"); return is_precursor;
-            }
-            if (number1[0] > 12)
-            {
-                is_precursor = true;
-            }
-            return is_precursor;
-        }
+        
         private void assign_manually_pro_fragment(string[] frag_info)
         {
             if (is_exp_deconvoluted && Int32.Parse(frag_info[4]) > 1) { return; }
@@ -2416,7 +2350,6 @@ namespace Isotope_fitting
             }
 
         }
-
         public void calculate_procedure(List<ChemiForm> selected_fragments)
         {
             if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); return; }
@@ -2468,7 +2401,6 @@ namespace Isotope_fitting
             plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
             plotFragProf_chkBox.Checked = true;
         }
-
         public void fragments_and_calculations_sequence_B()
         {
             calc_FF = false;
@@ -2494,7 +2426,6 @@ namespace Isotope_fitting
             recalculate_all_data_aligned();
             enable_UIcontrols("post calculations");
         }
-
         private void calculate_fragments_resolution(List<ChemiForm> selected_fragments)
         {
             calc_resolution = true;
@@ -2542,7 +2473,6 @@ namespace Isotope_fitting
             }
 
         }
-
         private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
@@ -2929,7 +2859,6 @@ namespace Isotope_fitting
             }
             return true;
         }
-
         private void add_fragments_to_all_data()
         {
             // pass the envelope (profile) of each NEW fragment in Fragment2 to all data
@@ -2953,7 +2882,6 @@ namespace Isotope_fitting
                     all_data[i].Add(new double[] { Fragments2[i - 1].Profile[p].X, Fragments2[i - 1].Profile[p].Y });
             }
         }
-
         private void populate_frag_treeView()
         {
             if (frag_tree.Nodes.Count > 0)
@@ -8693,10 +8621,11 @@ namespace Isotope_fitting
             }
         }
         #endregion
-        
+
         #endregion
 
         #region TAB DIAGRAMS
+        #region class init
         public class CustomPlotController : PlotController
         {
             public CustomPlotController()
@@ -8711,8 +8640,6 @@ namespace Isotope_fitting
                 this.BindMouseWheel(OxyModifierKeys.Control, PlotCommands.ZoomWheel);
             }
         }
-
-        #region class init
         public class CustomDataPoint : IScatterPointProvider
         {
             public double X { get; set; }
@@ -8804,7 +8731,6 @@ namespace Isotope_fitting
             }
         }
         #endregion
-
         private void tabFit_Leave(object sender, EventArgs e)
         {
             if (sequenceList != null && sequenceList.Count > 1)
@@ -8851,20 +8777,17 @@ namespace Isotope_fitting
             }
             initialize_ions_todraw(); initialize_plot_tabs();
         }
-
         private void styleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form12 frm12 = new Form12(this, 0);
             frm12.FormClosed += (s, f) => { save_preferences(); };
             frm12.ShowDialog();
         }
-
         private void style_toolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form12 frm12 = new Form12(this, 1);
             frm12.ShowDialog();
         }
-
         private void styleToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             Form13 frm13 = new Form13(this);
@@ -8918,8 +8841,7 @@ namespace Isotope_fitting
                 pp.InvalidatePlot(true);
             }
         }
-
-
+        
         #region sequence
         //sequence toolstrip
         private void highlightProp_Btn_Click(object sender, EventArgs e)
@@ -9061,11 +8983,11 @@ namespace Isotope_fitting
                     {
                         if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                        if (nn.Index == idx + 1 && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c") || nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b") || nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")))
+                        if (nn.Index == idx + 1 && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c") || nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b") || nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a") || (nn.Ion_type.StartsWith("d")&&is_riken) || (nn.Ion_type.StartsWith("(d") && is_riken)))
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
-                        else if (nn.SortIdx == idx && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y") || nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")))
+                        else if (nn.SortIdx == idx && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y") || nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x") || (nn.Ion_type.StartsWith("w") && is_riken) || (nn.Ion_type.StartsWith("(w") && is_riken)))
                         {
                             sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
@@ -10668,6 +10590,12 @@ namespace Isotope_fitting
             ppm_c.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
             ppm_c_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
             ppm_c_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
+            ppm_d.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
+            ppm_d_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
+            ppm_d_B.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
+            ppm_w.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
+            ppm_w_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
+            ppm_w_B.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
             ppm_x.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
             ppm_x_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
             ppm_x_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
@@ -12070,9 +11998,9 @@ namespace Isotope_fitting
                 if (fplot_type == 1) intensity_plot_init(temp_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
                 else if (fplot_type == 2) intensity_plot_init(temp_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
                 else if (fplot_type == 3) intensity_plot_init(temp_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
-                else if (fplot_type == 6) charge_plot_init(temp_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
-                else if (fplot_type == 7) charge_plot_init(temp_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
-                else if (fplot_type == 8) charge_plot_init(temp_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
+                else if (fplot_type == 5) charge_plot_init(temp_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
+                else if (fplot_type == 6) charge_plot_init(temp_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
+                else if (fplot_type == 7) charge_plot_init(temp_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
             }
             //refresh_temp_primary_plots(temp_plot, fplot_type);
             temp_plot.Model.Axes[1].Zoom(original_plotview.Model.Axes[1].ActualMinimum, original_plotview.Model.Axes[1].ActualMaximum);
@@ -12634,6 +12562,7 @@ namespace Isotope_fitting
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
+                if (!Directory.Exists(folderBrowserDialog1.SelectedPath)) { MessageBox.Show("No folder selected.Please try again."); return; }
                 progress_display_start(7, "Saving project...");
                 all = 0;
                 // The user selected a folder and pressed the OK button.                
@@ -12650,7 +12579,6 @@ namespace Isotope_fitting
                 _bw_save_project_frag.RunWorkerAsync(path_fragments);
                 _bw_save_project_fit_results.RunWorkerAsync(path_fit);
             }
-
         }
         void Project_save_fit_results(object sender, DoWorkEventArgs e)
         {
@@ -12911,8 +12839,7 @@ namespace Isotope_fitting
             File.WriteAllLines(path, fragText);
         }
         #endregion
-               
-       
+                      
         public void read_rtf_find_color(SequenceTab seq)
         {
             string rtf = seq.Rtf;
@@ -13002,12 +12929,6 @@ namespace Isotope_fitting
             }
             seq.Char_color = char_color;
             seq.Color_table = color_table;
-        }
-
-        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
-        {
-
-        }
-
+        }       
     }
 }
