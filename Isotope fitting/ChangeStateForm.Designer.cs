@@ -120,7 +120,7 @@
             // RNA_Btn
             // 
             this.RNA_Btn.AutoSize = true;
-            this.RNA_Btn.Location = new System.Drawing.Point(302, 211);
+            this.RNA_Btn.Location = new System.Drawing.Point(314, 211);
             this.RNA_Btn.Name = "RNA_Btn";
             this.RNA_Btn.Size = new System.Drawing.Size(48, 17);
             this.RNA_Btn.TabIndex = 6;
