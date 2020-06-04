@@ -21,6 +21,9 @@ namespace Isotope_fitting
             temp_riken= frm2.is_riken;
             if (frm2.is_riken) oligonoucl_state_Btn.BackColor =Color.LightBlue;
             else peptide_state_Btn.BackColor = Color.LightBlue;
+            RNA_Btn.Visible = DNA_Btn.Visible = temp_riken;
+            RNA_Btn.Checked = frm2.is_rna;
+            DNA_Btn.Checked = !frm2.is_rna;
         }
 
         private void oligonoucl_state_Btn_Click(object sender, EventArgs e)
@@ -28,6 +31,7 @@ namespace Isotope_fitting
             oligonoucl_state_Btn.BackColor = Color.LightBlue;
             peptide_state_Btn.BackColor = Color.Transparent;
             temp_riken = true;
+            RNA_Btn.Visible = DNA_Btn.Visible = temp_riken;
         }
 
         private void peptide_state_Btn_Click(object sender, EventArgs e)
@@ -35,6 +39,7 @@ namespace Isotope_fitting
             peptide_state_Btn.BackColor = Color.LightBlue;
             oligonoucl_state_Btn.BackColor = Color.Transparent;
             temp_riken = false;
+            RNA_Btn.Visible = DNA_Btn.Visible = temp_riken;
         }
 
         private void peptide_state_Lbl_Click(object sender, EventArgs e)
@@ -42,17 +47,22 @@ namespace Isotope_fitting
             peptide_state_Btn.BackColor = Color.LightBlue;
             oligonoucl_state_Btn.BackColor = Color.Transparent;
             temp_riken = false;
+            RNA_Btn.Visible = DNA_Btn.Visible = temp_riken;
         }
 
         private void oligonoucl_state_Lbl_Click(object sender, EventArgs e)
         {
             oligonoucl_state_Btn.BackColor = Color.LightBlue;
             peptide_state_Btn.BackColor = Color.Transparent;
-            temp_riken = true;            
+            temp_riken = true;      
+            RNA_Btn.Visible = DNA_Btn.Visible = temp_riken;
         }
 
         private void save_stateBtn_Click(object sender, EventArgs e)
         {
+            if (temp_riken &&! RNA_Btn.Checked && !DNA_Btn.Checked) { MessageBox.Show("Please select base sequence type (RNA,DNA).");return; }
+            if (temp_riken) frm2.is_rna = RNA_Btn.Checked;
+            else frm2.is_rna = false;
             if (frm2.is_riken==temp_riken) { frm2.change_state(false); }
             else
             {                

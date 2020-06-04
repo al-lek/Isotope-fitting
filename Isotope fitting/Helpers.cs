@@ -255,18 +255,6 @@ namespace Isotope_fitting
         }
 
         /// <summary>
-        /// Temporary for riken check, will delete it later
-        /// </summary>
-        public static string fix_formula_temporary_only_O(string input,int h2o )
-        {
-            string formula = "";
-            input = find_index_fix_formula(input, -h2o, 'O');
-
-            formula = input;
-            return formula;
-        }
-
-        /// <summary>
         /// For Exclude types feature, checks each input and add it in the list
         /// </summary>
         public static void check_item(Object item, List<ExcludeTypes> list, bool is_internal = false)

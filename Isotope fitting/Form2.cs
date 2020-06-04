@@ -39,6 +39,7 @@ namespace Isotope_fitting
     {
         #region PARAMETER SET TAB FIT
         public bool is_riken = false;
+        public bool is_rna = false;
         bool is_polarity_negative = false;
         public static ListBox machine_listBox = new ListBox();
         public static ListBox machine_listBox1 = new ListBox();
@@ -2159,7 +2160,7 @@ namespace Isotope_fitting
                         else ion_type += "-" + substring[c];
                     }
                     ChemFormulas[i].Ion_type = ion_type;
-                    ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = fix_formula_temporary_only_O(ChemFormulas[i].InputFormula,3);
+                    ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O'); 
                 }
                 else if (primary_present)
                 {
@@ -2192,6 +2193,7 @@ namespace Isotope_fitting
                         else ion_type += "-" + substring[c];
                     }
                     ChemFormulas[i].Ion_type = ion_type;
+                    ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O'); 
                 }
                 else
                 {

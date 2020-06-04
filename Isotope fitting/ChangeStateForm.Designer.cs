@@ -35,6 +35,8 @@
             this.oligonoucl_state_Btn = new System.Windows.Forms.PictureBox();
             this.save_stateBtn = new System.Windows.Forms.Button();
             this.cancelBtn = new System.Windows.Forms.Button();
+            this.RNA_Btn = new System.Windows.Forms.RadioButton();
+            this.DNA_Btn = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.peptide_state_Btn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.oligonoucl_state_Btn)).BeginInit();
             this.SuspendLayout();
@@ -94,7 +96,7 @@
             // 
             this.save_stateBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.save_stateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.save_stateBtn.Location = new System.Drawing.Point(368, 234);
+            this.save_stateBtn.Location = new System.Drawing.Point(368, 246);
             this.save_stateBtn.Name = "save_stateBtn";
             this.save_stateBtn.Size = new System.Drawing.Size(75, 23);
             this.save_stateBtn.TabIndex = 4;
@@ -107,13 +109,35 @@
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelBtn.Location = new System.Drawing.Point(275, 234);
+            this.cancelBtn.Location = new System.Drawing.Point(275, 246);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 5;
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            // 
+            // RNA_Btn
+            // 
+            this.RNA_Btn.AutoSize = true;
+            this.RNA_Btn.Location = new System.Drawing.Point(302, 211);
+            this.RNA_Btn.Name = "RNA_Btn";
+            this.RNA_Btn.Size = new System.Drawing.Size(48, 17);
+            this.RNA_Btn.TabIndex = 6;
+            this.RNA_Btn.TabStop = true;
+            this.RNA_Btn.Text = "RNA";
+            this.RNA_Btn.UseVisualStyleBackColor = true;
+            // 
+            // DNA_Btn
+            // 
+            this.DNA_Btn.AutoSize = true;
+            this.DNA_Btn.Location = new System.Drawing.Point(368, 211);
+            this.DNA_Btn.Name = "DNA_Btn";
+            this.DNA_Btn.Size = new System.Drawing.Size(48, 17);
+            this.DNA_Btn.TabIndex = 7;
+            this.DNA_Btn.TabStop = true;
+            this.DNA_Btn.Text = "DNA";
+            this.DNA_Btn.UseVisualStyleBackColor = true;
             // 
             // ChangeStateForm
             // 
@@ -122,7 +146,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CadetBlue;
             this.CancelButton = this.cancelBtn;
-            this.ClientSize = new System.Drawing.Size(505, 269);
+            this.ClientSize = new System.Drawing.Size(509, 295);
+            this.Controls.Add(this.DNA_Btn);
+            this.Controls.Add(this.RNA_Btn);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.save_stateBtn);
             this.Controls.Add(this.oligonoucl_state_Lbl);
@@ -151,5 +177,7 @@
         private System.Windows.Forms.Label oligonoucl_state_Lbl;
         private System.Windows.Forms.Button save_stateBtn;
         private System.Windows.Forms.Button cancelBtn;
+        private System.Windows.Forms.RadioButton RNA_Btn;
+        private System.Windows.Forms.RadioButton DNA_Btn;
     }
 }

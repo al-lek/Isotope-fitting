@@ -2328,7 +2328,7 @@ namespace Isotope_fitting
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.ppm_panel);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(537, 376);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(537, 351);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -2353,7 +2353,7 @@ namespace Isotope_fitting
             this.ppm_panel.Location = new System.Drawing.Point(0, 0);
             this.ppm_panel.Name = "ppm_panel";
             this.ppm_panel.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            this.ppm_panel.Size = new System.Drawing.Size(537, 376);
+            this.ppm_panel.Size = new System.Drawing.Size(537, 351);
             this.ppm_panel.TabIndex = 3;
             // 
             // ppm_toolStrip
