@@ -741,7 +741,7 @@ namespace Isotope_fitting
                     disp_z.ForeColor = ppm_z.ForeColor = ppm_z_H2O.ForeColor = ppm_z_NH3.ForeColor = Color.Tomato;
                     //charge diagramms
                     down1_Btn.Text = "x"; down2_Btn.Text = "y"; down3_Btn.Text = "z";
-                    ax_chBx.Text = "a - x"; by_chBx.Text = "b - y"; cz_chBx.Text = "c - y"; intA_chBx.Text = "internal a"; intB_chBx.Text = "internal b";
+                    ax_chBx.Text = "a - x"; by_chBx.Text = "b - y"; cz_chBx.Text = "c - z"; intA_chBx.Text = "internal a"; intB_chBx.Text = "internal b";
                     ax_chBxCopy1.Text = "a - x"; by_chBxCopy1.Text = "b - y"; cz_chBxCopy1.Text = "c - z"; intA_chBxCopy1.Text = "internal a"; intB_chBxCopy1.Text = "internal b";
                     ax_chBxCopy2.Text = "a - x"; by_chBxCopy2.Text = "b - y"; cz_chBxCopy2.Text = "c - z"; intA_chBxCopy2.Text = "internal a"; intB_chBxCopy2.Text = "internal b";
                 }
