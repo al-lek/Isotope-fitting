@@ -1645,7 +1645,7 @@ namespace Isotope_fitting
                     {
                         try
                         {
-                            pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X - 2 && x[0] < Fragments3.Last().Centroid[0].X + 2)).Max(k => k[1]);
+                            pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X - 1 && x[0] < Fragments3.Last().Centroid[0].X + 1)).Max(k => k[1]);
                         }
                         catch
                         {
@@ -1840,7 +1840,6 @@ namespace Isotope_fitting
         }
         #endregion
               
-
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
         {

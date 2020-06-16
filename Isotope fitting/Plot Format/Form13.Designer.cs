@@ -78,6 +78,7 @@
             // 
             // bar_grpBox13
             // 
+            this.bar_grpBox13.BackColor = System.Drawing.Color.Transparent;
             this.bar_grpBox13.Controls.Add(this.intLine_numUD13);
             this.bar_grpBox13.Controls.Add(this.line_width_Lbl13);
             this.bar_grpBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -134,6 +135,7 @@
             // 
             // tickmark_grpBx13
             // 
+            this.tickmark_grpBx13.BackColor = System.Drawing.Color.Transparent;
             this.tickmark_grpBx13.Controls.Add(this.xstepmajor_UD13);
             this.tickmark_grpBx13.Controls.Add(this.xstepminor_UD13);
             this.tickmark_grpBx13.Controls.Add(this.stepX_Lbl13);
@@ -437,6 +439,7 @@
             // 
             // units_grpBx13
             // 
+            this.units_grpBx13.BackColor = System.Drawing.Color.Transparent;
             this.units_grpBx13.Controls.Add(this.y_minorGrid_UD13);
             this.units_grpBx13.Controls.Add(this.y_minorGrid_Lbl13);
             this.units_grpBx13.Controls.Add(this.y_majorGrid_UD13);

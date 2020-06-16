@@ -30,12 +30,14 @@ namespace Isotope_fitting
             {
                 active_txt = true;
                 if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf)) seq_BoxFrm16.Text = Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
-                else { seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;  }        
+                else { seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;  }
+                seq_BoxFrm16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
             else if (frm2.sequenceList != null && frm2.sequenceList.Count >1)
             {
                 if (string.IsNullOrEmpty(frm2.sequenceList[0].Rtf)) seq_BoxFrm16.Text = Regex.Replace(frm2.sequenceList[0].Sequence, @".{10}(?!$)", "$0  ");
-                else seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;                
+                else seq_BoxFrm16.Rtf = frm2.sequenceList[0].Rtf;
+                seq_BoxFrm16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 create_tabPages();
             }
             initial_set = false;
@@ -64,6 +66,7 @@ namespace Isotope_fitting
                    Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)))};
                 if (string.IsNullOrEmpty(seq.Rtf)) box.Text = Regex.Replace(seq.Sequence, @".{10}(?!$)", "$0  ");
                 else box.Rtf = seq.Rtf;
+                box.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 box.TextChanged += (s, e1) =>
                 {
                     if (box.Text.Length > 10 && !active_txt && !initial_set)
@@ -80,6 +83,7 @@ namespace Isotope_fitting
                         box.Rtf = output_txt;
                         box.SelectionStart = box.Text.Length;
                         box.SelectionLength = 0;
+                        box.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                     }
                     active_txt = false;
                 };
@@ -183,6 +187,7 @@ namespace Isotope_fitting
                 seq_BoxFrm16.Rtf = output_txt;
                 seq_BoxFrm16.SelectionStart = seq_BoxFrm16.Text.Length;
                 seq_BoxFrm16.SelectionLength = 0;
+                seq_BoxFrm16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
             active_txt = false;
         }
@@ -252,6 +257,7 @@ namespace Isotope_fitting
                     box.Rtf = output_txt;
                     box.SelectionStart = box.Text.Length;
                     box.SelectionLength = 0;
+                    box.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 }
                 active_txt = false;
             };

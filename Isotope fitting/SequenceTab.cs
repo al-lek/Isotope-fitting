@@ -15,6 +15,9 @@ namespace Isotope_fitting
         private string rtf;
         private List<Color> color_table = new List<Color>();
         private int[] char_color;
+        private List<int[]> index_SS_primary = new List<int[]>();
+        private List<int[]> index_SS_internal = new List<int[]>();
+
         public int[] Char_color
         {
             get { return this.char_color; }
@@ -44,6 +47,16 @@ namespace Isotope_fitting
         {
             get { return this.sequence; }
             set { this.sequence = value; }
+        }
+        public List<int[]> Index_SS_primary
+        {
+            get { return this.index_SS_primary; }
+            set { this.index_SS_primary = value; }
+        }
+        public List<int[]> Index_SS_internal
+        {
+            get { return this.index_SS_internal; }
+            set { this.index_SS_internal = value; }
         }
     }
 }

@@ -483,5 +483,32 @@ namespace Isotope_fitting
             }
             return is_precursor;
         }
+
+        /// <summary>
+        /// retirn List<int[]> with thw indexes that are colored
+        /// </summary>
+        public static List<int[]> return_regions_SS(string text_input)
+        {
+            List<int[]> index_list = new List<int[]>();
+            if (!string.IsNullOrEmpty(text_input))
+            {
+                string text = text_input.Replace(" ", "");
+                string[] str = text.Split(',');
+                for (int a = 0; a < str.Length; a++)
+                {
+                    string[] str2 = str[a].Split('-');
+                    try
+                    {
+                        if (str2.Length == 2) { index_list.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
+                    }
+                    catch
+                    {
+                        return new List<int[]>();
+                    }
+                }
+            }
+            return index_list;
+        }
+
     }
 }

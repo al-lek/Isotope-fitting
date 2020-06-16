@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Isotope_fitting.Helpers;
+
 
 namespace Isotope_fitting
 {
@@ -302,23 +304,14 @@ namespace Isotope_fitting
         private void refresh_Btn_Click(object sender, EventArgs e)
         {
             frm2.color_primary_indexes.Clear();
-            if (!string.IsNullOrEmpty(textBox1.Text.ToString()))
+            try
             {
-                string text = textBox1.Text.Replace(" ", "");
-                string[] str = text.Split(',');
-                for (int a = 0; a < str.Length; a++)
-                {
-                    string[] str2 = str[a].Split('-');
-                    try
-                    {
-                        if (str2.Length == 2) { frm2.color_primary_indexes.Add(new int[] { Int32.Parse(str2[0]), Int32.Parse(str2[1]) }); }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Please check your input. Fill the box with the numbers of the areas you want to be colored  e.g.1-3,6-8");
-                    }
-                }
+                frm2.color_primary_indexes = return_regions_SS(textBox1.Text.ToString());
             }
+            catch
+            {
+                MessageBox.Show("Please check your input. Fill the box with the numbers of the areas you want to be colored  e.g.1-3,6-8");
+            }          
             frm2.paint_annotations_in_graphs(false, 1);
         }
 

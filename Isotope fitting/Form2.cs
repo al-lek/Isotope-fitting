@@ -6547,7 +6547,17 @@ namespace Isotope_fitting
                     {
                         foreach (SequenceTab seq in sequenceList)
                         {
-                            file.WriteLine("Extension:\t" + seq.Extension + "\t" + seq.Type.ToString() + "\t" + seq.Sequence + "\t" + seq.Rtf);
+                            string ss_primary_region = "";
+                            string ss_internal_region = "";
+                            foreach (int[] region in seq.Index_SS_primary)
+                            {
+                                ss_primary_region += region[0] + "-" + region[1] + ",";
+                            }
+                            foreach (int[] region in seq.Index_SS_internal)
+                            {
+                                ss_internal_region += region[0] + "-" + region[1] + ",";
+                            }
+                            file.WriteLine("Extension:\t" + seq.Extension + "\t" + seq.Type.ToString() + "\t" + seq.Sequence + "\t" + seq.Rtf + "\t"+ ss_primary_region + "\t" + ss_internal_region);
                         }
                     }
                     file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
@@ -6597,7 +6607,17 @@ namespace Isotope_fitting
                     {
                         foreach (SequenceTab seq in sequenceList)
                         {
-                            file.WriteLine("Extension:\t" + seq.Extension + "\t" + seq.Type.ToString() + "\t" + seq.Sequence + "\t" + seq.Rtf);
+                            string ss_primary_region = "";
+                            string ss_internal_region = "";
+                            foreach (int[] region in seq.Index_SS_primary)
+                            {
+                                ss_primary_region += region[0] + "-" + region[1] + ",";
+                            }
+                            foreach (int[] region in seq.Index_SS_internal)
+                            {
+                                ss_internal_region += region[0] + "-" + region[1] + ",";
+                            }
+                            file.WriteLine("Extension:\t" + seq.Extension + "\t" + seq.Type.ToString() + "\t" + seq.Sequence + "\t" + seq.Rtf + "\t" + ss_primary_region + "\t" + ss_internal_region);
                         }
                     }
                     file.WriteLine("Fitted isotopes:\t" + fragToSave.Count());
@@ -6712,7 +6732,7 @@ namespace Isotope_fitting
                                     mult_extensions = string_to_bool(str[1]); new_type = true;
                                 }
                                 else if (lista[j].StartsWith("Extension"))
-                                {
+                                {                                    
                                     if (peptide)
                                     {
                                         peptide = false;
@@ -6738,6 +6758,8 @@ namespace Isotope_fitting
                                         }
                                         if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
                                     }
+                                    if (str.Length==7) { sequenceList.Last().Index_SS_internal = return_regions_SS(str[5]); sequenceList.Last().Index_SS_primary = return_regions_SS(str[6]); }
+                                    else { sequenceList.Last().Index_SS_internal = new List<int[]>(); sequenceList.Last().Index_SS_primary = new List<int[]>(); }
                                 }
                                 else if (lista[j].StartsWith("AA"))
                                 {
@@ -7091,6 +7113,8 @@ namespace Isotope_fitting
                                         }
                                         if (!found) { sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last()); }
                                     }
+                                    if (str.Length == 7) { sequenceList.Last().Index_SS_internal = return_regions_SS(str[5]); sequenceList.Last().Index_SS_primary = return_regions_SS(str[6]); }
+                                    else { sequenceList.Last().Index_SS_internal = new List<int[]>(); sequenceList.Last().Index_SS_primary = new List<int[]>(); }
                                 }
                                 else if (lista[j].StartsWith("AA"))
                                 {
@@ -8816,19 +8840,57 @@ namespace Isotope_fitting
             ppm_plot.Model.IsLegendVisible = ppm_legend_Btn.Checked;
             ppm_plot.InvalidatePlot(true);
         }
-        public void paint_annotations_in_graphs(bool all = true, int code = 1)
+        public void paint_annotations_in_graphs(bool all = true, int code = 1, bool is_style_open=false)
         {
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            List<int[]> temp_primary = color_primary_indexes.ToList();
+            List<int[]> temp_internal = color_internal_indexes.ToList();
+            if (is_style_open)
+            {
+                if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+                {
+                    foreach (SequenceTab seq in sequenceList)
+                    {
+                        if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                        {
+                            seq.Index_SS_primary=temp_primary.ToList();
+                            seq.Index_SS_internal=temp_internal.ToList();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    sequenceList[0].Index_SS_primary = temp_primary.ToList();
+                    sequenceList[0].Index_SS_internal = temp_internal.ToList();
+                }
+            }
+            else
+            {
+                if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+                {
+                    foreach (SequenceTab seq in sequenceList)
+                    {
+                        if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                        {
+                            temp_primary = seq.Index_SS_primary.ToList();
+                            temp_internal = seq.Index_SS_internal.ToList();
+                            break;
+                        }
+                    }
+                }
+            } 
             List<PlotView> plots = new List<PlotView>();
             if (all || code == 1)
             {
                 plots = new List<PlotView>() { ax_plot, axCharge_plot, by_plot, byCharge_plot, cz_plot, czCharge_plot };
                 if (is_riken) plots.AddRange(new List<PlotView>() { dz_plot, dzCharge_plot });
-                annotations_in_plotview(plots, color_primary_indexes, OxyColor.FromAColor(99, color_primary));
+                annotations_in_plotview(plots, temp_primary, OxyColor.FromAColor(99, color_primary));
             }
             if (all || code == 2)
             {
                 plots = new List<PlotView>() { index_plot, indexto_plot };
-                annotations_in_plotview(plots, color_internal_indexes, OxyColor.FromAColor(99, color_internal));
+                annotations_in_plotview(plots, temp_internal, OxyColor.FromAColor(99, color_internal));
             }
         }
         private void annotations_in_plotview(List<PlotView> plots, List<int[]> indexes, OxyColor clr)
@@ -12050,11 +12112,26 @@ namespace Isotope_fitting
 
         public void paint_annotations_in_temp_graphs(int code, PlotView temp)
         {
+            if (sequenceList == null || sequenceList.Count == 0) return;
+            List<int[]> temp_primary = color_primary_indexes.ToList();
+            List<int[]> temp_internal = color_internal_indexes.ToList();
+            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+            {
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    {
+                        temp_primary = seq.Index_SS_primary.ToList();
+                        temp_internal = seq.Index_SS_internal.ToList();
+                        break;
+                    }
+                }
+            }
             if (code == 1)//primary
             {
                 temp.Model.Annotations.Clear();
 
-                foreach (int[] region in color_primary_indexes)
+                foreach (int[] region in temp_primary)
                 {
                     temp.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_primary) });
                 }
@@ -12063,7 +12140,7 @@ namespace Isotope_fitting
             if (code == 2)//internal
             {
                 temp.Model.Annotations.Clear();
-                foreach (int[] region in color_internal_indexes)
+                foreach (int[] region in temp_internal)
                 {
                     temp.Model.Annotations.Add(new RectangleAnnotation { MinimumX = region[0], MaximumX = region[1], Fill = OxyColor.FromAColor(99, color_internal) });
                 }

@@ -79,9 +79,9 @@
             this.axisytick_Lbl12 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.refresh_Btn = new System.Windows.Forms.Button();
             this.color_Btn = new System.Windows.Forms.Button();
+            this.refresh_Btn = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage2.SuspendLayout();
             this.axisY_Charge_grpBx.SuspendLayout();
@@ -110,7 +110,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(542, 237);
+            this.tabPage2.Size = new System.Drawing.Size(542, 243);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Charge Plot";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -822,15 +822,19 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "S-S regions";
             // 
-            // textBox1
+            // color_Btn
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(6, 39);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(264, 28);
-            this.textBox1.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
+            this.color_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.color_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.color_Btn.ForeColor = System.Drawing.Color.DarkSlateBlue;
+            this.color_Btn.Location = new System.Drawing.Point(308, 39);
+            this.color_Btn.Name = "color_Btn";
+            this.color_Btn.Size = new System.Drawing.Size(112, 28);
+            this.color_Btn.TabIndex = 27;
+            this.color_Btn.Text = "Color";
+            this.toolTip1.SetToolTip(this.color_Btn, "Select Color");
+            this.color_Btn.UseVisualStyleBackColor = true;
+            this.color_Btn.Click += new System.EventHandler(this.color_Btn_Click);
             // 
             // refresh_Btn
             // 
@@ -845,19 +849,15 @@
             this.refresh_Btn.UseVisualStyleBackColor = true;
             this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
             // 
-            // color_Btn
+            // textBox1
             // 
-            this.color_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.color_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.color_Btn.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.color_Btn.Location = new System.Drawing.Point(308, 39);
-            this.color_Btn.Name = "color_Btn";
-            this.color_Btn.Size = new System.Drawing.Size(112, 28);
-            this.color_Btn.TabIndex = 27;
-            this.color_Btn.Text = "Color";
-            this.toolTip1.SetToolTip(this.color_Btn, "Select Color");
-            this.color_Btn.UseVisualStyleBackColor = true;
-            this.color_Btn.Click += new System.EventHandler(this.color_Btn_Click);
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(6, 39);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(264, 28);
+            this.textBox1.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             // 
             // Form12
             // 
