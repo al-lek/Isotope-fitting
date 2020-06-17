@@ -134,41 +134,74 @@ namespace Isotope_fitting
                 s = s.Replace("\t", "");
                 s = s.Replace("\n", "");
                 s = s.Replace(" ", "");
-                if (string.IsNullOrEmpty(s)) { MessageBox.Show("You have to insert the aminoacid sequence for each extra tab you add."); return; }
+                if (string.IsNullOrEmpty(s)) { MessageBox.Show("You have to insert the sequence for each extra tab you add.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                for (int m = k+1;m < seq_tabControl.TabPages.Count - 1; m++)
+                {
+                    if (seq_tabControl.TabPages[k].Text.Equals(seq_tabControl.TabPages[m].Text)) { MessageBox.Show("Two identical extensions are detected.","Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                }
             }
-            if (frm2.sequenceList.Count > 0) { frm2.sequenceList.Clear(); }
+            //if (frm2.sequenceList.Count > 0) { frm2.sequenceList.Clear(); }
             frm2.heavy_present = false; frm2.light_present = false;
             for (int k = 0; k < seq_tabControl.TabPages.Count - 1; k++)
             {
                 RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+                string tab_name = seq_tabControl.TabPages[k].Text;
                 string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
                 s = s.Replace("\t", "");
                 s = s.Replace("\n", "");
                 s = s.Replace(" ", "");
                 string rtf_s = txtbox.Rtf.Replace(Environment.NewLine, "").ToString();
                 rtf_s = rtf_s.Replace("\t", "");
-                if (k == 0 ) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s });
-                else if (frm2.is_riken) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = rtf_s }); }
+                int[] check = new int[2];
+                if (k == 0)
+                {
+                    check= check_if_sequence_exists("", s,true);
+                    if(check[0]==0) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s });
+                    else frm2.sequenceList[0].Rtf = rtf_s;
+                }
+                else if (frm2.is_riken)
+                {
+                    check = check_if_sequence_exists(tab_name, s);
+                    if (check[0] == 0) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = tab_name, Type = 0, Rtf = rtf_s }); check[1] = frm2.sequenceList.Count - 1; }
+                    else { frm2.sequenceList[check[1]].Rtf = rtf_s; frm2.sequenceList[check[1]].Type = 0; }
+                }
                 else
                 {
-                    frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = seq_tabControl.TabPages[k].Text, Type = 0, Rtf = rtf_s });
+                    check = check_if_sequence_exists(tab_name, s);
+                    if (check[0] == 0) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = tab_name, Type = 0, Rtf = rtf_s }); check[1] = frm2.sequenceList.Count - 1; }
+                    else { frm2.sequenceList[check[1]].Rtf = rtf_s; frm2.sequenceList[check[1]].Type = 0; }                       
                     foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<GroupBox>().First().Controls.OfType<RadioButton>())
                     {
                         if (rdBtn.Checked)
                         {
-                            frm2.sequenceList.Last().Type = rdBtn.TabIndex;
+                            frm2.sequenceList[check[1]].Type = rdBtn.TabIndex;
                             if (rdBtn.TabIndex == 1) { frm2.heavy_present = true; }
                             else { frm2.light_present = true; }
                         }
                     }
                 }
-                frm2.read_rtf_find_color(frm2.sequenceList.Last());
+                frm2.read_rtf_find_color(frm2.sequenceList[check[1]]);
             }
             if (frm2.sequenceList.Count == 1) { frm2.tab_mode = false; }
             else { frm2.tab_mode = true; }
             this.Close();
         }
-
+        private int[] check_if_sequence_exists(string tab_name, string tab_sequence, bool general=false)
+        {
+            int[] result = new int[] {0,0};
+            int amount = frm2.sequenceList.Count;
+            if(amount==0) return result;
+            if (general) { amount = 1; }
+            for (int s=0;s< amount; s++ )
+            {
+                SequenceTab seq = frm2.sequenceList[s];
+                if (seq.Sequence.Equals(tab_sequence)&& seq.Extension.Equals(tab_name))
+                {
+                    result= new int[] { 1, s };
+                }
+            }
+            return result;
+        }
         #region general sequence        
         private void seq_BoxFrm16_TextChanged(object sender, EventArgs e)
         {
@@ -300,7 +333,7 @@ namespace Isotope_fitting
         //remove selected tab
         private void rmv_click(object sender, System.EventArgs e)
         {
-            if (seq_tabControl.SelectedIndex == 0) { MessageBox.Show("You can't remove the first tab"); return; }
+            if (seq_tabControl.SelectedIndex == 0) { MessageBox.Show("You can't remove the first tab", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             //frm2.sequenceList.RemoveAt(seq_tabControl.SelectedIndex-0);
             seq_tabControl.TabPages.Remove(seq_tabControl.SelectedTab);
         }
@@ -385,7 +418,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf."); return initial;
+                                    MessageBox.Show("Error in sequence rtf.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);return initial;
                                 }
                             }
                         }
@@ -413,7 +446,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf."); return initial;
+                                    MessageBox.Show("Error in sequence rtf.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return initial;
                                 }
                             }
                         }

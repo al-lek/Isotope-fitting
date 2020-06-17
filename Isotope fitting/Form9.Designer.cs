@@ -2013,7 +2013,7 @@
             this.statusStrpFrm9.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.statusStrpFrm9.Location = new System.Drawing.Point(0, 656);
             this.statusStrpFrm9.Name = "statusStrpFrm9";
-            this.statusStrpFrm9.Size = new System.Drawing.Size(769, 21);
+            this.statusStrpFrm9.Size = new System.Drawing.Size(866, 21);
             this.statusStrpFrm9.TabIndex = 52;
             this.statusStrpFrm9.Text = "statusStrip1";
             this.statusStrpFrm9.Visible = false;

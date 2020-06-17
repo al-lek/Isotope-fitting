@@ -128,7 +128,10 @@ namespace Isotope_fitting
             MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
             MenuItem remFrag = new MenuItem("Delete fragment", delete_frag);
             MenuItem clearall = new MenuItem("Clear all", delete_all);
-            ctxMn1.MenuItems.AddRange(new MenuItem[] { colorSelection, remFrag, clearall });
+            MenuItem copy_frag = new MenuItem("Copy fragment", copy_fragment);
+            MenuItem zoom_frag = new MenuItem("Zoom to fragment", zoom_to_fragment);
+            
+            ctxMn1.MenuItems.AddRange(new MenuItem[] { colorSelection, remFrag, clearall, copy_frag , zoom_frag });
             fragListView9.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
         }
         #endregion
@@ -471,6 +474,42 @@ namespace Isotope_fitting
                     if (clrDlg.ShowDialog() == DialogResult.OK) { Fragments3[frag_idx].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
                 }
             }
+        }
+        private void copy_fragment(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
+            StringBuilder sb = new StringBuilder();
+            if ((sender as MenuItem).Text == "Copy fragment" && selectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in fragListView9.SelectedItems)
+                {
+                    int i = System.Convert.ToInt32(item.SubItems[5].Text);                    
+                    if (Fragments3[i].Name.Contains("intern"))
+                        sb.AppendLine(Fragments3[i].Name + "\t" + Fragments3[i].Index + "\t" + Fragments3[i].IndexTo + "\t" + Fragments3[i].Charge.ToString() + "\t" + Fragments3[i].Mz + "\t" + Fragments3[i].InputFormula +
+                                                    "\t" + Fragments3[i].PPM_Error.ToString("0.##") + "\t" + (Fragments3[i].Factor * Fragments3[i].Max_intensity).ToString("0"));
+                    else
+                        sb.AppendLine(Fragments3[i].Name + "\t" + Fragments3[i].Index + "\t" + Fragments3[i].Charge.ToString() + "\t" + Fragments3[i].Mz + "\t" + Fragments3[i].InputFormula +
+                                                    "\t" + Fragments3[i].PPM_Error.ToString("0.##") + "\t" + (Fragments3[i].Factor * Fragments3[i].Max_intensity).ToString("0"));
+                }
+                Clipboard.Clear();
+                Clipboard.SetText(sb.ToString());
+            }
+           
+        }
+        private void zoom_to_fragment(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
+            if ((sender as MenuItem).Text == "Zoom to fragment" && selectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in fragListView9.SelectedItems)
+                {
+                    int i = System.Convert.ToInt32(item.SubItems[5].Text);
+                    double max_x =Fragments3[i].Profile.Last().X;
+                    double min_x =Fragments3[i].Profile[0].X;
+                    frm2.zoom_to_frag_frm9(min_x, max_x);
+                }                
+            }
+
         }
         private void initialize_data()
         {
@@ -1641,11 +1680,11 @@ namespace Isotope_fitting
                 if (insert_exp)
                 {
                     double pt0 = 0.1 * Form2.max_exp;
-                    if (all_data[0].Count > 0 && all_data[0][0][0] < Fragments3.Last().Profile[0].X && all_data[0].Last()[0] > Fragments3.Last().Profile.Last().X)
+                    if (all_data[0].Count > 0 )
                     {
                         try
                         {
-                            pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X - 1 && x[0] < Fragments3.Last().Centroid[0].X + 1)).Max(k => k[1]);
+                            pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X -0.5 && x[0] < Fragments3.Last().Centroid[0].X + 0.5)).Max(k => k[1]);
                         }
                         catch
                         {

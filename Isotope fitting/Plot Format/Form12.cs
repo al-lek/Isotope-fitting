@@ -312,7 +312,7 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Please check your input. Fill the box with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             }          
-            frm2.paint_annotations_in_graphs(false, 1);
+            frm2.paint_annotations_in_graphs(false, 1,true);
         }
 
         private void color_Btn_Click(object sender, EventArgs e)
