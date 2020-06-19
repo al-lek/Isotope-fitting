@@ -3113,16 +3113,12 @@ namespace Isotope_fitting
         }
         private void remove_node(TreeNode node, bool Unchecked = false)
         {
-            if (Form9.now && Form9.last_plotted.Count>0)
+            if (Form9.now && Form9.last_plotted.Count > 0)
             {
                 int count = Form9.last_plotted.Count;
-                if (count == 0) return;
-                else
-                {
-                    all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
-                    Form9.last_plotted.Clear();
-                    recalc_frm9(count, Form9.last_plotted.Count);
-                }
+                all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
+                Form9.last_plotted.Clear();
+                recalc_frm9(count, Form9.last_plotted.Count);
             }
             if (Unchecked)
             {
@@ -8078,42 +8074,61 @@ namespace Isotope_fitting
         }
         private void loadFragmentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
+            if(fitted_results.Count!=0 || all_fitted_results != null)
+            {
+                DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    is_recalc_res = false;
+                    loadList();
+                }
+                else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel) return;                
+            }
+            else
             {
                 is_recalc_res = false;
                 loadList();
-            }
-            else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
-            {
-                return;
-            }
+            }           
+           
         }
         private void loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!insert_exp) { MessageBox.Show("You must first load the experimental data for this action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
+            else if (fitted_results.Count != 0 || all_fitted_results != null)
+            { 
+                DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    is_recalc_res = true;
+                    loadList();
+                }
+                else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+            else
             {
                 is_recalc_res = true;
                 loadList();
             }
-            else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
-            {
-                return;
-            }
         }
         private void clearListBtn11_Click(object sender, EventArgs e)
         {
+            if (Fragments2.Count==0) {return;}
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
+                if (Form9.now && Form9.last_plotted.Count > 0)
+                {
+                    int count = Form9.last_plotted.Count;
+                    all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
+                    Form9.last_plotted.Clear();
+                    recalc_frm9(count, Form9.last_plotted.Count);
+                }
                 clearList();
             }
-            else if (dialogResult == DialogResult.No)
-            {
-                return;
-            }
+            else if (dialogResult == DialogResult.No) return;
         }
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -12222,6 +12237,7 @@ namespace Isotope_fitting
         }
         private bool Clear_all()
         {
+            CloseAllOpenForm("Form2");
             plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             is_exp_deconvoluted = false;
             labels_checked.Clear();

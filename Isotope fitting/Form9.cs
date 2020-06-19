@@ -126,7 +126,7 @@ namespace Isotope_fitting
         {
             ContextMenu ctxMn1 = new ContextMenu() { };
             MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
-            MenuItem remFrag = new MenuItem("Delete fragment", delete_frag);
+            MenuItem remFrag = new MenuItem("Remove fragment", delete_frag);
             MenuItem clearall = new MenuItem("Clear all", delete_all);
             MenuItem copy_frag = new MenuItem("Copy fragment", copy_fragment);
             MenuItem zoom_frag = new MenuItem("Zoom to fragment", zoom_to_fragment);
