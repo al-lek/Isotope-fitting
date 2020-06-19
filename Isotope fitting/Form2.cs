@@ -1214,6 +1214,14 @@ namespace Isotope_fitting
                                     mz_prev = mz;
                                 }
                             }
+                            else
+                            {
+                                MessageBox.Show("Oops... it seems you have inserted wrong file format. Please try again.","Wrong input",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                                file_name = ""; experimental.Clear();experimental_dec.Clear();
+                                sw1.Stop(); Debug.WriteLine("load_experimental: failed due to wrong file format" );
+                                progress_display_stop();
+                                return false;
+                            }
                             if (max_exp < y) max_exp = y;
                         }
                         catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return false; }
