@@ -365,6 +365,8 @@ namespace Isotope_fitting
             this.fit_Btn = new System.Windows.Forms.Button();
             this.fit_sel_Btn = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tab_losses = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -434,6 +436,7 @@ namespace Isotope_fitting
             this.fitOptions_grpBox.SuspendLayout();
             this.fiToolStrip.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tab_losses.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -3434,7 +3437,7 @@ namespace Isotope_fitting
             this.fragPlotLbl_chkBx.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(73, 24);
             this.fragPlotLbl_chkBx.Text = "Primary";
-            this.fragPlotLbl_chkBx.ToolTipText = "Show Primary Fragment Label";
+            this.fragPlotLbl_chkBx.ToolTipText = "Show primary fragments label";
             this.fragPlotLbl_chkBx.CheckedChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
             // 
             // toolStripButton1
@@ -3451,7 +3454,7 @@ namespace Isotope_fitting
             this.fragPlotLbl_chkBx2.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(72, 24);
             this.fragPlotLbl_chkBx2.Text = "Internal";
-            this.fragPlotLbl_chkBx2.ToolTipText = "Show Internal Fragments Label";
+            this.fragPlotLbl_chkBx2.ToolTipText = "Show internal fragments label";
             this.fragPlotLbl_chkBx2.CheckedChanged += new System.EventHandler(this.fragPlotLbl_chkBx2_CheckedChanged);
             // 
             // toolStripButton2
@@ -3608,6 +3611,7 @@ namespace Isotope_fitting
             this.disp_internal.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.disp_internal.Size = new System.Drawing.Size(47, 24);
             this.disp_internal.Text = "inter.";
+            this.disp_internal.ToolTipText = "Control whether internal fragments will appear to plot";
             // 
             // project_options_toolStripButton
             // 
@@ -4365,6 +4369,7 @@ namespace Isotope_fitting
             this.tabControl1.Controls.Add(this.tabDiagram);
             this.tabControl1.Controls.Add(this.tabPrimary);
             this.tabControl1.Controls.Add(this.tabInternal);
+            this.tabControl1.Controls.Add(this.tab_losses);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -4372,6 +4377,28 @@ namespace Isotope_fitting
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1370, 749);
             this.tabControl1.TabIndex = 0;
+            // 
+            // tab_losses
+            // 
+            this.tab_losses.Controls.Add(this.label1);
+            this.tab_losses.Location = new System.Drawing.Point(4, 22);
+            this.tab_losses.Name = "tab_losses";
+            this.tab_losses.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_losses.Size = new System.Drawing.Size(1362, 723);
+            this.tab_losses.TabIndex = 5;
+            this.tab_losses.Text = "Losses";
+            this.tab_losses.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Crimson;
+            this.label1.Location = new System.Drawing.Point(8, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(196, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Radical Migration Mapping";
             // 
             // Form2
             // 
@@ -4504,6 +4531,8 @@ namespace Isotope_fitting
             this.fiToolStrip.ResumeLayout(false);
             this.fiToolStrip.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tab_losses.ResumeLayout(false);
+            this.tab_losses.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -4842,5 +4871,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button fit_Btn;
         private System.Windows.Forms.Button fit_sel_Btn;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tab_losses;
+        private System.Windows.Forms.Label label1;
     }
 }

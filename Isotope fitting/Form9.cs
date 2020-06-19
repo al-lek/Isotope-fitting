@@ -522,13 +522,18 @@ namespace Isotope_fitting
         #region isotopic distributions calculations
         private void calc_Btn_Click(object sender, EventArgs e)
         {
+            calc_Btn.Enabled = false;
+            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); calc_Btn.Enabled = true; return; }
+            Remove_plotted();
             during_calc(true);
             if (Fragments3.Count > 0)
             {
-                DialogResult dialogResult = MessageBox.Show("Clear List before proceeding with calculation?", "Fragment Calculator", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Clear List before proceeding with calculation?", "Fragment Calculator", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);           
+                if (dialogResult == DialogResult.Cancel) { during_calc(false); calc_Btn.Enabled = true; return; }
                 if (dialogResult == DialogResult.Yes) Fragments3.Clear();
             }
             factor_panel9.Visible = false;
+            calc_Btn.Enabled = true;
             //the basic algorithm with small changes for the specific form9
             fragments_and_calculations_sequence_A_frm9();
         }
@@ -593,7 +598,7 @@ namespace Isotope_fitting
             string s = frm2.Peptide;
             string extension = extensionBox1.Text.ToString();
             int chain_type = 0;
-            if (heavy_ChkBox.Checked && Light_chkBox.Checked) { MessageBox.Show("Both heavy and light chain are checked. Please select only one chain type."); return res; }
+            if (heavy_ChkBox.Checked && Light_chkBox.Checked) { MessageBox.Show("Oops..Both heavy and light chain are checked. Please select only one chain type."); return res; }
             else if (heavy_ChkBox.Checked) { chain_type = 1; }
             else if (Light_chkBox.Checked) { chain_type = 2; }
             if (!string.IsNullOrEmpty(extension))
@@ -607,7 +612,7 @@ namespace Isotope_fitting
             }
             if (!ext_exists)
             {
-                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." , "Wrong Input", MessageBoxButtons.YesNo);
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted." , "Wrong Input", MessageBoxButtons.OK);
                  return res; 
             }
             if (ion_txtBox.Text.Contains("M"))
@@ -617,7 +622,7 @@ namespace Isotope_fitting
                     DialogResult dd= MessageBox.Show("There is no sequence for the extension type you have inserted." +
                         " This will affect the index numbers for the precursor ion you have inserted." +
                         "If you want to stop the calcuations and insert the correct indexes in the internal indexes section select 'No'. " +
-                        "If you want to proceed with the calculations press 'Yes'","Wrong Input",MessageBoxButtons.YesNo);
+                        "If you want to proceed with the calculations press 'Yes'","Wrong Input",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dd==DialogResult.No || dd == DialogResult.None) { return res; }                   
                 }
                 index = "0";indexTo = s.Length.ToString();
@@ -662,9 +667,8 @@ namespace Isotope_fitting
             }
             else if(string.IsNullOrEmpty(index))
             {
-                DialogResult dd = MessageBox.Show("You have not inserted an index. The calculations will proceed as for index=0" +
-                    "If you want to stop the calcuations select 'No'. " +
-                    "If you want to proceed with the calculations press 'Yes'", "Wrong Input", MessageBoxButtons.YesNo);
+                DialogResult dd = MessageBox.Show("Hmm, its seems that you have not inserted an index. The calculations will proceed as for index=0" +
+                    "If you want to proceed with the calculations press 'Yes', otherwise select 'No'. ", "Wrong Input", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
                 index = "0"; indexTo = "0";
             }
@@ -782,7 +786,7 @@ namespace Isotope_fitting
             }
             if (!ext_exists)
             {
-                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted.", "Wrong Input", MessageBoxButtons.YesNo);
+                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted.", "Wrong Input", MessageBoxButtons.OK);
                 return res;
             }
             chem_form = chemForm_txtBox_riken.Text.Replace(Environment.NewLine, " ").ToString();
@@ -1919,6 +1923,10 @@ namespace Isotope_fitting
         }
         private void rem_Btn_Click(object sender, EventArgs e)
         {
+            Remove_plotted();
+        }
+        private void Remove_plotted()
+        {
             if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
 
             int count = last_plotted.Count;
@@ -1954,7 +1962,7 @@ namespace Isotope_fitting
             }
             if (!ext_exists)
             {
-                DialogResult dd = MessageBox.Show("There is no sequence for the extension type you have inserted.", "Wrong Input", MessageBoxButtons.YesNo);
+                DialogResult dd = MessageBox.Show("Oops..There is no sequence for the extension type you have inserted.", "Wrong Input", MessageBoxButtons.OK);
                 return; 
             }
             double qMin = txt_to_d(multChem_min_charge);

@@ -573,7 +573,7 @@ namespace Isotope_fitting
             if (all == 3)
             {
                 progress_display_stop();
-                MessageBox.Show("Save project procedure is completed");
+                MessageBox.Show("You are ready!! Save project procedure is completed!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
@@ -584,7 +584,7 @@ namespace Isotope_fitting
             if (all == 3)
             {
                 progress_display_stop();
-                MessageBox.Show("Save project procedure is completed");
+                MessageBox.Show("You are ready!! Save project procedure is completed!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
@@ -595,7 +595,7 @@ namespace Isotope_fitting
             if (all == 3)
             {
                 progress_display_stop();
-                MessageBox.Show("Save project procedure is completed");
+                MessageBox.Show("You are ready!! Save project procedure is completed!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString(); }
         }
         void _bw_load_project_exp_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -604,7 +604,7 @@ namespace Isotope_fitting
             if (all == 4)
             {
                 Project_after_load();
-                MessageBox.Show("Load project procedure is completed");
+                MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
@@ -614,7 +614,7 @@ namespace Isotope_fitting
             if (all == 4)
             {
                 Project_after_load();
-                MessageBox.Show("Load project procedure is completed");
+                MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
@@ -624,7 +624,7 @@ namespace Isotope_fitting
             if (all == 4)
             {
                 Project_after_load();
-                MessageBox.Show("Load project procedure is completed");
+                MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
@@ -634,7 +634,7 @@ namespace Isotope_fitting
             if (all == 4)
             {
                 Project_after_load();
-                MessageBox.Show("Load project procedure is completed");
+                MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
@@ -949,7 +949,7 @@ namespace Isotope_fitting
                 }
                 catch
                 {
-                    MessageBox.Show( "Corrupted preferences file! Preferences not loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Oops the preferences' file is corrupted! But, don't worry you can start your processing with the default preferences. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     init_preferences();
                     save_preferences();
                 }
@@ -1139,7 +1139,8 @@ namespace Isotope_fitting
             }
             catch
             {
-                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading experimental data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Are you sure you entered the correct file format?" +
+                    "Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading experimental data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             finally
@@ -1562,8 +1563,8 @@ namespace Isotope_fitting
         {
             loadMS_Btn.Enabled = false; calc_FF = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
-            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel);
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("Don't hurry! You must first insert Sequence and then load a fragment file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
+            DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
@@ -1578,7 +1579,7 @@ namespace Isotope_fitting
                 if (sequenceList.Count == 1)
                 {
                     ms_sequence = sequenceList[0].Sequence;
-                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequence corresponding to the selected extension is empty!", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
+                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("Oops...the aminoacid sequence corresponding to the selected extension is empty!Please check again your input.", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
                     import_fragments();
                 }
                 else if (sequenceList.Count == 2)
@@ -1586,7 +1587,7 @@ namespace Isotope_fitting
                     ms_sequence = sequenceList[1].Sequence; ms_extension = "_" + sequenceList[1].Extension;
                     if (sequenceList[1].Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
                     else { ms_light_chain = true; ms_heavy_chain = false; }
-                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequence corresponding to the selected extension is empty!", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
+                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("Oops...the aminoacid sequence corresponding to the selected extension is empty!Please check again your input.", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
                     import_fragments();
                 }
                 else
@@ -1594,14 +1595,14 @@ namespace Isotope_fitting
                     var extension_dialog = this.ShowTabModeDialog();
                     if (string.IsNullOrEmpty(extension_dialog.ToString()) && string.IsNullOrEmpty(sequenceList[0].Sequence))
                     {
-                        MessageBox.Show("No extension selected!Loading fragments procedure is cancelled.", "Loading Fragments"); loadMS_Btn.Enabled = true; return;
+                        MessageBox.Show("No extension selected!Therefore, Loading fragments procedure is cancelled.", "Loading Fragments"); loadMS_Btn.Enabled = true; return;
                     }
                     else
                     {
                         ms_extension = "_" + extension_dialog.ToString();
                     }
                     //ms_tab_mode = true;
-                    DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel);
+                    DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.Ready to start?", "Message", MessageBoxButtons.OKCancel);
                     if (dialogResult1 == DialogResult.Cancel) { loadMS_Btn.Enabled = true; return; }
                     foreach (SequenceTab seq in sequenceList)
                     {
@@ -1619,7 +1620,7 @@ namespace Isotope_fitting
             }
             catch
             {
-                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Oops an error occured! Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 loadMS_Btn.Enabled = true; return;
             }
             finally
@@ -2150,7 +2151,7 @@ namespace Isotope_fitting
                     }
                     else
                     {
-                        MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Τhe remaining calculations will continue normally.");
+                        MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally.");
                         ChemFormulas.RemoveAt(i); return;
                     }
 
@@ -2180,7 +2181,7 @@ namespace Isotope_fitting
                         }
                         else
                         {
-                            MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Τhe remaining calculations will continue normally.");
+                            MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally.");
                             ChemFormulas.RemoveAt(i); return;
                         }
                     }
@@ -2254,8 +2255,8 @@ namespace Isotope_fitting
         {
             loadMS_Btn.Enabled = false; calc_FF = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
-            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct base sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel);
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("Don't hurry! You must first insert Sequence and then load a fragment file.", "No sequence found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
+            DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct base sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
@@ -2270,7 +2271,7 @@ namespace Isotope_fitting
                 var polarity_dialog = this.ShowPolarityDialog();
                 if (string.IsNullOrEmpty(polarity_dialog.ToString()))
                 {
-                    MessageBox.Show("No polarity selected!Loading fragments procedure is cancelled.", "Loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return;
+                    MessageBox.Show("No polarity selected!Therefore, Loading fragments procedure is cancelled.", "Loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return;
                 }
                 else if (polarity_dialog.ToString().Equals("Negative")) is_polarity_negative = true;
                 else is_polarity_negative = false;
@@ -2308,7 +2309,7 @@ namespace Isotope_fitting
             }
             catch
             {
-                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Oops an error occured! Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 loadMS_Btn.Enabled = true; return;
             }
             finally
@@ -2339,7 +2340,7 @@ namespace Isotope_fitting
         #region 2.a Select fragments and calculate their envelopes
         private void ProfCalc_Btn_Click(object sender, EventArgs e)
         {
-            if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then access 'Calculation Box'", "Error in Calculation Box!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("Don't hurry! You must first load an MS Product File and then access 'Calculation Box'. Please try again.", "Error in Calculation Box!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (is_riken)
             {
                 Form24_2 frm24_2 = new Form24_2(this);
@@ -2354,7 +2355,7 @@ namespace Isotope_fitting
         }
         public void calculate_procedure(List<ChemiForm> selected_fragments)
         {
-            if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("Don't hurry! You must first load an MS Product File and then press 'Calculate'", "Error in calculations!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             try
             {
                 try
@@ -2363,7 +2364,7 @@ namespace Isotope_fitting
                 }
                 catch
                 {
-                    MessageBox.Show("Please close the program and restart the procedure.", "Error in clear list!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in clear list!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 finally
                 {
@@ -2373,7 +2374,7 @@ namespace Isotope_fitting
             }
             catch
             {
-                MessageBox.Show("Please close the program and restart the procedure.", "Error in calculations!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in calculations!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             finally
             {
@@ -2509,7 +2510,7 @@ namespace Isotope_fitting
                 MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current files.", "Fitted fragments files");
 
             }
-            else if (selected_fragments.Count == 0) { MessageBox.Show("No fragments match to your research", "Fragment selection results",  MessageBoxButtons.OK, MessageBoxIcon.Asterisk); return; }
+            else if (selected_fragments.Count == 0) { MessageBox.Show("I'm sorry...No fragments match to your research", "Fragment selection results",  MessageBoxButtons.OK, MessageBoxIcon.Asterisk); return; }
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
@@ -3106,7 +3107,14 @@ namespace Isotope_fitting
         {
             if (Form9.now && Form9.last_plotted.Count>0)
             {
-                MessageBox.Show("Fragment List can't be altered while Fragment Calculator Form has fragments plotted. First Remove the Fragment Calculator Fragments and then delete fragments from the List", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);return;               
+                int count = Form9.last_plotted.Count;
+                if (count == 0) return;
+                else
+                {
+                    all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
+                    Form9.last_plotted.Clear();
+                    recalc_frm9(count, Form9.last_plotted.Count);
+                }
             }
             if (Unchecked)
             {
@@ -3150,7 +3158,7 @@ namespace Isotope_fitting
                 fitted_results.Clear();
                 if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-                if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                if (fit_tree != null) { selectedFragments.Clear(); fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed! Fit results are disposed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information); }
                 if (Fragments2.Count > 0)
                 {
                     factor_panel.Visible = false;
@@ -3182,7 +3190,7 @@ namespace Isotope_fitting
                 Location = new Point(275, 7), Size = new Size(60, 20) };
             btn_solo.Click += (s, e) =>
             {
-                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to adjust fragment's height!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                if (experimental.Count == 0) { MessageBox.Show("Oops..it seems you forgot to load an experimental file!You have to load the experimental data first in order to adjust fragment's height!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
                 // run solo fit. Fit calls refresh plot.
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(new List<int> { frag_idx + 1 }); // selected fragments have +1 index comparing to Fragments2
 
@@ -3466,7 +3474,7 @@ namespace Isotope_fitting
                 }
 
             }
-            if (selectedFragments_fragTypes.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (selectedFragments_fragTypes.Count == 0) { MessageBox.Show("Don't hurry!You have to check fragments first and then select save. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             frag_types_save = true;
             saveList();
         }
@@ -3627,10 +3635,10 @@ namespace Isotope_fitting
 
         private void fit_Btn_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Perform fit", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Ready to perform fit!Are you sure you want to proceed?", "Perform fit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
-                if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to perform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                if (experimental.Count == 0) { MessageBox.Show("Oops...it seems you forgot to load the experimental file!You have to load the experimental data first in order to perform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
                 bigPanel.Enabled = false;
 
                 // initialize a new background thread for fit 
@@ -4310,7 +4318,7 @@ namespace Isotope_fitting
         /// </summary>
         private void show_error(TreeNode node)
         {
-            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             StringBuilder sb = new StringBuilder();
             double lse = 0.0;
             List<double[]> lse_fragments = new List<double[]>();
@@ -4426,9 +4434,9 @@ namespace Isotope_fitting
         }
         private void copy_solution_fragments_toClipBoard(TreeNode node)
         {
-            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             bool header = true;
             if (dialogResult == DialogResult.No) { header = false; }
             StringBuilder sb = new StringBuilder();
@@ -4452,7 +4460,7 @@ namespace Isotope_fitting
         {
             if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo,MessageBoxIcon.Question);
             bool header = true;
             if (dialogResult == DialogResult.No) { header = false; }
             StringBuilder sb = new StringBuilder();
@@ -4589,7 +4597,11 @@ namespace Isotope_fitting
             List<double> UI_intensities = new List<double>();
 
             for (int i = 0; i < subSet.Length; i++)
-                UI_intensities.Add(Fragments2[subSet[i] - 1].Factor);
+            {
+               double factor = Fragments2[subSet[i] - 1].Factor;
+               if (factor!=0) UI_intensities.Add(Fragments2[subSet[i] - 1].Factor);
+               else  UI_intensities.Add(0.1*max_exp); 
+            }
 
             return UI_intensities;
         }
@@ -4628,7 +4640,7 @@ namespace Isotope_fitting
         /// </summary>
         private void fitnode_Re_Sort(TreeNode node)
         {
-            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             if (string.IsNullOrEmpty(node.Name))
             {
                 form_sort_fitnode(node.Index);
@@ -4643,7 +4655,7 @@ namespace Isotope_fitting
         /// </summary>
         private void refresh_fitnode_sorting(TreeNode node)
         {
-            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops...First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.",  MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             int node_index = node.Index;
             foreach (TreeNode tnn in fit_tree.Nodes[node_index].Nodes)
             {
@@ -4917,9 +4929,9 @@ namespace Isotope_fitting
                     }
                 }
                 if (grp_nodes.Count == 0 || frgmts.Count == 0) return;
-                if (frgmts.Count > 12) { MessageBox.Show("The maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups.","Failure",MessageBoxButtons.OK,MessageBoxIcon.Exclamation); return; }
-                if (frgmts.Count > 11) { DialogResult dialogResult = MessageBox.Show("Τhe process takes about 8 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo,MessageBoxIcon.Hand); if (dialogResult == DialogResult.No) { return; } }
-                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Τhe process takes about 4 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo,MessageBoxIcon.Hand); if (dialogResult == DialogResult.No) { return; } }
+                if (frgmts.Count > 12) { MessageBox.Show("Oops...the maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups.","Failure",MessageBoxButtons.OK,MessageBoxIcon.Exclamation); return; }
+                if (frgmts.Count > 11) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 8 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo,MessageBoxIcon.Hand); if (dialogResult == DialogResult.No) { return; } }
+                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 4 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo,MessageBoxIcon.Hand); if (dialogResult == DialogResult.No) { return; } }
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(frgmts);
                 grp_nodes.OrderBy(g => g); frgmts.OrderBy(f => f);
                 all_fitted_results.RemoveRange(grp_nodes[0], grp_nodes.Count());
@@ -5368,6 +5380,7 @@ namespace Isotope_fitting
 
         private void refresh_iso_plot()
         {
+            if (is_frag_calc_recalc ) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             //Remove existing series
             DisposeAllAndClear(LC_1.ViewXY.PointLineSeries);
             DisposeAllAndClear(LC_1.ViewXY.BarSeries);
@@ -6534,7 +6547,7 @@ namespace Isotope_fitting
                     name_extension += "." + sequenceList[s].Extension;
                 }
             }
-            DialogResult dialogResult = MessageBox.Show("By default 'EnviPat' Calculations are not saved. 'EnviPat' Calculations storage is recommended in cases of large compounds. Do you want to save 'EnviPat' Calculations ?", "'Save' settings", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("By default 'EnviPat' Calculations are not saved. Do you want to save 'EnviPat' Calculations ? ['Yes' recommended in case of a large compound]", "'Save' settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fragment" + name_extension, Filter = "Data Files (*.fit)|*.fit", DefaultExt = "fit", OverwritePrompt = true, AddExtension = true };
@@ -6583,7 +6596,7 @@ namespace Isotope_fitting
                     progress_display_stop();
                     file.Flush(); file.Close(); file.Dispose();
                     is_loading = false;
-                    MessageBox.Show("completed");
+                    MessageBox.Show("You are ready!");
                 }
             }
             else
@@ -6635,7 +6648,7 @@ namespace Isotope_fitting
         }
         void _bw_save_envipat_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show("completed");
+            MessageBox.Show("You are ready!");
         }
         void Save_frag_envipat(object sender, DoWorkEventArgs e)
         {
@@ -7662,9 +7675,7 @@ namespace Isotope_fitting
             try
             {
                 Parallel.For(0, all_data[0].Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
-                //for (int i = 0; i < all_data[0].Count; i++)
-                {
-                    //{
+                {                    
                     // one by one for all points
                     List<double> one_aligned_point = all_data_aligned[i].ToList();
                     //we set the vestor entry to null in order to release memory
@@ -7714,7 +7725,6 @@ namespace Isotope_fitting
                     }
 
                 });
-                //}
             }
             catch (Exception eeee)
             {
@@ -7725,8 +7735,8 @@ namespace Isotope_fitting
             all_data_aligned.Clear();
             all_data_aligned = aligned_intensities.OrderBy(d => aux_idx[sort_idx++]).ToList();
             progress_display_stop();
-            Invoke(new Action(() => OnRecalculate_completed()));
             is_frag_calc_recalc = false;
+            Invoke(new Action(() => OnRecalculate_completed()));
         }
         public void refresh_frm9()
         {
@@ -7789,7 +7799,7 @@ namespace Isotope_fitting
             loadFF_Btn.Enabled = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found.",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); calc_FF = false; loadFF_Btn.Enabled = true; return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
@@ -8023,7 +8033,7 @@ namespace Isotope_fitting
             }
             else
             {
-                DialogResult dialogResult = MessageBox.Show("The default image format is png. Do you want svg format?", "File Format", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show("The default image format is png. Do you want svg format?", "File Format", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Cancel) return;
                 else if (dialogResult == DialogResult.Yes)
                 {
@@ -8060,7 +8070,7 @@ namespace Isotope_fitting
         }
         private void loadFragmentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 is_recalc_res = false;
@@ -8074,7 +8084,7 @@ namespace Isotope_fitting
         private void loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!insert_exp) { MessageBox.Show("You must first load the experimental data for this action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 is_recalc_res = true;
@@ -8087,7 +8097,7 @@ namespace Isotope_fitting
         }
         private void clearListBtn11_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear Fragment List", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 clearList();
@@ -8417,7 +8427,7 @@ namespace Isotope_fitting
             else
             {
                 DisposeAllAndClear(LC_1.ViewXY.Annotations);
-                //refresh_iso_plot();
+                refresh_iso_plot();
             }
         }
         private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
@@ -8962,7 +8972,7 @@ namespace Isotope_fitting
         {
             string message_string = String.Empty;
             StringBuilder sb = new StringBuilder();
-            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You have to add amino-acid sequence", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("Don't hurry.You have to add amino-acid sequence first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             foreach (SequenceTab seq in sequenceList)
             {
                 if (string.IsNullOrEmpty(seq.Sequence)) continue;
@@ -12192,7 +12202,7 @@ namespace Isotope_fitting
         //clear
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 Clear_all();
@@ -12675,12 +12685,12 @@ namespace Isotope_fitting
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             save_preferences();
-            if (!insert_exp) { MessageBox.Show("No project available.There is not any experimental loaded. You can save Fragment List in a .fit file not in a project folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            else if (Fragments2.Count==0) { MessageBox.Show("No project available.There is not any Fragment List loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (!insert_exp) { MessageBox.Show("Sorry...No project available.There is not any experimental file loaded. You can save Fragment List in a .fit file instead.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+            else if (Fragments2.Count==0) { MessageBox.Show("Sorry...No project available.There is not any Fragment List loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                if (!Directory.Exists(folderBrowserDialog1.SelectedPath)) { MessageBox.Show("No folder selected.Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                if (!Directory.Exists(folderBrowserDialog1.SelectedPath)) { MessageBox.Show("Oops...No folder selected.Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
                 progress_display_start(7, "Saving project...");
                 all = 0;
                 // The user selected a folder and pressed the OK button.                
@@ -13013,7 +13023,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+                                    MessageBox.Show("Unfortunately an error occured while reading the sequence rtf. This means that the colored letters of the sequence won't be colored as you want.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                 }
                             }
                         }
@@ -13037,7 +13047,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Error in sequence rtf.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+                                    MessageBox.Show("Unfortunately an error occured while reading the sequence rtf. This means that the colored letters of the sequence won't be colored as you want.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                 }
                             }
                         }
@@ -13047,6 +13057,6 @@ namespace Isotope_fitting
             }
             seq.Char_color = char_color;
             seq.Color_table = color_table;
-        }       
+        }
     }
 }
