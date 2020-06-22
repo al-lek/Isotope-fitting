@@ -2169,7 +2169,11 @@ namespace Isotope_fitting
                         else ion_type += "-" + substring[c];
                     }
                     ChemFormulas[i].Ion_type = ion_type;
-                    ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O'); 
+                    if (!is_rna)
+                    {
+                        try { ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O'); }
+                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                    }
                 }
                 else if (primary_present)
                 {
@@ -2202,7 +2206,11 @@ namespace Isotope_fitting
                         else ion_type += "-" + substring[c];
                     }
                     ChemFormulas[i].Ion_type = ion_type;
-                    ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O'); 
+                    if (!is_rna)
+                    {
+                        try { ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O'); }
+                        catch (Exception eee) { MessageBox.Show(eee.ToString() + " ,Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                    }
                 }
                 else
                 {
@@ -3113,12 +3121,14 @@ namespace Isotope_fitting
         }
         private void remove_node(TreeNode node, bool Unchecked = false)
         {
+            if (is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            else if (string.IsNullOrEmpty(node.Name) || Fragments2.Count == 0) return;
             if (Form9.now && Form9.last_plotted.Count > 0)
             {
                 int count = Form9.last_plotted.Count;
                 all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
                 Form9.last_plotted.Clear();
-                recalc_frm9(count, Form9.last_plotted.Count);
+                //recalc_frm9(count, Form9.last_plotted.Count);
             }
             if (Unchecked)
             {
@@ -7679,53 +7689,61 @@ namespace Isotope_fitting
             try
             {
                 Parallel.For(0, all_data[0].Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
-                {                    
-                    // one by one for all points
-                    List<double> one_aligned_point = all_data_aligned[i].ToList();
-                    //we set the vestor entry to null in order to release memory
-                    all_data_aligned[i] = null;
-                    if (prev_count != 0) { one_aligned_point.RemoveRange(one_aligned_point.Count - prev_count, prev_count); }
-
-                    double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ta experimental ola ta x-->m/z
-                    for (int j = curr_count; j > 0; j--)
+                {
+                    if (i<all_data_aligned.Count)
                     {
-                        int distro_idx = all_data.Count - j;
+                        // one by one for all points
+                        List<double> one_aligned_point = all_data_aligned[i].ToList();
 
-                        // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
-                        double aligned_value = 0.0;
+                        //we set the vestor entry to null in order to release memory
+                        all_data_aligned[i] = null;
+                        if (prev_count != 0) { one_aligned_point.RemoveRange(one_aligned_point.Count - prev_count, prev_count); }
 
-                        for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
+                        double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ta experimental ola ta x-->m/z
+                        for (int j = curr_count; j > 0; j--)
                         {
-                            if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                            int distro_idx = all_data.Count - j;
+
+                            // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
+                            double aligned_value = 0.0;
+
+                            for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
                             {
-                                aligned_value = 0.0; break;
+                                if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                                {
+                                    aligned_value = 0.0; break;
+                                }
+                                if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
+                                {
+                                    aligned_value = 0.0; break;
+                                }
+                                if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
+                                {
+                                    //aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
+                                    aligned_value = interpolate(all_data[distro_idx][k][0], all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], all_data[distro_idx][k + 1][1], mz_toInterp);
+                                    break;
+                                }
                             }
-                            if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
+                            one_aligned_point.Add(aligned_value);
+                        }
+                        ////all_data_aligned[i] = one_aligned_point.ToArray();
+
+                        lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                        try
+                        {
+                            lock (_locker)
                             {
-                                aligned_value = 0.0; break;
-                            }
-                            if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
-                            {
-                                //aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
-                                aligned_value = interpolate(all_data[distro_idx][k][0], all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], all_data[distro_idx][k + 1][1], mz_toInterp);
-                                break;
+                                Interlocked.Increment(ref progress); if (progress % 5000 == 0 && i > 0) progress_display_update(progress);
                             }
                         }
-                        one_aligned_point.Add(aligned_value);
-                    }
-                    ////all_data_aligned[i] = one_aligned_point.ToArray();
-
-                    lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
-                    try
-                    {
-                        lock (_locker)
+                        catch (Exception ex)
                         {
-                            Interlocked.Increment(ref progress); if (progress % 5000 == 0 && i > 0) progress_display_update(progress);
+                            Debug.WriteLine("progress: " + progress.ToString() + "  " + i.ToString() + " X " + all_data[0][i][0].ToString() + " Y " + all_data[0][i][1].ToString() + "  " + ex);
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Debug.WriteLine("progress: " + progress.ToString() + "  " + i.ToString() + " X " + all_data[0][i][0].ToString() + " Y " + all_data[0][i][1].ToString() + "  " + ex);
+                        MessageBox.Show("An error occured while processing Data. Save your results and and restart the procedure. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
 
                 });

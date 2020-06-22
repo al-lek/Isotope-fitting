@@ -433,7 +433,7 @@ namespace Isotope_fitting
             if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
             during_calc(true);
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
-            if ((sender as MenuItem).Text == "Delete fragment" && selectedItems.Count > 0)
+            if ((sender as MenuItem).Text == "Remove fragment" && selectedItems.Count > 0)
             {
                 now = false;
                 int count = 0;
@@ -1806,8 +1806,10 @@ namespace Isotope_fitting
         #region insert fragment to Fragments2
         private void insert_Btn_Click(object sender, EventArgs e)
         {
-            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            insert_Btn.Enabled = false;
+            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); insert_Btn.Enabled = true; return; }
             insert_frag_to_Fragments2();
+            insert_Btn.Enabled = true;
         }
         private void insert_frag_to_Fragments2()
         {
@@ -1855,14 +1857,16 @@ namespace Isotope_fitting
                 Fragments2.Last().Centroid = Fragments3[new_fragin].Centroid.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Profile = Fragments3[new_fragin].Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments2.Last().Counter = Fragments3.Count;
-                Fragments2.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
+                Fragments2.Last().Max_intensity = Fragments3[new_fragin].Max_intensity;
             }
             // sort by mz the fragments list (global) 
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
             for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+            last_plotted.Clear();
+            //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
+            first = true;
             frm2.add_frag_frm9();
-
             int count = 0;
             foreach (ListViewItem item in fragListView9.CheckedItems)
             {
@@ -1875,10 +1879,7 @@ namespace Isotope_fitting
             // also restore indexes to match array position
             for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
             //refresh listview 
-            Fragments3_to_listview();
-            last_plotted.Clear();
-            //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
-            first = true;
+            Fragments3_to_listview();            
             factor_panel9.Visible = false; selected_idx = 0;
         }
         #endregion

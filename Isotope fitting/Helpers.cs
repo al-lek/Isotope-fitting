@@ -103,7 +103,7 @@ namespace Isotope_fitting
             if (idx < 0) return input;
             var theString = input;
             var aStringBuilder = new StringBuilder(theString);
-            if (Char.IsNumber(input[idx + 2]))
+            if (input.Length > idx +2 && Char.IsNumber(input[idx + 2]))
             {
                 if (input.Length > idx + 3 && Char.IsNumber(input[idx + 3]))
                 {
