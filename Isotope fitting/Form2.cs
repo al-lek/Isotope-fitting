@@ -7679,6 +7679,7 @@ namespace Isotope_fitting
         }
         public void refresh_all_data_aligned(int prev_count, int curr_count)
         {
+            if (all_data_aligned.Count==0) { recalculate_all_data_aligned();return; }
             is_frag_calc_recalc = true;
             List<double[]> aligned_intensities = new List<double[]>();
             List<int> aux_idx = new List<int>();

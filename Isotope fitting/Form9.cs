@@ -1877,7 +1877,7 @@ namespace Isotope_fitting
             // sort by mz the fragments list 
             Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
-            for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }
+            for (int k = 0; k < Fragments3.Count; k++) { Fragments3[k].Counter = k; }           
             //refresh listview 
             Fragments3_to_listview();            
             factor_panel9.Visible = false; selected_idx = 0;
@@ -1887,7 +1887,7 @@ namespace Isotope_fitting
         #region plot, un-plot fragments
         private void plot_Btn_Click(object sender, EventArgs e)
         {
-            if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            if (frm2.is_frag_calc_recalc || is_in_calc_mode ) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             plot_checked();
         }
         private void plot_checked(bool from_delete = false,int count_last_plotted=0)
@@ -1926,7 +1926,7 @@ namespace Isotope_fitting
         {
             Remove_plotted();
         }
-        private void Remove_plotted()
+        private void Remove_plotted(bool recalc=true)
         {
             if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
 
@@ -1936,7 +1936,7 @@ namespace Isotope_fitting
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-                frm2.recalc_frm9(count, last_plotted.Count);
+               if(recalc) frm2.recalc_frm9(count, last_plotted.Count);
             }
         }
         #endregion
