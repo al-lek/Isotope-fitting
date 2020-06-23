@@ -142,7 +142,14 @@ namespace Isotope_fitting
         {
             if (ppm9_numUD.ActiveControl != null && !string.IsNullOrEmpty(ppm9_numUD.ActiveControl.Text))
             {
-                ppmError9 = double.Parse(ppm9_numUD.ActiveControl.Text);
+                try
+                {
+                    ppmError9 = double.Parse(ppm9_numUD.ActiveControl.Text);
+                }
+                catch
+                {
+                    MessageBox.Show("Oops you have inserted a wrong format. Please try again!","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
             }
         }
 

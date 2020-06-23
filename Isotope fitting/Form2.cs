@@ -2911,14 +2911,16 @@ namespace Isotope_fitting
             {
                 frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node, e.Node.Checked); };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[8] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[9] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
                                                                       new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }),
                                                                       new MenuItem("Remove Unchecked", (s, e) => {remove_node(frag_tree.SelectedNode,true); }),
                                                                       new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
-                                                                      new MenuItem("Replace Extension", (s, e) => {replace_extension();  })
+                                                                      new MenuItem("Replace Extension", (s, e) => {replace_extension();  }),
+                                                                      new MenuItem("Zoom to fragment",(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  })
+
                 });
 
             }
@@ -2938,6 +2940,18 @@ namespace Isotope_fitting
 
             frag_tree.EndUpdate();
             frag_tree.Visible = true;
+        }
+        private void zoom_to_fragment(TreeNode node)
+        {
+            if (string.IsNullOrEmpty(node.Name) || Fragments2.Count == 0) return;
+            else
+            {
+                int idx = Convert.ToInt32(node.Name);
+                double max_x = Fragments2[idx].Profile.Last().X;
+                double min_x = Fragments2[idx].Profile[0].X;
+                zoom_to_frag_frm9(min_x, max_x);
+               
+            }     
         }
         private void colorSelection_frag_tree(TreeNode node)
         {
@@ -3394,11 +3408,13 @@ namespace Isotope_fitting
                         foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked) { innerNode.Checked = e.Node.Checked; } }
                     }
                 };
-                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[4] {
+                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[5] {
                     new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
                     new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
                     new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); }),
-                    new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) });
+                    new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) ,
+                    new MenuItem("Zoom to fragment",(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  })
+                });
 
             }
             fragTypes_tree.BeginUpdate();
@@ -13010,7 +13026,15 @@ namespace Isotope_fitting
             File.WriteAllLines(path, fragText);
         }
         #endregion
-                      
+
+        #region LOSSES
+        private void create_diagram()
+        {
+
+        }      
+
+        #endregion
+
         public void read_rtf_find_color(SequenceTab seq)
         {
             string rtf = seq.Rtf;
