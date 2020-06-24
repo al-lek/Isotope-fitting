@@ -711,6 +711,8 @@ namespace Isotope_fitting
                 Clear_all();
                 disp_d.Visible = disp_w.Visible = groupBoxIntensity4.Visible = groupBoxCharge4.Visible= is_riken;
                 ppm_toolStrip4.Visible = !is_riken;
+                losses_groupBox7.Visible = is_riken;
+                losses_groupBox2.Visible = is_riken;
                 foreach (ToolStrip strip in GetControls(panel2_tab2).OfType<ToolStrip>().Where(l => l.Name.Contains("ppm")))
                 {
                     foreach (ToolStripButton btn in strip.Items.OfType<ToolStripButton>())
@@ -733,6 +735,8 @@ namespace Isotope_fitting
                     ax_chBx.Text = "a - w"; by_chBx.Text = "b - x"; cz_chBx.Text = "c - y"; intA_chBx.Text = "d - z"; intB_chBx.Text = "internal";
                     ax_chBxCopy1.Text = "a - w"; by_chBxCopy1.Text = "b - x"; cz_chBxCopy1.Text = "c - y"; intA_chBxCopy1.Text = "d - z"; intB_chBxCopy1.Text = "internal";
                     ax_chBxCopy2.Text = "a - w"; by_chBxCopy2.Text = "b - x"; cz_chBxCopy2.Text = "c - y"; intA_chBxCopy2.Text = "d - z"; intB_chBxCopy2.Text = "internal";
+                    losses_groupBox2.Visible = losses_groupBox4.Visible = losses_groupBox6.Visible = losses_groupBox8.Visible = false;
+                    losses_groupBox2.Visible = losses_groupBox4.Visible = losses_groupBox6.Visible = losses_groupBox8.Visible = true;
                 }
                 else
                 {
@@ -10921,17 +10925,19 @@ namespace Isotope_fitting
             }
             paint_annotations_in_graphs();
         }
-        private bool search_primary(string type, int idx, string s_ext,List<ion> temp_iondraw)
+        private bool search_primary(string type, int idx, string s_ext,List<ion> temp_iondraw,bool losses_diagram=false)
         {
-            foreach (ion nn in IonDraw)
+            foreach (ion nn in temp_iondraw)
             {
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.SortIdx > idx) break;
-                if (nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;
+                else if (!losses_diagram && nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;
+                else if (losses_diagram && nn.SortIdx == idx & nn.Ion_type.Equals(type)) return true;
             }
             return false;
         }
+
         private void check_duplicate_ions()
         {
             int i = 0;
@@ -11856,20 +11862,65 @@ namespace Isotope_fitting
         #endregion
 
         #region LOSSES
-        private void create_diagram(string type,PlotView plot, FlowLayoutPanel pnl)
+       
+        private void create_plotview(GroupBox grp,string type)
         {
+            Panel pnl = GetControls(grp).OfType<Panel>().ToList().First();            
+            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().ToList().First();
+            PlotView plot;
+            if (pnl.Controls.Count>0)
+            {
+                plot = pnl.Controls[0] as PlotView;
+            }
+            else
+            {
+                plot = new PlotView() { Name = "plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
+                pnl.Controls.Add(plot);
+                PlotModel model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type+"  fragments", TitleColor = OxyColors.Green };
+                plot.Model = model;
+                var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                model.Axes.Add(linearAxis1);
+                var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12, MinorGridlineStyle = Xminor_grid12, TickStyle = X_tick12, MinimumMinorStep = 1.0, MajorStep = x_majorStep12, MinorStep = x_minorStep12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+                model.Axes.Add(linearAxis2);
+                plot.MouseDoubleClick += (s, e) => { model.ResetAllAxes(); plot.InvalidatePlot(true); };
+                plot.Controller = new CustomPlotController();
+            }            
+            create_check_boxes(type, flowpnl, pnl);
+            create_losses_diagram(type, plot, flowpnl,pnl);
+        }
+        private void create_losses_diagram(string type,PlotView plot, FlowLayoutPanel flowpnl,Panel pnl)
+        {
+            Color clr = Color.Blue;
+            if (plot.Model.Series != null) { plot.Model.Series.Clear(); }
+            plot.Model.Title = type + " fragments";
             List<ion> temp_iondraw = IonDraw.ToList();
-            int iondraw_count = temp_iondraw.Count;
-            if (iondraw_count == 0) { return; }
+            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+
+            int iondraw_count = temp_iondraw.Count; 
             string s_ext = "";
             string s_chain = Peptide;            
-            bool is_losses = GetControls(pnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
             List<string> check_names = new List<string>();
-            List<double[]> points_all = new List<double[]>();
-            var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            for (int cc = 0; cc < s_chain.Length; cc++)
+            {
+                if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                {
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -1.2));
+                }
+                else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                {
+                    s2a.Points.Add(new ScatterPoint(cc + 1, 1.2));
+                }
+            }
+            plot.Model.Series.Add(s1a); plot.Model.Series.Add(s2a);
+            plot.Model.Axes[1].Minimum = 0;
+            plot.Model.Axes[1].Maximum = s_chain.Length;
+            plot.Model.Axes[0].Minimum = -1.2;
+            plot.Model.Axes[0].Maximum = +1.2;
+            if (iondraw_count == 0) { return; }
             CI ion_comp = new CI();
             temp_iondraw.Sort(ion_comp);
-            List<CheckBox> list = GetControls(pnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
+            List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
+            bool is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
             if (list.Count > 0)
             {
                 foreach (CheckBox vv in list) {if(vv.Checked) check_names.Add(vv.Text); }
@@ -11880,49 +11931,67 @@ namespace Isotope_fitting
                 {
                     if (seq.Extension.Equals(seq_extensionBox.SelectedItem)) { s_chain = seq.Sequence; s_ext = seq.Extension; break; }
                 }
-            }           
-            for (int i = 0; i < iondraw_count; i++)
+            }
+            for (int k=0;k< check_names.Count(); k++ )
             {
-                ion nn = temp_iondraw[i];
-                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                foreach (string name in check_names)
+                string name = check_names[k];
+                List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
+                List<ion> merged_names = new List<ion>();
+                List<ScatterSeries> series_list = create_scatterseries(clr, type, "losses", 1);
+                for (int i = 0; i < iondraw_count; i++)
                 {
-                    if (name.Length>1 &&(nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
-                    {                        
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || search_primary(name[0].ToString(), nn.SortIdx, s_ext, temp_iondraw))
-                        {
-                            if (points_all.Count == 0 || (int)points_all.Last()[0] != nn.SortIdx)
-                            {
-                                points_all.Add(new double[] { nn.SortIdx, nn.Max_intensity });
+                    ion nn = temp_iondraw[i];
+                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                    if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                    if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)){ continue; }                    
+                    if (name.Length > 1 && (nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
+                    {
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw)))
+                        {                          
+                            if (merged_names.Count == 0 || (merged_names.Last().SortIdx != nn.SortIdx)&& merged_names.Last().Charge != nn.Charge)
+                            {                               
+                                merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
                             }
                             else
                             {
-                                points_all.Last()[1] += nn.Max_intensity;
+                                 merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name; 
                             }
                         }
                     }
 
                 }
-
-            }
+                int list_index = 0;
+                foreach (ion nn in merged_names)
+                {
+                    double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, temp_iondraw, true);
+                    double value = 0.0;
+                    list_index = return_list_index(nn.Max_intensity);
+                    if (nn.Max_intensity> primary_int) { value = (nn.Max_intensity- primary_int) / nn.Max_intensity; }
+                    else { value =(primary_int-nn.Max_intensity) / primary_int; }
+                    datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
+                }
+                for (int i = 9; i >= 0; i--)
+                {
+                    if (datapoint_list[i].Count > 0 ) { series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}";  plot.Model.Series.Add(series_list[i]); }
+                }
+            }            
+            plot.InvalidatePlot(true);
         }
-        private void create_check_boxes(string type, FlowLayoutPanel pnl)
+        private void create_check_boxes(string type, FlowLayoutPanel flowpnl,Panel pnl)
         {
             string s_ext = "";
             string s_chain = Peptide;
             List<ion> temp_iondraw = IonDraw.ToList();
             int iondraw_count = temp_iondraw.Count;
-            bool is_losses = GetControls(pnl).OfType<CheckBox>().Where(l=>l.Text.Equals("Losses")).ToList().First().Checked;
-            List<string[]> check_names = new List<string[]>();
-            //if ion list is empty clear checkboxes and return
-            if (iondraw_count == 0) { pnl.Controls.Clear(); return; }
-            List<CheckBox> list = GetControls(pnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
-            if (list.Count>0)
+            bool is_losses = false;
+            if (flowpnl.Controls.Count>0)
             {
-                foreach (CheckBox vv in list){ check_names.Add(new string[] { vv.Text,vv.Checked.ToString()}); }
-                pnl.Controls.Clear();
-            }
+                is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
+            }           
+            //if ion list is empty clear checkboxes and return
+            if (iondraw_count == 0) { flowpnl.Controls.Clear(); return; }
+            List<CheckBox> check_names = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
+            if (check_names.Count>0)  flowpnl.Controls.Clear();
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
@@ -11942,25 +12011,79 @@ namespace Isotope_fitting
                     int index = -1;
                     if (nn.Ion_type.Contains(type+"-")){ index = nn.Ion_type.IndexOf(type + "-");    }
                     else if (nn.Ion_type.Contains(type + "+")) {  index = nn.Ion_type.IndexOf(type + "+");   }
-                    if (index != -1)
+                    if (index != -1 && iParser(nn.Ion_type[index+ type.Length + 1].ToString()) !=0)
                     {
                         tt = nn.Ion_type.Substring(index, type.Length + 2);
-                        if (check_names.Count == 0 || !check_names.Any(p => p.Equals(tt))){ check_names.Add(new string[]{ tt, "true"}); }
+                        if (check_names.Count == 0 || !check_names.Any(p => p.Text.Equals(tt)))
+                        {
+                            CheckBox chk = new CheckBox() { Text = tt, Checked = true };
+                            chk.CheckedChanged += (s, e) => 
+                            {
+                                chk.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
+                            };
+                            check_names.Add(chk);                            
+                        }
                     }
                 }                
             }
             if (check_names.Count == 0) return;
-            check_names.Sort();
-            foreach (string[] name in check_names)
-            {
-                CheckBox ckbx = new CheckBox() {Text= name[0],Checked=string_to_bool(name[1]) };
-                pnl.Controls.Add(ckbx);
-            }
+            check_names = check_names.OrderBy(p => p.Text).ToList() ;
+            foreach (CheckBox ckbx in check_names){ flowpnl.Controls.Add(ckbx);}
             CheckBox ckbx_losses = new CheckBox() { Text = "Losses", Checked = is_losses };
-            pnl.Controls.Add(ckbx_losses);
+            flowpnl.Controls.Add(ckbx_losses);
             temp_iondraw.Clear();
         }
+        private double search_primary_return_intens(string type, int idx, string s_ext, List<ion> temp_iondraw, bool losses_diagram = false)
+        {
+            double intensity = 0.0;
+            foreach (ion nn in temp_iondraw)
+            {
+                if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                if (nn.SortIdx > idx) break;
+                else if (!losses_diagram && nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) { intensity += nn.Max_intensity; }
+                else if (losses_diagram && nn.SortIdx == idx & nn.Ion_type.Equals(type)) { intensity += nn.Max_intensity; break; }
+            }
+            return intensity;
+        }
+        private void losses_plot_panel1_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox1, "a");
+        }
+        private void losses_plot_panel3_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox3, "b");
+        }
 
+        private void losses_plot_panel5_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox5, "c");
+        }
+
+        private void losses_plot_panel7_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox7, "d");
+        }
+
+        private void losses_plot_panel2_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox2, "w");
+        }
+
+        private void losses_plot_panel4_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox4, "x");
+        }
+
+        private void losses_plot_panel6_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox6, "y");
+        }
+
+        private void losses_plot_panel8_Paint(object sender, PaintEventArgs e)
+        {
+            create_plotview(losses_groupBox8, "z");
+        }
         #endregion
 
         #region EXTRACT PLOTS
@@ -13224,7 +13347,8 @@ namespace Isotope_fitting
             }
             File.WriteAllLines(path, fragText);
         }
+
         #endregion
-        
+               
     }
 }

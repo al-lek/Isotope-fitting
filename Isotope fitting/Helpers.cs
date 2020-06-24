@@ -34,7 +34,7 @@ namespace Isotope_fitting
         /// </summary>
         public static int iParser(string t)
         {
-            // will reurn 0 on error
+            // will return 0 on error
             if (int.TryParse(t, out int i)) return i;
             return i;
         }
