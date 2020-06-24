@@ -366,7 +366,97 @@ namespace Isotope_fitting
             this.fit_sel_Btn = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_losses = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
+            this.losses_splitContainer = new System.Windows.Forms.SplitContainer();
+            this.losses_groupBox7 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel7 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel7 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip7 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn7 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn7 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn7 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box7 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box7 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox5 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel5 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip5 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn5 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn5 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn5 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box5 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box5 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox3 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel3 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn3 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn3 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn3 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box3 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box3 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox1 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel1 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn1 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn1 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box1 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box1 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox8 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel8 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel8 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip8 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn8 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn8 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn8 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box8 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box8 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox6 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel6 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel6 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip6 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn6 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn6 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn6 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box6 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box6 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox4 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel4 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip4 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn4 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn4 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn4 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box4 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box4 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_groupBox2 = new System.Windows.Forms.GroupBox();
+            this.losses_plot_panel2 = new System.Windows.Forms.Panel();
+            this.checkboxes_panel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.losses_toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.losses_saveBtn2 = new System.Windows.Forms.ToolStripButton();
+            this.losses_copyBtn2 = new System.Windows.Forms.ToolStripButton();
+            this.losses_DropBtn2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_styleBtn2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_extractBtn2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.losses_X_Box2 = new System.Windows.Forms.ToolStripTextBox();
+            this.losses_Y_Box2 = new System.Windows.Forms.ToolStripTextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.losses_label = new System.Windows.Forms.Label();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -437,6 +527,27 @@ namespace Isotope_fitting
             this.fiToolStrip.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tab_losses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.losses_splitContainer)).BeginInit();
+            this.losses_splitContainer.Panel1.SuspendLayout();
+            this.losses_splitContainer.Panel2.SuspendLayout();
+            this.losses_splitContainer.SuspendLayout();
+            this.losses_groupBox7.SuspendLayout();
+            this.losses_toolStrip7.SuspendLayout();
+            this.losses_groupBox5.SuspendLayout();
+            this.losses_toolStrip5.SuspendLayout();
+            this.losses_groupBox3.SuspendLayout();
+            this.losses_toolStrip3.SuspendLayout();
+            this.losses_groupBox1.SuspendLayout();
+            this.losses_toolStrip1.SuspendLayout();
+            this.losses_groupBox8.SuspendLayout();
+            this.losses_toolStrip8.SuspendLayout();
+            this.losses_groupBox6.SuspendLayout();
+            this.losses_toolStrip6.SuspendLayout();
+            this.losses_groupBox4.SuspendLayout();
+            this.losses_toolStrip4.SuspendLayout();
+            this.losses_groupBox2.SuspendLayout();
+            this.losses_toolStrip2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -4380,7 +4491,8 @@ namespace Isotope_fitting
             // 
             // tab_losses
             // 
-            this.tab_losses.Controls.Add(this.label1);
+            this.tab_losses.Controls.Add(this.losses_splitContainer);
+            this.tab_losses.Controls.Add(this.panel3);
             this.tab_losses.Location = new System.Drawing.Point(4, 22);
             this.tab_losses.Name = "tab_losses";
             this.tab_losses.Padding = new System.Windows.Forms.Padding(3);
@@ -4389,16 +4501,941 @@ namespace Isotope_fitting
             this.tab_losses.Text = "Losses";
             this.tab_losses.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // losses_splitContainer
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Crimson;
-            this.label1.Location = new System.Drawing.Point(8, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(196, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Radical Migration Mapping";
+            this.losses_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_splitContainer.Location = new System.Drawing.Point(3, 37);
+            this.losses_splitContainer.Name = "losses_splitContainer";
+            // 
+            // losses_splitContainer.Panel1
+            // 
+            this.losses_splitContainer.Panel1.AutoScroll = true;
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox7);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox5);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox3);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox1);
+            // 
+            // losses_splitContainer.Panel2
+            // 
+            this.losses_splitContainer.Panel2.AutoScroll = true;
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox8);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox6);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox4);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox2);
+            this.losses_splitContainer.Size = new System.Drawing.Size(1356, 683);
+            this.losses_splitContainer.SplitterDistance = 709;
+            this.losses_splitContainer.TabIndex = 33;
+            // 
+            // losses_groupBox7
+            // 
+            this.losses_groupBox7.Controls.Add(this.losses_plot_panel7);
+            this.losses_groupBox7.Controls.Add(this.checkboxes_panel7);
+            this.losses_groupBox7.Controls.Add(this.losses_toolStrip7);
+            this.losses_groupBox7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox7.Location = new System.Drawing.Point(0, 837);
+            this.losses_groupBox7.Name = "losses_groupBox7";
+            this.losses_groupBox7.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox7.TabIndex = 34;
+            this.losses_groupBox7.TabStop = false;
+            // 
+            // losses_plot_panel7
+            // 
+            this.losses_plot_panel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel7.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel7.Name = "losses_plot_panel7";
+            this.losses_plot_panel7.Size = new System.Drawing.Size(569, 260);
+            this.losses_plot_panel7.TabIndex = 21;
+            // 
+            // checkboxes_panel7
+            // 
+            this.checkboxes_panel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel7.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel7.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel7.Location = new System.Drawing.Point(615, 16);
+            this.checkboxes_panel7.Name = "checkboxes_panel7";
+            this.checkboxes_panel7.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel7.TabIndex = 22;
+            // 
+            // losses_toolStrip7
+            // 
+            this.losses_toolStrip7.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip7.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip7.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip7.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn7,
+            this.losses_copyBtn7,
+            this.losses_DropBtn7,
+            this.losses_X_Box7,
+            this.losses_Y_Box7});
+            this.losses_toolStrip7.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip7.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip7.Name = "losses_toolStrip7";
+            this.losses_toolStrip7.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip7.TabIndex = 24;
+            // 
+            // losses_saveBtn7
+            // 
+            this.losses_saveBtn7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn7.Image")));
+            this.losses_saveBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn7.Name = "losses_saveBtn7";
+            this.losses_saveBtn7.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn7.Text = "Save";
+            // 
+            // losses_copyBtn7
+            // 
+            this.losses_copyBtn7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn7.Image")));
+            this.losses_copyBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn7.Name = "losses_copyBtn7";
+            this.losses_copyBtn7.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn7.Text = "Copy";
+            // 
+            // losses_DropBtn7
+            // 
+            this.losses_DropBtn7.AutoToolTip = false;
+            this.losses_DropBtn7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn7,
+            this.losses_extractBtn7});
+            this.losses_DropBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn7.Image")));
+            this.losses_DropBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn7.Name = "losses_DropBtn7";
+            this.losses_DropBtn7.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn7.Text = " ";
+            // 
+            // losses_styleBtn7
+            // 
+            this.losses_styleBtn7.Name = "losses_styleBtn7";
+            this.losses_styleBtn7.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn7.Text = "Style";
+            this.losses_styleBtn7.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn7
+            // 
+            this.losses_extractBtn7.Name = "losses_extractBtn7";
+            this.losses_extractBtn7.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn7.Text = "Extract Plot";
+            this.losses_extractBtn7.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box7
+            // 
+            this.losses_X_Box7.AutoSize = false;
+            this.losses_X_Box7.Name = "losses_X_Box7";
+            this.losses_X_Box7.ReadOnly = true;
+            this.losses_X_Box7.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box7.ToolTipText = "Width";
+            // 
+            // losses_Y_Box7
+            // 
+            this.losses_Y_Box7.AutoSize = false;
+            this.losses_Y_Box7.Name = "losses_Y_Box7";
+            this.losses_Y_Box7.ReadOnly = true;
+            this.losses_Y_Box7.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box7.ToolTipText = "Height";
+            // 
+            // losses_groupBox5
+            // 
+            this.losses_groupBox5.Controls.Add(this.losses_plot_panel5);
+            this.losses_groupBox5.Controls.Add(this.checkboxes_panel5);
+            this.losses_groupBox5.Controls.Add(this.losses_toolStrip5);
+            this.losses_groupBox5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox5.Location = new System.Drawing.Point(0, 558);
+            this.losses_groupBox5.Name = "losses_groupBox5";
+            this.losses_groupBox5.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox5.TabIndex = 33;
+            this.losses_groupBox5.TabStop = false;
+            // 
+            // losses_plot_panel5
+            // 
+            this.losses_plot_panel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel5.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel5.Name = "losses_plot_panel5";
+            this.losses_plot_panel5.Size = new System.Drawing.Size(569, 260);
+            this.losses_plot_panel5.TabIndex = 21;
+            // 
+            // checkboxes_panel5
+            // 
+            this.checkboxes_panel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel5.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel5.Location = new System.Drawing.Point(615, 16);
+            this.checkboxes_panel5.Name = "checkboxes_panel5";
+            this.checkboxes_panel5.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel5.TabIndex = 22;
+            // 
+            // losses_toolStrip5
+            // 
+            this.losses_toolStrip5.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip5.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip5.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn5,
+            this.losses_copyBtn5,
+            this.losses_DropBtn5,
+            this.losses_X_Box5,
+            this.losses_Y_Box5});
+            this.losses_toolStrip5.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip5.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip5.Name = "losses_toolStrip5";
+            this.losses_toolStrip5.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip5.TabIndex = 24;
+            // 
+            // losses_saveBtn5
+            // 
+            this.losses_saveBtn5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn5.Image")));
+            this.losses_saveBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn5.Name = "losses_saveBtn5";
+            this.losses_saveBtn5.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn5.Text = "Save";
+            // 
+            // losses_copyBtn5
+            // 
+            this.losses_copyBtn5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn5.Image")));
+            this.losses_copyBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn5.Name = "losses_copyBtn5";
+            this.losses_copyBtn5.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn5.Text = "Copy";
+            // 
+            // losses_DropBtn5
+            // 
+            this.losses_DropBtn5.AutoToolTip = false;
+            this.losses_DropBtn5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn5,
+            this.losses_extractBtn5});
+            this.losses_DropBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn5.Image")));
+            this.losses_DropBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn5.Name = "losses_DropBtn5";
+            this.losses_DropBtn5.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn5.Text = " ";
+            // 
+            // losses_styleBtn5
+            // 
+            this.losses_styleBtn5.Name = "losses_styleBtn5";
+            this.losses_styleBtn5.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn5.Text = "Style";
+            this.losses_styleBtn5.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn5
+            // 
+            this.losses_extractBtn5.Name = "losses_extractBtn5";
+            this.losses_extractBtn5.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn5.Text = "Extract Plot";
+            this.losses_extractBtn5.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box5
+            // 
+            this.losses_X_Box5.AutoSize = false;
+            this.losses_X_Box5.Name = "losses_X_Box5";
+            this.losses_X_Box5.ReadOnly = true;
+            this.losses_X_Box5.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box5.ToolTipText = "Width";
+            // 
+            // losses_Y_Box5
+            // 
+            this.losses_Y_Box5.AutoSize = false;
+            this.losses_Y_Box5.Name = "losses_Y_Box5";
+            this.losses_Y_Box5.ReadOnly = true;
+            this.losses_Y_Box5.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box5.ToolTipText = "Height";
+            // 
+            // losses_groupBox3
+            // 
+            this.losses_groupBox3.Controls.Add(this.losses_plot_panel3);
+            this.losses_groupBox3.Controls.Add(this.checkboxes_panel3);
+            this.losses_groupBox3.Controls.Add(this.losses_toolStrip3);
+            this.losses_groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox3.Location = new System.Drawing.Point(0, 279);
+            this.losses_groupBox3.Name = "losses_groupBox3";
+            this.losses_groupBox3.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox3.TabIndex = 32;
+            this.losses_groupBox3.TabStop = false;
+            // 
+            // losses_plot_panel3
+            // 
+            this.losses_plot_panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel3.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel3.Name = "losses_plot_panel3";
+            this.losses_plot_panel3.Size = new System.Drawing.Size(569, 260);
+            this.losses_plot_panel3.TabIndex = 21;
+            // 
+            // checkboxes_panel3
+            // 
+            this.checkboxes_panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel3.Location = new System.Drawing.Point(615, 16);
+            this.checkboxes_panel3.Name = "checkboxes_panel3";
+            this.checkboxes_panel3.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel3.TabIndex = 22;
+            // 
+            // losses_toolStrip3
+            // 
+            this.losses_toolStrip3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip3.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn3,
+            this.losses_copyBtn3,
+            this.losses_DropBtn3,
+            this.losses_X_Box3,
+            this.losses_Y_Box3});
+            this.losses_toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip3.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip3.Name = "losses_toolStrip3";
+            this.losses_toolStrip3.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip3.TabIndex = 24;
+            // 
+            // losses_saveBtn3
+            // 
+            this.losses_saveBtn3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn3.Image")));
+            this.losses_saveBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn3.Name = "losses_saveBtn3";
+            this.losses_saveBtn3.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn3.Text = "Save";
+            // 
+            // losses_copyBtn3
+            // 
+            this.losses_copyBtn3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn3.Image")));
+            this.losses_copyBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn3.Name = "losses_copyBtn3";
+            this.losses_copyBtn3.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn3.Text = "Copy";
+            // 
+            // losses_DropBtn3
+            // 
+            this.losses_DropBtn3.AutoToolTip = false;
+            this.losses_DropBtn3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn3,
+            this.losses_extractBtn3});
+            this.losses_DropBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn3.Image")));
+            this.losses_DropBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn3.Name = "losses_DropBtn3";
+            this.losses_DropBtn3.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn3.Text = " ";
+            // 
+            // losses_styleBtn3
+            // 
+            this.losses_styleBtn3.Name = "losses_styleBtn3";
+            this.losses_styleBtn3.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn3.Text = "Style";
+            this.losses_styleBtn3.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn3
+            // 
+            this.losses_extractBtn3.Name = "losses_extractBtn3";
+            this.losses_extractBtn3.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn3.Text = "Extract Plot";
+            this.losses_extractBtn3.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box3
+            // 
+            this.losses_X_Box3.AutoSize = false;
+            this.losses_X_Box3.Name = "losses_X_Box3";
+            this.losses_X_Box3.ReadOnly = true;
+            this.losses_X_Box3.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box3.ToolTipText = "Width";
+            // 
+            // losses_Y_Box3
+            // 
+            this.losses_Y_Box3.AutoSize = false;
+            this.losses_Y_Box3.Name = "losses_Y_Box3";
+            this.losses_Y_Box3.ReadOnly = true;
+            this.losses_Y_Box3.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box3.ToolTipText = "Height";
+            // 
+            // losses_groupBox1
+            // 
+            this.losses_groupBox1.Controls.Add(this.losses_plot_panel1);
+            this.losses_groupBox1.Controls.Add(this.checkboxes_panel1);
+            this.losses_groupBox1.Controls.Add(this.losses_toolStrip1);
+            this.losses_groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.losses_groupBox1.Name = "losses_groupBox1";
+            this.losses_groupBox1.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox1.TabIndex = 31;
+            this.losses_groupBox1.TabStop = false;
+            // 
+            // losses_plot_panel1
+            // 
+            this.losses_plot_panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel1.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel1.Name = "losses_plot_panel1";
+            this.losses_plot_panel1.Size = new System.Drawing.Size(569, 260);
+            this.losses_plot_panel1.TabIndex = 21;
+            // 
+            // checkboxes_panel1
+            // 
+            this.checkboxes_panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel1.Location = new System.Drawing.Point(615, 16);
+            this.checkboxes_panel1.Name = "checkboxes_panel1";
+            this.checkboxes_panel1.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel1.TabIndex = 22;
+            // 
+            // losses_toolStrip1
+            // 
+            this.losses_toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn1,
+            this.losses_copyBtn1,
+            this.losses_DropBtn1,
+            this.losses_X_Box1,
+            this.losses_Y_Box1});
+            this.losses_toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip1.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip1.Name = "losses_toolStrip1";
+            this.losses_toolStrip1.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip1.TabIndex = 24;
+            // 
+            // losses_saveBtn1
+            // 
+            this.losses_saveBtn1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn1.Image")));
+            this.losses_saveBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn1.Name = "losses_saveBtn1";
+            this.losses_saveBtn1.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn1.Text = "Save";
+            // 
+            // losses_copyBtn1
+            // 
+            this.losses_copyBtn1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn1.Image")));
+            this.losses_copyBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn1.Name = "losses_copyBtn1";
+            this.losses_copyBtn1.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn1.Text = "Copy";
+            // 
+            // losses_DropBtn1
+            // 
+            this.losses_DropBtn1.AutoToolTip = false;
+            this.losses_DropBtn1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn1,
+            this.losses_extractBtn1});
+            this.losses_DropBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn1.Image")));
+            this.losses_DropBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn1.Name = "losses_DropBtn1";
+            this.losses_DropBtn1.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn1.Text = " ";
+            // 
+            // losses_styleBtn1
+            // 
+            this.losses_styleBtn1.Name = "losses_styleBtn1";
+            this.losses_styleBtn1.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn1.Text = "Style";
+            this.losses_styleBtn1.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn1
+            // 
+            this.losses_extractBtn1.Name = "losses_extractBtn1";
+            this.losses_extractBtn1.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn1.Text = "Extract Plot";
+            this.losses_extractBtn1.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box1
+            // 
+            this.losses_X_Box1.AutoSize = false;
+            this.losses_X_Box1.Name = "losses_X_Box1";
+            this.losses_X_Box1.ReadOnly = true;
+            this.losses_X_Box1.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box1.ToolTipText = "Width";
+            // 
+            // losses_Y_Box1
+            // 
+            this.losses_Y_Box1.AutoSize = false;
+            this.losses_Y_Box1.Name = "losses_Y_Box1";
+            this.losses_Y_Box1.ReadOnly = true;
+            this.losses_Y_Box1.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box1.ToolTipText = "Height";
+            // 
+            // losses_groupBox8
+            // 
+            this.losses_groupBox8.Controls.Add(this.losses_plot_panel8);
+            this.losses_groupBox8.Controls.Add(this.checkboxes_panel8);
+            this.losses_groupBox8.Controls.Add(this.losses_toolStrip8);
+            this.losses_groupBox8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox8.Location = new System.Drawing.Point(0, 837);
+            this.losses_groupBox8.Name = "losses_groupBox8";
+            this.losses_groupBox8.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox8.TabIndex = 35;
+            this.losses_groupBox8.TabStop = false;
+            // 
+            // losses_plot_panel8
+            // 
+            this.losses_plot_panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel8.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel8.Name = "losses_plot_panel8";
+            this.losses_plot_panel8.Size = new System.Drawing.Size(503, 260);
+            this.losses_plot_panel8.TabIndex = 21;
+            // 
+            // checkboxes_panel8
+            // 
+            this.checkboxes_panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel8.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel8.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel8.Location = new System.Drawing.Point(549, 16);
+            this.checkboxes_panel8.Name = "checkboxes_panel8";
+            this.checkboxes_panel8.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel8.TabIndex = 22;
+            // 
+            // losses_toolStrip8
+            // 
+            this.losses_toolStrip8.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip8.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip8.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip8.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn8,
+            this.losses_copyBtn8,
+            this.losses_DropBtn8,
+            this.losses_X_Box8,
+            this.losses_Y_Box8});
+            this.losses_toolStrip8.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip8.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip8.Name = "losses_toolStrip8";
+            this.losses_toolStrip8.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip8.TabIndex = 24;
+            // 
+            // losses_saveBtn8
+            // 
+            this.losses_saveBtn8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn8.Image")));
+            this.losses_saveBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn8.Name = "losses_saveBtn8";
+            this.losses_saveBtn8.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn8.Text = "Save";
+            // 
+            // losses_copyBtn8
+            // 
+            this.losses_copyBtn8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn8.Image")));
+            this.losses_copyBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn8.Name = "losses_copyBtn8";
+            this.losses_copyBtn8.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn8.Text = "Copy";
+            // 
+            // losses_DropBtn8
+            // 
+            this.losses_DropBtn8.AutoToolTip = false;
+            this.losses_DropBtn8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn8,
+            this.losses_extractBtn8});
+            this.losses_DropBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn8.Image")));
+            this.losses_DropBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn8.Name = "losses_DropBtn8";
+            this.losses_DropBtn8.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn8.Text = " ";
+            // 
+            // losses_styleBtn8
+            // 
+            this.losses_styleBtn8.Name = "losses_styleBtn8";
+            this.losses_styleBtn8.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn8.Text = "Style";
+            this.losses_styleBtn8.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn8
+            // 
+            this.losses_extractBtn8.Name = "losses_extractBtn8";
+            this.losses_extractBtn8.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn8.Text = "Extract Plot";
+            this.losses_extractBtn8.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box8
+            // 
+            this.losses_X_Box8.AutoSize = false;
+            this.losses_X_Box8.Name = "losses_X_Box8";
+            this.losses_X_Box8.ReadOnly = true;
+            this.losses_X_Box8.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box8.ToolTipText = "Width";
+            // 
+            // losses_Y_Box8
+            // 
+            this.losses_Y_Box8.AutoSize = false;
+            this.losses_Y_Box8.Name = "losses_Y_Box8";
+            this.losses_Y_Box8.ReadOnly = true;
+            this.losses_Y_Box8.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box8.ToolTipText = "Height";
+            // 
+            // losses_groupBox6
+            // 
+            this.losses_groupBox6.Controls.Add(this.losses_plot_panel6);
+            this.losses_groupBox6.Controls.Add(this.checkboxes_panel6);
+            this.losses_groupBox6.Controls.Add(this.losses_toolStrip6);
+            this.losses_groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox6.Location = new System.Drawing.Point(0, 558);
+            this.losses_groupBox6.Name = "losses_groupBox6";
+            this.losses_groupBox6.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox6.TabIndex = 34;
+            this.losses_groupBox6.TabStop = false;
+            // 
+            // losses_plot_panel6
+            // 
+            this.losses_plot_panel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel6.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel6.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel6.Name = "losses_plot_panel6";
+            this.losses_plot_panel6.Size = new System.Drawing.Size(503, 260);
+            this.losses_plot_panel6.TabIndex = 21;
+            // 
+            // checkboxes_panel6
+            // 
+            this.checkboxes_panel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel6.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel6.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel6.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel6.Location = new System.Drawing.Point(549, 16);
+            this.checkboxes_panel6.Name = "checkboxes_panel6";
+            this.checkboxes_panel6.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel6.TabIndex = 22;
+            // 
+            // losses_toolStrip6
+            // 
+            this.losses_toolStrip6.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip6.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip6.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn6,
+            this.losses_copyBtn6,
+            this.losses_DropBtn6,
+            this.losses_X_Box6,
+            this.losses_Y_Box6});
+            this.losses_toolStrip6.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip6.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip6.Name = "losses_toolStrip6";
+            this.losses_toolStrip6.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip6.TabIndex = 24;
+            // 
+            // losses_saveBtn6
+            // 
+            this.losses_saveBtn6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn6.Image")));
+            this.losses_saveBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn6.Name = "losses_saveBtn6";
+            this.losses_saveBtn6.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn6.Text = "Save";
+            // 
+            // losses_copyBtn6
+            // 
+            this.losses_copyBtn6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn6.Image")));
+            this.losses_copyBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn6.Name = "losses_copyBtn6";
+            this.losses_copyBtn6.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn6.Text = "Copy";
+            // 
+            // losses_DropBtn6
+            // 
+            this.losses_DropBtn6.AutoToolTip = false;
+            this.losses_DropBtn6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn6.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn6,
+            this.losses_extractBtn6});
+            this.losses_DropBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn6.Image")));
+            this.losses_DropBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn6.Name = "losses_DropBtn6";
+            this.losses_DropBtn6.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn6.Text = " ";
+            // 
+            // losses_styleBtn6
+            // 
+            this.losses_styleBtn6.Name = "losses_styleBtn6";
+            this.losses_styleBtn6.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn6.Text = "Style";
+            this.losses_styleBtn6.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn6
+            // 
+            this.losses_extractBtn6.Name = "losses_extractBtn6";
+            this.losses_extractBtn6.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn6.Text = "Extract Plot";
+            this.losses_extractBtn6.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box6
+            // 
+            this.losses_X_Box6.AutoSize = false;
+            this.losses_X_Box6.Name = "losses_X_Box6";
+            this.losses_X_Box6.ReadOnly = true;
+            this.losses_X_Box6.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box6.ToolTipText = "Width";
+            // 
+            // losses_Y_Box6
+            // 
+            this.losses_Y_Box6.AutoSize = false;
+            this.losses_Y_Box6.Name = "losses_Y_Box6";
+            this.losses_Y_Box6.ReadOnly = true;
+            this.losses_Y_Box6.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box6.ToolTipText = "Height";
+            // 
+            // losses_groupBox4
+            // 
+            this.losses_groupBox4.Controls.Add(this.losses_plot_panel4);
+            this.losses_groupBox4.Controls.Add(this.checkboxes_panel4);
+            this.losses_groupBox4.Controls.Add(this.losses_toolStrip4);
+            this.losses_groupBox4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox4.Location = new System.Drawing.Point(0, 279);
+            this.losses_groupBox4.Name = "losses_groupBox4";
+            this.losses_groupBox4.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox4.TabIndex = 33;
+            this.losses_groupBox4.TabStop = false;
+            // 
+            // losses_plot_panel4
+            // 
+            this.losses_plot_panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel4.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel4.Name = "losses_plot_panel4";
+            this.losses_plot_panel4.Size = new System.Drawing.Size(503, 260);
+            this.losses_plot_panel4.TabIndex = 21;
+            // 
+            // checkboxes_panel4
+            // 
+            this.checkboxes_panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel4.Location = new System.Drawing.Point(549, 16);
+            this.checkboxes_panel4.Name = "checkboxes_panel4";
+            this.checkboxes_panel4.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel4.TabIndex = 22;
+            // 
+            // losses_toolStrip4
+            // 
+            this.losses_toolStrip4.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip4.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn4,
+            this.losses_copyBtn4,
+            this.losses_DropBtn4,
+            this.losses_X_Box4,
+            this.losses_Y_Box4});
+            this.losses_toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip4.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip4.Name = "losses_toolStrip4";
+            this.losses_toolStrip4.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip4.TabIndex = 24;
+            // 
+            // losses_saveBtn4
+            // 
+            this.losses_saveBtn4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn4.Image")));
+            this.losses_saveBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn4.Name = "losses_saveBtn4";
+            this.losses_saveBtn4.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn4.Text = "Save";
+            // 
+            // losses_copyBtn4
+            // 
+            this.losses_copyBtn4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn4.Image")));
+            this.losses_copyBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn4.Name = "losses_copyBtn4";
+            this.losses_copyBtn4.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn4.Text = "Copy";
+            // 
+            // losses_DropBtn4
+            // 
+            this.losses_DropBtn4.AutoToolTip = false;
+            this.losses_DropBtn4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn4,
+            this.losses_extractBtn4});
+            this.losses_DropBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn4.Image")));
+            this.losses_DropBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn4.Name = "losses_DropBtn4";
+            this.losses_DropBtn4.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn4.Text = " ";
+            // 
+            // losses_styleBtn4
+            // 
+            this.losses_styleBtn4.Name = "losses_styleBtn4";
+            this.losses_styleBtn4.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn4.Text = "Style";
+            this.losses_styleBtn4.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn4
+            // 
+            this.losses_extractBtn4.Name = "losses_extractBtn4";
+            this.losses_extractBtn4.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn4.Text = "Extract Plot";
+            this.losses_extractBtn4.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box4
+            // 
+            this.losses_X_Box4.AutoSize = false;
+            this.losses_X_Box4.Name = "losses_X_Box4";
+            this.losses_X_Box4.ReadOnly = true;
+            this.losses_X_Box4.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box4.ToolTipText = "Width";
+            // 
+            // losses_Y_Box4
+            // 
+            this.losses_Y_Box4.AutoSize = false;
+            this.losses_Y_Box4.Name = "losses_Y_Box4";
+            this.losses_Y_Box4.ReadOnly = true;
+            this.losses_Y_Box4.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box4.ToolTipText = "Height";
+            // 
+            // losses_groupBox2
+            // 
+            this.losses_groupBox2.Controls.Add(this.losses_plot_panel2);
+            this.losses_groupBox2.Controls.Add(this.checkboxes_panel2);
+            this.losses_groupBox2.Controls.Add(this.losses_toolStrip2);
+            this.losses_groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox2.Location = new System.Drawing.Point(0, 0);
+            this.losses_groupBox2.Name = "losses_groupBox2";
+            this.losses_groupBox2.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox2.TabIndex = 32;
+            this.losses_groupBox2.TabStop = false;
+            // 
+            // losses_plot_panel2
+            // 
+            this.losses_plot_panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.losses_plot_panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.losses_plot_panel2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_plot_panel2.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel2.Name = "losses_plot_panel2";
+            this.losses_plot_panel2.Size = new System.Drawing.Size(503, 260);
+            this.losses_plot_panel2.TabIndex = 21;
+            // 
+            // checkboxes_panel2
+            // 
+            this.checkboxes_panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.checkboxes_panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkboxes_panel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.checkboxes_panel2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkboxes_panel2.Location = new System.Drawing.Point(549, 16);
+            this.checkboxes_panel2.Name = "checkboxes_panel2";
+            this.checkboxes_panel2.Size = new System.Drawing.Size(74, 260);
+            this.checkboxes_panel2.TabIndex = 22;
+            // 
+            // losses_toolStrip2
+            // 
+            this.losses_toolStrip2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.losses_toolStrip2.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.losses_toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_saveBtn2,
+            this.losses_copyBtn2,
+            this.losses_DropBtn2,
+            this.losses_X_Box2,
+            this.losses_Y_Box2});
+            this.losses_toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.losses_toolStrip2.Location = new System.Drawing.Point(3, 16);
+            this.losses_toolStrip2.Name = "losses_toolStrip2";
+            this.losses_toolStrip2.Size = new System.Drawing.Size(43, 260);
+            this.losses_toolStrip2.TabIndex = 24;
+            // 
+            // losses_saveBtn2
+            // 
+            this.losses_saveBtn2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_saveBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn2.Image")));
+            this.losses_saveBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_saveBtn2.Name = "losses_saveBtn2";
+            this.losses_saveBtn2.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn2.Text = "Save";
+            // 
+            // losses_copyBtn2
+            // 
+            this.losses_copyBtn2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_copyBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn2.Image")));
+            this.losses_copyBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_copyBtn2.Name = "losses_copyBtn2";
+            this.losses_copyBtn2.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn2.Text = "Copy";
+            // 
+            // losses_DropBtn2
+            // 
+            this.losses_DropBtn2.AutoToolTip = false;
+            this.losses_DropBtn2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_DropBtn2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_styleBtn2,
+            this.losses_extractBtn2});
+            this.losses_DropBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn2.Image")));
+            this.losses_DropBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_DropBtn2.Name = "losses_DropBtn2";
+            this.losses_DropBtn2.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn2.Text = " ";
+            // 
+            // losses_styleBtn2
+            // 
+            this.losses_styleBtn2.Name = "losses_styleBtn2";
+            this.losses_styleBtn2.Size = new System.Drawing.Size(133, 22);
+            this.losses_styleBtn2.Text = "Style";
+            this.losses_styleBtn2.ToolTipText = "Format the style of the plots in this tab";
+            // 
+            // losses_extractBtn2
+            // 
+            this.losses_extractBtn2.Name = "losses_extractBtn2";
+            this.losses_extractBtn2.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn2.Text = "Extract Plot";
+            this.losses_extractBtn2.ToolTipText = "Extract plot and edit its shape";
+            // 
+            // losses_X_Box2
+            // 
+            this.losses_X_Box2.AutoSize = false;
+            this.losses_X_Box2.Name = "losses_X_Box2";
+            this.losses_X_Box2.ReadOnly = true;
+            this.losses_X_Box2.Size = new System.Drawing.Size(40, 22);
+            this.losses_X_Box2.ToolTipText = "Width";
+            // 
+            // losses_Y_Box2
+            // 
+            this.losses_Y_Box2.AutoSize = false;
+            this.losses_Y_Box2.Name = "losses_Y_Box2";
+            this.losses_Y_Box2.ReadOnly = true;
+            this.losses_Y_Box2.Size = new System.Drawing.Size(40, 22);
+            this.losses_Y_Box2.ToolTipText = "Height";
+            // 
+            // panel3
+            // 
+            this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel3.Controls.Add(this.losses_label);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(1356, 34);
+            this.panel3.TabIndex = 32;
+            // 
+            // losses_label
+            // 
+            this.losses_label.AutoSize = true;
+            this.losses_label.Dock = System.Windows.Forms.DockStyle.Left;
+            this.losses_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.losses_label.ForeColor = System.Drawing.Color.Crimson;
+            this.losses_label.Location = new System.Drawing.Point(0, 0);
+            this.losses_label.Name = "losses_label";
+            this.losses_label.Size = new System.Drawing.Size(196, 20);
+            this.losses_label.TabIndex = 2;
+            this.losses_label.Text = "Radical Migration Mapping";
             // 
             // Form2
             // 
@@ -4411,7 +5448,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v25.1.1";
+            this.Text = "Peak Finder v25.1.2";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -4532,7 +5569,44 @@ namespace Isotope_fitting
             this.fiToolStrip.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tab_losses.ResumeLayout(false);
-            this.tab_losses.PerformLayout();
+            this.losses_splitContainer.Panel1.ResumeLayout(false);
+            this.losses_splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.losses_splitContainer)).EndInit();
+            this.losses_splitContainer.ResumeLayout(false);
+            this.losses_groupBox7.ResumeLayout(false);
+            this.losses_groupBox7.PerformLayout();
+            this.losses_toolStrip7.ResumeLayout(false);
+            this.losses_toolStrip7.PerformLayout();
+            this.losses_groupBox5.ResumeLayout(false);
+            this.losses_groupBox5.PerformLayout();
+            this.losses_toolStrip5.ResumeLayout(false);
+            this.losses_toolStrip5.PerformLayout();
+            this.losses_groupBox3.ResumeLayout(false);
+            this.losses_groupBox3.PerformLayout();
+            this.losses_toolStrip3.ResumeLayout(false);
+            this.losses_toolStrip3.PerformLayout();
+            this.losses_groupBox1.ResumeLayout(false);
+            this.losses_groupBox1.PerformLayout();
+            this.losses_toolStrip1.ResumeLayout(false);
+            this.losses_toolStrip1.PerformLayout();
+            this.losses_groupBox8.ResumeLayout(false);
+            this.losses_groupBox8.PerformLayout();
+            this.losses_toolStrip8.ResumeLayout(false);
+            this.losses_toolStrip8.PerformLayout();
+            this.losses_groupBox6.ResumeLayout(false);
+            this.losses_groupBox6.PerformLayout();
+            this.losses_toolStrip6.ResumeLayout(false);
+            this.losses_toolStrip6.PerformLayout();
+            this.losses_groupBox4.ResumeLayout(false);
+            this.losses_groupBox4.PerformLayout();
+            this.losses_toolStrip4.ResumeLayout(false);
+            this.losses_toolStrip4.PerformLayout();
+            this.losses_groupBox2.ResumeLayout(false);
+            this.losses_groupBox2.PerformLayout();
+            this.losses_toolStrip2.ResumeLayout(false);
+            this.losses_toolStrip2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -4872,6 +5946,96 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button fit_sel_Btn;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tab_losses;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox losses_groupBox1;
+        private System.Windows.Forms.Panel losses_plot_panel1;
+        private System.Windows.Forms.ToolStrip losses_toolStrip1;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn1;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn1;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn1;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn1;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn1;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box1;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box1;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label losses_label;
+        private System.Windows.Forms.SplitContainer losses_splitContainer;
+        private System.Windows.Forms.GroupBox losses_groupBox5;
+        private System.Windows.Forms.Panel losses_plot_panel5;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel5;
+        private System.Windows.Forms.ToolStrip losses_toolStrip5;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn5;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn5;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn5;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn5;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn5;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box5;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box5;
+        private System.Windows.Forms.GroupBox losses_groupBox3;
+        private System.Windows.Forms.Panel losses_plot_panel3;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel3;
+        private System.Windows.Forms.ToolStrip losses_toolStrip3;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn3;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn3;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn3;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn3;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn3;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box3;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box3;
+        private System.Windows.Forms.GroupBox losses_groupBox6;
+        private System.Windows.Forms.Panel losses_plot_panel6;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel6;
+        private System.Windows.Forms.ToolStrip losses_toolStrip6;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn6;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn6;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn6;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn6;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn6;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box6;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box6;
+        private System.Windows.Forms.GroupBox losses_groupBox4;
+        private System.Windows.Forms.Panel losses_plot_panel4;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel4;
+        private System.Windows.Forms.ToolStrip losses_toolStrip4;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn4;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn4;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn4;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn4;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn4;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box4;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box4;
+        private System.Windows.Forms.GroupBox losses_groupBox2;
+        private System.Windows.Forms.Panel losses_plot_panel2;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel2;
+        private System.Windows.Forms.ToolStrip losses_toolStrip2;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn2;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn2;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn2;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn2;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn2;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box2;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box2;
+        private System.Windows.Forms.GroupBox losses_groupBox7;
+        private System.Windows.Forms.Panel losses_plot_panel7;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel7;
+        private System.Windows.Forms.ToolStrip losses_toolStrip7;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn7;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn7;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn7;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn7;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn7;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box7;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box7;
+        private System.Windows.Forms.GroupBox losses_groupBox8;
+        private System.Windows.Forms.Panel losses_plot_panel8;
+        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel8;
+        private System.Windows.Forms.ToolStrip losses_toolStrip8;
+        private System.Windows.Forms.ToolStripButton losses_saveBtn8;
+        private System.Windows.Forms.ToolStripButton losses_copyBtn8;
+        private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn8;
+        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn8;
+        private System.Windows.Forms.ToolStripMenuItem losses_extractBtn8;
+        private System.Windows.Forms.ToolStripTextBox losses_X_Box8;
+        private System.Windows.Forms.ToolStripTextBox losses_Y_Box8;
     }
 }

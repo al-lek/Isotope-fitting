@@ -185,11 +185,11 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.clear_chemBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.clear_chem_multBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.clear_chemBtn_riken = new System.Windows.Forms.ToolStripButton();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
@@ -1876,7 +1876,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 485);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 489);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -1892,7 +1892,7 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(101, 484);
+            this.ppm9_numUD.Location = new System.Drawing.Point(101, 485);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -2103,7 +2103,7 @@
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(73, 24);
             this.plot_Btn.TabIndex = 54;
-            this.plot_Btn.Text = "Refresh";
+            this.plot_Btn.Text = "Plot";
             this.toolTip1.SetToolTip(this.plot_Btn, "Plot checked fragments");
             this.plot_Btn.UseVisualStyleBackColor = false;
             this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
@@ -2131,24 +2131,24 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton3});
+            this.clear_chemBtn});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip1.Location = new System.Drawing.Point(301, 187);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(91, 32);
             this.toolStrip1.TabIndex = 65;
             // 
-            // toolStripButton3
+            // clear_chemBtn
             // 
-            this.toolStripButton3.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripButton3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(90, 29);
-            this.toolStripButton3.Text = "Clear Data";
-            this.toolStripButton3.ToolTipText = "Clear Data";
-            this.toolStripButton3.Click += new System.EventHandler(this.clear_single_chem_Btn_Click);
+            this.clear_chemBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chemBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chemBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn.Image")));
+            this.clear_chemBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chemBtn.Name = "clear_chemBtn";
+            this.clear_chemBtn.Size = new System.Drawing.Size(90, 29);
+            this.clear_chemBtn.Text = "Clear Data";
+            this.clear_chemBtn.ToolTipText = "Clear Data";
+            this.clear_chemBtn.Click += new System.EventHandler(this.clear_single_chem_Btn_Click);
             // 
             // toolStrip2
             // 
@@ -2157,24 +2157,24 @@
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.clear_chem_multBtn});
             this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip2.Location = new System.Drawing.Point(301, 346);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(91, 32);
             this.toolStrip2.TabIndex = 66;
             // 
-            // toolStripButton1
+            // clear_chem_multBtn
             // 
-            this.toolStripButton1.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripButton1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(90, 29);
-            this.toolStripButton1.Text = "Clear Data";
-            this.toolStripButton1.ToolTipText = "Clear Data";
-            this.toolStripButton1.Click += new System.EventHandler(this.clear_multiple_chem_Btn_Click);
+            this.clear_chem_multBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chem_multBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chem_multBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chem_multBtn.Image")));
+            this.clear_chem_multBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chem_multBtn.Name = "clear_chem_multBtn";
+            this.clear_chem_multBtn.Size = new System.Drawing.Size(90, 29);
+            this.clear_chem_multBtn.Text = "Clear Data";
+            this.clear_chem_multBtn.ToolTipText = "Clear Data";
+            this.clear_chem_multBtn.Click += new System.EventHandler(this.clear_multiple_chem_Btn_Click);
             // 
             // toolStrip3
             // 
@@ -2183,24 +2183,24 @@
             this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip3.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton2});
+            this.clear_chemBtn_riken});
             this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip3.Location = new System.Drawing.Point(305, 116);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Size = new System.Drawing.Size(91, 32);
             this.toolStrip3.TabIndex = 66;
             // 
-            // toolStripButton2
+            // clear_chemBtn_riken
             // 
-            this.toolStripButton2.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripButton2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(90, 29);
-            this.toolStripButton2.Text = "Clear Data";
-            this.toolStripButton2.ToolTipText = "Clear Data";
-            this.toolStripButton2.Click += new System.EventHandler(this.clear_single_chem_Btn_riken_Click);
+            this.clear_chemBtn_riken.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chemBtn_riken.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chemBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn_riken.Image")));
+            this.clear_chemBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chemBtn_riken.Name = "clear_chemBtn_riken";
+            this.clear_chemBtn_riken.Size = new System.Drawing.Size(90, 29);
+            this.clear_chemBtn_riken.Text = "Clear Data";
+            this.clear_chemBtn_riken.ToolTipText = "Clear Data";
+            this.clear_chemBtn_riken.Click += new System.EventHandler(this.clear_single_chem_Btn_riken_Click);
             // 
             // Form9
             // 
@@ -2413,10 +2413,10 @@
         private System.Windows.Forms.TextBox chemForm_txtBox_riken;
         private System.Windows.Forms.Label chemForm_Lbl_riken;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton clear_chemBtn;
         private System.Windows.Forms.ToolStrip toolStrip2;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton clear_chem_multBtn;
         private System.Windows.Forms.ToolStrip toolStrip3;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton clear_chemBtn_riken;
     }
 }
