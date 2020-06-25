@@ -9129,6 +9129,7 @@ namespace Isotope_fitting
             foreach (SequenceTab seq in sequenceList)
             {
                 if (string.IsNullOrEmpty(seq.Sequence)) continue;
+                int seq_len= seq.Sequence.Length-1;
                 List<int> a_cov1 = new List<int>(); List<int> b_cov1 = new List<int>(); List<int> c_cov1 = new List<int>(); List<int> x_cov1 = new List<int>(); List<int> y_cov1 = new List<int>(); List<int> z_cov1 = new List<int>();
                 List<int> total_1 = new List<int>();
                 double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, t1 = 0;
@@ -9185,13 +9186,13 @@ namespace Isotope_fitting
                         }
                     }
                 }
-                a1 = 100 * (double)a_cov1.Count / seq.Sequence.Length;
-                b1 = 100 * (double)b_cov1.Count / seq.Sequence.Length;
-                c1 = 100 * (double)c_cov1.Count / seq.Sequence.Length;
-                x1 = 100 * (double)x_cov1.Count / seq.Sequence.Length;
-                y1 = 100 * (double)y_cov1.Count / seq.Sequence.Length;
-                z1 = 100 * (double)z_cov1.Count / seq.Sequence.Length;
-                t1 = 100 * (double)total_1.Count / seq.Sequence.Length;
+                a1 = 100 * (double)a_cov1.Count / seq_len;
+                b1 = 100 * (double)b_cov1.Count / seq_len;
+                c1 = 100 * (double)c_cov1.Count / seq_len;
+                x1 = 100 * (double)x_cov1.Count / seq_len;
+                y1 = 100 * (double)y_cov1.Count / seq_len;
+                z1 = 100 * (double)z_cov1.Count / seq_len;
+                t1 = 100 * (double)total_1.Count / seq_len;
 
                 sb.AppendLine("Extension: " + seq.Extension);
                 sb.AppendLine();
@@ -10242,7 +10243,7 @@ namespace Isotope_fitting
             else if (x < 0) { blue = (int)(-2 * (x) * 255); red = 0; green = 255; }
             else if (x < 0.5) { blue = 0; red = (int)(2 * (x) * 255); green = 255; }
             else { blue = 0; red = 255; green = (int)(-2 * (x - 1) * 255); }
-            return Color.FromArgb(150, (Byte)red, (Byte)green, (Byte)blue);
+            return Color.FromArgb(alpha, (Byte)red, (Byte)green, (Byte)blue);
         }
         //draw color range panels
         private void color_panel(Graphics g, Panel temp)
@@ -10808,16 +10809,7 @@ namespace Isotope_fitting
             #endregion
 
             #region toolstrip save-copy etc initiliazation
-            axSave_Btn.Click += (s, e) => { export_copy_plot(false, ax_plot); }; axCopy_Btn.Click += (s, e) => { export_copy_plot(true, ax_plot); };
-            bySave_Btn.Click += (s, e) => { export_copy_plot(false, by_plot); }; byCopy_Btn.Click += (s, e) => { export_copy_plot(true, by_plot); };
-            czSave_Btn.Click += (s, e) => { export_copy_plot(false, cz_plot); }; czCopy_Btn.Click += (s, e) => { export_copy_plot(true, cz_plot); };
-            dzSave_Btn.Click += (s, e) => { export_copy_plot(false, dz_plot); }; dzCopy_Btn.Click += (s, e) => { export_copy_plot(true, dz_plot); };
-
-            axChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, axCharge_plot); }; axChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, axCharge_plot); };
-            byChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, byCharge_plot); }; byChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, byCharge_plot); };
-            czChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, czCharge_plot); }; czChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, czCharge_plot); };
-            dzChargeSave_Btn.Click += (s, e) => { export_copy_plot(false, dzCharge_plot); }; dzChargeCopy_Btn.Click += (s, e) => { export_copy_plot(true, dzCharge_plot); };
-            
+           
             up1_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
             up2_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
             up3_Btn.CheckedChanged += (s, e) => { initialize_plot_tabs(); };
@@ -11703,42 +11695,7 @@ namespace Isotope_fitting
                 if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
             }
         }
-
-        private void ax_Pnl_Resize(object sender, EventArgs e)
-        {
-            ax_X_Box.Text = ax_Pnl.Size.Width.ToString();
-            ax_Y_Box.Text = ax_Pnl.Size.Height.ToString();
-        }
-
-        private void by_Pnl_Resize(object sender, EventArgs e)
-        {
-            by_X_Box.Text = by_Pnl.Size.Width.ToString();
-            by_Y_Box.Text = by_Pnl.Size.Height.ToString();
-        }
-
-        private void cz_Pnl_Resize(object sender, EventArgs e)
-        {
-            cz_X_Box.Text = cz_Pnl.Size.Width.ToString();
-            cz_Y_Box.Text = cz_Pnl.Size.Height.ToString();
-        }
-
-        private void axCharge_Pnl_Resize(object sender, EventArgs e)
-        {
-            axcharge_X_Box.Text = axCharge_Pnl.Size.Width.ToString();
-            axcharge_Y_Box.Text = axCharge_Pnl.Size.Height.ToString();
-        }
-
-        private void byCharge_Pnl_Resize(object sender, EventArgs e)
-        {
-            bycharge_X_Box.Text = byCharge_Pnl.Size.Width.ToString();
-            bycharge_Y_Box.Text = byCharge_Pnl.Size.Height.ToString();
-        }
-
-        private void czCharge_Pnl_Resize(object sender, EventArgs e)
-        {
-            czcharge_X_Box.Text = czCharge_Pnl.Size.Width.ToString();
-            czcharge_Y_Box.Text = czCharge_Pnl.Size.Height.ToString();
-        }
+      
 
         #endregion
 
@@ -11862,7 +11819,12 @@ namespace Isotope_fitting
         #endregion
 
         #region LOSSES
-       
+        private void find_plot_ingrp_export(Control grp,bool copy)
+        {
+            Panel pnl = GetControls(grp).OfType<Panel>().FirstOrDefault();
+            PlotView plot = GetControls(pnl).OfType<PlotView>().FirstOrDefault();
+            export_copy_plot(copy, plot );
+        }
         private void create_plotview(GroupBox grp,string type)
         {
             Panel pnl = GetControls(grp).OfType<Panel>().ToList().First();            
@@ -11895,7 +11857,6 @@ namespace Isotope_fitting
             plot.Model.Title = type + " fragments";
             List<ion> temp_iondraw = IonDraw.ToList();
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
-
             int iondraw_count = temp_iondraw.Count; 
             string s_ext = "";
             string s_chain = Peptide;            
@@ -11920,7 +11881,15 @@ namespace Isotope_fitting
             CI ion_comp = new CI();
             temp_iondraw.Sort(ion_comp);
             List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
-            bool is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
+            bool is_losses = false;
+            try
+            {
+                 is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
+            }
+            catch
+            {
+                is_losses = false;
+            }
             if (list.Count > 0)
             {
                 foreach (CheckBox vv in list) {if(vv.Checked) check_names.Add(vv.Text); }
@@ -11938,6 +11907,8 @@ namespace Isotope_fitting
                 List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                 List<ion> merged_names = new List<ion>();
                 List<ScatterSeries> series_list = create_scatterseries(clr, type, "losses", 1);
+                LineSeries line_ = new LineSeries { StrokeThickness=1,Color= clr.ToOxyColor() ,CanTrackerInterpolatePoints=false};
+                List<double[]> points_line_ = new List<double[]>();
                 for (int i = 0; i < iondraw_count; i++)
                 {
                     ion nn = temp_iondraw[i];
@@ -11948,27 +11919,45 @@ namespace Isotope_fitting
                     {
                         if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw)))
                         {                          
-                            if (merged_names.Count == 0 || (merged_names.Last().SortIdx != nn.SortIdx)&& merged_names.Last().Charge != nn.Charge)
-                            {                               
-                                merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                            if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx&& merged_names.Last().Charge == nn.Charge)
+                            {      
+                                merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
                             }
                             else
                             {
-                                 merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name; 
+                                merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
                             }
                         }
                     }
-
-                }
+                   
+                }               
                 int list_index = 0;
                 foreach (ion nn in merged_names)
-                {
+                {                    
                     double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, temp_iondraw, true);
                     double value = 0.0;
                     list_index = return_list_index(nn.Max_intensity);
-                    if (nn.Max_intensity> primary_int) { value = (nn.Max_intensity- primary_int) / nn.Max_intensity; }
+                    if (nn.Max_intensity == 0 && primary_int == 0) { value = 0.0; }                   
+                    else if (nn.Max_intensity> primary_int) { value = (nn.Max_intensity- primary_int) / nn.Max_intensity; }
                     else { value =(primary_int-nn.Max_intensity) / primary_int; }
                     datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
+                    if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
+                    {
+                        points_line_.Add(new double[] { nn.SortIdx, nn.Max_intensity, primary_int });
+                    }
+                    else if (points_line_.Last()[1] < nn.Max_intensity) { points_line_.Last()[1] = nn.Max_intensity; }
+                }
+                if (points_line_.Count > 0)
+                {
+                    foreach (double[] dd in points_line_)
+                    {
+                        double value = 0.0;
+                        if (dd[1] == 0 && dd[2] == 0) { value = 0.0; }
+                        else if (dd[1] > dd[2]) { value = (dd[1] - dd[2]) / dd[1]; }
+                        else { value = (dd[2] - dd[1]) / dd[2]; }
+                        line_.Points.Add(new DataPoint(dd[0], value));
+                    }
+                    plot.Model.Series.Add(line_);
                 }
                 for (int i = 9; i >= 0; i--)
                 {
@@ -12030,6 +12019,10 @@ namespace Isotope_fitting
             check_names = check_names.OrderBy(p => p.Text).ToList() ;
             foreach (CheckBox ckbx in check_names){ flowpnl.Controls.Add(ckbx);}
             CheckBox ckbx_losses = new CheckBox() { Text = "Losses", Checked = is_losses };
+            ckbx_losses.CheckedChanged += (s, e) =>
+            {
+                ckbx_losses.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
+            };
             flowpnl.Controls.Add(ckbx_losses);
             temp_iondraw.Clear();
         }
@@ -13349,6 +13342,23 @@ namespace Isotope_fitting
         }
 
         #endregion
-               
+
+       
+        private void losses_save_copyBtn_Click(object sender, EventArgs e)
+        {
+            bool copy = false;
+            ToolStripButton tsp = (sender as ToolStripButton);
+            if (tsp.Text.Contains("Copy")) copy = true;
+            find_plot_ingrp_export(tsp.GetCurrentParent().Parent ,copy);
+        }
+        private void plot_Pnl_Resize(object sender, EventArgs e)
+        {
+            Panel pnl = sender as Panel;
+            ToolStrip tsp = GetControls(pnl.Parent).OfType<ToolStrip>().FirstOrDefault();
+            ToolStripTextBox X_Box = tsp.Items.OfType<ToolStripTextBox>().Where(l=>l.Name.Contains("X_Box")).FirstOrDefault();
+            ToolStripTextBox Y_Box = tsp.Items.OfType<ToolStripTextBox>().Where(l => l.Name.Contains("Y_Box")).FirstOrDefault();
+            X_Box.Text = pnl.Size.Width.ToString();
+            Y_Box.Text = pnl.Size.Height.ToString();
+        }
     }
 }

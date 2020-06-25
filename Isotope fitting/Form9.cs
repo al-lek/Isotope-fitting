@@ -1715,7 +1715,7 @@ namespace Isotope_fitting
         {
             // all the decisions if a fragment is candidate for fitting
             bool fragment_is_canditate = true;
-            double max_error = 0.0;
+            double max_error = ppmError9;
             // deceide how many peaks will be involved in the selection process
             // results = {[resol1, ppm1], [resol2, ppm2], ....}
             List<double[]> results = new List<double[]>();
@@ -1741,7 +1741,7 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(cen[i].X);
                 results.Add(tmp);
-                if (Math.Abs(tmp[0])> ppmError9) 
+                if (Math.Abs(tmp[0])> max_error) 
                 {
                     //fragment_is_canditate = false;
                     try
@@ -1770,7 +1770,7 @@ namespace Isotope_fitting
                 {
                     double[] tmp = ppm_calculator(cen[i].X);
                     results.Add(tmp);
-                    if (Math.Abs(tmp[0]) > ppmError9) { fragment_is_canditate = false; }
+                    if (Math.Abs(tmp[0]) > max_error) { fragment_is_canditate = false; }
                 }
             }                
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!

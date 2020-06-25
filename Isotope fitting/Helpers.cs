@@ -20,6 +20,7 @@ namespace Isotope_fitting
         {
             return new[] { c }.Concat(c.Controls.OfType<Control>().SelectMany(x => GetControls(x)));
         }
+       
         /// <summary>
         /// Turn a string into a double
         /// </summary>

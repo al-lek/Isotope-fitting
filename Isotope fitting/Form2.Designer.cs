@@ -321,6 +321,7 @@ namespace Isotope_fitting
             this.splitContainer2 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -457,7 +458,6 @@ namespace Isotope_fitting
             this.losses_Y_Box2 = new System.Windows.Forms.ToolStripTextBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.losses_label = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -519,6 +519,7 @@ namespace Isotope_fitting
             this.toolStrip_fit_sort.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStrip_fragList.SuspendLayout();
             this.fragTypes_toolStrip.SuspendLayout();
             this.theorData_grpBx.SuspendLayout();
@@ -549,7 +550,6 @@ namespace Isotope_fitting
             this.losses_groupBox2.SuspendLayout();
             this.losses_toolStrip2.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -977,6 +977,7 @@ namespace Isotope_fitting
             this.dzCharge_Pnl.Name = "dzCharge_Pnl";
             this.dzCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.dzCharge_Pnl.TabIndex = 29;
+            this.dzCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip4
             // 
@@ -1005,6 +1006,7 @@ namespace Isotope_fitting
             this.dzChargeSave_Btn.Name = "dzChargeSave_Btn";
             this.dzChargeSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.dzChargeSave_Btn.Text = "Save";
+            this.dzChargeSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // dzChargeCopy_Btn
             // 
@@ -1014,6 +1016,7 @@ namespace Isotope_fitting
             this.dzChargeCopy_Btn.Name = "dzChargeCopy_Btn";
             this.dzChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.dzChargeCopy_Btn.Text = "Copy";
+            this.dzChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // toolStripDropDownButton2
             // 
@@ -1095,7 +1098,7 @@ namespace Isotope_fitting
             this.czCharge_Pnl.Name = "czCharge_Pnl";
             this.czCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.czCharge_Pnl.TabIndex = 29;
-            this.czCharge_Pnl.Resize += new System.EventHandler(this.czCharge_Pnl_Resize);
+            this.czCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip3
             // 
@@ -1124,6 +1127,7 @@ namespace Isotope_fitting
             this.czChargeSave_Btn.Name = "czChargeSave_Btn";
             this.czChargeSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.czChargeSave_Btn.Text = "Save";
+            this.czChargeSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // czChargeCopy_Btn
             // 
@@ -1133,6 +1137,7 @@ namespace Isotope_fitting
             this.czChargeCopy_Btn.Name = "czChargeCopy_Btn";
             this.czChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.czChargeCopy_Btn.Text = "Copy";
+            this.czChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // toolStripButton9
             // 
@@ -1214,7 +1219,7 @@ namespace Isotope_fitting
             this.byCharge_Pnl.Name = "byCharge_Pnl";
             this.byCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.byCharge_Pnl.TabIndex = 28;
-            this.byCharge_Pnl.Resize += new System.EventHandler(this.byCharge_Pnl_Resize);
+            this.byCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip2
             // 
@@ -1243,6 +1248,7 @@ namespace Isotope_fitting
             this.byChargeSave_Btn.Name = "byChargeSave_Btn";
             this.byChargeSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.byChargeSave_Btn.Text = "Save";
+            this.byChargeSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // byChargeCopy_Btn
             // 
@@ -1252,6 +1258,7 @@ namespace Isotope_fitting
             this.byChargeCopy_Btn.Name = "byChargeCopy_Btn";
             this.byChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.byChargeCopy_Btn.Text = "Copy";
+            this.byChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // toolStripButton7
             // 
@@ -1333,7 +1340,7 @@ namespace Isotope_fitting
             this.axCharge_Pnl.Name = "axCharge_Pnl";
             this.axCharge_Pnl.Size = new System.Drawing.Size(542, 237);
             this.axCharge_Pnl.TabIndex = 27;
-            this.axCharge_Pnl.Resize += new System.EventHandler(this.axCharge_Pnl_Resize);
+            this.axCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip1
             // 
@@ -1362,6 +1369,7 @@ namespace Isotope_fitting
             this.axChargeSave_Btn.Name = "axChargeSave_Btn";
             this.axChargeSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.axChargeSave_Btn.Text = "Save";
+            this.axChargeSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // axChargeCopy_Btn
             // 
@@ -1371,6 +1379,7 @@ namespace Isotope_fitting
             this.axChargeCopy_Btn.Name = "axChargeCopy_Btn";
             this.axChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.axChargeCopy_Btn.Text = "Copy";
+            this.axChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // form_primCharge_Btn
             // 
@@ -1488,6 +1497,7 @@ namespace Isotope_fitting
             this.dz_Pnl.Name = "dz_Pnl";
             this.dz_Pnl.Size = new System.Drawing.Size(677, 237);
             this.dz_Pnl.TabIndex = 23;
+            this.dz_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip4
             // 
@@ -1514,6 +1524,7 @@ namespace Isotope_fitting
             this.dzSave_Btn.Name = "dzSave_Btn";
             this.dzSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.dzSave_Btn.Text = "Save";
+            this.dzSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // dzCopy_Btn
             // 
@@ -1523,6 +1534,7 @@ namespace Isotope_fitting
             this.dzCopy_Btn.Name = "dzCopy_Btn";
             this.dzCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.dzCopy_Btn.Text = "Copy";
+            this.dzCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // toolStripDropDownButton3
             // 
@@ -1578,7 +1590,7 @@ namespace Isotope_fitting
             this.cz_Pnl.Name = "cz_Pnl";
             this.cz_Pnl.Size = new System.Drawing.Size(677, 237);
             this.cz_Pnl.TabIndex = 23;
-            this.cz_Pnl.Resize += new System.EventHandler(this.cz_Pnl_Resize);
+            this.cz_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip3
             // 
@@ -1605,6 +1617,7 @@ namespace Isotope_fitting
             this.czSave_Btn.Name = "czSave_Btn";
             this.czSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.czSave_Btn.Text = "Save";
+            this.czSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // czCopy_Btn
             // 
@@ -1614,6 +1627,7 @@ namespace Isotope_fitting
             this.czCopy_Btn.Name = "czCopy_Btn";
             this.czCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.czCopy_Btn.Text = "Copy";
+            this.czCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // toolStripButton6
             // 
@@ -1669,7 +1683,7 @@ namespace Isotope_fitting
             this.by_Pnl.Name = "by_Pnl";
             this.by_Pnl.Size = new System.Drawing.Size(677, 237);
             this.by_Pnl.TabIndex = 22;
-            this.by_Pnl.Resize += new System.EventHandler(this.by_Pnl_Resize);
+            this.by_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip2
             // 
@@ -1696,6 +1710,7 @@ namespace Isotope_fitting
             this.byCopy_Btn.Name = "byCopy_Btn";
             this.byCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.byCopy_Btn.Text = "Copy";
+            this.byCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // bySave_Btn
             // 
@@ -1705,6 +1720,7 @@ namespace Isotope_fitting
             this.bySave_Btn.Name = "bySave_Btn";
             this.bySave_Btn.Size = new System.Drawing.Size(40, 22);
             this.bySave_Btn.Text = "Save";
+            this.bySave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // toolStripButton5
             // 
@@ -1760,7 +1776,7 @@ namespace Isotope_fitting
             this.ax_Pnl.Name = "ax_Pnl";
             this.ax_Pnl.Size = new System.Drawing.Size(677, 237);
             this.ax_Pnl.TabIndex = 21;
-            this.ax_Pnl.Resize += new System.EventHandler(this.ax_Pnl_Resize);
+            this.ax_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip1
             // 
@@ -1787,6 +1803,7 @@ namespace Isotope_fitting
             this.axSave_Btn.Name = "axSave_Btn";
             this.axSave_Btn.Size = new System.Drawing.Size(40, 22);
             this.axSave_Btn.Text = "Save";
+            this.axSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // axCopy_Btn
             // 
@@ -1796,6 +1813,7 @@ namespace Isotope_fitting
             this.axCopy_Btn.Name = "axCopy_Btn";
             this.axCopy_Btn.Size = new System.Drawing.Size(40, 22);
             this.axCopy_Btn.Text = "Copy";
+            this.axCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // form_prim_Btn
             // 
@@ -3921,6 +3939,20 @@ namespace Isotope_fitting
             this.panel1.Size = new System.Drawing.Size(382, 106);
             this.panel1.TabIndex = 115;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Padding = new System.Windows.Forms.Padding(60, 0, 60, 0);
+            this.pictureBox1.Size = new System.Drawing.Size(382, 45);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 120;
+            this.pictureBox1.TabStop = false;
+            // 
             // toolStrip_fragList
             // 
             this.toolStrip_fragList.BackColor = System.Drawing.Color.Transparent;
@@ -4551,6 +4583,7 @@ namespace Isotope_fitting
             this.losses_plot_panel7.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel7.TabIndex = 21;
             this.losses_plot_panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel7_Paint);
+            this.losses_plot_panel7.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel7
             // 
@@ -4588,6 +4621,7 @@ namespace Isotope_fitting
             this.losses_saveBtn7.Name = "losses_saveBtn7";
             this.losses_saveBtn7.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn7.Text = "Save";
+            this.losses_saveBtn7.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn7
             // 
@@ -4597,6 +4631,7 @@ namespace Isotope_fitting
             this.losses_copyBtn7.Name = "losses_copyBtn7";
             this.losses_copyBtn7.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn7.Text = "Copy";
+            this.losses_copyBtn7.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn7
             // 
@@ -4663,6 +4698,7 @@ namespace Isotope_fitting
             this.losses_plot_panel5.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel5.TabIndex = 21;
             this.losses_plot_panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel5_Paint);
+            this.losses_plot_panel5.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel5
             // 
@@ -4700,6 +4736,7 @@ namespace Isotope_fitting
             this.losses_saveBtn5.Name = "losses_saveBtn5";
             this.losses_saveBtn5.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn5.Text = "Save";
+            this.losses_saveBtn5.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn5
             // 
@@ -4709,6 +4746,7 @@ namespace Isotope_fitting
             this.losses_copyBtn5.Name = "losses_copyBtn5";
             this.losses_copyBtn5.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn5.Text = "Copy";
+            this.losses_copyBtn5.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn5
             // 
@@ -4775,6 +4813,7 @@ namespace Isotope_fitting
             this.losses_plot_panel3.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel3.TabIndex = 21;
             this.losses_plot_panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel3_Paint);
+            this.losses_plot_panel3.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel3
             // 
@@ -4812,6 +4851,7 @@ namespace Isotope_fitting
             this.losses_saveBtn3.Name = "losses_saveBtn3";
             this.losses_saveBtn3.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn3.Text = "Save";
+            this.losses_saveBtn3.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn3
             // 
@@ -4821,6 +4861,7 @@ namespace Isotope_fitting
             this.losses_copyBtn3.Name = "losses_copyBtn3";
             this.losses_copyBtn3.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn3.Text = "Copy";
+            this.losses_copyBtn3.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn3
             // 
@@ -4887,6 +4928,7 @@ namespace Isotope_fitting
             this.losses_plot_panel1.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel1.TabIndex = 21;
             this.losses_plot_panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel1_Paint);
+            this.losses_plot_panel1.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel1
             // 
@@ -4924,6 +4966,7 @@ namespace Isotope_fitting
             this.losses_saveBtn1.Name = "losses_saveBtn1";
             this.losses_saveBtn1.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn1.Text = "Save";
+            this.losses_saveBtn1.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn1
             // 
@@ -4933,6 +4976,7 @@ namespace Isotope_fitting
             this.losses_copyBtn1.Name = "losses_copyBtn1";
             this.losses_copyBtn1.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn1.Text = "Copy";
+            this.losses_copyBtn1.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn1
             // 
@@ -4999,6 +5043,7 @@ namespace Isotope_fitting
             this.losses_plot_panel8.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel8.TabIndex = 21;
             this.losses_plot_panel8.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel8_Paint);
+            this.losses_plot_panel8.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel8
             // 
@@ -5036,6 +5081,7 @@ namespace Isotope_fitting
             this.losses_saveBtn8.Name = "losses_saveBtn8";
             this.losses_saveBtn8.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn8.Text = "Save";
+            this.losses_saveBtn8.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn8
             // 
@@ -5045,6 +5091,7 @@ namespace Isotope_fitting
             this.losses_copyBtn8.Name = "losses_copyBtn8";
             this.losses_copyBtn8.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn8.Text = "Copy";
+            this.losses_copyBtn8.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn8
             // 
@@ -5111,6 +5158,7 @@ namespace Isotope_fitting
             this.losses_plot_panel6.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel6.TabIndex = 21;
             this.losses_plot_panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel6_Paint);
+            this.losses_plot_panel6.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel6
             // 
@@ -5148,6 +5196,7 @@ namespace Isotope_fitting
             this.losses_saveBtn6.Name = "losses_saveBtn6";
             this.losses_saveBtn6.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn6.Text = "Save";
+            this.losses_saveBtn6.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn6
             // 
@@ -5157,6 +5206,7 @@ namespace Isotope_fitting
             this.losses_copyBtn6.Name = "losses_copyBtn6";
             this.losses_copyBtn6.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn6.Text = "Copy";
+            this.losses_copyBtn6.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn6
             // 
@@ -5223,6 +5273,7 @@ namespace Isotope_fitting
             this.losses_plot_panel4.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel4.TabIndex = 21;
             this.losses_plot_panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel4_Paint);
+            this.losses_plot_panel4.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel4
             // 
@@ -5260,6 +5311,7 @@ namespace Isotope_fitting
             this.losses_saveBtn4.Name = "losses_saveBtn4";
             this.losses_saveBtn4.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn4.Text = "Save";
+            this.losses_saveBtn4.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn4
             // 
@@ -5269,6 +5321,7 @@ namespace Isotope_fitting
             this.losses_copyBtn4.Name = "losses_copyBtn4";
             this.losses_copyBtn4.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn4.Text = "Copy";
+            this.losses_copyBtn4.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn4
             // 
@@ -5335,6 +5388,7 @@ namespace Isotope_fitting
             this.losses_plot_panel2.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel2.TabIndex = 21;
             this.losses_plot_panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel2_Paint);
+            this.losses_plot_panel2.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel2
             // 
@@ -5372,6 +5426,7 @@ namespace Isotope_fitting
             this.losses_saveBtn2.Name = "losses_saveBtn2";
             this.losses_saveBtn2.Size = new System.Drawing.Size(40, 22);
             this.losses_saveBtn2.Text = "Save";
+            this.losses_saveBtn2.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_copyBtn2
             // 
@@ -5381,6 +5436,7 @@ namespace Isotope_fitting
             this.losses_copyBtn2.Name = "losses_copyBtn2";
             this.losses_copyBtn2.Size = new System.Drawing.Size(40, 22);
             this.losses_copyBtn2.Text = "Copy";
+            this.losses_copyBtn2.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
             // losses_DropBtn2
             // 
@@ -5447,20 +5503,6 @@ namespace Isotope_fitting
             this.losses_label.Size = new System.Drawing.Size(196, 20);
             this.losses_label.TabIndex = 2;
             this.losses_label.Text = "Radical Migration Mapping";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Padding = new System.Windows.Forms.Padding(60, 0, 60, 0);
-            this.pictureBox1.Size = new System.Drawing.Size(382, 45);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 120;
-            this.pictureBox1.TabStop = false;
             // 
             // Form2
             // 
@@ -5578,6 +5620,7 @@ namespace Isotope_fitting
             this.splitContainer2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.fragTypes_toolStrip.ResumeLayout(false);
@@ -5632,7 +5675,6 @@ namespace Isotope_fitting
             this.losses_toolStrip2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
