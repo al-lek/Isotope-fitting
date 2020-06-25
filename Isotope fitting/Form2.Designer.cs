@@ -368,7 +368,7 @@ namespace Isotope_fitting
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_losses = new System.Windows.Forms.TabPage();
             this.losses_splitContainer = new System.Windows.Forms.SplitContainer();
-            this.losses_groupBox7 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_d = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel7 = new System.Windows.Forms.Panel();
             this.checkboxes_panel7 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip7 = new System.Windows.Forms.ToolStrip();
@@ -379,7 +379,7 @@ namespace Isotope_fitting
             this.losses_extractBtn7 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box7 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box7 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox5 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_c = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel5 = new System.Windows.Forms.Panel();
             this.checkboxes_panel5 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip5 = new System.Windows.Forms.ToolStrip();
@@ -390,7 +390,7 @@ namespace Isotope_fitting
             this.losses_extractBtn5 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box5 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box5 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox3 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_b = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel3 = new System.Windows.Forms.Panel();
             this.checkboxes_panel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip3 = new System.Windows.Forms.ToolStrip();
@@ -401,7 +401,7 @@ namespace Isotope_fitting
             this.losses_extractBtn3 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box3 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box3 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox1 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_a = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel1 = new System.Windows.Forms.Panel();
             this.checkboxes_panel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -412,7 +412,7 @@ namespace Isotope_fitting
             this.losses_extractBtn1 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box1 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box1 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox8 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_z = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel8 = new System.Windows.Forms.Panel();
             this.checkboxes_panel8 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip8 = new System.Windows.Forms.ToolStrip();
@@ -423,7 +423,7 @@ namespace Isotope_fitting
             this.losses_extractBtn8 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box8 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box8 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox6 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_y = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel6 = new System.Windows.Forms.Panel();
             this.checkboxes_panel6 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip6 = new System.Windows.Forms.ToolStrip();
@@ -434,7 +434,7 @@ namespace Isotope_fitting
             this.losses_extractBtn6 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box6 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box6 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox4 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_x = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel4 = new System.Windows.Forms.Panel();
             this.checkboxes_panel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip4 = new System.Windows.Forms.ToolStrip();
@@ -445,7 +445,7 @@ namespace Isotope_fitting
             this.losses_extractBtn4 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box4 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box4 = new System.Windows.Forms.ToolStripTextBox();
-            this.losses_groupBox2 = new System.Windows.Forms.GroupBox();
+            this.losses_groupBox_w = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel2 = new System.Windows.Forms.Panel();
             this.checkboxes_panel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.losses_toolStrip2 = new System.Windows.Forms.ToolStrip();
@@ -533,21 +533,21 @@ namespace Isotope_fitting
             this.losses_splitContainer.Panel1.SuspendLayout();
             this.losses_splitContainer.Panel2.SuspendLayout();
             this.losses_splitContainer.SuspendLayout();
-            this.losses_groupBox7.SuspendLayout();
+            this.losses_groupBox_d.SuspendLayout();
             this.losses_toolStrip7.SuspendLayout();
-            this.losses_groupBox5.SuspendLayout();
+            this.losses_groupBox_c.SuspendLayout();
             this.losses_toolStrip5.SuspendLayout();
-            this.losses_groupBox3.SuspendLayout();
+            this.losses_groupBox_b.SuspendLayout();
             this.losses_toolStrip3.SuspendLayout();
-            this.losses_groupBox1.SuspendLayout();
+            this.losses_groupBox_a.SuspendLayout();
             this.losses_toolStrip1.SuspendLayout();
-            this.losses_groupBox8.SuspendLayout();
+            this.losses_groupBox_z.SuspendLayout();
             this.losses_toolStrip8.SuspendLayout();
-            this.losses_groupBox6.SuspendLayout();
+            this.losses_groupBox_y.SuspendLayout();
             this.losses_toolStrip6.SuspendLayout();
-            this.losses_groupBox4.SuspendLayout();
+            this.losses_groupBox_x.SuspendLayout();
             this.losses_toolStrip4.SuspendLayout();
-            this.losses_groupBox2.SuspendLayout();
+            this.losses_groupBox_w.SuspendLayout();
             this.losses_toolStrip2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -4545,33 +4545,33 @@ namespace Isotope_fitting
             // losses_splitContainer.Panel1
             // 
             this.losses_splitContainer.Panel1.AutoScroll = true;
-            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox7);
-            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox5);
-            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox3);
-            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox1);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox_d);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox_c);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox_b);
+            this.losses_splitContainer.Panel1.Controls.Add(this.losses_groupBox_a);
             // 
             // losses_splitContainer.Panel2
             // 
             this.losses_splitContainer.Panel2.AutoScroll = true;
-            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox8);
-            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox6);
-            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox4);
-            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox2);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_z);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_y);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_x);
+            this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_w);
             this.losses_splitContainer.Size = new System.Drawing.Size(1356, 683);
             this.losses_splitContainer.SplitterDistance = 709;
             this.losses_splitContainer.TabIndex = 33;
             // 
-            // losses_groupBox7
+            // losses_groupBox_d
             // 
-            this.losses_groupBox7.Controls.Add(this.losses_plot_panel7);
-            this.losses_groupBox7.Controls.Add(this.checkboxes_panel7);
-            this.losses_groupBox7.Controls.Add(this.losses_toolStrip7);
-            this.losses_groupBox7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox7.Location = new System.Drawing.Point(0, 837);
-            this.losses_groupBox7.Name = "losses_groupBox7";
-            this.losses_groupBox7.Size = new System.Drawing.Size(692, 279);
-            this.losses_groupBox7.TabIndex = 34;
-            this.losses_groupBox7.TabStop = false;
+            this.losses_groupBox_d.Controls.Add(this.losses_plot_panel7);
+            this.losses_groupBox_d.Controls.Add(this.checkboxes_panel7);
+            this.losses_groupBox_d.Controls.Add(this.losses_toolStrip7);
+            this.losses_groupBox_d.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_d.Location = new System.Drawing.Point(0, 837);
+            this.losses_groupBox_d.Name = "losses_groupBox_d";
+            this.losses_groupBox_d.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox_d.TabIndex = 34;
+            this.losses_groupBox_d.TabStop = false;
             // 
             // losses_plot_panel7
             // 
@@ -4582,7 +4582,7 @@ namespace Isotope_fitting
             this.losses_plot_panel7.Name = "losses_plot_panel7";
             this.losses_plot_panel7.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel7.TabIndex = 21;
-            this.losses_plot_panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel7_Paint);
+            this.losses_plot_panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel7.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel7
@@ -4659,6 +4659,7 @@ namespace Isotope_fitting
             this.losses_extractBtn7.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn7.Text = "Extract Plot";
             this.losses_extractBtn7.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn7.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box7
             // 
@@ -4676,17 +4677,17 @@ namespace Isotope_fitting
             this.losses_Y_Box7.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box7.ToolTipText = "Height";
             // 
-            // losses_groupBox5
+            // losses_groupBox_c
             // 
-            this.losses_groupBox5.Controls.Add(this.losses_plot_panel5);
-            this.losses_groupBox5.Controls.Add(this.checkboxes_panel5);
-            this.losses_groupBox5.Controls.Add(this.losses_toolStrip5);
-            this.losses_groupBox5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox5.Location = new System.Drawing.Point(0, 558);
-            this.losses_groupBox5.Name = "losses_groupBox5";
-            this.losses_groupBox5.Size = new System.Drawing.Size(692, 279);
-            this.losses_groupBox5.TabIndex = 33;
-            this.losses_groupBox5.TabStop = false;
+            this.losses_groupBox_c.Controls.Add(this.losses_plot_panel5);
+            this.losses_groupBox_c.Controls.Add(this.checkboxes_panel5);
+            this.losses_groupBox_c.Controls.Add(this.losses_toolStrip5);
+            this.losses_groupBox_c.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_c.Location = new System.Drawing.Point(0, 558);
+            this.losses_groupBox_c.Name = "losses_groupBox_c";
+            this.losses_groupBox_c.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox_c.TabIndex = 33;
+            this.losses_groupBox_c.TabStop = false;
             // 
             // losses_plot_panel5
             // 
@@ -4697,7 +4698,7 @@ namespace Isotope_fitting
             this.losses_plot_panel5.Name = "losses_plot_panel5";
             this.losses_plot_panel5.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel5.TabIndex = 21;
-            this.losses_plot_panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel5_Paint);
+            this.losses_plot_panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel5.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel5
@@ -4774,6 +4775,7 @@ namespace Isotope_fitting
             this.losses_extractBtn5.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn5.Text = "Extract Plot";
             this.losses_extractBtn5.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn5.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box5
             // 
@@ -4791,17 +4793,17 @@ namespace Isotope_fitting
             this.losses_Y_Box5.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box5.ToolTipText = "Height";
             // 
-            // losses_groupBox3
+            // losses_groupBox_b
             // 
-            this.losses_groupBox3.Controls.Add(this.losses_plot_panel3);
-            this.losses_groupBox3.Controls.Add(this.checkboxes_panel3);
-            this.losses_groupBox3.Controls.Add(this.losses_toolStrip3);
-            this.losses_groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox3.Location = new System.Drawing.Point(0, 279);
-            this.losses_groupBox3.Name = "losses_groupBox3";
-            this.losses_groupBox3.Size = new System.Drawing.Size(692, 279);
-            this.losses_groupBox3.TabIndex = 32;
-            this.losses_groupBox3.TabStop = false;
+            this.losses_groupBox_b.Controls.Add(this.losses_plot_panel3);
+            this.losses_groupBox_b.Controls.Add(this.checkboxes_panel3);
+            this.losses_groupBox_b.Controls.Add(this.losses_toolStrip3);
+            this.losses_groupBox_b.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_b.Location = new System.Drawing.Point(0, 279);
+            this.losses_groupBox_b.Name = "losses_groupBox_b";
+            this.losses_groupBox_b.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox_b.TabIndex = 32;
+            this.losses_groupBox_b.TabStop = false;
             // 
             // losses_plot_panel3
             // 
@@ -4812,7 +4814,7 @@ namespace Isotope_fitting
             this.losses_plot_panel3.Name = "losses_plot_panel3";
             this.losses_plot_panel3.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel3.TabIndex = 21;
-            this.losses_plot_panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel3_Paint);
+            this.losses_plot_panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel3.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel3
@@ -4889,6 +4891,7 @@ namespace Isotope_fitting
             this.losses_extractBtn3.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn3.Text = "Extract Plot";
             this.losses_extractBtn3.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn3.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box3
             // 
@@ -4906,17 +4909,17 @@ namespace Isotope_fitting
             this.losses_Y_Box3.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box3.ToolTipText = "Height";
             // 
-            // losses_groupBox1
+            // losses_groupBox_a
             // 
-            this.losses_groupBox1.Controls.Add(this.losses_plot_panel1);
-            this.losses_groupBox1.Controls.Add(this.checkboxes_panel1);
-            this.losses_groupBox1.Controls.Add(this.losses_toolStrip1);
-            this.losses_groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.losses_groupBox1.Name = "losses_groupBox1";
-            this.losses_groupBox1.Size = new System.Drawing.Size(692, 279);
-            this.losses_groupBox1.TabIndex = 31;
-            this.losses_groupBox1.TabStop = false;
+            this.losses_groupBox_a.Controls.Add(this.losses_plot_panel1);
+            this.losses_groupBox_a.Controls.Add(this.checkboxes_panel1);
+            this.losses_groupBox_a.Controls.Add(this.losses_toolStrip1);
+            this.losses_groupBox_a.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_a.Location = new System.Drawing.Point(0, 0);
+            this.losses_groupBox_a.Name = "losses_groupBox_a";
+            this.losses_groupBox_a.Size = new System.Drawing.Size(692, 279);
+            this.losses_groupBox_a.TabIndex = 31;
+            this.losses_groupBox_a.TabStop = false;
             // 
             // losses_plot_panel1
             // 
@@ -4927,7 +4930,7 @@ namespace Isotope_fitting
             this.losses_plot_panel1.Name = "losses_plot_panel1";
             this.losses_plot_panel1.Size = new System.Drawing.Size(569, 260);
             this.losses_plot_panel1.TabIndex = 21;
-            this.losses_plot_panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel1_Paint);
+            this.losses_plot_panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel1.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel1
@@ -5004,6 +5007,7 @@ namespace Isotope_fitting
             this.losses_extractBtn1.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn1.Text = "Extract Plot";
             this.losses_extractBtn1.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn1.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box1
             // 
@@ -5021,17 +5025,17 @@ namespace Isotope_fitting
             this.losses_Y_Box1.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box1.ToolTipText = "Height";
             // 
-            // losses_groupBox8
+            // losses_groupBox_z
             // 
-            this.losses_groupBox8.Controls.Add(this.losses_plot_panel8);
-            this.losses_groupBox8.Controls.Add(this.checkboxes_panel8);
-            this.losses_groupBox8.Controls.Add(this.losses_toolStrip8);
-            this.losses_groupBox8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox8.Location = new System.Drawing.Point(0, 837);
-            this.losses_groupBox8.Name = "losses_groupBox8";
-            this.losses_groupBox8.Size = new System.Drawing.Size(626, 279);
-            this.losses_groupBox8.TabIndex = 35;
-            this.losses_groupBox8.TabStop = false;
+            this.losses_groupBox_z.Controls.Add(this.losses_plot_panel8);
+            this.losses_groupBox_z.Controls.Add(this.checkboxes_panel8);
+            this.losses_groupBox_z.Controls.Add(this.losses_toolStrip8);
+            this.losses_groupBox_z.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_z.Location = new System.Drawing.Point(0, 837);
+            this.losses_groupBox_z.Name = "losses_groupBox_z";
+            this.losses_groupBox_z.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox_z.TabIndex = 35;
+            this.losses_groupBox_z.TabStop = false;
             // 
             // losses_plot_panel8
             // 
@@ -5042,7 +5046,7 @@ namespace Isotope_fitting
             this.losses_plot_panel8.Name = "losses_plot_panel8";
             this.losses_plot_panel8.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel8.TabIndex = 21;
-            this.losses_plot_panel8.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel8_Paint);
+            this.losses_plot_panel8.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel8.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel8
@@ -5119,6 +5123,7 @@ namespace Isotope_fitting
             this.losses_extractBtn8.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn8.Text = "Extract Plot";
             this.losses_extractBtn8.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn8.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box8
             // 
@@ -5136,17 +5141,17 @@ namespace Isotope_fitting
             this.losses_Y_Box8.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box8.ToolTipText = "Height";
             // 
-            // losses_groupBox6
+            // losses_groupBox_y
             // 
-            this.losses_groupBox6.Controls.Add(this.losses_plot_panel6);
-            this.losses_groupBox6.Controls.Add(this.checkboxes_panel6);
-            this.losses_groupBox6.Controls.Add(this.losses_toolStrip6);
-            this.losses_groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox6.Location = new System.Drawing.Point(0, 558);
-            this.losses_groupBox6.Name = "losses_groupBox6";
-            this.losses_groupBox6.Size = new System.Drawing.Size(626, 279);
-            this.losses_groupBox6.TabIndex = 34;
-            this.losses_groupBox6.TabStop = false;
+            this.losses_groupBox_y.Controls.Add(this.losses_plot_panel6);
+            this.losses_groupBox_y.Controls.Add(this.checkboxes_panel6);
+            this.losses_groupBox_y.Controls.Add(this.losses_toolStrip6);
+            this.losses_groupBox_y.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_y.Location = new System.Drawing.Point(0, 558);
+            this.losses_groupBox_y.Name = "losses_groupBox_y";
+            this.losses_groupBox_y.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox_y.TabIndex = 34;
+            this.losses_groupBox_y.TabStop = false;
             // 
             // losses_plot_panel6
             // 
@@ -5157,7 +5162,7 @@ namespace Isotope_fitting
             this.losses_plot_panel6.Name = "losses_plot_panel6";
             this.losses_plot_panel6.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel6.TabIndex = 21;
-            this.losses_plot_panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel6_Paint);
+            this.losses_plot_panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel6.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel6
@@ -5234,6 +5239,7 @@ namespace Isotope_fitting
             this.losses_extractBtn6.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn6.Text = "Extract Plot";
             this.losses_extractBtn6.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn6.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box6
             // 
@@ -5251,17 +5257,17 @@ namespace Isotope_fitting
             this.losses_Y_Box6.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box6.ToolTipText = "Height";
             // 
-            // losses_groupBox4
+            // losses_groupBox_x
             // 
-            this.losses_groupBox4.Controls.Add(this.losses_plot_panel4);
-            this.losses_groupBox4.Controls.Add(this.checkboxes_panel4);
-            this.losses_groupBox4.Controls.Add(this.losses_toolStrip4);
-            this.losses_groupBox4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox4.Location = new System.Drawing.Point(0, 279);
-            this.losses_groupBox4.Name = "losses_groupBox4";
-            this.losses_groupBox4.Size = new System.Drawing.Size(626, 279);
-            this.losses_groupBox4.TabIndex = 33;
-            this.losses_groupBox4.TabStop = false;
+            this.losses_groupBox_x.Controls.Add(this.losses_plot_panel4);
+            this.losses_groupBox_x.Controls.Add(this.checkboxes_panel4);
+            this.losses_groupBox_x.Controls.Add(this.losses_toolStrip4);
+            this.losses_groupBox_x.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_x.Location = new System.Drawing.Point(0, 279);
+            this.losses_groupBox_x.Name = "losses_groupBox_x";
+            this.losses_groupBox_x.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox_x.TabIndex = 33;
+            this.losses_groupBox_x.TabStop = false;
             // 
             // losses_plot_panel4
             // 
@@ -5272,7 +5278,7 @@ namespace Isotope_fitting
             this.losses_plot_panel4.Name = "losses_plot_panel4";
             this.losses_plot_panel4.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel4.TabIndex = 21;
-            this.losses_plot_panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel4_Paint);
+            this.losses_plot_panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel4.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel4
@@ -5349,6 +5355,7 @@ namespace Isotope_fitting
             this.losses_extractBtn4.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn4.Text = "Extract Plot";
             this.losses_extractBtn4.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn4.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box4
             // 
@@ -5366,17 +5373,17 @@ namespace Isotope_fitting
             this.losses_Y_Box4.Size = new System.Drawing.Size(40, 22);
             this.losses_Y_Box4.ToolTipText = "Height";
             // 
-            // losses_groupBox2
+            // losses_groupBox_w
             // 
-            this.losses_groupBox2.Controls.Add(this.losses_plot_panel2);
-            this.losses_groupBox2.Controls.Add(this.checkboxes_panel2);
-            this.losses_groupBox2.Controls.Add(this.losses_toolStrip2);
-            this.losses_groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.losses_groupBox2.Location = new System.Drawing.Point(0, 0);
-            this.losses_groupBox2.Name = "losses_groupBox2";
-            this.losses_groupBox2.Size = new System.Drawing.Size(626, 279);
-            this.losses_groupBox2.TabIndex = 32;
-            this.losses_groupBox2.TabStop = false;
+            this.losses_groupBox_w.Controls.Add(this.losses_plot_panel2);
+            this.losses_groupBox_w.Controls.Add(this.checkboxes_panel2);
+            this.losses_groupBox_w.Controls.Add(this.losses_toolStrip2);
+            this.losses_groupBox_w.Dock = System.Windows.Forms.DockStyle.Top;
+            this.losses_groupBox_w.Location = new System.Drawing.Point(0, 0);
+            this.losses_groupBox_w.Name = "losses_groupBox_w";
+            this.losses_groupBox_w.Size = new System.Drawing.Size(626, 279);
+            this.losses_groupBox_w.TabIndex = 32;
+            this.losses_groupBox_w.TabStop = false;
             // 
             // losses_plot_panel2
             // 
@@ -5387,7 +5394,7 @@ namespace Isotope_fitting
             this.losses_plot_panel2.Name = "losses_plot_panel2";
             this.losses_plot_panel2.Size = new System.Drawing.Size(503, 260);
             this.losses_plot_panel2.TabIndex = 21;
-            this.losses_plot_panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel2_Paint);
+            this.losses_plot_panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel2.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // checkboxes_panel2
@@ -5464,6 +5471,7 @@ namespace Isotope_fitting
             this.losses_extractBtn2.Size = new System.Drawing.Size(133, 22);
             this.losses_extractBtn2.Text = "Extract Plot";
             this.losses_extractBtn2.ToolTipText = "Extract plot and edit its shape";
+            this.losses_extractBtn2.Click += new System.EventHandler(this.losses_extractBtn_Click);
             // 
             // losses_X_Box2
             // 
@@ -5641,36 +5649,36 @@ namespace Isotope_fitting
             this.losses_splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.losses_splitContainer)).EndInit();
             this.losses_splitContainer.ResumeLayout(false);
-            this.losses_groupBox7.ResumeLayout(false);
-            this.losses_groupBox7.PerformLayout();
+            this.losses_groupBox_d.ResumeLayout(false);
+            this.losses_groupBox_d.PerformLayout();
             this.losses_toolStrip7.ResumeLayout(false);
             this.losses_toolStrip7.PerformLayout();
-            this.losses_groupBox5.ResumeLayout(false);
-            this.losses_groupBox5.PerformLayout();
+            this.losses_groupBox_c.ResumeLayout(false);
+            this.losses_groupBox_c.PerformLayout();
             this.losses_toolStrip5.ResumeLayout(false);
             this.losses_toolStrip5.PerformLayout();
-            this.losses_groupBox3.ResumeLayout(false);
-            this.losses_groupBox3.PerformLayout();
+            this.losses_groupBox_b.ResumeLayout(false);
+            this.losses_groupBox_b.PerformLayout();
             this.losses_toolStrip3.ResumeLayout(false);
             this.losses_toolStrip3.PerformLayout();
-            this.losses_groupBox1.ResumeLayout(false);
-            this.losses_groupBox1.PerformLayout();
+            this.losses_groupBox_a.ResumeLayout(false);
+            this.losses_groupBox_a.PerformLayout();
             this.losses_toolStrip1.ResumeLayout(false);
             this.losses_toolStrip1.PerformLayout();
-            this.losses_groupBox8.ResumeLayout(false);
-            this.losses_groupBox8.PerformLayout();
+            this.losses_groupBox_z.ResumeLayout(false);
+            this.losses_groupBox_z.PerformLayout();
             this.losses_toolStrip8.ResumeLayout(false);
             this.losses_toolStrip8.PerformLayout();
-            this.losses_groupBox6.ResumeLayout(false);
-            this.losses_groupBox6.PerformLayout();
+            this.losses_groupBox_y.ResumeLayout(false);
+            this.losses_groupBox_y.PerformLayout();
             this.losses_toolStrip6.ResumeLayout(false);
             this.losses_toolStrip6.PerformLayout();
-            this.losses_groupBox4.ResumeLayout(false);
-            this.losses_groupBox4.PerformLayout();
+            this.losses_groupBox_x.ResumeLayout(false);
+            this.losses_groupBox_x.PerformLayout();
             this.losses_toolStrip4.ResumeLayout(false);
             this.losses_toolStrip4.PerformLayout();
-            this.losses_groupBox2.ResumeLayout(false);
-            this.losses_groupBox2.PerformLayout();
+            this.losses_groupBox_w.ResumeLayout(false);
+            this.losses_groupBox_w.PerformLayout();
             this.losses_toolStrip2.ResumeLayout(false);
             this.losses_toolStrip2.PerformLayout();
             this.panel3.ResumeLayout(false);
@@ -6014,7 +6022,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button fit_sel_Btn;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tab_losses;
-        private System.Windows.Forms.GroupBox losses_groupBox1;
+        private System.Windows.Forms.GroupBox losses_groupBox_a;
         private System.Windows.Forms.Panel losses_plot_panel1;
         private System.Windows.Forms.ToolStrip losses_toolStrip1;
         private System.Windows.Forms.ToolStripButton losses_saveBtn1;
@@ -6028,7 +6036,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label losses_label;
         private System.Windows.Forms.SplitContainer losses_splitContainer;
-        private System.Windows.Forms.GroupBox losses_groupBox5;
+        private System.Windows.Forms.GroupBox losses_groupBox_c;
         private System.Windows.Forms.Panel losses_plot_panel5;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel5;
         private System.Windows.Forms.ToolStrip losses_toolStrip5;
@@ -6039,7 +6047,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn5;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box5;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box5;
-        private System.Windows.Forms.GroupBox losses_groupBox3;
+        private System.Windows.Forms.GroupBox losses_groupBox_b;
         private System.Windows.Forms.Panel losses_plot_panel3;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel3;
         private System.Windows.Forms.ToolStrip losses_toolStrip3;
@@ -6050,7 +6058,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn3;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box3;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box3;
-        private System.Windows.Forms.GroupBox losses_groupBox6;
+        private System.Windows.Forms.GroupBox losses_groupBox_y;
         private System.Windows.Forms.Panel losses_plot_panel6;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel6;
         private System.Windows.Forms.ToolStrip losses_toolStrip6;
@@ -6061,7 +6069,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn6;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box6;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box6;
-        private System.Windows.Forms.GroupBox losses_groupBox4;
+        private System.Windows.Forms.GroupBox losses_groupBox_x;
         private System.Windows.Forms.Panel losses_plot_panel4;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel4;
         private System.Windows.Forms.ToolStrip losses_toolStrip4;
@@ -6072,7 +6080,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn4;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box4;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box4;
-        private System.Windows.Forms.GroupBox losses_groupBox2;
+        private System.Windows.Forms.GroupBox losses_groupBox_w;
         private System.Windows.Forms.Panel losses_plot_panel2;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel2;
         private System.Windows.Forms.ToolStrip losses_toolStrip2;
@@ -6083,7 +6091,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn2;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box2;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box2;
-        private System.Windows.Forms.GroupBox losses_groupBox7;
+        private System.Windows.Forms.GroupBox losses_groupBox_d;
         private System.Windows.Forms.Panel losses_plot_panel7;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel7;
         private System.Windows.Forms.ToolStrip losses_toolStrip7;
@@ -6094,7 +6102,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn7;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box7;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box7;
-        private System.Windows.Forms.GroupBox losses_groupBox8;
+        private System.Windows.Forms.GroupBox losses_groupBox_z;
         private System.Windows.Forms.Panel losses_plot_panel8;
         private System.Windows.Forms.FlowLayoutPanel checkboxes_panel8;
         private System.Windows.Forms.ToolStrip losses_toolStrip8;
