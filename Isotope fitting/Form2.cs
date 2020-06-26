@@ -8930,6 +8930,8 @@ namespace Isotope_fitting
             }
         }
         #endregion
+
+        #region UI
         private void tabFit_Leave(object sender, EventArgs e)
         {
             if (sequenceList != null && sequenceList.Count > 1)
@@ -9107,7 +9109,8 @@ namespace Isotope_fitting
                 pp.InvalidatePlot(true);
             }
         }
-        
+        #endregion
+
         #region sequence
         //sequence toolstrip
         private void highlightProp_Btn_Click(object sender, EventArgs e)
@@ -11875,13 +11878,13 @@ namespace Isotope_fitting
         private Color[] return_check_boxes_colors(string type, FlowLayoutPanel flowpnl)
         {
             Color[] clr = new Color[4];
-            if (type.Equals("a")) { clr = new Color[4] { Color.Green, Color.Olive, Color.LightGreen, Color.YellowGreen }; }
-            else if (type.Equals("b")) { clr = new Color[4] { Color.Blue, Color.DarkBlue, Color.DeepSkyBlue, Color.CornflowerBlue }; }
-            else if (type.Equals("c")) { clr = new Color[4] { Color.Firebrick, Color.Crimson, Color.Chocolate, Color.IndianRed }; }
+            if (type.Equals("a")) { clr = new Color[4] { Color.Green, Color.LightSeaGreen, Color.Chartreuse, Color.DarkSeaGreen }; }
+            else if (type.Equals("b")) { clr = new Color[4] { Color.Blue, Color.DarkBlue, Color.SlateBlue, Color.LightSteelBlue }; }
+            else if (type.Equals("c")) { clr = new Color[4] { Color.Firebrick, Color.RosyBrown, Color.Red, Color.DarkOrange }; }
             else if (type.Equals("d")) { clr = new Color[4] { Color.DeepPink, Color.DarkMagenta, Color.MediumVioletRed, Color.PaleVioletRed }; }
             else if (type.Equals("w") || (!is_riken && type.Equals("x"))) { clr = new Color[4] { Color.LimeGreen, Color.Lime, Color.MediumSpringGreen, Color.SeaGreen }; }
-            else if ((!is_riken && type.Equals("y")) || (is_riken && type.Equals("x"))) { clr = new Color[4] { Color.DodgerBlue, Color.RoyalBlue, Color.MediumBlue, Color.SkyBlue }; }
-            else if ((!is_riken && type.Equals("z")) || (is_riken && type.Equals("y"))) { clr = new Color[4] { Color.Tomato, Color.Coral, Color.Orange, Color.LightSalmon }; }
+            else if ((!is_riken && type.Equals("y")) || (is_riken && type.Equals("x"))) { clr = new Color[4] { Color.DodgerBlue, Color.MediumTurquoise, Color.MediumBlue, Color.LightBlue }; }
+            else if ((!is_riken && type.Equals("z")) || (is_riken && type.Equals("y"))) { clr = new Color[4] { Color.Tomato, Color.BurlyWood, Color.DarkOrange, Color.Brown }; }
             else if (is_riken && type.Equals("z")) { clr = new Color[4] { Color.HotPink, Color.DarkOrchid, Color.Pink, Color.Plum }; }
             List<CheckBox> list_ = GetControls(flowpnl).OfType<CheckBox>().ToList();
             foreach (CheckBox chk in list_)
@@ -11973,7 +11976,7 @@ namespace Isotope_fitting
                 List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                 List<ion> merged_names = new List<ion>();
                 List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
-                LineSeries line_ = new LineSeries { StrokeThickness = 1, Color =temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
+                LineSeries line_ = new LineSeries { StrokeThickness = 2, Color =temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
                 List<double[]> points_line_ = new List<double[]>();
                 for (int i = 0; i < iondraw_count; i++)
                 {
@@ -12172,7 +12175,6 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
-
 
 
         #region EXTRACT PLOTS
