@@ -10917,15 +10917,16 @@ namespace Isotope_fitting
             }
             paint_annotations_in_graphs();
         }
-        private bool search_primary(string type, int idx, string s_ext,List<ion> temp_iondraw,bool losses_diagram=false)
+        private bool search_primary(string type, int idx, string s_ext,List<ion> temp_iondraw, bool with_charge = false, int charge=0,bool losses_diagram=false)
         {
             foreach (ion nn in temp_iondraw)
             {
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.SortIdx > idx) break;
-                else if (!losses_diagram && nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;
-                else if (losses_diagram && nn.SortIdx == idx & nn.Ion_type.Equals(type)) return true;
+                else if (!with_charge&&!losses_diagram && nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;
+                else if (with_charge && nn.Charge == charge && !losses_diagram && nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) return true;
+                else if (losses_diagram && nn.SortIdx == idx && nn.Charge == charge && nn.Ion_type.Equals(type)) return true;
             }
             return false;
         }
@@ -11349,7 +11350,7 @@ namespace Isotope_fitting
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith(up_type) || nn.Ion_type.StartsWith("("+ up_type))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || search_primary(up_type, nn.SortIdx, s_ext, temp_iondraw))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || search_primary(up_type, nn.SortIdx, s_ext, temp_iondraw,true,nn.Charge))
                     {
                         if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
                         {
@@ -11370,7 +11371,7 @@ namespace Isotope_fitting
                 }
                 else if (nn.Ion_type.StartsWith(down_type) || nn.Ion_type.StartsWith("("+ down_type))
                 {
-                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || search_primary(down_type, nn.SortIdx, s_ext, temp_iondraw))
+                    if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || search_primary(down_type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge))
                     {
                         if (merged_down.Count == 0 || (int)merged_down.Last()[0] != nn.SortIdx)
                         {
@@ -11966,9 +11967,9 @@ namespace Isotope_fitting
                 string name = check_names[k];
                 MarkerType shape = MarkerType.Circle;
                 OxyPlot.LineStyle style = OxyPlot.LineStyle.Solid;
-                if (name.Contains("-1")) { shape = MarkerType.Square; style = OxyPlot.LineStyle.LongDash; temp = clr[1]; }
-                else if (name.Contains("+2")) { shape = MarkerType.Diamond; style = OxyPlot.LineStyle.LongDashDotDot; temp = clr[3]; }
-                else if (name.Contains("-2")) { shape = MarkerType.Triangle; style = OxyPlot.LineStyle.Dot; temp = clr[0]; }
+                if (name.Contains("-1")) { shape = MarkerType.Square; /*style = OxyPlot.LineStyle.LongDash;*/ temp = clr[1]; }
+                else if (name.Contains("+2")) { shape = MarkerType.Diamond; /*style = OxyPlot.LineStyle.LongDashDotDot;*/ temp = clr[3]; }
+                else if (name.Contains("-2")) { shape = MarkerType.Triangle; /*style = OxyPlot.LineStyle.Dot;*/ temp = clr[0]; }
                 List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                 List<ion> merged_names = new List<ion>();
                 List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
@@ -11982,7 +11983,7 @@ namespace Isotope_fitting
                     if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
                     if (name.Length > 1 && (nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw)))
+                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge,true)))
                         {
                             if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
                             {
@@ -11998,7 +11999,7 @@ namespace Isotope_fitting
                 int list_index = 0;
                 foreach (ion nn in merged_names)
                 {
-                    double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, temp_iondraw, true);
+                    double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext,nn.Charge, temp_iondraw);
                     double value = 0.0;
                     list_index = return_list_index(nn.Max_intensity);
                     if (nn.Max_intensity == 0 && primary_int == 0) { value = 0.0; }
@@ -12009,7 +12010,7 @@ namespace Isotope_fitting
                     {
                         points_line_.Add(new double[] { nn.SortIdx, nn.Max_intensity, primary_int });
                     }
-                    else if (points_line_.Last()[1] < nn.Max_intensity) { points_line_.Last()[1] = nn.Max_intensity; }
+                    else if (points_line_.Last()[1] < nn.Max_intensity) { points_line_.Last()[1] = nn.Max_intensity; points_line_.Last()[2] = primary_int; }
                 }
                 if (points_line_.Count > 0)
                 {
@@ -12087,7 +12088,7 @@ namespace Isotope_fitting
                         if (check_names.Count == 0 || !check_names.Any(p => p.Text.Equals(tt)))
                         {
                             CheckBox chk = new CheckBox() { Text = tt, Checked = true };
-                            if (chk.Name.Contains("-2")) { chk.ForeColor= clr[0]; }
+                            if (chk.Text.Contains("-2")) { chk.ForeColor= clr[0]; }
                             else if (chk.Text.Contains("-1")) { chk.ForeColor = clr[1]; }
                             else if (chk.Text.Contains("+1")) { chk.ForeColor = clr[2]; }
                             else if (chk.Text.Contains("+2")) { chk.ForeColor = clr[3]; }
@@ -12100,18 +12101,13 @@ namespace Isotope_fitting
                             if (e.Button == MouseButtons.Right)
                             {
                                 ContextMenu ctxMn = new ContextMenu(new MenuItem[1] {
-                                    new MenuItem("Select Color", (ss, ee) =>
-                                {
+                                    new MenuItem("Select Color", (ss, ee) =>{
                                     ColorDialog clrDlg = new ColorDialog();
-                                    if (clrDlg.ShowDialog() == DialogResult.OK)
-                                    {
-                                        chk.ForeColor = clrDlg.Color; pnl.Invalidate();
-                                    }
-                                })});
-                                    chk.ContextMenu = ctxMn;
-
-                                }
-
+                                    if (clrDlg.ShowDialog() == DialogResult.OK){chk.ForeColor = clrDlg.Color; pnl.Invalidate();}
+                                    })
+                                });
+                                chk.ContextMenu = ctxMn;
+                            }
                             };
                             check_names.Add(chk);
                         }
@@ -12130,7 +12126,7 @@ namespace Isotope_fitting
             temp_iondraw.Clear();
             return clr;
         }
-        private double search_primary_return_intens(string type, int idx, string s_ext, List<ion> temp_iondraw, bool losses_diagram = false)
+        private double search_primary_return_intens(string type, int idx, string s_ext,int charge, List<ion> temp_iondraw)
         {
             double intensity = 0.0;
             foreach (ion nn in temp_iondraw)
@@ -12138,8 +12134,7 @@ namespace Isotope_fitting
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.SortIdx > idx) break;
-                else if (!losses_diagram && nn.SortIdx == idx && !nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO") && (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))) { intensity += nn.Max_intensity; }
-                else if (losses_diagram && nn.SortIdx == idx & nn.Ion_type.Equals(type)) { intensity += nn.Max_intensity; break; }
+                else if (  nn.SortIdx == idx &&nn.Charge==charge && nn.Ion_type.Equals(type)) {intensity += nn.Max_intensity;break; }
             }
             return intensity;
         }
