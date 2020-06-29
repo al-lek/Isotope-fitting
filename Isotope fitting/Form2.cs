@@ -11986,10 +11986,10 @@ namespace Isotope_fitting
                         if (seq.Extension.Equals(seq_extensionBox.SelectedItem)) { s_chain = seq.Sequence; s_ext = seq.Extension; break; }
                     }
                 }
-                if (is_logarithmic)
-                {
-                    plot.Model.Axes[0]= new MagnitudeAxis { Position = AxisPosition.Left,  MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
-                }
+                //if (is_logarithmic)
+                //{
+                //    plot.Model.Axes[0] = new LogarithmicAxis {FilterMinValue=-1000000000000000000,  Position = AxisPosition.Left,  MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                //}
                 int count = check_names.Count();
                 for (int k = 0; k < count; k++)
                 {
@@ -12037,7 +12037,7 @@ namespace Isotope_fitting
                         {
                             if (primary_int == 0) primary_int = 1.0;
                             value = nn.Max_intensity / primary_int;
-                            //if (is_logarithmic) value = Math.Log10(value);
+                            if (is_logarithmic) value = Math.Log(value);
                             if (value > maximum) maximum = value;
                             if (name.Contains("-")) value = value * (-1);
                         }
@@ -12058,7 +12058,7 @@ namespace Isotope_fitting
                             {
                                 if (dd[2] == 0) dd[2] = 1.0;
                                 value = dd[1] / dd[2];
-                                //if (is_logarithmic) value = Math.Log10(value);
+                                if (is_logarithmic) value = Math.Log(value);
                                 if (name.Contains("-")) value = value * (-1);
                             }
                             if (line_.Points.Count > 0 && dd[0] - line_.Points.Last().X != 1)
