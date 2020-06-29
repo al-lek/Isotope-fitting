@@ -32,6 +32,7 @@ using Arction.WinForms.Charting.Titles;
 using Arction.WinForms.Charting.Views.ViewXY;
 using Arction.WinForms.Charting.Annotations;
 using System.ComponentModel;
+using OxyPlot.Axes;
 
 namespace Isotope_fitting
 {
@@ -11857,7 +11858,7 @@ namespace Isotope_fitting
                 pnl.Controls.Add(plot);
                 PlotModel model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
                 plot.Model = model;
-                var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2,IntervalLength=y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat=y_format12_2+ y_numformat12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength=y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat=y_format12_2+ y_numformat12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model.Axes.Add(linearAxis1);
                 var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep=x_minorStep12_2,MajorStep=x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
                 model.Axes.Add(linearAxis2);
@@ -11935,10 +11936,6 @@ namespace Isotope_fitting
                 }
             }
             plot.Model.Series.Add(s1a); plot.Model.Series.Add(s2a);
-            plot.Model.Axes[1].Minimum = 0;
-            plot.Model.Axes[1].Maximum = s_chain.Length;
-            plot.Model.Axes[0].Minimum = -1.2 * maximum;
-            plot.Model.Axes[0].Maximum = +1.2 * maximum;
             plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1a.Points.Clear(); s2a.Points.Clear();
@@ -11946,7 +11943,7 @@ namespace Isotope_fitting
                 {
                     if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                     {
-                        s1a.Points.Add(new ScatterPoint(cc + 1, plot.Model.Axes[0].ActualMinimum *0.99));
+                        s1a.Points.Add(new ScatterPoint(cc + 1, plot.Model.Axes[0].ActualMinimum * 0.99));
                     }
                     else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                     {
@@ -11955,138 +11952,160 @@ namespace Isotope_fitting
                 }
                 plot.Model.Series[0] = s1a; plot.Model.Series[1] = s2a; plot.InvalidatePlot(true);
             };
-            if (iondraw_count == 0) { return; }
-            CI ion_comp = new CI();
-            temp_iondraw.Sort(ion_comp);
-            List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
-            bool is_logarithmic = false;
-            bool is_losses = false;
-            try
+            if (iondraw_count >0)
             {
-                is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
-            }
-            catch
-            {
-                is_losses = false;
-            }
-            try
-            {
-                is_logarithmic = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Log.")).ToList().First().Checked;
-            }
-            catch
-            {
-                is_logarithmic = false;
-            }
-            if (list.Count > 0)
-            {
-                foreach (CheckBox vv in list) { if (vv.Checked) check_names.Add(vv.Text); }
-            }
-            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
-            {
-                foreach (SequenceTab seq in sequenceList)
+                CI ion_comp = new CI();
+                temp_iondraw.Sort(ion_comp);
+                List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
+                bool is_logarithmic = false;
+                bool is_losses = false;
+                try
                 {
-                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem)) { s_chain = seq.Sequence; s_ext = seq.Extension; break; }
+                    is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
                 }
-            }
-            int count = check_names.Count();
-            for (int k = 0; k < count; k++)
-            {
-                Color temp = clr[2];
-                string name = check_names[k];
-                MarkerType shape = MarkerType.Circle;
-                OxyPlot.LineStyle style = OxyPlot.LineStyle.Solid;
-                if (name.Contains("-1")) { shape = MarkerType.Square; /*style = OxyPlot.LineStyle.LongDash;*/ temp = clr[1]; }
-                else if (name.Contains("+2")) { shape = MarkerType.Diamond; /*style = OxyPlot.LineStyle.LongDashDotDot;*/ temp = clr[3]; }
-                else if (name.Contains("-2")) { shape = MarkerType.Triangle; /*style = OxyPlot.LineStyle.Dot;*/ temp = clr[0]; }
-                List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
-                List<ion> merged_names = new List<ion>();
-                List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
-                LineSeries line_ = new LineSeries { StrokeThickness = 2, Color =temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
-                List<double[]> points_line_ = new List<double[]>();
-                for (int i = 0; i < iondraw_count; i++)
+                catch
                 {
-                    ion nn = temp_iondraw[i];
-                    if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
-                    if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                    if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
-                    if (name.Length > 1 && (nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
+                    is_losses = false;
+                }
+                try
+                {
+                    is_logarithmic = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Log.")).ToList().First().Checked;
+                }
+                catch
+                {
+                    is_logarithmic = false;
+                }
+                if (list.Count > 0)
+                {
+                    foreach (CheckBox vv in list) { if (vv.Checked) check_names.Add(vv.Text); }
+                }
+                if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+                {
+                    foreach (SequenceTab seq in sequenceList)
                     {
-                        if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge,true)))
+                        if (seq.Extension.Equals(seq_extensionBox.SelectedItem)) { s_chain = seq.Sequence; s_ext = seq.Extension; break; }
+                    }
+                }
+                if (is_logarithmic)
+                {
+                    plot.Model.Axes[0]= new MagnitudeAxis { Position = AxisPosition.Left,  MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                }
+                int count = check_names.Count();
+                for (int k = 0; k < count; k++)
+                {
+                    Color temp = clr[2];
+                    string name = check_names[k];
+                    MarkerType shape = MarkerType.Circle;
+                    OxyPlot.LineStyle style = OxyPlot.LineStyle.Solid;
+                    if (name.Contains("-1")) { shape = MarkerType.Square; /*style = OxyPlot.LineStyle.LongDash;*/ temp = clr[1]; }
+                    else if (name.Contains("+2")) { shape = MarkerType.Diamond; /*style = OxyPlot.LineStyle.LongDashDotDot;*/ temp = clr[3]; }
+                    else if (name.Contains("-2")) { shape = MarkerType.Triangle; /*style = OxyPlot.LineStyle.Dot;*/ temp = clr[0]; }
+                    List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
+                    List<ion> merged_names = new List<ion>();
+                    List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
+                    LineSeries line_ = new LineSeries { StrokeThickness = 2, Color = temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
+                    List<double[]> points_line_ = new List<double[]>();
+                    for (int i = 0; i < iondraw_count; i++)
+                    {
+                        ion nn = temp_iondraw[i];
+                        if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
+                        if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                        if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
+                        if (name.Length > 1 && (nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
                         {
-                            if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
+                            if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge, true)))
                             {
-                                merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
-                            }
-                            else
-                            {
-                                merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                                if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
+                                {
+                                    merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
+                                }
+                                else
+                                {
+                                    merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                                }
                             }
                         }
                     }
-                }
-                int list_index = 0;
-                foreach (ion nn in merged_names)
-                {
-                    double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext,nn.Charge, temp_iondraw);
-                    double value = 0.0;
-                    list_index = return_list_index(nn.Max_intensity);
-                    if (nn.Max_intensity == 0 && primary_int == 0){value = 0.0;}
-                    else
+                    int list_index = 0;
+                    foreach (ion nn in merged_names)
                     {
-                        if (primary_int == 0) primary_int = 1.0;
-                         value = nn.Max_intensity / primary_int;
-                        if (is_logarithmic) value = Math.Log10(value);
-                        if (value > maximum) maximum = value;
-                        if (name.Contains("-")) value = value * (-1);
-                    }                    
-                    datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
-                    if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
-                    {
-                        points_line_.Add(new double[] { nn.SortIdx, nn.Max_intensity, primary_int });
-                    }
-                    else if (points_line_.Last()[1] < nn.Max_intensity) { points_line_.Last()[1] = nn.Max_intensity; points_line_.Last()[2] = primary_int; }
-                }
-                if (points_line_.Count > 0)
-                {
-                    foreach (double[] dd in points_line_)
-                    {
+                        double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, nn.Charge, temp_iondraw);
                         double value = 0.0;
-                        if (dd[1] == 0 && dd[2] == 0) { value = 0.0; }                        
+                        list_index = return_list_index(nn.Max_intensity);
+                        if (nn.Max_intensity == 0 && primary_int == 0) { value = 0.0; }
                         else
                         {
-                            if (dd[2] == 0) dd[2] = 1.0;
-                            value = dd[1] / dd[2];
-                            if (is_logarithmic) value = Math.Log10(value);
+                            if (primary_int == 0) primary_int = 1.0;
+                            value = nn.Max_intensity / primary_int;
+                            //if (is_logarithmic) value = Math.Log10(value);
+                            if (value > maximum) maximum = value;
                             if (name.Contains("-")) value = value * (-1);
                         }
-                        if (line_.Points.Count>0 && dd[0]- line_.Points.Last().X!=1)
+                        datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
+                        if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
                         {
-                            double temp_x = line_.Points.Last().X + 1;
-                            while (temp_x< dd[0])
-                            {
-                                line_.Points.Add(new DataPoint(temp_x, 0));
-                                temp_x++;
-                            }
+                            points_line_.Add(new double[] { nn.SortIdx, nn.Max_intensity, primary_int });
                         }
-                        else if (line_.Points.Count == 0 && dd[0] > 1)
-                        {
-                            line_.Points.Add(new DataPoint(dd[0]-1, 0));
-                        }                       
-                        line_.Points.Add(new DataPoint(dd[0], value));
-                       
+                        else if (points_line_.Last()[1] < nn.Max_intensity) { points_line_.Last()[1] = nn.Max_intensity; points_line_.Last()[2] = primary_int; }
                     }
-                    if(line_.Points.Last().X< s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X+1, 0));
-                    plot.Model.Series.Add(line_);
+                    if (points_line_.Count > 0)
+                    {
+                        foreach (double[] dd in points_line_)
+                        {
+                            double value = 0.0;
+                            if (dd[1] == 0 && dd[2] == 0) { value = 0.0; }
+                            else
+                            {
+                                if (dd[2] == 0) dd[2] = 1.0;
+                                value = dd[1] / dd[2];
+                                //if (is_logarithmic) value = Math.Log10(value);
+                                if (name.Contains("-")) value = value * (-1);
+                            }
+                            if (line_.Points.Count > 0 && dd[0] - line_.Points.Last().X != 1)
+                            {
+                                double temp_x = line_.Points.Last().X + 1;
+                                while (temp_x < dd[0])
+                                {
+                                    line_.Points.Add(new DataPoint(temp_x, 0));
+                                    temp_x++;
+                                }
+                            }
+                            else if (line_.Points.Count == 0 && dd[0] > 1)
+                            {
+                                line_.Points.Add(new DataPoint(dd[0] - 1, 0));
+                            }
+                            line_.Points.Add(new DataPoint(dd[0], value));
+
+                        }
+                        if (line_.Points.Last().X < s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X + 1, 0));
+                        plot.Model.Series.Add(line_);
+                    }
+                    for (int i = 9; i >= 0; i--)
+                    {
+                        if (datapoint_list[i].Count > 0) { series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; plot.Model.Series.Add(series_list[i]); }
+                    }
                 }
-                for (int i = 9; i >= 0; i--)
-                {
-                    if (datapoint_list[i].Count > 0) { series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; plot.Model.Series.Add(series_list[i]); }
-                }
-            }
-            if (is_logarithmic) { plot.Model.Axes[0].Title = "log(k)"; }
-            else { plot.Model.Axes[0].Title = "k"; }
+                if (is_logarithmic) { plot.Model.Axes[0].Title = "log(k)"; }
+                else { plot.Model.Axes[0].Title = "k"; }
+                
+            }   
+            plot.Model.Axes[1].Minimum = 0;
+            plot.Model.Axes[1].Maximum = s_chain.Length;
             plot.Model.Axes[0].Minimum = -1.2 * maximum;
             plot.Model.Axes[0].Maximum = +1.2 * maximum;
+            s1a.Points.Clear(); s2a.Points.Clear();
+            for (int cc = 0; cc < s_chain.Length; cc++)
+            {
+                if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                {
+                    s1a.Points.Add(new ScatterPoint(cc + 1,- 1.2 * maximum * 0.99));
+                }
+                else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                {
+                    s2a.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
+                }
+            }
+            plot.Model.Series[0] = s1a; plot.Model.Series[1] = s2a;
             plot.InvalidatePlot(true);
         }
         private Color[] create_check_boxes(string type, FlowLayoutPanel flowpnl, Panel pnl)
@@ -12563,7 +12582,7 @@ namespace Isotope_fitting
             temp_indexModel.Updated += (s, e) => { tempindex_Intensity_plot.Model.Axes[0].Zoom(temp_index_plot.Model.Axes[0].ActualMinimum, temp_index_plot.Model.Axes[0].ActualMaximum); };
             if (indexTo)
             {
-                create_internal_plot(temp_index_plot, tempindex_Intensity_plot, 2, Color.Green, Color.Blue);
+                create_internal_plot(temp_index_plot, tempindex_Intensity_plot, 1, Color.Green, Color.Blue);
                 temp_indexModel.Title = "internal  fragments' plot sorted by #AA terminal";
                 temp_index_plot.Model.Axes[1].Zoom(indexto_plot.Model.Axes[1].ActualMinimum, indexto_plot.Model.Axes[1].ActualMaximum);
                 temp_index_plot.Model.Axes[0].Zoom(indexto_plot.Model.Axes[0].ActualMinimum, indexto_plot.Model.Axes[0].ActualMaximum);
