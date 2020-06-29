@@ -165,6 +165,12 @@
     <Compile Include="Plot Format\Form12.Designer.cs">
       <DependentUpon>Form12.cs</DependentUpon>
     </Compile>
+    <Compile Include="Plot Format\Form12_2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Plot Format\Form12_2.Designer.cs">
+      <DependentUpon>Form12_2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plot Format\Form13.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -301,6 +307,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Plot Format\Form12.resx">
       <DependentUpon>Form12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Plot Format\Form12_2.resx">
+      <DependentUpon>Form12_2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Plot Format\Form13.resx">
       <DependentUpon>Form13.cs</DependentUpon>

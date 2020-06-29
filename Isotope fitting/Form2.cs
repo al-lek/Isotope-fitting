@@ -436,6 +436,19 @@ namespace Isotope_fitting
         public double yINT_majorStep13 = 5;
         public double yINT_minorStep13 = 1;
         public double int_width = 1;
+        //Hydrogens tab plots        
+        public OxyPlot.LineStyle Xmajor_grid12_2 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Xminor_grid12_2 = OxyPlot.LineStyle.None;
+        public OxyPlot.LineStyle Ymajor_grid12_2 = OxyPlot.LineStyle.Solid;
+        public OxyPlot.LineStyle Yminor_grid12_2 = OxyPlot.LineStyle.None;
+        public double y_interval12_2 = 50;
+        public OxyPlot.Axes.TickStyle X_tick12_2 = OxyPlot.Axes.TickStyle.Outside;
+        public OxyPlot.Axes.TickStyle Y_tick12_2 = OxyPlot.Axes.TickStyle.Outside;
+        public string y_format12_2 = "0.0E+";
+        public string y_numformat12_2 = "0";
+        public double x_majorStep12_2 = 5;
+        public double x_minorStep12_2 = 1;
+        public double line_width_2 = 1;
         #endregion
 
         #endregion
@@ -11835,6 +11848,8 @@ namespace Isotope_fitting
             if (pnl.Controls.Count > 0)
             {
                 plot = pnl.Controls[0] as PlotView;
+                plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             }
             else
             {
@@ -11842,9 +11857,9 @@ namespace Isotope_fitting
                 pnl.Controls.Add(plot);
                 PlotModel model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
                 plot.Model = model;
-                var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12,   FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2,IntervalLength=y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat=y_format12_2+ y_numformat12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model.Axes.Add(linearAxis1);
-                var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12, MinorGridlineStyle = Xminor_grid12, TickStyle = X_tick12,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+                var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep=x_minorStep12_2,MajorStep=x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
                 model.Axes.Add(linearAxis2);
                 plot.MouseDoubleClick += (s, e) => { model.ResetAllAxes(); plot.InvalidatePlot(true); };
                 plot.Controller = new CustomPlotController();
@@ -11897,13 +11912,14 @@ namespace Isotope_fitting
             return clr;
         }
         private void create_losses_diagram(string type, PlotView plot, FlowLayoutPanel flowpnl, Color[] clr)
-        { 
+        {
             if (plot.Model.Series != null) { plot.Model.Series.Clear(); }
             plot.Model.Title = type + " fragments";
             plot.Model.TitleColor = clr[0].ToOxyColor();
             List<ion> temp_iondraw = IonDraw.ToList();
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             int iondraw_count = temp_iondraw.Count;
+            double maximum = 1.0;
             string s_ext = "";
             string s_chain = Peptide;
             List<string> check_names = new List<string>();
@@ -11911,18 +11927,18 @@ namespace Isotope_fitting
             {
                 if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                 {
-                    s1a.Points.Add(new ScatterPoint(cc + 1, -1.2 * 0.99));
+                    s1a.Points.Add(new ScatterPoint(cc + 1, -1.2 * maximum * 0.99));
                 }
                 else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                 {
-                    s2a.Points.Add(new ScatterPoint(cc + 1, 1.2 * 0.99));
+                    s2a.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
                 }
             }
             plot.Model.Series.Add(s1a); plot.Model.Series.Add(s2a);
             plot.Model.Axes[1].Minimum = 0;
             plot.Model.Axes[1].Maximum = s_chain.Length;
-            plot.Model.Axes[0].Minimum = -1.2;
-            plot.Model.Axes[0].Maximum = +1.2;
+            plot.Model.Axes[0].Minimum = -1.2 * maximum;
+            plot.Model.Axes[0].Maximum = +1.2 * maximum;
             plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1a.Points.Clear(); s2a.Points.Clear();
@@ -11942,7 +11958,8 @@ namespace Isotope_fitting
             if (iondraw_count == 0) { return; }
             CI ion_comp = new CI();
             temp_iondraw.Sort(ion_comp);
-            List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
+            List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
+            bool is_logarithmic = false;
             bool is_losses = false;
             try
             {
@@ -11951,6 +11968,14 @@ namespace Isotope_fitting
             catch
             {
                 is_losses = false;
+            }
+            try
+            {
+                is_logarithmic = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Log.")).ToList().First().Checked;
+            }
+            catch
+            {
+                is_logarithmic = false;
             }
             if (list.Count > 0)
             {
@@ -12005,9 +12030,15 @@ namespace Isotope_fitting
                     double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext,nn.Charge, temp_iondraw);
                     double value = 0.0;
                     list_index = return_list_index(nn.Max_intensity);
-                    if (nn.Max_intensity == 0 && primary_int == 0) { value = 0.0; }
-                    else if (nn.Max_intensity > primary_int) { value = (nn.Max_intensity - primary_int) / nn.Max_intensity; }
-                    else { value = (nn.Max_intensity - primary_int) / primary_int; }
+                    if (nn.Max_intensity == 0 && primary_int == 0){value = 0.0;}
+                    else
+                    {
+                        if (primary_int == 0) primary_int = 1.0;
+                         value = nn.Max_intensity / primary_int;
+                        if (is_logarithmic) value = Math.Log10(value);
+                        if (value > maximum) maximum = value;
+                        if (name.Contains("-")) value = value * (-1);
+                    }                    
                     datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
                     if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
                     {
@@ -12020,9 +12051,14 @@ namespace Isotope_fitting
                     foreach (double[] dd in points_line_)
                     {
                         double value = 0.0;
-                        if (dd[1] == 0 && dd[2] == 0) { value = 0.0; }
-                        else if (dd[1] > dd[2]) { value = (dd[1] - dd[2]) / dd[1]; }
-                        else { value = (dd[1] - dd[2]) / dd[2]; }
+                        if (dd[1] == 0 && dd[2] == 0) { value = 0.0; }                        
+                        else
+                        {
+                            if (dd[2] == 0) dd[2] = 1.0;
+                            value = dd[1] / dd[2];
+                            if (is_logarithmic) value = Math.Log10(value);
+                            if (name.Contains("-")) value = value * (-1);
+                        }
                         if (line_.Points.Count>0 && dd[0]- line_.Points.Last().X!=1)
                         {
                             double temp_x = line_.Points.Last().X + 1;
@@ -12035,8 +12071,7 @@ namespace Isotope_fitting
                         else if (line_.Points.Count == 0 && dd[0] > 1)
                         {
                             line_.Points.Add(new DataPoint(dd[0]-1, 0));
-                        }
-                       
+                        }                       
                         line_.Points.Add(new DataPoint(dd[0], value));
                        
                     }
@@ -12048,6 +12083,10 @@ namespace Isotope_fitting
                     if (datapoint_list[i].Count > 0) { series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; plot.Model.Series.Add(series_list[i]); }
                 }
             }
+            if (is_logarithmic) { plot.Model.Axes[0].Title = "log(k)"; }
+            else { plot.Model.Axes[0].Title = "k"; }
+            plot.Model.Axes[0].Minimum = -1.2 * maximum;
+            plot.Model.Axes[0].Maximum = +1.2 * maximum;
             plot.InvalidatePlot(true);
         }
         private Color[] create_check_boxes(string type, FlowLayoutPanel flowpnl, Panel pnl)
@@ -12058,13 +12097,15 @@ namespace Isotope_fitting
             List<ion> temp_iondraw = IonDraw.ToList();
             int iondraw_count = temp_iondraw.Count;
             bool is_losses = false;
+            bool is_logarithmic =false;
             if (flowpnl.Controls.Count > 0)
             {
                 is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
+                is_logarithmic = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Log.")).ToList().First().Checked;
             }
             //if ion list is empty clear checkboxes and return
             if (iondraw_count == 0) { flowpnl.Controls.Clear(); return clr; }
-            List<CheckBox> check_names = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Equals("Losses")).ToList();
+            List<CheckBox> check_names = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
             if (check_names.Count > 0) flowpnl.Controls.Clear();
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
@@ -12121,11 +12162,16 @@ namespace Isotope_fitting
             check_names = check_names.OrderBy(p => p.Text).ToList();
             foreach (CheckBox ckbx in check_names) { flowpnl.Controls.Add(ckbx); }
             CheckBox ckbx_losses = new CheckBox() { Text = "Losses", Checked = is_losses };
+            CheckBox ckbx_log = new CheckBox() { Text = "Log.", Checked = is_logarithmic };
             ckbx_losses.CheckedChanged += (s, e) =>
             {
                 ckbx_losses.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
             };
-            flowpnl.Controls.Add(ckbx_losses);
+            ckbx_log.CheckedChanged += (s, e) =>
+            {
+                ckbx_log.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
+            };
+            flowpnl.Controls.AddRange(new Control[] { ckbx_losses, ckbx_log });
             temp_iondraw.Clear();
             return clr;
         }
@@ -12171,6 +12217,20 @@ namespace Isotope_fitting
             GroupBox grp = tt.Parent as GroupBox;
             string code = grp.Name.Last().ToString();
             create_export_plotview(grp, code);
+        }
+        private void losses_styleBtn1_Click(object sender, EventArgs e)
+        {
+            foreach (SequenceTab seq in sequenceList)
+            {
+                if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                {
+                    color_primary_indexes = seq.Index_SS_primary.ToList();
+                    break;
+                }
+            }
+            Form12_2 frm12_2 = new Form12_2(this);
+            frm12_2.FormClosed += (s, f) => { save_preferences(); tabControl1.TabPages["tab_Hydrogens"].Invalidate(); };
+            frm12_2.ShowDialog();
         }
         #endregion
 
@@ -13441,5 +13501,6 @@ namespace Isotope_fitting
 
         #endregion
 
+       
     }
 }

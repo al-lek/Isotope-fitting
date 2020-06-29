@@ -572,9 +572,8 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(6, 31);
-            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(264, 28);
+            this.textBox1.Size = new System.Drawing.Size(264, 21);
             this.textBox1.TabIndex = 0;
             this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             // 
