@@ -11839,7 +11839,7 @@ namespace Isotope_fitting
         {
             Panel pnl = GetControls(grp).OfType<Panel>().FirstOrDefault();
             PlotView plot = GetControls(pnl).OfType<PlotView>().FirstOrDefault();
-            export_copy_plot(copy, plot);
+            export_panel(copy, pnl);
         }
         private void create_plotview(GroupBox grp, string type)
         {
@@ -11902,7 +11902,7 @@ namespace Isotope_fitting
             plus_plot.Controller = new CustomPlotController();
             PlotView minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Bottom,*/ Height = 100 };
             pnl.Controls.Add(minus_plot);
-            PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+            PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
             minus_plot.Model = model2;
             var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
             model2.Axes.Add(linearAxis3);
@@ -11920,10 +11920,8 @@ namespace Isotope_fitting
             minus_plot.Model.Axes[0].Zoom(original_plotview_minus.Model.Axes[0].ActualMinimum, original_plotview_minus.Model.Axes[0].ActualMaximum);
             paint_annotations_in_temp_graphs(1, plus_plot);
             paint_annotations_in_temp_graphs(1, minus_plot);
-            Form11 frm11 = new Form11(plus_plot);
+            Form11 frm11 = new Form11(plus_plot,minus_plot,true);
             frm11.Show();
-            Form11 frm11_2 = new Form11(minus_plot);
-            frm11_2.Show();
         }
         private Color[] return_check_boxes_colors(string type, FlowLayoutPanel flowpnl)
         {
@@ -11957,8 +11955,11 @@ namespace Isotope_fitting
             var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             int iondraw_count = temp_iondraw.Count;
             double maximum = 1.0;
+            double minimum = -0.10 * maximum;
             string s_ext = "";
             string s_chain = Peptide;
+            bool is_logarithmic = false;
+            bool is_losses = false;
             List<string> check_names = new List<string>();
             for (int cc = 0; cc < s_chain.Length; cc++)
             {
@@ -12012,8 +12013,7 @@ namespace Isotope_fitting
                 CI ion_comp = new CI();
                 temp_iondraw.Sort(ion_comp);
                 List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
-                bool is_logarithmic = false;
-                bool is_losses = false;
+               
                 try
                 {
                     is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
@@ -12034,6 +12034,7 @@ namespace Isotope_fitting
                 {
                     plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
                     minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
+                    minimum = 0.1;
                 }
                 if (list.Count > 0)
                 {
@@ -12093,8 +12094,9 @@ namespace Isotope_fitting
                         {
                             if (primary_int == 0) primary_int = 1.0;
                             value = nn.Max_intensity / primary_int;
-                            if (is_logarithmic) value = Math.Log(value);
-                            if (value > maximum) maximum = value;                           
+                            //if (is_logarithmic) value = Math.Log(value);
+                            if (value > maximum) maximum = value;
+                            if (value < minimum) minimum = value;
                         }
                         datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
                         if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
@@ -12105,28 +12107,30 @@ namespace Isotope_fitting
                     }
                     if (points_line_.Count > 0)
                     {
+                        double min_add = 0.0;
+                        if (is_logarithmic) {  min_add = 0.00000000001; }
                         foreach (double[] dd in points_line_)
                         {
                             double value = 0.0;
-                            if (dd[1] == 0 && dd[2] == 0) { value = 0.0; }
+                            if (dd[1] == 0 && dd[2] == 0) { value = min_add; }
                             else
                             {
                                 if (dd[2] == 0) dd[2] = 1.0;
                                 value = dd[1] / dd[2];
-                                if (is_logarithmic) value = Math.Log(value);
+                                //if (is_logarithmic) value = Math.Log(value);
                             }
                             if (line_.Points.Count > 0 && dd[0] - line_.Points.Last().X != 1)
                             {
                                 double temp_x = line_.Points.Last().X + 1;
                                 while (temp_x < dd[0])
                                 {
-                                    line_.Points.Add(new DataPoint(temp_x, 0));
+                                    line_.Points.Add(new DataPoint(temp_x, min_add));
                                     temp_x++;
                                 }
                             }
                             else if (line_.Points.Count == 0 && dd[0] > 1)
                             {
-                                line_.Points.Add(new DataPoint(dd[0] - 1, 0));
+                                line_.Points.Add(new DataPoint(dd[0] - 1, min_add));
                             }
                             line_.Points.Add(new DataPoint(dd[0], value));
                         }
@@ -12144,25 +12148,28 @@ namespace Isotope_fitting
                         }
                     }
                 }
-                if (is_logarithmic) { plus_plot.Model.Axes[0].Title = "log(k)"; minus_plot.Model.Axes[0].Title = "log(k)"; }
-                else{plus_plot.Model.Axes[0].Title = "k";minus_plot.Model.Axes[0].Title = "k";}
+                if (is_logarithmic) { maximum = Math.Pow(maximum, 1.2); if (minimum<0)minimum = Math.Pow(minimum,1.5); else minimum = Math.Pow(minimum, 0.8); }
+                else{ minimum =-0.10*maximum; maximum = 1.2 * maximum; }                
             }
+             
             plus_plot.Model.Axes[1].Minimum =0;minus_plot.Model.Axes[1].Minimum = 0;
             plus_plot.Model.Axes[1].Maximum = s_chain.Length;minus_plot.Model.Axes[1].Maximum = s_chain.Length;
-            plus_plot.Model.Axes[0].Minimum = -0.12; minus_plot.Model.Axes[0].Minimum = -0.12;
-            plus_plot.Model.Axes[0].Maximum = +1.2 * maximum; minus_plot.Model.Axes[0].Maximum = +1.2 * maximum;            
+            plus_plot.Model.Axes[0].Minimum = minimum; minus_plot.Model.Axes[0].Minimum = minimum;
+            plus_plot.Model.Axes[0].Maximum = maximum; minus_plot.Model.Axes[0].Maximum = maximum;            
             s1a.Points.Clear(); s2a.Points.Clear();s1b.Points.Clear(); s2b.Points.Clear();
+            if (is_logarithmic) { maximum = Math.Pow(maximum, 0.99); minimum = Math.Pow(minimum, 0.99); }
+            else { maximum = maximum * 0.99; minimum = minimum * 0.99; }         
             for (int cc = 0; cc < s_chain.Length; cc++)
             {
                 if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                 {
-                    s1a.Points.Add(new ScatterPoint(cc + 1,- 0.12 * 0.99));
-                    s1b.Points.Add(new ScatterPoint(cc + 1, -0.12 * 0.99));
+                    s1a.Points.Add(new ScatterPoint(cc + 1, minimum));
+                    s1b.Points.Add(new ScatterPoint(cc + 1, minimum));
                 }
                 else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                 {
-                    s2a.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
-                    s2b.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
+                    s2a.Points.Add(new ScatterPoint(cc + 1,  maximum));
+                    s2b.Points.Add(new ScatterPoint(cc + 1,  maximum));
                 }
             }
             plus_plot.Model.Series[0] = s1a; plus_plot.Model.Series[1] = s2a;
@@ -12339,7 +12346,7 @@ namespace Isotope_fitting
             ppm_plot_init(temp_plot);
             temp_plot.Model.Axes[1].Zoom(ppm_plot.Model.Axes[1].ActualMinimum, ppm_plot.Model.Axes[1].ActualMaximum);
             temp_plot.Model.Axes[0].Zoom(ppm_plot.Model.Axes[0].ActualMinimum, ppm_plot.Model.Axes[0].ActualMaximum);
-            Form11 frm11 = new Form11(temp_plot);
+            Form11 frm11 = new Form11(temp_plot, temp_plot);
             frm11.Show();
         }
         #endregion
@@ -12731,7 +12738,7 @@ namespace Isotope_fitting
             temp_plot.Model.Axes[1].Zoom(original_plotview.Model.Axes[1].ActualMinimum, original_plotview.Model.Axes[1].ActualMaximum);
             temp_plot.Model.Axes[0].Zoom(original_plotview.Model.Axes[0].ActualMinimum, original_plotview.Model.Axes[0].ActualMaximum);
             paint_annotations_in_temp_graphs(1, temp_plot);
-            Form11 frm11 = new Form11(temp_plot);
+            Form11 frm11 = new Form11(temp_plot, temp_plot);
             frm11.Show();
         }
 

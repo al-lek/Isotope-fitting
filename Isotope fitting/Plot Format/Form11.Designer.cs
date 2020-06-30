@@ -98,6 +98,7 @@
             this.panel_frm11.Name = "panel_frm11";
             this.panel_frm11.Size = new System.Drawing.Size(757, 450);
             this.panel_frm11.TabIndex = 28;
+            this.panel_frm11.Resize += new System.EventHandler(this.panel_frm11_Resize);
             // 
             // Form11
             // 
