@@ -11844,52 +11844,86 @@ namespace Isotope_fitting
         private void create_plotview(GroupBox grp, string type)
         {
             Panel pnl = GetControls(grp).OfType<Panel>().ToList().First();
-            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().ToList().First();
-            PlotView plot;
+            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().Where(k=>k.Name.Contains("check")).First();
+            PlotView plus_plot;
+            PlotView minus_plot;
             if (pnl.Controls.Count > 0)
             {
-                plot = pnl.Controls[0] as PlotView;
-                plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
-                plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+                plus_plot = pnl.Controls[0] as PlotView;
+                plus_plot.Height = pnl.Height / 2;
+                plus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                plus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+                minus_plot = pnl.Controls[1] as PlotView;
+                minus_plot.Height = pnl.Height / 2;
+                minus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                minus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             }
             else
             {
-                plot = new PlotView() { Name = "plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-                pnl.Controls.Add(plot);
-                PlotModel model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
-                plot.Model = model;
+                plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White,Height=pnl.Height/2, Dock = System.Windows.Forms.DockStyle.Top };
+                pnl.Controls.Add(plus_plot);
+                PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+                plus_plot.Model = model1;
                 var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength=y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat=y_format12_2+ y_numformat12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
-                model.Axes.Add(linearAxis1);
+                model1.Axes.Add(linearAxis1);
                 var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep=x_minorStep12_2,MajorStep=x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
-                model.Axes.Add(linearAxis2);
-                plot.MouseDoubleClick += (s, e) => { model.ResetAllAxes(); plot.InvalidatePlot(true); };
-                plot.Controller = new CustomPlotController();
+                model1.Axes.Add(linearAxis2);
+                plus_plot.MouseDoubleClick += (s, e) => { model1.ResetAllAxes(); plus_plot.InvalidatePlot(true); };
+                plus_plot.Controller = new CustomPlotController();
+                minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, Height = pnl.Height / 2, Dock = System.Windows.Forms.DockStyle.Bottom };
+                pnl.Controls.Add(minus_plot);
+                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13/*, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green*/ };
+                minus_plot.Model = model2;
+                var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                model2.Axes.Add(linearAxis3);
+                var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+                model2.Axes.Add(linearAxis4);
+                minus_plot.MouseDoubleClick += (s, e) => { model2.ResetAllAxes(); minus_plot.InvalidatePlot(true); };
+                minus_plot.Controller = new CustomPlotController();
+
             }
             Color[] clr =create_check_boxes(type, flowpnl, pnl);
-            create_losses_diagram(type, plot, flowpnl,clr);
-            paint_annotations_in_temp_graphs(1, plot);
+            create_losses_diagram(type, plus_plot,minus_plot, flowpnl,clr);
+            paint_annotations_in_temp_graphs(1, plus_plot);
+            paint_annotations_in_temp_graphs(1, minus_plot);
         }
         private void create_export_plotview(GroupBox grp, string type)
         {
             Panel pnl = GetControls(grp).OfType<Panel>().ToList().First();
-            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().ToList().First();
-            PlotView plot = new PlotView() { Name = "plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            PlotModel model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
-            plot.Model = model;
+            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().Where(k => k.Name.Contains("check")).First();
+            PlotView plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Top,*/Height=100 };
+            PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+            plus_plot.Model = model1;
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
-            model.Axes.Add(linearAxis1);
+            model1.Axes.Add(linearAxis1);
             var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12, MinorGridlineStyle = Xminor_grid12, TickStyle = X_tick12,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
-            model.Axes.Add(linearAxis2);
-            plot.MouseDoubleClick += (s, e) => { model.ResetAllAxes(); plot.InvalidatePlot(true); };
-            plot.Controller = new CustomPlotController();
+            model1.Axes.Add(linearAxis2);
+            plus_plot.MouseDoubleClick += (s, e) => { model1.ResetAllAxes(); plus_plot.InvalidatePlot(true); };
+            plus_plot.Controller = new CustomPlotController();
+            PlotView minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Bottom,*/ Height = 100 };
+            pnl.Controls.Add(minus_plot);
+            PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+            minus_plot.Model = model2;
+            var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+            model2.Axes.Add(linearAxis3);
+            var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            model2.Axes.Add(linearAxis4);
+            minus_plot.MouseDoubleClick += (s, e) => { model2.ResetAllAxes(); minus_plot.InvalidatePlot(true); };
+            minus_plot.Controller = new CustomPlotController();
             Color[] clr = return_check_boxes_colors(type, flowpnl);
-            create_losses_diagram(type, plot, flowpnl, clr);
-            PlotView original_plotview = GetControls(pnl).OfType<PlotView>().First();
-            plot.Model.Axes[1].Zoom(original_plotview.Model.Axes[1].ActualMinimum, original_plotview.Model.Axes[1].ActualMaximum);
-            plot.Model.Axes[0].Zoom(original_plotview.Model.Axes[0].ActualMinimum, original_plotview.Model.Axes[0].ActualMaximum);
-            paint_annotations_in_temp_graphs(1, plot);
-            Form11 frm11 = new Form11(plot);
+            create_losses_diagram(type, plus_plot, minus_plot, flowpnl, clr);
+            PlotView original_plotview_plus = GetControls(pnl).OfType<PlotView>().Where(k=>k.Name.Contains("plus")).First();
+            plus_plot.Model.Axes[1].Zoom(original_plotview_plus.Model.Axes[1].ActualMinimum, original_plotview_plus.Model.Axes[1].ActualMaximum);
+            plus_plot.Model.Axes[0].Zoom(original_plotview_plus.Model.Axes[0].ActualMinimum, original_plotview_plus.Model.Axes[0].ActualMaximum);
+            PlotView original_plotview_minus = GetControls(pnl).OfType<PlotView>().Where(k => k.Name.Contains("minus")).First();
+            minus_plot.Model.Axes[1].Zoom(original_plotview_minus.Model.Axes[1].ActualMinimum, original_plotview_minus.Model.Axes[1].ActualMaximum);
+            minus_plot.Model.Axes[0].Zoom(original_plotview_minus.Model.Axes[0].ActualMinimum, original_plotview_minus.Model.Axes[0].ActualMaximum);
+            paint_annotations_in_temp_graphs(1, plus_plot);
+            paint_annotations_in_temp_graphs(1, minus_plot);
+            Form11 frm11 = new Form11(plus_plot);
             frm11.Show();
+            Form11 frm11_2 = new Form11(minus_plot);
+            frm11_2.Show();
         }
         private Color[] return_check_boxes_colors(string type, FlowLayoutPanel flowpnl)
         {
@@ -11912,13 +11946,15 @@ namespace Isotope_fitting
             }
             return clr;
         }
-        private void create_losses_diagram(string type, PlotView plot, FlowLayoutPanel flowpnl, Color[] clr)
+        private void create_losses_diagram(string type, PlotView plus_plot, PlotView minus_plot, FlowLayoutPanel flowpnl, Color[] clr)
         {
-            if (plot.Model.Series != null) { plot.Model.Series.Clear(); }
-            plot.Model.Title = type + " fragments";
-            plot.Model.TitleColor = clr[0].ToOxyColor();
+            if (plus_plot.Model.Series != null) { plus_plot.Model.Series.Clear(); }
+            if (minus_plot.Model.Series != null) { minus_plot.Model.Series.Clear(); }
+            plus_plot.Model.Title = type + " fragments";
+            plus_plot.Model.TitleColor = clr[0].ToOxyColor();
             List<ion> temp_iondraw = IonDraw.ToList();
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             int iondraw_count = temp_iondraw.Count;
             double maximum = 1.0;
             string s_ext = "";
@@ -11929,28 +11965,47 @@ namespace Isotope_fitting
                 if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                 {
                     s1a.Points.Add(new ScatterPoint(cc + 1, -1.2 * maximum * 0.99));
+                    s1b.Points.Add(new ScatterPoint(cc + 1, -1.2 * maximum * 0.99));
                 }
                 else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                 {
                     s2a.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
+                    s2b.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
                 }
             }
-            plot.Model.Series.Add(s1a); plot.Model.Series.Add(s2a);
-            plot.Model.Axes[0].AxisChanged += (s, e) =>
+            plus_plot.Model.Series.Add(s1a); plus_plot.Model.Series.Add(s2a);
+            minus_plot.Model.Series.Add(s1b); minus_plot.Model.Series.Add(s2b);
+            plus_plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1a.Points.Clear(); s2a.Points.Clear();
                 for (int cc = 0; cc < s_chain.Length; cc++)
                 {
                     if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                     {
-                        s1a.Points.Add(new ScatterPoint(cc + 1, plot.Model.Axes[0].ActualMinimum * 0.99));
+                        s1a.Points.Add(new ScatterPoint(cc + 1, plus_plot.Model.Axes[0].ActualMinimum * 0.99));
                     }
                     else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                     {
-                        s2a.Points.Add(new ScatterPoint(cc + 1, plot.Model.Axes[0].ActualMaximum * 0.99));
+                        s2a.Points.Add(new ScatterPoint(cc + 1, plus_plot.Model.Axes[0].ActualMaximum * 0.99));
                     }
                 }
-                plot.Model.Series[0] = s1a; plot.Model.Series[1] = s2a; plot.InvalidatePlot(true);
+                plus_plot.Model.Series[0] = s1a; plus_plot.Model.Series[1] = s2a; plus_plot.InvalidatePlot(true);
+            };
+            minus_plot.Model.Axes[0].AxisChanged += (s, e) =>
+            {
+                s1b.Points.Clear(); s2b.Points.Clear();
+                for (int cc = 0; cc < s_chain.Length; cc++)
+                {
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                    {
+                        s1b.Points.Add(new ScatterPoint(cc + 1, minus_plot.Model.Axes[0].ActualMinimum * 0.99));
+                    }
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                    {
+                        s2b.Points.Add(new ScatterPoint(cc + 1, minus_plot.Model.Axes[0].ActualMaximum * 0.99));
+                    }
+                }
+                minus_plot.Model.Series[0] = s1b; minus_plot.Model.Series[1] = s2b; minus_plot.InvalidatePlot(true);
             };
             if (iondraw_count >0)
             {
@@ -11975,6 +12030,11 @@ namespace Isotope_fitting
                 {
                     is_logarithmic = false;
                 }
+                if (is_logarithmic)
+                {
+                    plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
+                    minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
+                }
                 if (list.Count > 0)
                 {
                     foreach (CheckBox vv in list) { if (vv.Checked) check_names.Add(vv.Text); }
@@ -11986,10 +12046,6 @@ namespace Isotope_fitting
                         if (seq.Extension.Equals(seq_extensionBox.SelectedItem)) { s_chain = seq.Sequence; s_ext = seq.Extension; break; }
                     }
                 }
-                //if (is_logarithmic)
-                //{
-                //    plot.Model.Axes[0] = new LogarithmicAxis {FilterMinValue=-1000000000000000000,  Position = AxisPosition.Left,  MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
-                //}
                 int count = check_names.Count();
                 for (int k = 0; k < count; k++)
                 {
@@ -12038,8 +12094,7 @@ namespace Isotope_fitting
                             if (primary_int == 0) primary_int = 1.0;
                             value = nn.Max_intensity / primary_int;
                             if (is_logarithmic) value = Math.Log(value);
-                            if (value > maximum) maximum = value;
-                            if (name.Contains("-")) value = value * (-1);
+                            if (value > maximum) maximum = value;                           
                         }
                         datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
                         if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
@@ -12059,7 +12114,6 @@ namespace Isotope_fitting
                                 if (dd[2] == 0) dd[2] = 1.0;
                                 value = dd[1] / dd[2];
                                 if (is_logarithmic) value = Math.Log(value);
-                                if (name.Contains("-")) value = value * (-1);
                             }
                             if (line_.Points.Count > 0 && dd[0] - line_.Points.Last().X != 1)
                             {
@@ -12075,38 +12129,46 @@ namespace Isotope_fitting
                                 line_.Points.Add(new DataPoint(dd[0] - 1, 0));
                             }
                             line_.Points.Add(new DataPoint(dd[0], value));
-
                         }
                         if (line_.Points.Last().X < s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X + 1, 0));
-                        plot.Model.Series.Add(line_);
+                        if(name.Contains("+"))plus_plot.Model.Series.Add(line_);
+                        else minus_plot.Model.Series.Add(line_);
                     }
                     for (int i = 9; i >= 0; i--)
                     {
-                        if (datapoint_list[i].Count > 0) { series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}"; plot.Model.Series.Add(series_list[i]); }
+                        if (datapoint_list[i].Count > 0)
+                        {
+                            series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}";
+                            if (name.Contains("+")) plus_plot.Model.Series.Add(series_list[i]);
+                            else minus_plot.Model.Series.Add(series_list[i]);
+                        }
                     }
                 }
-                if (is_logarithmic) { plot.Model.Axes[0].Title = "log(k)"; }
-                else { plot.Model.Axes[0].Title = "k"; }
-                
-            }   
-            plot.Model.Axes[1].Minimum = 0;
-            plot.Model.Axes[1].Maximum = s_chain.Length;
-            plot.Model.Axes[0].Minimum = -1.2 * maximum;
-            plot.Model.Axes[0].Maximum = +1.2 * maximum;
-            s1a.Points.Clear(); s2a.Points.Clear();
+                if (is_logarithmic) { plus_plot.Model.Axes[0].Title = "log(k)"; minus_plot.Model.Axes[0].Title = "log(k)"; }
+                else{plus_plot.Model.Axes[0].Title = "k";minus_plot.Model.Axes[0].Title = "k";}
+            }
+            plus_plot.Model.Axes[1].Minimum =0;minus_plot.Model.Axes[1].Minimum = 0;
+            plus_plot.Model.Axes[1].Maximum = s_chain.Length;minus_plot.Model.Axes[1].Maximum = s_chain.Length;
+            plus_plot.Model.Axes[0].Minimum = -0.12; minus_plot.Model.Axes[0].Minimum = -0.12;
+            plus_plot.Model.Axes[0].Maximum = +1.2 * maximum; minus_plot.Model.Axes[0].Maximum = +1.2 * maximum;            
+            s1a.Points.Clear(); s2a.Points.Clear();s1b.Points.Clear(); s2b.Points.Clear();
             for (int cc = 0; cc < s_chain.Length; cc++)
             {
                 if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
                 {
-                    s1a.Points.Add(new ScatterPoint(cc + 1,- 1.2 * maximum * 0.99));
+                    s1a.Points.Add(new ScatterPoint(cc + 1,- 0.12 * 0.99));
+                    s1b.Points.Add(new ScatterPoint(cc + 1, -0.12 * 0.99));
                 }
                 else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                 {
                     s2a.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
+                    s2b.Points.Add(new ScatterPoint(cc + 1, 1.2 * maximum * 0.99));
                 }
             }
-            plot.Model.Series[0] = s1a; plot.Model.Series[1] = s2a;
-            plot.InvalidatePlot(true);
+            plus_plot.Model.Series[0] = s1a; plus_plot.Model.Series[1] = s2a;
+            plus_plot.InvalidatePlot(true);
+            minus_plot.Model.Series[0] = s1b; minus_plot.Model.Series[1] = s2b;
+            minus_plot.InvalidatePlot(true);
         }
         private Color[] create_check_boxes(string type, FlowLayoutPanel flowpnl, Panel pnl)
         {
