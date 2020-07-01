@@ -11916,9 +11916,9 @@ namespace Isotope_fitting
             PlotView plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Top,*/Height=100 };
             PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
             plus_plot.Model = model1;
-            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
             model1.Axes.Add(linearAxis1);
-            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12, MinorGridlineStyle = Xminor_grid12, TickStyle = X_tick12,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             model1.Axes.Add(linearAxis2);
             plus_plot.MouseDoubleClick += (s, e) => { model1.ResetAllAxes(); plus_plot.InvalidatePlot(true); };
             plus_plot.Controller = new CustomPlotController();
@@ -12103,7 +12103,8 @@ namespace Isotope_fitting
                             if (value > maximum) maximum = value;
                             if (value < minimum) minimum = value;
                         }
-                        datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, nn.Index.ToString(), nn.Mz, nn.Name));
+                        if (name.StartsWith("w")|| name.StartsWith("x")|| name.StartsWith("y")|| name.StartsWith("z")) { datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, /*nn.Index.ToString() +*/ "(" + s_chain[nn.SortIdx] + ")", nn.Mz, nn.Name)); }
+                        else { datapoint_list[list_index].Add(new CustomDataPoint(nn.SortIdx, value, /*nn.Index.ToString() +*/ "(" + s_chain[nn.SortIdx-1] + ")", nn.Mz, nn.Name)); }                        
                         if (points_line_.Count == 0 || points_line_.Last()[0] != nn.SortIdx)
                         {
                             points_line_.Add(new double[] { nn.SortIdx, nn.Max_intensity, primary_int });
@@ -12147,7 +12148,7 @@ namespace Isotope_fitting
                     {
                         if (datapoint_list[i].Count > 0)
                         {
-                            series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}";
+                            series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}\nBase:{Xreal}";
                             if (name.Contains("+")) plus_plot.Model.Series.Add(series_list[i]);
                             else minus_plot.Model.Series.Add(series_list[i]);
                         }
@@ -12344,7 +12345,7 @@ namespace Isotope_fitting
             string code = grp.Name.Last().ToString();
             create_export_plotview(grp, code);
         }
-        private void losses_styleBtn1_Click(object sender, EventArgs e)
+        private void losses_style_Btn_Click(object sender, EventArgs e)
         {
             foreach (SequenceTab seq in sequenceList)
             {
@@ -12355,8 +12356,12 @@ namespace Isotope_fitting
                 }
             }
             Form12_2 frm12_2 = new Form12_2(this);
-            frm12_2.FormClosed += (s, f) => { save_preferences(); tabControl1.TabPages["tab_Hydrogens"].Invalidate(); };
+            frm12_2.FormClosed += (s, f) => { save_preferences(); };
             frm12_2.ShowDialog();
+        }
+        public void inval_style_Refresh_Btn()
+        {
+            tabControl1.TabPages["tab_Hydrogens"].Invalidate();
         }
 
         private double find_bound_s(double bound_value,bool is_minimum, bool is_log=false)
@@ -13663,8 +13668,9 @@ namespace Isotope_fitting
             File.WriteAllLines(path, fragText);
         }
 
+
         #endregion
 
-       
+      
     }
 }

@@ -60,7 +60,17 @@
             // minIntensity_numUD
             // 
             this.minIntensity_numUD.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.minIntensity_numUD.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.minIntensity_numUD.Location = new System.Drawing.Point(160, 7);
+            this.minIntensity_numUD.Maximum = new decimal(new int[] {
+            1241513984,
+            370409800,
+            542101,
+            0});
             this.minIntensity_numUD.Minimum = new decimal(new int[] {
             10,
             0,

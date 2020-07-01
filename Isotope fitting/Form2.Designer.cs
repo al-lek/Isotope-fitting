@@ -404,7 +404,6 @@ namespace Isotope_fitting
             this.losses_saveBtn1 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn1 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.losses_styleBtn1 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_extractBtn1 = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_X_Box1 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box1 = new System.Windows.Forms.ToolStripTextBox();
@@ -449,6 +448,9 @@ namespace Isotope_fitting
             this.losses_X_Box2 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box2 = new System.Windows.Forms.ToolStripTextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
@@ -543,6 +545,7 @@ namespace Isotope_fitting
             this.losses_groupBox_w.SuspendLayout();
             this.losses_toolStrip2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -4517,7 +4520,7 @@ namespace Isotope_fitting
             this.tab_Hydrogens.Padding = new System.Windows.Forms.Padding(3);
             this.tab_Hydrogens.Size = new System.Drawing.Size(1362, 723);
             this.tab_Hydrogens.TabIndex = 5;
-            this.tab_Hydrogens.Text = "Hydrogens";
+            this.tab_Hydrogens.Text = "H-Rearrangements";
             this.tab_Hydrogens.UseVisualStyleBackColor = true;
             // 
             // losses_splitContainer
@@ -4946,7 +4949,6 @@ namespace Isotope_fitting
             this.losses_DropBtn1.AutoToolTip = false;
             this.losses_DropBtn1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.losses_DropBtn1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.losses_styleBtn1,
             this.losses_extractBtn1});
             this.losses_DropBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn1.Image")));
             this.losses_DropBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -4954,18 +4956,10 @@ namespace Isotope_fitting
             this.losses_DropBtn1.Size = new System.Drawing.Size(40, 22);
             this.losses_DropBtn1.Text = " ";
             // 
-            // losses_styleBtn1
-            // 
-            this.losses_styleBtn1.Name = "losses_styleBtn1";
-            this.losses_styleBtn1.Size = new System.Drawing.Size(133, 22);
-            this.losses_styleBtn1.Text = "Style";
-            this.losses_styleBtn1.ToolTipText = "Format the style of the plots in this tab";
-            this.losses_styleBtn1.Click += new System.EventHandler(this.losses_styleBtn1_Click);
-            // 
             // losses_extractBtn1
             // 
             this.losses_extractBtn1.Name = "losses_extractBtn1";
-            this.losses_extractBtn1.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn1.Size = new System.Drawing.Size(180, 22);
             this.losses_extractBtn1.Text = "Extract Plot";
             this.losses_extractBtn1.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn1.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -5421,6 +5415,7 @@ namespace Isotope_fitting
             // panel3
             // 
             this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel3.Controls.Add(this.toolStrip1);
             this.panel3.Controls.Add(this.losses_label);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -5428,6 +5423,41 @@ namespace Isotope_fitting
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1356, 34);
             this.panel3.TabIndex = 32;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.Color.White;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripDropDownButton4});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip1.Location = new System.Drawing.Point(349, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(34, 34);
+            this.toolStrip1.TabIndex = 25;
+            // 
+            // toolStripDropDownButton4
+            // 
+            this.toolStripDropDownButton4.AutoToolTip = false;
+            this.toolStripDropDownButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_style_Btn});
+            this.toolStripDropDownButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton4.Image")));
+            this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
+            this.toolStripDropDownButton4.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
+            this.toolStripDropDownButton4.Size = new System.Drawing.Size(31, 31);
+            this.toolStripDropDownButton4.Text = " ";
+            // 
+            // losses_style_Btn
+            // 
+            this.losses_style_Btn.Name = "losses_style_Btn";
+            this.losses_style_Btn.Size = new System.Drawing.Size(180, 22);
+            this.losses_style_Btn.Text = "Style";
+            this.losses_style_Btn.ToolTipText = "Format the style of the plots in this tab";
+            this.losses_style_Btn.Click += new System.EventHandler(this.losses_style_Btn_Click);
             // 
             // losses_label
             // 
@@ -5437,9 +5467,10 @@ namespace Isotope_fitting
             this.losses_label.ForeColor = System.Drawing.Color.Crimson;
             this.losses_label.Location = new System.Drawing.Point(0, 0);
             this.losses_label.Name = "losses_label";
-            this.losses_label.Size = new System.Drawing.Size(196, 20);
+            this.losses_label.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.losses_label.Size = new System.Drawing.Size(349, 25);
             this.losses_label.TabIndex = 2;
-            this.losses_label.Text = "Radical Migration Mapping";
+            this.losses_label.Text = "Intramolecular Hydrogen Atom Rearrangements";
             // 
             // toolStripButton4
             // 
@@ -5621,6 +5652,8 @@ namespace Isotope_fitting
             this.losses_toolStrip2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -5966,7 +5999,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton losses_saveBtn1;
         private System.Windows.Forms.ToolStripButton losses_copyBtn1;
         private System.Windows.Forms.ToolStripDropDownButton losses_DropBtn1;
-        private System.Windows.Forms.ToolStripMenuItem losses_styleBtn1;
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn1;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box1;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box1;
@@ -6045,5 +6077,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_X_Box8;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box8;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton4;
+        private System.Windows.Forms.ToolStripMenuItem losses_style_Btn;
     }
 }

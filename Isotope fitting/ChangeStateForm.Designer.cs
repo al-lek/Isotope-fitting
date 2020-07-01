@@ -100,7 +100,7 @@
             this.save_stateBtn.Name = "save_stateBtn";
             this.save_stateBtn.Size = new System.Drawing.Size(75, 23);
             this.save_stateBtn.TabIndex = 4;
-            this.save_stateBtn.Text = "Save";
+            this.save_stateBtn.Text = "Open";
             this.save_stateBtn.UseVisualStyleBackColor = true;
             this.save_stateBtn.Click += new System.EventHandler(this.save_stateBtn_Click);
             // 
