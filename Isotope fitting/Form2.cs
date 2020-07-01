@@ -11984,6 +11984,8 @@ namespace Isotope_fitting
         }
         private void create_losses_diagram(string type, PlotView plus_plot, PlotView minus_plot, FlowLayoutPanel flowpnl, Color[] clr)
         {
+            string text = "Amino Acid";
+            if(is_riken) text = "Base";
             if (plus_plot.Model.Series != null) { plus_plot.Model.Series.Clear(); }
             if (minus_plot.Model.Series != null) { minus_plot.Model.Series.Clear(); }
             plus_plot.Model.Title = type + " fragments";
@@ -12148,7 +12150,7 @@ namespace Isotope_fitting
                     {
                         if (datapoint_list[i].Count > 0)
                         {
-                            series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}\nBase:{Xreal}";
+                            series_list[i].ItemsSource = datapoint_list[i]; series_list[i].TrackerFormatString = "{0}\n{1}: {2:0.###}\n{3}: {4:0.###}\nMonoisotopic Mass: {Text}\n{Name}\n"+text+":{Xreal}";
                             if (name.Contains("+")) plus_plot.Model.Series.Add(series_list[i]);
                             else minus_plot.Model.Series.Add(series_list[i]);
                         }
@@ -13669,8 +13671,9 @@ namespace Isotope_fitting
         }
 
 
+
         #endregion
 
-      
+        
     }
 }

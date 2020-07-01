@@ -449,10 +449,10 @@ namespace Isotope_fitting
             this.losses_Y_Box2 = new System.Windows.Forms.ToolStripTextBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -823,8 +823,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem1
             // 
+            this.extractPlotToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem1.Image")));
             this.extractPlotToolStripMenuItem1.Name = "extractPlotToolStripMenuItem1";
-            this.extractPlotToolStripMenuItem1.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem1.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem1.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem1.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem1.Click += new System.EventHandler(this.extractPlotToolStripMenuItem1_Click);
@@ -914,8 +915,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem2
             // 
+            this.extractPlotToolStripMenuItem2.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem2.Image")));
             this.extractPlotToolStripMenuItem2.Name = "extractPlotToolStripMenuItem2";
-            this.extractPlotToolStripMenuItem2.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem2.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem2.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem2.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem2.Click += new System.EventHandler(this.extractPlotToolStripMenuItem2_Click);
@@ -1017,8 +1019,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem_charge_dz
             // 
+            this.extractPlotToolStripMenuItem_charge_dz.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem_charge_dz.Image")));
             this.extractPlotToolStripMenuItem_charge_dz.Name = "extractPlotToolStripMenuItem_charge_dz";
-            this.extractPlotToolStripMenuItem_charge_dz.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem_charge_dz.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem_charge_dz.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem_charge_dz.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem_charge_dz.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_charge_dz_Click);
@@ -1138,8 +1141,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem6
             // 
+            this.extractPlotToolStripMenuItem6.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem6.Image")));
             this.extractPlotToolStripMenuItem6.Name = "extractPlotToolStripMenuItem6";
-            this.extractPlotToolStripMenuItem6.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem6.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem6.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem6.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem6.Click += new System.EventHandler(this.extractPlotToolStripMenuItem6_Click);
@@ -1259,8 +1263,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem5
             // 
+            this.extractPlotToolStripMenuItem5.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem5.Image")));
             this.extractPlotToolStripMenuItem5.Name = "extractPlotToolStripMenuItem5";
-            this.extractPlotToolStripMenuItem5.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem5.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem5.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem5.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem5.Click += new System.EventHandler(this.extractPlotToolStripMenuItem5_Click);
@@ -1393,8 +1398,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem7
             // 
+            this.extractPlotToolStripMenuItem7.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem7.Image")));
             this.extractPlotToolStripMenuItem7.Name = "extractPlotToolStripMenuItem7";
-            this.extractPlotToolStripMenuItem7.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem7.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem7.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem7.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem7.Click += new System.EventHandler(this.extractPlotToolStripMenuItem7_Click);
@@ -1535,8 +1541,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem_dz
             // 
+            this.extractPlotToolStripMenuItem_dz.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem_dz.Image")));
             this.extractPlotToolStripMenuItem_dz.Name = "extractPlotToolStripMenuItem_dz";
-            this.extractPlotToolStripMenuItem_dz.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem_dz.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem_dz.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem_dz.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem_dz.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_dz_Click);
@@ -1628,8 +1635,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem8
             // 
+            this.extractPlotToolStripMenuItem8.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem8.Image")));
             this.extractPlotToolStripMenuItem8.Name = "extractPlotToolStripMenuItem8";
-            this.extractPlotToolStripMenuItem8.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem8.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem8.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem8.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem8.Click += new System.EventHandler(this.extractPlotToolStripMenuItem8_Click);
@@ -1721,8 +1729,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem4
             // 
+            this.extractPlotToolStripMenuItem4.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem4.Image")));
             this.extractPlotToolStripMenuItem4.Name = "extractPlotToolStripMenuItem4";
-            this.extractPlotToolStripMenuItem4.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem4.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem4.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem4.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem4.Click += new System.EventHandler(this.extractPlotToolStripMenuItem4_Click);
@@ -1825,8 +1834,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem3
             // 
+            this.extractPlotToolStripMenuItem3.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem3.Image")));
             this.extractPlotToolStripMenuItem3.Name = "extractPlotToolStripMenuItem3";
-            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem3.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem3.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem3.Click += new System.EventHandler(this.extractPlotToolStripMenuItem3_Click);
@@ -2534,8 +2544,9 @@ namespace Isotope_fitting
             // 
             // extractPlotToolStripMenuItem9
             // 
+            this.extractPlotToolStripMenuItem9.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem9.Image")));
             this.extractPlotToolStripMenuItem9.Name = "extractPlotToolStripMenuItem9";
-            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(133, 22);
+            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(182, 24);
             this.extractPlotToolStripMenuItem9.Text = "Extract plot";
             this.extractPlotToolStripMenuItem9.Click += new System.EventHandler(this.extractPlotToolStripMenuItem9_Click);
             // 
@@ -3453,15 +3464,17 @@ namespace Isotope_fitting
             // 
             // styleFormatBtn
             // 
+            this.styleFormatBtn.Image = ((System.Drawing.Image)(resources.GetObject("styleFormatBtn.Image")));
             this.styleFormatBtn.Name = "styleFormatBtn";
-            this.styleFormatBtn.Size = new System.Drawing.Size(134, 22);
+            this.styleFormatBtn.Size = new System.Drawing.Size(184, 26);
             this.styleFormatBtn.Text = "Style";
             this.styleFormatBtn.Click += new System.EventHandler(this.styleFormatBtn_Click);
             // 
             // extractPlotToolStripMenuItem
             // 
+            this.extractPlotToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem.Image")));
             this.extractPlotToolStripMenuItem.Name = "extractPlotToolStripMenuItem";
-            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
             // 
@@ -4634,8 +4647,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn7
             // 
+            this.losses_extractBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn7.Image")));
             this.losses_extractBtn7.Name = "losses_extractBtn7";
-            this.losses_extractBtn7.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn7.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn7.Text = "Extract Plot";
             this.losses_extractBtn7.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn7.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -4742,8 +4756,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn5
             // 
+            this.losses_extractBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn5.Image")));
             this.losses_extractBtn5.Name = "losses_extractBtn5";
-            this.losses_extractBtn5.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn5.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn5.Text = "Extract Plot";
             this.losses_extractBtn5.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn5.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -4850,8 +4865,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn3
             // 
+            this.losses_extractBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn3.Image")));
             this.losses_extractBtn3.Name = "losses_extractBtn3";
-            this.losses_extractBtn3.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn3.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn3.Text = "Extract Plot";
             this.losses_extractBtn3.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn3.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -4958,8 +4974,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn1
             // 
+            this.losses_extractBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn1.Image")));
             this.losses_extractBtn1.Name = "losses_extractBtn1";
-            this.losses_extractBtn1.Size = new System.Drawing.Size(180, 22);
+            this.losses_extractBtn1.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn1.Text = "Extract Plot";
             this.losses_extractBtn1.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn1.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -5066,8 +5083,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn8
             // 
+            this.losses_extractBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn8.Image")));
             this.losses_extractBtn8.Name = "losses_extractBtn8";
-            this.losses_extractBtn8.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn8.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn8.Text = "Extract Plot";
             this.losses_extractBtn8.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn8.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -5174,8 +5192,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn6
             // 
+            this.losses_extractBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn6.Image")));
             this.losses_extractBtn6.Name = "losses_extractBtn6";
-            this.losses_extractBtn6.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn6.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn6.Text = "Extract Plot";
             this.losses_extractBtn6.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn6.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -5282,8 +5301,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn4
             // 
+            this.losses_extractBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn4.Image")));
             this.losses_extractBtn4.Name = "losses_extractBtn4";
-            this.losses_extractBtn4.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn4.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn4.Text = "Extract Plot";
             this.losses_extractBtn4.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn4.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -5390,8 +5410,9 @@ namespace Isotope_fitting
             // 
             // losses_extractBtn2
             // 
+            this.losses_extractBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_extractBtn2.Image")));
             this.losses_extractBtn2.Name = "losses_extractBtn2";
-            this.losses_extractBtn2.Size = new System.Drawing.Size(133, 22);
+            this.losses_extractBtn2.Size = new System.Drawing.Size(182, 24);
             this.losses_extractBtn2.Text = "Extract Plot";
             this.losses_extractBtn2.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn2.Click += new System.EventHandler(this.losses_extractBtn_Click);
@@ -5435,29 +5456,8 @@ namespace Isotope_fitting
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(349, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(34, 34);
+            this.toolStrip1.Size = new System.Drawing.Size(65, 34);
             this.toolStrip1.TabIndex = 25;
-            // 
-            // toolStripDropDownButton4
-            // 
-            this.toolStripDropDownButton4.AutoToolTip = false;
-            this.toolStripDropDownButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.losses_style_Btn});
-            this.toolStripDropDownButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton4.Image")));
-            this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
-            this.toolStripDropDownButton4.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            this.toolStripDropDownButton4.Size = new System.Drawing.Size(31, 31);
-            this.toolStripDropDownButton4.Text = " ";
-            // 
-            // losses_style_Btn
-            // 
-            this.losses_style_Btn.Name = "losses_style_Btn";
-            this.losses_style_Btn.Size = new System.Drawing.Size(180, 22);
-            this.losses_style_Btn.Text = "Style";
-            this.losses_style_Btn.ToolTipText = "Format the style of the plots in this tab";
-            this.losses_style_Btn.Click += new System.EventHandler(this.losses_style_Btn_Click);
             // 
             // losses_label
             // 
@@ -5480,6 +5480,28 @@ namespace Isotope_fitting
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
+            // 
+            // losses_style_Btn
+            // 
+            this.losses_style_Btn.Image = ((System.Drawing.Image)(resources.GetObject("losses_style_Btn.Image")));
+            this.losses_style_Btn.Name = "losses_style_Btn";
+            this.losses_style_Btn.Size = new System.Drawing.Size(182, 24);
+            this.losses_style_Btn.Text = "Style";
+            this.losses_style_Btn.ToolTipText = "Format the style of the plots in this tab";
+            this.losses_style_Btn.Click += new System.EventHandler(this.losses_style_Btn_Click);
+            // 
+            // toolStripDropDownButton4
+            // 
+            this.toolStripDropDownButton4.AutoToolTip = false;
+            this.toolStripDropDownButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.losses_style_Btn});
+            this.toolStripDropDownButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton4.Image")));
+            this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
+            this.toolStripDropDownButton4.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
+            this.toolStripDropDownButton4.Size = new System.Drawing.Size(31, 31);
+            this.toolStripDropDownButton4.Text = " ";
             // 
             // Form2
             // 
