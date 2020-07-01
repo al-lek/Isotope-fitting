@@ -11834,7 +11834,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region LOSSES
+        #region Hydrogens Tab
         private void find_plot_ingrp_export(Control grp, bool copy)
         {
             Panel pnl = GetControls(grp).OfType<Panel>().FirstOrDefault();
@@ -11849,6 +11849,7 @@ namespace Isotope_fitting
             PlotView minus_plot;
             if (pnl.Controls.Count > 0)
             {
+                //refresh Plotviews' settings that might have changed by the style Form
                 plus_plot = pnl.Controls[0] as PlotView;
                 plus_plot.Height = pnl.Height / 2;
                 plus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
@@ -11857,9 +11858,24 @@ namespace Isotope_fitting
                 minus_plot.Height = pnl.Height / 2;
                 minus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 minus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
+                //bind the 2 X axes
+                plus_plot.Model.Axes[1].AxisChanged += (s, e) => {
+                    if (minus_plot.Model.Axes[1].ActualMinimum != plus_plot.Model.Axes[1].ActualMinimum && minus_plot.Model.Axes[1].ActualMaximum != plus_plot.Model.Axes[1].ActualMaximum)
+                    {
+                        minus_plot.Model.Axes[1].Zoom(plus_plot.Model.Axes[1].ActualMinimum, plus_plot.Model.Axes[1].ActualMaximum); minus_plot.InvalidatePlot(true);
+                    }
+                };
+                minus_plot.Model.Axes[1].AxisChanged += (s, e) => {
+                    if (minus_plot.Model.Axes[1].ActualMinimum != plus_plot.Model.Axes[1].ActualMinimum && minus_plot.Model.Axes[1].ActualMaximum != plus_plot.Model.Axes[1].ActualMaximum)
+                    {
+                        plus_plot.Model.Axes[1].Zoom(minus_plot.Model.Axes[1].ActualMinimum, minus_plot.Model.Axes[1].ActualMaximum); plus_plot.InvalidatePlot(true);
+                    }
+                };
+
             }
             else
             {
+                //create the Plotviews for plus (example:a+1,a+2) and minus(example:a-1,a-2) Hydrogens
                 plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White,Height=pnl.Height/2, Dock = System.Windows.Forms.DockStyle.Top };
                 pnl.Controls.Add(plus_plot);
                 PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
@@ -11872,7 +11888,7 @@ namespace Isotope_fitting
                 plus_plot.Controller = new CustomPlotController();
                 minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, Height = pnl.Height / 2, Dock = System.Windows.Forms.DockStyle.Bottom };
                 pnl.Controls.Add(minus_plot);
-                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13/*, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green*/ };
+                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
                 minus_plot.Model = model2;
                 var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model2.Axes.Add(linearAxis3);
@@ -11880,7 +11896,13 @@ namespace Isotope_fitting
                 model2.Axes.Add(linearAxis4);
                 minus_plot.MouseDoubleClick += (s, e) => { model2.ResetAllAxes(); minus_plot.InvalidatePlot(true); };
                 minus_plot.Controller = new CustomPlotController();
+                //bind the 2 X axes
+                linearAxis2.AxisChanged += (s, e) => { if (linearAxis4.ActualMinimum!= linearAxis2.ActualMinimum && linearAxis4.ActualMaximum != linearAxis2.ActualMaximum) {
+                        linearAxis4.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); minus_plot.InvalidatePlot(true); } };
+                linearAxis4.AxisChanged += (s, e) => { if (linearAxis4.ActualMinimum != linearAxis2.ActualMinimum && linearAxis4.ActualMaximum != linearAxis2.ActualMaximum) {
+                        linearAxis2.Zoom(linearAxis4.ActualMinimum, linearAxis4.ActualMaximum); plus_plot.InvalidatePlot(true); } };
 
+                //model1.Updated += (s, e) => { minus_plot.Model.Axes[1].Zoom(plus_plot.Model.Axes[1].ActualMinimum, plus_plot.Model.Axes[1].ActualMaximum); };
             }
             Color[] clr =create_check_boxes(type, flowpnl, pnl);
             create_losses_diagram(type, plus_plot,minus_plot, flowpnl,clr);
@@ -11902,7 +11924,7 @@ namespace Isotope_fitting
             plus_plot.Controller = new CustomPlotController();
             PlotView minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Bottom,*/ Height = 100 };
             pnl.Controls.Add(minus_plot);
-            PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+            PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
             minus_plot.Model = model2;
             var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
             model2.Axes.Add(linearAxis3);
@@ -11910,6 +11932,22 @@ namespace Isotope_fitting
             model2.Axes.Add(linearAxis4);
             minus_plot.MouseDoubleClick += (s, e) => { model2.ResetAllAxes(); minus_plot.InvalidatePlot(true); };
             minus_plot.Controller = new CustomPlotController();
+
+            //bind the 2 X axes
+            linearAxis2.AxisChanged += (s, e) => {
+                if (linearAxis4.ActualMinimum != linearAxis2.ActualMinimum && linearAxis4.ActualMaximum != linearAxis2.ActualMaximum)
+                {
+                    linearAxis4.Zoom(linearAxis2.ActualMinimum, linearAxis2.ActualMaximum); minus_plot.InvalidatePlot(true);
+                }
+            };
+            linearAxis4.AxisChanged += (s, e) => {
+                if (linearAxis4.ActualMinimum != linearAxis2.ActualMinimum && linearAxis4.ActualMaximum != linearAxis2.ActualMaximum)
+                {
+                    linearAxis2.Zoom(linearAxis4.ActualMinimum, linearAxis4.ActualMaximum); plus_plot.InvalidatePlot(true);
+                }
+            };
+
+
             Color[] clr = return_check_boxes_colors(type, flowpnl);
             create_losses_diagram(type, plus_plot, minus_plot, flowpnl, clr);
             PlotView original_plotview_plus = GetControls(pnl).OfType<PlotView>().Where(k=>k.Name.Contains("plus")).First();
@@ -11975,45 +12013,12 @@ namespace Isotope_fitting
                 }
             }
             plus_plot.Model.Series.Add(s1a); plus_plot.Model.Series.Add(s2a);
-            minus_plot.Model.Series.Add(s1b); minus_plot.Model.Series.Add(s2b);
-            plus_plot.Model.Axes[0].AxisChanged += (s, e) =>
-            {
-                s1a.Points.Clear(); s2a.Points.Clear();
-                for (int cc = 0; cc < s_chain.Length; cc++)
-                {
-                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
-                    {
-                        s1a.Points.Add(new ScatterPoint(cc + 1, plus_plot.Model.Axes[0].ActualMinimum * 0.99));
-                    }
-                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
-                    {
-                        s2a.Points.Add(new ScatterPoint(cc + 1, plus_plot.Model.Axes[0].ActualMaximum * 0.99));
-                    }
-                }
-                plus_plot.Model.Series[0] = s1a; plus_plot.Model.Series[1] = s2a; plus_plot.InvalidatePlot(true);
-            };
-            minus_plot.Model.Axes[0].AxisChanged += (s, e) =>
-            {
-                s1b.Points.Clear(); s2b.Points.Clear();
-                for (int cc = 0; cc < s_chain.Length; cc++)
-                {
-                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
-                    {
-                        s1b.Points.Add(new ScatterPoint(cc + 1, minus_plot.Model.Axes[0].ActualMinimum * 0.99));
-                    }
-                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
-                    {
-                        s2b.Points.Add(new ScatterPoint(cc + 1, minus_plot.Model.Axes[0].ActualMaximum * 0.99));
-                    }
-                }
-                minus_plot.Model.Series[0] = s1b; minus_plot.Model.Series[1] = s2b; minus_plot.InvalidatePlot(true);
-            };
+            minus_plot.Model.Series.Add(s1b); minus_plot.Model.Series.Add(s2b);            
             if (iondraw_count >0)
             {
                 CI ion_comp = new CI();
                 temp_iondraw.Sort(ion_comp);
-                List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
-               
+                List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();               
                 try
                 {
                     is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
@@ -12033,7 +12038,7 @@ namespace Isotope_fitting
                 if (is_logarithmic)
                 {
                     plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
-                    minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
+                    minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
                     minimum = 0.1;
                 }
                 if (list.Count > 0)
@@ -12151,14 +12156,47 @@ namespace Isotope_fitting
                 if (is_logarithmic) { maximum = Math.Pow(maximum, 1.2); if (minimum<0)minimum = Math.Pow(minimum,1.5); else minimum = Math.Pow(minimum, 0.8); }
                 else{ minimum =-0.10*maximum; maximum = 1.2 * maximum; }                
             }
-             
+            plus_plot.Model.Axes[0].AxisChanged += (s, e) =>
+            {
+                s1a.Points.Clear(); s2a.Points.Clear();
+                for (int cc = 0; cc < s_chain.Length; cc++)
+                {
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                    {
+                        s1a.Points.Add(new ScatterPoint(cc + 1, find_bound_s(plus_plot.Model.Axes[0].ActualMinimum,true,is_logarithmic)));                        
+                    }
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                    {
+                         s2a.Points.Add(new ScatterPoint(cc + 1, find_bound_s(plus_plot.Model.Axes[0].ActualMaximum, false, is_logarithmic)));                       
+                    }
+                }
+                plus_plot.Model.Series[0] = s1a; plus_plot.Model.Series[1] = s2a; plus_plot.InvalidatePlot(true);
+            };
+            minus_plot.Model.Axes[0].AxisChanged += (s, e) =>
+            {
+                s1b.Points.Clear(); s2b.Points.Clear();
+                for (int cc = 0; cc < s_chain.Length; cc++)
+                {
+                    if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
+                    {
+                        s1b.Points.Add(new ScatterPoint(cc + 1, find_bound_s(minus_plot.Model.Axes[0].ActualMinimum,true,is_logarithmic)));                       
+                    }
+                    else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
+                    {
+                        s2b.Points.Add(new ScatterPoint(cc + 1, find_bound_s(minus_plot.Model.Axes[0].ActualMaximum ,false,is_logarithmic)));                        
+                    }
+                }
+                minus_plot.Model.Series[0] = s1b; minus_plot.Model.Series[1] = s2b; minus_plot.InvalidatePlot(true);
+            };
             plus_plot.Model.Axes[1].Minimum =0;minus_plot.Model.Axes[1].Minimum = 0;
             plus_plot.Model.Axes[1].Maximum = s_chain.Length;minus_plot.Model.Axes[1].Maximum = s_chain.Length;
             plus_plot.Model.Axes[0].Minimum = minimum; minus_plot.Model.Axes[0].Minimum = minimum;
             plus_plot.Model.Axes[0].Maximum = maximum; minus_plot.Model.Axes[0].Maximum = maximum;            
             s1a.Points.Clear(); s2a.Points.Clear();s1b.Points.Clear(); s2b.Points.Clear();
-            if (is_logarithmic) { maximum = Math.Pow(maximum, 0.99); minimum = Math.Pow(minimum, 0.99); }
-            else { maximum = maximum * 0.99; minimum = minimum * 0.99; }         
+            //if (is_logarithmic) { maximum = Math.Pow(maximum, 0.99); minimum = Math.Pow(minimum, 0.99); }
+            //else { maximum = maximum * 0.99; minimum = minimum * 0.99; }         
+            minimum = find_bound_s(minimum, true, is_logarithmic);
+            maximum = find_bound_s(maximum, false, is_logarithmic);
             for (int cc = 0; cc < s_chain.Length; cc++)
             {
                 if (s_chain.ToArray()[cc].Equals('D') || s_chain[cc].Equals('E'))
@@ -12168,8 +12206,8 @@ namespace Isotope_fitting
                 }
                 else if (s_chain.ToArray()[cc].Equals('H') || s_chain[cc].Equals('R') || s_chain[cc].Equals('K'))
                 {
-                    s2a.Points.Add(new ScatterPoint(cc + 1,  maximum));
-                    s2b.Points.Add(new ScatterPoint(cc + 1,  maximum));
+                    s2a.Points.Add(new ScatterPoint(cc + 1, maximum));
+                    s2b.Points.Add(new ScatterPoint(cc + 1, maximum));
                 }
             }
             plus_plot.Model.Series[0] = s1a; plus_plot.Model.Series[1] = s2a;
@@ -12319,6 +12357,37 @@ namespace Isotope_fitting
             Form12_2 frm12_2 = new Form12_2(this);
             frm12_2.FormClosed += (s, f) => { save_preferences(); tabControl1.TabPages["tab_Hydrogens"].Invalidate(); };
             frm12_2.ShowDialog();
+        }
+
+        private double find_bound_s(double bound_value,bool is_minimum, bool is_log=false)
+        {
+            //is_minimum : want greater than bound
+            //!is_minimum : want smaller than bound
+            double final_value = bound_value;                   
+            if (is_log)
+            {
+                // log bounds are >0, therefore I want final<max, and final>min                
+                if ((final_value<1 && is_minimum)||(final_value >= 1 &&!is_minimum))
+                {
+                    final_value = Math.Pow(final_value, 0.99);
+                }
+                else
+                {
+                    final_value = Math.Pow(final_value, 1.01);
+                }
+            }
+            else
+            {
+                if ((final_value < 0 && is_minimum) || (final_value >= 0 && !is_minimum))
+                {
+                    final_value =final_value* 0.99;
+                }
+                else
+                {
+                    final_value = final_value* 1.01;
+                }
+            }
+            return final_value;
         }
         #endregion
 
@@ -13128,7 +13197,14 @@ namespace Isotope_fitting
                                 else { sequenceList[0] = new SequenceTab() { Extension = "", Sequence = str[3], Rtf = str[4], Type = 0 }; read_rtf_find_color(sequenceList[0]); }
                             }
                         }
-                        else sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = Convert.ToInt32(str[2]) }); read_rtf_find_color(sequenceList.Last());
+                        else
+                        {
+                            int type = Convert.ToInt32(str[2]);
+                            sequenceList.Add(new SequenceTab() { Extension = str[1], Sequence = str[3], Rtf = str[4], Type = type });
+                            read_rtf_find_color(sequenceList.Last());
+                            if (type==1) {heavy_present = true; }
+                            else if (type==2) {light_present = true; }
+                        }
                     }
                     else if (lista[j].StartsWith("Fitted")) candidate_fragments = f + Convert.ToInt32(str[1]) - 2;
                     else if (lista[j].StartsWith("Name")) continue;
