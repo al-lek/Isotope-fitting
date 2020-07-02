@@ -12039,8 +12039,8 @@ namespace Isotope_fitting
                 }
                 if (is_logarithmic)
                 {
-                    plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
-                    minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
+                    plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2,/*MinorTickSize=5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
+                    minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, /*MinorTickSize = 5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
                     minimum = 0.1;
                 }
                 if (list.Count > 0)
@@ -12195,9 +12195,7 @@ namespace Isotope_fitting
             plus_plot.Model.Axes[1].Maximum = s_chain.Length;minus_plot.Model.Axes[1].Maximum = s_chain.Length;
             plus_plot.Model.Axes[0].Minimum = minimum; minus_plot.Model.Axes[0].Minimum = minimum;
             plus_plot.Model.Axes[0].Maximum = maximum; minus_plot.Model.Axes[0].Maximum = maximum;            
-            s1a.Points.Clear(); s2a.Points.Clear();s1b.Points.Clear(); s2b.Points.Clear();
-            //if (is_logarithmic) { maximum = Math.Pow(maximum, 0.99); minimum = Math.Pow(minimum, 0.99); }
-            //else { maximum = maximum * 0.99; minimum = minimum * 0.99; }         
+            s1a.Points.Clear(); s2a.Points.Clear();s1b.Points.Clear(); s2b.Points.Clear();               
             minimum = find_bound_s(minimum, true, is_logarithmic);
             maximum = find_bound_s(maximum, false, is_logarithmic);
             for (int cc = 0; cc < s_chain.Length; cc++)
