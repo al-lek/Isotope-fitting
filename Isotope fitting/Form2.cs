@@ -12159,8 +12159,8 @@ namespace Isotope_fitting
                 if (is_logarithmic) { maximum = Math.Pow(maximum, 1.2); if (minimum<0)minimum = Math.Pow(minimum,1.5); else minimum = Math.Pow(minimum, 0.8); }
                 else{ minimum =-0.10*maximum; maximum = 1.2 * maximum; }                
             }
-            maximum = round_to_10_power(maximum);
-            minimum = round_to_10_power(minimum);
+            maximum = round_to_10_power(maximum,false);
+            minimum = round_to_10_power(minimum,true);
             plus_plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1a.Points.Clear(); s2a.Points.Clear();
@@ -12365,16 +12365,44 @@ namespace Isotope_fitting
         {
             tabControl1.TabPages["tab_Hydrogens"].Invalidate();
         }
-        private double round_to_10_power(double initial)
+        private double round_to_10_power(double initial, bool is_minimum)
         {
             double final = 0.0;
-            final = Math.Ceiling(Math.Abs(initial));
-            int num = 10;
-            while (num>0)
+            final = Math.Abs(initial);
+            double num =  10;
+            if (is_minimum && initial<0) { is_minimum = false; }
+            else if (!is_minimum && initial < 0) { is_minimum = true; }
+            if (final<1)
             {
-                if (final/num<=1) { final = num; break; }
-                else { num = num * 10; }
+                while (num > 0)
+                {
+                    if (final * num < 1) { num = num * 10;  }
+                    else if(is_minimum){final = 1/(num*10); break;}
+                    else { final = 10/num; break; }
+                }
             }
+            else
+            {
+                while (num > 0)
+                {
+                    if (final / num > 1 ||(final / num == 1 && !is_minimum))
+                    {
+                        num = num * 10;                        
+                    }
+                    else if (final / num == 1 && is_minimum)
+                    {
+                        final = num/10; break;
+                    }
+                    else if(is_minimum)
+                    {
+                        final = num/100; break;
+                    }
+                    else
+                    {
+                        final = num; break;
+                    }
+                }
+            }           
             if (initial < 0) final = final * (-1);
             return final;
         }
