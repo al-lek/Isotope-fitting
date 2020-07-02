@@ -12159,6 +12159,8 @@ namespace Isotope_fitting
                 if (is_logarithmic) { maximum = Math.Pow(maximum, 1.2); if (minimum<0)minimum = Math.Pow(minimum,1.5); else minimum = Math.Pow(minimum, 0.8); }
                 else{ minimum =-0.10*maximum; maximum = 1.2 * maximum; }                
             }
+            maximum = round_to_10_power(maximum);
+            minimum = round_to_10_power(minimum);
             plus_plot.Model.Axes[0].AxisChanged += (s, e) =>
             {
                 s1a.Points.Clear(); s2a.Points.Clear();
@@ -12363,7 +12365,19 @@ namespace Isotope_fitting
         {
             tabControl1.TabPages["tab_Hydrogens"].Invalidate();
         }
-
+        private double round_to_10_power(double initial)
+        {
+            double final = 0.0;
+            final = Math.Ceiling(Math.Abs(initial));
+            int num = 10;
+            while (num>0)
+            {
+                if (final/num<=1) { final = num; break; }
+                else { num = num * 10; }
+            }
+            if (initial < 0) final = final * (-1);
+            return final;
+        }
         private double find_bound_s(double bound_value,bool is_minimum, bool is_log=false)
         {
             //is_minimum : want greater than bound
