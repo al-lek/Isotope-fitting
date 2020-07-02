@@ -9016,8 +9016,7 @@ namespace Isotope_fitting
                 seq_extensionBox.Enabled = seq_extensionBoxCopy1.Enabled = seq_extensionBoxCopy2.Enabled = false;
             }
             initialize_ions_todraw(); initialize_plot_tabs();
-        }
-       
+        }       
         private void primary_int_styleBtn_Click(object sender, EventArgs e)
         {
             foreach (SequenceTab seq in sequenceList)
@@ -9031,11 +9030,7 @@ namespace Isotope_fitting
             Form12 frm12 = new Form12(this, 0);
             frm12.FormClosed += (s, f) => { save_preferences(); };
             frm12.ShowDialog();
-        }
-        private void style_toolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
+        }       
         private void primary_charge_styleBtn_Click(object sender, EventArgs e)
         {
             foreach (SequenceTab seq in sequenceList)
@@ -9322,11 +9317,14 @@ namespace Isotope_fitting
                         }
                         if (is_primary)
                         {
-                            if (nn.Ion_type.StartsWith("(")) { type = nn.Ion_type[1].ToString(); }
-                            else { type = nn.Ion_type[0].ToString(); }
-                            double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, nn.Charge, temp_iondraw);
-                            if (primary_int == 0) primary_int = 1.0;
-                            value = (nn.Max_intensity / primary_int).ToString();
+                            if(nn.Ion_type.Contains("+1")|| nn.Ion_type.Contains("+2") || nn.Ion_type.Contains("-1") || nn.Ion_type.Contains("-2"))
+                            {
+                                if (nn.Ion_type.StartsWith("(")) { type = nn.Ion_type[1].ToString(); }
+                                else { type = nn.Ion_type[0].ToString(); }
+                                double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, nn.Charge, temp_iondraw);
+                                if (primary_int == 0) primary_int = 1.0;
+                                value = (nn.Max_intensity / primary_int).ToString();
+                            }                           
                         }
                         if (is_present)
                         {                            

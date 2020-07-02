@@ -51,7 +51,7 @@
             this.frag_listView.HoverSelection = true;
             this.frag_listView.Location = new System.Drawing.Point(0, 0);
             this.frag_listView.Name = "frag_listView";
-            this.frag_listView.Size = new System.Drawing.Size(299, 553);
+            this.frag_listView.Size = new System.Drawing.Size(376, 553);
             this.frag_listView.TabIndex = 1;
             this.frag_listView.UseCompatibleStateImageBehavior = false;
             this.frag_listView.View = System.Windows.Forms.View.Details;
@@ -59,7 +59,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Fragment";
-            this.columnHeader1.Width = 84;
+            this.columnHeader1.Width = 150;
             // 
             // columnHeader2
             // 
@@ -79,7 +79,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(299, 553);
+            this.ClientSize = new System.Drawing.Size(376, 553);
             this.Controls.Add(this.frag_listView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "Form_matrix";
