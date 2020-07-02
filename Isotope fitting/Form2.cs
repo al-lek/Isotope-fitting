@@ -1159,12 +1159,12 @@ namespace Isotope_fitting
             preferences[0] += "ppm_graph_type: " + ppm_graph_type.ToString() + "\r\n";
 
             //hydrogens rearrangement extra parameters
-            preferences[0] += y_interval12_2;
-            preferences[0] += y_format12_2;
-            preferences[0] += y_numformat12_2;
-            preferences[0] += x_majorStep12_2;
-            preferences[0] += x_minorStep12_2;
-            preferences[0] += line_width_2;
+            preferences[0] += "y_interval12_2: " + y_interval12_2;
+            preferences[0] += "y_format12_2: " + y_format12_2;
+            preferences[0] += "y_numformat12_2: " + y_numformat12_2;
+            preferences[0] += "x_majorStep12_2: " + x_majorStep12_2;
+            preferences[0] += "x_minorStep12_2: " + x_minorStep12_2;
+            preferences[0] += "line_width_2: " + line_width_2;
 
 
             // save to default file
@@ -9017,7 +9017,8 @@ namespace Isotope_fitting
             }
             initialize_ions_todraw(); initialize_plot_tabs();
         }
-        private void styleToolStripMenuItem_Click(object sender, EventArgs e)
+       
+        private void primary_int_styleBtn_Click(object sender, EventArgs e)
         {
             foreach (SequenceTab seq in sequenceList)
             {
@@ -9033,6 +9034,10 @@ namespace Isotope_fitting
         }
         private void style_toolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+        }
+        private void primary_charge_styleBtn_Click(object sender, EventArgs e)
+        {
             foreach (SequenceTab seq in sequenceList)
             {
                 if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
@@ -9044,13 +9049,13 @@ namespace Isotope_fitting
             Form12 frm12 = new Form12(this, 1);
             frm12.ShowDialog();
         }
-        private void styleToolStripMenuItem3_Click(object sender, EventArgs e)
+        private void internal_style_Btn_Click(object sender, EventArgs e)
         {
             foreach (SequenceTab seq in sequenceList)
             {
                 if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
                 {
-                    color_internal_indexes=seq.Index_SS_internal.ToList();
+                    color_internal_indexes = seq.Index_SS_internal.ToList();
                     break;
                 }
             }
@@ -11908,11 +11913,11 @@ namespace Isotope_fitting
                 //refresh Plotviews' settings that might have changed by the style Form
                 plus_plot = pnl.Controls[0] as PlotView;
                 plus_plot.Height = pnl.Height / 2;
-                plus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                plus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() {  MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 plus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
                 minus_plot = pnl.Controls[1] as PlotView;
                 minus_plot.Height = pnl.Height / 2;
-                minus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                minus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() {  MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 minus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
                 //bind the 2 X axes
                 plus_plot.Model.Axes[1].AxisChanged += (s, e) => {
@@ -11977,7 +11982,7 @@ namespace Isotope_fitting
             PlotView plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Top,*/Height=100 };
             PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
             plus_plot.Model = model1;
-            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+            var linearAxis1 = new OxyPlot.Axes.LinearAxis() { PositionAtZeroCrossing = true, MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
             model1.Axes.Add(linearAxis1);
             var linearAxis2 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             model1.Axes.Add(linearAxis2);
@@ -11987,7 +11992,7 @@ namespace Isotope_fitting
             pnl.Controls.Add(minus_plot);
             PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
             minus_plot.Model = model2;
-            var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+            var linearAxis3 = new OxyPlot.Axes.LinearAxis() { PositionAtZeroCrossing = true, MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
             model2.Axes.Add(linearAxis3);
             var linearAxis4 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
             model2.Axes.Add(linearAxis4);
@@ -12092,7 +12097,7 @@ namespace Isotope_fitting
                 if (is_logarithmic)
                 {
                     plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2,/*MinorTickSize=5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
-                    minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, /*MinorTickSize = 5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
+                    minus_plot.Model.Axes[0] = new LogarithmicAxis {Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, /*MinorTickSize = 5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
                     minimum = 0.1;
                 }               
                 if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
@@ -12244,7 +12249,12 @@ namespace Isotope_fitting
             plus_plot.Model.Axes[1].Minimum =0;minus_plot.Model.Axes[1].Minimum = 0;
             plus_plot.Model.Axes[1].Maximum = s_chain.Length;minus_plot.Model.Axes[1].Maximum = s_chain.Length;
             plus_plot.Model.Axes[0].Minimum = minimum; minus_plot.Model.Axes[0].Minimum = minimum;
-            plus_plot.Model.Axes[0].Maximum = maximum; minus_plot.Model.Axes[0].Maximum = maximum;            
+            plus_plot.Model.Axes[0].Maximum = maximum; minus_plot.Model.Axes[0].Maximum = maximum;
+
+            ////absolute minimum,absolute maximum
+            //plus_plot.Model.Axes[0].AbsoluteMinimum = minimum; minus_plot.Model.Axes[0].AbsoluteMinimum = minimum;
+            //plus_plot.Model.Axes[0].AbsoluteMaximum = maximum; minus_plot.Model.Axes[0].AbsoluteMaximum = maximum;
+
             s1a.Points.Clear(); s2a.Points.Clear();s1b.Points.Clear(); s2b.Points.Clear();               
             minimum = find_bound_s(minimum, true, is_logarithmic);
             maximum = find_bound_s(maximum, false, is_logarithmic);
@@ -13758,6 +13768,9 @@ namespace Isotope_fitting
             }
             File.WriteAllLines(path, fragText);
         }
+
+
+
 
 
 
