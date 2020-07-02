@@ -140,6 +140,12 @@
     <Compile Include="ChemForm.cs" />
     <Compile Include="ChemiForm.cs" />
     <Compile Include="ExcludeTypes.cs" />
+    <Compile Include="Form_matrix.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_matrix.Designer.cs">
+      <DependentUpon>Form_matrix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers.cs" />
     <Compile Include="Oligonoucleotides\Form24_2.cs">
       <SubType>Form</SubType>
@@ -295,6 +301,9 @@
     <Compile Include="WindowSet.cs" />
     <EmbeddedResource Include="ChangeStateForm.resx">
       <DependentUpon>ChangeStateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_matrix.resx">
+      <DependentUpon>Form_matrix.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Oligonoucleotides\Form24_2.resx">
       <DependentUpon>Form24_2.cs</DependentUpon>

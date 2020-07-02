@@ -449,7 +449,7 @@ namespace Isotope_fitting
         public string y_numformat12_2 = "0";
         public double x_majorStep12_2 = 5;
         public double x_minorStep12_2 = 1;
-        public double line_width_2 = 1;
+        public double line_width_2 = 2;
         #endregion
 
         #endregion
@@ -964,6 +964,21 @@ namespace Isotope_fitting
                     x_ppm_minorStep = Convert.ToDouble(preferences[91].Split(':')[1]);
                     ppm_bullet_size = Convert.ToDouble(preferences[92].Split(':')[1]);
                     ppm_graph_type = Int32.Parse(preferences[93].Split(':')[1]);
+                    try
+                    {
+                        //hydrogens rearrangement extra parameters
+                        y_interval12_2 = Convert.ToDouble(preferences[94].Split(':')[1]);
+                        y_format12_2 = preferences[95].Split(':')[1].ToString();
+                        y_numformat12_2 = preferences[96].Split(':')[1].ToString();
+                        x_majorStep12_2 = Convert.ToDouble(preferences[97].Split(':')[1]);
+                        x_minorStep12_2 = Convert.ToDouble(preferences[98].Split(':')[1]);
+                        line_width_2 = Convert.ToDouble(preferences[99].Split(':')[1]);
+                    }
+                    catch
+                    {
+                        init_preferences();
+                        save_preferences();
+                    }                   
 
                 }
                 catch
@@ -981,8 +996,8 @@ namespace Isotope_fitting
         }
         public void init_preferences()
         {
-            ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 2; selection_rule = new bool[] { false, true, false, false, false, false };
-            fit_sort = new bool[] { true, false, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+            ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 0; selection_rule = new bool[] { true, false, false, false, false, false };
+            fit_sort = new bool[] { false, true, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb(); peak_color = OxyColors.Crimson; fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid; exp_width = 1; frag_width = 2; fit_width = 1;
             peak_width = 1; cen_width = 1; Xmajor_grid = false; Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside; Y_tick = OxyPlot.Axes.TickStyle.Outside; x_interval = 50;
             y_interval = 50; x_format = "G"; y_format = "0.0E+"; x_numformat = "0"; y_numformat = "0"; Xmajor_grid12 = OxyPlot.LineStyle.Solid; Xminor_grid12 = OxyPlot.LineStyle.None; Ymajor_grid12 = OxyPlot.LineStyle.Solid; Yminor_grid12 = OxyPlot.LineStyle.None; y_interval12 = 50;
@@ -996,6 +1011,7 @@ namespace Isotope_fitting
             }
             entire_spectrum = true; threshold = 0.01; annotation_size = 9.0; deconv_machine = ""; is_deconv_const_resolution = false;
             y_ppm_majorStep = 2; y_ppm_minorStep = 1; x_ppm_majorStep = 5; x_ppm_minorStep = 1; ppm_bullet_size = 1.0; ppm_graph_type = 1;
+             y_interval12_2 = 50;y_format12_2 = "0.0E+";y_numformat12_2 = "0";x_majorStep12_2 = 5;x_minorStep12_2 = 1;line_width_2 = 2;
         }
         public void save_preferences()
         {
@@ -1141,6 +1157,15 @@ namespace Isotope_fitting
             preferences[0] += "x_ppm_minorStep: " + x_ppm_minorStep.ToString() + "\r\n";
             preferences[0] += "ppm_bullet_size: " + ppm_bullet_size.ToString() + "\r\n";
             preferences[0] += "ppm_graph_type: " + ppm_graph_type.ToString() + "\r\n";
+
+            //hydrogens rearrangement extra parameters
+            preferences[0] += y_interval12_2;
+            preferences[0] += y_format12_2;
+            preferences[0] += y_numformat12_2;
+            preferences[0] += x_majorStep12_2;
+            preferences[0] += x_minorStep12_2;
+            preferences[0] += line_width_2;
+
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -9236,12 +9261,16 @@ namespace Isotope_fitting
         //mouse down
         private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
         {
+            List<string[]> frags = new List<string[]>();
+            List<ion> temp_iondraw = IonDraw.ToList();
+            CI ion_comp = new CI();
+            temp_iondraw.Sort(ion_comp);
             int x = e.X;
             int y = e.Y;
             int temp_x = 3;
             int temp_y = 20;
             string s = Peptide;
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
             string s_ext = "";//the desired extension
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
@@ -9263,37 +9292,59 @@ namespace Isotope_fitting
             {
                 if (temp_x <= x && temp_x + 20 >= x && temp_y <= y && temp_y + 15 >= y)
                 {
-                    foreach (ion nn in IonDraw)
+                    foreach (ion nn in temp_iondraw)
                     {
+                        bool is_present = false;
+                        bool is_primary = false;
+                        string type = "";
+                        string value ="";
                         if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                         else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         if (nn.Index == idx + 1 && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c") || nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b") || nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a") || (nn.Ion_type.StartsWith("d")&&is_riken) || (nn.Ion_type.StartsWith("(d") && is_riken)))
                         {
-                            sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
+                            is_present = true; is_primary = true;
+                            //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
                         else if (nn.SortIdx == idx && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y") || nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x") || (nn.Ion_type.StartsWith("w") && is_riken) || (nn.Ion_type.StartsWith("(w") && is_riken)))
                         {
-                            sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
+                            is_present = true; is_primary = true;
+                            //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
                         else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                         {
-                            sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
+                            is_present = true;
+                            //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
+                        }
+                        if (is_primary)
+                        {
+                            if (nn.Ion_type.StartsWith("(")) { type = nn.Ion_type[1].ToString(); }
+                            else { type = nn.Ion_type[0].ToString(); }
+                            double primary_int = search_primary_return_intens(type, nn.SortIdx, s_ext, nn.Charge, temp_iondraw);
+                            if (primary_int == 0) primary_int = 1.0;
+                            value = (nn.Max_intensity / primary_int).ToString();
+                        }
+                        if (is_present)
+                        {                            
+                            frags.Add(new string[] { nn.Name, nn.Mz.ToString(), Math.Round(nn.Max_intensity, 4).ToString(), value });
                         }
                     }
-                    if (sb.Length == 0)
+                    if (frags.Count == 0)
                     {
-                        sb.AppendLine("No ions match to your research");
+                        //sb.AppendLine("No ions match to your research");
+                        MessageBox.Show("No ions match to your research", "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                        return;
                     }
                     else
                     {
-                        List<string> items = new List<string>(sb.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
-                        items.Sort();
-                        sb = new StringBuilder(string.Join("\r\n", items.ToArray()));
+                        frags=frags.OrderBy(p=>p[0]).ToList();
+                        //List<string> items = new List<string>(sb.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
+                        //items.Sort();
+                        //sb = new StringBuilder(string.Join("\r\n", items.ToArray()));
                     }
-                    string message_string = sb.ToString();
-                    Form17 frm17 = new Form17(message_string);
-                    frm17.Text = "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")";
-                    frm17.ShowDialog();
+                    //string message_string = sb.ToString();
+                    Form_matrix frm_matrix = new Form_matrix(frags);
+                    frm_matrix.Text = "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")";
+                    frm_matrix.ShowDialog();
                     return;
                 }
                 else
@@ -11837,16 +11888,21 @@ namespace Isotope_fitting
         #region Hydrogens Tab
         private void find_plot_ingrp_export(Control grp, bool copy)
         {
-            Panel pnl = GetControls(grp).OfType<Panel>().FirstOrDefault();
+            Panel pnl = GetControls(grp).OfType<Panel>().Where(l => l.Name.Contains("plot")).First();
             PlotView plot = GetControls(pnl).OfType<PlotView>().FirstOrDefault();
             export_panel(copy, pnl);
         }
         private void create_plotview(GroupBox grp, string type)
         {
-            Panel pnl = GetControls(grp).OfType<Panel>().ToList().First();
-            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().Where(k=>k.Name.Contains("check")).First();
+            Panel pnl = GetControls(grp).OfType<Panel>().Where(l=>l.Name.Contains("plot")).First();
+            Panel checks_panel = GetControls(grp).OfType<Panel>().Where(k=>k.Name.Contains("check")).First();
             PlotView plus_plot;
             PlotView minus_plot;
+            bool is_logarithmic = false;
+            bool is_losses = false;
+            ToolStrip tt = GetControls(grp).OfType<ToolStrip>().First();
+            is_logarithmic = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("log")).First().Checked;
+            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("losses")).First().Checked;                       
             if (pnl.Controls.Count > 0)
             {
                 //refresh Plotviews' settings that might have changed by the style Form
@@ -11904,15 +11960,20 @@ namespace Isotope_fitting
 
                 //model1.Updated += (s, e) => { minus_plot.Model.Axes[1].Zoom(plus_plot.Model.Axes[1].ActualMinimum, plus_plot.Model.Axes[1].ActualMaximum); };
             }
-            Color[] clr =create_check_boxes(type, flowpnl, pnl);
-            create_losses_diagram(type, plus_plot,minus_plot, flowpnl,clr);
+            Color[] clr =create_check_boxes(type, checks_panel, pnl);
+            create_losses_diagram(type, plus_plot,minus_plot, checks_panel,clr,is_logarithmic, is_losses);
             paint_annotations_in_temp_graphs(1, plus_plot);
             paint_annotations_in_temp_graphs(1, minus_plot);
         }
         private void create_export_plotview(GroupBox grp, string type)
         {
-            Panel pnl = GetControls(grp).OfType<Panel>().ToList().First();
-            FlowLayoutPanel flowpnl = GetControls(grp).OfType<FlowLayoutPanel>().Where(k => k.Name.Contains("check")).First();
+            Panel pnl = GetControls(grp).OfType<Panel>().Where(l => l.Name.Contains("plot")).First();
+            Panel checks_panel = GetControls(grp).OfType<Panel>().Where(k => k.Name.Contains("check")).First();
+            bool is_logarithmic = false;
+            bool is_losses = false;
+            ToolStrip tt = GetControls(grp).OfType<ToolStrip>().First();
+            is_logarithmic = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("log")).First().Checked;
+            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("losses")).First().Checked;
             PlotView plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Top,*/Height=100 };
             PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
             plus_plot.Model = model1;
@@ -11932,7 +11993,6 @@ namespace Isotope_fitting
             model2.Axes.Add(linearAxis4);
             minus_plot.MouseDoubleClick += (s, e) => { model2.ResetAllAxes(); minus_plot.InvalidatePlot(true); };
             minus_plot.Controller = new CustomPlotController();
-
             //bind the 2 X axes
             linearAxis2.AxisChanged += (s, e) => {
                 if (linearAxis4.ActualMinimum != linearAxis2.ActualMinimum && linearAxis4.ActualMaximum != linearAxis2.ActualMaximum)
@@ -11946,10 +12006,9 @@ namespace Isotope_fitting
                     linearAxis2.Zoom(linearAxis4.ActualMinimum, linearAxis4.ActualMaximum); plus_plot.InvalidatePlot(true);
                 }
             };
-
-
-            Color[] clr = return_check_boxes_colors(type, flowpnl);
-            create_losses_diagram(type, plus_plot, minus_plot, flowpnl, clr);
+            
+            Color[] clr = return_check_boxes_colors(type, checks_panel);
+            create_losses_diagram(type, plus_plot, minus_plot, checks_panel, clr,is_logarithmic, is_losses);
             PlotView original_plotview_plus = GetControls(pnl).OfType<PlotView>().Where(k=>k.Name.Contains("plus")).First();
             plus_plot.Model.Axes[1].Zoom(original_plotview_plus.Model.Axes[1].ActualMinimum, original_plotview_plus.Model.Axes[1].ActualMaximum);
             plus_plot.Model.Axes[0].Zoom(original_plotview_plus.Model.Axes[0].ActualMinimum, original_plotview_plus.Model.Axes[0].ActualMaximum);
@@ -11961,7 +12020,7 @@ namespace Isotope_fitting
             Form11 frm11 = new Form11(plus_plot,minus_plot,true);
             frm11.Show();
         }
-        private Color[] return_check_boxes_colors(string type, FlowLayoutPanel flowpnl)
+        private Color[] return_check_boxes_colors(string type, Panel checks_panel)
         {
             Color[] clr = new Color[4];
             if (type.Equals("a")) { clr = new Color[4] { Color.Green, Color.LightSeaGreen, Color.Chartreuse, Color.DarkSeaGreen }; }
@@ -11972,17 +12031,20 @@ namespace Isotope_fitting
             else if ((!is_riken && type.Equals("y")) || (is_riken && type.Equals("x"))) { clr = new Color[4] { Color.DodgerBlue, Color.MediumTurquoise, Color.MediumBlue, Color.LightBlue }; }
             else if ((!is_riken && type.Equals("z")) || (is_riken && type.Equals("y"))) { clr = new Color[4] { Color.Tomato, Color.BurlyWood, Color.DarkOrange, Color.Brown }; }
             else if (is_riken && type.Equals("z")) { clr = new Color[4] { Color.HotPink, Color.DarkOrchid, Color.Pink, Color.Plum }; }
-            List<CheckBox> list_ = GetControls(flowpnl).OfType<CheckBox>().ToList();
-            foreach (CheckBox chk in list_)
+            foreach (Control cc in checks_panel.Controls)
             {
-                if (chk.Text.Contains("-2")) { clr[0] = chk.ForeColor; }
-                else if (chk.Text.Contains("-1")) { clr[1] = chk.ForeColor; }
-                else if (chk.Text.Contains("+1")) { clr[2] = chk.ForeColor; }
-                else if (chk.Text.Contains("+2")) { clr[3] = chk.ForeColor; }
-            }
+                List<CheckBox> list_ = GetControls(cc).OfType<CheckBox>().ToList();
+                foreach (CheckBox ckbx in list_)
+                {
+                    if (ckbx.Text.Contains("-2")) { clr[0] = ckbx.ForeColor; }
+                    else if (ckbx.Text.Contains("-1")) { clr[1] = ckbx.ForeColor; }
+                    else if (ckbx.Text.Contains("+1")) { clr[2] = ckbx.ForeColor; }
+                    else if (ckbx.Text.Contains("+2")) { clr[3] = ckbx.ForeColor; }
+                }
+            }           
             return clr;
         }
-        private void create_losses_diagram(string type, PlotView plus_plot, PlotView minus_plot, FlowLayoutPanel flowpnl, Color[] clr)
+        private void create_losses_diagram(string type, PlotView plus_plot, PlotView minus_plot, Panel checks_panel, Color[] clr,bool is_logarithmic,bool is_losses)
         {
             string text = "Amino Acid";
             if(is_riken) text = "Base";
@@ -11998,8 +12060,6 @@ namespace Isotope_fitting
             double minimum = -0.10 * maximum;
             string s_ext = "";
             string s_chain = Peptide;
-            bool is_logarithmic = false;
-            bool is_losses = false;
             List<string> check_names = new List<string>();
             for (int cc = 0; cc < s_chain.Length; cc++)
             {
@@ -12020,33 +12080,21 @@ namespace Isotope_fitting
             {
                 CI ion_comp = new CI();
                 temp_iondraw.Sort(ion_comp);
-                List<CheckBox> list = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();               
-                try
+                List<CheckBox> list = new List<CheckBox>();
+                foreach (Control cc in checks_panel.Controls)
                 {
-                    is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
+                     list.AddRange( GetControls(cc).OfType<CheckBox>().ToList());
                 }
-                catch
+                if (list.Count > 0)
                 {
-                    is_losses = false;
-                }
-                try
-                {
-                    is_logarithmic = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Log.")).ToList().First().Checked;
-                }
-                catch
-                {
-                    is_logarithmic = false;
+                    foreach (CheckBox vv in list) { if (vv.Checked) check_names.Add(vv.Text); }
                 }
                 if (is_logarithmic)
                 {
                     plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2,/*MinorTickSize=5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
                     minus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, /*MinorTickSize = 5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
                     minimum = 0.1;
-                }
-                if (list.Count > 0)
-                {
-                    foreach (CheckBox vv in list) { if (vv.Checked) check_names.Add(vv.Text); }
-                }
+                }               
                 if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
                 {
                     foreach (SequenceTab seq in sequenceList)
@@ -12067,7 +12115,7 @@ namespace Isotope_fitting
                     List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                     List<ion> merged_names = new List<ion>();
                     List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
-                    LineSeries line_ = new LineSeries { StrokeThickness = 2, Color = temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
+                    LineSeries line_ = new LineSeries { StrokeThickness = line_width_2, Color = temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
                     List<double[]> points_line_ = new List<double[]>();
                     for (int i = 0; i < iondraw_count; i++)
                     {
@@ -12218,24 +12266,23 @@ namespace Isotope_fitting
             minus_plot.Model.Series[0] = s1b; minus_plot.Model.Series[1] = s2b;
             minus_plot.InvalidatePlot(true);
         }
-        private Color[] create_check_boxes(string type, FlowLayoutPanel flowpnl, Panel pnl)
+        private Color[] create_check_boxes(string type, Panel checks_panel, Panel pnl)
         {
-            Color[] clr = return_check_boxes_colors(type, flowpnl);
+            Color[] clr = return_check_boxes_colors(type, checks_panel);
             string s_ext = "";
             string s_chain = Peptide;
             List<ion> temp_iondraw = IonDraw.ToList();
-            int iondraw_count = temp_iondraw.Count;
-            bool is_losses = false;
-            bool is_logarithmic =false;
-            if (flowpnl.Controls.Count > 0)
-            {
-                is_losses = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Losses")).ToList().First().Checked;
-                is_logarithmic = GetControls(flowpnl).OfType<CheckBox>().Where(l => l.Text.Equals("Log.")).ToList().First().Checked;
-            }
+            int iondraw_count = temp_iondraw.Count;                      
             //if ion list is empty clear checkboxes and return
-            if (iondraw_count == 0) { flowpnl.Controls.Clear(); return clr; }
-            List<CheckBox> check_names = GetControls(flowpnl).OfType<CheckBox>().Where(l => !l.Text.Contains("Lo")).ToList();
-            if (check_names.Count > 0) flowpnl.Controls.Clear();
+            if (iondraw_count == 0) { checks_panel.Controls.Clear(); return clr; }
+            List<CheckBox> check_names = new List<CheckBox>();
+            foreach (Control cc in checks_panel.Controls)
+            {
+                check_names .AddRange( GetControls(cc).OfType<CheckBox>().ToList());
+            }
+            if (check_names.Count > 0) checks_panel.Controls.Clear();
+            FlowLayoutPanel flowpnl_1 = new FlowLayoutPanel() { Height= checks_panel.Height/2-20,Width= checks_panel.Width-10,Location=new Point(3,20)};
+            FlowLayoutPanel flowpnl_2 = new FlowLayoutPanel() { Height = checks_panel.Height / 2-20, Width = checks_panel.Width-10, Location = new Point(3,20+pnl.Height / 2) };
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
@@ -12260,47 +12307,41 @@ namespace Isotope_fitting
                         tt = nn.Ion_type.Substring(index, type.Length + 2);
                         if (check_names.Count == 0 || !check_names.Any(p => p.Text.Equals(tt)))
                         {
-                            CheckBox chk = new CheckBox() { Text = tt, Checked = true };
-                            if (chk.Text.Contains("-2")) { chk.ForeColor= clr[0]; }
-                            else if (chk.Text.Contains("-1")) { chk.ForeColor = clr[1]; }
-                            else if (chk.Text.Contains("+1")) { chk.ForeColor = clr[2]; }
-                            else if (chk.Text.Contains("+2")) { chk.ForeColor = clr[3]; }
-                            chk.CheckedChanged += (s, e) =>
+                            CheckBox ckbx = new CheckBox() { Text = tt, Checked = true };
+                            if (ckbx.Text.Contains("-2")) { ckbx.ForeColor= clr[0]; }
+                            else if (ckbx.Text.Contains("-1")) { ckbx.ForeColor = clr[1]; }
+                            else if (ckbx.Text.Contains("+1")) { ckbx.ForeColor = clr[2]; }
+                            else if (ckbx.Text.Contains("+2")) { ckbx.ForeColor = clr[3]; }
+                            ckbx.CheckedChanged += (s, e) =>
                             {
-                                chk.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
+                                ckbx.Parent.Parent.Parent.Controls.OfType<Panel>().Where(l=>l.Name.Contains("plot")).First().Invalidate();
                             };
-                            chk.MouseUp += (s, e) =>
+                            ckbx.MouseUp += (s, e) =>
                             {
-                            if (e.Button == MouseButtons.Right)
-                            {
-                                ContextMenu ctxMn = new ContextMenu(new MenuItem[1] {
-                                    new MenuItem("Select Color", (ss, ee) =>{
-                                    ColorDialog clrDlg = new ColorDialog();
-                                    if (clrDlg.ShowDialog() == DialogResult.OK){chk.ForeColor = clrDlg.Color; pnl.Invalidate();}
-                                    })
-                                });
-                                chk.ContextMenu = ctxMn;
-                            }
+                                if (e.Button == MouseButtons.Right)
+                                {
+                                    ContextMenu ctxMn = new ContextMenu(new MenuItem[1] {
+                                        new MenuItem("Select Color", (ss, ee) =>{
+                                        ColorDialog clrDlg = new ColorDialog();
+                                        if (clrDlg.ShowDialog() == DialogResult.OK){ckbx.ForeColor = clrDlg.Color; pnl.Invalidate();}
+                                        })
+                                    });
+                                    ckbx.ContextMenu = ctxMn;
+                                }
                             };
-                            check_names.Add(chk);
+                            check_names.Add(ckbx);
                         }
                     }
                 }
             }
             if (check_names.Count == 0) return clr;
             check_names = check_names.OrderBy(p => p.Text).ToList();
-            foreach (CheckBox ckbx in check_names) { flowpnl.Controls.Add(ckbx); }
-            CheckBox ckbx_losses = new CheckBox() { Text = "Losses", Checked = is_losses };
-            CheckBox ckbx_log = new CheckBox() { Text = "Log.", Checked = is_logarithmic };
-            ckbx_losses.CheckedChanged += (s, e) =>
+            foreach (CheckBox ckbx in check_names)
             {
-                ckbx_losses.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
-            };
-            ckbx_log.CheckedChanged += (s, e) =>
-            {
-                ckbx_log.Parent.Parent.Controls.OfType<Panel>().First().Invalidate();
-            };
-            flowpnl.Controls.AddRange(new Control[] { ckbx_losses, ckbx_log });
+                if(ckbx.Text.Contains("+"))flowpnl_1.Controls.Add(ckbx);
+                else flowpnl_2.Controls.Add(ckbx);
+            }
+            checks_panel.Controls.AddRange(new Control[] { flowpnl_1 , flowpnl_2});
             temp_iondraw.Clear();
             return clr;
         }
@@ -12435,6 +12476,14 @@ namespace Isotope_fitting
                 }
             }
             return final_value;
+        }
+        private void replot_grp_CheckStateChanged(object sender, EventArgs e)
+        {
+            ToolStripItem tsp = (sender as ToolStripItem);
+            ToolStrip tt = tsp.GetCurrentParent();
+            GroupBox grp = tt.Parent as GroupBox;
+            Panel pnl = GetControls(grp).OfType<Panel>().Where(l => l.Name.Contains("plot")).First();
+            pnl.Invalidate();
         }
         #endregion
 
@@ -13712,8 +13761,10 @@ namespace Isotope_fitting
 
 
 
+
+
         #endregion
 
-        
+       
     }
 }

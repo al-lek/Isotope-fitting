@@ -369,82 +369,98 @@ namespace Isotope_fitting
             this.losses_splitContainer = new System.Windows.Forms.SplitContainer();
             this.losses_groupBox_d = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel7 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel7 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel7 = new System.Windows.Forms.Panel();
             this.losses_toolStrip7 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn7 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn7 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn7 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check7 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check7 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box7 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box7 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_c = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel5 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel5 = new System.Windows.Forms.Panel();
             this.losses_toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn5 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn5 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn5 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check5 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check5 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box5 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box5 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_b = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel3 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel3 = new System.Windows.Forms.Panel();
             this.losses_toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn3 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn3 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check3 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check3 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box3 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box3 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_a = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel1 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel1 = new System.Windows.Forms.Panel();
             this.losses_toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn1 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn1 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check1 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check1 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box1 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box1 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_z = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel8 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel8 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel8 = new System.Windows.Forms.Panel();
             this.losses_toolStrip8 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn8 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn8 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn8 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check8 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check8 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box8 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box8 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_y = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel6 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel6 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel6 = new System.Windows.Forms.Panel();
             this.losses_toolStrip6 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn6 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn6 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn6 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check6 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check6 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box6 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box6 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_x = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel4 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel4 = new System.Windows.Forms.Panel();
             this.losses_toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn4 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn4 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check4 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check4 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box4 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box4 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_groupBox_w = new System.Windows.Forms.GroupBox();
             this.losses_plot_panel2 = new System.Windows.Forms.Panel();
-            this.checkboxes_panel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxes_panel2 = new System.Windows.Forms.Panel();
             this.losses_toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn2 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn2 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_check2 = new System.Windows.Forms.ToolStripButton();
+            this.losses_check2 = new System.Windows.Forms.ToolStripButton();
             this.losses_X_Box2 = new System.Windows.Forms.ToolStripTextBox();
             this.losses_Y_Box2 = new System.Windows.Forms.ToolStripTextBox();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -4578,9 +4594,9 @@ namespace Isotope_fitting
             this.losses_plot_panel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel7.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel7.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel7.Name = "losses_plot_panel7";
-            this.losses_plot_panel7.Size = new System.Drawing.Size(569, 381);
+            this.losses_plot_panel7.Size = new System.Drawing.Size(568, 381);
             this.losses_plot_panel7.TabIndex = 21;
             this.losses_plot_panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel7.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -4589,7 +4605,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel7.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel7.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel7.Location = new System.Drawing.Point(615, 16);
             this.checkboxes_panel7.Name = "checkboxes_panel7";
@@ -4605,12 +4620,14 @@ namespace Isotope_fitting
             this.losses_saveBtn7,
             this.losses_copyBtn7,
             this.losses_DropBtn7,
+            this.log_check7,
+            this.losses_check7,
             this.losses_X_Box7,
             this.losses_Y_Box7});
             this.losses_toolStrip7.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip7.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip7.Name = "losses_toolStrip7";
-            this.losses_toolStrip7.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip7.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip7.TabIndex = 24;
             // 
             // losses_saveBtn7
@@ -4619,7 +4636,7 @@ namespace Isotope_fitting
             this.losses_saveBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn7.Image")));
             this.losses_saveBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn7.Name = "losses_saveBtn7";
-            this.losses_saveBtn7.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn7.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn7.Text = "Save";
             this.losses_saveBtn7.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4629,7 +4646,7 @@ namespace Isotope_fitting
             this.losses_copyBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn7.Image")));
             this.losses_copyBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn7.Name = "losses_copyBtn7";
-            this.losses_copyBtn7.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn7.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn7.Text = "Copy";
             this.losses_copyBtn7.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4642,7 +4659,7 @@ namespace Isotope_fitting
             this.losses_DropBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn7.Image")));
             this.losses_DropBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn7.Name = "losses_DropBtn7";
-            this.losses_DropBtn7.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn7.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn7.Text = " ";
             // 
             // losses_extractBtn7
@@ -4653,6 +4670,34 @@ namespace Isotope_fitting
             this.losses_extractBtn7.Text = "Extract Plot";
             this.losses_extractBtn7.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn7.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check7
+            // 
+            this.log_check7.Checked = true;
+            this.log_check7.CheckOnClick = true;
+            this.log_check7.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check7.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check7.Name = "log_check7";
+            this.log_check7.Size = new System.Drawing.Size(41, 19);
+            this.log_check7.Text = "log.";
+            this.log_check7.ToolTipText = "Logarithmic Y Axis";
+            this.log_check7.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check7
+            // 
+            this.losses_check7.CheckOnClick = true;
+            this.losses_check7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check7.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check7.Name = "losses_check7";
+            this.losses_check7.Size = new System.Drawing.Size(41, 19);
+            this.losses_check7.Text = "losses";
+            this.losses_check7.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check7.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box7
             // 
@@ -4687,9 +4732,9 @@ namespace Isotope_fitting
             this.losses_plot_panel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel5.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel5.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel5.Name = "losses_plot_panel5";
-            this.losses_plot_panel5.Size = new System.Drawing.Size(569, 381);
+            this.losses_plot_panel5.Size = new System.Drawing.Size(568, 381);
             this.losses_plot_panel5.TabIndex = 21;
             this.losses_plot_panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel5.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -4698,7 +4743,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel5.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel5.Location = new System.Drawing.Point(615, 16);
             this.checkboxes_panel5.Name = "checkboxes_panel5";
@@ -4714,12 +4758,14 @@ namespace Isotope_fitting
             this.losses_saveBtn5,
             this.losses_copyBtn5,
             this.losses_DropBtn5,
+            this.log_check5,
+            this.losses_check5,
             this.losses_X_Box5,
             this.losses_Y_Box5});
             this.losses_toolStrip5.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip5.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip5.Name = "losses_toolStrip5";
-            this.losses_toolStrip5.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip5.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip5.TabIndex = 24;
             // 
             // losses_saveBtn5
@@ -4728,7 +4774,7 @@ namespace Isotope_fitting
             this.losses_saveBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn5.Image")));
             this.losses_saveBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn5.Name = "losses_saveBtn5";
-            this.losses_saveBtn5.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn5.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn5.Text = "Save";
             this.losses_saveBtn5.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4738,7 +4784,7 @@ namespace Isotope_fitting
             this.losses_copyBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn5.Image")));
             this.losses_copyBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn5.Name = "losses_copyBtn5";
-            this.losses_copyBtn5.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn5.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn5.Text = "Copy";
             this.losses_copyBtn5.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4751,7 +4797,7 @@ namespace Isotope_fitting
             this.losses_DropBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn5.Image")));
             this.losses_DropBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn5.Name = "losses_DropBtn5";
-            this.losses_DropBtn5.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn5.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn5.Text = " ";
             // 
             // losses_extractBtn5
@@ -4762,6 +4808,34 @@ namespace Isotope_fitting
             this.losses_extractBtn5.Text = "Extract Plot";
             this.losses_extractBtn5.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn5.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check5
+            // 
+            this.log_check5.Checked = true;
+            this.log_check5.CheckOnClick = true;
+            this.log_check5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check5.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check5.Name = "log_check5";
+            this.log_check5.Size = new System.Drawing.Size(41, 19);
+            this.log_check5.Text = "log.";
+            this.log_check5.ToolTipText = "Logarithmic Y Axis";
+            this.log_check5.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check5
+            // 
+            this.losses_check5.CheckOnClick = true;
+            this.losses_check5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check5.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check5.Name = "losses_check5";
+            this.losses_check5.Size = new System.Drawing.Size(41, 19);
+            this.losses_check5.Text = "losses";
+            this.losses_check5.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check5.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box5
             // 
@@ -4796,9 +4870,9 @@ namespace Isotope_fitting
             this.losses_plot_panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel3.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel3.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel3.Name = "losses_plot_panel3";
-            this.losses_plot_panel3.Size = new System.Drawing.Size(569, 381);
+            this.losses_plot_panel3.Size = new System.Drawing.Size(568, 381);
             this.losses_plot_panel3.TabIndex = 21;
             this.losses_plot_panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel3.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -4807,7 +4881,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel3.Location = new System.Drawing.Point(615, 16);
             this.checkboxes_panel3.Name = "checkboxes_panel3";
@@ -4823,12 +4896,14 @@ namespace Isotope_fitting
             this.losses_saveBtn3,
             this.losses_copyBtn3,
             this.losses_DropBtn3,
+            this.log_check3,
+            this.losses_check3,
             this.losses_X_Box3,
             this.losses_Y_Box3});
             this.losses_toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip3.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip3.Name = "losses_toolStrip3";
-            this.losses_toolStrip3.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip3.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip3.TabIndex = 24;
             // 
             // losses_saveBtn3
@@ -4837,7 +4912,7 @@ namespace Isotope_fitting
             this.losses_saveBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn3.Image")));
             this.losses_saveBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn3.Name = "losses_saveBtn3";
-            this.losses_saveBtn3.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn3.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn3.Text = "Save";
             this.losses_saveBtn3.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4847,7 +4922,7 @@ namespace Isotope_fitting
             this.losses_copyBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn3.Image")));
             this.losses_copyBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn3.Name = "losses_copyBtn3";
-            this.losses_copyBtn3.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn3.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn3.Text = "Copy";
             this.losses_copyBtn3.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4860,7 +4935,7 @@ namespace Isotope_fitting
             this.losses_DropBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn3.Image")));
             this.losses_DropBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn3.Name = "losses_DropBtn3";
-            this.losses_DropBtn3.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn3.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn3.Text = " ";
             // 
             // losses_extractBtn3
@@ -4871,6 +4946,34 @@ namespace Isotope_fitting
             this.losses_extractBtn3.Text = "Extract Plot";
             this.losses_extractBtn3.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn3.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check3
+            // 
+            this.log_check3.Checked = true;
+            this.log_check3.CheckOnClick = true;
+            this.log_check3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check3.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check3.Name = "log_check3";
+            this.log_check3.Size = new System.Drawing.Size(41, 19);
+            this.log_check3.Text = "log.";
+            this.log_check3.ToolTipText = "Logarithmic Y Axis";
+            this.log_check3.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check3
+            // 
+            this.losses_check3.CheckOnClick = true;
+            this.losses_check3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check3.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check3.Name = "losses_check3";
+            this.losses_check3.Size = new System.Drawing.Size(41, 19);
+            this.losses_check3.Text = "losses";
+            this.losses_check3.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check3.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box3
             // 
@@ -4905,9 +5008,9 @@ namespace Isotope_fitting
             this.losses_plot_panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel1.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel1.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel1.Name = "losses_plot_panel1";
-            this.losses_plot_panel1.Size = new System.Drawing.Size(569, 381);
+            this.losses_plot_panel1.Size = new System.Drawing.Size(568, 381);
             this.losses_plot_panel1.TabIndex = 21;
             this.losses_plot_panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel1.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -4916,7 +5019,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel1.Location = new System.Drawing.Point(615, 16);
             this.checkboxes_panel1.Name = "checkboxes_panel1";
@@ -4932,12 +5034,14 @@ namespace Isotope_fitting
             this.losses_saveBtn1,
             this.losses_copyBtn1,
             this.losses_DropBtn1,
+            this.log_check1,
+            this.losses_check1,
             this.losses_X_Box1,
             this.losses_Y_Box1});
             this.losses_toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip1.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip1.Name = "losses_toolStrip1";
-            this.losses_toolStrip1.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip1.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip1.TabIndex = 24;
             // 
             // losses_saveBtn1
@@ -4946,7 +5050,7 @@ namespace Isotope_fitting
             this.losses_saveBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn1.Image")));
             this.losses_saveBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn1.Name = "losses_saveBtn1";
-            this.losses_saveBtn1.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn1.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn1.Text = "Save";
             this.losses_saveBtn1.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4956,7 +5060,7 @@ namespace Isotope_fitting
             this.losses_copyBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn1.Image")));
             this.losses_copyBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn1.Name = "losses_copyBtn1";
-            this.losses_copyBtn1.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn1.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn1.Text = "Copy";
             this.losses_copyBtn1.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4969,7 +5073,7 @@ namespace Isotope_fitting
             this.losses_DropBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn1.Image")));
             this.losses_DropBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn1.Name = "losses_DropBtn1";
-            this.losses_DropBtn1.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn1.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn1.Text = " ";
             // 
             // losses_extractBtn1
@@ -4980,6 +5084,34 @@ namespace Isotope_fitting
             this.losses_extractBtn1.Text = "Extract Plot";
             this.losses_extractBtn1.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn1.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check1
+            // 
+            this.log_check1.Checked = true;
+            this.log_check1.CheckOnClick = true;
+            this.log_check1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check1.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check1.Name = "log_check1";
+            this.log_check1.Size = new System.Drawing.Size(41, 19);
+            this.log_check1.Text = "log.";
+            this.log_check1.ToolTipText = "Logarithmic Y Axis";
+            this.log_check1.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check1
+            // 
+            this.losses_check1.CheckOnClick = true;
+            this.losses_check1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check1.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check1.Name = "losses_check1";
+            this.losses_check1.Size = new System.Drawing.Size(41, 19);
+            this.losses_check1.Text = "losses";
+            this.losses_check1.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check1.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box1
             // 
@@ -5014,9 +5146,9 @@ namespace Isotope_fitting
             this.losses_plot_panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel8.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel8.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel8.Name = "losses_plot_panel8";
-            this.losses_plot_panel8.Size = new System.Drawing.Size(503, 381);
+            this.losses_plot_panel8.Size = new System.Drawing.Size(502, 381);
             this.losses_plot_panel8.TabIndex = 21;
             this.losses_plot_panel8.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel8.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -5025,7 +5157,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel8.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel8.Location = new System.Drawing.Point(549, 16);
             this.checkboxes_panel8.Name = "checkboxes_panel8";
@@ -5041,12 +5172,14 @@ namespace Isotope_fitting
             this.losses_saveBtn8,
             this.losses_copyBtn8,
             this.losses_DropBtn8,
+            this.log_check8,
+            this.losses_check8,
             this.losses_X_Box8,
             this.losses_Y_Box8});
             this.losses_toolStrip8.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip8.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip8.Name = "losses_toolStrip8";
-            this.losses_toolStrip8.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip8.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip8.TabIndex = 24;
             // 
             // losses_saveBtn8
@@ -5055,7 +5188,7 @@ namespace Isotope_fitting
             this.losses_saveBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn8.Image")));
             this.losses_saveBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn8.Name = "losses_saveBtn8";
-            this.losses_saveBtn8.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn8.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn8.Text = "Save";
             this.losses_saveBtn8.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5065,7 +5198,7 @@ namespace Isotope_fitting
             this.losses_copyBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn8.Image")));
             this.losses_copyBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn8.Name = "losses_copyBtn8";
-            this.losses_copyBtn8.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn8.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn8.Text = "Copy";
             this.losses_copyBtn8.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5078,7 +5211,7 @@ namespace Isotope_fitting
             this.losses_DropBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn8.Image")));
             this.losses_DropBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn8.Name = "losses_DropBtn8";
-            this.losses_DropBtn8.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn8.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn8.Text = " ";
             // 
             // losses_extractBtn8
@@ -5089,6 +5222,34 @@ namespace Isotope_fitting
             this.losses_extractBtn8.Text = "Extract Plot";
             this.losses_extractBtn8.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn8.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check8
+            // 
+            this.log_check8.Checked = true;
+            this.log_check8.CheckOnClick = true;
+            this.log_check8.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check8.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check8.Name = "log_check8";
+            this.log_check8.Size = new System.Drawing.Size(41, 19);
+            this.log_check8.Text = "log.";
+            this.log_check8.ToolTipText = "Logarithmic Y Axis";
+            this.log_check8.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check8
+            // 
+            this.losses_check8.CheckOnClick = true;
+            this.losses_check8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check8.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check8.Name = "losses_check8";
+            this.losses_check8.Size = new System.Drawing.Size(41, 19);
+            this.losses_check8.Text = "losses";
+            this.losses_check8.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check8.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box8
             // 
@@ -5123,9 +5284,9 @@ namespace Isotope_fitting
             this.losses_plot_panel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel6.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel6.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel6.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel6.Name = "losses_plot_panel6";
-            this.losses_plot_panel6.Size = new System.Drawing.Size(503, 381);
+            this.losses_plot_panel6.Size = new System.Drawing.Size(502, 381);
             this.losses_plot_panel6.TabIndex = 21;
             this.losses_plot_panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel6.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -5134,7 +5295,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel6.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel6.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel6.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel6.Location = new System.Drawing.Point(549, 16);
             this.checkboxes_panel6.Name = "checkboxes_panel6";
@@ -5150,12 +5310,14 @@ namespace Isotope_fitting
             this.losses_saveBtn6,
             this.losses_copyBtn6,
             this.losses_DropBtn6,
+            this.log_check6,
+            this.losses_check6,
             this.losses_X_Box6,
             this.losses_Y_Box6});
             this.losses_toolStrip6.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip6.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip6.Name = "losses_toolStrip6";
-            this.losses_toolStrip6.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip6.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip6.TabIndex = 24;
             // 
             // losses_saveBtn6
@@ -5164,7 +5326,7 @@ namespace Isotope_fitting
             this.losses_saveBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn6.Image")));
             this.losses_saveBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn6.Name = "losses_saveBtn6";
-            this.losses_saveBtn6.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn6.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn6.Text = "Save";
             this.losses_saveBtn6.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5174,7 +5336,7 @@ namespace Isotope_fitting
             this.losses_copyBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn6.Image")));
             this.losses_copyBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn6.Name = "losses_copyBtn6";
-            this.losses_copyBtn6.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn6.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn6.Text = "Copy";
             this.losses_copyBtn6.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5187,7 +5349,7 @@ namespace Isotope_fitting
             this.losses_DropBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn6.Image")));
             this.losses_DropBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn6.Name = "losses_DropBtn6";
-            this.losses_DropBtn6.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn6.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn6.Text = " ";
             // 
             // losses_extractBtn6
@@ -5198,6 +5360,34 @@ namespace Isotope_fitting
             this.losses_extractBtn6.Text = "Extract Plot";
             this.losses_extractBtn6.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn6.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check6
+            // 
+            this.log_check6.Checked = true;
+            this.log_check6.CheckOnClick = true;
+            this.log_check6.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check6.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check6.Name = "log_check6";
+            this.log_check6.Size = new System.Drawing.Size(41, 19);
+            this.log_check6.Text = "log.";
+            this.log_check6.ToolTipText = "Logarithmic Y Axis";
+            this.log_check6.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check6
+            // 
+            this.losses_check6.CheckOnClick = true;
+            this.losses_check6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check6.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check6.Name = "losses_check6";
+            this.losses_check6.Size = new System.Drawing.Size(41, 19);
+            this.losses_check6.Text = "losses";
+            this.losses_check6.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check6.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box6
             // 
@@ -5232,9 +5422,9 @@ namespace Isotope_fitting
             this.losses_plot_panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel4.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel4.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel4.Name = "losses_plot_panel4";
-            this.losses_plot_panel4.Size = new System.Drawing.Size(503, 381);
+            this.losses_plot_panel4.Size = new System.Drawing.Size(502, 381);
             this.losses_plot_panel4.TabIndex = 21;
             this.losses_plot_panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel4.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -5243,7 +5433,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel4.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel4.Location = new System.Drawing.Point(549, 16);
             this.checkboxes_panel4.Name = "checkboxes_panel4";
@@ -5259,12 +5448,14 @@ namespace Isotope_fitting
             this.losses_saveBtn4,
             this.losses_copyBtn4,
             this.losses_DropBtn4,
+            this.log_check4,
+            this.losses_check4,
             this.losses_X_Box4,
             this.losses_Y_Box4});
             this.losses_toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip4.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip4.Name = "losses_toolStrip4";
-            this.losses_toolStrip4.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip4.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip4.TabIndex = 24;
             // 
             // losses_saveBtn4
@@ -5273,7 +5464,7 @@ namespace Isotope_fitting
             this.losses_saveBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn4.Image")));
             this.losses_saveBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn4.Name = "losses_saveBtn4";
-            this.losses_saveBtn4.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn4.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn4.Text = "Save";
             this.losses_saveBtn4.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5283,7 +5474,7 @@ namespace Isotope_fitting
             this.losses_copyBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn4.Image")));
             this.losses_copyBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn4.Name = "losses_copyBtn4";
-            this.losses_copyBtn4.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn4.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn4.Text = "Copy";
             this.losses_copyBtn4.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5296,7 +5487,7 @@ namespace Isotope_fitting
             this.losses_DropBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn4.Image")));
             this.losses_DropBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn4.Name = "losses_DropBtn4";
-            this.losses_DropBtn4.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn4.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn4.Text = " ";
             // 
             // losses_extractBtn4
@@ -5307,6 +5498,34 @@ namespace Isotope_fitting
             this.losses_extractBtn4.Text = "Extract Plot";
             this.losses_extractBtn4.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn4.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check4
+            // 
+            this.log_check4.Checked = true;
+            this.log_check4.CheckOnClick = true;
+            this.log_check4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check4.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check4.Name = "log_check4";
+            this.log_check4.Size = new System.Drawing.Size(41, 19);
+            this.log_check4.Text = "log.";
+            this.log_check4.ToolTipText = "Logarithmic Y Axis";
+            this.log_check4.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check4
+            // 
+            this.losses_check4.CheckOnClick = true;
+            this.losses_check4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check4.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check4.Name = "losses_check4";
+            this.losses_check4.Size = new System.Drawing.Size(41, 19);
+            this.losses_check4.Text = "losses";
+            this.losses_check4.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check4.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box4
             // 
@@ -5341,9 +5560,9 @@ namespace Isotope_fitting
             this.losses_plot_panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.losses_plot_panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.losses_plot_panel2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.losses_plot_panel2.Location = new System.Drawing.Point(46, 16);
+            this.losses_plot_panel2.Location = new System.Drawing.Point(47, 16);
             this.losses_plot_panel2.Name = "losses_plot_panel2";
-            this.losses_plot_panel2.Size = new System.Drawing.Size(503, 381);
+            this.losses_plot_panel2.Size = new System.Drawing.Size(502, 381);
             this.losses_plot_panel2.TabIndex = 21;
             this.losses_plot_panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.losses_plot_panel_Paint);
             this.losses_plot_panel2.Resize += new System.EventHandler(this.plot_Pnl_Resize);
@@ -5352,7 +5571,6 @@ namespace Isotope_fitting
             // 
             this.checkboxes_panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.checkboxes_panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkboxes_panel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.checkboxes_panel2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkboxes_panel2.Location = new System.Drawing.Point(549, 16);
             this.checkboxes_panel2.Name = "checkboxes_panel2";
@@ -5368,12 +5586,14 @@ namespace Isotope_fitting
             this.losses_saveBtn2,
             this.losses_copyBtn2,
             this.losses_DropBtn2,
+            this.log_check2,
+            this.losses_check2,
             this.losses_X_Box2,
             this.losses_Y_Box2});
             this.losses_toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.losses_toolStrip2.Location = new System.Drawing.Point(3, 16);
             this.losses_toolStrip2.Name = "losses_toolStrip2";
-            this.losses_toolStrip2.Size = new System.Drawing.Size(43, 381);
+            this.losses_toolStrip2.Size = new System.Drawing.Size(44, 381);
             this.losses_toolStrip2.TabIndex = 24;
             // 
             // losses_saveBtn2
@@ -5382,7 +5602,7 @@ namespace Isotope_fitting
             this.losses_saveBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_saveBtn2.Image")));
             this.losses_saveBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_saveBtn2.Name = "losses_saveBtn2";
-            this.losses_saveBtn2.Size = new System.Drawing.Size(40, 22);
+            this.losses_saveBtn2.Size = new System.Drawing.Size(41, 22);
             this.losses_saveBtn2.Text = "Save";
             this.losses_saveBtn2.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5392,7 +5612,7 @@ namespace Isotope_fitting
             this.losses_copyBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn2.Image")));
             this.losses_copyBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn2.Name = "losses_copyBtn2";
-            this.losses_copyBtn2.Size = new System.Drawing.Size(40, 22);
+            this.losses_copyBtn2.Size = new System.Drawing.Size(41, 22);
             this.losses_copyBtn2.Text = "Copy";
             this.losses_copyBtn2.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5405,7 +5625,7 @@ namespace Isotope_fitting
             this.losses_DropBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn2.Image")));
             this.losses_DropBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn2.Name = "losses_DropBtn2";
-            this.losses_DropBtn2.Size = new System.Drawing.Size(40, 22);
+            this.losses_DropBtn2.Size = new System.Drawing.Size(41, 22);
             this.losses_DropBtn2.Text = " ";
             // 
             // losses_extractBtn2
@@ -5416,6 +5636,34 @@ namespace Isotope_fitting
             this.losses_extractBtn2.Text = "Extract Plot";
             this.losses_extractBtn2.ToolTipText = "Extract plot and edit its shape";
             this.losses_extractBtn2.Click += new System.EventHandler(this.losses_extractBtn_Click);
+            // 
+            // log_check2
+            // 
+            this.log_check2.Checked = true;
+            this.log_check2.CheckOnClick = true;
+            this.log_check2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.log_check2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.log_check2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.log_check2.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.log_check2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.log_check2.Name = "log_check2";
+            this.log_check2.Size = new System.Drawing.Size(41, 19);
+            this.log_check2.Text = "log.";
+            this.log_check2.ToolTipText = "Logarithmic Y Axis";
+            this.log_check2.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            // 
+            // losses_check2
+            // 
+            this.losses_check2.CheckOnClick = true;
+            this.losses_check2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.losses_check2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.losses_check2.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.losses_check2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_check2.Name = "losses_check2";
+            this.losses_check2.Size = new System.Drawing.Size(41, 19);
+            this.losses_check2.Text = "losses";
+            this.losses_check2.ToolTipText = "Logarithmic Y Axis";
+            this.losses_check2.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
             // 
             // losses_X_Box2
             // 
@@ -5471,6 +5719,7 @@ namespace Isotope_fitting
             this.toolStripDropDownButton4.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
             this.toolStripDropDownButton4.Size = new System.Drawing.Size(31, 31);
             this.toolStripDropDownButton4.Text = " ";
+            this.toolStripDropDownButton4.ToolTipText = "Settings";
             // 
             // losses_style_Btn
             // 
@@ -6024,13 +6273,13 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn1;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box1;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box1;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel1;
+        private System.Windows.Forms.Panel checkboxes_panel1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label losses_label;
         private System.Windows.Forms.SplitContainer losses_splitContainer;
         private System.Windows.Forms.GroupBox losses_groupBox_c;
         private System.Windows.Forms.Panel losses_plot_panel5;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel5;
+        private System.Windows.Forms.Panel checkboxes_panel5;
         private System.Windows.Forms.ToolStrip losses_toolStrip5;
         private System.Windows.Forms.ToolStripButton losses_saveBtn5;
         private System.Windows.Forms.ToolStripButton losses_copyBtn5;
@@ -6040,7 +6289,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box5;
         private System.Windows.Forms.GroupBox losses_groupBox_b;
         private System.Windows.Forms.Panel losses_plot_panel3;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel3;
+        private System.Windows.Forms.Panel checkboxes_panel3;
         private System.Windows.Forms.ToolStrip losses_toolStrip3;
         private System.Windows.Forms.ToolStripButton losses_saveBtn3;
         private System.Windows.Forms.ToolStripButton losses_copyBtn3;
@@ -6050,7 +6299,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box3;
         private System.Windows.Forms.GroupBox losses_groupBox_y;
         private System.Windows.Forms.Panel losses_plot_panel6;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel6;
+        private System.Windows.Forms.Panel checkboxes_panel6;
         private System.Windows.Forms.ToolStrip losses_toolStrip6;
         private System.Windows.Forms.ToolStripButton losses_saveBtn6;
         private System.Windows.Forms.ToolStripButton losses_copyBtn6;
@@ -6060,7 +6309,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box6;
         private System.Windows.Forms.GroupBox losses_groupBox_x;
         private System.Windows.Forms.Panel losses_plot_panel4;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel4;
+        private System.Windows.Forms.Panel checkboxes_panel4;
         private System.Windows.Forms.ToolStrip losses_toolStrip4;
         private System.Windows.Forms.ToolStripButton losses_saveBtn4;
         private System.Windows.Forms.ToolStripButton losses_copyBtn4;
@@ -6070,7 +6319,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box4;
         private System.Windows.Forms.GroupBox losses_groupBox_w;
         private System.Windows.Forms.Panel losses_plot_panel2;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel2;
+        private System.Windows.Forms.Panel checkboxes_panel2;
         private System.Windows.Forms.ToolStrip losses_toolStrip2;
         private System.Windows.Forms.ToolStripButton losses_saveBtn2;
         private System.Windows.Forms.ToolStripButton losses_copyBtn2;
@@ -6080,7 +6329,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box2;
         private System.Windows.Forms.GroupBox losses_groupBox_d;
         private System.Windows.Forms.Panel losses_plot_panel7;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel7;
+        private System.Windows.Forms.Panel checkboxes_panel7;
         private System.Windows.Forms.ToolStrip losses_toolStrip7;
         private System.Windows.Forms.ToolStripButton losses_saveBtn7;
         private System.Windows.Forms.ToolStripButton losses_copyBtn7;
@@ -6090,7 +6339,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box7;
         private System.Windows.Forms.GroupBox losses_groupBox_z;
         private System.Windows.Forms.Panel losses_plot_panel8;
-        private System.Windows.Forms.FlowLayoutPanel checkboxes_panel8;
+        private System.Windows.Forms.Panel checkboxes_panel8;
         private System.Windows.Forms.ToolStrip losses_toolStrip8;
         private System.Windows.Forms.ToolStripButton losses_saveBtn8;
         private System.Windows.Forms.ToolStripButton losses_copyBtn8;
@@ -6102,5 +6351,21 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton4;
         private System.Windows.Forms.ToolStripMenuItem losses_style_Btn;
+        private System.Windows.Forms.ToolStripButton log_check7;
+        private System.Windows.Forms.ToolStripButton log_check5;
+        private System.Windows.Forms.ToolStripButton log_check3;
+        private System.Windows.Forms.ToolStripButton log_check1;
+        private System.Windows.Forms.ToolStripButton log_check8;
+        private System.Windows.Forms.ToolStripButton log_check6;
+        private System.Windows.Forms.ToolStripButton log_check4;
+        private System.Windows.Forms.ToolStripButton log_check2;
+        private System.Windows.Forms.ToolStripButton losses_check7;
+        private System.Windows.Forms.ToolStripButton losses_check5;
+        private System.Windows.Forms.ToolStripButton losses_check3;
+        private System.Windows.Forms.ToolStripButton losses_check1;
+        private System.Windows.Forms.ToolStripButton losses_check8;
+        private System.Windows.Forms.ToolStripButton losses_check6;
+        private System.Windows.Forms.ToolStripButton losses_check4;
+        private System.Windows.Forms.ToolStripButton losses_check2;
     }
 }

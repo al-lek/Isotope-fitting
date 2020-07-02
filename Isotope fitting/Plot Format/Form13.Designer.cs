@@ -297,6 +297,7 @@
             this.formatY_UD13.Name = "formatY_UD13";
             this.formatY_UD13.Size = new System.Drawing.Size(85, 20);
             this.formatY_UD13.TabIndex = 19;
+            this.formatY_UD13.Wrap = true;
             this.formatY_UD13.SelectedItemChanged += new System.EventHandler(this.formatY_UD13_SelectedItemChanged);
             // 
             // formatY_Lbl13
@@ -319,6 +320,7 @@
             this.x_minorGrid_UD13.Name = "x_minorGrid_UD13";
             this.x_minorGrid_UD13.Size = new System.Drawing.Size(120, 20);
             this.x_minorGrid_UD13.TabIndex = 11;
+            this.x_minorGrid_UD13.Wrap = true;
             this.x_minorGrid_UD13.SelectedItemChanged += new System.EventHandler(this.x_minorGrid_UD13_SelectedItemChanged);
             // 
             // x_minorGrid_Lbl13
@@ -341,6 +343,7 @@
             this.x_majorGrid_UD13.Name = "x_majorGrid_UD13";
             this.x_majorGrid_UD13.Size = new System.Drawing.Size(120, 20);
             this.x_majorGrid_UD13.TabIndex = 9;
+            this.x_majorGrid_UD13.Wrap = true;
             this.x_majorGrid_UD13.SelectedItemChanged += new System.EventHandler(this.x_majorGrid_UD13_SelectedItemChanged);
             // 
             // x_majorGrid_Lbl13
@@ -365,6 +368,7 @@
             this.xtickUD13.Name = "xtickUD13";
             this.xtickUD13.Size = new System.Drawing.Size(120, 20);
             this.xtickUD13.TabIndex = 2;
+            this.xtickUD13.Wrap = true;
             this.xtickUD13.SelectedItemChanged += new System.EventHandler(this.xtickUD13_SelectedItemChanged);
             // 
             // axisxtick_Lbl13
@@ -467,6 +471,7 @@
             this.y_minorGrid_UD13.Name = "y_minorGrid_UD13";
             this.y_minorGrid_UD13.Size = new System.Drawing.Size(120, 20);
             this.y_minorGrid_UD13.TabIndex = 15;
+            this.y_minorGrid_UD13.Wrap = true;
             this.y_minorGrid_UD13.SelectedItemChanged += new System.EventHandler(this.y_minorGrid_UD13_SelectedItemChanged);
             // 
             // y_minorGrid_Lbl13
@@ -489,6 +494,7 @@
             this.y_majorGrid_UD13.Name = "y_majorGrid_UD13";
             this.y_majorGrid_UD13.Size = new System.Drawing.Size(120, 20);
             this.y_majorGrid_UD13.TabIndex = 13;
+            this.y_majorGrid_UD13.Wrap = true;
             this.y_majorGrid_UD13.SelectedItemChanged += new System.EventHandler(this.y_majorGrid_UD13_SelectedItemChanged);
             // 
             // y_majorGrid_Lbl13
@@ -513,6 +519,7 @@
             this.ytickUD13.Name = "ytickUD13";
             this.ytickUD13.Size = new System.Drawing.Size(120, 20);
             this.ytickUD13.TabIndex = 3;
+            this.ytickUD13.Wrap = true;
             this.ytickUD13.SelectedItemChanged += new System.EventHandler(this.ytickUD13_SelectedItemChanged);
             // 
             // axisytick_Lbl13

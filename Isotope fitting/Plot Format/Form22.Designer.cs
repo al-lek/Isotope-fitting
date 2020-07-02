@@ -268,6 +268,7 @@
             this.x_ppm_minorGrid_UD.Name = "x_ppm_minorGrid_UD";
             this.x_ppm_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.x_ppm_minorGrid_UD.TabIndex = 11;
+            this.x_ppm_minorGrid_UD.Wrap = true;
             this.x_ppm_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_ppm_minorGrid_UD_SelectedItemChanged);
             // 
             // x_ppm_minorGrid_Lbl
@@ -290,6 +291,7 @@
             this.x_ppm_majorGrid_UD.Name = "x_ppm_majorGrid_UD";
             this.x_ppm_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.x_ppm_majorGrid_UD.TabIndex = 9;
+            this.x_ppm_majorGrid_UD.Wrap = true;
             this.x_ppm_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.x_ppm_majorGrid_UD_SelectedItemChanged);
             // 
             // x_ppm_majorGrid_Lbl
@@ -314,6 +316,7 @@
             this.x_ppm_tickUD.Name = "x_ppm_tickUD";
             this.x_ppm_tickUD.Size = new System.Drawing.Size(120, 20);
             this.x_ppm_tickUD.TabIndex = 2;
+            this.x_ppm_tickUD.Wrap = true;
             this.x_ppm_tickUD.SelectedItemChanged += new System.EventHandler(this.x_ppm_tickUD_SelectedItemChanged);
             // 
             // axisx_ppm_tick_Lbl
@@ -429,6 +432,7 @@
             this.y_ppm_minorGrid_UD.Name = "y_ppm_minorGrid_UD";
             this.y_ppm_minorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.y_ppm_minorGrid_UD.TabIndex = 20;
+            this.y_ppm_minorGrid_UD.Wrap = true;
             this.y_ppm_minorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_ppm_minorGrid_UD_SelectedItemChanged);
             // 
             // y_ppm_minorGrid_Lbl
@@ -451,6 +455,7 @@
             this.y_ppm_majorGrid_UD.Name = "y_ppm_majorGrid_UD";
             this.y_ppm_majorGrid_UD.Size = new System.Drawing.Size(120, 20);
             this.y_ppm_majorGrid_UD.TabIndex = 18;
+            this.y_ppm_majorGrid_UD.Wrap = true;
             this.y_ppm_majorGrid_UD.SelectedItemChanged += new System.EventHandler(this.y_ppm_majorGrid_UD_SelectedItemChanged);
             // 
             // y_ppm_majorGrid_Lbl
@@ -475,6 +480,7 @@
             this.y_ppm_tickUD.Name = "y_ppm_tickUD";
             this.y_ppm_tickUD.Size = new System.Drawing.Size(120, 20);
             this.y_ppm_tickUD.TabIndex = 16;
+            this.y_ppm_tickUD.Wrap = true;
             this.y_ppm_tickUD.SelectedItemChanged += new System.EventHandler(this.y_ppm_tickUD_SelectedItemChanged);
             // 
             // axisy_ppm_tick_Lbl

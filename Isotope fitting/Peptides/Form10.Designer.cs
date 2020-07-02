@@ -273,6 +273,7 @@
             this.fit10_UD.Name = "fit10_UD";
             this.fit10_UD.Size = new System.Drawing.Size(120, 20);
             this.fit10_UD.TabIndex = 10;
+            this.fit10_UD.Wrap = true;
             this.fit10_UD.SelectedItemChanged += new System.EventHandler(this.fit10_UD_SelectedItemChanged);
             // 
             // fitC1_Lbl
@@ -332,6 +333,7 @@
             this.frag10_UD.Name = "frag10_UD";
             this.frag10_UD.Size = new System.Drawing.Size(120, 20);
             this.frag10_UD.TabIndex = 7;
+            this.frag10_UD.Wrap = true;
             this.frag10_UD.SelectedItemChanged += new System.EventHandler(this.frag10_UD_SelectedItemChanged);
             // 
             // fragW1_Lbl
@@ -604,6 +606,7 @@
             this.exp10_UD.Name = "exp10_UD";
             this.exp10_UD.Size = new System.Drawing.Size(120, 20);
             this.exp10_UD.TabIndex = 2;
+            this.exp10_UD.Wrap = true;
             this.exp10_UD.SelectedItemChanged += new System.EventHandler(this.exp10_UD_SelectedItemChanged);
             // 
             // expS1_Lbl

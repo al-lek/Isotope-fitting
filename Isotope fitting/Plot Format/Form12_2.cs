@@ -179,5 +179,10 @@ namespace Isotope_fitting
         {
             frm2.y_numformat12_2 = formatY_numUD12.Value.ToString();
         }
+
+        private void line_numUD_ValueChanged(object sender, EventArgs e)
+        {
+            frm2.line_width_2 = (double)line_numUD.Value;
+        }
     }
 }
