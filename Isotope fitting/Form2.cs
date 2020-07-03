@@ -997,7 +997,7 @@ namespace Isotope_fitting
         public void init_preferences()
         {
             ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 0; selection_rule = new bool[] { true, false, false, false, false, false };
-            fit_sort = new bool[] { false, true, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+            fit_sort = new bool[] { false, true, false, false, false, false }; a_coef = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb(); peak_color = OxyColors.Crimson; fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid; exp_width = 1; frag_width = 2; fit_width = 1;
             peak_width = 1; cen_width = 1; Xmajor_grid = false; Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside; Y_tick = OxyPlot.Axes.TickStyle.Outside; x_interval = 50;
             y_interval = 50; x_format = "G"; y_format = "0.0E+"; x_numformat = "0"; y_numformat = "0"; Xmajor_grid12 = OxyPlot.LineStyle.Solid; Xminor_grid12 = OxyPlot.LineStyle.None; Ymajor_grid12 = OxyPlot.LineStyle.Solid; Yminor_grid12 = OxyPlot.LineStyle.None; y_interval12 = 50;
