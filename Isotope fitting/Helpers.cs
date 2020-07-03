@@ -486,7 +486,7 @@ namespace Isotope_fitting
         }
 
         /// <summary>
-        /// retirn List<int[]> with thw indexes that are colored
+        /// retirn List<int[]> with the indexes that are colored
         /// </summary>
         public static List<int[]> return_regions_SS(string text_input)
         {
@@ -510,6 +510,41 @@ namespace Isotope_fitting
             }
             return index_list;
         }
-
+        /// <summary>
+        ///return the double number in the numeric Up Down or an error message if the user enters the wrong format
+        /// </summary>
+        public static double[] numUD_to_double_number(NumericUpDown numUD)
+        {
+            double[] value =new double[] { 0.0,1.0};
+            try
+            {
+                double temp = double.Parse(numUD.ActiveControl.Text);
+                value[0] = temp;
+            }
+            catch
+            {
+                value[1] = 0.0;
+                MessageBox.Show("Ooops...This control accepts numbers only. ", "Wrong format", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            return value;
+        }
+        /// <summary>
+        ///return the double number in the numeric Up Down or an error message if the user enters the wrong format
+        /// </summary>
+        public static int[] numUD_to_int_number(NumericUpDown numUD)
+        {
+            int[] value = new int[] { 0, 1 };
+            try
+            {
+                int temp = int.Parse(numUD.ActiveControl.Text);
+                value[0] = temp;
+            }
+            catch
+            {
+                value[1] = 0;
+                MessageBox.Show("Ooops...This control accepts integer numbers only. ", "Wrong format", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            return value;
+        }
     }
 }

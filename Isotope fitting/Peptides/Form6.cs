@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Isotope_fitting.Helpers;
+
 
 namespace Isotope_fitting
 {
@@ -200,87 +202,108 @@ namespace Isotope_fitting
             if (numericUpDown1.ActiveControl != null && !string.IsNullOrEmpty(numericUpDown1.ActiveControl.Text))
             {
                 if (string.IsNullOrEmpty(numericUpDown1.ActiveControl.Text)) vis_res = 0;
-                vis_res = int.Parse(numericUpDown1.ActiveControl.Text);
+                int[] temp = numUD_to_int_number(numericUpDown1);
+                if (temp[1] == 1) vis_res = temp[0];
             }
         }
         private void Ai_coef_numUD_TextChanged(object sender, EventArgs e)
         {
             //coeff_matrix[0] = (double)Ai_coef_numUD.Value;
             if (Ai_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(Ai_coef_numUD.ActiveControl.Text))
-            {                
-                coeff_matrix[0] = double.Parse(Ai_coef_numUD.ActiveControl.Text);
+            {
+                //coeff_matrix[0] = double.Parse(Ai_coef_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(Ai_coef_numUD);
+                if(temp[1]==1) coeff_matrix[0] = temp[0];               
             }
         }
         private void A_coef_numUD_TextChanged(object sender, EventArgs e)
         {
             //coeff_matrix[1] = (double)A_coef_numUD.Value;
             if (A_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(A_coef_numUD.ActiveControl.Text))
-            {               
-                coeff_matrix[1] = double.Parse(A_coef_numUD.ActiveControl.Text);
+            {
+                //coeff_matrix[1] = double.Parse(A_coef_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(A_coef_numUD);
+                if (temp[1] == 1) coeff_matrix[1] = temp[0];
             }
         }
         private void di_coef_numUD_TextChanged(object sender, EventArgs e)
         {
             //coeff_matrix[2] = (double)di_coef_numUD.Value;
             if (di_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(di_coef_numUD.ActiveControl.Text))
-            {                
-                coeff_matrix[2] = double.Parse(di_coef_numUD.ActiveControl.Text);
+            {
+                //coeff_matrix[2] = double.Parse(di_coef_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(di_coef_numUD);
+                if (temp[1] == 1) coeff_matrix[2] = temp[0];
             }
         }
         private void sse_coef_numUD_TextChanged(object sender, EventArgs e)
         {
             //coeff_matrix[3] = (double)sse_coef_numUD.Value;
             if (sse_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(sse_coef_numUD.ActiveControl.Text))
-            {                
-                coeff_matrix[3] = double.Parse(sse_coef_numUD.ActiveControl.Text);
+            {
+                //coeff_matrix[3] = double.Parse(sse_coef_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(sse_coef_numUD);
+                if (temp[1] == 1) coeff_matrix[3] = temp[0];
             }
         }
         private void ei_coef_numUD_TextChanged(object sender, EventArgs e)
         {
             //coeff_matrix[4] = (double)ei_coef_numUD.Value;
             if (ei_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(ei_coef_numUD.ActiveControl.Text))
-            {               
-                coeff_matrix[4] = double.Parse(ei_coef_numUD.ActiveControl.Text);
+            {
+                //coeff_matrix[4] = double.Parse(ei_coef_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(ei_coef_numUD);
+                if (temp[1] == 1) coeff_matrix[4] = temp[0]; 
             }
         }
         private void dinew_coef_numUD_TextChanged(object sender, EventArgs e)
         {
             //coeff_matrix[5] = (double)dinew_coef_numUD.Value;
             if (dinew_coef_numUD.ActiveControl != null && !string.IsNullOrEmpty(dinew_coef_numUD.ActiveControl.Text))
-            {                
-                coeff_matrix[5] = double.Parse(dinew_coef_numUD.ActiveControl.Text);
+            {
+                //coeff_matrix[5] = double.Parse(dinew_coef_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(dinew_coef_numUD);
+                if (temp[1] == 1) coeff_matrix[5] = temp[0];
             }
         }
         private void Ai_numUD_TextChanged(object sender, EventArgs e)
         {
             //thres[0] = (double)Ai_numUD.Value;
             if (Ai_numUD.ActiveControl != null && !string.IsNullOrEmpty(Ai_numUD.ActiveControl.Text))
-            {               
-                thres[0] = double.Parse(Ai_numUD.ActiveControl.Text);
+            {
+                //thres[0] = double.Parse(Ai_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(Ai_numUD);
+                if (temp[1] == 1) thres[0] = temp[0];
             }
         }
         private void A_numUD_TextChanged(object sender, EventArgs e)
         {
             //thres[1] = (double)A_numUD.Value;
             if (A_numUD.ActiveControl != null && !string.IsNullOrEmpty(A_numUD.ActiveControl.Text))
-            {                
-                thres[1] = double.Parse(A_numUD.ActiveControl.Text);
+            {
+                //thres[1] = double.Parse(A_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(A_numUD);
+                if (temp[1] == 1) thres[1] = temp[0];
             }
         }
         private void di_numUD_TextChanged(object sender, EventArgs e)
         {
            //thres[2] = (double)di_numUD.Value;
             if (di_numUD.ActiveControl != null && !string.IsNullOrEmpty(di_numUD.ActiveControl.Text))
-            {               
-                thres[2] = double.Parse(di_numUD.ActiveControl.Text);
+            {
+                //thres[2] = double.Parse(di_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(di_numUD);
+                if (temp[1] == 1) thres[2] = temp[0];
             }
         }
         private void ei_numUD_TextChanged(object sender, EventArgs e)
         {
             //thres[3] = (double)ei_numUD.Value;
             if (ei_numUD.ActiveControl != null && !string.IsNullOrEmpty(ei_numUD.ActiveControl.Text))
-            {                
-                thres[3] = double.Parse(ei_numUD.ActiveControl.Text);
+            {
+                //thres[3] = double.Parse(ei_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(ei_numUD);
+                if (temp[1] == 1) thres[3] = temp[0];
             }
         }
         private void dinew_numUD_TextChanged(object sender, EventArgs e)
@@ -288,7 +311,9 @@ namespace Isotope_fitting
             //thres[4] = (double)dinew_numUD.Value;
             if (dinew_numUD.ActiveControl != null && !string.IsNullOrEmpty(dinew_numUD.ActiveControl.Text))
             {
-                thres[4] = double.Parse(dinew_numUD.ActiveControl.Text);
+                //thres[4] = double.Parse(dinew_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(dinew_numUD);
+                if (temp[1] == 1) thres[4] = temp[0];
             }
         }
         private void vital_refresh()
@@ -360,7 +385,9 @@ namespace Isotope_fitting
             //best_num = (int)best_num_UD.Value;
             if (best_num_UD.ActiveControl != null && !string.IsNullOrEmpty(best_num_UD.ActiveControl.Text))
             {
-                best_num = int.Parse(best_num_UD.ActiveControl.Text);
+                //best_num = int.Parse(best_num_UD.ActiveControl.Text);
+                int[] temp = numUD_to_int_number(best_num_UD);
+                if (temp[1] == 1) best_num = temp[0];                
             }
         }
 
@@ -369,7 +396,9 @@ namespace Isotope_fitting
             //thres[5] = (double)sd_numUD.Value;
             if (sd_numUD.ActiveControl != null && !string.IsNullOrEmpty(sd_numUD.ActiveControl.Text))
             {
-                thres[5] = double.Parse(sd_numUD.ActiveControl.Text);
+                //thres[5] = double.Parse(sd_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(sd_numUD);
+                if (temp[1] == 1) thres[5] = temp[0];
             }
         }
 
@@ -378,7 +407,9 @@ namespace Isotope_fitting
             //thres[6] = (double)sdnew_numUD.Value;
             if (sdnew_numUD.ActiveControl != null && !string.IsNullOrEmpty(sdnew_numUD.ActiveControl.Text))
             {
-                thres[6] = double.Parse(sdnew_numUD.ActiveControl.Text);
+                //thres[6] = double.Parse(sdnew_numUD.ActiveControl.Text);
+                double[] temp = numUD_to_double_number(sdnew_numUD);
+                if (temp[1] == 1) thres[6] = temp[0];
             }
         }
 
