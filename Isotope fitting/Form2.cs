@@ -12193,7 +12193,7 @@ namespace Isotope_fitting
                             }
                             line_.Points.Add(new DataPoint(dd[0], value));
                         }
-                        if (line_.Points.Last().X < s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X + 1, 0));
+                        if (line_.Points.Last().X < s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X + 1, min_add));
                         if(name.Contains("+"))plus_plot.Model.Series.Add(line_);
                         else minus_plot.Model.Series.Add(line_);
                     }
