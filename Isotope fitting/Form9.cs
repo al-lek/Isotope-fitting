@@ -1167,28 +1167,29 @@ namespace Isotope_fitting
             }
             return res;
         }       
+        
         private List<ChemiForm> select_fragments2_frm9_riken()
         {
             List<ChemiForm> res = new List<ChemiForm>();
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
             //other types are M, internal and known MS2
             // 1. get mz and charge limits (if any)
-            double mzMin = txt_to_d(mzMin_Box);
+            double mzMin = txt_to_d(mzMin_Box_riken);
             if (double.IsNaN(mzMin)) mzMin = dParser(ChemFormulas.First().Mz);
 
-            double mzMax = txt_to_d(mzMax_Box);
+            double mzMax = txt_to_d(mzMax_Box_riken);
             if (double.IsNaN(mzMax)) mzMax = dParser(ChemFormulas.Last().Mz);
 
-            double qMin = txt_to_d(chargeMin_Box);
+            double qMin = txt_to_d(chargeMin_Box_riken);
             if (double.IsNaN(qMin)) qMin = -100.0;
 
-            double qMax = txt_to_d(chargeMax_Box);
+            double qMax = txt_to_d(chargeMax_Box_riken);
             if (double.IsNaN(qMax)) qMax = 100.0;
 
             if (frm2.is_exp_deconvoluted) { qMin = 0; qMax = 1; }
             // 2. get checked types
             List<string> types = new List<string>();
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
+            foreach (CheckedListBox lstBox in GetControls(fragTab_riken).OfType<CheckedListBox>())
                 foreach (var item in lstBox.CheckedItems)
                     types.Add(item.ToString());
 
@@ -1197,20 +1198,24 @@ namespace Isotope_fitting
             List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();// internal a, internal b-2H2O...
             List<string> types_B_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("B")).ToList();// primary with neutral loss a-H2O, b-NH3, ...
             List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();// a, b, y.....
-            List<string> types_primary_H2O = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 5).ToList();  // a+H2O, y-H2O....
             List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 3).ToList();  // a+1, y-2....
+            List<string> types_primary_H2O = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 5).ToList();  // a+H2O, y-H2O....
             List<string> types_known_MS2 = types.Where(t => t.StartsWith("known")).ToList();  // known MS2 fragments....
-            List<string> types_B = types.Where(t => t.StartsWith("B(")).ToList();  // known MS2 fragments....
+            List<string> types_B = types.Where(t => t.StartsWith("B(")).ToList();  // B() fragments....
 
             //4.index primary
             List<int[]> primary_indexes = new List<int[]>();
-            if (!string.IsNullOrEmpty(idxPr_Box.Text.ToString())) add_to_indexes_list(idxPr_Box.Text, primary_indexes);
+            if (!string.IsNullOrEmpty(idxPr_Box_riken.Text.ToString())) add_to_indexes_list(idxPr_Box_riken.Text, primary_indexes);
 
             //5. index internal
             List<int[]> internal_indexesFrom = new List<int[]>();
             List<int[]> internal_indexesTo = new List<int[]>();
-            if (!string.IsNullOrEmpty(idxFrom_Box.Text.ToString())) add_to_indexes_list(idxFrom_Box.Text, internal_indexesFrom);
-            if (!string.IsNullOrEmpty(idxTo_Box.Text.ToString())) add_to_indexes_list(idxTo_Box.Text, internal_indexesTo);
+            if (!string.IsNullOrEmpty(idxFrom_Box_riken.Text.ToString())) add_to_indexes_list(idxFrom_Box_riken.Text, internal_indexesFrom);
+            if (!string.IsNullOrEmpty(idxTo_Box_riken.Text.ToString())) add_to_indexes_list(idxTo_Box_riken.Text, internal_indexesTo);
+            if (internal_indexesTo.Count != internal_indexesFrom.Count)
+            {
+                MessageBox.Show("Wrong format in internal indexes"); internal_indexesTo.Clear(); internal_indexesFrom.Clear();
+            }
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
             {
@@ -1224,8 +1229,8 @@ namespace Isotope_fitting
                 bool is_B_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("B(");
                 bool is_primary = primary.Contains(curr_type.ToArray()[0].ToString()) && curr_type.Length == 1;
                 bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("B(") && curr_type.Length > 1;
-                bool is_known_MS2 = curr_type.StartsWith("known"); ;
-                bool is_B = curr_type.StartsWith("B("); ;
+                bool is_known_MS2 = curr_type.StartsWith("known");
+                bool is_B = curr_type.StartsWith("B(");
 
 
                 // drop frag by mz and charge rules
@@ -1275,7 +1280,7 @@ namespace Isotope_fitting
                     if (primary_indexes.Count > 0)
                     {
                         in_bounds = false;
-                        if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }
+                        if (sortIdx_chkBx_riken.Checked) { index1 = chem.SortIdx; }
                         for (int k = 0; k < primary_indexes.Count; k++)
                         {
                             if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
@@ -1454,11 +1459,6 @@ namespace Isotope_fitting
                     if (types_known_MS2.Contains(curr_type)) res.Add(chem.DeepCopy());
                     continue;
                 }
-                if (is_primary_Hyd) // this should hit, we do not request this type from riken
-                {
-                    if (types_primary_Hyd.Contains(curr_type)) res.Add(chem.DeepCopy());
-                    continue;
-                }
 
                 if (is_primary)
                 {
@@ -1470,7 +1470,7 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
-                            // add the primary and modify it according to gain or loss of H
+                            // add the primary and modify it according to gain or loss of H2O
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
 
@@ -1483,7 +1483,7 @@ namespace Isotope_fitting
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
 
-                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
+                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4).ToString();
                             res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
                         }
                     }
@@ -1491,11 +1491,11 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
                         {
-                            // add the primary and modify it according to gain or loss of H2O
+                            // add the primary and modify it according to gain or loss of H
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
 
-                            string new_type ="("+hyd_mod+")";
+                            string new_type = "(" + hyd_mod + ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
