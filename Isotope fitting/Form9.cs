@@ -999,7 +999,7 @@ namespace Isotope_fitting
 
             // 2. get checked types
             List<string> types = new List<string>();
-            foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
+            foreach (CheckedListBox lstBox in GetControls(Frag_tab).OfType<CheckedListBox>().Where(l => l.TabIndex < 20))
                 foreach (var item in lstBox.CheckedItems)
                     types.Add(item.ToString());
 
