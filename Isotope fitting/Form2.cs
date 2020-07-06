@@ -2218,9 +2218,14 @@ namespace Isotope_fitting
                         try
                         {
                             ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O');
-
+                            ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
+                            ChemiForm.CheckChem(temp_chem);
+                            if(temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            double emass = 0.00054858;
+                            if (charge == 0) { ChemFormulas[i].Mz = Math.Round(temp_chem.Monoisotopic.Mass, 4).ToString(); }
+                            else { ChemFormulas[i].Mz = Math.Round((temp_chem.Monoisotopic.Mass - emass * charge) / Math.Abs(charge), 4).ToString(); }
                         }
-                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
                 else if (primary_present)
@@ -2256,8 +2261,17 @@ namespace Isotope_fitting
                     ChemFormulas[i].Ion_type = ion_type;
                     if (!is_rna)
                     {
-                        try { ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O'); }
-                        catch (Exception eee) { MessageBox.Show(eee.ToString() + " ,Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                        try
+                        {
+                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O');
+                            ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
+                            ChemiForm.CheckChem(temp_chem);
+                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            double emass = 0.00054858;
+                            if (charge == 0) { ChemFormulas[i].Mz = Math.Round(temp_chem.Monoisotopic.Mass, 4).ToString(); }
+                            else { ChemFormulas[i].Mz = Math.Round((temp_chem.Monoisotopic.Mass - emass * charge) / Math.Abs(charge), 4).ToString(); }
+                        }
+                        catch (Exception eee) { MessageBox.Show(eee.ToString() + " ,Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
                 else
@@ -2297,9 +2311,14 @@ namespace Isotope_fitting
                         try
                         {
                             ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -ms_sequence.Length, 'O');
-
+                            ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
+                            ChemiForm.CheckChem(temp_chem);
+                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            double emass = 0.00054858;
+                            if (charge == 0) { ChemFormulas[i].Mz = Math.Round(temp_chem.Monoisotopic.Mass, 4).ToString(); }
+                            else { ChemFormulas[i].Mz = Math.Round((temp_chem.Monoisotopic.Mass - emass * charge) / Math.Abs(charge), 4).ToString(); }
                         }
-                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
                 else
