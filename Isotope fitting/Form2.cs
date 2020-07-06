@@ -997,7 +997,7 @@ namespace Isotope_fitting
         public void init_preferences()
         {
             ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 0; selection_rule = new bool[] { true, false, false, false, false, false };
-            fit_sort = new bool[] { false, true, false, false, false, false }; a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
+            fit_sort = new bool[] { false, true, false, false, false, false }; a_coef = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0 }; visible_results = 100; fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 }; ppmDi = 8.0;
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb(); peak_color = OxyColors.Crimson; fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid; exp_width = 1; frag_width = 2; fit_width = 1;
             peak_width = 1; cen_width = 1; Xmajor_grid = false; Xminor_grid = false; Ymajor_grid = false; Yminor_grid = false; X_tick = OxyPlot.Axes.TickStyle.Outside; Y_tick = OxyPlot.Axes.TickStyle.Outside; x_interval = 50;
             y_interval = 50; x_format = "G"; y_format = "0.0E+"; x_numformat = "0"; y_numformat = "0"; Xmajor_grid12 = OxyPlot.LineStyle.Solid; Xminor_grid12 = OxyPlot.LineStyle.None; Ymajor_grid12 = OxyPlot.LineStyle.Solid; Yminor_grid12 = OxyPlot.LineStyle.None; y_interval12 = 50;
@@ -12094,8 +12094,8 @@ namespace Isotope_fitting
                 }
                 if (is_logarithmic)
                 {
-                    plus_plot.Model.Axes[0] = new LogarithmicAxis {  Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2,/*MinorTickSize=5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };
-                    minus_plot.Model.Axes[0] = new LogarithmicAxis {Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, /*MinorTickSize = 5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11 };                   
+                    plus_plot.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2,/*MinorTickSize=5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                    minus_plot.Model.Axes[0] = new LogarithmicAxis {Position = AxisPosition.Left, IntervalLength = y_interval12_2, MajorGridlineStyle = Ymajor_grid12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, /*MinorTickSize = 5,*/ StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                     minimum = 0.1;
                 }               
                 if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
@@ -12193,7 +12193,7 @@ namespace Isotope_fitting
                             }
                             line_.Points.Add(new DataPoint(dd[0], value));
                         }
-                        if (line_.Points.Last().X < s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X + 1, 0));
+                        if (line_.Points.Last().X < s_chain.Length) line_.Points.Add(new DataPoint(line_.Points.Last().X + 1, min_add));
                         if(name.Contains("+"))plus_plot.Model.Series.Add(line_);
                         else minus_plot.Model.Series.Add(line_);
                     }

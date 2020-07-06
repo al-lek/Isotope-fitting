@@ -83,5 +83,7 @@ namespace Isotope_fitting
         {
             selection_list_1.Enabled = constRes_radBtn.Checked;
         }
+
+       
     }
 }
