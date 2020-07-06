@@ -2215,7 +2215,11 @@ namespace Isotope_fitting
                     ChemFormulas[i].Ion_type = ion_type;
                     if (!is_rna)
                     {
-                        try { ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O'); }
+                        try
+                        {
+                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O');
+
+                        }
                         catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
@@ -2288,6 +2292,15 @@ namespace Isotope_fitting
                     ChemFormulas[i].SortIdx = 0;
                     ChemFormulas[i].Index = "0";
                     ChemFormulas[i].IndexTo = (ms_sequence.Length - 1).ToString();
+                    if (!is_rna)
+                    {
+                        try
+                        {
+                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -ms_sequence.Length, 'O');
+
+                        }
+                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + "The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                    }
                 }
                 else
                 {
