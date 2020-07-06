@@ -3212,7 +3212,7 @@ namespace Isotope_fitting
         private void remove_node(TreeNode node, bool Unchecked = false)
         {
             if (is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
-            else if (string.IsNullOrEmpty(node.Name) || Fragments2.Count == 0) return;
+            else if ((!Unchecked &&string.IsNullOrEmpty(node.Name) )|| Fragments2.Count == 0) return;
             if (Form9.now && Form9.last_plotted.Count > 0)
             {
                 int count = Form9.last_plotted.Count;
@@ -3255,7 +3255,6 @@ namespace Isotope_fitting
                     fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
                 }
             }
-            else if (string.IsNullOrEmpty(node.Name) || Fragments2.Count == 0) return;
             else
             {
                 int idx = Convert.ToInt32(node.Name);
