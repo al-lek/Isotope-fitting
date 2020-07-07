@@ -580,6 +580,11 @@ namespace Isotope_fitting
             }           
 
             if (selected_fragments.Count == 0) { MessageBox.Show("No fragments found"); during_calc(false); return; } 
+            if(selected_fragments.Count>1000)
+            {
+                DialogResult dialogResult = MessageBox.Show("The Selected fragments are " + selected_fragments.Count.ToString() + ". Are you sure you want to proceed with calculation?", "Fragment Calculator", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (dialogResult != DialogResult.Yes) { during_calc(false); return; }
+            }
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
             // 2. calculate fragments resolution

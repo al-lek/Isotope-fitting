@@ -964,6 +964,7 @@ namespace Isotope_fitting
                     x_ppm_minorStep = Convert.ToDouble(preferences[91].Split(':')[1]);
                     ppm_bullet_size = Convert.ToDouble(preferences[92].Split(':')[1]);
                     ppm_graph_type = Int32.Parse(preferences[93].Split(':')[1]);
+
                     try
                     {
                         //hydrogens rearrangement extra parameters
@@ -1159,12 +1160,12 @@ namespace Isotope_fitting
             preferences[0] += "ppm_graph_type: " + ppm_graph_type.ToString() + "\r\n";
 
             //hydrogens rearrangement extra parameters
-            preferences[0] += "y_interval12_2: " + y_interval12_2;
-            preferences[0] += "y_format12_2: " + y_format12_2;
-            preferences[0] += "y_numformat12_2: " + y_numformat12_2;
-            preferences[0] += "x_majorStep12_2: " + x_majorStep12_2;
-            preferences[0] += "x_minorStep12_2: " + x_minorStep12_2;
-            preferences[0] += "line_width_2: " + line_width_2;
+            preferences[0] += "y_interval12_2: " + y_interval12_2 + "\r\n";
+            preferences[0] += "y_format12_2: " + y_format12_2 + "\r\n";
+            preferences[0] += "y_numformat12_2: " + y_numformat12_2 + "\r\n";
+            preferences[0] += "x_majorStep12_2: " + x_majorStep12_2 + "\r\n";
+            preferences[0] += "x_minorStep12_2: " + x_minorStep12_2 + "\r\n";
+            preferences[0] += "line_width_2: " + line_width_2 + "\r\n";
 
 
             // save to default file
