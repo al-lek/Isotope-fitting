@@ -72,7 +72,7 @@
             542101,
             0});
             this.minIntensity_numUD.Minimum = new decimal(new int[] {
-            10,
+            1,
             0,
             0,
             0});
