@@ -77,34 +77,56 @@ namespace Isotope_fitting
         /// <summary>
         /// Fix chemical formula, add or subduct 'H' 'H2O' 'NH3'
         /// </summary>
-        public static string fix_formula(string input, bool simple = true, int h = -1, int h2o = 0, int nh3 = 0)
+        public static string fix_formula(out bool is_error,string input, bool simple = true, int h = -1, int h2o = 0, int nh3 = 0)
         {
             string formula = "";
-            if (simple == true) { formula = find_index_fix_formula(input, h); return formula; }
-            if (h2o != 0)
+            bool error = false;
+            is_error = error;
+            if (simple == true) { formula = find_index_fix_formula(out error  ,input, h);  }
+            else
             {
-                input = find_index_fix_formula(input, 2 * h2o, 'H');
-                input = find_index_fix_formula(input, h2o, 'O');
-            }
-            if (nh3 != 0)
-            {
-                input = find_index_fix_formula(input, 3 * nh3, 'H');
-                input = find_index_fix_formula(input, nh3, 'N');
-            }
-            formula = input;
+                if (h2o != 0)
+                {
+                    input = find_index_fix_formula(out error, input, 2 * h2o, 'H');
+                    input = find_index_fix_formula(out error, input, h2o, 'O');
+                }
+                if (nh3 != 0)
+                {
+                    input = find_index_fix_formula(out error, input, 3 * nh3, 'H');
+                    input = find_index_fix_formula(out error, input, nh3, 'N');
+                }
+                formula = input;
+            }            
+            is_error = error;
             return formula;
         }
 
         /// <summary>
         /// Find the element's index in the chemical formula
         /// </summary>
-        public static string find_index_fix_formula(string input, int amount = -1, char element = 'H')
+        public static string find_index_fix_formula( out bool error,string input, int amount = -1, char element = 'H')
         {
+            error = false;
+            bool error2 = false;
             int idx = input.IndexOf(element);
-            if (idx < 0) return input;
+            if (idx < 0 && amount<0){
+                error = true; return input;}
+            else if (idx < 0)
+            {
+                int idx_c = input.IndexOf('C');
+                bool stop = false;
+                while (!stop)
+                {
+                    idx_c++;
+                    if(input.Length <= idx_c || !Char.IsNumber(input[idx_c])) { stop = true; }
+                }
+                if (!stop) input = element + amount.ToString() + input;
+                else input = input.Insert(idx_c, element + amount.ToString() );
+                return input;
+            }
             var theString = input;
             var aStringBuilder = new StringBuilder(theString);
-            if (input.Length > idx +2 && Char.IsNumber(input[idx + 2]))
+            if (input.Length > idx + 2 && Char.IsNumber(input[idx + 2]))
             {
                 if (input.Length > idx + 3 && Char.IsNumber(input[idx + 3]))
                 {
@@ -112,43 +134,45 @@ namespace Isotope_fitting
                     {
                         if (input.Length > idx + 5 && Char.IsNumber(input[idx + 5]))
                         {
-                            input = replace_number_fix_formula(input, amount, idx + 1, 5);
+                            input = replace_number_fix_formula(out error2,input, amount, idx + 1, 5);
                         }
                         else
                         {
-                            input = replace_number_fix_formula(input, amount, idx + 1, 4);
+                            input = replace_number_fix_formula(out error2, input, amount, idx + 1, 4);
                         }
                     }
                     else
                     {
-                        input = replace_number_fix_formula(input, amount, idx + 1, 3);
+                        input = replace_number_fix_formula(out error2, input, amount, idx + 1, 3);
                     }
                 }
                 else
                 {
-                    input = replace_number_fix_formula(input, amount, idx + 1, 2);
+                    input = replace_number_fix_formula(out error2, input, amount, idx + 1, 2);
                 }
             }
             else
             {
-                input = replace_number_fix_formula(input, amount, idx + 1, 1);
+                input = replace_number_fix_formula(out error2, input, amount, idx + 1, 1);
             }
+            error = error2;
             return input;
         }
 
         /// <summary>
         ///Given the index of the number that indicates the amount of an element in the chemical formula, set the desired amount
         /// </summary>
-        public static string replace_number_fix_formula(string input, int amount, int sub_index, int sub_length)
+        public static string replace_number_fix_formula(out bool error,string input, int amount, int sub_index, int sub_length)
         {
             var theString = input;
+            error = false;
             var aStringBuilder = new StringBuilder(theString);
             Int32.TryParse(theString.Substring(sub_index, sub_length), out int result);
             aStringBuilder.Remove(sub_index, sub_length);
             aStringBuilder.Insert(sub_index, (result + amount).ToString());
             if (result+amount<0)
             {
-                MessageBox.Show(" ");
+                error = true;
             }
             theString = aStringBuilder.ToString();
             input = theString;

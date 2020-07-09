@@ -739,27 +739,22 @@ namespace Isotope_fitting
                 string lbl = "";
                 if (res.Last().Ion.Contains("internal"))
                 {                   
-                    lbl = res.Last().Ion + "[" + res.Last().Index + "-" + res.Last().IndexTo + "]";
-                    res.Last().Radio_label = lbl;
-                    if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
-                    else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";
+                    lbl = res.Last().Ion + "[" + res.Last().Index + "-" + res.Last().IndexTo + "]";                    
                 }
                 else if (res.Last().Ion_type.StartsWith("M"))
                 {
-                    lbl =ion;
-                    res.Last().Radio_label = lbl;
-                    if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
-                    else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";
+                    lbl =ion;                    
                 }
                 else
                 {
                     if (res.Last().Ion_type.Length == 1) { lbl = res.Last().Ion_type + res.Last().Index; }
-                    else { lbl = "(" + res.Last().Ion_type + ")" + res.Last().Index; }
-                    res.Last().Radio_label = lbl;
-                    if (res.Last().Charge > 0) res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+";
-                    else res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-";                    
+                    else { lbl = "(" + res.Last().Ion_type + ")" + res.Last().Index; }                                     
                 }
-                res.Last().Radio_label += extension; res.Last().Name += extension;
+                res.Last().Radio_label = lbl + extension;
+                if (c > 0) res.Last().Name = lbl + "_" +c.ToString() + "+" + extension;
+                else if (c < 0) res.Last().Name = lbl + "_" + Math.Abs(c).ToString() + "-"+extension;
+                else res.Last().Name = lbl + "_" + c.ToString() +  extension;
+
                 if (res.Last().Ion.StartsWith("x") || res.Last().Ion.StartsWith("y") || res.Last().Ion.StartsWith("z") || res.Last().Ion.StartsWith("(x") || res.Last().Ion.StartsWith("(y") || res.Last().Ion.StartsWith("(z"))
                 {
                     res.Last().SortIdx = s.Length - Int32.Parse(res.Last().Index);
@@ -971,14 +966,20 @@ namespace Isotope_fitting
                 string lbl = "";
                 lbl = ion;
                 res.Last().Radio_label = lbl + extension;
-                res.Last().InputFormula= res.Last().PrintFormula= fix_formula(chem_form, true, res.Last().Charge);
-                if (res.Last().Charge > 0)
+                //res.Last().InputFormula= res.Last().PrintFormula= fix_formula(chem_form, true, res.Last().Charge);
+                if (c > 0)
                 {
+                    res.Last().Adduct = "H" + c.ToString();
                     res.Last().Name = lbl + "_" + res.Last().Charge.ToString() + "+" + extension;
+                }
+                else if(c < 0)
+                {
+                    res.Last().Deduct = "H" + Math.Abs(c).ToString();
+                    res.Last().Name = lbl + "_" + Math.Abs(c).ToString() + "-" + extension;
                 }
                 else
                 {
-                    res.Last().Name = lbl + "_" + Math.Abs(res.Last().Charge).ToString() + "-" + extension;
+                    res.Last().Name = lbl + "_" + c.ToString() +  extension;
                 }
             }            
             return res;
@@ -1154,7 +1155,7 @@ namespace Isotope_fitting
                             // add the primary and modify it according to gain or loss of H
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
-
+                            bool is_error = false;
                             string new_type = "(" + hyd_mod + ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
@@ -1165,7 +1166,9 @@ namespace Isotope_fitting
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
 
                             res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
                         }
                     }
                 }
@@ -1475,6 +1478,7 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
+                            bool is_error = false;
                             // add the primary and modify it according to gain or loss of H2O
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
@@ -1489,17 +1493,19 @@ namespace Isotope_fitting
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
 
                             res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
                         }
                     }
                     if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
                     {
                         foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
                         {
+                            bool is_error = false;
                             // add the primary and modify it according to gain or loss of H
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
-
                             string new_type = "(" + hyd_mod + ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
@@ -1508,13 +1514,15 @@ namespace Isotope_fitting
                             if (hyd_mod.Contains('+'))
                             {
                                 res[curr_idx].Mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, false, 0, 1);
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error,res[curr_idx].InputFormula, false, 0, 1);
                             }
                             else
                             {
                                 res[curr_idx].Mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, false, 0, -1);
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, -1);
                             }
+                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
                         }
                     }
                 }

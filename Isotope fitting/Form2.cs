@@ -1736,7 +1736,7 @@ namespace Isotope_fitting
                         else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
                         else if (calc_FF) assign_manually_pro_fragment(tmp_str);
                     }
-                    catch { MessageBox.Show("Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                    catch(Exception eeeee) { MessageBox.Show(eeeee.ToString()+ "\r\n Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
 
                     if (j % 1000 == 0 && j > 0) progress_display_update(j);
                 }
@@ -1756,6 +1756,7 @@ namespace Isotope_fitting
         {
             int charge = Int32.Parse(frag_info[3]);
             if (is_exp_deconvoluted && charge > 1) { return; }
+            bool is_error = false;
 
             ChemFormulas.Add(new ChemiForm
             {
@@ -1799,7 +1800,7 @@ namespace Isotope_fitting
             // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
-            if (!calc_FF) ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula);
+            if (!calc_FF) ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(out is_error,ChemFormulas[i].InputFormula);
             if (is_exp_deconvoluted)
             {
                 //in case of a deconvoluted spectra 
@@ -1837,7 +1838,9 @@ namespace Isotope_fitting
                 else { lbl = "(" + ChemFormulas[i].Ion_type + ")" + ChemFormulas[i].Index; }
                 ChemFormulas[i].Radio_label = lbl + ms_extension;
                 if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
-                else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+                else if(ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+                else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
+
             }
             else
             {
@@ -1851,6 +1854,7 @@ namespace Isotope_fitting
                     substring[1] = ChemFormulas[i].Ion.Substring(dash_idx);
                 }
                 else substring[0] = ChemFormulas[i].Ion;
+                string lbl = String.Empty;
 
                 if (substring[0].StartsWith("MH") && c_is_precursor(ChemFormulas[i].InputFormula))  // an internal b could be MHQRP for example, so check also carbons
                 {
@@ -1858,11 +1862,7 @@ namespace Isotope_fitting
                     ChemFormulas[i].Color = OxyColors.DarkRed;
                     ChemFormulas[i].Index = 0.ToString();
                     ChemFormulas[i].IndexTo = (ms_sequence.Length - 1).ToString();
-
-                    string lbl = ChemFormulas[i].Ion_type;
-                    ChemFormulas[i].Radio_label = lbl + ms_extension;
-                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
-                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+                     lbl = ChemFormulas[i].Ion_type;                   
                 }
                 else if (substring[1].Contains("-CO"))
                 {
@@ -1870,14 +1870,9 @@ namespace Isotope_fitting
 
                     ChemFormulas[i].Ion_type = "internal a" + substring[1];
                     ChemFormulas[i].Color = OxyColors.DarkViolet;
-                    string lbl = String.Empty;
                     ChemFormulas[i].Index = (ms_sequence.IndexOf(substring[0]) + 1).ToString();
                     ChemFormulas[i].IndexTo = (ms_sequence.IndexOf(substring[0]) + substring[0].Length).ToString();
-
-                    lbl = "internal_a" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-                    ChemFormulas[i].Radio_label = lbl + ms_extension;
-                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
-                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+                    lbl = "internal_a" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";                    
                 }
                 else
                 {
@@ -1885,12 +1880,12 @@ namespace Isotope_fitting
                     ChemFormulas[i].Color = OxyColors.MediumOrchid;
                     ChemFormulas[i].Index = (ms_sequence.IndexOf(substring[0]) + 1).ToString();
                     ChemFormulas[i].IndexTo = (ms_sequence.IndexOf(substring[0]) + substring[0].Length).ToString();
-
-                    string lbl = "internal_b" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-                    ChemFormulas[i].Radio_label = lbl + ms_extension;
-                    if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
-                    else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+                    lbl = "internal_b" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";                   
                 }
+                ChemFormulas[i].Radio_label = lbl + ms_extension;
+                if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
+                else if (ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+                else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
             }
             if (ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z"))
             {
@@ -2118,7 +2113,7 @@ namespace Isotope_fitting
         private void assign_riken_fragment(string[] frag_info)
         {
             List<string> other_frag_types = new List<string> { "acp3Y", "dRp" };
-
+            bool is_error = false;
             //m/z	Charge	Chemical Formula	Type
             int charge = Int32.Parse(frag_info[1]);
             if (is_exp_deconvoluted && Math.Abs(charge) > 1) { return; }
@@ -2153,17 +2148,20 @@ namespace Isotope_fitting
                 Extension = ms_extension,
             });
             int i = ChemFormulas.Count - 1;
-            //if (ms_heavy_chain) ChemFormulas[i].Chain_type = 1;
-            //else if (ms_light_chain) ChemFormulas[i].Chain_type = 2;
-            /*else*/
-            ChemFormulas[i].Chain_type = 0;
-
             // Note on formulas
             // InputFormula is the text from Riken.
+            ChemFormulas[i].Chain_type = 0;
+            // in order to maintain an exclusive way of presenting chemical formulas,the riken chemical formulas are converted to Molecular formulas of charge 0
+            ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(out is_error,ChemFormulas[i].InputFormula, true, charge * (-1));
+            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". The molecular formula for charge could not be created from the chemical formula : " + ChemFormulas[i].InputFormula + " ,with charge : "+ ChemFormulas[i].Charge+ " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+
+            if (charge>0) { ChemFormulas[i].Adduct = "H" + charge.ToString(); }
+            else if (charge < 0) { ChemFormulas[i].Deduct = "H" + (charge * (-1)).ToString(); }
+            
             if (is_exp_deconvoluted)
             {
-                ChemFormulas[i].Charge = 0;
-                ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula, true, charge * (-1));
+                ChemFormulas[i].Charge = 0; ChemFormulas[i].Adduct = ""; ChemFormulas[i].Deduct = "";
+                //ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula, true, charge * (-1));
                 return;
             }
             else
@@ -2218,7 +2216,8 @@ namespace Isotope_fitting
                     {
                         try
                         {
-                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index, 'O');
+                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(out is_error, ChemFormulas[i].InputFormula, -index, 'O');
+                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".You are in DNA mode but the Oxygens could not be removed from the chemical formula : "+ ChemFormulas[i].InputFormula+ " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
                             ChemiForm.CheckChem(temp_chem);
                             if(temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
@@ -2264,7 +2263,8 @@ namespace Isotope_fitting
                     {
                         try
                         {
-                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O');
+                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(out is_error  ,ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O');
+                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".You are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
                             ChemiForm.CheckChem(temp_chem);
                             if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
@@ -2311,7 +2311,8 @@ namespace Isotope_fitting
                     {
                         try
                         {
-                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(ChemFormulas[i].InputFormula, -ms_sequence.Length, 'O');
+                            ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(out is_error  ,ChemFormulas[i].InputFormula, -ms_sequence.Length, 'O');
+                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".You are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
                             ChemiForm.CheckChem(temp_chem);
                             if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
@@ -2342,7 +2343,8 @@ namespace Isotope_fitting
             lbl = ChemFormulas[i].Ion;
             ChemFormulas[i].Radio_label = lbl + ms_extension;
             if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
-            else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+            else if (ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
+            else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
         }
         private void load_RIKEN_product_procedure()
         {
@@ -2607,7 +2609,7 @@ namespace Isotope_fitting
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
-            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }            
             change_name_duplicates();
             // thread safely fire event to continue calculations
             if (selected_fragments.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
@@ -7600,9 +7602,7 @@ namespace Isotope_fitting
             else if (Fragments2.Count > 0)
             {
                 // sort by mz the fragments list (global) beause it is mixed by multi-threading
-                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
-                // also restore indexes to match array position
-                for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }
+                Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();                
                 change_name_duplicates();
                 // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));

@@ -3182,16 +3182,19 @@ namespace Isotope_fitting
                                 foreach (string d in deduct.Keys)
                                 {
                                     dictionary[d] -= deduct[d];
+                                    if(dictionary[d]<0 && d.Equals("H")) { H_minus = Math.Abs(dictionary[d]); }
+                                    if (dictionary[d] < 0 && !d.Equals("H")) { chem.Error = true; }
                                 }
+                                if (H_minus > 0) { dictionary.Remove("H"); }
                             }
                         }
                     }
 
-                    //check if each element's amount in the deduct is larger than the corresponding element in the chemical formula
-                    if (dictionary.Any(item => item.Value < 0))
-                    {
-                        chem.Error = true;
-                    }
+                    ////check if each element's amount in the deduct is larger than the corresponding element in the chemical formula
+                    //if (dictionary.Any(item => item.Value < 0))
+                    //{                        
+                    //    chem.Error = true;
+                    //}
 
                     //check if each element's amount in the deduct is larger than the corresponding element in the chemical formula
                     //in this case the element is "deleted" from the chemical formula

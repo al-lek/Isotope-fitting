@@ -392,6 +392,7 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
+                            bool is_error = false;
                             // add the primary and modify it according to gain or loss of H2O
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
@@ -406,13 +407,15 @@ namespace Isotope_fitting
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
 
                             res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, true, (int)hyd_num);
+                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error,res[curr_idx].InputFormula, true, (int)hyd_num);
+                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
                         }
                     }
                     if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
                     {
                         foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
                         {
+                            bool is_error = false;
                             // add the primary and modify it according to gain or loss of H
                             res.Add(chem.DeepCopy());
                             int curr_idx = res.Count - 1;
@@ -425,13 +428,14 @@ namespace Isotope_fitting
                             if (hyd_mod.Contains('+'))
                             {
                                 res[curr_idx].Mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, false, 0,1);
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0,1);
                             }
                             else
                             {
                                 res[curr_idx].Mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(res[curr_idx].InputFormula, false, 0,-1);
-                            }                           
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0,-1);
+                            }     
+                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
                         }
                     }
                 }

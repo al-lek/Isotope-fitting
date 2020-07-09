@@ -12,7 +12,6 @@ namespace Isotope_fitting
 {
     public partial class Form17 : Form
     {
-        Form2 frm2;
         string message ="";
         public Form17(/*Form2 f*/string m)
         {
