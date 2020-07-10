@@ -4498,7 +4498,7 @@ namespace Isotope_fitting
             this.exp_Settings_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.exp_Settings_toolStrip.Location = new System.Drawing.Point(144, 45);
             this.exp_Settings_toolStrip.Name = "exp_Settings_toolStrip";
-            this.exp_Settings_toolStrip.Size = new System.Drawing.Size(103, 25);
+            this.exp_Settings_toolStrip.Size = new System.Drawing.Size(72, 25);
             this.exp_Settings_toolStrip.TabIndex = 0;
             this.exp_Settings_toolStrip.Text = "toolStrip1";
             // 

@@ -8454,7 +8454,7 @@ namespace Isotope_fitting
                 {
                     sumFrag += temp; sumExp += metr[0];
                 }
-                else if (metr[0] > 50.0)
+                else if (metr[0] > min_intes)
                 {
                     sumExp += metr[0];
                 }
