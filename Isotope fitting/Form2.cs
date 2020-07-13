@@ -11040,8 +11040,8 @@ namespace Isotope_fitting
                 intensity_plot_init(cz_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
                 intensity_plot_init(dz_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
                 ppm_plot_init(ppm_plot);
-                create_internal_plot(index_plot, indexIntensity_plot, 1, Color.Green, Color.Blue);
-                create_internal_plot(indexto_plot, indextoIntensity_plot, 2, Color.Green, Color.Blue);
+                create_internal_plot(index_plot, indexIntensity_plot, 2, Color.Green, Color.Blue);
+                create_internal_plot(indexto_plot, indextoIntensity_plot, 1, Color.Green, Color.Blue);
             }
             else
             {
