@@ -76,7 +76,7 @@ namespace Isotope_fitting
             this.tabPrimary = new System.Windows.Forms.TabPage();
             this.panel2_tab3 = new System.Windows.Forms.Panel();
             this.groupBoxCharge4 = new System.Windows.Forms.GroupBox();
-            this.dzCharge_Pnl = new System.Windows.Forms.Panel();
+            this.dzCharge_Pnl_plot = new System.Windows.Forms.Panel();
             this.Charge_toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.dzChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.dzChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -87,7 +87,7 @@ namespace Isotope_fitting
             this.dzcharge_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.dzcharge_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxCharge3 = new System.Windows.Forms.GroupBox();
-            this.czCharge_Pnl = new System.Windows.Forms.Panel();
+            this.czCharge_Pnl_plot = new System.Windows.Forms.Panel();
             this.Charge_toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.czChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.czChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -98,7 +98,7 @@ namespace Isotope_fitting
             this.czcharge_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.czcharge_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxCharge2 = new System.Windows.Forms.GroupBox();
-            this.byCharge_Pnl = new System.Windows.Forms.Panel();
+            this.byCharge_Pnl_plot = new System.Windows.Forms.Panel();
             this.Charge_toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.byChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.byChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -109,7 +109,7 @@ namespace Isotope_fitting
             this.bycharge_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.bycharge_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxCharge1 = new System.Windows.Forms.GroupBox();
-            this.axCharge_Pnl = new System.Windows.Forms.Panel();
+            this.axCharge_Pnl_plot = new System.Windows.Forms.Panel();
             this.Charge_toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.primary_charge_settingsBtn = new System.Windows.Forms.ToolStripDropDownButton();
             this.primary_charge_styleBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +125,7 @@ namespace Isotope_fitting
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel1_tab3 = new System.Windows.Forms.Panel();
             this.groupBoxIntensity4 = new System.Windows.Forms.GroupBox();
-            this.dz_Pnl = new System.Windows.Forms.Panel();
+            this.dz_Pnl_plot = new System.Windows.Forms.Panel();
             this.intensity_toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.dzSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.dzCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -134,7 +134,7 @@ namespace Isotope_fitting
             this.dz_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.dz_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxIntensity3 = new System.Windows.Forms.GroupBox();
-            this.cz_Pnl = new System.Windows.Forms.Panel();
+            this.cz_Pnl_plot = new System.Windows.Forms.Panel();
             this.intensity_toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.czSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.czCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -143,7 +143,7 @@ namespace Isotope_fitting
             this.cz_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.cz_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxIntensity2 = new System.Windows.Forms.GroupBox();
-            this.by_Pnl = new System.Windows.Forms.Panel();
+            this.by_Pnl_plot = new System.Windows.Forms.Panel();
             this.intensity_toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.byCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.bySave_Btn = new System.Windows.Forms.ToolStripButton();
@@ -152,7 +152,7 @@ namespace Isotope_fitting
             this.by_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.by_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxIntensity1 = new System.Windows.Forms.GroupBox();
-            this.ax_Pnl = new System.Windows.Forms.Panel();
+            this.ax_Pnl_plot = new System.Windows.Forms.Panel();
             this.intensity_toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.primary_intens_settingsBtn = new System.Windows.Forms.ToolStripDropDownButton();
             this.primary_int_styleBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -1020,7 +1020,7 @@ namespace Isotope_fitting
             // 
             // groupBoxCharge4
             // 
-            this.groupBoxCharge4.Controls.Add(this.dzCharge_Pnl);
+            this.groupBoxCharge4.Controls.Add(this.dzCharge_Pnl_plot);
             this.groupBoxCharge4.Controls.Add(this.Charge_toolStrip4);
             this.groupBoxCharge4.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge4.Location = new System.Drawing.Point(0, 768);
@@ -1029,14 +1029,14 @@ namespace Isotope_fitting
             this.groupBoxCharge4.TabIndex = 33;
             this.groupBoxCharge4.TabStop = false;
             // 
-            // dzCharge_Pnl
+            // dzCharge_Pnl_plot
             // 
-            this.dzCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dzCharge_Pnl.Location = new System.Drawing.Point(3, 16);
-            this.dzCharge_Pnl.Name = "dzCharge_Pnl";
-            this.dzCharge_Pnl.Size = new System.Drawing.Size(542, 237);
-            this.dzCharge_Pnl.TabIndex = 29;
-            this.dzCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.dzCharge_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dzCharge_Pnl_plot.Location = new System.Drawing.Point(3, 16);
+            this.dzCharge_Pnl_plot.Name = "dzCharge_Pnl_plot";
+            this.dzCharge_Pnl_plot.Size = new System.Drawing.Size(542, 237);
+            this.dzCharge_Pnl_plot.TabIndex = 29;
+            this.dzCharge_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip4
             // 
@@ -1142,7 +1142,7 @@ namespace Isotope_fitting
             // 
             // groupBoxCharge3
             // 
-            this.groupBoxCharge3.Controls.Add(this.czCharge_Pnl);
+            this.groupBoxCharge3.Controls.Add(this.czCharge_Pnl_plot);
             this.groupBoxCharge3.Controls.Add(this.Charge_toolStrip3);
             this.groupBoxCharge3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge3.Location = new System.Drawing.Point(0, 512);
@@ -1151,14 +1151,14 @@ namespace Isotope_fitting
             this.groupBoxCharge3.TabIndex = 32;
             this.groupBoxCharge3.TabStop = false;
             // 
-            // czCharge_Pnl
+            // czCharge_Pnl_plot
             // 
-            this.czCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.czCharge_Pnl.Location = new System.Drawing.Point(3, 16);
-            this.czCharge_Pnl.Name = "czCharge_Pnl";
-            this.czCharge_Pnl.Size = new System.Drawing.Size(542, 237);
-            this.czCharge_Pnl.TabIndex = 29;
-            this.czCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.czCharge_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.czCharge_Pnl_plot.Location = new System.Drawing.Point(3, 16);
+            this.czCharge_Pnl_plot.Name = "czCharge_Pnl_plot";
+            this.czCharge_Pnl_plot.Size = new System.Drawing.Size(542, 237);
+            this.czCharge_Pnl_plot.TabIndex = 29;
+            this.czCharge_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip3
             // 
@@ -1264,7 +1264,7 @@ namespace Isotope_fitting
             // 
             // groupBoxCharge2
             // 
-            this.groupBoxCharge2.Controls.Add(this.byCharge_Pnl);
+            this.groupBoxCharge2.Controls.Add(this.byCharge_Pnl_plot);
             this.groupBoxCharge2.Controls.Add(this.Charge_toolStrip2);
             this.groupBoxCharge2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge2.Location = new System.Drawing.Point(0, 256);
@@ -1273,14 +1273,14 @@ namespace Isotope_fitting
             this.groupBoxCharge2.TabIndex = 31;
             this.groupBoxCharge2.TabStop = false;
             // 
-            // byCharge_Pnl
+            // byCharge_Pnl_plot
             // 
-            this.byCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.byCharge_Pnl.Location = new System.Drawing.Point(3, 16);
-            this.byCharge_Pnl.Name = "byCharge_Pnl";
-            this.byCharge_Pnl.Size = new System.Drawing.Size(542, 237);
-            this.byCharge_Pnl.TabIndex = 28;
-            this.byCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.byCharge_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.byCharge_Pnl_plot.Location = new System.Drawing.Point(3, 16);
+            this.byCharge_Pnl_plot.Name = "byCharge_Pnl_plot";
+            this.byCharge_Pnl_plot.Size = new System.Drawing.Size(542, 237);
+            this.byCharge_Pnl_plot.TabIndex = 28;
+            this.byCharge_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip2
             // 
@@ -1386,7 +1386,7 @@ namespace Isotope_fitting
             // 
             // groupBoxCharge1
             // 
-            this.groupBoxCharge1.Controls.Add(this.axCharge_Pnl);
+            this.groupBoxCharge1.Controls.Add(this.axCharge_Pnl_plot);
             this.groupBoxCharge1.Controls.Add(this.Charge_toolStrip1);
             this.groupBoxCharge1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCharge1.Location = new System.Drawing.Point(0, 0);
@@ -1395,14 +1395,14 @@ namespace Isotope_fitting
             this.groupBoxCharge1.TabIndex = 30;
             this.groupBoxCharge1.TabStop = false;
             // 
-            // axCharge_Pnl
+            // axCharge_Pnl_plot
             // 
-            this.axCharge_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.axCharge_Pnl.Location = new System.Drawing.Point(3, 16);
-            this.axCharge_Pnl.Name = "axCharge_Pnl";
-            this.axCharge_Pnl.Size = new System.Drawing.Size(542, 237);
-            this.axCharge_Pnl.TabIndex = 27;
-            this.axCharge_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.axCharge_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.axCharge_Pnl_plot.Location = new System.Drawing.Point(3, 16);
+            this.axCharge_Pnl_plot.Name = "axCharge_Pnl_plot";
+            this.axCharge_Pnl_plot.Size = new System.Drawing.Size(542, 237);
+            this.axCharge_Pnl_plot.TabIndex = 27;
+            this.axCharge_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // Charge_toolStrip1
             // 
@@ -1561,7 +1561,7 @@ namespace Isotope_fitting
             // 
             // groupBoxIntensity4
             // 
-            this.groupBoxIntensity4.Controls.Add(this.dz_Pnl);
+            this.groupBoxIntensity4.Controls.Add(this.dz_Pnl_plot);
             this.groupBoxIntensity4.Controls.Add(this.intensity_toolStrip4);
             this.groupBoxIntensity4.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxIntensity4.Location = new System.Drawing.Point(0, 768);
@@ -1570,16 +1570,16 @@ namespace Isotope_fitting
             this.groupBoxIntensity4.TabIndex = 33;
             this.groupBoxIntensity4.TabStop = false;
             // 
-            // dz_Pnl
+            // dz_Pnl_plot
             // 
-            this.dz_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.dz_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dz_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dz_Pnl.Location = new System.Drawing.Point(46, 16);
-            this.dz_Pnl.Name = "dz_Pnl";
-            this.dz_Pnl.Size = new System.Drawing.Size(677, 237);
-            this.dz_Pnl.TabIndex = 23;
-            this.dz_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.dz_Pnl_plot.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.dz_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dz_Pnl_plot.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dz_Pnl_plot.Location = new System.Drawing.Point(46, 16);
+            this.dz_Pnl_plot.Name = "dz_Pnl_plot";
+            this.dz_Pnl_plot.Size = new System.Drawing.Size(677, 237);
+            this.dz_Pnl_plot.TabIndex = 23;
+            this.dz_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip4
             // 
@@ -1655,7 +1655,7 @@ namespace Isotope_fitting
             // 
             // groupBoxIntensity3
             // 
-            this.groupBoxIntensity3.Controls.Add(this.cz_Pnl);
+            this.groupBoxIntensity3.Controls.Add(this.cz_Pnl_plot);
             this.groupBoxIntensity3.Controls.Add(this.intensity_toolStrip3);
             this.groupBoxIntensity3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxIntensity3.Location = new System.Drawing.Point(0, 512);
@@ -1664,16 +1664,16 @@ namespace Isotope_fitting
             this.groupBoxIntensity3.TabIndex = 32;
             this.groupBoxIntensity3.TabStop = false;
             // 
-            // cz_Pnl
+            // cz_Pnl_plot
             // 
-            this.cz_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.cz_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cz_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cz_Pnl.Location = new System.Drawing.Point(46, 16);
-            this.cz_Pnl.Name = "cz_Pnl";
-            this.cz_Pnl.Size = new System.Drawing.Size(677, 237);
-            this.cz_Pnl.TabIndex = 23;
-            this.cz_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.cz_Pnl_plot.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cz_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cz_Pnl_plot.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cz_Pnl_plot.Location = new System.Drawing.Point(46, 16);
+            this.cz_Pnl_plot.Name = "cz_Pnl_plot";
+            this.cz_Pnl_plot.Size = new System.Drawing.Size(677, 237);
+            this.cz_Pnl_plot.TabIndex = 23;
+            this.cz_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip3
             // 
@@ -1749,7 +1749,7 @@ namespace Isotope_fitting
             // 
             // groupBoxIntensity2
             // 
-            this.groupBoxIntensity2.Controls.Add(this.by_Pnl);
+            this.groupBoxIntensity2.Controls.Add(this.by_Pnl_plot);
             this.groupBoxIntensity2.Controls.Add(this.intensity_toolStrip2);
             this.groupBoxIntensity2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxIntensity2.Location = new System.Drawing.Point(0, 256);
@@ -1758,16 +1758,16 @@ namespace Isotope_fitting
             this.groupBoxIntensity2.TabIndex = 31;
             this.groupBoxIntensity2.TabStop = false;
             // 
-            // by_Pnl
+            // by_Pnl_plot
             // 
-            this.by_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.by_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.by_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.by_Pnl.Location = new System.Drawing.Point(46, 16);
-            this.by_Pnl.Name = "by_Pnl";
-            this.by_Pnl.Size = new System.Drawing.Size(677, 237);
-            this.by_Pnl.TabIndex = 22;
-            this.by_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.by_Pnl_plot.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.by_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.by_Pnl_plot.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.by_Pnl_plot.Location = new System.Drawing.Point(46, 16);
+            this.by_Pnl_plot.Name = "by_Pnl_plot";
+            this.by_Pnl_plot.Size = new System.Drawing.Size(677, 237);
+            this.by_Pnl_plot.TabIndex = 22;
+            this.by_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip2
             // 
@@ -1843,7 +1843,7 @@ namespace Isotope_fitting
             // 
             // groupBoxIntensity1
             // 
-            this.groupBoxIntensity1.Controls.Add(this.ax_Pnl);
+            this.groupBoxIntensity1.Controls.Add(this.ax_Pnl_plot);
             this.groupBoxIntensity1.Controls.Add(this.intensity_toolStrip1);
             this.groupBoxIntensity1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxIntensity1.Location = new System.Drawing.Point(0, 0);
@@ -1852,16 +1852,16 @@ namespace Isotope_fitting
             this.groupBoxIntensity1.TabIndex = 30;
             this.groupBoxIntensity1.TabStop = false;
             // 
-            // ax_Pnl
+            // ax_Pnl_plot
             // 
-            this.ax_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ax_Pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ax_Pnl.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ax_Pnl.Location = new System.Drawing.Point(46, 16);
-            this.ax_Pnl.Name = "ax_Pnl";
-            this.ax_Pnl.Size = new System.Drawing.Size(677, 237);
-            this.ax_Pnl.TabIndex = 21;
-            this.ax_Pnl.Resize += new System.EventHandler(this.plot_Pnl_Resize);
+            this.ax_Pnl_plot.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ax_Pnl_plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ax_Pnl_plot.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ax_Pnl_plot.Location = new System.Drawing.Point(46, 16);
+            this.ax_Pnl_plot.Name = "ax_Pnl_plot";
+            this.ax_Pnl_plot.Size = new System.Drawing.Size(677, 237);
+            this.ax_Pnl_plot.TabIndex = 21;
+            this.ax_Pnl_plot.Resize += new System.EventHandler(this.plot_Pnl_Resize);
             // 
             // intensity_toolStrip1
             // 
@@ -2632,7 +2632,7 @@ namespace Isotope_fitting
             this.ppm_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ppm_toolStrip.Location = new System.Drawing.Point(0, 8);
             this.ppm_toolStrip.Name = "ppm_toolStrip";
-            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 102);
+            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 121);
             this.ppm_toolStrip.TabIndex = 1;
             // 
             // ppmSave_Btn
@@ -5885,7 +5885,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v25.2.3";
+            this.Text = "Peak Finder v25.2.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -6093,7 +6093,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.TabPage tabPrimary;
         private System.Windows.Forms.Panel panel2_tab3;
         private System.Windows.Forms.GroupBox groupBoxCharge4;
-        private System.Windows.Forms.Panel dzCharge_Pnl;
+        private System.Windows.Forms.Panel dzCharge_Pnl_plot;
         private System.Windows.Forms.ToolStrip Charge_toolStrip4;
         private System.Windows.Forms.ToolStripButton dzChargeSave_Btn;
         private System.Windows.Forms.ToolStripButton dzChargeCopy_Btn;
@@ -6104,7 +6104,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox dzcharge_X_Box;
         private System.Windows.Forms.ToolStripTextBox dzcharge_Y_Box;
         private System.Windows.Forms.GroupBox groupBoxCharge3;
-        private System.Windows.Forms.Panel czCharge_Pnl;
+        private System.Windows.Forms.Panel czCharge_Pnl_plot;
         private System.Windows.Forms.ToolStrip Charge_toolStrip3;
         private System.Windows.Forms.ToolStripButton czChargeSave_Btn;
         private System.Windows.Forms.ToolStripButton czChargeCopy_Btn;
@@ -6115,7 +6115,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox czcharge_X_Box;
         private System.Windows.Forms.ToolStripTextBox czcharge_Y_Box;
         private System.Windows.Forms.GroupBox groupBoxCharge2;
-        private System.Windows.Forms.Panel byCharge_Pnl;
+        private System.Windows.Forms.Panel byCharge_Pnl_plot;
         private System.Windows.Forms.ToolStrip Charge_toolStrip2;
         private System.Windows.Forms.ToolStripButton byChargeSave_Btn;
         private System.Windows.Forms.ToolStripButton byChargeCopy_Btn;
@@ -6126,7 +6126,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox bycharge_X_Box;
         private System.Windows.Forms.ToolStripTextBox bycharge_Y_Box;
         private System.Windows.Forms.GroupBox groupBoxCharge1;
-        private System.Windows.Forms.Panel axCharge_Pnl;
+        private System.Windows.Forms.Panel axCharge_Pnl_plot;
         private System.Windows.Forms.ToolStrip Charge_toolStrip1;
         private System.Windows.Forms.ToolStripButton axChargeSave_Btn;
         private System.Windows.Forms.ToolStripButton axChargeCopy_Btn;
@@ -6139,7 +6139,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panel1_tab3;
         private System.Windows.Forms.GroupBox groupBoxIntensity4;
-        private System.Windows.Forms.Panel dz_Pnl;
+        private System.Windows.Forms.Panel dz_Pnl_plot;
         private System.Windows.Forms.ToolStrip intensity_toolStrip4;
         private System.Windows.Forms.ToolStripButton dzSave_Btn;
         private System.Windows.Forms.ToolStripButton dzCopy_Btn;
@@ -6148,7 +6148,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox dz_X_Box;
         private System.Windows.Forms.ToolStripTextBox dz_Y_Box;
         private System.Windows.Forms.GroupBox groupBoxIntensity3;
-        private System.Windows.Forms.Panel cz_Pnl;
+        private System.Windows.Forms.Panel cz_Pnl_plot;
         private System.Windows.Forms.ToolStrip intensity_toolStrip3;
         private System.Windows.Forms.ToolStripButton czSave_Btn;
         private System.Windows.Forms.ToolStripButton czCopy_Btn;
@@ -6157,7 +6157,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox cz_X_Box;
         private System.Windows.Forms.ToolStripTextBox cz_Y_Box;
         private System.Windows.Forms.GroupBox groupBoxIntensity2;
-        private System.Windows.Forms.Panel by_Pnl;
+        private System.Windows.Forms.Panel by_Pnl_plot;
         private System.Windows.Forms.ToolStrip intensity_toolStrip2;
         private System.Windows.Forms.ToolStripButton byCopy_Btn;
         private System.Windows.Forms.ToolStripButton bySave_Btn;
@@ -6166,7 +6166,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripTextBox by_X_Box;
         private System.Windows.Forms.ToolStripTextBox by_Y_Box;
         private System.Windows.Forms.GroupBox groupBoxIntensity1;
-        private System.Windows.Forms.Panel ax_Pnl;
+        private System.Windows.Forms.Panel ax_Pnl_plot;
         private System.Windows.Forms.ToolStrip intensity_toolStrip1;
         private System.Windows.Forms.ToolStripButton axSave_Btn;
         private System.Windows.Forms.ToolStripButton axCopy_Btn;

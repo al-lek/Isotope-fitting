@@ -2609,7 +2609,19 @@ namespace Isotope_fitting
             // sort by mz the fragments list (global) beause it is mixed by multi-threading
             Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
-            for (int k = 0; k < Fragments2.Count; k++) { Fragments2[k].Counter = (k + 1); }            
+            for (int k = 0; k < Fragments2.Count; k++)
+            {
+                Fragments2[k].Counter = (k + 1);
+                //// in order to maintain an exclusive way of presenting chemical formulas,the riken chemical formulas are converted to Molecular formulas of charge 0
+                //bool is_error = false;
+                // Fragments2[k].InputFormula = fix_formula(out is_error, Fragments2[k].InputFormula, true, Fragments2[k].Charge * (-1));
+                //if (is_error)
+                //{
+                //    MessageBox.Show("Error with fragment " + Fragments2[k].Ion + ",with m/z " + Fragments2[k].Mz + ". The molecular formula for charge could not be created from the chemical formula : " + Fragments2[k].InputFormula + " ,with charge : " + Fragments2[k].Charge + " . Don't worry the remaining calculations will continue normally.");
+                //}
+                //if (Fragments2[k].Charge > 0) { Fragments2[k].Adduct = "H" + Fragments2[k].Charge.ToString(); }
+                //else if (Fragments2[k].Charge < 0) { Fragments2[k].Deduct = "H" + (Fragments2[k].Charge * (-1)).ToString(); }
+            }
             change_name_duplicates();
             // thread safely fire event to continue calculations
             if (selected_fragments.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
@@ -2994,8 +3006,8 @@ namespace Isotope_fitting
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
-                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode); } }),
-                                                                      new MenuItem("Remove Unchecked", (s, e) => {remove_node(frag_tree.SelectedNode,true); }),
+                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode.Name); } }),
+                                                                      new MenuItem("Remove Unchecked", (s, e) => {remove_node("",true); }),
                                                                       new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
                                                                       new MenuItem("Replace Extension", (s, e) => {replace_extension();  }),
                                                                       new MenuItem("Zoom to fragment",(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  })
@@ -3212,10 +3224,10 @@ namespace Isotope_fitting
             prompt.ShowDialog();
             return new string[] { textBox1.Text.Replace("_", ""), textBox2.Text.Replace("_", "") };
         }
-        private void remove_node(TreeNode node, bool Unchecked = false)
+        private void remove_node(string node_name, bool Unchecked = false)
         {
             if (is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
-            else if ((!Unchecked &&string.IsNullOrEmpty(node.Name) )|| Fragments2.Count == 0) return;
+            else if ((!Unchecked &&string.IsNullOrEmpty(node_name) )|| Fragments2.Count == 0) return;
             if (Form9.now && Form9.last_plotted.Count > 0)
             {
                 int count = Form9.last_plotted.Count;
@@ -3260,7 +3272,7 @@ namespace Isotope_fitting
             }
             else
             {
-                int idx = Convert.ToInt32(node.Name);
+                int idx = Convert.ToInt32(node_name);
                 fitted_results.Clear();
                 if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
@@ -9204,9 +9216,9 @@ namespace Isotope_fitting
             {
                 if (string.IsNullOrEmpty(seq.Sequence)) continue;
                 int seq_len= seq.Sequence.Length-1;
-                List<int> a_cov1 = new List<int>(); List<int> b_cov1 = new List<int>(); List<int> c_cov1 = new List<int>(); List<int> x_cov1 = new List<int>(); List<int> y_cov1 = new List<int>(); List<int> z_cov1 = new List<int>();
+                List<int> a_cov1 = new List<int>(); List<int> b_cov1 = new List<int>(); List<int> c_cov1 = new List<int>(); List<int> x_cov1 = new List<int>(); List<int> y_cov1 = new List<int>(); List<int> z_cov1 = new List<int>(); List<int> d_cov1 = new List<int>(); List<int> w_cov1 = new List<int>();
                 List<int> total_1 = new List<int>();
-                double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, t1 = 0;
+                double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, d1 = 0, w1 = 0, t1 = 0;
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(seq.Extension) && !recognise_extension(nn.Extension, seq.Extension)) { continue; }
@@ -9259,6 +9271,22 @@ namespace Isotope_fitting
                             if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
                         }
                     }
+                    else if (is_riken && (nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")))
+                        {
+                            if (d_cov1.Count == 0 || !d_cov1.Contains(nn.Index)) { d_cov1.Add(nn.Index); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
+                    else if(is_riken && (nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")))
+                    {
+                        if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")))
+                        {
+                            if (w_cov1.Count == 0 || !w_cov1.Contains(nn.Index)) { w_cov1.Add(nn.Index); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                        }
+                    }
                 }
                 a1 = 100 * (double)a_cov1.Count / seq_len;
                 b1 = 100 * (double)b_cov1.Count / seq_len;
@@ -9266,6 +9294,8 @@ namespace Isotope_fitting
                 x1 = 100 * (double)x_cov1.Count / seq_len;
                 y1 = 100 * (double)y_cov1.Count / seq_len;
                 z1 = 100 * (double)z_cov1.Count / seq_len;
+                d1 = 100 * (double)d_cov1.Count / seq_len;
+                w1 = 100 * (double)w_cov1.Count / seq_len;
                 t1 = 100 * (double)total_1.Count / seq_len;
 
                 sb.AppendLine("Extension: " + seq.Extension);
@@ -9276,6 +9306,13 @@ namespace Isotope_fitting
                 sb.AppendLine();
                 sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
                 sb.AppendLine();
+                if (is_riken)
+                {
+                    sb.AppendLine("d : " + Math.Round(d1, 1).ToString() + "%");
+                    sb.AppendLine();
+                    sb.AppendLine("w : " + Math.Round(w1, 1).ToString() + "%");
+                    sb.AppendLine();
+                }                
                 sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
                 sb.AppendLine();
                 sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
@@ -10731,7 +10768,7 @@ namespace Isotope_fitting
             // ax plot
             if (ax_plot != null) ax_plot.Dispose();
             ax_plot = new PlotView() { Name = "ax_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            ax_Pnl.Controls.Add(ax_plot);
+            ax_Pnl_plot.Controls.Add(ax_plot);
             PlotModel ax_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
             ax_plot.Model = ax_model;
             var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
@@ -10745,7 +10782,7 @@ namespace Isotope_fitting
             // by plot
             if (by_plot != null) by_plot.Dispose();
             by_plot = new PlotView() { Name = "by_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            by_Pnl.Controls.Add(by_plot);
+            by_Pnl_plot.Controls.Add(by_plot);
             PlotModel by_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, TitleFontSize = 14, Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             by_plot.Model = by_model;
             var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
@@ -10759,7 +10796,7 @@ namespace Isotope_fitting
             // cz plot
             if (cz_plot != null) cz_plot.Dispose();
             cz_plot = new PlotView() { Name = "cz_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            cz_Pnl.Controls.Add(cz_plot);
+            cz_Pnl_plot.Controls.Add(cz_plot);
             PlotModel cz_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "c - z  fragments", TitleColor = OxyColors.Red };
             cz_plot.Model = cz_model;
             var linearAxis5 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
@@ -10773,7 +10810,7 @@ namespace Isotope_fitting
             // dz plot
             if (dz_plot != null) dz_plot.Dispose();
             dz_plot = new PlotView() { Name = "dz_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            dz_Pnl.Controls.Add(dz_plot);
+            dz_Pnl_plot.Controls.Add(dz_plot);
             PlotModel dz_model = new PlotModel { PlotType = PlotType.XY, TitleFont = "Arial", DefaultFont = "Arial", IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, Title = "d - z  fragments", TitleColor = OxyColors.DeepPink };
             dz_plot.Model = dz_model;
             var linearAxis115 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12, MinorGridlineStyle = Yminor_grid12, TickStyle = Y_tick12, StringFormat = y_format12 + y_numformat12, IntervalLength = y_interval12, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Intensity" };
@@ -10786,7 +10823,7 @@ namespace Isotope_fitting
             // ax charge plot
             if (axCharge_plot != null) axCharge_plot.Dispose();
             axCharge_plot = new PlotView() { Name = "axCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            axCharge_Pnl.Controls.Add(axCharge_plot);
+            axCharge_Pnl_plot.Controls.Add(axCharge_plot);
             PlotModel axCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "a - x  fragments", TitleColor = OxyColors.Green };
             axCharge_plot.Model = axCharge_model;
             var linearAxis15 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_charge_grid12, MinorGridlineStyle = Yminor_charge_grid12, TickStyle = Y_charge_tick12, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
@@ -10799,7 +10836,7 @@ namespace Isotope_fitting
             // by charge plot
             if (byCharge_plot != null) byCharge_plot.Dispose();
             byCharge_plot = new PlotView() { Name = "byCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            byCharge_Pnl.Controls.Add(byCharge_plot);
+            byCharge_Pnl_plot.Controls.Add(byCharge_plot);
             PlotModel byCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "b - y  fragments", TitleColor = OxyColors.Blue };
             byCharge_plot.Model = byCharge_model;
             var linearAxis17 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_charge_grid12, MinorGridlineStyle = Yminor_charge_grid12, TickStyle = Y_charge_tick12, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
@@ -10812,7 +10849,7 @@ namespace Isotope_fitting
             // cz charge plot
             if (czCharge_plot != null) czCharge_plot.Dispose();
             czCharge_plot = new PlotView() { Name = "czCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            czCharge_Pnl.Controls.Add(czCharge_plot);
+            czCharge_Pnl_plot.Controls.Add(czCharge_plot);
             PlotModel czCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "c - z  fragments", TitleColor = OxyColors.Red };
             czCharge_plot.Model = czCharge_model;
             var linearAxis19 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_charge_grid12, MinorGridlineStyle = Yminor_charge_grid12, TickStyle = Y_charge_tick12, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
@@ -10825,7 +10862,7 @@ namespace Isotope_fitting
             // dz charge plot
             if (dzCharge_plot != null) dzCharge_plot.Dispose();
             dzCharge_plot = new PlotView() { Name = "dzCharge_plot", BackColor = Color.White, Dock = System.Windows.Forms.DockStyle.Fill };
-            dzCharge_Pnl.Controls.Add(dzCharge_plot);
+            dzCharge_Pnl_plot.Controls.Add(dzCharge_plot);
             PlotModel dzCharge_model = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "d - z  fragments", TitleColor = OxyColors.DeepPink };
             dzCharge_plot.Model = dzCharge_model;
             var linearAxis119 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_charge_grid12, MinorGridlineStyle = Yminor_charge_grid12, TickStyle = Y_charge_tick12, MajorStep = x_charge_majorStep12, MinorStep = x_charge_minorStep12, MinimumMinorStep = 1.0, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Charge State [#H+]" };
@@ -13798,6 +13835,7 @@ namespace Isotope_fitting
             }
             File.WriteAllLines(path, fragText);
         }
+
 
 
 
