@@ -5359,7 +5359,7 @@ namespace Isotope_fitting
             axisY_1.RangeChanged += yAxis_RangeChanged;
             LC_2.ViewXY.XAxes[0].RangeChanged += LC_2xAxis_RangeChanged;
             LC_1.MouseMove += new MouseEventHandler(_chart_MouseMove);
-            LC_1.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
+            LC_1.MouseDoubleClick += (s, e) => {v.ZoomToFit(); if (autoscale_Btn.Checked) { xAxis_fox_yAxis(LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum); }};
             LC_1.MouseDown += new MouseEventHandler(_chart_MouseDown);
         }
 
@@ -5372,7 +5372,7 @@ namespace Isotope_fitting
             LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
             LC_2.EndUpdate();
         }
-
+       
         private void yAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary Y axis
@@ -5388,16 +5388,23 @@ namespace Isotope_fitting
             e.CancelRendering = true;
             double x_min = e.NewMin;
             double x_max = e.NewMax;
+            xAxis_fox_yAxis(e.NewMin, e.NewMax);
+        }
+        private void xAxis_fox_yAxis(double x_min, double x_max)
+        {
             LC_1.BeginUpdate();
             LC_2.BeginUpdate();
             LC_1.ViewXY.XAxes[1].SetRange(x_min, x_max);
             LC_2.ViewXY.XAxes[0].SetRange(x_min, x_max);
             if (autoscale_Btn.Checked)
             {
-                if (all_data.Count > 0 && Fragments2.Count > 0)
+                if (all_data.Count > 0 /*&& Fragments2.Count > 0*/)
                 {
                     double y_max = return_Yaxis_range(x_min, x_max);
-                    if (y_max > 0) { LC_1.ViewXY.YAxes[0].SetRange(-0.2 * y_max, 1.2 * y_max); }
+                    if (y_max > 0)
+                    {
+                        LC_1.ViewXY.YAxes[0].SetRange(-0.2 * y_max, 1.2 * y_max);
+                    }
                     else
                     {
                         bool bChanged = false;
