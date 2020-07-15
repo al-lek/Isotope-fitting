@@ -5768,8 +5768,7 @@ namespace Isotope_fitting
             Color clr = Color.FromArgb(custom_colors[idx]);
             return clr;
         }
-
-
+        
         private void Init_PointLineSeries(LightningChartUltimate LC, string name, Color color, float width, LinePattern style)
         {
             PointLineSeries pls = new PointLineSeries(LC.ViewXY, LC.ViewXY.XAxes[0], LC.ViewXY.YAxes[0])
@@ -5876,8 +5875,7 @@ namespace Isotope_fitting
             //invalidate_all();
             LC_1.ViewXY.LegendBox.Visible = legend_chkBx.Checked;
         }
-
-
+        
         private void frag_annotation(List<int> to_plot, LightningChartUltimate plot)
         {
             if ((fragPlotLbl_chkBx.Checked || fragPlotLbl_chkBx2.Checked) && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
@@ -6100,7 +6098,6 @@ namespace Isotope_fitting
             }
             return Y_max;
         }
-
 
         #endregion
 
@@ -9483,7 +9480,9 @@ namespace Isotope_fitting
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
-                g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                //g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
+
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -9668,7 +9667,9 @@ namespace Isotope_fitting
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
-                g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                //g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
+
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -9918,7 +9919,8 @@ namespace Isotope_fitting
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    //if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
                     {
                         if (!los_chkBox_temp.Checked)
                         {
@@ -9948,7 +9950,9 @@ namespace Isotope_fitting
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
-                g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                //g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
+
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -10064,20 +10068,20 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 8, nn.Color, g);
                         }
                     }
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
-                    {
-                        if (!los_chkBox_temp.Checked)
-                        {
-                            if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
-                            {
-                                draw_line(pp, false, 0, nn.Color, g, true);
-                            }
-                            else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
-                            {
-                                draw_line(pp, false, 0, nn.Color, g, true);
-                            }
-                        }
-                    }
+                    //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    //{
+                    //    if (!los_chkBox_temp.Checked)
+                    //    {
+                    //        if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
+                    //        {
+                    //            draw_line(pp, false, 0, nn.Color, g, true);
+                    //        }
+                    //        else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
+                    //        {
+                    //            draw_line(pp, false, 0, nn.Color, g, true);
+                    //        }
+                    //    }
+                    //}
                 }
                 pp.X = pp.X + 20;
                 if (pp.X + 20 >= sequence_Pnl_temp.Width - 21 - 50) { pp.X = 3; pp.Y = pp.Y + 50; }
@@ -10143,11 +10147,12 @@ namespace Isotope_fitting
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                     //if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                     {
                         if (!los_chkBox_temp.Checked)
                         {
-                           if (int_chBx_temp.Checked)
+                            if (int_chBx_temp.Checked)
                             {
                                 intensity += nn.Max_intensity;
                             }
@@ -10169,7 +10174,8 @@ namespace Isotope_fitting
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
-                g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                //g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
+                draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -10321,16 +10327,16 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 12, nn.Color, g);
                         }
                     }
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
-                    {
-                        if (!los_chkBox_temp.Checked)
-                        {
-                            if (int_chBx_temp.Checked)
-                            {
-                                draw_line(pp, false, 0, nn.Color, g, true);
-                            }
-                        }
-                    }
+                    //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    //{
+                    //    if (!los_chkBox_temp.Checked)
+                    //    {
+                    //        if (int_chBx_temp.Checked)
+                    //        {
+                    //            draw_line(pp, false, 0, nn.Color, g, true);
+                    //        }
+                    //    }
+                    //}
                 }
                 pp.X = pp.X + 20;
                 if (pp.X + 20 >= sequence_Pnl_temp.Width - 21 - 50) { pp.X = 3; pp.Y = pp.Y + 58; }
@@ -10338,6 +10344,12 @@ namespace Isotope_fitting
             }
 
             return;
+        }
+        private void draw_letter(Graphics g,string letter,Panel sequence_Pnl_temp, SolidBrush sb, Point pp)
+        {
+            Point pp_final = new Point(pp.X, pp.Y);
+            if(letter.Equals("I")) pp_final = new Point(pp.X+4, pp.Y);
+            g.DrawString(letter, sequence_Pnl_temp.Font, sb, pp_final);
         }
         private void draw_rectangle(Point pf, Color color_draw, Graphics g)
         {
@@ -10347,7 +10359,9 @@ namespace Isotope_fitting
             SolidBrush blueBrush = new SolidBrush(color_draw);
 
             // Create rectangle.
-            Rectangle rect = new Rectangle(pf.X - 1, pf.Y, 20, 17);
+            //Rectangle rect = new Rectangle(pf.X - 1, pf.Y, 20, 17);
+            Rectangle rect = new Rectangle(pf.X+16, pf.Y,6, 17);
+
 
             // Fill rectangle to screen.
             g.FillRectangle(blueBrush, rect);
@@ -12637,7 +12651,7 @@ namespace Isotope_fitting
             v.AxisLayout.XAxisAutoPlacement = XAxisAutoPlacement.BottomThenTop;
             temp_plot.EndUpdate();
             refresh_temp_plot(temp_plot);
-            temp_plot.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
+            temp_plot.MouseDoubleClick += (s, e) => { v.ZoomToFit();  };
             Form20 frm20 = new Form20(temp_plot, LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum, LC_1.ViewXY.YAxes[0].Minimum, LC_1.ViewXY.YAxes[0].Maximum);
             frm20.Show();
         }
