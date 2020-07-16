@@ -3855,6 +3855,7 @@ namespace Isotope_fitting
                 // intensities are fixed in alligned_intensities for all. Fragments height is regulated by each one's Factor
                 List<double[]> aligned_intensities_subSet = subset_of_aligned_distros(set[i].ToArray());
 
+                
                 // get the intensities of the fragments, to pass them to the optimizer as a better starting point
                 List<double> UI_intensities = get_UI_intensities(set[i]);
                 try
@@ -3874,6 +3875,7 @@ namespace Isotope_fitting
                 {
                     Debug.WriteLine(ex);
                 }
+
             });
 
             // sort res and powerSet by least SSE
@@ -4121,39 +4123,55 @@ namespace Isotope_fitting
         }
         private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities, double experimental_sum)
         {
-            // 1. initialize needed params
-            // in coefficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
-            // UI_intensities is initial values to make a starting point
-            int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
+            //check if aligned_intensities_subSet is empty
+            if (aligned_intensities_subSet.Count==0)
+            {
+                int frag_count = UI_intensities.Count();
+                double[] coeficients = new double[frag_count];
+                for (int i = 0; i < frag_count; i++) coeficients[i] = 0.0;
+                // 2. save result
+                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Ai,A]
+                double[] result = new double[6 * frag_count + 6];
+                for (int i = 0; i < frag_count; i++) { result[i] = coeficients[i]; result[i + 4 * frag_count] = 0; result[i + 5 * frag_count] = 0; } //initialize di error and sd
+                result[6 * frag_count + 3] = 0;
+                result[6 * frag_count + 4] =100; result[6 * frag_count + 5] = 100;
+                return result;
+            }
+            else
+            {
+                // 1. initialize needed params
+                // in coefficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
+                // UI_intensities is initial values to make a starting point
+                int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
 
-            double[] coeficients = UI_intensities.ToArray();
-            double[] bndl = new double[distros_num];
-            double[] bndh = new double[distros_num];
-            for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i] * 1e2; }
+                double[] coeficients = UI_intensities.ToArray();
+                double[] bndl = new double[distros_num];
+                double[] bndh = new double[distros_num];
+                for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i] * 1e2; }
 
-            double epsx = 0.000001;
-            int maxits = 1000000;
-            alglib.minlmstate state;
-            alglib.minlmreport rep;
+                double epsx = 0.000001;
+                int maxits = 1000000;
+                alglib.minlmstate state;
+                alglib.minlmreport rep;
 
-            alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
-            alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
-            alglib.minlmsetcond(state, epsx, maxits);
-            alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities_subSet);
-            alglib.minlmresults(state, out coeficients, out rep);
+                alglib.minlmcreatev(distros_num, coeficients, 0.001, out state);
+                alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
+                alglib.minlmsetcond(state, epsx, maxits);
+                alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities_subSet);
+                alglib.minlmresults(state, out coeficients, out rep);
 
-            // 2. save result
-            // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di, SSE,Ai,A]
-            double[] result = new double[6 * distros_num + 6];
-            for (int i = 0; i < distros_num; i++) { result[i] = coeficients[i]; result[i + 4 * distros_num] = 0; result[i + 5 * distros_num] = 0; } //initialize di error and sd
-            result[6 * distros_num + 3] = state.fi[0];
-            (result[6 * distros_num + 4], result[6 * distros_num + 5]) = per_cent_fit_coverage(aligned_intensities_subSet, coeficients, experimental_sum);
+                // 2. save result
+                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Ai,A]
+                double[] result = new double[6 * distros_num + 6];
+                for (int i = 0; i < distros_num; i++) { result[i] = coeficients[i]; result[i + 4 * distros_num] = 0; result[i + 5 * distros_num] = 0; } //initialize di error and sd
+                result[6 * distros_num + 3] = state.fi[0];
+                (result[6 * distros_num + 4], result[6 * distros_num + 5]) = per_cent_fit_coverage(aligned_intensities_subSet, coeficients, experimental_sum);
 
-            //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
-            //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coefficients);
-            //result[distros_num + 3] = (result[distros_num])+ result[distros_num + 2] +(10/result[distros_num + 1]);
-
-            return result;
+                //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
+                //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coefficients);
+                //result[distros_num + 3] = (result[distros_num])+ result[distros_num + 2] +(10/result[distros_num + 1]);
+                return result;
+            }
         }
 
         #region unused code, extra test attempt--> not useful, delete it if you like
@@ -9669,7 +9687,7 @@ namespace Isotope_fitting
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
                 //g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
                 draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
-
+                //counts the internal -B() in the current index
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -9820,23 +9838,60 @@ namespace Isotope_fitting
                         {
                             draw_line(temp_p, false, 12, nn.Color, g);
                         }
-                    }
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    }                   
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked && int_chBx_temp.Checked && aw_chBx_temp.Checked && bx_chBx_temp.Checked && cy_chBx_temp.Checked && dz_chBx_temp.Checked)
                     {
-                        if (!los_chkBox_temp.Checked)
+                        draw_line(pp, false, 0, nn.Color, g, true);
+                    }
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1)&& !los_chkBox_temp.Checked && int_chBx_temp.Checked)
+                    {
+                        bool is_left = true;
+                        bool is_up = true;
+                        int step = 0;
+                        Color clr = Color.Orange;
+                        if (nn.Index == idx + 2)
                         {
-                           if (int_chBx_temp.Checked )
-                            {
-                                draw_line(pp, false, 0, nn.Color, g, true);
-                            }
+                            is_left = false;
+                            if (nn.Name.StartsWith("(w") || nn.Name.StartsWith("w")) { step = 0 * 4; clr = Color.LimeGreen; }
+                            if (nn.Name.StartsWith("(x") || nn.Name.StartsWith("x")) { step = 1 * 4; clr = Color.DodgerBlue; }
+                            if (nn.Name.StartsWith("(y") || nn.Name.StartsWith("y")) { step = 2 * 4; clr = Color.Tomato; }
+                            if (nn.Name.StartsWith("(z") || nn.Name.StartsWith("z")) { step =3 * 4; clr = Color.HotPink; }
                         }
+                        else 
+                        {
+                            string[] str = nn.Name.Split('-');
+                            if (str.Length>2)
+                            {
+                                if (str[1].StartsWith("a")) { step = 0 * 4; clr = Color.Green; }
+                                if (str[1].StartsWith("b")) { step = 1 * 4; clr = Color.Blue; }
+                                if (str[1].StartsWith("c")) { step = 2 * 4; clr = Color.Firebrick; }
+                                if (str[1].StartsWith("d")) { step = 3 * 4; clr = Color.DeepPink; }
+                            }                            
+                        }
+                        
+                        if (nn.Ion_type.Contains("B(")){is_up = false; draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }            
+                        else draw_internal_riken_line(pp, is_left, is_up, step, clr, g);     
                     }
                 }
                 pp.X = pp.X + 20;
                 if (pp.X + 20 >= sequence_Pnl_temp.Width) { pp.X = 3; pp.Y = pp.Y + 58; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 58; }
+                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 58; }                
             }
             return;
+        }
+        private void draw_internal_riken_line(Point pf, bool left, bool up, int step, Color color_draw, Graphics g)
+        {
+            //0.707 * 5=3.5 
+            int triangle_a =4;        
+            int x1, x2, x3, y1, y2, y3;
+            Pen mypen = new Pen(color_draw, 2F);
+            x1 = pf.X + 18;
+            if (left) { x2 = x1- triangle_a;  x3 = x2 - 5; }
+            else { x2 = x1+ triangle_a; x3 = x2 + 5; }
+            if (up) { y1 = pf.Y - step + 3; y2 = y1 - triangle_a; y3 = y2;  }
+            else {y1 = pf.Y + 14 + step + 2; y2 = y1 + triangle_a; y3 = y2;  }
+            Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
+            g.DrawLines(mypen, points);
         }
         private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false)
         {
