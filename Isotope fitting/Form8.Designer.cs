@@ -179,11 +179,11 @@
             this.save_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.save_btn.BackColor = System.Drawing.Color.Green;
             this.save_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.save_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.save_btn.Location = new System.Drawing.Point(160, 117);
             this.save_btn.Name = "save_btn";
-            this.save_btn.Size = new System.Drawing.Size(64, 27);
+            this.save_btn.Size = new System.Drawing.Size(75, 25);
             this.save_btn.TabIndex = 23;
             this.save_btn.Text = "Save";
             this.save_btn.UseVisualStyleBackColor = false;
@@ -194,11 +194,11 @@
             this.save_peak_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.save_peak_btn.BackColor = System.Drawing.Color.Green;
             this.save_peak_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.save_peak_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.save_peak_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.save_peak_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.save_peak_btn.Location = new System.Drawing.Point(160, 117);
             this.save_peak_btn.Name = "save_peak_btn";
-            this.save_peak_btn.Size = new System.Drawing.Size(64, 27);
+            this.save_peak_btn.Size = new System.Drawing.Size(75, 25);
             this.save_peak_btn.TabIndex = 24;
             this.save_peak_btn.Text = "Save";
             this.save_peak_btn.UseVisualStyleBackColor = false;
@@ -248,13 +248,13 @@
             // recalc_Exp_Btn
             // 
             this.recalc_Exp_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.recalc_Exp_Btn.BackColor = System.Drawing.Color.SteelBlue;
+            this.recalc_Exp_Btn.BackColor = System.Drawing.Color.Transparent;
             this.recalc_Exp_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.recalc_Exp_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.recalc_Exp_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.recalc_Exp_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.recalc_Exp_Btn.ForeColor = System.Drawing.Color.SteelBlue;
             this.recalc_Exp_Btn.Location = new System.Drawing.Point(8, 117);
             this.recalc_Exp_Btn.Name = "recalc_Exp_Btn";
-            this.recalc_Exp_Btn.Size = new System.Drawing.Size(146, 27);
+            this.recalc_Exp_Btn.Size = new System.Drawing.Size(145, 25);
             this.recalc_Exp_Btn.TabIndex = 24;
             this.recalc_Exp_Btn.Text = "Recalculate Exp. Profile";
             this.recalc_Exp_Btn.UseVisualStyleBackColor = false;

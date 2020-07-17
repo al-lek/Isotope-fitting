@@ -10487,6 +10487,13 @@ namespace Isotope_fitting
             else { blue = 0; red = 255; green = (int)(-2 * (x - 1) * 255); }
             return Color.FromArgb(alpha, (Byte)red, (Byte)green, (Byte)blue);
         }
+        private void find_max_min_int()
+        {
+            foreach (ion nn in IonDraw)
+            {
+               
+            }
+        }
         //draw color range panels
         private void color_panel(Graphics g, Panel temp)
         {
@@ -12667,8 +12674,7 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
-
-
+        
         #region EXTRACT PLOTS
 
         #region extract ppm_plot
@@ -13947,7 +13953,6 @@ namespace Isotope_fitting
 
 
         #endregion
-
-       
+               
     }
 }
