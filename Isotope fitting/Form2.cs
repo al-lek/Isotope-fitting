@@ -1310,7 +1310,7 @@ namespace Isotope_fitting
             ////// add experimental to plot
             start_idx = 0;
             end_idx = experimental.Count;
-            MessageBox.Show("The processing of the experimental data is completed.");
+            MessageBox.Show("Processing is completed.","Load experimental data",MessageBoxButtons.OK);
             LC_1.ViewXY.ZoomToFit();
         }
         private void peakDetect_and_resolutionRef()
@@ -1656,7 +1656,7 @@ namespace Isotope_fitting
                     }
                     //ms_tab_mode = true;
                     DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.Ready to start?", "Message", MessageBoxButtons.OKCancel);
-                    if (dialogResult1 == DialogResult.Cancel) { loadMS_Btn.Enabled = true; return; }
+                    if (dialogResult1 != DialogResult.OK) { loadMS_Btn.Enabled = true; return; }
                     foreach (SequenceTab seq in sequenceList)
                     {
                         if (("_" + seq.Extension).Equals(ms_extension))
@@ -2389,7 +2389,7 @@ namespace Isotope_fitting
                     }
                     //ms_tab_mode = true;
                     DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension base sequence.", "Message", MessageBoxButtons.OKCancel);
-                    if (dialogResult1 == DialogResult.Cancel) { loadMS_Btn.Enabled = true; return; }
+                    if (dialogResult1!= DialogResult.OK) { loadMS_Btn.Enabled = true; return; }
                     foreach (SequenceTab seq in sequenceList)
                     {
                         if (("_" + seq.Extension).Equals(ms_extension))
@@ -3755,8 +3755,8 @@ namespace Isotope_fitting
 
         private void fit_Btn_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Ready to perform fit!Are you sure you want to proceed?", "Perform fit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
+            DialogResult dialogResult = MessageBox.Show("Ready to perform fit!Are you sure you want to proceed?", "Perform fit", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.OK)
             {
                 if (experimental.Count == 0) { MessageBox.Show("Oops...it seems you forgot to load the experimental file!You have to load the experimental data first in order to perform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
                 bigPanel.Enabled = false;
@@ -3771,7 +3771,7 @@ namespace Isotope_fitting
 
                 fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = true;
             }
-            else if (dialogResult == DialogResult.No)
+            else 
             {
                 return;
             }
@@ -5068,8 +5068,8 @@ namespace Isotope_fitting
                 }
                 if (grp_nodes.Count == 0 || frgmts.Count == 0) return;
                 if (frgmts.Count > 12) { MessageBox.Show("Oops...the maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups.","Failure",MessageBoxButtons.OK,MessageBoxIcon.Exclamation); return; }
-                if (frgmts.Count > 11) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 8 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo,MessageBoxIcon.Hand); if (dialogResult == DialogResult.No) { return; } }
-                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 4 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.YesNo,MessageBoxIcon.Hand); if (dialogResult == DialogResult.No) { return; } }
+                if (frgmts.Count > 11) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 8 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.OKCancel,MessageBoxIcon.Hand); if (dialogResult != DialogResult.OK) { return; } }
+                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 4 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.OKCancel,MessageBoxIcon.Hand); if (dialogResult != DialogResult.OK) { return; } }
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(frgmts);
                 grp_nodes.OrderBy(g => g); frgmts.OrderBy(f => f);
                 all_fitted_results.RemoveRange(grp_nodes[0], grp_nodes.Count());
@@ -8038,7 +8038,7 @@ namespace Isotope_fitting
             loadFF_Btn.Enabled = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found.",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); calc_FF = false; loadFF_Btn.Enabled = true; return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
                 Form16 frm16 = new Form16(this);
@@ -8082,7 +8082,7 @@ namespace Isotope_fitting
                     }
                     //ms_tab_mode = true;
                     DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel);
-                    if (dialogResult1 == DialogResult.Cancel) { loadFF_Btn.Enabled = true; return; }
+                    if (dialogResult1 != DialogResult.OK) { loadFF_Btn.Enabled = true; return; }
                     foreach (SequenceTab seq in sequenceList)
                     {
                         if (("_" + seq.Extension).Equals(ms_extension))
@@ -8311,13 +8311,13 @@ namespace Isotope_fitting
         {
             if(fitted_results.Count!=0 || all_fitted_results != null)
             {
-                DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
+                DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.OK)
                 {
                     is_recalc_res = false;
                     loadList();
                 }
-                else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel) return;                
+                else { return; }             
             }
             else
             {
@@ -8331,13 +8331,13 @@ namespace Isotope_fitting
             if (!insert_exp) { MessageBox.Show("You must first load the experimental data for this action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             else if (fitted_results.Count != 0 || all_fitted_results != null)
             { 
-                DialogResult dialogResult = MessageBox.Show("Are you sure? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
+                DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.OK)
                 {
                     is_recalc_res = true;
                     loadList();
                 }
-                else if (dialogResult == DialogResult.No || dialogResult == DialogResult.Cancel)
+                else 
                 {
                     return;
                 }
@@ -8351,8 +8351,8 @@ namespace Isotope_fitting
         private void clearListBtn11_Click(object sender, EventArgs e)
         {
             if (Fragments2.Count==0) {return;}
-            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear Fragment List", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Clear Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.OK)
             {
                 if (Form9.now && Form9.last_plotted.Count > 0)
                 {
@@ -8363,7 +8363,7 @@ namespace Isotope_fitting
                 }
                 clearList();
             }
-            else if (dialogResult == DialogResult.No) return;
+            else return;
         }
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -8502,6 +8502,8 @@ namespace Isotope_fitting
         {
             if (experimental.Count == 0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_internal_indexes.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (Fragments2.Count == 0) { return; }
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Refresh Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dialogResult != DialogResult.OK) { return; }
             int initial_count = Fragments2.Count;
             int rr = 0;
             bool first = true;
@@ -9358,8 +9360,15 @@ namespace Isotope_fitting
             temp_iondraw.Sort(ion_comp);
             int x = e.X;
             int y = e.Y;
-            int temp_x = 3;
-            int temp_y = 20;
+            int temp_x_init = 3;
+            int temp_y_init = 20;            
+            int step_x = 20;
+            int step_y = 50;
+            int length_panel =0;
+            if (is_riken ) { temp_x_init = 5; temp_y_init = 24; step_y = 74; }           
+            if(highlight_ibt_ckBx.Checked) {  length_panel = -21 - 50; }
+            int temp_x = temp_x_init;
+            int temp_y = temp_y_init;
             string s = Peptide;
             //StringBuilder sb = new StringBuilder();
             string s_ext = "";//the desired extension
@@ -9381,7 +9390,7 @@ namespace Isotope_fitting
             if (rdBtn50.Checked) grp_num = 50;
             for (int idx = 0; idx < s.Length; idx++)
             {
-                if (temp_x <= x && temp_x + 20 >= x && temp_y <= y && temp_y + 15 >= y)
+                if (temp_x <= x && temp_x + step_x >= x && temp_y <= y && temp_y + 15 >= y)
                 {
                     foreach (ion nn in temp_iondraw)
                     {
@@ -9443,9 +9452,9 @@ namespace Isotope_fitting
                 }
                 else
                 {
-                    temp_x = temp_x + 20;
-                    if (temp_x + 20 >= sequence_Pnl.Width) { temp_x = 3; temp_y = temp_y + 50; }
-                    if ((idx + 1) % grp_num == 0) { temp_x = 3; temp_y = temp_y + 50; }
+                    temp_x = temp_x + step_x;
+                    if (temp_x + step_x >= sequence_Pnl.Width + length_panel) { temp_x = temp_x_init; temp_y = temp_y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_x = temp_x_init; temp_y = temp_y + step_y; }
                 }
             }
         }
@@ -9469,10 +9478,17 @@ namespace Isotope_fitting
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int step_x = 20;
+            int step_y = 50;
+            int temp_y_init = 20;
+            int temp_x_init = 3;
+            int length_panel = 0;
             Pen p = new Pen(Color.Black);
             int point_x, point_y;
-            point_y = 20;
-            point_x = 3;
+            point_y = temp_y_init;
+            point_x = temp_x_init;
+            int grp_num = 25;
+            if (rdBtn50_temp.Checked) grp_num = 50;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
@@ -9490,11 +9506,10 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / 25 >= 7) { draw_sequence_panel_temp.Height = 60 * s.Length / 25; }
+            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y + 10) * s.Length / grp_num; }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
-            int grp_num = 25;
-            if (rdBtn50_temp.Checked) grp_num = 50;
+            
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
@@ -9506,8 +9521,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + 40 >= sequence_Pnl_temp.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -9631,9 +9646,9 @@ namespace Isotope_fitting
                         }
                     }
                 }
-                pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl_temp.Width) { pp.X = 3; pp.Y = pp.Y + 50; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+                pp.X = pp.X + step_x;
+                if (pp.X + step_x >= sequence_Pnl_temp.Width+ length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
+                if ((idx + 1) % grp_num == 0) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
             }
             return;
         }
@@ -9656,10 +9671,17 @@ namespace Isotope_fitting
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int step_x = 20;
+            int step_y = 74;
+            int temp_y_init = 24;
+            int temp_x_init = 5;
+            int length_panel =0;
             Pen p = new Pen(Color.Black);
             int point_x, point_y;
-            point_y = 24;
-            point_x = 3;
+            point_y = temp_y_init;
+            point_x = temp_x_init;
+            int grp_num = 25;
+            if (rdBtn50_temp.Checked) grp_num = 50;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
@@ -9677,11 +9699,10 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / 25 >= 7) { draw_sequence_panel_temp.Height = 60 * s.Length / 25; }
+            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y + 10) * s.Length / grp_num; }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
-            int grp_num = 25;
-            if (rdBtn50_temp.Checked) grp_num = 50;
+           
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
@@ -9693,8 +9714,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + 40 >= sequence_Pnl_temp.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2);  temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -9839,7 +9860,7 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 12, nn.Color, g);
                         }
                     }                   
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked && int_chBx_temp.Checked && aw_chBx_temp.Checked && bx_chBx_temp.Checked && cy_chBx_temp.Checked && dz_chBx_temp.Checked)
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
                     {
                         draw_line(pp, false, 0, nn.Color, g, true);
                     }
@@ -9849,23 +9870,24 @@ namespace Isotope_fitting
                         bool is_up = true;
                         int step = 0;
                         Color clr = Color.Orange;
+                        // 4/O,707=5.6
                         if (nn.Index == idx + 2)
                         {
                             is_left = false;
-                            if (nn.Name.StartsWith("(w") || nn.Name.StartsWith("w")) { step = 0 * 4; clr = Color.LimeGreen; }
-                            if (nn.Name.StartsWith("(x") || nn.Name.StartsWith("x")) { step = 1 * 4; clr = Color.DodgerBlue; }
-                            if (nn.Name.StartsWith("(y") || nn.Name.StartsWith("y")) { step = 2 * 4; clr = Color.Tomato; }
-                            if (nn.Name.StartsWith("(z") || nn.Name.StartsWith("z")) { step =3 * 4; clr = Color.HotPink; }
+                            if (nn.Name.StartsWith("(w") || nn.Name.StartsWith("w")) { step = 0 * 6; clr = Color.LimeGreen; }
+                            if (nn.Name.StartsWith("(x") || nn.Name.StartsWith("x")) { step = 1 * 6; clr = Color.DodgerBlue; }
+                            if (nn.Name.StartsWith("(y") || nn.Name.StartsWith("y")) { step = 2 * 6; clr = Color.Tomato; }
+                            if (nn.Name.StartsWith("(z") || nn.Name.StartsWith("z")) { step =3 * 6; clr = Color.HotPink; }
                         }
                         else 
                         {
                             string[] str = nn.Name.Split('-');
                             if (str.Length>2)
                             {
-                                if (str[1].StartsWith("a")) { step = 0 * 4; clr = Color.Green; }
-                                if (str[1].StartsWith("b")) { step = 1 * 4; clr = Color.Blue; }
-                                if (str[1].StartsWith("c")) { step = 2 * 4; clr = Color.Firebrick; }
-                                if (str[1].StartsWith("d")) { step = 3 * 4; clr = Color.DeepPink; }
+                                if (str[1].StartsWith("a")) { step = 0 * 6; clr = Color.Green; }
+                                if (str[1].StartsWith("b")) { step = 1 * 6; clr = Color.Blue; }
+                                if (str[1].StartsWith("c")) { step = 2 * 6; clr = Color.Firebrick; }
+                                if (str[1].StartsWith("d")) { step = 3 * 6; clr = Color.DeepPink; }
                             }                            
                         }
                         
@@ -9873,23 +9895,23 @@ namespace Isotope_fitting
                         else draw_internal_riken_line(pp, is_left, is_up, step, clr, g);     
                     }
                 }
-                pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl_temp.Width) { pp.X = 3; pp.Y = pp.Y + 58; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 58; }                
+                pp.X = pp.X + step_x;
+                if (pp.X + step_x >= sequence_Pnl_temp.Width + length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
+                if ((idx + 1) % grp_num == 0) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }                
             }
             return;
         }
         private void draw_internal_riken_line(Point pf, bool left, bool up, int step, Color color_draw, Graphics g)
         {
-            //0.707 * 5=3.5 
-            int triangle_a =4;        
+            //0.707 * 10=7.07 
+            int triangle_a =6;        
             int x1, x2, x3, y1, y2, y3;
             Pen mypen = new Pen(color_draw, 2F);
-            x1 = pf.X + 18;
-            if (left) { x2 = x1- triangle_a;  x3 = x2 - 5; }
-            else { x2 = x1+ triangle_a; x3 = x2 + 5; }
-            if (up) { y1 = pf.Y - step + 3; y2 = y1 - triangle_a; y3 = y2;  }
-            else {y1 = pf.Y + 14 + step + 2; y2 = y1 + triangle_a; y3 = y2;  }
+            x1 = pf.X + 18; x2 = x1;
+            if (left) {   x3 = x2 - triangle_a; }
+            else {  x3 = x2 + triangle_a; }
+            if (up) { y1 = pf.Y - step + 6; y2 = y1 - 5;  y3 = y2 - triangle_a; }
+            else {y1 = pf.Y + 14 + step-3; y2 = y1 + 5; y3 = y2 + triangle_a; }
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
         }
@@ -9938,16 +9960,24 @@ namespace Isotope_fitting
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int step_x = 20;
+            int step_y = 50;
+            int temp_y_init = 20;
+            int temp_x_init = 3;
+            int length_panel = -21 - 50;
             Pen p = new Pen(Color.Black);
             int point_x, point_y;
-            point_y = 20;
-            point_x = 3;
+            point_y = temp_y_init;
+            point_x = temp_x_init;
+            
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
 
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
+            int grp_num = 25;
+            if (rdBtn50_temp.Checked) grp_num = 50;
             if (tab_mode && seq_extensionBox_temp.Enabled && seq_extensionBox_temp.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
@@ -9960,11 +9990,10 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / 25 >= 7) { draw_sequence_panel_temp.Height = 60 * s.Length / 25; }
+            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y+10) * s.Length / grp_num; }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
-            int grp_num = 25;
-            if (rdBtn50_temp.Checked) grp_num = 50;
+           
 
             //draw the rectangles
             for (int idx = 0; idx < s.Length; idx++)
@@ -9994,9 +10023,9 @@ namespace Isotope_fitting
                 {
                     draw_rectangle(pp, GetColor(intensity), g);
                 }
-                pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl_temp.Width - 21 - 50) { pp.X = 3; pp.Y = pp.Y + 50; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+                pp.X = pp.X + step_x;
+                if (pp.X + step_x >= sequence_Pnl_temp.Width+ length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
+                if ((idx + 1) % grp_num == 0) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
             }
 
             //draw as usual over the rectangles
@@ -10013,8 +10042,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + 40 >= sequence_Pnl_temp.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -10138,9 +10167,9 @@ namespace Isotope_fitting
                     //    }
                     //}
                 }
-                pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl_temp.Width - 21 - 50) { pp.X = 3; pp.Y = pp.Y + 50; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 50; }
+                pp.X = pp.X + step_x;
+                if (pp.X + step_x >= sequence_Pnl_temp.Width + length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
+                if ((idx + 1) % grp_num == 0) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
             }
 
             return;
@@ -10166,14 +10195,20 @@ namespace Isotope_fitting
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int step_x = 20;
+            int step_y = 74;
+            int temp_y_init = 24;
+            int temp_x_init =5;
+            int length_panel = -21 - 50;
             Pen p = new Pen(Color.Black);
             int point_x, point_y;
-            point_y = 24;
-            point_x = 3;
+            point_y = temp_y_init;
+            point_x = temp_x_init;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
-
+            int grp_num = 25;
+            if (rdBtn50_temp.Checked) grp_num = 50;
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
             if (tab_mode && seq_extensionBox_temp.Enabled && seq_extensionBox_temp.SelectedIndex != -1)
@@ -10188,12 +10223,9 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / 25 >= 7) { draw_sequence_panel_temp.Height = 60 * s.Length / 25; }
+            if (s.Length / grp_num >= (400/ (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y+10) * s.Length / grp_num; }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
-            int grp_num = 25;
-            if (rdBtn50_temp.Checked) grp_num = 50;
-
             //draw the rectangles
             for (int idx = 0; idx < s.Length; idx++)
             {
@@ -10205,22 +10237,16 @@ namespace Isotope_fitting
                     if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
                      //if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                     {
-                        if (!los_chkBox_temp.Checked)
-                        {
-                            if (int_chBx_temp.Checked)
-                            {
-                                intensity += nn.Max_intensity;
-                            }
-                        }
+                        if (!los_chkBox_temp.Checked && int_chBx_temp.Checked){intensity += nn.Max_intensity;}
                     }
                 }
                 if (intensity > 0)
                 {
                     draw_rectangle(pp, GetColor(intensity), g);
                 }
-                pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl_temp.Width - 21 - 50) { pp.X = 3; pp.Y = pp.Y + 58; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 58; }
+                pp.X = pp.X + step_x;
+                if (pp.X + step_x >= sequence_Pnl_temp.Width+ length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
+                if ((idx + 1) % grp_num == 0) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
             }
 
             //draw as usual over the rectangles
@@ -10236,8 +10262,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + 40 >= sequence_Pnl_temp.Width) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + 50; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size+ step_x)/2); temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -10393,9 +10419,9 @@ namespace Isotope_fitting
                     //    }
                     //}
                 }
-                pp.X = pp.X + 20;
-                if (pp.X + 20 >= sequence_Pnl_temp.Width - 21 - 50) { pp.X = 3; pp.Y = pp.Y + 58; }
-                if ((idx + 1) % grp_num == 0) { pp.X = 3; pp.Y = pp.Y + 58; }
+                pp.X = pp.X + step_x;
+                if (pp.X + step_x >= sequence_Pnl_temp.Width + length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
+                if ((idx + 1) % grp_num == 0) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
             }
 
             return;
@@ -13139,12 +13165,12 @@ namespace Isotope_fitting
         //clear
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Clear all data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Clear all data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.OK)
             {
                 Clear_all();
             }
-            else if (dialogResult == DialogResult.No)
+            else
             {
                 return;
             }

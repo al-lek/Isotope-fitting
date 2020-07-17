@@ -18,6 +18,7 @@ namespace Isotope_fitting
         {
             InitializeComponent();
             frm2 = f;
+            this.Text = frm2.Text;
             temp_riken= frm2.is_riken;
             if (frm2.is_riken) oligonoucl_state_Btn.BackColor =Color.LightBlue;
             else peptide_state_Btn.BackColor = Color.LightBlue;
@@ -75,6 +76,16 @@ namespace Isotope_fitting
         private void cancelBtn_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void RNA_Btn_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DNA_Btn_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

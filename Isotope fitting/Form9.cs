@@ -539,6 +539,11 @@ namespace Isotope_fitting
                 if (dialogResult == DialogResult.Cancel) { during_calc(false); calc_Btn.Enabled = true; return; }
                 if (dialogResult == DialogResult.Yes) Fragments3.Clear();
             }
+            else
+            {
+                DialogResult dialogResult = MessageBox.Show("Proceed with calculation?", "Fragment Calculator", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult != DialogResult.OK) { during_calc(false); calc_Btn.Enabled = true; return; }              
+            }
             factor_panel9.Visible = false;
             calc_Btn.Enabled = true;
             //the basic algorithm with small changes for the specific form9
@@ -582,8 +587,8 @@ namespace Isotope_fitting
             if (selected_fragments.Count == 0) { MessageBox.Show("No fragments found"); during_calc(false); return; } 
             if(selected_fragments.Count>1000)
             {
-                DialogResult dialogResult = MessageBox.Show("The Selected fragments are " + selected_fragments.Count.ToString() + ". Are you sure you want to proceed with calculation?", "Fragment Calculator", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (dialogResult != DialogResult.Yes) { during_calc(false); return; }
+                DialogResult dialogResult = MessageBox.Show("The Selected fragments are " + selected_fragments.Count.ToString() + ". Are you sure you want to proceed with calculation?", "Fragment Calculator", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult != DialogResult.OK) { during_calc(false); return; }
             }
             sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
             sw1.Reset(); sw1.Start();
@@ -633,9 +638,9 @@ namespace Isotope_fitting
                 {
                     DialogResult dd= MessageBox.Show("There is no sequence for the extension type you have inserted." +
                         " This will affect the index numbers for the precursor ion you have inserted." +
-                        "If you want to stop the calcuations and insert the correct indexes in the internal indexes section select 'No'. " +
-                        "If you want to proceed with the calculations press 'Yes'","Wrong Input",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dd==DialogResult.No || dd == DialogResult.None) { return res; }                   
+                        "If you want to stop the calcuations and insert the correct indexes in the internal indexes section select 'Cancel'. " +
+                        "If you want to proceed with the calculations press 'Ok'","Wrong Input",MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    if (dd!=DialogResult.OK) { return res; }                   
                 }
                 index = "0";indexTo = s.Length.ToString();
             }   
@@ -680,8 +685,8 @@ namespace Isotope_fitting
             else if(string.IsNullOrEmpty(index))
             {
                 DialogResult dd = MessageBox.Show("Hmm, its seems that you have not inserted an index. The calculations will proceed as for index=0" +
-                    "If you want to proceed with the calculations press 'Yes', otherwise select 'No'. ", "Wrong Input", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dd == DialogResult.No || dd == DialogResult.None) { return res; }
+                    "If you want to proceed with the calculations press 'Ok', otherwise select 'Cancel'. ", "Wrong Input", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dd != DialogResult.OK) { return res; }
                 index = "0"; indexTo = "0";
             }
             double qMin = txt_to_d(minCharge_txtBox);

@@ -154,39 +154,45 @@ namespace Isotope_fitting
                 rtf_s = rtf_s.Replace("\t", "");
                 int[] check = new int[2];
                 if (k == 0)
-                {
-                    check= check_if_sequence_exists("", s,true);
-                    if(check[0]==0) frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s });
-                    else frm2.sequenceList[0].Rtf = rtf_s;
+                {                    
+                    if (frm2.sequenceList.Count==0) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s }); }
+                    else
+                    {
+                        check = check_if_sequence_exists("", s, 0, true);
+                        if (check[0] == 0) frm2.sequenceList[0] = new SequenceTab() { Sequence = s, Extension = "", Type = 0, Rtf = rtf_s };
+                        else frm2.sequenceList[0].Rtf = rtf_s;
+                    }                    
                 }
                 else if (frm2.is_riken)
                 {
-                    check = check_if_sequence_exists(tab_name, s);
+                    check = check_if_sequence_exists(tab_name, s,0);
                     if (check[0] == 0) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = tab_name, Type = 0, Rtf = rtf_s }); check[1] = frm2.sequenceList.Count - 1; }
                     else { frm2.sequenceList[check[1]].Rtf = rtf_s; frm2.sequenceList[check[1]].Type = 0; }
                 }
                 else
                 {
-                    check = check_if_sequence_exists(tab_name, s);
-                    if (check[0] == 0) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = tab_name, Type = 0, Rtf = rtf_s }); check[1] = frm2.sequenceList.Count - 1; }
-                    else { frm2.sequenceList[check[1]].Rtf = rtf_s; frm2.sequenceList[check[1]].Type = 0; }                       
+                    int type = 0;
                     foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<GroupBox>().First().Controls.OfType<RadioButton>())
                     {
                         if (rdBtn.Checked)
                         {
-                            frm2.sequenceList[check[1]].Type = rdBtn.TabIndex;
+                            type = rdBtn.TabIndex;
                             if (rdBtn.TabIndex == 1) { frm2.heavy_present = true; }
                             else { frm2.light_present = true; }
                         }
                     }
+                    check = check_if_sequence_exists(tab_name, s,type);
+                    if (check[0] == 0) { frm2.sequenceList.Add(new SequenceTab() { Sequence = s, Extension = tab_name, Type = type, Rtf = rtf_s }); check[1] = frm2.sequenceList.Count - 1; }
+                    else { frm2.sequenceList[check[1]].Rtf = rtf_s; frm2.sequenceList[check[1]].Type = type; }                    
                 }
                 frm2.read_rtf_find_color(frm2.sequenceList[check[1]]);
             }
+            remove_seq_from_list();
             if (frm2.sequenceList.Count == 1) { frm2.tab_mode = false; }
             else { frm2.tab_mode = true; }
             this.Close();
         }
-        private int[] check_if_sequence_exists(string tab_name, string tab_sequence, bool general=false)
+        private int[] check_if_sequence_exists(string tab_name, string tab_sequence,int type, bool general=false)
         {
             int[] result = new int[] {0,0};
             int amount = frm2.sequenceList.Count;
@@ -195,12 +201,44 @@ namespace Isotope_fitting
             for (int s=0;s< amount; s++ )
             {
                 SequenceTab seq = frm2.sequenceList[s];
-                if (seq.Sequence.Equals(tab_sequence)&& seq.Extension.Equals(tab_name))
+                if (seq.Sequence.Equals(tab_sequence)&& seq.Extension.Equals(tab_name) && seq.Type == type)
                 {
                     result= new int[] { 1, s };
                 }
             }
             return result;
+        }
+        private void remove_seq_from_list()
+        {
+            if (frm2.sequenceList.Count<2) return;
+            int s = 1;
+            while (s< frm2.sequenceList.Count)
+            {
+                SequenceTab seq = frm2.sequenceList[s];
+                bool is_present = false;
+                for (int k = 1; k < seq_tabControl.TabPages.Count - 1; k++)
+                {
+                    int type = 0;
+                    RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
+                    string tab_name = seq_tabControl.TabPages[k].Text;
+                    string tab_sequence = txtbox.Text.Replace(Environment.NewLine, "").ToString();
+                    tab_sequence = tab_sequence.Replace("\t", "").Replace("\n", "").Replace(" ", "");                   
+                    if (!frm2.is_riken)                   
+                    {
+                        foreach (RadioButton rdBtn in seq_tabControl.TabPages[k].Controls.OfType<GroupBox>().First().Controls.OfType<RadioButton>())
+                        {
+                            if (rdBtn.Checked){type = rdBtn.TabIndex;}
+                        }
+                       
+                    }
+                    if (seq.Sequence.Equals(tab_sequence) && seq.Extension.Equals(tab_name) && seq.Type == type)
+                    {
+                        is_present = true; break;
+                    }
+                }
+                if (!is_present) frm2.sequenceList.RemoveAt(s);
+                else s++;
+            }
         }
         #region general sequence        
         private void seq_BoxFrm16_TextChanged(object sender, EventArgs e)

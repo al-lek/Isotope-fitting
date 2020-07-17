@@ -330,7 +330,6 @@ namespace Isotope_fitting
             this.splitContainer2 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -543,7 +542,6 @@ namespace Isotope_fitting
             this.toolStrip_fit_sort.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStrip_fragList.SuspendLayout();
             this.fragTypes_toolStrip.SuspendLayout();
             this.theorData_grpBx.SuspendLayout();
@@ -3902,7 +3900,7 @@ namespace Isotope_fitting
             // 
             this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -3910,7 +3908,7 @@ namespace Isotope_fitting
             // 
             this.loadToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadToolStripMenuItem.Image")));
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -3918,7 +3916,7 @@ namespace Isotope_fitting
             // 
             this.clearAllToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("clearAllToolStripMenuItem.Image")));
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.clearAllToolStripMenuItem.Text = "Clear all";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -3926,8 +3924,8 @@ namespace Isotope_fitting
             // 
             this.chageStateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("chageStateToolStripMenuItem.Image")));
             this.chageStateToolStripMenuItem.Name = "chageStateToolStripMenuItem";
-            this.chageStateToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.chageStateToolStripMenuItem.Text = "Chage State";
+            this.chageStateToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.chageStateToolStripMenuItem.Text = "Application";
             this.chageStateToolStripMenuItem.Click += new System.EventHandler(this.chageStateToolStripMenuItem_Click);
             // 
             // res_grpBox
@@ -4069,27 +4067,12 @@ namespace Isotope_fitting
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.toolStrip_fragList);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(382, 106);
             this.panel1.TabIndex = 115;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Padding = new System.Windows.Forms.Padding(60, 0, 60, 0);
-            this.pictureBox1.Size = new System.Drawing.Size(382, 45);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 120;
-            this.pictureBox1.TabStop = false;
             // 
             // toolStrip_fragList
             // 
@@ -5996,7 +5979,6 @@ namespace Isotope_fitting
             this.splitContainer2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.fragTypes_toolStrip.ResumeLayout(false);
@@ -6471,7 +6453,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem losses_extractBtn8;
         private System.Windows.Forms.ToolStripTextBox losses_X_Box8;
         private System.Windows.Forms.ToolStripTextBox losses_Y_Box8;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton4;
         private System.Windows.Forms.ToolStripMenuItem losses_style_Btn;
