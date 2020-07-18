@@ -2638,6 +2638,7 @@ namespace Isotope_fitting
                         IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
                     }
                 }
+                find_max_min_int();
                 return;
             }
             int light_chain_count = 0;//the amount of heavy chain sequences
@@ -2672,6 +2673,7 @@ namespace Isotope_fitting
                     IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
                 }
             }
+            find_max_min_int();
             return;
         }
         private void Envipat_Calcs_and_filter_byPPM(ChemiForm chem)
@@ -6877,6 +6879,7 @@ namespace Isotope_fitting
                     _bw_save_envipat.RunWorkerAsync(file);
                 }
             }
+            find_max_min_int();
         }
         void _bw_save_envipat_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -10489,10 +10492,19 @@ namespace Isotope_fitting
         }
         private void find_max_min_int()
         {
-            foreach (ion nn in IonDraw)
+            if (IonDraw.Count==0) { seq_min_val = 10;seq_max_val = 10000000000;  return; }
+            List<ion> temp_iondraw = IonDraw.ToList();
+            seq_min_val = 10000000000000000;
+            seq_max_val =0;
+            bool has_internals = false;
+            foreach (ion nn in temp_iondraw)
             {
-               
+                if (!nn.Ion_type.Contains("int")) continue;
+                if (nn.Max_intensity> seq_max_val) { seq_max_val =(int)Math.Ceiling( nn.Max_intensity); }
+                if (nn.Max_intensity < seq_min_val) { seq_min_val = (int)Math.Floor(nn.Max_intensity); }
+                has_internals = true;
             }
+            if(!has_internals) { seq_min_val = 10; seq_max_val = 10000000000; }
         }
         //draw color range panels
         private void color_panel(Graphics g, Panel temp)
