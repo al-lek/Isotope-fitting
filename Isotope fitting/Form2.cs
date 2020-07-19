@@ -9634,20 +9634,50 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 8, nn.Color, g);
                         }
                     }
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    //{
+                    //    if (!los_chkBox_temp.Checked)
+                    //    {
+                    //        if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
+                    //        {
+                    //            draw_line(pp, false, 0, nn.Color, g, true);
+                    //        }
+                    //        else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
+                    //        {
+                    //            draw_line(pp, false, 0, nn.Color, g, true);
+                    //        }
+                    //    }
+                    //}
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked &&( intB_chBx_temp.Checked || intA_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked ))
                     {
-                        if (!los_chkBox_temp.Checked)
+                        if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
                         {
-                            if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
-                            {
-                                draw_line(pp, false, 0, nn.Color, g, true);
-                            }
-                            else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
-                            {
-                                draw_line(pp, false, 0, nn.Color, g, true);
-                            }
+                            draw_line(pp, false, 0, nn.Color, g, true);
+                        }
+                        else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
+                        {
+                            draw_line(pp, false, 0, nn.Color, g, true);
                         }
                     }
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked &&( intB_chBx_temp.Checked || intA_chBx_temp.Checked))
+                    {
+                        bool is_left = true;
+                        bool is_up = true;
+                        bool exist = false;
+                        int step = 0;
+                        Color clr = Color.Orange;
+                        if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b")){clr = Color.Green;exist = true; }
+                        else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b")){clr = Color.Blue;is_left = false;exist = true; }
+                        if (exist)
+                        {
+                            if (nn.Ion_type.Contains("H2O") && nn.Ion_type.Contains("NH3")) { is_up = false; step = 2 * 6; }
+                            else if (nn.Ion_type.Contains("H2O")) { is_up = false; step = 0 * 6; }
+                            else if (nn.Ion_type.Contains("NH3")) { is_up = false; step = 1 * 6; }
+                            if (is_up) { draw_internal_riken_line(pp, is_left, is_up, step, clr, g); }
+                            else { draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }
+                        }                                            
+                    }
+
                 }
                 pp.X = pp.X + step_x;
                 if (pp.X + step_x >= sequence_Pnl_temp.Width+ length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
