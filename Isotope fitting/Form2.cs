@@ -11596,8 +11596,15 @@ namespace Isotope_fitting
                 plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
                 plot.Model.InvalidatePlot(false);
             };
-            if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0; }
-            else { plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; }
+            if (temp_iondraw.Count>0)
+            {
+                if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0; x_ppm_majorStep = (ppm_points + 1) / 15; x_ppm_minorStep = x_ppm_majorStep / 5; }
+                else { plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; x_ppm_majorStep = (last_m_z - first_m_z + 2) / 6; x_ppm_minorStep = x_ppm_majorStep / 5; }
+                
+            }
+            else { x_ppm_majorStep = 5;x_ppm_minorStep = 1;}
+            plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
+            plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
             plot.InvalidatePlot(true);
             temp_iondraw.Clear();
 

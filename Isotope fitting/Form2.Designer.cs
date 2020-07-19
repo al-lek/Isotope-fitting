@@ -2644,7 +2644,7 @@ namespace Isotope_fitting
             this.ppm_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ppm_toolStrip.Location = new System.Drawing.Point(0, 8);
             this.ppm_toolStrip.Name = "ppm_toolStrip";
-            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 102);
+            this.ppm_toolStrip.Size = new System.Drawing.Size(32, 121);
             this.ppm_toolStrip.TabIndex = 1;
             // 
             // ppmSave_Btn
