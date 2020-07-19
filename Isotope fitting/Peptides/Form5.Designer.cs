@@ -28,11 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form5));
             this.peak_listView = new System.Windows.Forms.ListView();
             this.peak_xClmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.peak_yClmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.peak_resClmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuStripCopy = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripCopy.SuspendLayout();
             this.SuspendLayout();
             // 
             // peak_listView
@@ -41,6 +45,7 @@
             this.peak_xClmn,
             this.peak_yClmn,
             this.peak_resClmn});
+            this.peak_listView.ContextMenuStrip = this.contextMenuStripCopy;
             this.peak_listView.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.peak_listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.peak_listView.FullRowSelect = true;
@@ -69,6 +74,20 @@
             this.peak_resClmn.Text = "Resolution";
             this.peak_resClmn.Width = 110;
             // 
+            // contextMenuStripCopy
+            // 
+            this.contextMenuStripCopy.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToClipboardToolStripMenuItem});
+            this.contextMenuStripCopy.Name = "contextMenuStrip1";
+            this.contextMenuStripCopy.Size = new System.Drawing.Size(172, 26);
+            // 
+            // copyToClipboardToolStripMenuItem
+            // 
+            this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
+            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.copyToClipboardToolStripMenuItem.Text = "Copy to Clipboard";
+            this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
+            // 
             // Form5
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -84,6 +103,7 @@
             this.Text = "Peak Detection";
             this.TopMost = true;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form5_DpiChanged);
+            this.contextMenuStripCopy.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -94,5 +114,7 @@
         private System.Windows.Forms.ColumnHeader peak_xClmn;
         private System.Windows.Forms.ColumnHeader peak_yClmn;
         private System.Windows.Forms.ColumnHeader peak_resClmn;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripCopy;
+        private System.Windows.Forms.ToolStripMenuItem copyToClipboardToolStripMenuItem;
     }
 }

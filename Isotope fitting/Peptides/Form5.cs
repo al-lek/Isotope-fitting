@@ -14,9 +14,6 @@ namespace Isotope_fitting
             InitializeComponent();
             init_peak_listView();
             fill_peak_listView();
-
-            // event on RightClick to copy peaks to clipboard 
-            peak_listView.MouseClick += (s, e) => { if (e.Button == MouseButtons.Right) peaks_toClipboard(); };
         }
 
         private void init_peak_listView()
@@ -68,13 +65,12 @@ namespace Isotope_fitting
         private void peaks_toClipboard()
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("Centroid" + "\t" + "Intensity" + "\t" + "Resolution");
+            sb.Append("\r\n");
 
             foreach (double[] peak in Form2.peak_points)
             {
-                foreach(double peak_data in peak)
-                {
-                    sb.Append(peak_data.ToString() + "\t");
-                }
+                sb.Append(Math.Round((peak[1] + peak[4]), 6).ToString() + "\t"+ Math.Round((peak[5]), 2).ToString() + "\t"+ Math.Round((peak[3]), 0).ToString());               
                 sb.Append("\r\n");
             }
             Clipboard.SetText(sb.ToString());
@@ -83,6 +79,11 @@ namespace Isotope_fitting
         private void Form5_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
+        }
+
+        private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            peaks_toClipboard();
         }
     }
 

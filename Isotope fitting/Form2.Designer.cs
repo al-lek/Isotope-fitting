@@ -4486,6 +4486,7 @@ namespace Isotope_fitting
             this.displayPeakList_btn.TabIndex = 2;
             this.displayPeakList_btn.Text = "peak list";
             this.displayPeakList_btn.UseVisualStyleBackColor = false;
+            this.displayPeakList_btn.Click += new System.EventHandler(this.displayPeakList_btn_Click);
             // 
             // exp_Settings_toolStrip
             // 
