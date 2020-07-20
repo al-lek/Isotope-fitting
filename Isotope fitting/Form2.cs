@@ -3008,7 +3008,14 @@ namespace Isotope_fitting
             }
             else if (frag_tree.ContextMenu == null)
             {
-                frag_tree.AfterCheck += (s, e) => { frag_node_checkChanged(e.Node, e.Node.Checked); };
+                frag_tree.AfterCheck += (s, e) =>
+                {
+                    if ((e.Action == TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard) && !string.IsNullOrEmpty(e.Node.Name))
+                    {
+                        find_node_and_expand(fragTypes_tree, e.Node.Checked, e.Node.Name);
+                    }
+                    frag_node_checkChanged(e.Node, e.Node.Checked);
+                };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
                 frag_tree.ContextMenu = new ContextMenu(new MenuItem[9] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
@@ -3472,7 +3479,7 @@ namespace Isotope_fitting
                     // do not refresh if frag check is caused by selecting a fit. It will cut unecessary calls for each of the many fragments in fit set
                     if (!block_plot_refresh && !block_fit_refresh) refresh_iso_plot();
                     frag_tree.EndUpdate();
-                }
+                }               
             }
             this.Cursor = System.Windows.Forms.Cursors.Default;
         }
@@ -3498,7 +3505,7 @@ namespace Isotope_fitting
                     {
                         foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked) { innerNode.Checked = e.Node.Checked; } }                       
                     }
-                    else if (!string.IsNullOrEmpty(e.Node.Name))
+                    else if ((e.Action == TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard)&&!string.IsNullOrEmpty(e.Node.Name))
                     {
                        find_node_and_expand(frag_tree, e.Node.Checked, e.Node.Name);
                     }
@@ -3578,6 +3585,7 @@ namespace Isotope_fitting
         }
         private void find_node_and_expand(TreeView tree,bool check, string index)
         {
+            if (tree == null || tree.Nodes == null) { return; }
             foreach (TreeNode big_node in tree.Nodes)
             {
                 if(big_node.Nodes != null)
