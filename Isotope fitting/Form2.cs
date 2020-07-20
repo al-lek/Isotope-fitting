@@ -10893,15 +10893,15 @@ namespace Isotope_fitting
                         draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
                         draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 20;
                         is_up = false; is_left = true;
-                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g, true); g.DrawString("int[-,a]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g, true); g.DrawString("int[-,a]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step)); pp.Y += 15;
                         is_left = false;
-                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15; ;
-                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15; ;
+                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
                     }
                 } 
             }
