@@ -18,10 +18,9 @@ namespace Isotope_fitting
         {
             InitializeComponent();
             frm2 = f;
-            x_ppm_stepminor_UD.Value = (decimal)frm2.x_ppm_minorStep;
+            x_ppm_stepminor_UD.Value = (decimal)frm2.x_ppm_interval;
             y_ppm_stepminor_UD.Value = (decimal)frm2.y_ppm_minorStep;
             y_ppm_stepmajor_UD.Value = (decimal)frm2.y_ppm_majorStep;
-            x_ppm_stepmajor_UD.Value = (decimal)frm2.x_ppm_majorStep;
             bullet_size_numUD.Value = (decimal)frm2.ppm_bullet_size;
             end_valUD.Value = (decimal)frm2.last_m_z;
             start_valUD.Value = (decimal)frm2.first_m_z;
@@ -85,15 +84,11 @@ namespace Isotope_fitting
 
         private void x_ppm_stepminor_UD_ValueChanged(object sender, EventArgs e)
         {
-            frm2.x_ppm_minorStep = (double)x_ppm_stepminor_UD.Value;
+            frm2.x_ppm_interval = (double)x_ppm_stepminor_UD.Value;
             frm2.ppm_plot_refresh();
         }
 
-        private void x_ppm_stepmajor_UD_ValueChanged(object sender, EventArgs e)
-        {
-            frm2.x_ppm_majorStep = (double)x_ppm_stepmajor_UD.Value;
-            frm2.ppm_plot_refresh();
-        }
+       
 
         private void y_ppm_stepminor_UD_ValueChanged(object sender, EventArgs e)
         {

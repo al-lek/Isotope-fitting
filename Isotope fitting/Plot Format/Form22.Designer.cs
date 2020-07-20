@@ -36,7 +36,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.number_rdBtn = new System.Windows.Forms.RadioButton();
             this.mz_rdBtn = new System.Windows.Forms.RadioButton();
-            this.x_ppm_stepmajor_UD = new System.Windows.Forms.NumericUpDown();
             this.x_ppm_stepminor_UD = new System.Windows.Forms.NumericUpDown();
             this.stepX_ppm_Lbl = new System.Windows.Forms.Label();
             this.x_ppm_minorGrid_UD = new System.Windows.Forms.DomainUpDown();
@@ -62,7 +61,6 @@
             this.axisX_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepmajor_UD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepminor_UD)).BeginInit();
             this.axisY_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepmajor_UD)).BeginInit();
@@ -80,7 +78,6 @@
             this.axisX_Charge_grpBx.Controls.Add(this.label1);
             this.axisX_Charge_grpBx.Controls.Add(this.number_rdBtn);
             this.axisX_Charge_grpBx.Controls.Add(this.mz_rdBtn);
-            this.axisX_Charge_grpBx.Controls.Add(this.x_ppm_stepmajor_UD);
             this.axisX_Charge_grpBx.Controls.Add(this.x_ppm_stepminor_UD);
             this.axisX_Charge_grpBx.Controls.Add(this.stepX_ppm_Lbl);
             this.axisX_Charge_grpBx.Controls.Add(this.x_ppm_minorGrid_UD);
@@ -200,30 +197,6 @@
             this.mz_rdBtn.UseVisualStyleBackColor = true;
             this.mz_rdBtn.CheckedChanged += new System.EventHandler(this.mz_rdBtn_CheckedChanged);
             // 
-            // x_ppm_stepmajor_UD
-            // 
-            this.x_ppm_stepmajor_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_ppm_stepmajor_UD.Location = new System.Drawing.Point(209, 63);
-            this.x_ppm_stepmajor_UD.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.x_ppm_stepmajor_UD.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.x_ppm_stepmajor_UD.Name = "x_ppm_stepmajor_UD";
-            this.x_ppm_stepmajor_UD.Size = new System.Drawing.Size(48, 20);
-            this.x_ppm_stepmajor_UD.TabIndex = 14;
-            this.x_ppm_stepmajor_UD.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.x_ppm_stepmajor_UD.ValueChanged += new System.EventHandler(this.x_ppm_stepmajor_UD_ValueChanged);
-            // 
             // x_ppm_stepminor_UD
             // 
             this.x_ppm_stepminor_UD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -253,11 +226,11 @@
             this.stepX_ppm_Lbl.AutoSize = true;
             this.stepX_ppm_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stepX_ppm_Lbl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.stepX_ppm_Lbl.Location = new System.Drawing.Point(5, 66);
+            this.stepX_ppm_Lbl.Location = new System.Drawing.Point(34, 66);
             this.stepX_ppm_Lbl.Name = "stepX_ppm_Lbl";
-            this.stepX_ppm_Lbl.Size = new System.Drawing.Size(116, 15);
+            this.stepX_ppm_Lbl.Size = new System.Drawing.Size(87, 15);
             this.stepX_ppm_Lbl.TabIndex = 12;
-            this.stepX_ppm_Lbl.Text = "Step (minor , major)";
+            this.stepX_ppm_Lbl.Text = "Interval Length";
             // 
             // x_ppm_minorGrid_UD
             // 
@@ -566,7 +539,6 @@
             this.axisX_Charge_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepmajor_UD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_ppm_stepminor_UD)).EndInit();
             this.axisY_Charge_grpBx.ResumeLayout(false);
             this.axisY_Charge_grpBx.PerformLayout();
@@ -582,7 +554,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox axisX_Charge_grpBx;
-        private System.Windows.Forms.NumericUpDown x_ppm_stepmajor_UD;
         private System.Windows.Forms.NumericUpDown x_ppm_stepminor_UD;
         private System.Windows.Forms.Label stepX_ppm_Lbl;
         private System.Windows.Forms.DomainUpDown x_ppm_minorGrid_UD;

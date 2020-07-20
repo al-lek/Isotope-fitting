@@ -388,6 +388,7 @@ namespace Isotope_fitting
         public double y_ppm_minorStep = 1;
         public double x_ppm_majorStep = 5;
         public double x_ppm_minorStep = 1;
+        public double x_ppm_interval = 20;
         public double ppm_bullet_size = 1.0;
         public int ppm_graph_type = 1;
         public double first_m_z = 0.0;
@@ -974,12 +975,14 @@ namespace Isotope_fitting
                         x_majorStep12_2 = Convert.ToDouble(preferences[97].Split(':')[1]);
                         x_minorStep12_2 = Convert.ToDouble(preferences[98].Split(':')[1]);
                         line_width_2 = Convert.ToDouble(preferences[99].Split(':')[1]);
+                        x_ppm_interval = Convert.ToDouble(preferences[100].Split(':')[1]);
                     }
                     catch
                     {
                         init_preferences();
                         save_preferences();
-                    }                   
+                    }            
+                    
 
                 }
                 catch
@@ -1011,8 +1014,8 @@ namespace Isotope_fitting
                 ppm_regions.Add(new ppm_area { Chk = false, Max = 0.0, Min = 0.0, Max_ppm = 8.0, Rule = 0 });
             }
             entire_spectrum = true; threshold = 0.01; annotation_size = 9.0; deconv_machine = ""; is_deconv_const_resolution = false;
-            y_ppm_majorStep = 2; y_ppm_minorStep = 1; x_ppm_majorStep = 5; x_ppm_minorStep = 1; ppm_bullet_size = 1.0; ppm_graph_type = 1;
-             y_interval12_2 = 50;y_format12_2 = "0.0E+";y_numformat12_2 = "0";x_majorStep12_2 = 5;x_minorStep12_2 = 1;line_width_2 = 2;
+            y_ppm_majorStep = 2; y_ppm_minorStep = 1; x_ppm_majorStep = 5; x_ppm_minorStep = 1; ppm_bullet_size = 1.0; ppm_graph_type = 1; x_ppm_interval = 20;
+            y_interval12_2 = 50;y_format12_2 = "0.0E+";y_numformat12_2 = "0";x_majorStep12_2 = 5;x_minorStep12_2 = 1;line_width_2 = 2;
         }
         public void save_preferences()
         {
@@ -1166,6 +1169,9 @@ namespace Isotope_fitting
             preferences[0] += "x_majorStep12_2: " + x_majorStep12_2 + "\r\n";
             preferences[0] += "x_minorStep12_2: " + x_minorStep12_2 + "\r\n";
             preferences[0] += "line_width_2: " + line_width_2 + "\r\n";
+
+            //ppm plot extra parameters
+            preferences[0] += "x_ppm_interval: " + x_ppm_interval.ToString() + "\r\n";
 
 
             // save to default file
@@ -11092,7 +11098,7 @@ namespace Isotope_fitting
             ppm_plot.Model = ppm_model;
             var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_ppm_grid, MinorGridlineStyle = Yminor_ppm_grid, FontSize = 10, TickStyle = Y_ppm_tick, MajorStep = y_ppm_majorStep, MinorStep = y_ppm_minorStep, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
             ppm_model.Axes.Add(linearAxis21);
-            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_ppm_grid, MinorGridlineStyle = Xminor_ppm_grid, FontSize = 10, TickStyle = X_ppm_tick, MajorStep = x_ppm_majorStep, MinorStep = x_ppm_minorStep, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_ppm_grid, MinorGridlineStyle = Xminor_ppm_grid, FontSize = 10, TickStyle = X_ppm_tick,IntervalLength= x_ppm_interval /*MajorStep = x_ppm_majorStep, MinorStep = x_ppm_minorStep*/, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
             ppm_model.Axes.Add(linearAxis22);
             ppm_plot.MouseDoubleClick += (s, e) => { ppm_model.ResetAllAxes(); ppm_plot.InvalidatePlot(true); };
             ppm_plot.Controller = new CustomPlotController();
@@ -11596,15 +11602,23 @@ namespace Isotope_fitting
                 plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
                 plot.Model.InvalidatePlot(false);
             };
-            if (temp_iondraw.Count>0)
-            {
-                if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0; x_ppm_majorStep = (ppm_points + 1) / 15; x_ppm_minorStep = x_ppm_majorStep / 5; }
-                else { plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; x_ppm_majorStep = (last_m_z - first_m_z + 2) / 6; x_ppm_minorStep = x_ppm_majorStep / 5; }
-                
-            }
-            else { x_ppm_majorStep = 5;x_ppm_minorStep = 1;}
-            plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
-            plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
+            //if (temp_iondraw.Count>0)
+            //{
+                if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0;
+                    //x_ppm_majorStep = (ppm_points + 1) / 15; x_ppm_minorStep = x_ppm_majorStep / 5; plot.Model.Axes[1].MajorStep = x_ppm_majorStep;plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
+                }
+                else
+                {
+                    plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; /*x_ppm_majorStep = Math.Ceiling((last_m_z - first_m_z + 2) / 6); x_ppm_minorStep = x_ppm_majorStep / 5;*/
+                    //plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
+                    //plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
+                    //plot.Model.Axes[1].IntervalLength = 20;
+                }                
+            //}
+            //else { x_ppm_majorStep = 5;x_ppm_minorStep = 1; plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
+            //    plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
+            //}
+            
             plot.InvalidatePlot(true);
             temp_iondraw.Clear();
 
@@ -12011,8 +12025,9 @@ namespace Isotope_fitting
             ppm_plot.Model.Axes[1].MajorGridlineStyle = Xmajor_ppm_grid;
             ppm_plot.Model.Axes[1].MinorGridlineStyle = Xminor_ppm_grid;
             ppm_plot.Model.Axes[1].TickStyle = X_ppm_tick;
-            ppm_plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
-            ppm_plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
+            ppm_plot.Model.Axes[1].IntervalLength = x_ppm_interval;
+            //ppm_plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
+            //ppm_plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
             ppm_plot.InvalidatePlot(true);            
         }
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -12738,7 +12753,7 @@ namespace Isotope_fitting
             temp_plot.Model = temp_model;
             var linearAxis21 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_ppm_grid, MinorGridlineStyle = Yminor_ppm_grid, FontSize = 10, TickStyle = Y_ppm_tick, MajorStep = y_ppm_majorStep, MinorStep = y_ppm_minorStep, MinimumMinorStep = 1.0, AxisTitleDistance = 7, TitleFontSize = 11, Title = "ppm Error" };
             temp_model.Axes.Add(linearAxis21);
-            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_ppm_grid, MinorGridlineStyle = Xminor_ppm_grid, FontSize = 10, TickStyle = X_ppm_tick, MajorStep = x_ppm_majorStep, MinorStep = x_ppm_minorStep, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
+            var linearAxis22 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_ppm_grid, MinorGridlineStyle = Xminor_ppm_grid, FontSize = 10, TickStyle = X_ppm_tick,IntervalLength= x_ppm_interval /*MajorStep = x_ppm_majorStep, MinorStep = x_ppm_minorStep*/, AxisTitleDistance = 7, TitleFontSize = 11, Title = "# fragments", Position = OxyPlot.Axes.AxisPosition.Bottom };
             temp_model.Axes.Add(linearAxis22);
             temp_plot.MouseDoubleClick += (s, e) => { temp_model.ResetAllAxes(); temp_plot.InvalidatePlot(true); };
             temp_plot.Controller = new CustomPlotController();
