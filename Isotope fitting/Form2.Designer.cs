@@ -231,12 +231,14 @@ namespace Isotope_fitting
             this.sequence_toolStripCopy2 = new System.Windows.Forms.ToolStrip();
             this.seqSave_BtnCopy2 = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_BtnCopy2 = new System.Windows.Forms.ToolStripButton();
+            this.seqLegendBtnCopy2 = new System.Windows.Forms.ToolStripButton();
             this.ax_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.by_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.cz_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.intA_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.intB_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.sequence_PnlCopy2 = new System.Windows.Forms.Panel();
+            this.legend_panelCopy2 = new System.Windows.Forms.Panel();
             this.color_range_panelCopy2 = new System.Windows.Forms.Panel();
             this.color_range_picBoxCopy2 = new System.Windows.Forms.PictureBox();
             this.seq_lbl_panelCopy2 = new System.Windows.Forms.Panel();
@@ -252,12 +254,14 @@ namespace Isotope_fitting
             this.sequence_toolStripCopy1 = new System.Windows.Forms.ToolStrip();
             this.seqSave_BtnCopy1 = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_BtnCopy1 = new System.Windows.Forms.ToolStripButton();
+            this.seqLegendBtnCopy1 = new System.Windows.Forms.ToolStripButton();
             this.ax_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.by_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.cz_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.intA_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.intB_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.sequence_PnlCopy1 = new System.Windows.Forms.Panel();
+            this.legend_panelCopy1 = new System.Windows.Forms.Panel();
             this.color_range_panelCopy1 = new System.Windows.Forms.Panel();
             this.color_range_picBoxCopy1 = new System.Windows.Forms.PictureBox();
             this.seq_lbl_panelCopy1 = new System.Windows.Forms.Panel();
@@ -273,6 +277,7 @@ namespace Isotope_fitting
             this.sequence_toolStrip = new System.Windows.Forms.ToolStrip();
             this.seqSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_Btn = new System.Windows.Forms.ToolStripButton();
+            this.seqLegendBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton12 = new System.Windows.Forms.ToolStripSeparator();
             this.seq_coverageBtn = new System.Windows.Forms.ToolStripButton();
             this.highlightProp_Btn = new System.Windows.Forms.ToolStripButton();
@@ -282,6 +287,7 @@ namespace Isotope_fitting
             this.intA_chBx = new System.Windows.Forms.CheckBox();
             this.intB_chBx = new System.Windows.Forms.CheckBox();
             this.sequence_Pnl = new System.Windows.Forms.Panel();
+            this.legend_panel = new System.Windows.Forms.Panel();
             this.color_range_panel = new System.Windows.Forms.Panel();
             this.color_range_picBox = new System.Windows.Forms.PictureBox();
             this.seq_lbl_panel = new System.Windows.Forms.Panel();
@@ -2690,14 +2696,14 @@ namespace Isotope_fitting
             // 
             this.extractPlotToolStripMenuItem9.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem9.Image")));
             this.extractPlotToolStripMenuItem9.Name = "extractPlotToolStripMenuItem9";
-            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(182, 24);
+            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(133, 22);
             this.extractPlotToolStripMenuItem9.Text = "Extract plot";
             this.extractPlotToolStripMenuItem9.Click += new System.EventHandler(this.extractPlotToolStripMenuItem9_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.settingsToolStripMenuItem.Text = "Properties";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -2760,7 +2766,7 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBxCopy2.TabIndex = 20;
             this.highlight_ibt_ckBxCopy2.Text = "Color";
             this.highlight_ibt_ckBxCopy2.UseVisualStyleBackColor = true;
-            this.highlight_ibt_ckBxCopy2.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBxCopy2_CheckedChanged);
+            this.highlight_ibt_ckBxCopy2.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBx_CheckedChanged);
             // 
             // seq_extensionBoxCopy2
             // 
@@ -2829,11 +2835,12 @@ namespace Isotope_fitting
             this.sequence_toolStripCopy2.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.sequence_toolStripCopy2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.seqSave_BtnCopy2,
-            this.seqCopy_BtnCopy2});
+            this.seqCopy_BtnCopy2,
+            this.seqLegendBtnCopy2});
             this.sequence_toolStripCopy2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.sequence_toolStripCopy2.Location = new System.Drawing.Point(728, 27);
             this.sequence_toolStripCopy2.Name = "sequence_toolStripCopy2";
-            this.sequence_toolStripCopy2.Size = new System.Drawing.Size(24, 52);
+            this.sequence_toolStripCopy2.Size = new System.Drawing.Size(24, 77);
             this.sequence_toolStripCopy2.TabIndex = 8;
             // 
             // seqSave_BtnCopy2
@@ -2853,6 +2860,16 @@ namespace Isotope_fitting
             this.seqCopy_BtnCopy2.Name = "seqCopy_BtnCopy2";
             this.seqCopy_BtnCopy2.Size = new System.Drawing.Size(22, 22);
             this.seqCopy_BtnCopy2.Text = "Copy";
+            // 
+            // seqLegendBtnCopy2
+            // 
+            this.seqLegendBtnCopy2.CheckOnClick = true;
+            this.seqLegendBtnCopy2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seqLegendBtnCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seqLegendBtnCopy2.Image")));
+            this.seqLegendBtnCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seqLegendBtnCopy2.Name = "seqLegendBtnCopy2";
+            this.seqLegendBtnCopy2.Size = new System.Drawing.Size(22, 22);
+            this.seqLegendBtnCopy2.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // ax_chBxCopy2
             // 
@@ -2915,6 +2932,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sequence_PnlCopy2.AutoScroll = true;
             this.sequence_PnlCopy2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sequence_PnlCopy2.Controls.Add(this.legend_panelCopy2);
             this.sequence_PnlCopy2.Controls.Add(this.color_range_panelCopy2);
             this.sequence_PnlCopy2.Controls.Add(this.color_range_picBoxCopy2);
             this.sequence_PnlCopy2.Controls.Add(this.seq_lbl_panelCopy2);
@@ -2925,6 +2943,18 @@ namespace Isotope_fitting
             this.sequence_PnlCopy2.TabIndex = 7;
             this.sequence_PnlCopy2.Paint += new System.Windows.Forms.PaintEventHandler(this.sequence_PnlCopy2_Paint);
             this.sequence_PnlCopy2.Resize += new System.EventHandler(this.sequence_PnlCopy2_Resize);
+            // 
+            // legend_panelCopy2
+            // 
+            this.legend_panelCopy2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.legend_panelCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legend_panelCopy2.Location = new System.Drawing.Point(442, 0);
+            this.legend_panelCopy2.Name = "legend_panelCopy2";
+            this.legend_panelCopy2.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
+            this.legend_panelCopy2.Size = new System.Drawing.Size(80, 455);
+            this.legend_panelCopy2.TabIndex = 24;
+            this.legend_panelCopy2.Visible = false;
+            this.legend_panelCopy2.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
             // 
             // color_range_panelCopy2
             // 
@@ -3021,7 +3051,7 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBxCopy1.TabIndex = 19;
             this.highlight_ibt_ckBxCopy1.Text = "Color";
             this.highlight_ibt_ckBxCopy1.UseVisualStyleBackColor = true;
-            this.highlight_ibt_ckBxCopy1.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBxCopy1_CheckedChanged);
+            this.highlight_ibt_ckBxCopy1.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBx_CheckedChanged);
             // 
             // seq_extensionBoxCopy1
             // 
@@ -3090,11 +3120,12 @@ namespace Isotope_fitting
             this.sequence_toolStripCopy1.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.sequence_toolStripCopy1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.seqSave_BtnCopy1,
-            this.seqCopy_BtnCopy1});
+            this.seqCopy_BtnCopy1,
+            this.seqLegendBtnCopy1});
             this.sequence_toolStripCopy1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.sequence_toolStripCopy1.Location = new System.Drawing.Point(728, 27);
             this.sequence_toolStripCopy1.Name = "sequence_toolStripCopy1";
-            this.sequence_toolStripCopy1.Size = new System.Drawing.Size(24, 52);
+            this.sequence_toolStripCopy1.Size = new System.Drawing.Size(24, 77);
             this.sequence_toolStripCopy1.TabIndex = 8;
             // 
             // seqSave_BtnCopy1
@@ -3114,6 +3145,16 @@ namespace Isotope_fitting
             this.seqCopy_BtnCopy1.Name = "seqCopy_BtnCopy1";
             this.seqCopy_BtnCopy1.Size = new System.Drawing.Size(22, 22);
             this.seqCopy_BtnCopy1.Text = "Copy";
+            // 
+            // seqLegendBtnCopy1
+            // 
+            this.seqLegendBtnCopy1.CheckOnClick = true;
+            this.seqLegendBtnCopy1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seqLegendBtnCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seqLegendBtnCopy1.Image")));
+            this.seqLegendBtnCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seqLegendBtnCopy1.Name = "seqLegendBtnCopy1";
+            this.seqLegendBtnCopy1.Size = new System.Drawing.Size(22, 22);
+            this.seqLegendBtnCopy1.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // ax_chBxCopy1
             // 
@@ -3176,6 +3217,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sequence_PnlCopy1.AutoScroll = true;
             this.sequence_PnlCopy1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sequence_PnlCopy1.Controls.Add(this.legend_panelCopy1);
             this.sequence_PnlCopy1.Controls.Add(this.color_range_panelCopy1);
             this.sequence_PnlCopy1.Controls.Add(this.color_range_picBoxCopy1);
             this.sequence_PnlCopy1.Controls.Add(this.seq_lbl_panelCopy1);
@@ -3186,6 +3228,18 @@ namespace Isotope_fitting
             this.sequence_PnlCopy1.TabIndex = 7;
             this.sequence_PnlCopy1.Paint += new System.Windows.Forms.PaintEventHandler(this.sequence_PnlCopy1_Paint);
             this.sequence_PnlCopy1.Resize += new System.EventHandler(this.sequence_PnlCopy1_Resize);
+            // 
+            // legend_panelCopy1
+            // 
+            this.legend_panelCopy1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.legend_panelCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legend_panelCopy1.Location = new System.Drawing.Point(442, 0);
+            this.legend_panelCopy1.Name = "legend_panelCopy1";
+            this.legend_panelCopy1.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
+            this.legend_panelCopy1.Size = new System.Drawing.Size(80, 455);
+            this.legend_panelCopy1.TabIndex = 23;
+            this.legend_panelCopy1.Visible = false;
+            this.legend_panelCopy1.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
             // 
             // color_range_panelCopy1
             // 
@@ -3350,13 +3404,14 @@ namespace Isotope_fitting
             this.sequence_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.seqSave_Btn,
             this.seqCopy_Btn,
+            this.seqLegendBtn,
             this.toolStripButton12,
             this.seq_coverageBtn,
             this.highlightProp_Btn});
             this.sequence_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.sequence_toolStrip.Location = new System.Drawing.Point(728, 27);
             this.sequence_toolStrip.Name = "sequence_toolStrip";
-            this.sequence_toolStrip.Size = new System.Drawing.Size(24, 108);
+            this.sequence_toolStrip.Size = new System.Drawing.Size(24, 133);
             this.sequence_toolStrip.TabIndex = 8;
             // 
             // seqSave_Btn
@@ -3376,6 +3431,16 @@ namespace Isotope_fitting
             this.seqCopy_Btn.Name = "seqCopy_Btn";
             this.seqCopy_Btn.Size = new System.Drawing.Size(22, 22);
             this.seqCopy_Btn.Text = "Copy";
+            // 
+            // seqLegendBtn
+            // 
+            this.seqLegendBtn.CheckOnClick = true;
+            this.seqLegendBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seqLegendBtn.Image = ((System.Drawing.Image)(resources.GetObject("seqLegendBtn.Image")));
+            this.seqLegendBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seqLegendBtn.Name = "seqLegendBtn";
+            this.seqLegendBtn.Size = new System.Drawing.Size(22, 22);
+            this.seqLegendBtn.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // toolStripButton12
             // 
@@ -3463,6 +3528,7 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sequence_Pnl.AutoScroll = true;
             this.sequence_Pnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sequence_Pnl.Controls.Add(this.legend_panel);
             this.sequence_Pnl.Controls.Add(this.color_range_panel);
             this.sequence_Pnl.Controls.Add(this.color_range_picBox);
             this.sequence_Pnl.Controls.Add(this.seq_lbl_panel);
@@ -3474,6 +3540,18 @@ namespace Isotope_fitting
             this.sequence_Pnl.Paint += new System.Windows.Forms.PaintEventHandler(this.sequence_Pnl_Paint);
             this.sequence_Pnl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.sequence_Pnl_MouseDown);
             this.sequence_Pnl.Resize += new System.EventHandler(this.sequence_Pnl_Resize);
+            // 
+            // legend_panel
+            // 
+            this.legend_panel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.legend_panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legend_panel.Location = new System.Drawing.Point(442, 0);
+            this.legend_panel.Name = "legend_panel";
+            this.legend_panel.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
+            this.legend_panel.Size = new System.Drawing.Size(80, 444);
+            this.legend_panel.TabIndex = 19;
+            this.legend_panel.Visible = false;
+            this.legend_panel.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
             // 
             // color_range_panel
             // 
@@ -4486,7 +4564,6 @@ namespace Isotope_fitting
             this.displayPeakList_btn.TabIndex = 2;
             this.displayPeakList_btn.Text = "peak list";
             this.displayPeakList_btn.UseVisualStyleBackColor = false;
-            this.displayPeakList_btn.Click += new System.EventHandler(this.displayPeakList_btn_Click);
             // 
             // exp_Settings_toolStrip
             // 
@@ -5884,7 +5961,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v25.2.4";
+            this.Text = "Peak Finder v25.2.5";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -6503,5 +6580,11 @@ namespace Isotope_fitting
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripButton seqLegendBtnCopy2;
+        private System.Windows.Forms.ToolStripButton seqLegendBtnCopy1;
+        private System.Windows.Forms.ToolStripButton seqLegendBtn;
+        private System.Windows.Forms.Panel legend_panelCopy2;
+        private System.Windows.Forms.Panel legend_panelCopy1;
+        private System.Windows.Forms.Panel legend_panel;
     }
 }

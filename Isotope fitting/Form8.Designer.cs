@@ -77,7 +77,7 @@
             0,
             0});
             this.minIntensity_numUD.Name = "minIntensity_numUD";
-            this.minIntensity_numUD.Size = new System.Drawing.Size(41, 21);
+            this.minIntensity_numUD.Size = new System.Drawing.Size(73, 21);
             this.minIntensity_numUD.TabIndex = 1;
             this.minIntensity_numUD.Value = new decimal(new int[] {
             10,

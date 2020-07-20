@@ -3017,7 +3017,7 @@ namespace Isotope_fitting
                     frag_node_checkChanged(e.Node, e.Node.Checked);
                 };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[9] {new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[9] {new MenuItem("Copy fragment", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
                                                                       new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
@@ -4301,7 +4301,7 @@ namespace Isotope_fitting
         //***************************************************
         private void generate_fit_results(bool project = false)
         {
-            if (all_fitted_results.Count == 0) return;
+            if (all_fitted_results==null || all_fitted_results.Count == 0) return;
             else if (all_fitted_results.Count == 1 && all_fitted_results[0].Count == 0) return;
             sw1.Reset(); sw1.Start();
             // clear panel
@@ -9479,7 +9479,7 @@ namespace Isotope_fitting
                     if ((idx + 1) % grp_num == 0) { temp_x = temp_x_init; temp_y = temp_y + step_y; }
                 }
             }
-        }
+        }        
         //draw       
         private void sequence_draw_general(Graphics g,Panel draw_sequence_panel_temp)
         {
@@ -9495,6 +9495,7 @@ namespace Isotope_fitting
             CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
             CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
+            Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
 
             color_range_picBox_temp.Visible = false; color_range_panel_temp.Visible = false; seq_lbl_panel_temp.Visible = false;
             //g = pnl.CreateGraphics();
@@ -9505,7 +9506,8 @@ namespace Isotope_fitting
             int temp_y_init = 20;
             int temp_x_init = 3;
             int length_panel = 0;
-            Pen p = new Pen(Color.Black);
+            if (legend_panel_temp.Visible) length_panel =-legend_panel_temp.Width;
+             Pen p = new Pen(Color.Black);
             int point_x, point_y;
             point_y = temp_y_init;
             point_x = temp_x_init;
@@ -9652,21 +9654,7 @@ namespace Isotope_fitting
                         {
                             draw_line(temp_p, false, 8, nn.Color, g);
                         }
-                    }
-                    //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
-                    //{
-                    //    if (!los_chkBox_temp.Checked)
-                    //    {
-                    //        if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
-                    //        {
-                    //            draw_line(pp, false, 0, nn.Color, g, true);
-                    //        }
-                    //        else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
-                    //        {
-                    //            draw_line(pp, false, 0, nn.Color, g, true);
-                    //        }
-                    //    }
-                    //}
+                    }                  
                     else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked &&( intB_chBx_temp.Checked || intA_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked ))
                     {
                         if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
@@ -9696,7 +9684,6 @@ namespace Isotope_fitting
                             else { draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }
                         }                                            
                     }
-
                 }
                 pp.X = pp.X + step_x;
                 if (pp.X + step_x >= sequence_Pnl_temp.Width+ length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
@@ -9718,6 +9705,7 @@ namespace Isotope_fitting
             CheckBox dz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
             CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
+            Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
 
             color_range_picBox_temp.Visible = false; color_range_panel_temp.Visible = false; seq_lbl_panel_temp.Visible = false;
             //g = pnl.CreateGraphics();
@@ -9728,6 +9716,7 @@ namespace Isotope_fitting
             int temp_y_init = 24;
             int temp_x_init = 5;
             int length_panel =0;
+            if (legend_panel_temp.Visible) length_panel = -legend_panel_temp.Width;
             Pen p = new Pen(Color.Black);
             int point_x, point_y;
             point_y = temp_y_init;
@@ -9953,27 +9942,48 @@ namespace Isotope_fitting
             }
             return;
         }
-        private void draw_internal_riken_line(Point pf, bool left, bool up, int step, Color color_draw, Graphics g)
+        private void draw_internal_riken_line(Point pf, bool left, bool up, int step, Color color_draw, Graphics g,bool legend=false)
         {
             //0.707 * 10=7.07 
             int triangle_a =6;        
             int x1, x2, x3, y1, y2, y3;
             Pen mypen = new Pen(color_draw, 2F);
-            x1 = pf.X + 18; x2 = x1;
-            if (left) {   x3 = x2 - triangle_a; }
-            else {  x3 = x2 + triangle_a; }
-            if (up) { y1 = pf.Y - step + 6; y2 = y1 - 5;  y3 = y2 - triangle_a; }
-            else {y1 = pf.Y + 14 + step-3; y2 = y1 + 5; y3 = y2 + triangle_a; }
+            if (!legend)
+            {            
+                x1 = pf.X + 18; x2 = x1;
+                if (left) {   x3 = x2 - triangle_a; }
+                else {  x3 = x2 + triangle_a; }
+                if (up) { y1 = pf.Y - step + 6; y2 = y1 - 5;  y3 = y2 - triangle_a; }
+                else {y1 = pf.Y + 14 + step-3; y2 = y1 + 5; y3 = y2 + triangle_a; }
+            }
+            else
+            {
+                triangle_a = 5;
+                x1 = pf.X; x2 = x1;
+                if (left) { x3 = x2 - triangle_a; }
+                else { x3 = x2 + triangle_a; }
+                if (up) { y1 = pf.Y ; y2 = y1 - 5; y3 = y2 - triangle_a; }
+                else { y1 = pf.Y ; y2 = y1 + 5; y3 = y2 + triangle_a; }
+            }
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
         }
-        private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false)
+        private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false,bool legend=false)
         {
             int x1, x2, x3, y1, y2, y3;
             Pen mypen = new Pen(color_draw, 2F);
-            if (inter) { x1 = pf.X + 18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2; }
-            else if (up) { x1 = pf.X + 18; x2 = x1; y1 = pf.Y - step + 3; y2 = y1 - 5; y3 = y2; x3 = x2 - 10; }
-            else { x1 = pf.X + 18; x2 = x1; y1 = pf.Y + 14 + step + 2; y2 = y1 + 5; y3 = y2; x3 = x2 + 10; }
+            if (!legend)
+            {
+                if (inter) { x1 = pf.X + 18; x2 = x1; y1 = pf.Y; y2 = y1 + 15; x3 = x2; y3 = y2; }
+                else if (up) { x1 = pf.X + 18; x2 = x1; y1 = pf.Y - step + 3; y2 = y1 - 5; y3 = y2; x3 = x2 - 10; }
+                else { x1 = pf.X + 18; x2 = x1; y1 = pf.Y + 14 + step + 2; y2 = y1 + 5; y3 = y2; x3 = x2 + 10; }
+            }
+            else
+            {
+                if (inter) { x1 = pf.X; x2 = x1; y1 = pf.Y; y2 = y1 + 6; x3 = x2; y3 = y2; }
+                else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y ; y2 = y1 - 3; y3 = y2; x3 = x2 - 6; }
+                else { x1 = pf.X; x2 = x1; y1 = pf.Y  ; y2 = y1 + 3; y3 = y2; x3 = x2 + 6; }
+            }            
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
         }
@@ -10005,7 +10015,7 @@ namespace Isotope_fitting
             CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
             CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
-            
+           
             color_range_picBox_temp.Visible = is_rgb_color_range;
             color_range_panel_temp.Visible = !is_rgb_color_range;
             seq_lbl_panel_temp.Visible = true;
@@ -10240,7 +10250,7 @@ namespace Isotope_fitting
             CheckBox dz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
             CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
-
+           
             color_range_picBox_temp.Visible = is_rgb_color_range;
             color_range_panel_temp.Visible = !is_rgb_color_range;
             seq_lbl_panel_temp.Visible = true;
@@ -10501,7 +10511,15 @@ namespace Isotope_fitting
         }
         private void highlight_ibt_ckBx_CheckedChanged(object sender, EventArgs e)
         {
-            sequence_Pnl.Refresh(); color_range_panel.Refresh(); seq_lbl_panel.Refresh();
+            CheckBox clr_ckbx = (sender as CheckBox);
+            Panel big_pnl = clr_ckbx.Parent as Panel;
+            ToolStrip tsp = GetControls(big_pnl).OfType<ToolStrip>().First();
+            ToolStripButton tspbtn = tsp.Items.OfType<ToolStripButton>().Where(t=>t.Name.Contains("seqLegend")).First();
+            if (clr_ckbx.Checked && tspbtn.Checked) { tspbtn.Checked=false; }
+            Panel seq_pnl = GetControls(big_pnl).OfType<Panel>().Where(n => n.Name.Contains("sequence_Pnl")).First();
+            Panel color_range_pnl = GetControls(seq_pnl).OfType<Panel>().Where(n => n.Name.Contains("color_range")).First();
+            Panel seq_lbl_pnl = GetControls(seq_pnl).OfType<Panel>().Where(n => n.Name.Contains("seq_lbl")).First();
+            seq_pnl.Refresh(); color_range_pnl.Refresh(); seq_lbl_pnl.Refresh();
         }
         private Color GetColor(double actualValue)
         {
@@ -10704,7 +10722,203 @@ namespace Isotope_fitting
             initialize_ions_todraw(); initialize_plot_tabs();
             sequence_Pnl.Refresh();
         }
+        //legend Panel
+        private void legend_panel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel pnl = (sender as Panel);
+            int padding = pnl.Padding.Top;
+            int width = pnl.Size.Width;
+            int height = pnl.Size.Height - (padding * 2);
+            Panel draw_sequence_panel_temp = pnl.Parent.Parent as Panel;
+            Point pp = new Point(10, padding);
+            Graphics g = e.Graphics;
+            SolidBrush sb = new SolidBrush(Color.Black);
+            Pen mypen = new Pen(Color.Black, 2F);
+            int y_step =5;
+            int y_step_up =10;
+            int step_x = 12;
 
+            if (!is_riken)
+            {
+                CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+                CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+                CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+                CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+                CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+                if (los_chkBox_temp.Checked)                    
+                {
+                    Color clr1 = Color.Green;
+                    Color clr2 = Color.LimeGreen;
+                    string[] str = new string[] { "a-losses", "a", "x", "x-losses" };
+                    if (by_chBx_temp.Checked){clr2 = Color.DodgerBlue;clr1 = Color.Blue; str = new string[] { "b-losses", "b", "y", "y-losses" }; }
+                    if (cz_chBx_temp.Checked){clr2 = Color.Tomato;clr1 = Color.Firebrick; str = new string[] { "c-losses", "c", "z", "z-losses" }; }
+                    if (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked)
+                    {
+                        draw_line(pp, true, 0, clr2, g,false,true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X+ step_x, pp.Y- y_step_up));
+                        pp.Y += 10;
+                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                        pp.Y += 10;
+                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step));
+                        pp.Y += 10;
+                        draw_line(pp, false, 0, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                    }
+                }
+                else
+                {
+                    Color clr1 = Color.Green;
+                    Color clr2 = Color.LimeGreen;
+                    int step = 0;
+                    if (ax_chBx_temp.Checked)
+                    {
+                        draw_line(pp, true, step, clr1, g,false, true); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step));pp.Y += 20;
+                    }
+                    if (by_chBx_temp.Checked)
+                    {
+                        clr1 = Color.Blue; clr2 = Color.DodgerBlue;
+                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
+                    }
+                    if (cz_chBx_temp.Checked)
+                    {
+                        clr2 = Color.Tomato; clr1 = Color.Firebrick;
+                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
+
+                    }
+                    if ((intA_chBx_temp.Checked || intB_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked))
+                    {
+                        if (intA_chBx_temp.Checked) { clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up/2)); pp.Y += 15;}
+                        if (intB_chBx_temp.Checked) { clr1 = Color.MediumOrchid; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up/2)); pp.Y += 15;}
+                    }
+                    else
+                    {
+                        bool is_left = true;
+                        bool is_up = true;
+                        step = 6;
+                        if (intA_chBx_temp.Checked )
+                        {
+                            is_up = true;
+                            clr1 = Color.Green;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up)); pp.Y += 15;
+                            is_up = false;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.a-H20", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 1 * step, clr1, g, true); g.DrawString("int.a-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, clr1, g, true); g.DrawString("int.a-H20-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }
+                        if (intB_chBx_temp.Checked )
+                        {
+                            clr1 = Color.Blue;
+                            is_left = false;
+                            is_up = true;
+                            draw_internal_riken_line(pp, is_left, is_up,0* step, clr1, g, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            is_up = false;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.b-H20", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 1 * step, clr1, g, true); g.DrawString("int.b-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, clr1, g, true); g.DrawString("int.b-H20-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }                       
+                    }
+                } 
+            }
+            else
+            {
+                CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+                CheckBox aw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox bx_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+                CheckBox cy_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+                CheckBox dz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+                CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+                if (los_chkBox_temp.Checked )
+                {
+                    Color clr1 = Color.LimeGreen;
+                    Color clr2 = Color.Green;
+                    string[] str = new string[] { "a-losses", "a", "w", "w-losses" };
+                    if (bx_chBx_temp.Checked) { clr1 = Color.DodgerBlue; clr2 = Color.Blue; str = new string[] { "b-losses", "b", "x", "x-losses" }; }
+                    if (cy_chBx_temp.Checked) { clr1 = Color.Tomato; clr2 = Color.Firebrick; str = new string[] { "c-losses", "c", "y", "y-losses" }; }
+                    if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }                                       
+                    if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
+                    {
+                        draw_line(pp, true, 4, clr2, g, false, true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - 4 + y_step_up)); pp.Y += 10;
+                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y += 10;
+                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step)); pp.Y += 10;
+                        draw_line(pp, false, 4, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step + 4)); pp.Y += 10;
+                    }
+                }
+                else
+                {
+                    Color clr1 = Color.Green;
+                    Color clr2 = Color.LimeGreen;
+                    int step = 0;
+                    if (aw_chBx_temp.Checked)
+                    {
+                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                    }
+                    if (bx_chBx_temp.Checked)
+                    {
+                       clr1 = Color.Blue; clr2 = Color.DodgerBlue;
+                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
+                    }
+                    if (cy_chBx_temp.Checked)
+                    {
+                       clr2 = Color.Tomato; clr1 = Color.Firebrick;
+                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
+                    }
+                    if (dz_chBx_temp.Checked)
+                    {
+                        step =0; clr1 = Color.DeepPink; clr2 = Color.HotPink;
+                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
+                    }
+                    if (int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
+                    {
+                         clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true,true); g.DrawString("int.", pnl.Font, sb, new Point(pp.X + step_x, pp.Y-  y_step_up/2)); pp.Y += 10;
+                    }
+                    else
+                    {
+                        bool is_left = true;
+                        bool is_up = true;
+                        step = 0;        
+                        is_up = true; is_left = true;
+                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g,true); g.DrawString("int[-,a]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step_up)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        is_left = false;
+                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 20;
+                        is_up = false; is_left = true;
+                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g, true); g.DrawString("int[-,a]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step)); pp.Y += 10;
+                        is_left = false;
+                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]-B()", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                    }
+                } 
+            }
+        }
+
+        private void seqLegendBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripButton tsp = (sender as ToolStripButton);
+            if (!tsp.Name.Contains("seqLegend")) return;
+            Panel big_pnl = tsp.GetCurrentParent().Parent as Panel;
+            CheckBox clr_ckbx = GetControls(big_pnl).OfType<CheckBox>().Where(n => n.Name.Contains("highlight")).First();
+            if (clr_ckbx.Checked) { clr_ckbx.Checked = !tsp.Checked; }
+            Panel seq_pnl = GetControls(big_pnl).OfType<Panel>().Where(n => n.Name.Contains("sequence_Pnl")).First();
+            Panel leg_pnl = GetControls(seq_pnl).OfType<Panel>().Where(n => n.Name.Contains("legend_panel")).First();
+            leg_pnl.Visible = tsp.Checked;
+            seq_pnl.Invalidate();
+        }
         #endregion
 
         #region sequence panels copies
@@ -13418,6 +13632,7 @@ namespace Isotope_fitting
             StreamReader objReader = new StreamReader(filename);
             do { lista.Add(objReader.ReadLine()); }
             while (objReader.Peek() != -1);
+            if (lista.Count == 0) return;
             objReader.Close();
             if (all_fitted_results != null) all_fitted_results.Clear();
             if (all_fitted_sets != null) all_fitted_sets.Clear();
@@ -13715,8 +13930,8 @@ namespace Isotope_fitting
             fit_Btn.Enabled = true; fit_sel_Btn.Enabled = true;
             plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
             loadExp_Btn.Enabled = true;
-            plotFragProf_chkBox.Checked = true;
-            if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); }
+            plotFragProf_chkBox.Checked = true;                
+            if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); find_max_min_int(); }
             //fit
             generate_fit_results(true);
         }
@@ -13750,6 +13965,7 @@ namespace Isotope_fitting
         void Project_save_fit_results(object sender, DoWorkEventArgs e)
         {
             string path = e.Argument.ToString();
+            if (all_fitted_results.Count == 0) return;
             using (StreamWriter writer = new StreamWriter(path, append: false))
             {
                 writer.WriteLine("results");
@@ -14005,20 +14221,9 @@ namespace Isotope_fitting
             }
             File.WriteAllLines(path, fragText);
         }
-
-
-
-
-
-
-
-
-
+        
         #endregion
 
-        private void displayPeakList_btn_Click(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }
