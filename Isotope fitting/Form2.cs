@@ -3488,14 +3488,7 @@ namespace Isotope_fitting
 
         //fragTypes
         private void populate_fragtypes_treeView()
-        {
-            // create a new tree
-            //fragTypes_tree = null;
-            //if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Dispose(); }        // for GC?
-
-            //fragTypes_tree = new TreeView() { CheckBoxes = true, Location = new Point(555, 560), Name = "fragType_tree", Size = new Size(338, 420), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right };
-            //user_grpBox.Controls.Add(fragTypes_tree);
-            //fragTypes_tree.BringToFront();
+        {            
             if (fragTypes_tree.Nodes.Count > 0) { fragTypes_tree.Nodes.Clear(); }
             if (fragTypes_tree.ContextMenu == null)
             {
@@ -3503,7 +3496,11 @@ namespace Isotope_fitting
                 {
                     if (string.IsNullOrEmpty(e.Node.Name) && e.Node.Nodes != null && e.Node.Nodes.Count > 0)
                     {
-                        foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked) { innerNode.Checked = e.Node.Checked; } }
+                        foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked) { innerNode.Checked = e.Node.Checked; } }                       
+                    }
+                    else if (!string.IsNullOrEmpty(e.Node.Name))
+                    {
+                       find_node_and_expand(frag_tree, e.Node.Checked, e.Node.Name);
                     }
                 };
                 fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[5] {
@@ -3513,7 +3510,6 @@ namespace Isotope_fitting
                     new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) ,
                     new MenuItem("Zoom to fragment",(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  })
                 });
-
             }
             fragTypes_tree.BeginUpdate();
             for (int i = 0; i < Fragments2.Count; i++)
@@ -3542,7 +3538,6 @@ namespace Isotope_fitting
                                     baseNode.Nodes.Insert(j, new_fragTreeNode(i));
                                     added = true; break;
                                 }
-
                                 else if (curr_num == inTree_num)
                                 {
                                     for (int k = j; k < baseNode.Nodes.Count; k++)
@@ -3562,7 +3557,6 @@ namespace Isotope_fitting
                                     break;
                                 }
                             }
-
                             if (!added)
                             {
                                 baseNode.Nodes.Add(new_fragTreeNode(i));
@@ -3570,7 +3564,6 @@ namespace Isotope_fitting
                             }
                         }
                     }
-
                     if (!added)
                     {
                         TreeNode tr_inner = new_fragTreeNode(i);
@@ -3582,7 +3575,19 @@ namespace Isotope_fitting
             }
             fragTypes_tree.EndUpdate();
             fragTypes_tree.Visible = true; fragStorage_Lbl.Visible = true; fragTypes_toolStrip.Visible = true;
-
+        }
+        private void find_node_and_expand(TreeView tree,bool check, string index)
+        {
+            foreach (TreeNode big_node in tree.Nodes)
+            {
+                if(big_node.Nodes != null)
+                {
+                    foreach (TreeNode node in big_node.Nodes)
+                    {
+                        if (node.Name.Equals(index)) {node.EnsureVisible(); if (node.Checked != check) { node.Checked = check; } break; }
+                    }
+                }                
+            }
         }
         private void save_FragTypes_Btn_Click(object sender, EventArgs e)
         {
@@ -10541,6 +10546,7 @@ namespace Isotope_fitting
                 has_internals = true;
             }
             if(!has_internals) { seq_min_val = 10; seq_max_val = 10000000000; }
+            else { seq_max_val = (int)Math.Ceiling(seq_max_val * 1.1); seq_min_val = (int)Math.Floor(seq_min_val * 0.9); }
         }
         //draw color range panels
         private void color_panel(Graphics g, Panel temp)
@@ -11602,26 +11608,10 @@ namespace Isotope_fitting
                 plot.Model.Subtitle = e.HitResult != null ? e.HitResult.Text : null;
                 plot.Model.InvalidatePlot(false);
             };
-            //if (temp_iondraw.Count>0)
-            //{
-                if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0;
-                    //x_ppm_majorStep = (ppm_points + 1) / 15; x_ppm_minorStep = x_ppm_majorStep / 5; plot.Model.Axes[1].MajorStep = x_ppm_majorStep;plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
-                }
-                else
-                {
-                    plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; /*x_ppm_majorStep = Math.Ceiling((last_m_z - first_m_z + 2) / 6); x_ppm_minorStep = x_ppm_majorStep / 5;*/
-                    //plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
-                    //plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
-                    //plot.Model.Axes[1].IntervalLength = 20;
-                }                
-            //}
-            //else { x_ppm_majorStep = 5;x_ppm_minorStep = 1; plot.Model.Axes[1].MajorStep = x_ppm_majorStep;
-            //    plot.Model.Axes[1].MinorStep = x_ppm_minorStep;
-            //}
-            
+            if (ppm_graph_type == 1) { plot.Model.Axes[1].Maximum = ppm_points + 1; plot.Model.Axes[1].Minimum = 0; }
+            else { plot.Model.Axes[1].Maximum = last_m_z + 1; plot.Model.Axes[1].Minimum = first_m_z - 1; }
             plot.InvalidatePlot(true);
             temp_iondraw.Clear();
-
         }
        
         private void charge_plot_init(PlotView plot,string up_type, string down_type, int  t,Color up_clr, Color down_clr)
