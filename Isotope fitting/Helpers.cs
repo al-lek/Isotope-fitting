@@ -385,7 +385,21 @@ namespace Isotope_fitting
             foreach (Form form in list)
                 form.Close();
         }
-       
+        /// <summary>
+        /// Find and return all open forms with the name of (parameter)
+        /// </summary>
+        public static new List<Form> FindOpenForm(string currentForm)
+        {
+            // temp list
+            var list = new List<Form>();
+
+            // fill list
+            foreach (Form form in Application.OpenForms)
+                if (currentForm.Equals(form.Name))
+                    list.Add(form);
+            return list;
+        }
+
         #region extension
         public static bool recognise_extension(string fra_exte, string Extension)
         {
@@ -553,7 +567,7 @@ namespace Isotope_fitting
             return value;
         }
         /// <summary>
-        ///return the double number in the numeric Up Down or an error message if the user enters the wrong format
+        ///return the integer number in the numeric Up Down or an error message if the user enters the wrong format
         /// </summary>
         public static int[] numUD_to_int_number(NumericUpDown numUD)
         {

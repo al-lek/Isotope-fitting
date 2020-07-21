@@ -138,9 +138,9 @@
             this.uncheck_all_boxBtn_riken,
             this.clear_allBtn_riken});
             this.toolStrip_riken.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
-            this.toolStrip_riken.Location = new System.Drawing.Point(385, 0);
+            this.toolStrip_riken.Location = new System.Drawing.Point(387, 0);
             this.toolStrip_riken.Name = "toolStrip_riken";
-            this.toolStrip_riken.Size = new System.Drawing.Size(32, 510);
+            this.toolStrip_riken.Size = new System.Drawing.Size(30, 510);
             this.toolStrip_riken.TabIndex = 57;
             // 
             // check_all_boxBtn_riken
@@ -673,6 +673,7 @@
             this.MinimizeBox = false;
             this.Name = "Form24_2";
             this.Text = "Calculation Box";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form24_2_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.toolStrip_riken.ResumeLayout(false);

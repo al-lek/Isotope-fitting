@@ -389,7 +389,7 @@ namespace Isotope_fitting
             calculate_fragments_resolution(selected_fragments);
             frm2.calculate_procedure(selected_fragments);
             calcBtn.Enabled = true;
-            this.Close();
+            //this.Close();
         }
         private void calculate_fragments_resolution(List<ChemiForm> selected_fragments)
         {
@@ -452,7 +452,8 @@ namespace Isotope_fitting
         private void clear_allBtn_Click(object sender, EventArgs e)
         {
             UncheckAll_calculationPanel();
-
+            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
+            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
         }
 
         private void check_all_boxBtn_Click(object sender, EventArgs e)
@@ -463,7 +464,15 @@ namespace Isotope_fitting
         private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
         {
             un_check_all_checkboxes(this, false);
+        }
 
+        private void Form24_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
     }
 }

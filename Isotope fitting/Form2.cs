@@ -455,6 +455,8 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
+        private Form24 frm24;
+        private Form24_2 frm24_2;
 
         public Form2()
         {
@@ -476,6 +478,7 @@ namespace Isotope_fitting
             //call change state window
             initiate_change_state_form();
         }
+
 
         #region init
         private void initialize_machine_listboxes()
@@ -2446,15 +2449,46 @@ namespace Isotope_fitting
             if (ChemFormulas.Count == 0) { MessageBox.Show("Don't hurry! You must first load an MS Product File and then access 'Calculation Box'. Please try again.", "Error in Calculation Box!",  MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (is_riken)
             {
-                Form24_2 frm24_2 = new Form24_2(this);
-                frm24_2.ShowDialog();
+                if (frm24_2 != null)
+                {
+                    if (!frm24_2.Visible)
+                    {
+                        // Add the message
+                        frm24_2.Show();
+                    }
+                    else
+                    {
+                        // Top
+                        frm24_2.BringToFront();
+                    }
+                }                  
+                else
+                {
+                    frm24_2 = new Form24_2(this);
+                    frm24_2.ShowDialog();
+                }               
             }
             else
             {
-                Form24 frm24 = new Form24(this);
-                frm24.ShowDialog();
+                if (frm24!=null)
+                {
+                    if (!frm24.Visible)
+                    {
+                        // Add the message
+                        frm24.Show();
+                    }
+                    else
+                    {
+                        // Top
+                        frm24.BringToFront();
+                    }
+                }
+                else
+                {
+                    frm24 = new Form24(this);
+                    frm24.ShowDialog();
+                }               
             }
-
         }
         public void calculate_procedure(List<ChemiForm> selected_fragments)
         {
@@ -13433,6 +13467,8 @@ namespace Isotope_fitting
         private bool Clear_all()
         {
             CloseAllOpenForm("Form2");
+            if (frm24_2 != null) { frm24_2 = null; }
+            if (frm24 != null) { frm24 = null; }
             plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             is_exp_deconvoluted = false;
             labels_checked.Clear();
