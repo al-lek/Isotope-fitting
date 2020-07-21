@@ -503,5 +503,21 @@ namespace Isotope_fitting
 
         }
 
+        private void clear_allBtn_riken_Click(object sender, EventArgs e)
+        {
+            UncheckAll_calculationPanel();
+        }
+
+        private void uncheck_all_boxBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(this, false);
+
+        }
+
+        private void check_all_boxBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(this, true);
+
+        }
     }
 }

@@ -448,5 +448,22 @@ namespace Isotope_fitting
         {
             mzMax_Box.SelectAll();
         }
+
+        private void clear_allBtn_Click(object sender, EventArgs e)
+        {
+            UncheckAll_calculationPanel();
+
+        }
+
+        private void check_all_boxBtn_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(this,true);
+        }
+
+        private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes(this, false);
+
+        }
     }
 }

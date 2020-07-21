@@ -537,7 +537,7 @@ namespace Isotope_fitting
             {
                 DialogResult dialogResult = MessageBox.Show("Clear List before proceeding with calculation?", "Fragment Calculator", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);           
                 if (dialogResult == DialogResult.Cancel) { during_calc(false); calc_Btn.Enabled = true; return; }
-                if (dialogResult == DialogResult.Yes) Fragments3.Clear();
+                if (dialogResult == DialogResult.Yes) { Fragments3.Clear(); Fragments3_to_listview(); }
             }
             else
             {
@@ -1831,6 +1831,7 @@ namespace Isotope_fitting
         #region insert fragment to Fragments2
         private void insert_Btn_Click(object sender, EventArgs e)
         {
+            if (Fragments3.Count == 0) return;
             insert_Btn.Enabled = false;
             if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); insert_Btn.Enabled = true; return; }
             insert_frag_to_Fragments2();

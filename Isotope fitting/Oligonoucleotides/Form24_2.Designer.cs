@@ -30,12 +30,15 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24_2));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.toolStrip_riken = new System.Windows.Forms.ToolStrip();
+            this.check_all_boxBtn_riken = new System.Windows.Forms.ToolStripButton();
+            this.uncheck_all_boxBtn_riken = new System.Windows.Forms.ToolStripButton();
+            this.clear_allBtn_riken = new System.Windows.Forms.ToolStripButton();
             this.known_lstBox = new System.Windows.Forms.CheckedListBox();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.calcBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
             this.frag_sort_Btn2 = new System.Windows.Forms.ToolStripButton();
-            this.clearBtn = new System.Windows.Forms.ToolStripButton();
             this.w_lstBox = new System.Windows.Forms.CheckedListBox();
             this.d_lstBox = new System.Windows.Forms.CheckedListBox();
             this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
@@ -71,6 +74,7 @@
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
             this.panel_calc.SuspendLayout();
+            this.toolStrip_riken.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,6 +83,7 @@
             this.panel_calc.AutoScroll = true;
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel_calc.Controls.Add(this.toolStrip_riken);
             this.panel_calc.Controls.Add(this.known_lstBox);
             this.panel_calc.Controls.Add(this.toolStrip_fragList);
             this.panel_calc.Controls.Add(this.w_lstBox);
@@ -119,8 +124,56 @@
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(383, 540);
+            this.panel_calc.Size = new System.Drawing.Size(417, 540);
             this.panel_calc.TabIndex = 5;
+            // 
+            // toolStrip_riken
+            // 
+            this.toolStrip_riken.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip_riken.Dock = System.Windows.Forms.DockStyle.Right;
+            this.toolStrip_riken.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip_riken.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip_riken.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.check_all_boxBtn_riken,
+            this.uncheck_all_boxBtn_riken,
+            this.clear_allBtn_riken});
+            this.toolStrip_riken.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
+            this.toolStrip_riken.Location = new System.Drawing.Point(385, 0);
+            this.toolStrip_riken.Name = "toolStrip_riken";
+            this.toolStrip_riken.Size = new System.Drawing.Size(32, 510);
+            this.toolStrip_riken.TabIndex = 57;
+            // 
+            // check_all_boxBtn_riken
+            // 
+            this.check_all_boxBtn_riken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.check_all_boxBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("check_all_boxBtn_riken.Image")));
+            this.check_all_boxBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_all_boxBtn_riken.Name = "check_all_boxBtn_riken";
+            this.check_all_boxBtn_riken.Size = new System.Drawing.Size(29, 29);
+            this.check_all_boxBtn_riken.ToolTipText = "Check all";
+            this.check_all_boxBtn_riken.Click += new System.EventHandler(this.check_all_boxBtn_riken_Click);
+            // 
+            // uncheck_all_boxBtn_riken
+            // 
+            this.uncheck_all_boxBtn_riken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheck_all_boxBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_boxBtn_riken.Image")));
+            this.uncheck_all_boxBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheck_all_boxBtn_riken.Name = "uncheck_all_boxBtn_riken";
+            this.uncheck_all_boxBtn_riken.Size = new System.Drawing.Size(29, 29);
+            this.uncheck_all_boxBtn_riken.ToolTipText = "Uncheck all";
+            this.uncheck_all_boxBtn_riken.Click += new System.EventHandler(this.uncheck_all_boxBtn_riken_Click);
+            // 
+            // clear_allBtn_riken
+            // 
+            this.clear_allBtn_riken.BackColor = System.Drawing.Color.Transparent;
+            this.clear_allBtn_riken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.clear_allBtn_riken.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clear_allBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("clear_allBtn_riken.Image")));
+            this.clear_allBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_allBtn_riken.Name = "clear_allBtn_riken";
+            this.clear_allBtn_riken.Size = new System.Drawing.Size(29, 29);
+            this.clear_allBtn_riken.ToolTipText = "Clear Data";
+            this.clear_allBtn_riken.Click += new System.EventHandler(this.clear_allBtn_riken_Click);
             // 
             // known_lstBox
             // 
@@ -149,14 +202,13 @@
             this.toolStrip_fragList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.calcBtn,
             this.toolStripButton2,
-            this.frag_sort_Btn2,
-            this.clearBtn});
+            this.frag_sort_Btn2});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip_fragList.Location = new System.Drawing.Point(0, 510);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(383, 30);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(417, 30);
             this.toolStrip_fragList.TabIndex = 23;
             // 
             // calcBtn
@@ -185,17 +237,6 @@
             this.frag_sort_Btn2.Size = new System.Drawing.Size(68, 27);
             this.frag_sort_Btn2.Text = "Filter";
             this.frag_sort_Btn2.Click += new System.EventHandler(this.frag_sort_Btn2_Click);
-            // 
-            // clearBtn
-            // 
-            this.clearBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.clearBtn.Image = ((System.Drawing.Image)(resources.GetObject("clearBtn.Image")));
-            this.clearBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(69, 27);
-            this.clearBtn.Text = "Clear";
-            this.clearBtn.ToolTipText = "Clear calculation options";
-            this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
             // 
             // w_lstBox
             // 
@@ -624,7 +665,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 540);
+            this.ClientSize = new System.Drawing.Size(417, 540);
             this.Controls.Add(this.panel_calc);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -634,6 +675,8 @@
             this.Text = "Calculation Box";
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
+            this.toolStrip_riken.ResumeLayout(false);
+            this.toolStrip_riken.PerformLayout();
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.ResumeLayout(false);
@@ -682,7 +725,10 @@
         private System.Windows.Forms.ToolStripButton calcBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripButton2;
         private System.Windows.Forms.ToolStripButton frag_sort_Btn2;
-        private System.Windows.Forms.ToolStripButton clearBtn;
         private System.Windows.Forms.CheckedListBox known_lstBox;
+        private System.Windows.Forms.ToolStrip toolStrip_riken;
+        private System.Windows.Forms.ToolStripButton check_all_boxBtn_riken;
+        private System.Windows.Forms.ToolStripButton uncheck_all_boxBtn_riken;
+        private System.Windows.Forms.ToolStripButton clear_allBtn_riken;
     }
 }

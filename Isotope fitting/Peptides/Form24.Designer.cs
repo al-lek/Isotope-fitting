@@ -31,12 +31,15 @@
             System.Windows.Forms.Label customRes_Btn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.toolStrip_basic = new System.Windows.Forms.ToolStrip();
+            this.check_all_boxBtn = new System.Windows.Forms.ToolStripButton();
+            this.uncheck_all_boxBtn = new System.Windows.Forms.ToolStripButton();
+            this.clear_allBtn = new System.Windows.Forms.ToolStripButton();
             this.sortIdx_chkBx = new System.Windows.Forms.CheckBox();
             this.dvw_lstBox = new System.Windows.Forms.CheckedListBox();
             this.chargeMax_Box = new System.Windows.Forms.TextBox();
             this.internal_lstBox = new System.Windows.Forms.CheckedListBox();
             this.addin_lstBox = new System.Windows.Forms.CheckedListBox();
-            //Form24.machine_listBox = new System.Windows.Forms.ListBox();
             this.frag_Label = new System.Windows.Forms.Label();
             this.M_lstBox = new System.Windows.Forms.CheckedListBox();
             this.charge_Label = new System.Windows.Forms.Label();
@@ -68,11 +71,11 @@
             this.internal_Label = new System.Windows.Forms.Label();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.calcBtn = new System.Windows.Forms.ToolStripButton();
-            this.frag_sort_Btn2 = new System.Windows.Forms.ToolStripButton();
-            this.clearBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
+            this.frag_sort_Btn2 = new System.Windows.Forms.ToolStripButton();
             customRes_Btn = new System.Windows.Forms.Label();
             this.panel_calc.SuspendLayout();
+            this.toolStrip_basic.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,13 +96,13 @@
             this.panel_calc.AutoScroll = true;
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel_calc.Controls.Add(this.toolStrip_basic);
             this.panel_calc.Controls.Add(this.sortIdx_chkBx);
             this.panel_calc.Controls.Add(this.dvw_lstBox);
             this.panel_calc.Controls.Add(customRes_Btn);
             this.panel_calc.Controls.Add(this.chargeMax_Box);
             this.panel_calc.Controls.Add(this.internal_lstBox);
             this.panel_calc.Controls.Add(this.addin_lstBox);
-            //this.panel_calc.Controls.Add(Form2.machine_listBox);
             this.panel_calc.Controls.Add(this.frag_Label);
             this.panel_calc.Controls.Add(this.M_lstBox);
             this.panel_calc.Controls.Add(this.charge_Label);
@@ -133,8 +136,54 @@
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(295, 581);
+            this.panel_calc.Size = new System.Drawing.Size(341, 581);
             this.panel_calc.TabIndex = 4;
+            // 
+            // toolStrip_basic
+            // 
+            this.toolStrip_basic.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip_basic.Dock = System.Windows.Forms.DockStyle.Right;
+            this.toolStrip_basic.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip_basic.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip_basic.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.check_all_boxBtn,
+            this.uncheck_all_boxBtn,
+            this.clear_allBtn});
+            this.toolStrip_basic.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
+            this.toolStrip_basic.Location = new System.Drawing.Point(309, 0);
+            this.toolStrip_basic.Name = "toolStrip_basic";
+            this.toolStrip_basic.Size = new System.Drawing.Size(32, 581);
+            this.toolStrip_basic.TabIndex = 57;
+            // 
+            // check_all_boxBtn
+            // 
+            this.check_all_boxBtn.Image = ((System.Drawing.Image)(resources.GetObject("check_all_boxBtn.Image")));
+            this.check_all_boxBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_all_boxBtn.Name = "check_all_boxBtn";
+            this.check_all_boxBtn.Size = new System.Drawing.Size(29, 29);
+            this.check_all_boxBtn.ToolTipText = "Check all";
+            this.check_all_boxBtn.Click += new System.EventHandler(this.check_all_boxBtn_Click);
+            // 
+            // uncheck_all_boxBtn
+            // 
+            this.uncheck_all_boxBtn.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_boxBtn.Image")));
+            this.uncheck_all_boxBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheck_all_boxBtn.Name = "uncheck_all_boxBtn";
+            this.uncheck_all_boxBtn.Size = new System.Drawing.Size(29, 29);
+            this.uncheck_all_boxBtn.ToolTipText = "Uncheck all";
+            this.uncheck_all_boxBtn.Click += new System.EventHandler(this.uncheck_all_boxBtn_Click);
+            // 
+            // clear_allBtn
+            // 
+            this.clear_allBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_allBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.clear_allBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clear_allBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_allBtn.Image")));
+            this.clear_allBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_allBtn.Name = "clear_allBtn";
+            this.clear_allBtn.Size = new System.Drawing.Size(29, 29);
+            this.clear_allBtn.ToolTipText = "Clear Data";
+            this.clear_allBtn.Click += new System.EventHandler(this.clear_allBtn_Click);
             // 
             // sortIdx_chkBx
             // 
@@ -212,45 +261,7 @@
             this.addin_lstBox.Location = new System.Drawing.Point(165, 129);
             this.addin_lstBox.Name = "addin_lstBox";
             this.addin_lstBox.Size = new System.Drawing.Size(120, 199);
-            //this.addin_lstBox.TabIndex = 10;
-            //// 
-            //// machine_listBox
-            //// 
-            //Form24.machine_listBox.ForeColor = System.Drawing.Color.DarkSlateGray;
-            //Form24.machine_listBox.FormattingEnabled = true;
-            //Form24.machine_listBox.Items.AddRange(new object[] {
-            //"Elite_R240000@400",
-            //"Elite_R120000@400",
-            //"Elite_R60000@400",
-            //"Elite_R30000@400",
-            //"OrbitrapXL,Velos,VelosPro_R120000@400",
-            //"OrbitrapXL,Velos,VelosPro_R60000@400",
-            //"OrbitrapXL,Velos,VelosPro_R30000@400",
-            //"OrbitrapXL,Velos,VelosPro_R15000@400",
-            //"OrbitrapXL,Velos,VelosPro_R7500@400",
-            //"Q-Exactive,ExactivePlus_280K@200",
-            //"Q-Exactive,ExactivePlus_R140000@200",
-            //"Q-Exactive,ExactivePlus_R70000@200",
-            //"Q-Exactive,ExactivePlus_R35000@200",
-            //"Q-Exactive,ExactivePlus_R17500@200",
-            //"Exactive_R100000@200",
-            //"Exactive_R50000@200",
-            //"Exactive_R25000@200",
-            //"Exactive_R12500@200",
-            //"OTFusion,QExactiveHF_480000@200",
-            //"OTFusion,QExactiveHF_240000@200",
-            //"OTFusion,QExactiveHF_120000@200",
-            //"OTFusion,QExactiveHF_60000@200",
-            //"OTFusion,QExactiveHF_30000@200",
-            //"OTFusion,QExactiveHF_15000@200",
-            //"TripleTOF5600_R28000@200",
-            //"QTOF_XevoG2-S_R25000@200",
-            //"TripleTOF6600_R30000@400             "});
-            //Form24.machine_listBox.Location = new System.Drawing.Point(94, 504);
-            //Form24.machine_listBox.Name = "machine_listBox";
-            //Form24.machine_listBox.Size = new System.Drawing.Size(191, 56);
-            //Form24.machine_listBox.TabIndex = 21;
-            //Form24.machine_listBox.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
+            this.addin_lstBox.TabIndex = 23;
             // 
             // frag_Label
             // 
@@ -603,14 +614,13 @@
             this.toolStrip_fragList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.calcBtn,
             this.toolStripButton2,
-            this.frag_sort_Btn2,
-            this.clearBtn});
+            this.frag_sort_Btn2});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip_fragList.Location = new System.Drawing.Point(0, 581);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(295, 30);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(341, 30);
             this.toolStrip_fragList.TabIndex = 120;
             // 
             // calcBtn
@@ -625,6 +635,11 @@
             this.calcBtn.Text = "Calculate";
             this.calcBtn.Click += new System.EventHandler(this.calcBtn_Click);
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(6, 30);
+            // 
             // frag_sort_Btn2
             // 
             this.frag_sort_Btn2.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -635,27 +650,11 @@
             this.frag_sort_Btn2.Text = "Filter";
             this.frag_sort_Btn2.Click += new System.EventHandler(this.frag_sort_Btn2_Click);
             // 
-            // clearBtn
-            // 
-            this.clearBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.clearBtn.Image = ((System.Drawing.Image)(resources.GetObject("clearBtn.Image")));
-            this.clearBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(69, 27);
-            this.clearBtn.Text = "Clear";
-            this.clearBtn.ToolTipText = "Clear calculation options";
-            this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(6, 30);
-            // 
             // Form24
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(295, 611);
+            this.ClientSize = new System.Drawing.Size(341, 611);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.toolStrip_fragList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -666,6 +665,8 @@
             this.Text = "Calculation Box";
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
+            this.toolStrip_basic.ResumeLayout(false);
+            this.toolStrip_basic.PerformLayout();
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.ResumeLayout(false);
@@ -712,8 +713,11 @@
         private System.Windows.Forms.Label internal_Label;
         private System.Windows.Forms.ToolStrip toolStrip_fragList;
         private System.Windows.Forms.ToolStripButton frag_sort_Btn2;
-        private System.Windows.Forms.ToolStripButton clearBtn;
         private System.Windows.Forms.ToolStripButton calcBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripButton2;
+        private System.Windows.Forms.ToolStrip toolStrip_basic;
+        private System.Windows.Forms.ToolStripButton check_all_boxBtn;
+        private System.Windows.Forms.ToolStripButton uncheck_all_boxBtn;
+        private System.Windows.Forms.ToolStripButton clear_allBtn;
     }
 }
