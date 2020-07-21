@@ -10928,10 +10928,10 @@ namespace Isotope_fitting
                     if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }                                       
                     if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, 4, clr2, g, false, true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y += 10;
-                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y +=10;
-                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step)); pp.Y += 10;
-                        draw_line(pp, false, 4, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step + 4));
+                        draw_line(pp, true, 4, clr2, g, false, true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y +=10;
+                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_line(pp, false, 4, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
                     }
                 }
                 else
