@@ -2948,10 +2948,10 @@ namespace Isotope_fitting
             // 
             this.legend_panelCopy2.Dock = System.Windows.Forms.DockStyle.Right;
             this.legend_panelCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legend_panelCopy2.Location = new System.Drawing.Point(442, 0);
+            this.legend_panelCopy2.Location = new System.Drawing.Point(441, 0);
             this.legend_panelCopy2.Name = "legend_panelCopy2";
             this.legend_panelCopy2.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
-            this.legend_panelCopy2.Size = new System.Drawing.Size(80, 455);
+            this.legend_panelCopy2.Size = new System.Drawing.Size(81, 455);
             this.legend_panelCopy2.TabIndex = 24;
             this.legend_panelCopy2.Visible = false;
             this.legend_panelCopy2.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
@@ -3233,10 +3233,10 @@ namespace Isotope_fitting
             // 
             this.legend_panelCopy1.Dock = System.Windows.Forms.DockStyle.Right;
             this.legend_panelCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legend_panelCopy1.Location = new System.Drawing.Point(442, 0);
+            this.legend_panelCopy1.Location = new System.Drawing.Point(441, 0);
             this.legend_panelCopy1.Name = "legend_panelCopy1";
             this.legend_panelCopy1.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
-            this.legend_panelCopy1.Size = new System.Drawing.Size(80, 455);
+            this.legend_panelCopy1.Size = new System.Drawing.Size(81, 455);
             this.legend_panelCopy1.TabIndex = 23;
             this.legend_panelCopy1.Visible = false;
             this.legend_panelCopy1.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
@@ -3545,10 +3545,10 @@ namespace Isotope_fitting
             // 
             this.legend_panel.Dock = System.Windows.Forms.DockStyle.Right;
             this.legend_panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legend_panel.Location = new System.Drawing.Point(442, 0);
+            this.legend_panel.Location = new System.Drawing.Point(441, 0);
             this.legend_panel.Name = "legend_panel";
             this.legend_panel.Padding = new System.Windows.Forms.Padding(0, 16, 0, 16);
-            this.legend_panel.Size = new System.Drawing.Size(80, 444);
+            this.legend_panel.Size = new System.Drawing.Size(81, 444);
             this.legend_panel.TabIndex = 19;
             this.legend_panel.Visible = false;
             this.legend_panel.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);

@@ -10730,13 +10730,13 @@ namespace Isotope_fitting
             int width = pnl.Size.Width;
             int height = pnl.Size.Height - (padding * 2);
             Panel draw_sequence_panel_temp = pnl.Parent.Parent as Panel;
-            Point pp = new Point(10, padding);
+            Point pp = new Point(5, padding);
             Graphics g = e.Graphics;
             SolidBrush sb = new SolidBrush(Color.Black);
             Pen mypen = new Pen(Color.Black, 2F);
             int y_step =5;
             int y_step_up =10;
-            int step_x = 12;
+            int step_x =6;
 
             if (!is_riken)
             {
@@ -10756,11 +10756,11 @@ namespace Isotope_fitting
                     if (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked)
                     {
                         draw_line(pp, true, 0, clr2, g,false,true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X+ step_x, pp.Y- y_step_up));
-                        pp.Y += 10;
+                        pp.Y += 5;
                         draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
-                        pp.Y += 10;
+                        pp.Y += 20;
                         draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step));
-                        pp.Y += 10;
+                        pp.Y += 5;
                         draw_line(pp, false, 0, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                     }
                 }
@@ -10839,10 +10839,10 @@ namespace Isotope_fitting
                     if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }                                       
                     if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, 4, clr2, g, false, true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y += 10;
-                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y += 10;
-                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step)); pp.Y += 10;
-                        draw_line(pp, false, 4, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step + 4)); pp.Y += 10;
+                        draw_line(pp, true, 4, clr2, g, false, true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y += 5;
+                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step_up)); pp.Y +=20;
+                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step)); pp.Y += 5;
+                        draw_line(pp, false, 4, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y + y_step + 4));
                     }
                 }
                 else
