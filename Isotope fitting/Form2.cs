@@ -252,6 +252,7 @@ namespace Isotope_fitting
         /// </summary>
         public bool[] selection_rule = new bool[] { true, false, false, false, false, false };
         bool block_plot_refresh = false;
+        bool block_expand = false;
         bool block_fit_refresh = false;
         /// <summary>
         /// max ppm error used in di and ei calculation during fitting
@@ -3434,6 +3435,7 @@ namespace Isotope_fitting
             if (string.IsNullOrEmpty(node.Name))
             {
                 block_plot_refresh = true;
+                block_expand = true;
                 foreach (TreeNode subNode in node.Nodes)
                 {
                     if (subNode.Checked != node.Checked)
@@ -3442,6 +3444,7 @@ namespace Isotope_fitting
                     }
                 }
                 block_plot_refresh = false;
+                block_expand = false;
                 if (!block_fit_refresh) { refresh_iso_plot(); }
             }
             else
@@ -3452,9 +3455,10 @@ namespace Isotope_fitting
                     frag_tree.BeginUpdate();
                     if (is_checked)
                     {
-                        node.BackColor = Color.Gainsboro; EnsureVisibleWithoutRightScrolling(node); Fragments2[idx].To_plot = is_checked;
+                        node.BackColor = Color.Gainsboro;Fragments2[idx].To_plot = is_checked;
                         // selectedFragments list starts with 1, Fragments2 start with 0. Also first check if it is already checked (avoid entering the same frag multiple times)
                         if (!selectedFragments.Contains(idx + 1)) selectedFragments.Add(idx + 1);
+                        if(!block_expand) EnsureVisibleWithoutRightScrolling(node);
                     }
                     else
                     {
