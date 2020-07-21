@@ -1796,8 +1796,8 @@ namespace Isotope_fitting
             this.intensity_toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.intensity_toolStrip2.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.intensity_toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.byCopy_Btn,
             this.bySave_Btn,
+            this.byCopy_Btn,
             this.toolStripButton5,
             this.by_X_Box,
             this.by_Y_Box});
@@ -3448,9 +3448,9 @@ namespace Isotope_fitting
             this.seq_coverageBtn,
             this.highlightProp_Btn});
             this.sequence_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.sequence_toolStrip.Location = new System.Drawing.Point(720, 27);
+            this.sequence_toolStrip.Location = new System.Drawing.Point(728, 27);
             this.sequence_toolStrip.Name = "sequence_toolStrip";
-            this.sequence_toolStrip.Size = new System.Drawing.Size(32, 152);
+            this.sequence_toolStrip.Size = new System.Drawing.Size(24, 133);
             this.sequence_toolStrip.TabIndex = 8;
             // 
             // seqSave_Btn

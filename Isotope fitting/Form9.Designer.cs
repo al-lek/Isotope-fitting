@@ -39,6 +39,10 @@
             this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
             this.FragCalc_TabControl = new System.Windows.Forms.TabControl();
             this.chemForm_tab = new System.Windows.Forms.TabPage();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.clear_chem_multBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.clear_chemBtn = new System.Windows.Forms.ToolStripButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mult_Light_chkBox = new System.Windows.Forms.RadioButton();
             this.mult_heavy_ChkBox = new System.Windows.Forms.RadioButton();
@@ -145,6 +149,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.chemForm_tab_riken = new System.Windows.Forms.TabPage();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.clear_chemBtn_riken = new System.Windows.Forms.ToolStripButton();
             this.extensionBox1_riken = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.ion_txtBox_riken = new System.Windows.Forms.TextBox();
@@ -184,17 +190,13 @@
             this.rem_Btn = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.clear_chemBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.clear_chem_multBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.clear_chemBtn_riken = new System.Windows.Forms.ToolStripButton();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
             this.FragCalc_TabControl.SuspendLayout();
             this.chemForm_tab.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.Frag_tab.SuspendLayout();
@@ -202,13 +204,11 @@
             this.fragTab_riken.SuspendLayout();
             this.toolStrip_riken.SuspendLayout();
             this.chemForm_tab_riken.SuspendLayout();
+            this.toolStrip3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.statusStrpFrm9.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
-            this.toolStrip3.SuspendLayout();
             this.SuspendLayout();
             // 
             // z_clmn
@@ -375,6 +375,58 @@
             this.chemForm_tab.TabIndex = 1;
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.White;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clear_chem_multBtn});
+            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip2.Location = new System.Drawing.Point(301, 346);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(91, 32);
+            this.toolStrip2.TabIndex = 66;
+            // 
+            // clear_chem_multBtn
+            // 
+            this.clear_chem_multBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chem_multBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chem_multBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chem_multBtn.Image")));
+            this.clear_chem_multBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chem_multBtn.Name = "clear_chem_multBtn";
+            this.clear_chem_multBtn.Size = new System.Drawing.Size(90, 29);
+            this.clear_chem_multBtn.Text = "Clear Data";
+            this.clear_chem_multBtn.ToolTipText = "Clear Data";
+            this.clear_chem_multBtn.Click += new System.EventHandler(this.clear_multiple_chem_Btn_Click);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.Color.White;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clear_chemBtn});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip1.Location = new System.Drawing.Point(301, 187);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(91, 32);
+            this.toolStrip1.TabIndex = 65;
+            // 
+            // clear_chemBtn
+            // 
+            this.clear_chemBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chemBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chemBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn.Image")));
+            this.clear_chemBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chemBtn.Name = "clear_chemBtn";
+            this.clear_chemBtn.Size = new System.Drawing.Size(90, 29);
+            this.clear_chemBtn.Text = "Clear Data";
+            this.clear_chemBtn.ToolTipText = "Clear Data";
+            this.clear_chemBtn.Click += new System.EventHandler(this.clear_single_chem_Btn_Click);
             // 
             // groupBox2
             // 
@@ -1718,6 +1770,32 @@
             this.chemForm_tab_riken.Text = "Chemical formula";
             this.chemForm_tab_riken.UseVisualStyleBackColor = true;
             // 
+            // toolStrip3
+            // 
+            this.toolStrip3.BackColor = System.Drawing.Color.White;
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clear_chemBtn_riken});
+            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip3.Location = new System.Drawing.Point(305, 116);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Size = new System.Drawing.Size(91, 32);
+            this.toolStrip3.TabIndex = 66;
+            // 
+            // clear_chemBtn_riken
+            // 
+            this.clear_chemBtn_riken.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chemBtn_riken.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chemBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn_riken.Image")));
+            this.clear_chemBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chemBtn_riken.Name = "clear_chemBtn_riken";
+            this.clear_chemBtn_riken.Size = new System.Drawing.Size(90, 29);
+            this.clear_chemBtn_riken.Text = "Clear Data";
+            this.clear_chemBtn_riken.ToolTipText = "Clear Data";
+            this.clear_chemBtn_riken.Click += new System.EventHandler(this.clear_single_chem_Btn_riken_Click);
+            // 
             // extensionBox1_riken
             // 
             this.extensionBox1_riken.ForeColor = System.Drawing.Color.Black;
@@ -2124,84 +2202,6 @@
             this.rem_Btn.UseVisualStyleBackColor = false;
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.BackColor = System.Drawing.Color.White;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clear_chemBtn});
-            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.toolStrip1.Location = new System.Drawing.Point(301, 187);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(91, 32);
-            this.toolStrip1.TabIndex = 65;
-            // 
-            // clear_chemBtn
-            // 
-            this.clear_chemBtn.BackColor = System.Drawing.Color.Transparent;
-            this.clear_chemBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.clear_chemBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn.Image")));
-            this.clear_chemBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clear_chemBtn.Name = "clear_chemBtn";
-            this.clear_chemBtn.Size = new System.Drawing.Size(90, 29);
-            this.clear_chemBtn.Text = "Clear Data";
-            this.clear_chemBtn.ToolTipText = "Clear Data";
-            this.clear_chemBtn.Click += new System.EventHandler(this.clear_single_chem_Btn_Click);
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.BackColor = System.Drawing.Color.White;
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(25, 25);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clear_chem_multBtn});
-            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.toolStrip2.Location = new System.Drawing.Point(301, 346);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(91, 32);
-            this.toolStrip2.TabIndex = 66;
-            // 
-            // clear_chem_multBtn
-            // 
-            this.clear_chem_multBtn.BackColor = System.Drawing.Color.Transparent;
-            this.clear_chem_multBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.clear_chem_multBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chem_multBtn.Image")));
-            this.clear_chem_multBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clear_chem_multBtn.Name = "clear_chem_multBtn";
-            this.clear_chem_multBtn.Size = new System.Drawing.Size(90, 29);
-            this.clear_chem_multBtn.Text = "Clear Data";
-            this.clear_chem_multBtn.ToolTipText = "Clear Data";
-            this.clear_chem_multBtn.Click += new System.EventHandler(this.clear_multiple_chem_Btn_Click);
-            // 
-            // toolStrip3
-            // 
-            this.toolStrip3.BackColor = System.Drawing.Color.White;
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(25, 25);
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clear_chemBtn_riken});
-            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.toolStrip3.Location = new System.Drawing.Point(305, 116);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(91, 32);
-            this.toolStrip3.TabIndex = 66;
-            // 
-            // clear_chemBtn_riken
-            // 
-            this.clear_chemBtn_riken.BackColor = System.Drawing.Color.Transparent;
-            this.clear_chemBtn_riken.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.clear_chemBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn_riken.Image")));
-            this.clear_chemBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clear_chemBtn_riken.Name = "clear_chemBtn_riken";
-            this.clear_chemBtn_riken.Size = new System.Drawing.Size(90, 29);
-            this.clear_chemBtn_riken.Text = "Clear Data";
-            this.clear_chemBtn_riken.ToolTipText = "Clear Data";
-            this.clear_chemBtn_riken.Click += new System.EventHandler(this.clear_single_chem_Btn_riken_Click);
-            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -2212,7 +2212,6 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.statusStrpFrm9);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(740, 700);
@@ -2227,6 +2226,10 @@
             this.FragCalc_TabControl.ResumeLayout(false);
             this.chemForm_tab.ResumeLayout(false);
             this.chemForm_tab.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -2241,17 +2244,13 @@
             this.toolStrip_riken.PerformLayout();
             this.chemForm_tab_riken.ResumeLayout(false);
             this.chemForm_tab_riken.PerformLayout();
+            this.toolStrip3.ResumeLayout(false);
+            this.toolStrip3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
-            this.toolStrip3.ResumeLayout(false);
-            this.toolStrip3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
