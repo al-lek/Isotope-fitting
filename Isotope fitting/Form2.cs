@@ -9390,6 +9390,8 @@ namespace Isotope_fitting
             int length_panel =0;
             if (is_riken ) { temp_x_init = 5; temp_y_init = 24; step_y = 74; }           
             if(highlight_ibt_ckBx.Checked) {  length_panel = -21 - 50; }
+            if (legend_panel.Visible) length_panel = -legend_panel.Width;
+
             int temp_x = temp_x_init;
             int temp_y = temp_y_init;
             string s = Peptide;
@@ -9546,8 +9548,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + step_y; }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -9681,7 +9683,7 @@ namespace Isotope_fitting
                             if (nn.Ion_type.Contains("H2O") && nn.Ion_type.Contains("NH3")) { is_up = false; step = 2 * 6; }
                             else if (nn.Ion_type.Contains("H2O")) { is_up = false; step = 0 * 6; }
                             else if (nn.Ion_type.Contains("NH3")) { is_up = false; step = 1 * 6; }
-                            if (is_up) { draw_internal_riken_line(pp, is_left, is_up, step, clr, g); }
+                            if (is_left) { draw_internal_riken_line(pp, is_left, is_up, step, clr, g); }
                             else { draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }
                         }                                            
                     }
@@ -9771,8 +9773,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2);  temp_p.Y = temp_p.Y + step_y; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18;  temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -9947,9 +9949,9 @@ namespace Isotope_fitting
                                 if (str[1].StartsWith("d")) { step = 3 * 6; clr = Color.DeepPink; }
                             }                            
                         }
-                        
-                        if (nn.Ion_type.Contains("B(")){is_up = false; draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }            
-                        else draw_internal_riken_line(pp, is_left, is_up, step, clr, g);     
+                        if (nn.Ion_type.Contains("B(")){is_up = false; } 
+                        if (is_left) { draw_internal_riken_line(pp, is_left, is_up, step, clr, g); }
+                        else { draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }
                     }
                 }
                 pp.X = pp.X + step_x;
@@ -10121,8 +10123,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -10355,8 +10357,8 @@ namespace Isotope_fitting
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
-                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size+ step_x)/2); temp_p.Y = temp_p.Y + step_y; }
-                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - (((int)draw_sequence_panel_temp.Font.Size + step_x) / 2); temp_p.Y = temp_p.Y + step_y; }
+                    if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
+                    if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
