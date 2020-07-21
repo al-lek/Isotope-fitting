@@ -524,7 +524,7 @@
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form12_2";
-            this.Text = "Radical  Migration Mapping plot format";
+            this.Text = "Intramolecular Hydrogen Atom Rearrangements plot format";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.bar_grpBox.ResumeLayout(false);
