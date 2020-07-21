@@ -728,6 +728,7 @@ namespace Isotope_fitting
                 ppm_toolStrip4.Visible = !is_riken;
                 losses_groupBox_d.Visible = is_riken;
                 losses_groupBox_w.Visible = is_riken;
+                dvw_chBx.Visible= dvw_chBxCopy1.Visible = dvw_chBxCopy2.Visible = !is_riken;
                 foreach (ToolStrip strip in GetControls(panel2_tab2).OfType<ToolStrip>().Where(l => l.Name.Contains("ppm")))
                 {
                     foreach (ToolStripButton btn in strip.Items.OfType<ToolStripButton>())
@@ -9496,9 +9497,11 @@ namespace Isotope_fitting
             CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
+            CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
 
-            color_range_picBox_temp.Visible = false; color_range_panel_temp.Visible = false; seq_lbl_panel_temp.Visible = false;
-            //g = pnl.CreateGraphics();
+            if (color_range_picBox_temp.Visible) { color_range_picBox_temp.Visible = false; }
+            if (color_range_panel_temp.Visible) { color_range_panel_temp.Visible = false; }
+            if (seq_lbl_panel_temp.Visible){ seq_lbl_panel_temp.Visible = false;}
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             int step_x = 20;
@@ -9537,9 +9540,7 @@ namespace Isotope_fitting
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (curr_ss.Char_color != null) sb.Color = curr_ss.Color_table[curr_ss.Char_color[idx]];
-                //g.DrawString(s[idx].ToString(), sequence_Pnl_temp.Font, sb, pp);
                 draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
-
                 foreach (ion nn in IonDraw)
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
@@ -9684,6 +9685,20 @@ namespace Isotope_fitting
                             else { draw_internal_riken_line(temp_p, is_left, is_up, step, clr, g); }
                         }                                            
                     }
+                    else if ((nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 0, Color.DarkTurquoise, g);
+                    }
+                    else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    {
+                        draw_line(temp_p, false, 0, Color.DarkTurquoise, g);
+
+                    }
+                    else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    {
+                        draw_line(temp_p, false, 4, Color.DarkCyan, g);
+
+                    }
                 }
                 pp.X = pp.X + step_x;
                 if (pp.X + step_x >= sequence_Pnl_temp.Width+ length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }
@@ -9707,8 +9722,9 @@ namespace Isotope_fitting
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
 
-            color_range_picBox_temp.Visible = false; color_range_panel_temp.Visible = false; seq_lbl_panel_temp.Visible = false;
-            //g = pnl.CreateGraphics();
+            if (color_range_picBox_temp.Visible) { color_range_picBox_temp.Visible = false; }
+            if (color_range_panel_temp.Visible) { color_range_panel_temp.Visible = false; }
+            if (seq_lbl_panel_temp.Visible) { seq_lbl_panel_temp.Visible = false; }       
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
             int step_x = 20;
@@ -10015,7 +10031,8 @@ namespace Isotope_fitting
             CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
             CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
-           
+            CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
+
             color_range_picBox_temp.Visible = is_rgb_color_range;
             color_range_panel_temp.Visible = !is_rgb_color_range;
             seq_lbl_panel_temp.Visible = true;
@@ -10213,6 +10230,20 @@ namespace Isotope_fitting
                         {
                             draw_line(temp_p, false, 8, nn.Color, g);
                         }
+                    }
+                    else if ((nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    {
+                        draw_line(pp, true, 0, Color.DarkTurquoise, g);
+                    }
+                    else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    {
+                        draw_line(temp_p, false, 0, Color.DarkTurquoise, g);
+
+                    }
+                    else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    {
+                        draw_line(temp_p, false, 4, Color.DarkCyan, g);
+
                     }
                     //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
                     //{
@@ -10650,50 +10681,77 @@ namespace Isotope_fitting
         //refresh, checks etc
         private void ax_chBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (ax_chBx.Checked)
+            CheckBox ax_chBx_temp = sender as CheckBox;
+            Panel draw_sequence_panel_temp = ax_chBx_temp.Parent as Panel;
+            CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+            if (ax_chBx_temp.Checked)
             {
-                ax_chBx.ForeColor = Color.ForestGreen;
-                if (los_chkBox.Checked) { by_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
+                //CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+                CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+                CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+                CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+                ax_chBx_temp.ForeColor = Color.ForestGreen;
+                if (los_chkBox_temp.Checked) { by_chBx_temp.Checked = false; cz_chBx_temp.Checked = false; intB_chBx_temp.Checked = false; intA_chBx_temp.Checked = false; }
             }
             else
             {
-                ax_chBx.ForeColor = Control.DefaultForeColor;
+                ax_chBx_temp.ForeColor = Control.DefaultForeColor;
             }
         }
         private void by_chBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (by_chBx.Checked)
+            CheckBox by_chBx_temp = sender as CheckBox;
+            Panel draw_sequence_panel_temp = by_chBx_temp.Parent as Panel;
+            CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+            if (by_chBx_temp.Checked)
             {
-                by_chBx.ForeColor = Color.Blue;
-                if (los_chkBox.Checked) { ax_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
+                CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+                CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+                CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+                by_chBx_temp.ForeColor = Color.Blue;
+                if (los_chkBox_temp.Checked) { ax_chBx_temp.Checked = false; cz_chBx_temp.Checked = false; intB_chBx_temp.Checked = false; intA_chBx_temp.Checked = false; }
 
             }
             else
             {
-                by_chBx.ForeColor = Control.DefaultForeColor;
+                by_chBx_temp.ForeColor = Control.DefaultForeColor;
             }
         }
         private void cz_chBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (cz_chBx.Checked)
+            CheckBox cz_chBx_temp = sender as CheckBox;
+            Panel draw_sequence_panel_temp = cz_chBx_temp.Parent as Panel;
+            CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+            if (cz_chBx_temp.Checked)
             {
-                cz_chBx.ForeColor = Color.Crimson;
-                if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; }
-
+                CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+                CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+                CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+                cz_chBx_temp.ForeColor = Color.Crimson;
+                if (los_chkBox_temp.Checked) { ax_chBx_temp.Checked = false; by_chBx_temp.Checked = false; intB_chBx_temp.Checked = false; intA_chBx_temp.Checked = false; }
             }
             else
             {
-                cz_chBx.ForeColor = Control.DefaultForeColor;
+                cz_chBx_temp.ForeColor = Control.DefaultForeColor;
             }
         }
         private void intA_chBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (intA_chBx.Checked && is_riken)
+            CheckBox intA_chBx_temp = sender as CheckBox;
+            Panel draw_sequence_panel_temp = intA_chBx_temp.Parent as Panel;
+            CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+            if (intA_chBx_temp.Checked && is_riken)
             {
-                intA_chBx.ForeColor = Color.HotPink;
-                if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; }
+                CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+                CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+                intA_chBx_temp.ForeColor = Color.HotPink;
+                if (los_chkBox_temp.Checked) { ax_chBx_temp.Checked = false; by_chBx_temp.Checked = false; cz_chBx_temp.Checked = false; }
             }
-            else intA_chBx.ForeColor = Control.DefaultForeColor;
+            else intA_chBx_temp.ForeColor = Control.DefaultForeColor;
         }
         private void draw_Btn_Click(object sender, EventArgs e)
         {
@@ -10713,9 +10771,31 @@ namespace Isotope_fitting
         }
         private void los_chkBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (los_chkBox.Checked) { ax_chBx.Checked = false; by_chBx.Checked = false; cz_chBx.Checked = false; intB_chBx.Checked = false; intA_chBx.Checked = false; intB_chBx.Enabled = false;if (!is_riken) { intA_chBx.Enabled = false; } }
-            else { intB_chBx.Enabled = true; intA_chBx.Enabled = true; }
-
+            CheckBox los_chkBox_temp = sender as CheckBox;
+            Panel draw_sequence_panel_temp = los_chkBox_temp.Parent as Panel;
+            CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+            CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+            CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+            CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+            CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+            CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
+            if (los_chkBox_temp.Checked) { ax_chBx_temp.Checked = false; by_chBx_temp.Checked = false; cz_chBx_temp.Checked = false; intB_chBx_temp.Checked = false; intA_chBx_temp.Checked = false; intB_chBx_temp.Enabled = false; dvw_chBx_temp.Enabled = false; dvw_chBx_temp.Checked = false; if (!is_riken) { intA_chBx_temp.Enabled = false; } }
+            else { intB_chBx_temp.Enabled = true; intA_chBx_temp.Enabled = true; dvw_chBx_temp.Enabled = true; dvw_chBx_temp.Checked = true; }
+        }
+        private void dvw_chBx_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox dvw_chBx_temp = sender as CheckBox;
+            if (dvw_chBx_temp.Checked)
+            {
+                Panel draw_sequence_panel_temp = dvw_chBx_temp.Parent as Panel;
+                CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+                CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+                CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+                CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+                CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+                CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
+                ax_chBx_temp.Checked = false;by_chBx_temp.Checked = false;by_chBx_temp.Checked = false;intA_chBx_temp.Checked = false;los_chkBox_temp.Checked = false;intB_chBx_temp.Checked = false;
+            }
         }
         private void seq_extensionBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -10729,7 +10809,8 @@ namespace Isotope_fitting
             int padding = pnl.Padding.Top;
             int width = pnl.Size.Width;
             int height = pnl.Size.Height - (padding * 2);
-            Panel draw_sequence_panel_temp = pnl.Parent.Parent as Panel;
+            Panel seq_pnl = pnl.Parent as Panel;
+            Panel draw_sequence_panel_temp = seq_pnl.Parent as Panel;
             Point pp = new Point(5, padding);
             Graphics g = e.Graphics;
             SolidBrush sb = new SolidBrush(Color.Black);
@@ -10737,7 +10818,6 @@ namespace Isotope_fitting
             int y_step =5;
             int y_step_up =10;
             int step_x =6;
-
             if (!is_riken)
             {
                 CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
@@ -10746,7 +10826,16 @@ namespace Isotope_fitting
                 CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
                 CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
                 CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
-                if (los_chkBox_temp.Checked)                    
+                CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
+                if (dvw_chBx_temp.Checked)
+                {
+                    draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                    pp.Y += 5;
+                    draw_line(pp, false, 0, Color.Turquoise, g, false, true); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                    pp.Y += 10;
+                    draw_line(pp, false, 0, Color.DarkCyan, g, false, true); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                }
+                else if (los_chkBox_temp.Checked)                    
                 {
                     Color clr1 = Color.Green;
                     Color clr2 = Color.LimeGreen;
@@ -10906,11 +10995,9 @@ namespace Isotope_fitting
                 } 
             }
         }
-
         private void seqLegendBtn_CheckedChanged(object sender, EventArgs e)
         {
             ToolStripButton tsp = (sender as ToolStripButton);
-            if (!tsp.Name.Contains("seqLegend")) return;
             Panel big_pnl = tsp.GetCurrentParent().Parent as Panel;
             CheckBox clr_ckbx = GetControls(big_pnl).OfType<CheckBox>().Where(n => n.Name.Contains("highlight")).First();
             if (clr_ckbx.Checked) { clr_ckbx.Checked = !tsp.Checked; }
@@ -10922,50 +11009,7 @@ namespace Isotope_fitting
         #endregion
 
         #region sequence panels copies
-        #region sequence copy 1
-        private void highlight_ibt_ckBxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh(); seq_lbl_panelCopy1.Refresh();
-        }
-
-        private void ax_chBxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ax_chBxCopy1.Checked)
-            {
-                ax_chBxCopy1.ForeColor = Color.ForestGreen;
-                if (los_chkBoxCopy1.Checked) { by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; }
-            }
-            else
-            {
-                ax_chBxCopy1.ForeColor = Control.DefaultForeColor;
-            }
-        }
-        private void by_chBxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (by_chBxCopy1.Checked)
-            {
-                by_chBxCopy1.ForeColor = Color.Blue;
-                if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; }
-
-            }
-            else
-            {
-                by_chBxCopy1.ForeColor = Control.DefaultForeColor;
-            }
-        }
-        private void cz_chBxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cz_chBxCopy1.Checked)
-            {
-                cz_chBxCopy1.ForeColor = Color.Crimson;
-                if (los_chkBoxCopy1.Checked) { by_chBxCopy1.Checked = false; ax_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; }
-
-            }
-            else
-            {
-                cz_chBxCopy1.ForeColor = Control.DefaultForeColor;
-            }
-        }
+        #region sequence copy 1 
         private void draw_BtnCopy1_Click(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh(); color_range_panelCopy1.Refresh(); seq_lbl_panelCopy1.Refresh();
@@ -10973,16 +11017,7 @@ namespace Isotope_fitting
         private void rdBtn25Copy1_CheckedChanged(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh();
-        }
-        private void intA_chBxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (intA_chBxCopy1.Checked && is_riken)
-            {
-                intA_chBxCopy1.ForeColor = Color.HotPink;
-                if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; }
-            }
-            else intA_chBxCopy1.ForeColor = Control.DefaultForeColor;
-        }
+        }       
         private void rdBtn50Copy1_CheckedChanged(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh();
@@ -11015,86 +11050,26 @@ namespace Isotope_fitting
         private void delele_sequencePnl1_Click(object sender, EventArgs e)
         {
             draw_sequence_panelCopy1.Visible = false;
-        }
-        private void los_chkBoxCopy1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (los_chkBoxCopy1.Checked) { ax_chBxCopy1.Checked = false; by_chBxCopy1.Checked = false; cz_chBxCopy1.Checked = false; intB_chBxCopy1.Checked = false; intA_chBxCopy1.Checked = false; intB_chBxCopy1.Enabled = false; if (!is_riken) { intA_chBxCopy1.Enabled = false; } }
-            else { intB_chBxCopy1.Enabled = true; intA_chBxCopy1.Enabled = true; }
-        }
-
+        }      
         private void seq_extensionBoxCopy1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             sequence_PnlCopy1.Refresh();
         }
         #endregion
 
-        #region sequence copy 2
-        private void highlight_ibt_ckBxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
-        }
-        private void ax_chBxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ax_chBxCopy2.Checked)
-            {
-                ax_chBxCopy2.ForeColor = Color.ForestGreen;
-                if (los_chkBoxCopy2.Checked) { by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; }
-            }
-            else
-            {
-                ax_chBxCopy2.ForeColor = Control.DefaultForeColor;
-            }
-        }
-        private void by_chBxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (by_chBxCopy2.Checked)
-            {
-                by_chBxCopy2.ForeColor = Color.Blue;
-                if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; }
-
-            }
-            else
-            {
-                by_chBxCopy2.ForeColor = Control.DefaultForeColor;
-            }
-        }
-
-        private void cz_chBxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cz_chBxCopy2.Checked)
-            {
-                cz_chBxCopy2.ForeColor = Color.Crimson;
-                if (los_chkBoxCopy2.Checked) { by_chBxCopy2.Checked = false; ax_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; }
-
-            }
-            else
-            {
-                cz_chBxCopy2.ForeColor = Control.DefaultForeColor;
-            }
-        }
+        #region sequence copy 2 
         private void draw_BtnCopy2_Click(object sender, EventArgs e)
         {
             sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
         }
-
         private void rdBtn25Copy2_CheckedChanged(object sender, EventArgs e)
         {
             sequence_PnlCopy2.Refresh();
         }
-
         private void rdBtn50Copy2_CheckedChanged(object sender, EventArgs e)
         {
             sequence_PnlCopy2.Refresh();
-        }
-        private void intA_chBxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (intA_chBxCopy2.Checked && is_riken)
-            {
-                intA_chBxCopy2.ForeColor = Color.HotPink;
-                if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; }
-            }
-            else intA_chBxCopy2.ForeColor = Control.DefaultForeColor;
-        }
+        }      
         private void sequence_PnlCopy2_Paint(object sender, PaintEventArgs e)
         {
             if (is_riken)
@@ -11112,7 +11087,6 @@ namespace Isotope_fitting
         {
             color_panel(e.Graphics, color_range_panelCopy2);
         }
-
         private void seq_lbl_panelCopy2_Paint(object sender, PaintEventArgs e)
         {
             label_color_panel(e.Graphics, seq_lbl_panelCopy2);
@@ -11121,18 +11095,11 @@ namespace Isotope_fitting
         {
             sequence_PnlCopy2.Refresh(); color_range_panelCopy2.Refresh(); seq_lbl_panelCopy2.Refresh();
         }
-
         private void delele_sequencePnl2_Click(object sender, EventArgs e)
         {
             draw_sequence_panelCopy2.Visible = false;
         }
-
-        private void los_chkBoxCopy2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (los_chkBoxCopy2.Checked) { ax_chBxCopy2.Checked = false; by_chBxCopy2.Checked = false; cz_chBxCopy2.Checked = false; intB_chBxCopy2.Checked = false; intA_chBxCopy2.Checked = false; intB_chBxCopy2.Enabled = false; if (!is_riken) { intA_chBxCopy2.Enabled = false; } }
-            else { intB_chBxCopy2.Enabled = true; intA_chBxCopy2.Enabled = true; }
-        }
-
+             
         #endregion
 
         private void add_sequencePanel1_Click(object sender, EventArgs e)
@@ -14221,9 +14188,10 @@ namespace Isotope_fitting
             }
             File.WriteAllLines(path, fragText);
         }
-        
-        #endregion
 
-       
+
+
+        #endregion
+                
     }
 }
