@@ -241,7 +241,7 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(500, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(427, 694);
+            this.panel_calc.Size = new System.Drawing.Size(427, 673);
             this.panel_calc.TabIndex = 4;
             // 
             // label8
@@ -250,7 +250,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label8.Location = new System.Drawing.Point(5, 606);
+            this.label8.Location = new System.Drawing.Point(5, 585);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(152, 13);
             this.label8.TabIndex = 64;
@@ -265,7 +265,7 @@
             0,
             0,
             131072});
-            this.thre_numUD.Location = new System.Drawing.Point(188, 602);
+            this.thre_numUD.Location = new System.Drawing.Point(188, 581);
             this.thre_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -289,7 +289,7 @@
             // 
             this.resolution_Box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(101, 459);
+            this.resolution_Box.Location = new System.Drawing.Point(101, 438);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(167, 20);
             this.resolution_Box.TabIndex = 61;
@@ -303,7 +303,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label1.Location = new System.Drawing.Point(25, 462);
+            this.label1.Location = new System.Drawing.Point(25, 441);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 60;
@@ -316,7 +316,7 @@
             this.ignore_ppm_form9.Checked = true;
             this.ignore_ppm_form9.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ignore_ppm_form9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ignore_ppm_form9.Location = new System.Drawing.Point(190, 487);
+            this.ignore_ppm_form9.Location = new System.Drawing.Point(190, 466);
             this.ignore_ppm_form9.Name = "ignore_ppm_form9";
             this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
             this.ignore_ppm_form9.TabIndex = 58;
@@ -337,7 +337,7 @@
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(424, 432);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(424, 411);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // chemForm_tab
@@ -1765,7 +1765,7 @@
             this.chemForm_tab_riken.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab_riken.Name = "chemForm_tab_riken";
             this.chemForm_tab_riken.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab_riken.Size = new System.Drawing.Size(416, 406);
+            this.chemForm_tab_riken.Size = new System.Drawing.Size(416, 385);
             this.chemForm_tab_riken.TabIndex = 3;
             this.chemForm_tab_riken.Text = "Chemical formula";
             this.chemForm_tab_riken.UseVisualStyleBackColor = true;
@@ -1913,7 +1913,7 @@
             this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(3, 638);
+            this.calc_Btn.Location = new System.Drawing.Point(3, 617);
             this.calc_Btn.Name = "calc_Btn";
             this.calc_Btn.Size = new System.Drawing.Size(97, 24);
             this.calc_Btn.TabIndex = 41;
@@ -1928,7 +1928,7 @@
             this.half_minus_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.half_minus_rdBtn.AutoSize = true;
             this.half_minus_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_minus_rdBtn.Location = new System.Drawing.Point(152, 547);
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(152, 526);
             this.half_minus_rdBtn.Name = "half_minus_rdBtn";
             this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
             this.half_minus_rdBtn.TabIndex = 43;
@@ -1942,7 +1942,7 @@
             this.calc_param9Lbl.AutoSize = true;
             this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_param9Lbl.ForeColor = System.Drawing.Color.DarkBlue;
-            this.calc_param9Lbl.Location = new System.Drawing.Point(4, 433);
+            this.calc_param9Lbl.Location = new System.Drawing.Point(4, 412);
             this.calc_param9Lbl.Name = "calc_param9Lbl";
             this.calc_param9Lbl.Size = new System.Drawing.Size(130, 17);
             this.calc_param9Lbl.TabIndex = 51;
@@ -1954,7 +1954,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 489);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 468);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -1970,7 +1970,7 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(101, 485);
+            this.ppm9_numUD.Location = new System.Drawing.Point(101, 464);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1985,7 +1985,7 @@
             this.half_plus_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.half_plus_rdBtn.AutoSize = true;
             this.half_plus_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_plus_rdBtn.Location = new System.Drawing.Point(152, 577);
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(152, 556);
             this.half_plus_rdBtn.Name = "half_plus_rdBtn";
             this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
             this.half_plus_rdBtn.TabIndex = 44;
@@ -1998,7 +1998,7 @@
             this.one_rdBtn9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.one_rdBtn9.AutoSize = true;
             this.one_rdBtn9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.one_rdBtn9.Location = new System.Drawing.Point(7, 517);
+            this.one_rdBtn9.Location = new System.Drawing.Point(7, 496);
             this.one_rdBtn9.Name = "one_rdBtn9";
             this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
             this.one_rdBtn9.TabIndex = 39;
@@ -2011,7 +2011,7 @@
             this.half_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.half_rdBtn.AutoSize = true;
             this.half_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_rdBtn.Location = new System.Drawing.Point(152, 517);
+            this.half_rdBtn.Location = new System.Drawing.Point(152, 496);
             this.half_rdBtn.Name = "half_rdBtn";
             this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
             this.half_rdBtn.TabIndex = 42;
@@ -2024,7 +2024,7 @@
             this.two_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.two_rdBtn.AutoSize = true;
             this.two_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.two_rdBtn.Location = new System.Drawing.Point(7, 547);
+            this.two_rdBtn.Location = new System.Drawing.Point(7, 526);
             this.two_rdBtn.Name = "two_rdBtn";
             this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.two_rdBtn.TabIndex = 40;
@@ -2037,7 +2037,7 @@
             this.three_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.three_rdBtn.AutoSize = true;
             this.three_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.three_rdBtn.Location = new System.Drawing.Point(7, 577);
+            this.three_rdBtn.Location = new System.Drawing.Point(7, 556);
             this.three_rdBtn.Name = "three_rdBtn";
             this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.three_rdBtn.TabIndex = 41;
@@ -2067,9 +2067,9 @@
             this.progressLabel9,
             this.ProgressBar9});
             this.statusStrpFrm9.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.statusStrpFrm9.Location = new System.Drawing.Point(0, 656);
+            this.statusStrpFrm9.Location = new System.Drawing.Point(0, 673);
             this.statusStrpFrm9.Name = "statusStrpFrm9";
-            this.statusStrpFrm9.Size = new System.Drawing.Size(866, 21);
+            this.statusStrpFrm9.Size = new System.Drawing.Size(879, 21);
             this.statusStrpFrm9.TabIndex = 52;
             this.statusStrpFrm9.Text = "statusStrip1";
             this.statusStrpFrm9.Visible = false;
@@ -2115,7 +2115,7 @@
             this.fragListView9.Location = new System.Drawing.Point(427, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(452, 586);
+            this.fragListView9.Size = new System.Drawing.Size(452, 565);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -2152,7 +2152,7 @@
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.insert_Btn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(427, 623);
+            this.panel1.Location = new System.Drawing.Point(427, 602);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(452, 71);
             this.panel1.TabIndex = 56;
