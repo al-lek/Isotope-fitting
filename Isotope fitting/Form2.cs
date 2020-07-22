@@ -7840,7 +7840,7 @@ namespace Isotope_fitting
             }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragTypes_toolStrip.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
-            fit_sel_Btn.Enabled = false; fit_Btn.Enabled = false; fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;            
+            /*fit_sel_Btn.Enabled = false; fit_Btn.Enabled = false;*/ fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;            
             recalculate_all_data_aligned();
         }
         #endregion
@@ -13499,7 +13499,7 @@ namespace Isotope_fitting
             //plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
             loadMS_Btn.Enabled = true;
             Fitting_chkBox.Checked = false;
-            Fitting_chkBox.Enabled = false;
+            //Fitting_chkBox.Enabled = false;
             Fragments2.Clear(); ChemFormulas.Clear();
             selectedFragments.Clear();
             machine_sel_index = 9;
@@ -13507,7 +13507,7 @@ namespace Isotope_fitting
             selected_window = 1000000;
             bigPanel.Controls.Clear();
             candidate_fragments = 1;
-            fit_sel_Btn.Enabled = false;
+            //fit_sel_Btn.Enabled = false;
             windowList.Clear();
             mark_neues = false; loaded_window = false;
             neues = 0;
