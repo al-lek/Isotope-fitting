@@ -8946,7 +8946,7 @@ namespace Isotope_fitting
             file_name = "";
             project_experimental = "";
             if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            fit_chkGrpsBtn.Enabled = fit_chkGrpsfit_chkGrpsChkFragBtnChkFragBtn11.Enabled = false;
+            fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
             fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
             fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid;
             exp_width = 1; frag_width = 2; fit_width = 1;
