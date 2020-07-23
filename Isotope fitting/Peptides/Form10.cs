@@ -144,7 +144,7 @@ namespace Isotope_fitting
         }
         private void refresh10_Btn_Click(object sender, EventArgs e)
         {
-            frm2.refresh_frm9();
+            frm2.external_refresh_isoplot();
         }
 
 

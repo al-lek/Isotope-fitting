@@ -340,12 +340,10 @@ namespace Isotope_fitting
             Form21 frm21 = new Form21(frm2);            
             frm21.ShowDialog();
         }
-
-        private void ignore_ppm_chkBox_CheckedChanged(object sender, EventArgs e)
+       
+        private void ignore_ppm_chkBox_Click(object sender, EventArgs e)
         {
             frm2.ignore_ppm_refresh = ignore_ppm_chkBox.Checked;
-            if (ignore_ppm_chkBox.Checked) ignore_ppm_chkBox.ForeColor = Color.Red;
-            else ignore_ppm_chkBox.ForeColor = Color.Black;
         }
     }
 }

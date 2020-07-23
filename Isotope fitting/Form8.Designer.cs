@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form8));
             this.minIntensity_lbl = new System.Windows.Forms.Label();
             this.minIntensity_numUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
@@ -35,16 +36,20 @@
             this.constRes_radBtn = new System.Windows.Forms.RadioButton();
             this.resolution_list_combBox = new System.Windows.Forms.ComboBox();
             this.selection_list_1 = new System.Windows.Forms.ComboBox();
-            this.save_btn = new System.Windows.Forms.Button();
-            this.save_peak_btn = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.recalc_Exp_Btn = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.save_peakBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.save_btn = new System.Windows.Forms.ToolStripButton();
+            this.recalc_Exp_Btn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // minIntensity_lbl
@@ -174,36 +179,6 @@
             this.selection_list_1.Size = new System.Drawing.Size(122, 21);
             this.selection_list_1.TabIndex = 5;
             // 
-            // save_btn
-            // 
-            this.save_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.save_btn.BackColor = System.Drawing.Color.Green;
-            this.save_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.save_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_btn.Location = new System.Drawing.Point(160, 117);
-            this.save_btn.Name = "save_btn";
-            this.save_btn.Size = new System.Drawing.Size(75, 25);
-            this.save_btn.TabIndex = 23;
-            this.save_btn.Text = "Save";
-            this.save_btn.UseVisualStyleBackColor = false;
-            this.save_btn.Click += new System.EventHandler(this.save_btn_Click);
-            // 
-            // save_peak_btn
-            // 
-            this.save_peak_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.save_peak_btn.BackColor = System.Drawing.Color.Green;
-            this.save_peak_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.save_peak_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.save_peak_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_peak_btn.Location = new System.Drawing.Point(160, 117);
-            this.save_peak_btn.Name = "save_peak_btn";
-            this.save_peak_btn.Size = new System.Drawing.Size(75, 25);
-            this.save_peak_btn.TabIndex = 24;
-            this.save_peak_btn.Text = "Save";
-            this.save_peak_btn.UseVisualStyleBackColor = false;
-            this.save_peak_btn.Click += new System.EventHandler(this.save_peak_btn_Click);
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -217,7 +192,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.save_peak_btn);
+            this.tabPage1.Controls.Add(this.toolStrip1);
             this.tabPage1.Controls.Add(this.minIntensity_numUD);
             this.tabPage1.Controls.Add(this.minIntensity_lbl);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -225,14 +200,13 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(241, 161);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Peak Detection Settings";
+            this.tabPage1.Text = "Peak Detection";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.recalc_Exp_Btn);
+            this.tabPage2.Controls.Add(this.toolStrip2);
             this.tabPage2.Controls.Add(this.listRes_radBtn);
-            this.tabPage2.Controls.Add(this.save_btn);
             this.tabPage2.Controls.Add(this.resolution_list_combBox);
             this.tabPage2.Controls.Add(this.constRes_radBtn);
             this.tabPage2.Controls.Add(this.label2);
@@ -242,22 +216,69 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(241, 161);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Deconvoluted spectra";
+            this.tabPage2.Text = "Deconvolution";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.save_peakBtn});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 121);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(235, 37);
+            this.toolStrip1.TabIndex = 25;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // save_peakBtn
+            // 
+            this.save_peakBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.save_peakBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.save_peakBtn.Image = ((System.Drawing.Image)(resources.GetObject("save_peakBtn.Image")));
+            this.save_peakBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.save_peakBtn.Name = "save_peakBtn";
+            this.save_peakBtn.Size = new System.Drawing.Size(34, 34);
+            this.save_peakBtn.Text = "Save";
+            this.save_peakBtn.Click += new System.EventHandler(this.save_peak_btn_Click);
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.save_btn,
+            this.recalc_Exp_Btn});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 121);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(235, 37);
+            this.toolStrip2.TabIndex = 26;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // save_btn
+            // 
+            this.save_btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.save_btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.save_btn.Image = ((System.Drawing.Image)(resources.GetObject("save_btn.Image")));
+            this.save_btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.save_btn.Name = "save_btn";
+            this.save_btn.Size = new System.Drawing.Size(34, 34);
+            this.save_btn.Text = "Save";
+            this.save_btn.Click += new System.EventHandler(this.save_btn_Click);
             // 
             // recalc_Exp_Btn
             // 
-            this.recalc_Exp_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.recalc_Exp_Btn.BackColor = System.Drawing.Color.Transparent;
-            this.recalc_Exp_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.recalc_Exp_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.recalc_Exp_Btn.ForeColor = System.Drawing.Color.SteelBlue;
-            this.recalc_Exp_Btn.Location = new System.Drawing.Point(8, 117);
+            this.recalc_Exp_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.recalc_Exp_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.recalc_Exp_Btn.Image = ((System.Drawing.Image)(resources.GetObject("recalc_Exp_Btn.Image")));
+            this.recalc_Exp_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.recalc_Exp_Btn.Name = "recalc_Exp_Btn";
-            this.recalc_Exp_Btn.Size = new System.Drawing.Size(145, 25);
-            this.recalc_Exp_Btn.TabIndex = 24;
-            this.recalc_Exp_Btn.Text = "Recalculate Exp. Profile";
-            this.recalc_Exp_Btn.UseVisualStyleBackColor = false;
+            this.recalc_Exp_Btn.Size = new System.Drawing.Size(34, 34);
+            this.recalc_Exp_Btn.Text = "Recalculate profile";
             this.recalc_Exp_Btn.Click += new System.EventHandler(this.recalc_Exp_Btn_Click);
             // 
             // Form8
@@ -282,6 +303,10 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -295,11 +320,13 @@
         private System.Windows.Forms.RadioButton listRes_radBtn;
         private System.Windows.Forms.RadioButton constRes_radBtn;
         private System.Windows.Forms.ComboBox resolution_list_combBox;
-        private System.Windows.Forms.Button save_btn;
-        private System.Windows.Forms.Button save_peak_btn;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button recalc_Exp_Btn;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton save_peakBtn;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton save_btn;
+        private System.Windows.Forms.ToolStripButton recalc_Exp_Btn;
     }
 }

@@ -208,6 +208,10 @@ namespace Isotope_fitting
                         lstBox.SetItemCheckState(i, CheckState.Checked);
                     }
                 }
+                foreach (CheckBox box in GetControls(container).OfType<CheckBox>())
+                {
+                    box.Checked = true;
+                }
             }
             else
             {
@@ -218,6 +222,10 @@ namespace Isotope_fitting
                     {
                         lstBox.SetItemCheckState(i, CheckState.Unchecked);
                     }
+                }
+                foreach (CheckBox box in GetControls(container).OfType<CheckBox>())
+                {
+                    box.Checked = false;
                 }
             }
         }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form10));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -62,8 +63,6 @@
             this.expS1_Lbl = new System.Windows.Forms.Label();
             this.expW1_numUD = new System.Windows.Forms.NumericUpDown();
             this.expW1_Lbl = new System.Windows.Forms.Label();
-            this.reset_Btn = new System.Windows.Forms.Button();
-            this.refresh10_Btn = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.units_grpBx = new System.Windows.Forms.GroupBox();
             this.y_minor_grid = new System.Windows.Forms.CheckBox();
@@ -85,6 +84,9 @@
             this.intervalX_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.refresh10_Btn = new System.Windows.Forms.ToolStripButton();
+            this.reset_Btn = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -104,6 +106,7 @@
             this.tickmark_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -114,21 +117,20 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(831, 290);
+            this.tabControl1.Size = new System.Drawing.Size(831, 324);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.toolStrip2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.fit_grpBx);
             this.tabPage1.Controls.Add(this.Theor_grpBx);
             this.tabPage1.Controls.Add(this.exp1_grpBx);
-            this.tabPage1.Controls.Add(this.reset_Btn);
-            this.tabPage1.Controls.Add(this.refresh10_Btn);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(823, 264);
+            this.tabPage1.Size = new System.Drawing.Size(823, 298);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Lines";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -663,32 +665,6 @@
             this.expW1_Lbl.TabIndex = 21;
             this.expW1_Lbl.Text = "Width";
             // 
-            // reset_Btn
-            // 
-            this.reset_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.reset_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reset_Btn.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.reset_Btn.Location = new System.Drawing.Point(279, 219);
-            this.reset_Btn.Name = "reset_Btn";
-            this.reset_Btn.Size = new System.Drawing.Size(257, 34);
-            this.reset_Btn.TabIndex = 13;
-            this.reset_Btn.Text = "Reset";
-            this.reset_Btn.UseVisualStyleBackColor = true;
-            this.reset_Btn.Click += new System.EventHandler(this.reset_Btn_Click);
-            // 
-            // refresh10_Btn
-            // 
-            this.refresh10_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.refresh10_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.refresh10_Btn.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.refresh10_Btn.Location = new System.Drawing.Point(555, 219);
-            this.refresh10_Btn.Name = "refresh10_Btn";
-            this.refresh10_Btn.Size = new System.Drawing.Size(257, 34);
-            this.refresh10_Btn.TabIndex = 12;
-            this.refresh10_Btn.Text = "Refresh Plot";
-            this.refresh10_Btn.UseVisualStyleBackColor = true;
-            this.refresh10_Btn.Click += new System.EventHandler(this.refresh10_Btn_Click);
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.units_grpBx);
@@ -696,7 +672,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(823, 264);
+            this.tabPage2.Size = new System.Drawing.Size(823, 298);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Axis";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1015,12 +991,49 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refresh10_Btn,
+            this.reset_Btn});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 258);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(817, 37);
+            this.toolStrip2.TabIndex = 27;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // refresh10_Btn
+            // 
+            this.refresh10_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.refresh10_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refresh10_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh10_Btn.Image")));
+            this.refresh10_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refresh10_Btn.Name = "refresh10_Btn";
+            this.refresh10_Btn.Size = new System.Drawing.Size(34, 34);
+            this.refresh10_Btn.Text = "Refresh plot";
+            this.refresh10_Btn.Click += new System.EventHandler(this.refresh10_Btn_Click);
+            // 
+            // reset_Btn
+            // 
+            this.reset_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.reset_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.reset_Btn.Image = ((System.Drawing.Image)(resources.GetObject("reset_Btn.Image")));
+            this.reset_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.reset_Btn.Name = "reset_Btn";
+            this.reset_Btn.Size = new System.Drawing.Size(34, 34);
+            this.reset_Btn.Text = "Recalculate profile";
+            this.reset_Btn.Click += new System.EventHandler(this.reset_Btn_Click);
+            // 
             // Form10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(831, 290);
+            this.ClientSize = new System.Drawing.Size(831, 324);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form10";
@@ -1031,6 +1044,7 @@
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form10_DpiChanged);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).EndInit();
@@ -1054,6 +1068,8 @@
             this.tickmark_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1073,8 +1089,6 @@
         private System.Windows.Forms.NumericUpDown fitW1_numUD;
         private System.Windows.Forms.Label fitW1_Lbl;
         private System.Windows.Forms.Button fitW1_Btn;
-        private System.Windows.Forms.Button refresh10_Btn;
-        private System.Windows.Forms.Button reset_Btn;
         private System.Windows.Forms.Label Centroids_Lbl;
         private System.Windows.Forms.NumericUpDown cenW1_numUD;
         private System.Windows.Forms.Label cenW1_Lbl;
@@ -1117,5 +1131,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown annotSize_numUD;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton refresh10_Btn;
+        private System.Windows.Forms.ToolStripButton reset_Btn;
     }
 }

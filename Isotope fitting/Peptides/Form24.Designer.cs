@@ -136,7 +136,7 @@
             this.panel_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(341, 581);
+            this.panel_calc.Size = new System.Drawing.Size(341, 599);
             this.panel_calc.TabIndex = 4;
             // 
             // toolStrip_basic
@@ -152,7 +152,7 @@
             this.toolStrip_basic.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
             this.toolStrip_basic.Location = new System.Drawing.Point(311, 0);
             this.toolStrip_basic.Name = "toolStrip_basic";
-            this.toolStrip_basic.Size = new System.Drawing.Size(30, 581);
+            this.toolStrip_basic.Size = new System.Drawing.Size(30, 599);
             this.toolStrip_basic.TabIndex = 57;
             // 
             // check_all_boxBtn
@@ -605,48 +605,49 @@
             // 
             // toolStrip_fragList
             // 
-            this.toolStrip_fragList.AutoSize = false;
             this.toolStrip_fragList.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip_fragList.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip_fragList.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.toolStrip_fragList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip_fragList.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip_fragList.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.toolStrip_fragList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.calcBtn,
             this.toolStripButton2,
             this.frag_sort_Btn2});
             this.toolStrip_fragList.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip_fragList.Location = new System.Drawing.Point(0, 581);
+            this.toolStrip_fragList.Location = new System.Drawing.Point(0, 599);
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(341, 30);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(341, 47);
             this.toolStrip_fragList.TabIndex = 120;
             // 
             // calcBtn
             // 
-            this.calcBtn.BackColor = System.Drawing.Color.SteelBlue;
+            this.calcBtn.BackColor = System.Drawing.Color.Transparent;
+            this.calcBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.calcBtn.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.calcBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.calcBtn.Image = ((System.Drawing.Image)(resources.GetObject("calcBtn.Image")));
             this.calcBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.calcBtn.Name = "calcBtn";
-            this.calcBtn.Size = new System.Drawing.Size(99, 27);
+            this.calcBtn.Size = new System.Drawing.Size(34, 34);
             this.calcBtn.Text = "Calculate";
             this.calcBtn.Click += new System.EventHandler(this.calcBtn_Click);
             // 
             // toolStripButton2
             // 
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(6, 30);
+            this.toolStripButton2.Size = new System.Drawing.Size(6, 37);
             // 
             // frag_sort_Btn2
             // 
+            this.frag_sort_Btn2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.frag_sort_Btn2.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.frag_sort_Btn2.Image = ((System.Drawing.Image)(resources.GetObject("frag_sort_Btn2.Image")));
             this.frag_sort_Btn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.frag_sort_Btn2.Name = "frag_sort_Btn2";
-            this.frag_sort_Btn2.Size = new System.Drawing.Size(68, 27);
+            this.frag_sort_Btn2.Size = new System.Drawing.Size(44, 44);
             this.frag_sort_Btn2.Text = "Filter";
             this.frag_sort_Btn2.Click += new System.EventHandler(this.frag_sort_Btn2_Click);
             // 
@@ -654,7 +655,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(341, 611);
+            this.ClientSize = new System.Drawing.Size(341, 646);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.toolStrip_fragList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -671,6 +672,7 @@
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

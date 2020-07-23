@@ -397,7 +397,7 @@ namespace Isotope_fitting
                 if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
                 // manualy adjust height. We have also to maualy call refresh plot
                 Fragments3[selected_idx].Factor = Convert.ToDouble(numUD.Value) / Fragments3[selected_idx].Max_intensity;
-                frm2.refresh_frm9();
+                frm2.external_refresh_isoplot();
             };
             numUD.Focus();           
             //ensure that the focus is mainly on numeric up down box in the factor_panel9 

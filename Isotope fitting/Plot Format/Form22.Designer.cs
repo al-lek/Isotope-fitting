@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form22));
             this.axisX_Charge_grpBx = new System.Windows.Forms.GroupBox();
             this.end_valUD = new System.Windows.Forms.NumericUpDown();
             this.start_valUD = new System.Windows.Forms.NumericUpDown();
@@ -44,7 +45,6 @@
             this.x_ppm_majorGrid_Lbl = new System.Windows.Forms.Label();
             this.x_ppm_tickUD = new System.Windows.Forms.DomainUpDown();
             this.axisx_ppm_tick_Lbl = new System.Windows.Forms.Label();
-            this.refresh_Btn = new System.Windows.Forms.Button();
             this.axisY_Charge_grpBx = new System.Windows.Forms.GroupBox();
             this.y_ppm_stepmajor_UD = new System.Windows.Forms.NumericUpDown();
             this.y_ppm_stepminor_UD = new System.Windows.Forms.NumericUpDown();
@@ -58,6 +58,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bullet_size_numUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.refresh_Btn = new System.Windows.Forms.ToolStripButton();
             this.axisX_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).BeginInit();
@@ -67,6 +69,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepminor_UD)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).BeginInit();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // axisX_Charge_grpBx
@@ -91,7 +94,7 @@
             this.axisX_Charge_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
             this.axisX_Charge_grpBx.Location = new System.Drawing.Point(0, 0);
             this.axisX_Charge_grpBx.Name = "axisX_Charge_grpBx";
-            this.axisX_Charge_grpBx.Size = new System.Drawing.Size(289, 274);
+            this.axisX_Charge_grpBx.Size = new System.Drawing.Size(289, 271);
             this.axisX_Charge_grpBx.TabIndex = 3;
             this.axisX_Charge_grpBx.TabStop = false;
             this.axisX_Charge_grpBx.Text = "Axis X";
@@ -303,19 +306,6 @@
             this.axisx_ppm_tick_Lbl.TabIndex = 0;
             this.axisx_ppm_tick_Lbl.Text = "Tick Marks";
             // 
-            // refresh_Btn
-            // 
-            this.refresh_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.refresh_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.refresh_Btn.ForeColor = System.Drawing.Color.SlateBlue;
-            this.refresh_Btn.Location = new System.Drawing.Point(421, 18);
-            this.refresh_Btn.Name = "refresh_Btn";
-            this.refresh_Btn.Size = new System.Drawing.Size(128, 34);
-            this.refresh_Btn.TabIndex = 25;
-            this.refresh_Btn.Text = "Refresh Plot";
-            this.refresh_Btn.UseVisualStyleBackColor = true;
-            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
-            // 
             // axisY_Charge_grpBx
             // 
             this.axisY_Charge_grpBx.Controls.Add(this.y_ppm_stepmajor_UD);
@@ -332,7 +322,7 @@
             this.axisY_Charge_grpBx.ForeColor = System.Drawing.Color.SlateBlue;
             this.axisY_Charge_grpBx.Location = new System.Drawing.Point(292, 0);
             this.axisY_Charge_grpBx.Name = "axisY_Charge_grpBx";
-            this.axisY_Charge_grpBx.Size = new System.Drawing.Size(269, 274);
+            this.axisY_Charge_grpBx.Size = new System.Drawing.Size(269, 271);
             this.axisY_Charge_grpBx.TabIndex = 15;
             this.axisY_Charge_grpBx.TabStop = false;
             this.axisY_Charge_grpBx.Text = "Axis Y";
@@ -469,13 +459,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.toolStrip2);
             this.groupBox1.Controls.Add(this.bullet_size_numUD);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.refresh_Btn);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 274);
+            this.groupBox1.Location = new System.Drawing.Point(0, 271);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(561, 67);
+            this.groupBox1.Size = new System.Drawing.Size(561, 71);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             // 
@@ -520,11 +510,36 @@
             this.label2.TabIndex = 26;
             this.label2.Text = "Point size factor";
             // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refresh_Btn});
+            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip2.Location = new System.Drawing.Point(521, 16);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(37, 52);
+            this.toolStrip2.TabIndex = 28;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // refresh_Btn
+            // 
+            this.refresh_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refresh_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh_Btn.Image")));
+            this.refresh_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refresh_Btn.Name = "refresh_Btn";
+            this.refresh_Btn.Size = new System.Drawing.Size(34, 49);
+            this.refresh_Btn.Text = "Refresh plot";
+            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
+            // 
             // Form22
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 341);
+            this.ClientSize = new System.Drawing.Size(561, 342);
             this.Controls.Add(this.axisY_Charge_grpBx);
             this.Controls.Add(this.axisX_Charge_grpBx);
             this.Controls.Add(this.groupBox1);
@@ -547,6 +562,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).EndInit();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -575,7 +592,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton number_rdBtn;
         private System.Windows.Forms.RadioButton mz_rdBtn;
-        private System.Windows.Forms.Button refresh_Btn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown bullet_size_numUD;
@@ -583,5 +599,7 @@
         private System.Windows.Forms.NumericUpDown start_valUD;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton refresh_Btn;
     }
 }

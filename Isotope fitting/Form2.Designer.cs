@@ -296,22 +296,20 @@ namespace Isotope_fitting
             this.tabFit = new System.Windows.Forms.TabPage();
             this.plots_grpBox = new System.Windows.Forms.Panel();
             this.fit_grpBox = new System.Windows.Forms.GroupBox();
+            this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.toolStrip_plot = new System.Windows.Forms.ToolStrip();
             this.chartFormatBtn = new System.Windows.Forms.ToolStripDropDownButton();
             this.styleFormatBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportImage_Btn = new System.Windows.Forms.ToolStripButton();
             this.autoscale_Btn = new System.Windows.Forms.ToolStripButton();
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
-            this.copyImage_Btn = new System.Windows.Forms.ToolStripButton();
             this.zoomIn_Y_Btn = new System.Windows.Forms.ToolStripButton();
             this.zoomOut_Y_Btn = new System.Windows.Forms.ToolStripButton();
             this.legend_chkBx = new System.Windows.Forms.ToolStripButton();
-            this.fragPlotLbl_chkBx = new System.Windows.Forms.ToolStripButton();
+            this.frag_lbl_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
-            this.fragPlotLbl_chkBx2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripSeparator();
+            this.view_fragBtn = new System.Windows.Forms.ToolStripButton();
             this.disp_a = new System.Windows.Forms.ToolStripButton();
             this.disp_b = new System.Windows.Forms.ToolStripButton();
             this.disp_c = new System.Windows.Forms.ToolStripButton();
@@ -321,8 +319,8 @@ namespace Isotope_fitting
             this.disp_y = new System.Windows.Forms.ToolStripButton();
             this.disp_z = new System.Windows.Forms.ToolStripButton();
             this.disp_internal = new System.Windows.Forms.ToolStripButton();
-            this.res_grpBox = new System.Windows.Forms.GroupBox();
             this.user_grpBox = new System.Windows.Forms.Panel();
+            this.fitOptions_grpBox = new System.Windows.Forms.GroupBox();
             this.Fit_results_groupBox = new System.Windows.Forms.GroupBox();
             this.bigPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.toolStrip_fit_sort = new System.Windows.Forms.ToolStrip();
@@ -330,12 +328,13 @@ namespace Isotope_fitting
             this.uncheckFit_Btn = new System.Windows.Forms.ToolStripButton();
             this.sortSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.refresh_fitRes_Btn = new System.Windows.Forms.ToolStripButton();
-            this.fitOptions_grpBox = new System.Windows.Forms.GroupBox();
             this.fitting_toolStrip = new System.Windows.Forms.ToolStrip();
             this.fit_Btn = new System.Windows.Forms.ToolStripButton();
             this.fit_sel_Btn = new System.Windows.Forms.ToolStripButton();
             this.fit_chkGrpsBtn = new System.Windows.Forms.ToolStripButton();
             this.fit_chkGrpsChkFragBtn = new System.Windows.Forms.ToolStripButton();
+            this.Fitting_chkBox = new System.Windows.Forms.ToolStripButton();
+            this.fitSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.theorData_grpBx = new System.Windows.Forms.GroupBox();
             this.MSproduct_treeView = new System.Windows.Forms.TreeView();
             this.theoretical_toolStrip = new System.Windows.Forms.ToolStrip();
@@ -359,6 +358,7 @@ namespace Isotope_fitting
             this.save_proj_Btn = new System.Windows.Forms.ToolStripButton();
             this.clear_proj_Btn = new System.Windows.Forms.ToolStripButton();
             this.application_proj_Btn = new System.Windows.Forms.ToolStripButton();
+            this.help_Btn = new System.Windows.Forms.ToolStripButton();
             this.splitContainer2 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -492,9 +492,6 @@ namespace Isotope_fitting
             this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton18 = new System.Windows.Forms.ToolStripButton();
-            this.Fitting_chkBox = new System.Windows.Forms.ToolStripButton();
-            this.fitSettings_Btn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -555,9 +552,9 @@ namespace Isotope_fitting
             this.plots_grpBox.SuspendLayout();
             this.toolStrip_plot.SuspendLayout();
             this.user_grpBox.SuspendLayout();
+            this.fitOptions_grpBox.SuspendLayout();
             this.Fit_results_groupBox.SuspendLayout();
             this.toolStrip_fit_sort.SuspendLayout();
-            this.fitOptions_grpBox.SuspendLayout();
             this.fitting_toolStrip.SuspendLayout();
             this.theorData_grpBx.SuspendLayout();
             this.theoretical_toolStrip.SuspendLayout();
@@ -696,7 +693,7 @@ namespace Isotope_fitting
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 31);
+            this.splitContainer1.Location = new System.Drawing.Point(3, 43);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -709,8 +706,8 @@ namespace Isotope_fitting
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel2_intIdxTo);
             this.splitContainer1.Panel2.Controls.Add(this.int_IdxTo_toolStrip);
-            this.splitContainer1.Size = new System.Drawing.Size(1356, 689);
-            this.splitContainer1.SplitterDistance = 330;
+            this.splitContainer1.Size = new System.Drawing.Size(1356, 677);
+            this.splitContainer1.SplitterDistance = 324;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 29;
             // 
@@ -722,7 +719,7 @@ namespace Isotope_fitting
             this.panel1_intIdx.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1_intIdx.Location = new System.Drawing.Point(44, 0);
             this.panel1_intIdx.Name = "panel1_intIdx";
-            this.panel1_intIdx.Size = new System.Drawing.Size(1312, 330);
+            this.panel1_intIdx.Size = new System.Drawing.Size(1312, 324);
             this.panel1_intIdx.TabIndex = 27;
             // 
             // idxPnl1
@@ -732,7 +729,7 @@ namespace Isotope_fitting
             this.idxPnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPnl1.Location = new System.Drawing.Point(0, 0);
             this.idxPnl1.Name = "idxPnl1";
-            this.idxPnl1.Size = new System.Drawing.Size(1074, 330);
+            this.idxPnl1.Size = new System.Drawing.Size(1074, 324);
             this.idxPnl1.TabIndex = 28;
             // 
             // splitter2
@@ -740,7 +737,7 @@ namespace Isotope_fitting
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter2.Location = new System.Drawing.Point(1074, 0);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 330);
+            this.splitter2.Size = new System.Drawing.Size(3, 324);
             this.splitter2.TabIndex = 27;
             this.splitter2.TabStop = false;
             // 
@@ -751,7 +748,7 @@ namespace Isotope_fitting
             this.idxInt_Pnl1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxInt_Pnl1.Location = new System.Drawing.Point(1077, 0);
             this.idxInt_Pnl1.Name = "idxInt_Pnl1";
-            this.idxInt_Pnl1.Size = new System.Drawing.Size(235, 330);
+            this.idxInt_Pnl1.Size = new System.Drawing.Size(235, 324);
             this.idxInt_Pnl1.TabIndex = 25;
             // 
             // int_Idx_toolStrip
@@ -767,7 +764,7 @@ namespace Isotope_fitting
             this.int_Idx_toolStrip.Location = new System.Drawing.Point(0, 0);
             this.int_Idx_toolStrip.Name = "int_Idx_toolStrip";
             this.int_Idx_toolStrip.Padding = new System.Windows.Forms.Padding(0, 20, 1, 0);
-            this.int_Idx_toolStrip.Size = new System.Drawing.Size(44, 330);
+            this.int_Idx_toolStrip.Size = new System.Drawing.Size(44, 324);
             this.int_Idx_toolStrip.TabIndex = 25;
             // 
             // int_IdxSave_Btn
@@ -785,7 +782,7 @@ namespace Isotope_fitting
             this.int_IdxCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxCopy_Btn.Image")));
             this.int_IdxCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.int_IdxCopy_Btn.Name = "int_IdxCopy_Btn";
-            this.int_IdxCopy_Btn.Size = new System.Drawing.Size(29, 22);
+            this.int_IdxCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.int_IdxCopy_Btn.Text = "Copy";
             // 
             // toolStripDropDownButton1
@@ -796,7 +793,7 @@ namespace Isotope_fitting
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem1
             // 
@@ -815,7 +812,7 @@ namespace Isotope_fitting
             this.panel2_intIdxTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2_intIdxTo.Location = new System.Drawing.Point(44, 0);
             this.panel2_intIdxTo.Name = "panel2_intIdxTo";
-            this.panel2_intIdxTo.Size = new System.Drawing.Size(1312, 354);
+            this.panel2_intIdxTo.Size = new System.Drawing.Size(1312, 348);
             this.panel2_intIdxTo.TabIndex = 28;
             // 
             // idxPnl2
@@ -825,7 +822,7 @@ namespace Isotope_fitting
             this.idxPnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPnl2.Location = new System.Drawing.Point(0, 0);
             this.idxPnl2.Name = "idxPnl2";
-            this.idxPnl2.Size = new System.Drawing.Size(1074, 354);
+            this.idxPnl2.Size = new System.Drawing.Size(1074, 348);
             this.idxPnl2.TabIndex = 29;
             // 
             // splitter3
@@ -833,7 +830,7 @@ namespace Isotope_fitting
             this.splitter3.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter3.Location = new System.Drawing.Point(1074, 0);
             this.splitter3.Name = "splitter3";
-            this.splitter3.Size = new System.Drawing.Size(3, 354);
+            this.splitter3.Size = new System.Drawing.Size(3, 348);
             this.splitter3.TabIndex = 28;
             this.splitter3.TabStop = false;
             // 
@@ -844,7 +841,7 @@ namespace Isotope_fitting
             this.idxInt_Pnl2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxInt_Pnl2.Location = new System.Drawing.Point(1077, 0);
             this.idxInt_Pnl2.Name = "idxInt_Pnl2";
-            this.idxInt_Pnl2.Size = new System.Drawing.Size(235, 354);
+            this.idxInt_Pnl2.Size = new System.Drawing.Size(235, 348);
             this.idxInt_Pnl2.TabIndex = 26;
             // 
             // int_IdxTo_toolStrip
@@ -859,7 +856,7 @@ namespace Isotope_fitting
             this.int_IdxTo_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.int_IdxTo_toolStrip.Location = new System.Drawing.Point(0, 0);
             this.int_IdxTo_toolStrip.Name = "int_IdxTo_toolStrip";
-            this.int_IdxTo_toolStrip.Size = new System.Drawing.Size(44, 354);
+            this.int_IdxTo_toolStrip.Size = new System.Drawing.Size(44, 348);
             this.int_IdxTo_toolStrip.TabIndex = 26;
             // 
             // int_IdxToSave_Btn
@@ -877,7 +874,7 @@ namespace Isotope_fitting
             this.int_IdxToCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("int_IdxToCopy_Btn.Image")));
             this.int_IdxToCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.int_IdxToCopy_Btn.Name = "int_IdxToCopy_Btn";
-            this.int_IdxToCopy_Btn.Size = new System.Drawing.Size(29, 22);
+            this.int_IdxToCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.int_IdxToCopy_Btn.Text = "Copy";
             // 
             // toolStripButton8
@@ -888,7 +885,7 @@ namespace Isotope_fitting
             this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
             this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(29, 22);
+            this.toolStripButton8.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem2
             // 
@@ -908,7 +905,7 @@ namespace Isotope_fitting
             this.panel4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1356, 28);
+            this.panel4.Size = new System.Drawing.Size(1356, 40);
             this.panel4.TabIndex = 33;
             // 
             // toolStrip2
@@ -916,14 +913,14 @@ namespace Isotope_fitting
             this.toolStrip2.BackColor = System.Drawing.Color.White;
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Left;
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton5});
             this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip2.Location = new System.Drawing.Point(172, 0);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip2.Size = new System.Drawing.Size(33, 28);
+            this.toolStrip2.Size = new System.Drawing.Size(45, 40);
             this.toolStrip2.TabIndex = 28;
             // 
             // toolStripDropDownButton5
@@ -935,7 +932,7 @@ namespace Isotope_fitting
             this.toolStripDropDownButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton5.Image")));
             this.toolStripDropDownButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton5.Name = "toolStripDropDownButton5";
-            this.toolStripDropDownButton5.Size = new System.Drawing.Size(31, 25);
+            this.toolStripDropDownButton5.Size = new System.Drawing.Size(43, 37);
             this.toolStripDropDownButton5.Text = " ";
             this.toolStripDropDownButton5.ToolTipText = "Settings";
             // 
@@ -943,7 +940,7 @@ namespace Isotope_fitting
             // 
             this.internal_style_Btn.Image = ((System.Drawing.Image)(resources.GetObject("internal_style_Btn.Image")));
             this.internal_style_Btn.Name = "internal_style_Btn";
-            this.internal_style_Btn.Size = new System.Drawing.Size(101, 24);
+            this.internal_style_Btn.Size = new System.Drawing.Size(113, 36);
             this.internal_style_Btn.Text = "Style";
             this.internal_style_Btn.ToolTipText = "Format the style of the plots in this tab";
             this.internal_style_Btn.Click += new System.EventHandler(this.internal_style_Btn_Click);
@@ -956,7 +953,8 @@ namespace Isotope_fitting
             this.idxPlotLbl.ForeColor = System.Drawing.Color.DarkCyan;
             this.idxPlotLbl.Location = new System.Drawing.Point(0, 0);
             this.idxPlotLbl.Name = "idxPlotLbl";
-            this.idxPlotLbl.Size = new System.Drawing.Size(172, 20);
+            this.idxPlotLbl.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.idxPlotLbl.Size = new System.Drawing.Size(172, 28);
             this.idxPlotLbl.TabIndex = 26;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
             // 
@@ -982,9 +980,9 @@ namespace Isotope_fitting
             this.panel2_tab3.Controls.Add(this.groupBoxCharge2);
             this.panel2_tab3.Controls.Add(this.groupBoxCharge1);
             this.panel2_tab3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2_tab3.Location = new System.Drawing.Point(751, 31);
+            this.panel2_tab3.Location = new System.Drawing.Point(751, 43);
             this.panel2_tab3.Name = "panel2_tab3";
-            this.panel2_tab3.Size = new System.Drawing.Size(608, 689);
+            this.panel2_tab3.Size = new System.Drawing.Size(608, 677);
             this.panel2_tab3.TabIndex = 26;
             // 
             // groupBoxCharge4
@@ -1042,7 +1040,7 @@ namespace Isotope_fitting
             this.dzChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("dzChargeCopy_Btn.Image")));
             this.dzChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dzChargeCopy_Btn.Name = "dzChargeCopy_Btn";
-            this.dzChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.dzChargeCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.dzChargeCopy_Btn.Text = "Copy";
             this.dzChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1054,7 +1052,7 @@ namespace Isotope_fitting
             this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(40, 22);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem_charge_dz
             // 
@@ -1076,7 +1074,7 @@ namespace Isotope_fitting
             this.up4_Btn.Image = ((System.Drawing.Image)(resources.GetObject("up4_Btn.Image")));
             this.up4_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.up4_Btn.Name = "up4_Btn";
-            this.up4_Btn.Size = new System.Drawing.Size(40, 24);
+            this.up4_Btn.Size = new System.Drawing.Size(41, 24);
             this.up4_Btn.Text = "d";
             // 
             // down4_Btn
@@ -1090,7 +1088,7 @@ namespace Isotope_fitting
             this.down4_Btn.Image = ((System.Drawing.Image)(resources.GetObject("down4_Btn.Image")));
             this.down4_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.down4_Btn.Name = "down4_Btn";
-            this.down4_Btn.Size = new System.Drawing.Size(40, 24);
+            this.down4_Btn.Size = new System.Drawing.Size(41, 24);
             this.down4_Btn.Text = "z";
             // 
             // dzcharge_X_Box
@@ -1164,7 +1162,7 @@ namespace Isotope_fitting
             this.czChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("czChargeCopy_Btn.Image")));
             this.czChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.czChargeCopy_Btn.Name = "czChargeCopy_Btn";
-            this.czChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.czChargeCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.czChargeCopy_Btn.Text = "Copy";
             this.czChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1176,7 +1174,7 @@ namespace Isotope_fitting
             this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
             this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(40, 22);
+            this.toolStripButton9.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem6
             // 
@@ -1198,7 +1196,7 @@ namespace Isotope_fitting
             this.up3_Btn.Image = ((System.Drawing.Image)(resources.GetObject("up3_Btn.Image")));
             this.up3_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.up3_Btn.Name = "up3_Btn";
-            this.up3_Btn.Size = new System.Drawing.Size(40, 24);
+            this.up3_Btn.Size = new System.Drawing.Size(41, 24);
             this.up3_Btn.Text = "c";
             // 
             // down3_Btn
@@ -1212,7 +1210,7 @@ namespace Isotope_fitting
             this.down3_Btn.Image = ((System.Drawing.Image)(resources.GetObject("down3_Btn.Image")));
             this.down3_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.down3_Btn.Name = "down3_Btn";
-            this.down3_Btn.Size = new System.Drawing.Size(40, 24);
+            this.down3_Btn.Size = new System.Drawing.Size(41, 24);
             this.down3_Btn.Text = "z";
             // 
             // czcharge_X_Box
@@ -1276,7 +1274,7 @@ namespace Isotope_fitting
             this.byChargeSave_Btn.Image = ((System.Drawing.Image)(resources.GetObject("byChargeSave_Btn.Image")));
             this.byChargeSave_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.byChargeSave_Btn.Name = "byChargeSave_Btn";
-            this.byChargeSave_Btn.Size = new System.Drawing.Size(40, 22);
+            this.byChargeSave_Btn.Size = new System.Drawing.Size(44, 34);
             this.byChargeSave_Btn.Text = "Save";
             this.byChargeSave_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1286,7 +1284,7 @@ namespace Isotope_fitting
             this.byChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("byChargeCopy_Btn.Image")));
             this.byChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.byChargeCopy_Btn.Name = "byChargeCopy_Btn";
-            this.byChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.byChargeCopy_Btn.Size = new System.Drawing.Size(44, 34);
             this.byChargeCopy_Btn.Text = "Copy";
             this.byChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1298,7 +1296,7 @@ namespace Isotope_fitting
             this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
             this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(40, 22);
+            this.toolStripButton7.Size = new System.Drawing.Size(44, 34);
             // 
             // extractPlotToolStripMenuItem5
             // 
@@ -1320,7 +1318,7 @@ namespace Isotope_fitting
             this.up2_Btn.Image = ((System.Drawing.Image)(resources.GetObject("up2_Btn.Image")));
             this.up2_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.up2_Btn.Name = "up2_Btn";
-            this.up2_Btn.Size = new System.Drawing.Size(40, 24);
+            this.up2_Btn.Size = new System.Drawing.Size(44, 24);
             this.up2_Btn.Text = "b";
             // 
             // down2_Btn
@@ -1334,7 +1332,7 @@ namespace Isotope_fitting
             this.down2_Btn.Image = ((System.Drawing.Image)(resources.GetObject("down2_Btn.Image")));
             this.down2_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.down2_Btn.Name = "down2_Btn";
-            this.down2_Btn.Size = new System.Drawing.Size(40, 24);
+            this.down2_Btn.Size = new System.Drawing.Size(44, 24);
             this.down2_Btn.Text = "y";
             // 
             // bycharge_X_Box
@@ -1403,7 +1401,7 @@ namespace Isotope_fitting
             this.primary_charge_settingsBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_charge_settingsBtn.Image")));
             this.primary_charge_settingsBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.primary_charge_settingsBtn.Name = "primary_charge_settingsBtn";
-            this.primary_charge_settingsBtn.Size = new System.Drawing.Size(40, 22);
+            this.primary_charge_settingsBtn.Size = new System.Drawing.Size(41, 34);
             this.primary_charge_settingsBtn.Text = " ";
             this.primary_charge_settingsBtn.ToolTipText = "Settings";
             // 
@@ -1419,7 +1417,7 @@ namespace Isotope_fitting
             // toolStripButton11
             // 
             this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(40, 6);
+            this.toolStripButton11.Size = new System.Drawing.Size(41, 6);
             // 
             // axChargeSave_Btn
             // 
@@ -1437,7 +1435,7 @@ namespace Isotope_fitting
             this.axChargeCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axChargeCopy_Btn.Image")));
             this.axChargeCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.axChargeCopy_Btn.Name = "axChargeCopy_Btn";
-            this.axChargeCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.axChargeCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.axChargeCopy_Btn.Text = "Copy";
             this.axChargeCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1451,7 +1449,7 @@ namespace Isotope_fitting
             this.form_primCharge_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.form_primCharge_Btn.Name = "form_primCharge_Btn";
             this.form_primCharge_Btn.RightToLeftAutoMirrorImage = true;
-            this.form_primCharge_Btn.Size = new System.Drawing.Size(40, 22);
+            this.form_primCharge_Btn.Size = new System.Drawing.Size(41, 34);
             this.form_primCharge_Btn.Text = " ";
             // 
             // extractPlotToolStripMenuItem7
@@ -1474,7 +1472,7 @@ namespace Isotope_fitting
             this.up1_Btn.Image = ((System.Drawing.Image)(resources.GetObject("up1_Btn.Image")));
             this.up1_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.up1_Btn.Name = "up1_Btn";
-            this.up1_Btn.Size = new System.Drawing.Size(40, 24);
+            this.up1_Btn.Size = new System.Drawing.Size(41, 24);
             this.up1_Btn.Text = "a";
             // 
             // down1_Btn
@@ -1509,9 +1507,9 @@ namespace Isotope_fitting
             // 
             // splitter1
             // 
-            this.splitter1.Location = new System.Drawing.Point(746, 31);
+            this.splitter1.Location = new System.Drawing.Point(746, 43);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(5, 689);
+            this.splitter1.Size = new System.Drawing.Size(5, 677);
             this.splitter1.TabIndex = 25;
             this.splitter1.TabStop = false;
             // 
@@ -1523,9 +1521,9 @@ namespace Isotope_fitting
             this.panel1_tab3.Controls.Add(this.groupBoxIntensity2);
             this.panel1_tab3.Controls.Add(this.groupBoxIntensity1);
             this.panel1_tab3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1_tab3.Location = new System.Drawing.Point(3, 31);
+            this.panel1_tab3.Location = new System.Drawing.Point(3, 43);
             this.panel1_tab3.Name = "panel1_tab3";
-            this.panel1_tab3.Size = new System.Drawing.Size(743, 689);
+            this.panel1_tab3.Size = new System.Drawing.Size(743, 677);
             this.panel1_tab3.TabIndex = 24;
             // 
             // groupBoxIntensity4
@@ -1583,7 +1581,7 @@ namespace Isotope_fitting
             this.dzCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("dzCopy_Btn.Image")));
             this.dzCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dzCopy_Btn.Name = "dzCopy_Btn";
-            this.dzCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.dzCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.dzCopy_Btn.Text = "Copy";
             this.dzCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1595,7 +1593,7 @@ namespace Isotope_fitting
             this.toolStripDropDownButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton3.Image")));
             this.toolStripDropDownButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton3.Name = "toolStripDropDownButton3";
-            this.toolStripDropDownButton3.Size = new System.Drawing.Size(40, 22);
+            this.toolStripDropDownButton3.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem_dz
             // 
@@ -1677,7 +1675,7 @@ namespace Isotope_fitting
             this.czCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("czCopy_Btn.Image")));
             this.czCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.czCopy_Btn.Name = "czCopy_Btn";
-            this.czCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.czCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.czCopy_Btn.Text = "Copy";
             this.czCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1689,7 +1687,7 @@ namespace Isotope_fitting
             this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(40, 22);
+            this.toolStripButton6.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem8
             // 
@@ -1771,7 +1769,7 @@ namespace Isotope_fitting
             this.byCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("byCopy_Btn.Image")));
             this.byCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.byCopy_Btn.Name = "byCopy_Btn";
-            this.byCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.byCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.byCopy_Btn.Text = "Copy";
             this.byCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1783,7 +1781,7 @@ namespace Isotope_fitting
             this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(40, 22);
+            this.toolStripButton5.Size = new System.Drawing.Size(41, 34);
             // 
             // extractPlotToolStripMenuItem4
             // 
@@ -1860,7 +1858,7 @@ namespace Isotope_fitting
             this.primary_intens_settingsBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_intens_settingsBtn.Image")));
             this.primary_intens_settingsBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.primary_intens_settingsBtn.Name = "primary_intens_settingsBtn";
-            this.primary_intens_settingsBtn.Size = new System.Drawing.Size(40, 22);
+            this.primary_intens_settingsBtn.Size = new System.Drawing.Size(41, 34);
             this.primary_intens_settingsBtn.Text = " ";
             this.primary_intens_settingsBtn.ToolTipText = "Settings";
             // 
@@ -1876,7 +1874,7 @@ namespace Isotope_fitting
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(40, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(41, 6);
             // 
             // axSave_Btn
             // 
@@ -1894,7 +1892,7 @@ namespace Isotope_fitting
             this.axCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("axCopy_Btn.Image")));
             this.axCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.axCopy_Btn.Name = "axCopy_Btn";
-            this.axCopy_Btn.Size = new System.Drawing.Size(40, 22);
+            this.axCopy_Btn.Size = new System.Drawing.Size(41, 34);
             this.axCopy_Btn.Text = "Copy";
             this.axCopy_Btn.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -1907,7 +1905,7 @@ namespace Isotope_fitting
             this.form_prim_Btn.Image = ((System.Drawing.Image)(resources.GetObject("form_prim_Btn.Image")));
             this.form_prim_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.form_prim_Btn.Name = "form_prim_Btn";
-            this.form_prim_Btn.Size = new System.Drawing.Size(40, 22);
+            this.form_prim_Btn.Size = new System.Drawing.Size(41, 34);
             this.form_prim_Btn.Text = " ";
             // 
             // extractPlotToolStripMenuItem3
@@ -1943,7 +1941,7 @@ namespace Isotope_fitting
             this.panel5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel5.Location = new System.Drawing.Point(3, 3);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1356, 28);
+            this.panel5.Size = new System.Drawing.Size(1356, 40);
             this.panel5.TabIndex = 34;
             // 
             // label1
@@ -1954,7 +1952,8 @@ namespace Isotope_fitting
             this.label1.ForeColor = System.Drawing.Color.RosyBrown;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(170, 20);
+            this.label1.Padding = new System.Windows.Forms.Padding(0, 9, 0, 0);
+            this.label1.Size = new System.Drawing.Size(170, 29);
             this.label1.TabIndex = 26;
             this.label1.Text = "Primary fragments\' plot";
             // 
@@ -2619,7 +2618,7 @@ namespace Isotope_fitting
             this.ppmCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppmCopy_Btn.Image")));
             this.ppmCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppmCopy_Btn.Name = "ppmCopy_Btn";
-            this.ppmCopy_Btn.Size = new System.Drawing.Size(30, 22);
+            this.ppmCopy_Btn.Size = new System.Drawing.Size(42, 34);
             this.ppmCopy_Btn.Text = "Copy";
             // 
             // ppm_legend_Btn
@@ -2629,7 +2628,7 @@ namespace Isotope_fitting
             this.ppm_legend_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_legend_Btn.Image")));
             this.ppm_legend_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_legend_Btn.Name = "ppm_legend_Btn";
-            this.ppm_legend_Btn.Size = new System.Drawing.Size(30, 22);
+            this.ppm_legend_Btn.Size = new System.Drawing.Size(42, 34);
             this.ppm_legend_Btn.CheckedChanged += new System.EventHandler(this.ppm_legend_Btn_CheckedChanged);
             // 
             // ppm_extract_btn
@@ -2641,7 +2640,7 @@ namespace Isotope_fitting
             this.ppm_extract_btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_extract_btn.Image")));
             this.ppm_extract_btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_extract_btn.Name = "ppm_extract_btn";
-            this.ppm_extract_btn.Size = new System.Drawing.Size(30, 22);
+            this.ppm_extract_btn.Size = new System.Drawing.Size(42, 34);
             // 
             // extractPlotToolStripMenuItem9
             // 
@@ -2821,7 +2820,7 @@ namespace Isotope_fitting
             this.seqCopy_BtnCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seqCopy_BtnCopy2.Image")));
             this.seqCopy_BtnCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqCopy_BtnCopy2.Name = "seqCopy_BtnCopy2";
-            this.seqCopy_BtnCopy2.Size = new System.Drawing.Size(22, 22);
+            this.seqCopy_BtnCopy2.Size = new System.Drawing.Size(33, 34);
             this.seqCopy_BtnCopy2.Text = "Copy";
             // 
             // seqLegendBtnCopy2
@@ -2831,7 +2830,7 @@ namespace Isotope_fitting
             this.seqLegendBtnCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seqLegendBtnCopy2.Image")));
             this.seqLegendBtnCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtnCopy2.Name = "seqLegendBtnCopy2";
-            this.seqLegendBtnCopy2.Size = new System.Drawing.Size(22, 22);
+            this.seqLegendBtnCopy2.Size = new System.Drawing.Size(33, 34);
             this.seqLegendBtnCopy2.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // ax_chBxCopy2
@@ -3118,7 +3117,7 @@ namespace Isotope_fitting
             this.seqCopy_BtnCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seqCopy_BtnCopy1.Image")));
             this.seqCopy_BtnCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqCopy_BtnCopy1.Name = "seqCopy_BtnCopy1";
-            this.seqCopy_BtnCopy1.Size = new System.Drawing.Size(22, 22);
+            this.seqCopy_BtnCopy1.Size = new System.Drawing.Size(33, 34);
             this.seqCopy_BtnCopy1.Text = "Copy";
             // 
             // seqLegendBtnCopy1
@@ -3128,7 +3127,7 @@ namespace Isotope_fitting
             this.seqLegendBtnCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seqLegendBtnCopy1.Image")));
             this.seqLegendBtnCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtnCopy1.Name = "seqLegendBtnCopy1";
-            this.seqLegendBtnCopy1.Size = new System.Drawing.Size(22, 22);
+            this.seqLegendBtnCopy1.Size = new System.Drawing.Size(33, 34);
             this.seqLegendBtnCopy1.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // ax_chBxCopy1
@@ -3416,7 +3415,7 @@ namespace Isotope_fitting
             this.seqCopy_Btn.Image = ((System.Drawing.Image)(resources.GetObject("seqCopy_Btn.Image")));
             this.seqCopy_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqCopy_Btn.Name = "seqCopy_Btn";
-            this.seqCopy_Btn.Size = new System.Drawing.Size(22, 22);
+            this.seqCopy_Btn.Size = new System.Drawing.Size(33, 34);
             this.seqCopy_Btn.Text = "Copy";
             // 
             // seqLegendBtn
@@ -3426,13 +3425,13 @@ namespace Isotope_fitting
             this.seqLegendBtn.Image = ((System.Drawing.Image)(resources.GetObject("seqLegendBtn.Image")));
             this.seqLegendBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtn.Name = "seqLegendBtn";
-            this.seqLegendBtn.Size = new System.Drawing.Size(22, 22);
+            this.seqLegendBtn.Size = new System.Drawing.Size(33, 34);
             this.seqLegendBtn.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // toolStripButton12
             // 
             this.toolStripButton12.Name = "toolStripButton12";
-            this.toolStripButton12.Size = new System.Drawing.Size(22, 6);
+            this.toolStripButton12.Size = new System.Drawing.Size(33, 6);
             // 
             // seq_coverageBtn
             // 
@@ -3440,7 +3439,7 @@ namespace Isotope_fitting
             this.seq_coverageBtn.Image = ((System.Drawing.Image)(resources.GetObject("seq_coverageBtn.Image")));
             this.seq_coverageBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seq_coverageBtn.Name = "seq_coverageBtn";
-            this.seq_coverageBtn.Size = new System.Drawing.Size(22, 22);
+            this.seq_coverageBtn.Size = new System.Drawing.Size(33, 34);
             this.seq_coverageBtn.ToolTipText = "Sequence coverage statistics";
             this.seq_coverageBtn.Click += new System.EventHandler(this.seq_coverageBtn_Click);
             // 
@@ -3450,7 +3449,7 @@ namespace Isotope_fitting
             this.highlightProp_Btn.Image = ((System.Drawing.Image)(resources.GetObject("highlightProp_Btn.Image")));
             this.highlightProp_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.highlightProp_Btn.Name = "highlightProp_Btn";
-            this.highlightProp_Btn.Size = new System.Drawing.Size(22, 22);
+            this.highlightProp_Btn.Size = new System.Drawing.Size(33, 34);
             this.highlightProp_Btn.Text = "Highlight properties";
             this.highlightProp_Btn.Click += new System.EventHandler(this.highlightProp_Btn_Click);
             // 
@@ -3609,8 +3608,8 @@ namespace Isotope_fitting
             | System.Windows.Forms.AnchorStyles.Right)));
             this.plots_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.plots_grpBox.Controls.Add(this.fit_grpBox);
-            this.plots_grpBox.Controls.Add(this.toolStrip_plot);
             this.plots_grpBox.Controls.Add(this.res_grpBox);
+            this.plots_grpBox.Controls.Add(this.toolStrip_plot);
             this.plots_grpBox.Location = new System.Drawing.Point(3, 3);
             this.plots_grpBox.Name = "plots_grpBox";
             this.plots_grpBox.Size = new System.Drawing.Size(743, 717);
@@ -3627,27 +3626,34 @@ namespace Isotope_fitting
             this.fit_grpBox.TabIndex = 4;
             this.fit_grpBox.TabStop = false;
             // 
+            // res_grpBox
+            // 
+            this.res_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.res_grpBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.res_grpBox.Location = new System.Drawing.Point(0, 450);
+            this.res_grpBox.Name = "res_grpBox";
+            this.res_grpBox.Size = new System.Drawing.Size(743, 267);
+            this.res_grpBox.TabIndex = 1;
+            this.res_grpBox.TabStop = false;
+            // 
             // toolStrip_plot
             // 
             this.toolStrip_plot.AutoSize = false;
-            this.toolStrip_plot.BackColor = System.Drawing.Color.Lavender;
+            this.toolStrip_plot.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip_plot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStrip_plot.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_plot.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip_plot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.chartFormatBtn,
-            this.exportImage_Btn,
             this.autoscale_Btn,
             this.cursor_chkBx,
-            this.copyImage_Btn,
             this.zoomIn_Y_Btn,
             this.zoomOut_Y_Btn,
             this.legend_chkBx,
-            this.fragPlotLbl_chkBx,
+            this.frag_lbl_Btn,
             this.toolStripButton1,
-            this.fragPlotLbl_chkBx2,
-            this.toolStripButton2,
             this.toolStripButton3,
+            this.view_fragBtn,
             this.disp_a,
             this.disp_b,
             this.disp_c,
@@ -3692,18 +3698,6 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
             // 
-            // exportImage_Btn
-            // 
-            this.exportImage_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.exportImage_Btn.Image = ((System.Drawing.Image)(resources.GetObject("exportImage_Btn.Image")));
-            this.exportImage_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.exportImage_Btn.Name = "exportImage_Btn";
-            this.exportImage_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.exportImage_Btn.Size = new System.Drawing.Size(34, 29);
-            this.exportImage_Btn.ToolTipText = "Export Image";
-            this.exportImage_Btn.Visible = false;
-            this.exportImage_Btn.Click += new System.EventHandler(this.exportImage_Btn_Click);
-            // 
             // autoscale_Btn
             // 
             this.autoscale_Btn.Checked = true;
@@ -3728,18 +3722,6 @@ namespace Isotope_fitting
             this.cursor_chkBx.Size = new System.Drawing.Size(34, 29);
             this.cursor_chkBx.Text = "Show Cursor";
             this.cursor_chkBx.CheckStateChanged += new System.EventHandler(this.cursor_chkBx_CheckStateChanged);
-            // 
-            // copyImage_Btn
-            // 
-            this.copyImage_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.copyImage_Btn.Image = ((System.Drawing.Image)(resources.GetObject("copyImage_Btn.Image")));
-            this.copyImage_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copyImage_Btn.Name = "copyImage_Btn";
-            this.copyImage_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.copyImage_Btn.Size = new System.Drawing.Size(34, 29);
-            this.copyImage_Btn.ToolTipText = "Copy Image";
-            this.copyImage_Btn.Visible = false;
-            this.copyImage_Btn.Click += new System.EventHandler(this.copyImage_Btn_Click);
             // 
             // zoomIn_Y_Btn
             // 
@@ -3773,39 +3755,25 @@ namespace Isotope_fitting
             this.legend_chkBx.Text = "Show Legends";
             this.legend_chkBx.CheckedChanged += new System.EventHandler(this.legend_chkBx_CheckedChanged);
             // 
-            // fragPlotLbl_chkBx
+            // frag_lbl_Btn
             // 
-            this.fragPlotLbl_chkBx.CheckOnClick = true;
-            this.fragPlotLbl_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx.Image")));
-            this.fragPlotLbl_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fragPlotLbl_chkBx.Name = "fragPlotLbl_chkBx";
-            this.fragPlotLbl_chkBx.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.fragPlotLbl_chkBx.Size = new System.Drawing.Size(83, 29);
-            this.fragPlotLbl_chkBx.Text = "Primary";
-            this.fragPlotLbl_chkBx.ToolTipText = "Show primary fragments label";
-            this.fragPlotLbl_chkBx.CheckedChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
+            this.frag_lbl_Btn.CheckOnClick = true;
+            this.frag_lbl_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.frag_lbl_Btn.DoubleClickEnabled = true;
+            this.frag_lbl_Btn.Image = ((System.Drawing.Image)(resources.GetObject("frag_lbl_Btn.Image")));
+            this.frag_lbl_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.frag_lbl_Btn.Name = "frag_lbl_Btn";
+            this.frag_lbl_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.frag_lbl_Btn.Size = new System.Drawing.Size(34, 29);
+            this.frag_lbl_Btn.Text = "Display Fragments\' Label";
+            this.frag_lbl_Btn.ToolTipText = "Show primary fragments label";
+            this.frag_lbl_Btn.CheckStateChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
+            this.frag_lbl_Btn.DoubleClick += new System.EventHandler(this.fragPlotLbl_chkBx_DoubleClick);
             // 
             // toolStripButton1
             // 
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(6, 32);
-            // 
-            // fragPlotLbl_chkBx2
-            // 
-            this.fragPlotLbl_chkBx2.CheckOnClick = true;
-            this.fragPlotLbl_chkBx2.Image = ((System.Drawing.Image)(resources.GetObject("fragPlotLbl_chkBx2.Image")));
-            this.fragPlotLbl_chkBx2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fragPlotLbl_chkBx2.Name = "fragPlotLbl_chkBx2";
-            this.fragPlotLbl_chkBx2.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.fragPlotLbl_chkBx2.Size = new System.Drawing.Size(82, 29);
-            this.fragPlotLbl_chkBx2.Text = "Internal";
-            this.fragPlotLbl_chkBx2.ToolTipText = "Show internal fragments label";
-            this.fragPlotLbl_chkBx2.CheckedChanged += new System.EventHandler(this.fragPlotLbl_chkBx2_CheckedChanged);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButton3
             // 
@@ -3813,6 +3781,16 @@ namespace Isotope_fitting
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(6, 32);
             this.toolStripButton3.Visible = false;
+            // 
+            // view_fragBtn
+            // 
+            this.view_fragBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.view_fragBtn.Image = ((System.Drawing.Image)(resources.GetObject("view_fragBtn.Image")));
+            this.view_fragBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.view_fragBtn.Name = "view_fragBtn";
+            this.view_fragBtn.Size = new System.Drawing.Size(34, 29);
+            this.view_fragBtn.Text = "Display properties";
+            this.view_fragBtn.Click += new System.EventHandler(this.view_fragBtn_Click);
             // 
             // disp_a
             // 
@@ -3958,21 +3936,10 @@ namespace Isotope_fitting
             this.disp_internal.Text = "inter.";
             this.disp_internal.ToolTipText = "Control whether internal fragments will appear to plot";
             // 
-            // res_grpBox
-            // 
-            this.res_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.res_grpBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.res_grpBox.Location = new System.Drawing.Point(0, 450);
-            this.res_grpBox.Name = "res_grpBox";
-            this.res_grpBox.Size = new System.Drawing.Size(743, 267);
-            this.res_grpBox.TabIndex = 1;
-            this.res_grpBox.TabStop = false;
-            // 
             // user_grpBox
             // 
             this.user_grpBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.user_grpBox.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.user_grpBox.Controls.Add(this.Fit_results_groupBox);
             this.user_grpBox.Controls.Add(this.fitOptions_grpBox);
             this.user_grpBox.Controls.Add(this.theorData_grpBx);
             this.user_grpBox.Controls.Add(this.expData_grpBx);
@@ -3986,6 +3953,20 @@ namespace Isotope_fitting
             this.user_grpBox.Size = new System.Drawing.Size(610, 717);
             this.user_grpBox.TabIndex = 1;
             // 
+            // fitOptions_grpBox
+            // 
+            this.fitOptions_grpBox.Controls.Add(this.Fit_results_groupBox);
+            this.fitOptions_grpBox.Controls.Add(this.fitting_toolStrip);
+            this.fitOptions_grpBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fitOptions_grpBox.ForeColor = System.Drawing.Color.SteelBlue;
+            this.fitOptions_grpBox.Location = new System.Drawing.Point(0, 239);
+            this.fitOptions_grpBox.Name = "fitOptions_grpBox";
+            this.fitOptions_grpBox.Size = new System.Drawing.Size(214, 478);
+            this.fitOptions_grpBox.TabIndex = 4;
+            this.fitOptions_grpBox.TabStop = false;
+            this.fitOptions_grpBox.Text = "Fitting";
+            // 
             // Fit_results_groupBox
             // 
             this.Fit_results_groupBox.Controls.Add(this.bigPanel);
@@ -3993,12 +3974,12 @@ namespace Isotope_fitting
             this.Fit_results_groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Fit_results_groupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Fit_results_groupBox.ForeColor = System.Drawing.Color.SteelBlue;
-            this.Fit_results_groupBox.Location = new System.Drawing.Point(0, 299);
+            this.Fit_results_groupBox.Location = new System.Drawing.Point(3, 56);
             this.Fit_results_groupBox.Name = "Fit_results_groupBox";
-            this.Fit_results_groupBox.Size = new System.Drawing.Size(228, 418);
+            this.Fit_results_groupBox.Size = new System.Drawing.Size(208, 419);
             this.Fit_results_groupBox.TabIndex = 10000019;
             this.Fit_results_groupBox.TabStop = false;
-            this.Fit_results_groupBox.Text = "Fit results";
+            this.Fit_results_groupBox.Text = "results";
             // 
             // bigPanel
             // 
@@ -4011,9 +3992,9 @@ namespace Isotope_fitting
             this.bigPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bigPanel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.bigPanel.Location = new System.Drawing.Point(3, 55);
-            this.bigPanel.MinimumSize = new System.Drawing.Size(217, 217);
+            this.bigPanel.MinimumSize = new System.Drawing.Size(200, 217);
             this.bigPanel.Name = "bigPanel";
-            this.bigPanel.Size = new System.Drawing.Size(222, 360);
+            this.bigPanel.Size = new System.Drawing.Size(202, 361);
             this.bigPanel.TabIndex = 10000000;
             this.bigPanel.WrapContents = false;
             // 
@@ -4029,7 +4010,7 @@ namespace Isotope_fitting
             this.refresh_fitRes_Btn});
             this.toolStrip_fit_sort.Location = new System.Drawing.Point(3, 18);
             this.toolStrip_fit_sort.Name = "toolStrip_fit_sort";
-            this.toolStrip_fit_sort.Size = new System.Drawing.Size(222, 37);
+            this.toolStrip_fit_sort.Size = new System.Drawing.Size(202, 37);
             this.toolStrip_fit_sort.TabIndex = 10000016;
             this.toolStrip_fit_sort.Text = "toolStrip1";
             // 
@@ -4071,21 +4052,8 @@ namespace Isotope_fitting
             this.refresh_fitRes_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.refresh_fitRes_Btn.Name = "refresh_fitRes_Btn";
             this.refresh_fitRes_Btn.Size = new System.Drawing.Size(34, 34);
-            this.refresh_fitRes_Btn.Text = "Refresh \'Fit results\'";
+            this.refresh_fitRes_Btn.Text = "Refresh \'Fit results\' based on \'Sort Settings\'";
             this.refresh_fitRes_Btn.Click += new System.EventHandler(this.refresh_fitRes_Btn_Click);
-            // 
-            // fitOptions_grpBox
-            // 
-            this.fitOptions_grpBox.Controls.Add(this.fitting_toolStrip);
-            this.fitOptions_grpBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.fitOptions_grpBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fitOptions_grpBox.ForeColor = System.Drawing.Color.SteelBlue;
-            this.fitOptions_grpBox.Location = new System.Drawing.Point(0, 239);
-            this.fitOptions_grpBox.Name = "fitOptions_grpBox";
-            this.fitOptions_grpBox.Size = new System.Drawing.Size(228, 60);
-            this.fitOptions_grpBox.TabIndex = 4;
-            this.fitOptions_grpBox.TabStop = false;
-            this.fitOptions_grpBox.Text = "Fitting";
             // 
             // fitting_toolStrip
             // 
@@ -4102,7 +4070,7 @@ namespace Isotope_fitting
             this.fitting_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.fitting_toolStrip.Location = new System.Drawing.Point(3, 19);
             this.fitting_toolStrip.Name = "fitting_toolStrip";
-            this.fitting_toolStrip.Size = new System.Drawing.Size(222, 37);
+            this.fitting_toolStrip.Size = new System.Drawing.Size(208, 37);
             this.fitting_toolStrip.TabIndex = 47;
             this.fitting_toolStrip.Text = "toolStrip1";
             // 
@@ -4147,6 +4115,27 @@ namespace Isotope_fitting
             this.fit_chkGrpsChkFragBtn.Text = "Fit checked Fragments in checked groups";
             this.fit_chkGrpsChkFragBtn.Click += new System.EventHandler(this.fit_chkGrpsChkFragBtn_Click_1);
             // 
+            // Fitting_chkBox
+            // 
+            this.Fitting_chkBox.CheckOnClick = true;
+            this.Fitting_chkBox.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.Fitting_chkBox.Image = ((System.Drawing.Image)(resources.GetObject("Fitting_chkBox.Image")));
+            this.Fitting_chkBox.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Fitting_chkBox.Name = "Fitting_chkBox";
+            this.Fitting_chkBox.Size = new System.Drawing.Size(34, 34);
+            this.Fitting_chkBox.Text = "Plot fit";
+            this.Fitting_chkBox.CheckedChanged += new System.EventHandler(this.Fitting_chkBox_CheckedChanged_1);
+            // 
+            // fitSettings_Btn
+            // 
+            this.fitSettings_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.fitSettings_Btn.Image = ((System.Drawing.Image)(resources.GetObject("fitSettings_Btn.Image")));
+            this.fitSettings_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fitSettings_Btn.Name = "fitSettings_Btn";
+            this.fitSettings_Btn.Size = new System.Drawing.Size(34, 34);
+            this.fitSettings_Btn.Text = "Fit Settings";
+            this.fitSettings_Btn.Click += new System.EventHandler(this.fitSettings_Btn_Click);
+            // 
             // theorData_grpBx
             // 
             this.theorData_grpBx.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -4157,7 +4146,7 @@ namespace Isotope_fitting
             this.theorData_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
             this.theorData_grpBx.Location = new System.Drawing.Point(0, 127);
             this.theorData_grpBx.Name = "theorData_grpBx";
-            this.theorData_grpBx.Size = new System.Drawing.Size(228, 112);
+            this.theorData_grpBx.Size = new System.Drawing.Size(214, 112);
             this.theorData_grpBx.TabIndex = 2;
             this.theorData_grpBx.TabStop = false;
             this.theorData_grpBx.Text = "Theoretical Data";
@@ -4165,12 +4154,13 @@ namespace Isotope_fitting
             // MSproduct_treeView
             // 
             this.MSproduct_treeView.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.MSproduct_treeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MSproduct_treeView.ContextMenuStrip = this.contextMenuStrip_MSproduct;
             this.MSproduct_treeView.Dock = System.Windows.Forms.DockStyle.Top;
             this.MSproduct_treeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MSproduct_treeView.Location = new System.Drawing.Point(3, 56);
             this.MSproduct_treeView.Name = "MSproduct_treeView";
-            this.MSproduct_treeView.Size = new System.Drawing.Size(222, 54);
+            this.MSproduct_treeView.Size = new System.Drawing.Size(208, 54);
             this.MSproduct_treeView.TabIndex = 122;
             // 
             // theoretical_toolStrip
@@ -4188,7 +4178,7 @@ namespace Isotope_fitting
             this.theoretical_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.theoretical_toolStrip.Location = new System.Drawing.Point(3, 19);
             this.theoretical_toolStrip.Name = "theoretical_toolStrip";
-            this.theoretical_toolStrip.Size = new System.Drawing.Size(222, 37);
+            this.theoretical_toolStrip.Size = new System.Drawing.Size(208, 37);
             this.theoretical_toolStrip.TabIndex = 124;
             this.theoretical_toolStrip.Text = "toolStrip1";
             // 
@@ -4265,7 +4255,7 @@ namespace Isotope_fitting
             this.expData_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
             this.expData_grpBx.Location = new System.Drawing.Point(0, 59);
             this.expData_grpBx.Name = "expData_grpBx";
-            this.expData_grpBx.Size = new System.Drawing.Size(228, 68);
+            this.expData_grpBx.Size = new System.Drawing.Size(214, 68);
             this.expData_grpBx.TabIndex = 0;
             this.expData_grpBx.TabStop = false;
             this.expData_grpBx.Text = "Experimental Data";
@@ -4279,7 +4269,7 @@ namespace Isotope_fitting
             this.filename_txtBx.Location = new System.Drawing.Point(3, 56);
             this.filename_txtBx.Name = "filename_txtBx";
             this.filename_txtBx.ReadOnly = true;
-            this.filename_txtBx.Size = new System.Drawing.Size(222, 11);
+            this.filename_txtBx.Size = new System.Drawing.Size(208, 11);
             this.filename_txtBx.TabIndex = 41;
             // 
             // experimental_toolStrip
@@ -4296,7 +4286,7 @@ namespace Isotope_fitting
             this.experimental_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.experimental_toolStrip.Location = new System.Drawing.Point(3, 19);
             this.experimental_toolStrip.Name = "experimental_toolStrip";
-            this.experimental_toolStrip.Size = new System.Drawing.Size(222, 37);
+            this.experimental_toolStrip.Size = new System.Drawing.Size(208, 37);
             this.experimental_toolStrip.TabIndex = 42;
             this.experimental_toolStrip.Text = "toolStrip1";
             // 
@@ -4328,6 +4318,7 @@ namespace Isotope_fitting
             this.displayPeakList_btn.Name = "displayPeakList_btn";
             this.displayPeakList_btn.Size = new System.Drawing.Size(34, 34);
             this.displayPeakList_btn.ToolTipText = "Show peak list";
+            this.displayPeakList_btn.Click += new System.EventHandler(this.displayPeakList_btn_Click);
             // 
             // plotExp_chkBox
             // 
@@ -4360,7 +4351,7 @@ namespace Isotope_fitting
             this.project_grpBx.ForeColor = System.Drawing.Color.SteelBlue;
             this.project_grpBx.Location = new System.Drawing.Point(0, 0);
             this.project_grpBx.Name = "project_grpBx";
-            this.project_grpBx.Size = new System.Drawing.Size(228, 59);
+            this.project_grpBx.Size = new System.Drawing.Size(214, 59);
             this.project_grpBx.TabIndex = 10000020;
             this.project_grpBx.TabStop = false;
             this.project_grpBx.Text = "Project";
@@ -4375,11 +4366,11 @@ namespace Isotope_fitting
             this.save_proj_Btn,
             this.clear_proj_Btn,
             this.application_proj_Btn,
-            this.toolStripButton18});
+            this.help_Btn});
             this.project_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.project_toolStrip.Location = new System.Drawing.Point(3, 19);
             this.project_toolStrip.Name = "project_toolStrip";
-            this.project_toolStrip.Size = new System.Drawing.Size(222, 37);
+            this.project_toolStrip.Size = new System.Drawing.Size(208, 37);
             this.project_toolStrip.TabIndex = 0;
             this.project_toolStrip.Text = "toolStrip1";
             // 
@@ -4420,8 +4411,19 @@ namespace Isotope_fitting
             this.application_proj_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.application_proj_Btn.Name = "application_proj_Btn";
             this.application_proj_Btn.Size = new System.Drawing.Size(34, 34);
+            this.application_proj_Btn.Text = "Select Application";
             this.application_proj_Btn.ToolTipText = "Select Application";
             this.application_proj_Btn.Click += new System.EventHandler(this.application_proj_Btn_Click);
+            // 
+            // help_Btn
+            // 
+            this.help_Btn.CheckOnClick = true;
+            this.help_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.help_Btn.Image = ((System.Drawing.Image)(resources.GetObject("help_Btn.Image")));
+            this.help_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.help_Btn.Name = "help_Btn";
+            this.help_Btn.Size = new System.Drawing.Size(34, 34);
+            this.help_Btn.Text = "Help";
             // 
             // splitContainer2
             // 
@@ -4432,9 +4434,9 @@ namespace Isotope_fitting
             this.splitContainer2.Controls.Add(this.fragTypes_toolStrip);
             this.splitContainer2.Controls.Add(this.fragTypes_tree);
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitContainer2.Location = new System.Drawing.Point(228, 0);
+            this.splitContainer2.Location = new System.Drawing.Point(214, 0);
             this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Size = new System.Drawing.Size(382, 717);
+            this.splitContainer2.Size = new System.Drawing.Size(396, 717);
             this.splitContainer2.TabIndex = 10000018;
             // 
             // panel2
@@ -4443,7 +4445,7 @@ namespace Isotope_fitting
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel2.Location = new System.Drawing.Point(0, 59);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(382, 387);
+            this.panel2.Size = new System.Drawing.Size(396, 387);
             this.panel2.TabIndex = 116;
             // 
             // panel1
@@ -4453,7 +4455,7 @@ namespace Isotope_fitting
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(382, 59);
+            this.panel1.Size = new System.Drawing.Size(396, 59);
             this.panel1.TabIndex = 115;
             // 
             // toolStrip_fragList
@@ -4482,7 +4484,7 @@ namespace Isotope_fitting
             this.toolStrip_fragList.Name = "toolStrip_fragList";
             this.toolStrip_fragList.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip_fragList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip_fragList.Size = new System.Drawing.Size(382, 37);
+            this.toolStrip_fragList.Size = new System.Drawing.Size(396, 37);
             this.toolStrip_fragList.TabIndex = 119;
             // 
             // loadListBtn11
@@ -4498,7 +4500,6 @@ namespace Isotope_fitting
             this.loadListBtn11.Size = new System.Drawing.Size(43, 34);
             this.loadListBtn11.Text = "Load fragments from a \' .fit \' file";
             this.loadListBtn11.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
-            this.loadListBtn11.Click += new System.EventHandler(this.loadListBtn11_Click);
             // 
             // loadFragmentsToolStripMenuItem
             // 
@@ -4593,6 +4594,7 @@ namespace Isotope_fitting
             this.show_files_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.show_files_Btn.Size = new System.Drawing.Size(34, 34);
             this.show_files_Btn.Text = "Display loaded Fragment lists";
+            this.show_files_Btn.Click += new System.EventHandler(this.show_files_Btn_Click);
             // 
             // statistics_Btn
             // 
@@ -4646,7 +4648,7 @@ namespace Isotope_fitting
             this.factor_panel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.factor_panel.Location = new System.Drawing.Point(0, 446);
             this.factor_panel.Name = "factor_panel";
-            this.factor_panel.Size = new System.Drawing.Size(382, 30);
+            this.factor_panel.Size = new System.Drawing.Size(396, 30);
             this.factor_panel.TabIndex = 114;
             // 
             // fragTypes_toolStrip
@@ -4663,7 +4665,7 @@ namespace Isotope_fitting
             this.fragTypes_toolStrip.Name = "fragTypes_toolStrip";
             this.fragTypes_toolStrip.Padding = new System.Windows.Forms.Padding(0);
             this.fragTypes_toolStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.fragTypes_toolStrip.Size = new System.Drawing.Size(382, 37);
+            this.fragTypes_toolStrip.Size = new System.Drawing.Size(396, 37);
             this.fragTypes_toolStrip.TabIndex = 120;
             this.fragTypes_toolStrip.Visible = false;
             // 
@@ -4674,7 +4676,7 @@ namespace Isotope_fitting
             this.save_FragTypes_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.save_FragTypes_Btn.Name = "save_FragTypes_Btn";
             this.save_FragTypes_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.save_FragTypes_Btn.Size = new System.Drawing.Size(24, 24);
+            this.save_FragTypes_Btn.Size = new System.Drawing.Size(34, 34);
             this.save_FragTypes_Btn.Text = "Save checked fragments";
             this.save_FragTypes_Btn.Click += new System.EventHandler(this.save_FragTypes_Btn_Click);
             // 
@@ -4698,7 +4700,7 @@ namespace Isotope_fitting
             this.fragTypes_tree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fragTypes_tree.Location = new System.Drawing.Point(0, 493);
             this.fragTypes_tree.Name = "fragTypes_tree";
-            this.fragTypes_tree.Size = new System.Drawing.Size(382, 224);
+            this.fragTypes_tree.Size = new System.Drawing.Size(396, 224);
             this.fragTypes_tree.TabIndex = 112;
             this.fragTypes_tree.Visible = false;
             // 
@@ -4756,7 +4758,7 @@ namespace Isotope_fitting
             // losses_splitContainer
             // 
             this.losses_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.losses_splitContainer.Location = new System.Drawing.Point(3, 37);
+            this.losses_splitContainer.Location = new System.Drawing.Point(3, 43);
             this.losses_splitContainer.Name = "losses_splitContainer";
             // 
             // losses_splitContainer.Panel1
@@ -4774,7 +4776,7 @@ namespace Isotope_fitting
             this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_y);
             this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_x);
             this.losses_splitContainer.Panel2.Controls.Add(this.losses_groupBox_w);
-            this.losses_splitContainer.Size = new System.Drawing.Size(1356, 683);
+            this.losses_splitContainer.Size = new System.Drawing.Size(1356, 677);
             this.losses_splitContainer.SplitterDistance = 709;
             this.losses_splitContainer.TabIndex = 33;
             // 
@@ -4860,7 +4862,7 @@ namespace Isotope_fitting
             this.losses_DropBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn7.Image")));
             this.losses_DropBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn7.Name = "losses_DropBtn7";
-            this.losses_DropBtn7.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn7.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn7.Text = " ";
             // 
             // losses_extractBtn7
@@ -4985,7 +4987,7 @@ namespace Isotope_fitting
             this.losses_copyBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn5.Image")));
             this.losses_copyBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn5.Name = "losses_copyBtn5";
-            this.losses_copyBtn5.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn5.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn5.Text = "Copy";
             this.losses_copyBtn5.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -4998,7 +5000,7 @@ namespace Isotope_fitting
             this.losses_DropBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn5.Image")));
             this.losses_DropBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn5.Name = "losses_DropBtn5";
-            this.losses_DropBtn5.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn5.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn5.Text = " ";
             // 
             // losses_extractBtn5
@@ -5123,7 +5125,7 @@ namespace Isotope_fitting
             this.losses_copyBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn3.Image")));
             this.losses_copyBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn3.Name = "losses_copyBtn3";
-            this.losses_copyBtn3.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn3.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn3.Text = "Copy";
             this.losses_copyBtn3.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5136,7 +5138,7 @@ namespace Isotope_fitting
             this.losses_DropBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn3.Image")));
             this.losses_DropBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn3.Name = "losses_DropBtn3";
-            this.losses_DropBtn3.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn3.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn3.Text = " ";
             // 
             // losses_extractBtn3
@@ -5261,7 +5263,7 @@ namespace Isotope_fitting
             this.losses_copyBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn1.Image")));
             this.losses_copyBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn1.Name = "losses_copyBtn1";
-            this.losses_copyBtn1.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn1.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn1.Text = "Copy";
             this.losses_copyBtn1.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5274,7 +5276,7 @@ namespace Isotope_fitting
             this.losses_DropBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn1.Image")));
             this.losses_DropBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn1.Name = "losses_DropBtn1";
-            this.losses_DropBtn1.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn1.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn1.Text = " ";
             // 
             // losses_extractBtn1
@@ -5399,7 +5401,7 @@ namespace Isotope_fitting
             this.losses_copyBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn8.Image")));
             this.losses_copyBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn8.Name = "losses_copyBtn8";
-            this.losses_copyBtn8.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn8.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn8.Text = "Copy";
             this.losses_copyBtn8.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5412,7 +5414,7 @@ namespace Isotope_fitting
             this.losses_DropBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn8.Image")));
             this.losses_DropBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn8.Name = "losses_DropBtn8";
-            this.losses_DropBtn8.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn8.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn8.Text = " ";
             // 
             // losses_extractBtn8
@@ -5537,7 +5539,7 @@ namespace Isotope_fitting
             this.losses_copyBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn6.Image")));
             this.losses_copyBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn6.Name = "losses_copyBtn6";
-            this.losses_copyBtn6.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn6.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn6.Text = "Copy";
             this.losses_copyBtn6.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5550,7 +5552,7 @@ namespace Isotope_fitting
             this.losses_DropBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn6.Image")));
             this.losses_DropBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn6.Name = "losses_DropBtn6";
-            this.losses_DropBtn6.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn6.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn6.Text = " ";
             // 
             // losses_extractBtn6
@@ -5675,7 +5677,7 @@ namespace Isotope_fitting
             this.losses_copyBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn4.Image")));
             this.losses_copyBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn4.Name = "losses_copyBtn4";
-            this.losses_copyBtn4.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn4.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn4.Text = "Copy";
             this.losses_copyBtn4.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5688,7 +5690,7 @@ namespace Isotope_fitting
             this.losses_DropBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn4.Image")));
             this.losses_DropBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn4.Name = "losses_DropBtn4";
-            this.losses_DropBtn4.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn4.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn4.Text = " ";
             // 
             // losses_extractBtn4
@@ -5813,7 +5815,7 @@ namespace Isotope_fitting
             this.losses_copyBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_copyBtn2.Image")));
             this.losses_copyBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_copyBtn2.Name = "losses_copyBtn2";
-            this.losses_copyBtn2.Size = new System.Drawing.Size(41, 22);
+            this.losses_copyBtn2.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn2.Text = "Copy";
             this.losses_copyBtn2.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
             // 
@@ -5826,7 +5828,7 @@ namespace Isotope_fitting
             this.losses_DropBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_DropBtn2.Image")));
             this.losses_DropBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_DropBtn2.Name = "losses_DropBtn2";
-            this.losses_DropBtn2.Size = new System.Drawing.Size(41, 22);
+            this.losses_DropBtn2.Size = new System.Drawing.Size(41, 34);
             this.losses_DropBtn2.Text = " ";
             // 
             // losses_extractBtn2
@@ -5891,7 +5893,7 @@ namespace Isotope_fitting
             this.panel3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel3.Location = new System.Drawing.Point(3, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1356, 34);
+            this.panel3.Size = new System.Drawing.Size(1356, 40);
             this.panel3.TabIndex = 32;
             // 
             // toolStrip1
@@ -5899,13 +5901,13 @@ namespace Isotope_fitting
             this.toolStrip1.BackColor = System.Drawing.Color.White;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton4});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(349, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(34, 34);
+            this.toolStrip1.Size = new System.Drawing.Size(46, 40);
             this.toolStrip1.TabIndex = 25;
             // 
             // toolStripDropDownButton4
@@ -5918,7 +5920,7 @@ namespace Isotope_fitting
             this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
             this.toolStripDropDownButton4.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            this.toolStripDropDownButton4.Size = new System.Drawing.Size(31, 31);
+            this.toolStripDropDownButton4.Size = new System.Drawing.Size(43, 37);
             this.toolStripDropDownButton4.Text = " ";
             this.toolStripDropDownButton4.ToolTipText = "Settings";
             // 
@@ -5926,7 +5928,7 @@ namespace Isotope_fitting
             // 
             this.losses_style_Btn.Image = ((System.Drawing.Image)(resources.GetObject("losses_style_Btn.Image")));
             this.losses_style_Btn.Name = "losses_style_Btn";
-            this.losses_style_Btn.Size = new System.Drawing.Size(101, 24);
+            this.losses_style_Btn.Size = new System.Drawing.Size(113, 36);
             this.losses_style_Btn.Text = "Style";
             this.losses_style_Btn.ToolTipText = "Format the style of the plots in this tab";
             this.losses_style_Btn.Click += new System.EventHandler(this.losses_style_Btn_Click);
@@ -5939,8 +5941,8 @@ namespace Isotope_fitting
             this.losses_label.ForeColor = System.Drawing.Color.Crimson;
             this.losses_label.Location = new System.Drawing.Point(0, 0);
             this.losses_label.Name = "losses_label";
-            this.losses_label.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.losses_label.Size = new System.Drawing.Size(349, 25);
+            this.losses_label.Padding = new System.Windows.Forms.Padding(0, 9, 0, 0);
+            this.losses_label.Size = new System.Drawing.Size(349, 29);
             this.losses_label.TabIndex = 2;
             this.losses_label.Text = "Intramolecular Hydrogen Atom Rearrangements";
             // 
@@ -5952,37 +5954,6 @@ namespace Isotope_fitting
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
-            // 
-            // toolStripButton18
-            // 
-            this.toolStripButton18.CheckOnClick = true;
-            this.toolStripButton18.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton18.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton18.Image")));
-            this.toolStripButton18.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton18.Name = "toolStripButton18";
-            this.toolStripButton18.Size = new System.Drawing.Size(34, 34);
-            this.toolStripButton18.Text = "toolStripButton18";
-            // 
-            // Fitting_chkBox
-            // 
-            this.Fitting_chkBox.CheckOnClick = true;
-            this.Fitting_chkBox.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.Fitting_chkBox.Image = ((System.Drawing.Image)(resources.GetObject("Fitting_chkBox.Image")));
-            this.Fitting_chkBox.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Fitting_chkBox.Name = "Fitting_chkBox";
-            this.Fitting_chkBox.Size = new System.Drawing.Size(34, 34);
-            this.Fitting_chkBox.Text = "Plot fit";
-            this.Fitting_chkBox.CheckedChanged += new System.EventHandler(this.Fitting_chkBox_CheckedChanged_1);
-            // 
-            // fitSettings_Btn
-            // 
-            this.fitSettings_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.fitSettings_Btn.Image = ((System.Drawing.Image)(resources.GetObject("fitSettings_Btn.Image")));
-            this.fitSettings_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fitSettings_Btn.Name = "fitSettings_Btn";
-            this.fitSettings_Btn.Size = new System.Drawing.Size(34, 34);
-            this.fitSettings_Btn.Text = "Fit Settings";
-            this.fitSettings_Btn.Click += new System.EventHandler(this.fitSettings_Btn_Click);
             // 
             // Form2
             // 
@@ -6099,12 +6070,12 @@ namespace Isotope_fitting
             this.toolStrip_plot.PerformLayout();
             this.user_grpBox.ResumeLayout(false);
             this.user_grpBox.PerformLayout();
+            this.fitOptions_grpBox.ResumeLayout(false);
+            this.fitOptions_grpBox.PerformLayout();
             this.Fit_results_groupBox.ResumeLayout(false);
             this.Fit_results_groupBox.PerformLayout();
             this.toolStrip_fit_sort.ResumeLayout(false);
             this.toolStrip_fit_sort.PerformLayout();
-            this.fitOptions_grpBox.ResumeLayout(false);
-            this.fitOptions_grpBox.PerformLayout();
             this.fitting_toolStrip.ResumeLayout(false);
             this.fitting_toolStrip.PerformLayout();
             this.theorData_grpBx.ResumeLayout(false);
@@ -6418,17 +6389,12 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripDropDownButton chartFormatBtn;
         private System.Windows.Forms.ToolStripMenuItem styleFormatBtn;
         private System.Windows.Forms.ToolStripMenuItem extractPlotToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton exportImage_Btn;
         private System.Windows.Forms.ToolStripButton autoscale_Btn;
         private System.Windows.Forms.ToolStripButton cursor_chkBx;
-        private System.Windows.Forms.ToolStripButton copyImage_Btn;
         private System.Windows.Forms.ToolStripButton zoomIn_Y_Btn;
         private System.Windows.Forms.ToolStripButton zoomOut_Y_Btn;
         private System.Windows.Forms.ToolStripButton legend_chkBx;
-        private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx;
         private System.Windows.Forms.ToolStripSeparator toolStripButton1;
-        private System.Windows.Forms.ToolStripButton fragPlotLbl_chkBx2;
-        private System.Windows.Forms.ToolStripSeparator toolStripButton2;
         private System.Windows.Forms.ToolStripSeparator toolStripButton3;
         private System.Windows.Forms.ToolStripButton disp_a;
         private System.Windows.Forms.ToolStripButton disp_b;
@@ -6635,8 +6601,10 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton fit_sel_Btn;
         private System.Windows.Forms.ToolStripButton fit_chkGrpsBtn;
         private System.Windows.Forms.ToolStripButton fit_chkGrpsChkFragBtn;
-        private System.Windows.Forms.ToolStripButton toolStripButton18;
+        private System.Windows.Forms.ToolStripButton help_Btn;
         private System.Windows.Forms.ToolStripButton Fitting_chkBox;
         private System.Windows.Forms.ToolStripButton fitSettings_Btn;
+        private System.Windows.Forms.ToolStripButton frag_lbl_Btn;
+        private System.Windows.Forms.ToolStripButton view_fragBtn;
     }
 }

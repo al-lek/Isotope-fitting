@@ -38,13 +38,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.min_numUD = new System.Windows.Forms.NumericUpDown();
             this.max_numUD = new System.Windows.Forms.NumericUpDown();
-            this.btn = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.seq_reg_numUD = new System.Windows.Forms.NumericUpDown();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.save_Btn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // hightlight_clr_Btn
@@ -150,21 +152,6 @@
             this.max_numUD.Size = new System.Drawing.Size(120, 20);
             this.max_numUD.TabIndex = 26;
             // 
-            // btn
-            // 
-            this.btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn.BackColor = System.Drawing.Color.Green;
-            this.btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btn.Location = new System.Drawing.Point(285, 260);
-            this.btn.Name = "btn";
-            this.btn.Size = new System.Drawing.Size(64, 24);
-            this.btn.TabIndex = 27;
-            this.btn.Text = "Save";
-            this.btn.UseVisualStyleBackColor = false;
-            this.btn.Click += new System.EventHandler(this.btn_Click);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -205,15 +192,40 @@
             0,
             0});
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.save_Btn});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 260);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(362, 37);
+            this.toolStrip1.TabIndex = 31;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // save_Btn
+            // 
+            this.save_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.save_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.save_Btn.Image = ((System.Drawing.Image)(resources.GetObject("save_Btn.Image")));
+            this.save_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.save_Btn.Name = "save_Btn";
+            this.save_Btn.Size = new System.Drawing.Size(34, 34);
+            this.save_Btn.Text = "Save";
+            this.save_Btn.Click += new System.EventHandler(this.btn_Click);
+            // 
             // Form23
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 297);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.seq_reg_numUD);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.btn);
             this.Controls.Add(this.max_numUD);
             this.Controls.Add(this.min_numUD);
             this.Controls.Add(this.label4);
@@ -233,6 +245,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -249,9 +263,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown min_numUD;
         private System.Windows.Forms.NumericUpDown max_numUD;
-        private System.Windows.Forms.Button btn;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown seq_reg_numUD;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton save_Btn;
     }
 }

@@ -29,39 +29,23 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form16));
-            this.seq_Btn = new System.Windows.Forms.Button();
             this.add_tab_page = new System.Windows.Forms.TabPage();
             this.seq_tabControl = new System.Windows.Forms.TabControl();
             this.seq_tab = new System.Windows.Forms.TabPage();
             this.seq_BoxFrm16 = new System.Windows.Forms.RichTextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.seq_Btn = new System.Windows.Forms.ToolStripButton();
             this.seq_tabControl.SuspendLayout();
             this.seq_tab.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // seq_Btn
-            // 
-            this.seq_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.seq_Btn.BackColor = System.Drawing.Color.ForestGreen;
-            this.seq_Btn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.seq_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.seq_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.seq_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.seq_Btn.Location = new System.Drawing.Point(546, 19);
-            this.seq_Btn.Name = "seq_Btn";
-            this.seq_Btn.Size = new System.Drawing.Size(119, 32);
-            this.seq_Btn.TabIndex = 1;
-            this.seq_Btn.Text = "Save Sequence ";
-            this.seq_Btn.UseVisualStyleBackColor = false;
-            this.seq_Btn.Click += new System.EventHandler(this.seq_Btn_Click);
             // 
             // add_tab_page
             // 
             this.add_tab_page.Location = new System.Drawing.Point(4, 22);
             this.add_tab_page.Name = "add_tab_page";
             this.add_tab_page.Padding = new System.Windows.Forms.Padding(3);
-            this.add_tab_page.Size = new System.Drawing.Size(698, 353);
+            this.add_tab_page.Size = new System.Drawing.Size(673, 313);
             this.add_tab_page.TabIndex = 3;
             this.add_tab_page.Text = "+";
             this.add_tab_page.UseVisualStyleBackColor = true;
@@ -74,7 +58,7 @@
             this.seq_tabControl.Location = new System.Drawing.Point(0, 0);
             this.seq_tabControl.Name = "seq_tabControl";
             this.seq_tabControl.SelectedIndex = 0;
-            this.seq_tabControl.Size = new System.Drawing.Size(681, 339);
+            this.seq_tabControl.Size = new System.Drawing.Size(681, 369);
             this.seq_tabControl.TabIndex = 3;
             this.seq_tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.seq_tabControl_Selecting);
             this.seq_tabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.seq_tabControl_MouseDown);
@@ -85,7 +69,7 @@
             this.seq_tab.Location = new System.Drawing.Point(4, 22);
             this.seq_tab.Name = "seq_tab";
             this.seq_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.seq_tab.Size = new System.Drawing.Size(673, 313);
+            this.seq_tab.Size = new System.Drawing.Size(673, 343);
             this.seq_tab.TabIndex = 0;
             this.seq_tab.Text = "General Sequence";
             this.seq_tab.UseVisualStyleBackColor = true;
@@ -100,20 +84,35 @@
             this.seq_BoxFrm16.Name = "seq_BoxFrm16";
             this.seq_BoxFrm16.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.seq_BoxFrm16.ShowSelectionMargin = true;
-            this.seq_BoxFrm16.Size = new System.Drawing.Size(667, 307);
+            this.seq_BoxFrm16.Size = new System.Drawing.Size(667, 337);
             this.seq_BoxFrm16.TabIndex = 2;
             this.seq_BoxFrm16.Text = "";
             this.seq_BoxFrm16.TextChanged += new System.EventHandler(this.seq_BoxFrm16_TextChanged);
             // 
-            // groupBox1
+            // toolStrip1
             // 
-            this.groupBox1.Controls.Add(this.seq_Btn);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 339);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(681, 67);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
+            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.seq_Btn});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 369);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(681, 37);
+            this.toolStrip1.TabIndex = 33;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // seq_Btn
+            // 
+            this.seq_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.seq_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_Btn.Image = ((System.Drawing.Image)(resources.GetObject("seq_Btn.Image")));
+            this.seq_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_Btn.Name = "seq_Btn";
+            this.seq_Btn.Size = new System.Drawing.Size(34, 34);
+            this.seq_Btn.Text = "Save Sequence";
+            this.seq_Btn.Click += new System.EventHandler(this.seq_Btn_Click);
             // 
             // Form16
             // 
@@ -121,7 +120,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(681, 406);
             this.Controls.Add(this.seq_tabControl);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -132,18 +131,19 @@
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form16_DpiChanged);
             this.seq_tabControl.ResumeLayout(false);
             this.seq_tab.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button seq_Btn;
         private System.Windows.Forms.TabPage add_tab_page;
         private System.Windows.Forms.TabControl seq_tabControl;
         private System.Windows.Forms.TabPage seq_tab;
         private System.Windows.Forms.RichTextBox seq_BoxFrm16;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton seq_Btn;
     }
 }

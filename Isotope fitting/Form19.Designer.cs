@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form19));
             this.ppm_lbl = new System.Windows.Forms.Label();
             this.fragGrps_lbl = new System.Windows.Forms.Label();
             this.ppm_numUD = new System.Windows.Forms.NumericUpDown();
@@ -76,11 +77,12 @@
             this.num_min_1 = new System.Windows.Forms.NumericUpDown();
             this.max_ppm_label = new System.Windows.Forms.Label();
             this.ppm_1 = new System.Windows.Forms.NumericUpDown();
-            this.save_Btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.thre_numUD = new System.Windows.Forms.NumericUpDown();
-            this.exclusionList_Btn = new System.Windows.Forms.Button();
-            this.ignore_ppm_chkBox = new System.Windows.Forms.CheckBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.save_Btn = new System.Windows.Forms.ToolStripButton();
+            this.exclusionList_Btn = new System.Windows.Forms.ToolStripButton();
+            this.ignore_ppm_chkBox = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fragGrps_numUD)).BeginInit();
             this.entire_grpBx.SuspendLayout();
@@ -104,6 +106,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.num_min_1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ppm_lbl
@@ -830,27 +833,12 @@
             0,
             0});
             // 
-            // save_Btn
-            // 
-            this.save_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.save_Btn.BackColor = System.Drawing.Color.Green;
-            this.save_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.save_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.save_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.save_Btn.Location = new System.Drawing.Point(709, 246);
-            this.save_Btn.Name = "save_Btn";
-            this.save_Btn.Size = new System.Drawing.Size(62, 23);
-            this.save_Btn.TabIndex = 4;
-            this.save_Btn.Text = "Save";
-            this.save_Btn.UseVisualStyleBackColor = false;
-            this.save_Btn.Click += new System.EventHandler(this.save_Btn_Click);
-            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(16, 212);
+            this.label1.Location = new System.Drawing.Point(16, 216);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(173, 15);
             this.label1.TabIndex = 5;
@@ -865,7 +853,7 @@
             0,
             0,
             131072});
-            this.thre_numUD.Location = new System.Drawing.Point(199, 209);
+            this.thre_numUD.Location = new System.Drawing.Point(199, 213);
             this.thre_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -885,42 +873,64 @@
             0,
             131072});
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.save_Btn,
+            this.exclusionList_Btn,
+            this.ignore_ppm_chkBox});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 248);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(778, 37);
+            this.toolStrip1.TabIndex = 32;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // save_Btn
+            // 
+            this.save_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.save_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.save_Btn.Image = ((System.Drawing.Image)(resources.GetObject("save_Btn.Image")));
+            this.save_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.save_Btn.Name = "save_Btn";
+            this.save_Btn.Size = new System.Drawing.Size(34, 34);
+            this.save_Btn.Text = "Save";
+            this.save_Btn.Click += new System.EventHandler(this.save_Btn_Click);
+            // 
             // exclusionList_Btn
             // 
-            this.exclusionList_Btn.BackColor = System.Drawing.Color.DarkOrange;
-            this.exclusionList_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.exclusionList_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.exclusionList_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.exclusionList_Btn.Location = new System.Drawing.Point(582, 246);
+            this.exclusionList_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.exclusionList_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.exclusionList_Btn.Image = ((System.Drawing.Image)(resources.GetObject("exclusionList_Btn.Image")));
+            this.exclusionList_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.exclusionList_Btn.Name = "exclusionList_Btn";
-            this.exclusionList_Btn.Size = new System.Drawing.Size(105, 23);
-            this.exclusionList_Btn.TabIndex = 9;
+            this.exclusionList_Btn.Size = new System.Drawing.Size(34, 34);
             this.exclusionList_Btn.Text = "Exclusion List";
-            this.exclusionList_Btn.UseVisualStyleBackColor = false;
             this.exclusionList_Btn.Click += new System.EventHandler(this.exclusionList_Btn_Click);
             // 
             // ignore_ppm_chkBox
             // 
-            this.ignore_ppm_chkBox.AutoSize = true;
-            this.ignore_ppm_chkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ignore_ppm_chkBox.Location = new System.Drawing.Point(444, 246);
+            this.ignore_ppm_chkBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ignore_ppm_chkBox.CheckOnClick = true;
+            this.ignore_ppm_chkBox.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ignore_ppm_chkBox.Image = ((System.Drawing.Image)(resources.GetObject("ignore_ppm_chkBox.Image")));
+            this.ignore_ppm_chkBox.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ignore_ppm_chkBox.Name = "ignore_ppm_chkBox";
-            this.ignore_ppm_chkBox.Size = new System.Drawing.Size(99, 19);
-            this.ignore_ppm_chkBox.TabIndex = 10;
+            this.ignore_ppm_chkBox.Size = new System.Drawing.Size(34, 34);
             this.ignore_ppm_chkBox.Text = "ignore ppm";
-            this.ignore_ppm_chkBox.UseVisualStyleBackColor = true;
-            this.ignore_ppm_chkBox.CheckedChanged += new System.EventHandler(this.ignore_ppm_chkBox_CheckedChanged);
+            this.ignore_ppm_chkBox.Click += new System.EventHandler(this.ignore_ppm_chkBox_Click);
             // 
             // Form19
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(791, 281);
-            this.Controls.Add(this.ignore_ppm_chkBox);
-            this.Controls.Add(this.exclusionList_Btn);
+            this.ClientSize = new System.Drawing.Size(778, 285);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.thre_numUD);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.save_Btn);
             this.Controls.Add(this.region_grpBox);
             this.Controls.Add(this.entire_grpBx);
             this.Controls.Add(this.regions_chkBx);
@@ -960,6 +970,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.num_min_1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppm_1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1015,10 +1027,11 @@
         private System.Windows.Forms.NumericUpDown num_max_3;
         private System.Windows.Forms.NumericUpDown num_min_3;
         private System.Windows.Forms.NumericUpDown ppm_3;
-        private System.Windows.Forms.Button save_Btn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown thre_numUD;
-        private System.Windows.Forms.Button exclusionList_Btn;
-        private System.Windows.Forms.CheckBox ignore_ppm_chkBox;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton save_Btn;
+        private System.Windows.Forms.ToolStripButton exclusionList_Btn;
+        private System.Windows.Forms.ToolStripButton ignore_ppm_chkBox;
     }
 }

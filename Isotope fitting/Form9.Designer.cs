@@ -32,6 +32,8 @@
             System.Windows.Forms.ColumnHeader z_clmn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.toolStrip6 = new System.Windows.Forms.ToolStrip();
+            this.calc_Btn = new System.Windows.Forms.ToolStripButton();
             this.label8 = new System.Windows.Forms.Label();
             this.thre_numUD = new System.Windows.Forms.NumericUpDown();
             this.resolution_Box = new System.Windows.Forms.TextBox();
@@ -39,8 +41,10 @@
             this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
             this.FragCalc_TabControl = new System.Windows.Forms.TabControl();
             this.chemForm_tab = new System.Windows.Forms.TabPage();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.clear_chem_multBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.load_chems_file_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.clear_chemBtn = new System.Windows.Forms.ToolStripButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -54,7 +58,6 @@
             this.extensionBox1 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.filename_txtBx = new System.Windows.Forms.TextBox();
-            this.load_chems_file_Btn = new System.Windows.Forms.Button();
             this.multChem_max_charge = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -162,7 +165,6 @@
             this.minCharge_txtBox_riken = new System.Windows.Forms.TextBox();
             this.chemForm_txtBox_riken = new System.Windows.Forms.TextBox();
             this.chemForm_Lbl_riken = new System.Windows.Forms.Label();
-            this.calc_Btn = new System.Windows.Forms.Button();
             this.half_minus_rdBtn = new System.Windows.Forms.RadioButton();
             this.calc_param9Lbl = new System.Windows.Forms.Label();
             this.ppm9_Lbl = new System.Windows.Forms.Label();
@@ -172,7 +174,6 @@
             this.half_rdBtn = new System.Windows.Forms.RadioButton();
             this.two_rdBtn = new System.Windows.Forms.RadioButton();
             this.three_rdBtn = new System.Windows.Forms.RadioButton();
-            this.insert_Btn = new System.Windows.Forms.Button();
             this.statusStrpFrm9 = new System.Windows.Forms.StatusStrip();
             this.progressLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ProgressBar9 = new System.Windows.Forms.ToolStripProgressBar();
@@ -184,17 +185,19 @@
             this.seq_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppm_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.plot_Btn = new System.Windows.Forms.Button();
-            this.rem_Btn = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.toolStrip5 = new System.Windows.Forms.ToolStrip();
+            this.insert_Btn = new System.Windows.Forms.ToolStripButton();
+            this.plot_Btn = new System.Windows.Forms.ToolStripButton();
+            this.rem_Btn = new System.Windows.Forms.ToolStripButton();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
+            this.toolStrip6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).BeginInit();
             this.FragCalc_TabControl.SuspendLayout();
             this.chemForm_tab.SuspendLayout();
+            this.toolStrip4.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -207,8 +210,7 @@
             this.toolStrip3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).BeginInit();
             this.statusStrpFrm9.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.toolStrip5.SuspendLayout();
             this.SuspendLayout();
             // 
             // z_clmn
@@ -220,13 +222,13 @@
             // 
             this.panel_calc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel_calc.BackColor = System.Drawing.Color.White;
+            this.panel_calc.Controls.Add(this.toolStrip6);
             this.panel_calc.Controls.Add(this.label8);
             this.panel_calc.Controls.Add(this.thre_numUD);
             this.panel_calc.Controls.Add(this.resolution_Box);
             this.panel_calc.Controls.Add(this.label1);
             this.panel_calc.Controls.Add(this.ignore_ppm_form9);
             this.panel_calc.Controls.Add(this.FragCalc_TabControl);
-            this.panel_calc.Controls.Add(this.calc_Btn);
             this.panel_calc.Controls.Add(this.half_minus_rdBtn);
             this.panel_calc.Controls.Add(this.calc_param9Lbl);
             this.panel_calc.Controls.Add(this.ppm9_Lbl);
@@ -241,8 +243,32 @@
             this.panel_calc.Location = new System.Drawing.Point(0, 0);
             this.panel_calc.MaximumSize = new System.Drawing.Size(500, 1500);
             this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Size = new System.Drawing.Size(427, 673);
+            this.panel_calc.Size = new System.Drawing.Size(427, 694);
             this.panel_calc.TabIndex = 4;
+            // 
+            // toolStrip6
+            // 
+            this.toolStrip6.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip6.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip6.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.calc_Btn});
+            this.toolStrip6.Location = new System.Drawing.Point(0, 647);
+            this.toolStrip6.Name = "toolStrip6";
+            this.toolStrip6.Size = new System.Drawing.Size(427, 47);
+            this.toolStrip6.TabIndex = 65;
+            this.toolStrip6.Text = "toolStrip6";
+            // 
+            // calc_Btn
+            // 
+            this.calc_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.calc_Btn.Image = ((System.Drawing.Image)(resources.GetObject("calc_Btn.Image")));
+            this.calc_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.calc_Btn.Name = "calc_Btn";
+            this.calc_Btn.Size = new System.Drawing.Size(44, 44);
+            this.calc_Btn.Text = "Calculate";
+            this.calc_Btn.Click += new System.EventHandler(this.calc_Btn_Click);
             // 
             // label8
             // 
@@ -250,7 +276,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label8.Location = new System.Drawing.Point(5, 585);
+            this.label8.Location = new System.Drawing.Point(5, 606);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(152, 13);
             this.label8.TabIndex = 64;
@@ -265,7 +291,7 @@
             0,
             0,
             131072});
-            this.thre_numUD.Location = new System.Drawing.Point(188, 581);
+            this.thre_numUD.Location = new System.Drawing.Point(188, 602);
             this.thre_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -289,7 +315,7 @@
             // 
             this.resolution_Box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.resolution_Box.ForeColor = System.Drawing.Color.Black;
-            this.resolution_Box.Location = new System.Drawing.Point(101, 438);
+            this.resolution_Box.Location = new System.Drawing.Point(101, 459);
             this.resolution_Box.Name = "resolution_Box";
             this.resolution_Box.Size = new System.Drawing.Size(167, 20);
             this.resolution_Box.TabIndex = 61;
@@ -303,7 +329,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.label1.Location = new System.Drawing.Point(25, 441);
+            this.label1.Location = new System.Drawing.Point(25, 462);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 60;
@@ -316,7 +342,7 @@
             this.ignore_ppm_form9.Checked = true;
             this.ignore_ppm_form9.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ignore_ppm_form9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ignore_ppm_form9.Location = new System.Drawing.Point(190, 466);
+            this.ignore_ppm_form9.Location = new System.Drawing.Point(190, 487);
             this.ignore_ppm_form9.Name = "ignore_ppm_form9";
             this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
             this.ignore_ppm_form9.TabIndex = 58;
@@ -337,17 +363,17 @@
             this.FragCalc_TabControl.Location = new System.Drawing.Point(0, 0);
             this.FragCalc_TabControl.Name = "FragCalc_TabControl";
             this.FragCalc_TabControl.SelectedIndex = 0;
-            this.FragCalc_TabControl.Size = new System.Drawing.Size(424, 411);
+            this.FragCalc_TabControl.Size = new System.Drawing.Size(424, 432);
             this.FragCalc_TabControl.TabIndex = 57;
             // 
             // chemForm_tab
             // 
+            this.chemForm_tab.Controls.Add(this.toolStrip4);
             this.chemForm_tab.Controls.Add(this.toolStrip2);
             this.chemForm_tab.Controls.Add(this.toolStrip1);
             this.chemForm_tab.Controls.Add(this.groupBox2);
             this.chemForm_tab.Controls.Add(this.groupBox3);
             this.chemForm_tab.Controls.Add(this.filename_txtBx);
-            this.chemForm_tab.Controls.Add(this.load_chems_file_Btn);
             this.chemForm_tab.Controls.Add(this.multChem_max_charge);
             this.chemForm_tab.Controls.Add(this.label3);
             this.chemForm_tab.Controls.Add(this.label4);
@@ -376,54 +402,80 @@
             this.chemForm_tab.Text = "Chemical formula";
             this.chemForm_tab.UseVisualStyleBackColor = true;
             // 
+            // toolStrip4
+            // 
+            this.toolStrip4.BackColor = System.Drawing.Color.White;
+            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clear_chem_multBtn});
+            this.toolStrip4.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip4.Location = new System.Drawing.Point(354, 355);
+            this.toolStrip4.Name = "toolStrip4";
+            this.toolStrip4.Size = new System.Drawing.Size(35, 37);
+            this.toolStrip4.TabIndex = 67;
+            // 
+            // clear_chem_multBtn
+            // 
+            this.clear_chem_multBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chem_multBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.clear_chem_multBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.clear_chem_multBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chem_multBtn.Image")));
+            this.clear_chem_multBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.clear_chem_multBtn.Name = "clear_chem_multBtn";
+            this.clear_chem_multBtn.Size = new System.Drawing.Size(34, 34);
+            this.clear_chem_multBtn.Text = "Clear Data";
+            this.clear_chem_multBtn.ToolTipText = "Clear Data";
+            this.clear_chem_multBtn.Click += new System.EventHandler(this.clear_multiple_chem_Btn_Click);
+            // 
             // toolStrip2
             // 
             this.toolStrip2.BackColor = System.Drawing.Color.White;
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clear_chem_multBtn});
+            this.load_chems_file_Btn});
             this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.toolStrip2.Location = new System.Drawing.Point(301, 346);
+            this.toolStrip2.Location = new System.Drawing.Point(114, 307);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(91, 32);
+            this.toolStrip2.Size = new System.Drawing.Size(35, 37);
             this.toolStrip2.TabIndex = 66;
             // 
-            // clear_chem_multBtn
+            // load_chems_file_Btn
             // 
-            this.clear_chem_multBtn.BackColor = System.Drawing.Color.Transparent;
-            this.clear_chem_multBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.clear_chem_multBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chem_multBtn.Image")));
-            this.clear_chem_multBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clear_chem_multBtn.Name = "clear_chem_multBtn";
-            this.clear_chem_multBtn.Size = new System.Drawing.Size(90, 29);
-            this.clear_chem_multBtn.Text = "Clear Data";
-            this.clear_chem_multBtn.ToolTipText = "Clear Data";
-            this.clear_chem_multBtn.Click += new System.EventHandler(this.clear_multiple_chem_Btn_Click);
+            this.load_chems_file_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.load_chems_file_Btn.Image = ((System.Drawing.Image)(resources.GetObject("load_chems_file_Btn.Image")));
+            this.load_chems_file_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.load_chems_file_Btn.Name = "load_chems_file_Btn";
+            this.load_chems_file_Btn.Size = new System.Drawing.Size(34, 34);
+            this.load_chems_file_Btn.Text = "Load File";
+            this.load_chems_file_Btn.Click += new System.EventHandler(this.load_chems_file_Btn_Click);
             // 
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.Color.White;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clear_chemBtn});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.toolStrip1.Location = new System.Drawing.Point(301, 187);
+            this.toolStrip1.Location = new System.Drawing.Point(350, 182);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(91, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(35, 37);
             this.toolStrip1.TabIndex = 65;
             // 
             // clear_chemBtn
             // 
             this.clear_chemBtn.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chemBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.clear_chemBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.clear_chemBtn.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn.Image")));
             this.clear_chemBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.clear_chemBtn.Name = "clear_chemBtn";
-            this.clear_chemBtn.Size = new System.Drawing.Size(90, 29);
+            this.clear_chemBtn.Size = new System.Drawing.Size(34, 34);
             this.clear_chemBtn.Text = "Clear Data";
             this.clear_chemBtn.ToolTipText = "Clear Data";
             this.clear_chemBtn.Click += new System.EventHandler(this.clear_single_chem_Btn_Click);
@@ -550,21 +602,6 @@
             this.filename_txtBx.ReadOnly = true;
             this.filename_txtBx.Size = new System.Drawing.Size(391, 11);
             this.filename_txtBx.TabIndex = 59;
-            // 
-            // load_chems_file_Btn
-            // 
-            this.load_chems_file_Btn.BackColor = System.Drawing.Color.MediumSlateBlue;
-            this.load_chems_file_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.load_chems_file_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.load_chems_file_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.load_chems_file_Btn.Location = new System.Drawing.Point(3, 354);
-            this.load_chems_file_Btn.Name = "load_chems_file_Btn";
-            this.load_chems_file_Btn.Size = new System.Drawing.Size(90, 24);
-            this.load_chems_file_Btn.TabIndex = 56;
-            this.load_chems_file_Btn.Text = "Load File";
-            this.toolTip1.SetToolTip(this.load_chems_file_Btn, "Load a file with chemical formulas and names of fragments");
-            this.load_chems_file_Btn.UseVisualStyleBackColor = false;
-            this.load_chems_file_Btn.Click += new System.EventHandler(this.load_chems_file_Btn_Click);
             // 
             // multChem_max_charge
             // 
@@ -1765,7 +1802,7 @@
             this.chemForm_tab_riken.Location = new System.Drawing.Point(4, 22);
             this.chemForm_tab_riken.Name = "chemForm_tab_riken";
             this.chemForm_tab_riken.Padding = new System.Windows.Forms.Padding(3);
-            this.chemForm_tab_riken.Size = new System.Drawing.Size(416, 385);
+            this.chemForm_tab_riken.Size = new System.Drawing.Size(416, 406);
             this.chemForm_tab_riken.TabIndex = 3;
             this.chemForm_tab_riken.Text = "Chemical formula";
             this.chemForm_tab_riken.UseVisualStyleBackColor = true;
@@ -1775,23 +1812,24 @@
             this.toolStrip3.BackColor = System.Drawing.Color.White;
             this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clear_chemBtn_riken});
             this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.toolStrip3.Location = new System.Drawing.Point(305, 116);
+            this.toolStrip3.Location = new System.Drawing.Point(357, 118);
             this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(91, 32);
+            this.toolStrip3.Size = new System.Drawing.Size(35, 37);
             this.toolStrip3.TabIndex = 66;
             // 
             // clear_chemBtn_riken
             // 
             this.clear_chemBtn_riken.BackColor = System.Drawing.Color.Transparent;
+            this.clear_chemBtn_riken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.clear_chemBtn_riken.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.clear_chemBtn_riken.Image = ((System.Drawing.Image)(resources.GetObject("clear_chemBtn_riken.Image")));
             this.clear_chemBtn_riken.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.clear_chemBtn_riken.Name = "clear_chemBtn_riken";
-            this.clear_chemBtn_riken.Size = new System.Drawing.Size(90, 29);
+            this.clear_chemBtn_riken.Size = new System.Drawing.Size(34, 34);
             this.clear_chemBtn_riken.Text = "Clear Data";
             this.clear_chemBtn_riken.ToolTipText = "Clear Data";
             this.clear_chemBtn_riken.Click += new System.EventHandler(this.clear_single_chem_Btn_riken_Click);
@@ -1905,30 +1943,12 @@
             this.chemForm_Lbl_riken.TabIndex = 2;
             this.chemForm_Lbl_riken.Text = "Chemical Formula";
             // 
-            // calc_Btn
-            // 
-            this.calc_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.calc_Btn.BackColor = System.Drawing.Color.MidnightBlue;
-            this.calc_Btn.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
-            this.calc_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.calc_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.calc_Btn.ForeColor = System.Drawing.SystemColors.Control;
-            this.calc_Btn.Location = new System.Drawing.Point(3, 617);
-            this.calc_Btn.Name = "calc_Btn";
-            this.calc_Btn.Size = new System.Drawing.Size(97, 24);
-            this.calc_Btn.TabIndex = 41;
-            this.calc_Btn.Text = "Calculate";
-            this.toolTip1.SetToolTip(this.calc_Btn, "\'Calculate\' removes previously calculated fragments from the \'Fragment Calculator" +
-        "\' list");
-            this.calc_Btn.UseVisualStyleBackColor = false;
-            this.calc_Btn.Click += new System.EventHandler(this.calc_Btn_Click);
-            // 
             // half_minus_rdBtn
             // 
             this.half_minus_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.half_minus_rdBtn.AutoSize = true;
             this.half_minus_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_minus_rdBtn.Location = new System.Drawing.Point(152, 526);
+            this.half_minus_rdBtn.Location = new System.Drawing.Point(152, 547);
             this.half_minus_rdBtn.Name = "half_minus_rdBtn";
             this.half_minus_rdBtn.Size = new System.Drawing.Size(113, 17);
             this.half_minus_rdBtn.TabIndex = 43;
@@ -1942,7 +1962,7 @@
             this.calc_param9Lbl.AutoSize = true;
             this.calc_param9Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calc_param9Lbl.ForeColor = System.Drawing.Color.DarkBlue;
-            this.calc_param9Lbl.Location = new System.Drawing.Point(4, 412);
+            this.calc_param9Lbl.Location = new System.Drawing.Point(4, 433);
             this.calc_param9Lbl.Name = "calc_param9Lbl";
             this.calc_param9Lbl.Size = new System.Drawing.Size(130, 17);
             this.calc_param9Lbl.TabIndex = 51;
@@ -1954,7 +1974,7 @@
             this.ppm9_Lbl.AutoSize = true;
             this.ppm9_Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ppm9_Lbl.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 468);
+            this.ppm9_Lbl.Location = new System.Drawing.Point(9, 489);
             this.ppm9_Lbl.Name = "ppm9_Lbl";
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
@@ -1970,7 +1990,7 @@
             0,
             0,
             65536});
-            this.ppm9_numUD.Location = new System.Drawing.Point(101, 464);
+            this.ppm9_numUD.Location = new System.Drawing.Point(101, 485);
             this.ppm9_numUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1985,7 +2005,7 @@
             this.half_plus_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.half_plus_rdBtn.AutoSize = true;
             this.half_plus_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_plus_rdBtn.Location = new System.Drawing.Point(152, 556);
+            this.half_plus_rdBtn.Location = new System.Drawing.Point(152, 577);
             this.half_plus_rdBtn.Name = "half_plus_rdBtn";
             this.half_plus_rdBtn.Size = new System.Drawing.Size(116, 17);
             this.half_plus_rdBtn.TabIndex = 44;
@@ -1998,7 +2018,7 @@
             this.one_rdBtn9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.one_rdBtn9.AutoSize = true;
             this.one_rdBtn9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.one_rdBtn9.Location = new System.Drawing.Point(7, 496);
+            this.one_rdBtn9.Location = new System.Drawing.Point(7, 517);
             this.one_rdBtn9.Name = "one_rdBtn9";
             this.one_rdBtn9.Size = new System.Drawing.Size(93, 17);
             this.one_rdBtn9.TabIndex = 39;
@@ -2011,7 +2031,7 @@
             this.half_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.half_rdBtn.AutoSize = true;
             this.half_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.half_rdBtn.Location = new System.Drawing.Point(152, 496);
+            this.half_rdBtn.Location = new System.Drawing.Point(152, 517);
             this.half_rdBtn.Name = "half_rdBtn";
             this.half_rdBtn.Size = new System.Drawing.Size(104, 17);
             this.half_rdBtn.TabIndex = 42;
@@ -2024,7 +2044,7 @@
             this.two_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.two_rdBtn.AutoSize = true;
             this.two_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.two_rdBtn.Location = new System.Drawing.Point(7, 526);
+            this.two_rdBtn.Location = new System.Drawing.Point(7, 547);
             this.two_rdBtn.Name = "two_rdBtn";
             this.two_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.two_rdBtn.TabIndex = 40;
@@ -2037,29 +2057,13 @@
             this.three_rdBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.three_rdBtn.AutoSize = true;
             this.three_rdBtn.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.three_rdBtn.Location = new System.Drawing.Point(7, 556);
+            this.three_rdBtn.Location = new System.Drawing.Point(7, 577);
             this.three_rdBtn.Name = "three_rdBtn";
             this.three_rdBtn.Size = new System.Drawing.Size(93, 17);
             this.three_rdBtn.TabIndex = 41;
             this.three_rdBtn.TabStop = true;
             this.three_rdBtn.Text = "3 most intense";
             this.three_rdBtn.UseVisualStyleBackColor = true;
-            // 
-            // insert_Btn
-            // 
-            this.insert_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.insert_Btn.BackColor = System.Drawing.Color.Green;
-            this.insert_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.insert_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insert_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.insert_Btn.Location = new System.Drawing.Point(313, 25);
-            this.insert_Btn.Name = "insert_Btn";
-            this.insert_Btn.Size = new System.Drawing.Size(127, 24);
-            this.insert_Btn.TabIndex = 53;
-            this.insert_Btn.Text = "Insert to Frag.List";
-            this.toolTip1.SetToolTip(this.insert_Btn, "Insert checked fragments in \'Fragment List\'");
-            this.insert_Btn.UseVisualStyleBackColor = false;
-            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
             // 
             // statusStrpFrm9
             // 
@@ -2115,7 +2119,7 @@
             this.fragListView9.Location = new System.Drawing.Point(427, 37);
             this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
-            this.fragListView9.Size = new System.Drawing.Size(452, 565);
+            this.fragListView9.Size = new System.Drawing.Size(452, 610);
             this.fragListView9.TabIndex = 55;
             this.fragListView9.UseCompatibleStateImageBehavior = false;
             this.fragListView9.View = System.Windows.Forms.View.Details;
@@ -2146,60 +2150,52 @@
             // 
             this.ppm_clmn.Text = "ppm";
             // 
-            // panel1
+            // toolStrip5
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Controls.Add(this.insert_Btn);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(427, 602);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(452, 71);
-            this.panel1.TabIndex = 56;
+            this.toolStrip5.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip5.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip5.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip5.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.insert_Btn,
+            this.plot_Btn,
+            this.rem_Btn});
+            this.toolStrip5.Location = new System.Drawing.Point(427, 647);
+            this.toolStrip5.Name = "toolStrip5";
+            this.toolStrip5.Size = new System.Drawing.Size(452, 47);
+            this.toolStrip5.TabIndex = 57;
+            this.toolStrip5.Text = "toolStrip5";
             // 
-            // groupBox1
+            // insert_Btn
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.plot_Btn);
-            this.groupBox1.Controls.Add(this.rem_Btn);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(173, 53);
-            this.groupBox1.TabIndex = 56;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Graph";
+            this.insert_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.insert_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.insert_Btn.Image = ((System.Drawing.Image)(resources.GetObject("insert_Btn.Image")));
+            this.insert_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.insert_Btn.Name = "insert_Btn";
+            this.insert_Btn.Size = new System.Drawing.Size(44, 44);
+            this.insert_Btn.Text = "Insert to Fragment List";
+            this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
             // 
             // plot_Btn
             // 
-            this.plot_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.plot_Btn.BackColor = System.Drawing.Color.Blue;
-            this.plot_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.plot_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plot_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.plot_Btn.Location = new System.Drawing.Point(11, 19);
+            this.plot_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.plot_Btn.Image = ((System.Drawing.Image)(resources.GetObject("plot_Btn.Image")));
+            this.plot_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.plot_Btn.Name = "plot_Btn";
-            this.plot_Btn.Size = new System.Drawing.Size(73, 24);
-            this.plot_Btn.TabIndex = 54;
+            this.plot_Btn.Size = new System.Drawing.Size(44, 44);
             this.plot_Btn.Text = "Plot";
-            this.toolTip1.SetToolTip(this.plot_Btn, "Plot checked fragments");
-            this.plot_Btn.UseVisualStyleBackColor = false;
             this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
             // 
             // rem_Btn
             // 
-            this.rem_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.rem_Btn.BackColor = System.Drawing.Color.Red;
-            this.rem_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.rem_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rem_Btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rem_Btn.Location = new System.Drawing.Point(90, 19);
+            this.rem_Btn.CheckOnClick = true;
+            this.rem_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rem_Btn.Image = ((System.Drawing.Image)(resources.GetObject("rem_Btn.Image")));
+            this.rem_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rem_Btn.Name = "rem_Btn";
-            this.rem_Btn.Size = new System.Drawing.Size(73, 24);
-            this.rem_Btn.TabIndex = 55;
+            this.rem_Btn.Size = new System.Drawing.Size(44, 44);
             this.rem_Btn.Text = "Clear";
-            this.toolTip1.SetToolTip(this.rem_Btn, "Remove the last group of plotted fragments from the central plot");
-            this.rem_Btn.UseVisualStyleBackColor = false;
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
             // Form9
@@ -2209,7 +2205,7 @@
             this.ClientSize = new System.Drawing.Size(879, 694);
             this.Controls.Add(this.fragListView9);
             this.Controls.Add(this.factor_panel9);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.toolStrip5);
             this.Controls.Add(this.panel_calc);
             this.Controls.Add(this.statusStrpFrm9);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -2222,10 +2218,14 @@
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form9_DpiChanged);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
+            this.toolStrip6.ResumeLayout(false);
+            this.toolStrip6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.thre_numUD)).EndInit();
             this.FragCalc_TabControl.ResumeLayout(false);
             this.chemForm_tab.ResumeLayout(false);
             this.chemForm_tab.PerformLayout();
+            this.toolStrip4.ResumeLayout(false);
+            this.toolStrip4.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -2249,8 +2249,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ppm9_numUD)).EndInit();
             this.statusStrpFrm9.ResumeLayout(false);
             this.statusStrpFrm9.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.toolStrip5.ResumeLayout(false);
+            this.toolStrip5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2266,7 +2266,6 @@
         private System.Windows.Forms.Label charge_Label;
         private System.Windows.Forms.CheckedListBox z_lstBox;
         private System.Windows.Forms.Button chargeAll_Btn;
-        private System.Windows.Forms.Button calc_Btn;
         private System.Windows.Forms.CheckedListBox y_lstBox;
         private System.Windows.Forms.Label mz_Label;
         private System.Windows.Forms.CheckedListBox c_lstBox;
@@ -2301,7 +2300,6 @@
         private System.Windows.Forms.StatusStrip statusStrpFrm9;
         private System.Windows.Forms.ToolStripStatusLabel progressLabel9;
         private System.Windows.Forms.ToolStripProgressBar ProgressBar9;
-        private System.Windows.Forms.Button insert_Btn;
         private System.Windows.Forms.CheckedListBox dvw_lstBox;
         private System.Windows.Forms.Panel factor_panel9;
         private System.Windows.Forms.ListView fragListView9;
@@ -2334,11 +2332,7 @@
         private System.Windows.Forms.CheckBox ignore_ppm_form9;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox resolution_Box;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button rem_Btn;
-        private System.Windows.Forms.Button plot_Btn;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Button load_chems_file_Btn;
         private System.Windows.Forms.TextBox multChem_max_charge;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -2350,7 +2344,6 @@
         private System.Windows.Forms.ToolStripButton clear_allBtn;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown thre_numUD;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox extensionBox1;
         private System.Windows.Forms.Label label9;
@@ -2414,8 +2407,16 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton clear_chemBtn;
         private System.Windows.Forms.ToolStrip toolStrip2;
-        private System.Windows.Forms.ToolStripButton clear_chem_multBtn;
         private System.Windows.Forms.ToolStrip toolStrip3;
         private System.Windows.Forms.ToolStripButton clear_chemBtn_riken;
+        private System.Windows.Forms.ToolStripButton load_chems_file_Btn;
+        private System.Windows.Forms.ToolStrip toolStrip4;
+        private System.Windows.Forms.ToolStripButton clear_chem_multBtn;
+        private System.Windows.Forms.ToolStrip toolStrip5;
+        private System.Windows.Forms.ToolStripButton insert_Btn;
+        private System.Windows.Forms.ToolStripButton plot_Btn;
+        private System.Windows.Forms.ToolStripButton rem_Btn;
+        private System.Windows.Forms.ToolStrip toolStrip6;
+        private System.Windows.Forms.ToolStripButton calc_Btn;
     }
 }
