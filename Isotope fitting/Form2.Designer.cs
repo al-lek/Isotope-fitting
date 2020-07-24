@@ -3940,7 +3940,7 @@ namespace Isotope_fitting
             this.fit_sel_Btn.Name = "fit_sel_Btn";
             this.fit_sel_Btn.Size = new System.Drawing.Size(34, 34);
             this.fit_sel_Btn.Text = "Fit checked fragments";
-            this.fit_sel_Btn.ToolTipText = "Save current project";
+            this.fit_sel_Btn.ToolTipText = "Fit checked fragments";
             this.fit_sel_Btn.Click += new System.EventHandler(this.fit_Btn_Click);
             // 
             // fit_chkGrpsBtn

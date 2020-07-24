@@ -479,8 +479,7 @@ namespace Isotope_fitting
             //call change state window
             initiate_change_state_form();
         }
-
-
+        
         #region init
         private void initialize_machine_listboxes()
         {
@@ -3215,6 +3214,10 @@ namespace Isotope_fitting
                         {
                             if (frag_temp.Any(p => p.Equals("internal a")) && label_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
                         }
+                        else if (is_riken && ion.Contains("int"))
+                        {
+                            if (frag_temp.Any(p => p.Equals("internal")) && label_temp.Any(p => p.Equals("internal"))) { to_plot.Add(idx); }
+                        }
                         else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                         {
                             if (frag_temp.Any(p => p.Equals("d")) && label_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); }
@@ -5648,6 +5651,10 @@ namespace Isotope_fitting
                     {
                         if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
                     }
+                    else if (is_riken && ion.Contains("int"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("internal"))) { to_plot.Add(idx); }
+                    }
                     else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                     {
                         if (frag_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); }
@@ -6089,6 +6096,10 @@ namespace Isotope_fitting
                     else if (ion.Contains("int"))
                     {
                         if (frag_temp.Any(p => p.Equals("internal a"))) { max_min_Y_frag(out Y_max, Y_max, fra, x_min, x_max); }
+                    }
+                    else if (is_riken && ion.Contains("int"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("internal"))) { max_min_Y_frag(out Y_max, Y_max, fra, x_min, x_max); }
                     }
                     else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                     {
@@ -8479,6 +8490,10 @@ namespace Isotope_fitting
                 {
                     if (frag_temp.Any(p => p.Equals("internal a"))) { fragstatistics.Add(idx); }
                 }
+                else if (is_riken && ion.Contains("int"))
+                {
+                    if (frag_temp.Any(p => p.Equals("internal"))) { fragstatistics.Add(idx); }
+                }
                 else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                 {
                     if (frag_temp.Any(p => p.Equals("d"))) { fragstatistics.Add(idx); }
@@ -8714,6 +8729,10 @@ namespace Isotope_fitting
                     else if (ion.Contains("int"))
                     {
                         if (frag_temp.Any(p => p.Equals("internal a")) && label_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
+                    }
+                    else if (is_riken && ion.Contains("int"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("internal")) && label_temp.Any(p => p.Equals("internal"))) { to_plot.Add(idx); }
                     }
                     else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                     {
@@ -13038,6 +13057,10 @@ namespace Isotope_fitting
                 {
                     if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
                 }
+                else if (is_riken && ion.Contains("int"))
+                {
+                    if (frag_temp.Any(p => p.Equals("internal")) ) { to_plot.Add(idx); }
+                }
                 else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                 {
                     if (frag_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); }
@@ -13498,7 +13521,7 @@ namespace Isotope_fitting
         //load
         private void load_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { return; }
+            if (help_Btn.Checked) { MessageBox.Show("You can load here a project created from the current software. ","Load Project",MessageBoxButtons.OK,MessageBoxIcon.Information); return; }
             project_load();
         }
         private void project_load()
@@ -14093,9 +14116,5 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void frag_lbl_Btn_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
