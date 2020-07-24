@@ -87,12 +87,12 @@ namespace Isotope_fitting
 
         private void ystepminor_UD13_ValueChanged(object sender, EventArgs e)
         {
-            frm2.yINT_minorStep13 = (double)ystepminor_UD13.Value;frm2.internal_plots_refresh();
+            frm2.yINT_minorStep13 = (double)ystepminor_UD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
         }
 
         private void ystepmajor_UD13_ValueChanged(object sender, EventArgs e)
         {
-            frm2.yINT_majorStep13 = (double)ystepmajor_UD13.Value;frm2.internal_plots_refresh();
+            frm2.yINT_majorStep13 = (double)ystepmajor_UD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
         }
 
         private void x_majorGrid_UD13_SelectedItemChanged(object sender, EventArgs e)

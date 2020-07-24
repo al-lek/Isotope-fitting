@@ -195,6 +195,9 @@ namespace Isotope_fitting
             this.ppm_z = new System.Windows.Forms.ToolStripButton();
             this.ppm_z_H2O = new System.Windows.Forms.ToolStripButton();
             this.ppm_z_NH3 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_d2 = new System.Windows.Forms.ToolStripButton();
+            this.ppm_v = new System.Windows.Forms.ToolStripButton();
+            this.ppm_w2 = new System.Windows.Forms.ToolStripButton();
             this.ppm_toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.ppm_a = new System.Windows.Forms.ToolStripButton();
             this.ppm_a_H2O = new System.Windows.Forms.ToolStripButton();
@@ -374,6 +377,8 @@ namespace Isotope_fitting
             this.fragTypes_toolStrip = new System.Windows.Forms.ToolStrip();
             this.save_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
             this.toggle_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
+            this.check_all_fragTypes = new System.Windows.Forms.ToolStripButton();
+            this.uncheck_all_fragTypes = new System.Windows.Forms.ToolStripButton();
             this.fragTypes_tree = new System.Windows.Forms.TreeView();
             this.statusStrp = new System.Windows.Forms.StatusStrip();
             this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -491,8 +496,6 @@ namespace Isotope_fitting
             this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.check_all_fragTypes = new System.Windows.Forms.ToolStripButton();
-            this.uncheck_all_fragTypes = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -1975,7 +1978,7 @@ namespace Isotope_fitting
             // 
             this.splitter4.Location = new System.Drawing.Point(780, 3);
             this.splitter4.Name = "splitter4";
-            this.splitter4.Size = new System.Drawing.Size(5, 717);
+            this.splitter4.Size = new System.Drawing.Size(10, 717);
             this.splitter4.TabIndex = 25;
             this.splitter4.TabStop = false;
             // 
@@ -1998,6 +2001,7 @@ namespace Isotope_fitting
             // ppm_toolStrip6
             // 
             this.ppm_toolStrip6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm_toolStrip6.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ppm_toolStrip6.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ppm_toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_M,
@@ -2093,6 +2097,7 @@ namespace Isotope_fitting
             // ppm_toolStrip4
             // 
             this.ppm_toolStrip4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm_toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ppm_toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_internal_b,
             this.ppm_internal_b_H2O,
@@ -2146,6 +2151,7 @@ namespace Isotope_fitting
             // ppm_toolStrip5
             // 
             this.ppm_toolStrip5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm_toolStrip5.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ppm_toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_internal_a,
             this.ppm_internal_a_H2O,
@@ -2199,6 +2205,7 @@ namespace Isotope_fitting
             // ppm_toolStrip3
             // 
             this.ppm_toolStrip3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm_toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ppm_toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_w,
             this.ppm_w_H2O,
@@ -2211,7 +2218,10 @@ namespace Isotope_fitting
             this.ppm_y_NH3,
             this.ppm_z,
             this.ppm_z_H2O,
-            this.ppm_z_NH3});
+            this.ppm_z_NH3,
+            this.ppm_d2,
+            this.ppm_v,
+            this.ppm_w2});
             this.ppm_toolStrip3.Location = new System.Drawing.Point(0, 401);
             this.ppm_toolStrip3.Name = "ppm_toolStrip3";
             this.ppm_toolStrip3.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
@@ -2375,9 +2385,49 @@ namespace Isotope_fitting
             this.ppm_z_NH3.Size = new System.Drawing.Size(54, 22);
             this.ppm_z_NH3.Text = "z-NH3";
             // 
+            // ppm_d2
+            // 
+            this.ppm_d2.Checked = true;
+            this.ppm_d2.CheckOnClick = true;
+            this.ppm_d2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_d2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_d2.ForeColor = System.Drawing.Color.Turquoise;
+            this.ppm_d2.Image = ((System.Drawing.Image)(resources.GetObject("ppm_d2.Image")));
+            this.ppm_d2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_d2.Name = "ppm_d2";
+            this.ppm_d2.Size = new System.Drawing.Size(25, 22);
+            this.ppm_d2.Text = "d ";
+            // 
+            // ppm_v
+            // 
+            this.ppm_v.Checked = true;
+            this.ppm_v.CheckOnClick = true;
+            this.ppm_v.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_v.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_v.ForeColor = System.Drawing.Color.Turquoise;
+            this.ppm_v.Image = ((System.Drawing.Image)(resources.GetObject("ppm_v.Image")));
+            this.ppm_v.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_v.Name = "ppm_v";
+            this.ppm_v.Size = new System.Drawing.Size(23, 20);
+            this.ppm_v.Text = "v";
+            // 
+            // ppm_w2
+            // 
+            this.ppm_w2.Checked = true;
+            this.ppm_w2.CheckOnClick = true;
+            this.ppm_w2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_w2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ppm_w2.ForeColor = System.Drawing.Color.Turquoise;
+            this.ppm_w2.Image = ((System.Drawing.Image)(resources.GetObject("ppm_w2.Image")));
+            this.ppm_w2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_w2.Name = "ppm_w2";
+            this.ppm_w2.Size = new System.Drawing.Size(23, 20);
+            this.ppm_w2.Text = "w";
+            // 
             // ppm_toolStrip2
             // 
             this.ppm_toolStrip2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ppm_toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ppm_toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ppm_a,
             this.ppm_a_H2O,
@@ -4544,6 +4594,28 @@ namespace Isotope_fitting
             this.toggle_FragTypes_Btn.Text = "Toggle All Outlining";
             this.toggle_FragTypes_Btn.CheckedChanged += new System.EventHandler(this.toggle_FragTypes_Btn_CheckedChanged);
             // 
+            // check_all_fragTypes
+            // 
+            this.check_all_fragTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.check_all_fragTypes.Image = ((System.Drawing.Image)(resources.GetObject("check_all_fragTypes.Image")));
+            this.check_all_fragTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_all_fragTypes.Name = "check_all_fragTypes";
+            this.check_all_fragTypes.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.check_all_fragTypes.Size = new System.Drawing.Size(34, 34);
+            this.check_all_fragTypes.Text = "Check all";
+            this.check_all_fragTypes.Click += new System.EventHandler(this.check_all_fragTypes_Click);
+            // 
+            // uncheck_all_fragTypes
+            // 
+            this.uncheck_all_fragTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheck_all_fragTypes.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_fragTypes.Image")));
+            this.uncheck_all_fragTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheck_all_fragTypes.Name = "uncheck_all_fragTypes";
+            this.uncheck_all_fragTypes.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.uncheck_all_fragTypes.Size = new System.Drawing.Size(34, 34);
+            this.uncheck_all_fragTypes.Text = "Uncheck all";
+            this.uncheck_all_fragTypes.Click += new System.EventHandler(this.uncheck_all_fragTypes_Click);
+            // 
             // fragTypes_tree
             // 
             this.fragTypes_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -5903,28 +5975,6 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
-            // check_all_fragTypes
-            // 
-            this.check_all_fragTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.check_all_fragTypes.Image = ((System.Drawing.Image)(resources.GetObject("check_all_fragTypes.Image")));
-            this.check_all_fragTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.check_all_fragTypes.Name = "check_all_fragTypes";
-            this.check_all_fragTypes.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.check_all_fragTypes.Size = new System.Drawing.Size(34, 34);
-            this.check_all_fragTypes.Text = "Check all";
-            this.check_all_fragTypes.Click += new System.EventHandler(this.check_all_fragTypes_Click);
-            // 
-            // uncheck_all_fragTypes
-            // 
-            this.uncheck_all_fragTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.uncheck_all_fragTypes.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_fragTypes.Image")));
-            this.uncheck_all_fragTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.uncheck_all_fragTypes.Name = "uncheck_all_fragTypes";
-            this.uncheck_all_fragTypes.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.uncheck_all_fragTypes.Size = new System.Drawing.Size(34, 34);
-            this.uncheck_all_fragTypes.Text = "Uncheck all";
-            this.uncheck_all_fragTypes.Click += new System.EventHandler(this.uncheck_all_fragTypes_Click);
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6577,5 +6627,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton losses_legendBtn2;
         private System.Windows.Forms.ToolStripButton check_all_fragTypes;
         private System.Windows.Forms.ToolStripButton uncheck_all_fragTypes;
+        private System.Windows.Forms.ToolStripButton ppm_d2;
+        private System.Windows.Forms.ToolStripButton ppm_v;
+        private System.Windows.Forms.ToolStripButton ppm_w2;
     }
 }

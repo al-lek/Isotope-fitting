@@ -28,11 +28,16 @@ namespace Isotope_fitting
         {
             foreach (string s in frm2.frag)
             {
-                CheckBox chk = new CheckBox() {Text=s };
+                CheckBox chk = new CheckBox() {Text=s ,AutoSize=true};
                 if (is_view && frm2.view_frag.Any(p=>p.Equals(s))) {chk.Checked = true; }
                 else if(!is_view && frm2.label_frag.Any(p => p.Equals(s))) { chk.Checked = true; }
                 flowPanel.Controls.Add(chk);
             }
+        }
+        private Color give_color()
+        {
+            Color clr = Color.Orange;
+            return clr;
         }
         private void ok_btn_Click(object sender, EventArgs e)
         {
