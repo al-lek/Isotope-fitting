@@ -79,11 +79,12 @@
             this.axisytick_Lbl12 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.refresh_Btn = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.color_Btn = new System.Windows.Forms.ToolStripButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.refresh_Btn = new System.Windows.Forms.ToolStripButton();
-            this.color_Btn = new System.Windows.Forms.ToolStripButton();
             this.tabPage2.SuspendLayout();
             this.axisY_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.y_charge_stepmajor_UD12)).BeginInit();
@@ -102,6 +103,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.yInterval_UD12)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,7 +114,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(542, 243);
+            this.tabPage2.Size = new System.Drawing.Size(600, 248);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Charge Plot";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -818,6 +820,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.toolStrip1);
             this.groupBox1.Controls.Add(this.toolStrip2);
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -830,14 +833,30 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "S-S regions";
             // 
-            // textBox1
+            // toolStrip1
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(6, 39);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(264, 21);
-            this.textBox1.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
+            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refresh_Btn});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip1.Location = new System.Drawing.Point(568, 17);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(37, 74);
+            this.toolStrip1.TabIndex = 30;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // refresh_Btn
+            // 
+            this.refresh_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refresh_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh_Btn.Image")));
+            this.refresh_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refresh_Btn.Name = "refresh_Btn";
+            this.refresh_Btn.Size = new System.Drawing.Size(34, 71);
+            this.refresh_Btn.Text = "Refresh plot";
+            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
             // 
             // toolStrip2
             // 
@@ -846,24 +865,13 @@
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.color_Btn,
-            this.refresh_Btn});
+            this.color_Btn});
             this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip2.Location = new System.Drawing.Point(285, 30);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(102, 37);
+            this.toolStrip2.Size = new System.Drawing.Size(68, 37);
             this.toolStrip2.TabIndex = 29;
             this.toolStrip2.Text = "toolStrip2";
-            // 
-            // refresh_Btn
-            // 
-            this.refresh_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.refresh_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh_Btn.Image")));
-            this.refresh_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.refresh_Btn.Name = "refresh_Btn";
-            this.refresh_Btn.Size = new System.Drawing.Size(34, 34);
-            this.refresh_Btn.Text = "Refresh plot";
-            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
             // 
             // color_Btn
             // 
@@ -872,8 +880,17 @@
             this.color_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color_Btn.Name = "color_Btn";
             this.color_Btn.Size = new System.Drawing.Size(34, 34);
-            this.color_Btn.Text = "toolStripButton2";
+            this.color_Btn.Text = "Color";
             this.color_Btn.Click += new System.EventHandler(this.color_Btn_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(6, 39);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(264, 21);
+            this.textBox1.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             // 
             // Form12
             // 
@@ -915,6 +932,8 @@
             this.tabControl1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
@@ -976,6 +995,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton color_Btn;
+        private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton refresh_Btn;
     }
 }

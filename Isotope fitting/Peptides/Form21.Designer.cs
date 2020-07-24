@@ -42,7 +42,6 @@
             this.add_Btn = new System.Windows.Forms.Button();
             this.clear_Btn = new System.Windows.Forms.Button();
             this.groupBox_frm21 = new System.Windows.Forms.GroupBox();
-            this.btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ionType_box = new System.Windows.Forms.ComboBox();
@@ -51,8 +50,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.end_box = new System.Windows.Forms.TextBox();
             this.start_box = new System.Windows.Forms.TextBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.save_Btn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_frm21.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView_21
@@ -70,7 +72,7 @@
             this.listView_21.HideSelection = false;
             this.listView_21.Location = new System.Drawing.Point(0, 0);
             this.listView_21.Name = "listView_21";
-            this.listView_21.Size = new System.Drawing.Size(432, 322);
+            this.listView_21.Size = new System.Drawing.Size(432, 325);
             this.listView_21.TabIndex = 0;
             this.listView_21.UseCompatibleStateImageBehavior = false;
             this.listView_21.View = System.Windows.Forms.View.Details;
@@ -146,7 +148,7 @@
             // 
             // groupBox_frm21
             // 
-            this.groupBox_frm21.Controls.Add(this.btn);
+            this.groupBox_frm21.Controls.Add(this.toolStrip1);
             this.groupBox_frm21.Controls.Add(this.label1);
             this.groupBox_frm21.Controls.Add(this.add_Btn);
             this.groupBox_frm21.Controls.Add(this.clear_Btn);
@@ -158,26 +160,11 @@
             this.groupBox_frm21.Controls.Add(this.end_box);
             this.groupBox_frm21.Controls.Add(this.start_box);
             this.groupBox_frm21.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox_frm21.Location = new System.Drawing.Point(0, 322);
+            this.groupBox_frm21.Location = new System.Drawing.Point(0, 325);
             this.groupBox_frm21.Name = "groupBox_frm21";
             this.groupBox_frm21.Size = new System.Drawing.Size(432, 111);
             this.groupBox_frm21.TabIndex = 22;
             this.groupBox_frm21.TabStop = false;
-            // 
-            // btn
-            // 
-            this.btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn.BackColor = System.Drawing.Color.Green;
-            this.btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btn.Location = new System.Drawing.Point(356, 72);
-            this.btn.Name = "btn";
-            this.btn.Size = new System.Drawing.Size(64, 27);
-            this.btn.TabIndex = 22;
-            this.btn.Text = "Save";
-            this.btn.UseVisualStyleBackColor = false;
-            this.btn.Click += new System.EventHandler(this.btn_Click);
             // 
             // label1
             // 
@@ -262,11 +249,36 @@
             this.start_box.TabIndex = 17;
             this.start_box.TextChanged += new System.EventHandler(this.start_box_TextChanged);
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.save_Btn});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 71);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(426, 37);
+            this.toolStrip1.TabIndex = 34;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // save_Btn
+            // 
+            this.save_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.save_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.save_Btn.Image = ((System.Drawing.Image)(resources.GetObject("save_Btn.Image")));
+            this.save_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.save_Btn.Name = "save_Btn";
+            this.save_Btn.Size = new System.Drawing.Size(34, 34);
+            this.save_Btn.Text = "Save";
+            this.save_Btn.Click += new System.EventHandler(this.btn_Click);
+            // 
             // Form21
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(432, 433);
+            this.ClientSize = new System.Drawing.Size(432, 436);
             this.Controls.Add(this.listView_21);
             this.Controls.Add(this.groupBox_frm21);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -279,6 +291,8 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox_frm21.ResumeLayout(false);
             this.groupBox_frm21.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -305,6 +319,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox end_box;
         private System.Windows.Forms.TextBox start_box;
-        private System.Windows.Forms.Button btn;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton save_Btn;
     }
 }

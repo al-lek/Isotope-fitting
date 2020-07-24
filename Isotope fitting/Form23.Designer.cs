@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form23));
-            this.hightlight_clr_Btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.rgb_rdBtn = new System.Windows.Forms.RadioButton();
             this.hightColor_rdBtn = new System.Windows.Forms.RadioButton();
@@ -43,22 +42,14 @@
             this.seq_reg_numUD = new System.Windows.Forms.NumericUpDown();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.save_Btn = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.hightlight_clr_Btn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // hightlight_clr_Btn
-            // 
-            this.hightlight_clr_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.hightlight_clr_Btn.Location = new System.Drawing.Point(285, 48);
-            this.hightlight_clr_Btn.Name = "hightlight_clr_Btn";
-            this.hightlight_clr_Btn.Size = new System.Drawing.Size(64, 24);
-            this.hightlight_clr_Btn.TabIndex = 18;
-            this.hightlight_clr_Btn.Text = "Color";
-            this.hightlight_clr_Btn.UseVisualStyleBackColor = true;
-            this.hightlight_clr_Btn.Click += new System.EventHandler(this.hightlight_clr_Btn_Click);
             // 
             // label1
             // 
@@ -217,11 +208,37 @@
             this.save_Btn.Text = "Save";
             this.save_Btn.Click += new System.EventHandler(this.btn_Click);
             // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hightlight_clr_Btn});
+            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip2.Location = new System.Drawing.Point(271, 43);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(37, 37);
+            this.toolStrip2.TabIndex = 32;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // hightlight_clr_Btn
+            // 
+            this.hightlight_clr_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.hightlight_clr_Btn.Image = ((System.Drawing.Image)(resources.GetObject("hightlight_clr_Btn.Image")));
+            this.hightlight_clr_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.hightlight_clr_Btn.Name = "hightlight_clr_Btn";
+            this.hightlight_clr_Btn.Size = new System.Drawing.Size(34, 34);
+            this.hightlight_clr_Btn.Text = "Color";
+            this.hightlight_clr_Btn.Click += new System.EventHandler(this.hightlight_clr_Btn_Click);
+            // 
             // Form23
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 297);
+            this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.seq_reg_numUD);
             this.Controls.Add(this.label6);
@@ -234,7 +251,6 @@
             this.Controls.Add(this.hightColor_rdBtn);
             this.Controls.Add(this.rgb_rdBtn);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.hightlight_clr_Btn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -247,14 +263,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button hightlight_clr_Btn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton rgb_rdBtn;
         private System.Windows.Forms.RadioButton hightColor_rdBtn;
@@ -268,5 +284,7 @@
         private System.Windows.Forms.NumericUpDown seq_reg_numUD;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton save_Btn;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton hightlight_clr_Btn;
     }
 }

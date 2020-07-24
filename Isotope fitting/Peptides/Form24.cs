@@ -79,7 +79,7 @@ namespace Isotope_fitting
         private void UncheckAll_calculationPanel()
         {
             set_textboxes_checks_empty(this);
-            un_check_all_checkboxes(this);
+            un_check_all_checkboxes_ListBx(this);
         }
        
         private List<ChemiForm> select_fragments2()
@@ -458,12 +458,12 @@ namespace Isotope_fitting
 
         private void check_all_boxBtn_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(this,true);
+            un_check_all_checkboxes_ListBx(this,true);
         }
 
         private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(this, false);
+            un_check_all_checkboxes_ListBx(this, false);
         }
 
         private void Form24_FormClosing(object sender, FormClosingEventArgs e)

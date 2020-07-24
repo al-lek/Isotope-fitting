@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form10));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.refresh10_Btn = new System.Windows.Forms.ToolStripButton();
+            this.reset_Btn = new System.Windows.Forms.ToolStripButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.annotSize_numUD = new System.Windows.Forms.NumericUpDown();
@@ -84,11 +87,9 @@
             this.intervalX_Lbl = new System.Windows.Forms.Label();
             this.xtickUD = new System.Windows.Forms.DomainUpDown();
             this.axisxtick_Lbl = new System.Windows.Forms.Label();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.refresh10_Btn = new System.Windows.Forms.ToolStripButton();
-            this.reset_Btn = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).BeginInit();
             this.fit_grpBx.SuspendLayout();
@@ -106,7 +107,6 @@
             this.tickmark_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).BeginInit();
-            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -134,6 +134,43 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Lines";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refresh10_Btn,
+            this.reset_Btn});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 258);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(817, 37);
+            this.toolStrip2.TabIndex = 27;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // refresh10_Btn
+            // 
+            this.refresh10_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.refresh10_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refresh10_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh10_Btn.Image")));
+            this.refresh10_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refresh10_Btn.Name = "refresh10_Btn";
+            this.refresh10_Btn.Size = new System.Drawing.Size(34, 34);
+            this.refresh10_Btn.Text = "Refresh plot";
+            this.refresh10_Btn.Click += new System.EventHandler(this.refresh10_Btn_Click);
+            // 
+            // reset_Btn
+            // 
+            this.reset_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.reset_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.reset_Btn.Image = ((System.Drawing.Image)(resources.GetObject("reset_Btn.Image")));
+            this.reset_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.reset_Btn.Name = "reset_Btn";
+            this.reset_Btn.Size = new System.Drawing.Size(34, 34);
+            this.reset_Btn.Text = "Reset";
+            this.reset_Btn.Click += new System.EventHandler(this.reset_Btn_Click);
             // 
             // groupBox1
             // 
@@ -991,43 +1028,6 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
-            // toolStrip2
-            // 
-            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refresh10_Btn,
-            this.reset_Btn});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 258);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(817, 37);
-            this.toolStrip2.TabIndex = 27;
-            this.toolStrip2.Text = "toolStrip2";
-            // 
-            // refresh10_Btn
-            // 
-            this.refresh10_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.refresh10_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.refresh10_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh10_Btn.Image")));
-            this.refresh10_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.refresh10_Btn.Name = "refresh10_Btn";
-            this.refresh10_Btn.Size = new System.Drawing.Size(34, 34);
-            this.refresh10_Btn.Text = "Refresh plot";
-            this.refresh10_Btn.Click += new System.EventHandler(this.refresh10_Btn_Click);
-            // 
-            // reset_Btn
-            // 
-            this.reset_Btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.reset_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.reset_Btn.Image = ((System.Drawing.Image)(resources.GetObject("reset_Btn.Image")));
-            this.reset_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.reset_Btn.Name = "reset_Btn";
-            this.reset_Btn.Size = new System.Drawing.Size(34, 34);
-            this.reset_Btn.Text = "Recalculate profile";
-            this.reset_Btn.Click += new System.EventHandler(this.reset_Btn_Click);
-            // 
             // Form10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1045,6 +1045,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.annotSize_numUD)).EndInit();
@@ -1068,8 +1070,6 @@
             this.tickmark_grpBx.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formatX_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xInterval_UD)).EndInit();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }

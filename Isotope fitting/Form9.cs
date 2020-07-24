@@ -192,17 +192,17 @@ namespace Isotope_fitting
         }
         private void clear_allBtn_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(Frag_tab);
+            un_check_all_checkboxes_ListBx(Frag_tab);
             set_textboxes_checks_empty(Frag_tab);
         }
         private void check_all_boxBtn_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(Frag_tab, true);
+            un_check_all_checkboxes_ListBx(Frag_tab, true);
         }
 
         private void uncheck_all_boxBtn_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(Frag_tab);
+            un_check_all_checkboxes_ListBx(Frag_tab);
         }
 
         private void minCharge_txtBox_TextChanged(object sender, EventArgs e)
@@ -250,15 +250,15 @@ namespace Isotope_fitting
         #region riken tabs UI
         private void check_all_boxBtn_riken_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(fragTab_riken, true);
+            un_check_all_checkboxes_ListBx(fragTab_riken, true);
         }
         private void uncheck_all_boxBtn_riken_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(fragTab_riken, false);
+            un_check_all_checkboxes_ListBx(fragTab_riken, false);
         }
         private void clear_allBtn_riken_Click(object sender, EventArgs e)
         {
-            un_check_all_checkboxes(fragTab_riken, false);
+            un_check_all_checkboxes_ListBx(fragTab_riken, false);
             set_textboxes_checks_empty(fragTab_riken);
         }
 

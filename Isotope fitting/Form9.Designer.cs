@@ -2184,7 +2184,7 @@
             this.plot_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.plot_Btn.Name = "plot_Btn";
             this.plot_Btn.Size = new System.Drawing.Size(44, 44);
-            this.plot_Btn.Text = "Plot";
+            this.plot_Btn.Text = "Plot checked fragments";
             this.plot_Btn.Click += new System.EventHandler(this.plot_Btn_Click);
             // 
             // rem_Btn
@@ -2195,7 +2195,7 @@
             this.rem_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rem_Btn.Name = "rem_Btn";
             this.rem_Btn.Size = new System.Drawing.Size(44, 44);
-            this.rem_Btn.Text = "Clear";
+            this.rem_Btn.Text = "Clear plot from fragments";
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
             // Form9

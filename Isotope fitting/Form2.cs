@@ -141,9 +141,7 @@ namespace Isotope_fitting
         public static int selected_window = 1000000;
 
         private ListViewItemComparer _lvwItemComparer;
-        #region colours
-        PlotView iso_plot;
-        PlotView res_plot;
+        #region colours     
         OxyColor[] data_colors = new OxyColor[21] { OxyColors.Black, OxyColors.Green, OxyColors.IndianRed, OxyColors.Turquoise, OxyColors.DarkViolet, OxyColors.SlateGray, OxyColors.DarkRed, OxyColors.DarkOliveGreen, OxyColors.DarkSlateBlue,
             OxyColors.DarkKhaki, OxyColors.DimGray, OxyColors.DeepPink, OxyColors.Ivory, OxyColors.Tan, OxyColors.Orange, OxyColors.Olive, OxyColors.MistyRose, OxyColors.Moccasin, OxyColors.MediumOrchid, OxyColors.LimeGreen, OxyColors.LightGoldenrodYellow};
         OxyColor[] charge_colors = new OxyColor[21] { OxyColors.Black, OxyColors.Green, OxyColors.IndianRed, OxyColors.Turquoise, OxyColors.DarkViolet, OxyColors.SlateGray, OxyColors.DarkRed, OxyColors.DarkOliveGreen, OxyColors.DarkSlateBlue,
@@ -895,7 +893,7 @@ namespace Isotope_fitting
                     Xmajor_grid = string_to_bool(preferences[35].Split(':')[1]);
                     Xminor_grid = string_to_bool(preferences[36].Split(':')[1]);
                     Ymajor_grid = string_to_bool(preferences[37].Split(':')[1]);
-                    Yminor_grid = string_to_bool(preferences[37].Split(':')[1]);
+                    Yminor_grid = string_to_bool(preferences[38].Split(':')[1]);
                     //preferences[0] += X_tick = OxyPlot.Axes.TickStyle.Outside;
                     //preferences[0] += Y_tick = OxyPlot.Axes.TickStyle.Outside;
                     x_interval = Convert.ToDouble(preferences[39].Split(':')[1]);
@@ -5243,29 +5241,8 @@ namespace Isotope_fitting
             if (help_Btn.Checked) { return; }
             fit_checked_groups(false);
         }
-
-        #endregion
-
-        #region UI control
-        private void enable_UIcontrols(string status)
-        {
-            if (status == "post load")
-            {
-                //Fitting_chkBox.Enabled = true;
-                Fitting_chkBox.Checked = false;
-            }
-            else if (status == "post import fragments")
-            {
-
-            }
-            else if (status == "post calculations")
-            {
-                //fit_Btn.Enabled = fit_sel_Btn.Enabled = true;
-            }
-        }
-
-
-        #endregion
+       
+        #endregion       
 
         #region refresh plot        
         private void recalculate_fitted_residual(List<int> to_plot)
@@ -5342,18 +5319,7 @@ namespace Isotope_fitting
 
             last_ploted_iso = new List<int>(to_plot);
             //sw1.Stop(); Console.WriteLine("Total compute Parallel: " + sw1.ElapsedMilliseconds.ToString()); sw1.Reset();
-        }
-        private void invalidate_all()
-        {
-            iso_plot.InvalidatePlot(true);
-            res_plot.InvalidatePlot(true);
-        }
-        private OxyColor get_fragment_color(int idx)
-        {
-            //idx is the all_data structure index not the Fragments2 index
-            OxyColor clr = OxyColor.FromUInt32((uint)custom_colors[idx]);
-            return clr;
-        }
+        }       
 
         #endregion
 
@@ -6156,12 +6122,12 @@ namespace Isotope_fitting
         private void max_min_Y_frag(out double Y_max,double y_max, FragForm fra, double x_min, double x_max)
         {
             Y_max = y_max;
-            if (fra.Profile.First().X > x_max || fra.Profile.Last().X < x_min) { return; }
+            if (fra.Profile.First().X > x_max || fra.Profile.Last().X < x_min) {  return; }
             for (int p = 0; p < fra.Centroid.Count; p++)
             {
                 double inten = fra.Factor * fra.Centroid[p].Y;
                 double mz = fra.Centroid[p].X;
-                if (mz > x_max || mz < x_min || inten < Y_max) { return; }
+                if (mz > x_max || mz < x_min || inten < Y_max) { continue; }               
                 else { Y_max = inten; break; }
             }
         }
@@ -8223,6 +8189,22 @@ namespace Isotope_fitting
         #endregion
 
         #region UI
+        private void enable_UIcontrols(string status)
+        {
+            if (status == "post load")
+            {
+                //Fitting_chkBox.Enabled = true;
+                Fitting_chkBox.Checked = false;
+            }
+            else if (status == "post import fragments")
+            {
+
+            }
+            else if (status == "post calculations")
+            {
+                //fit_Btn.Enabled = fit_sel_Btn.Enabled = true;
+            }
+        }
         private void Initialize_UI()
         {            
             plotExp_chkBox.CheckedChanged += (s, e) => { if (help_Btn.Checked) { return; } if (/*!exp_deconvoluted &&*/ (!block_plot_refresh)) { refresh_iso_plot(); } /*else if(plotExp_chkBox.Checked) { plotExp_chkBox.Checked = false; }*/ };
@@ -8666,6 +8648,10 @@ namespace Isotope_fitting
             frm19.ShowDialog();
             //params_form();
         }
+        private void show_files_Btn_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { return; }
+        }
         //plot     
         private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
         {
@@ -8766,6 +8752,21 @@ namespace Isotope_fitting
             }
             //Allow chart rendering
             LC_1.EndUpdate();
+        }
+        private void fragPlotLbl_chkBx_DoubleClick(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { return; }
+            Form_types f = new Form_types(this, false);
+            f.Location = MousePosition;
+            f.ShowDialog();
+        }
+
+        private void view_fragBtn_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { return; }
+            Form_types f = new Form_types(this, true);
+            f.Location = MousePosition;
+            f.ShowDialog();
         }
         //MS product       
         private void deleteAllFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -12328,7 +12329,7 @@ namespace Isotope_fitting
                 //create the Plotviews for plus (example:a+1,a+2) and minus(example:a-1,a-2) Hydrogens
                 plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White,Height=pnl.Height/2, Dock = System.Windows.Forms.DockStyle.Top };
                 pnl.Controls.Add(plus_plot);
-                PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+                PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
                 plus_plot.Model = model1;
                 var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength=y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat=y_format12_2+ y_numformat12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model1.Axes.Add(linearAxis1);
@@ -12338,7 +12339,7 @@ namespace Isotope_fitting
                 plus_plot.Controller = new CustomPlotController();
                 minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, Height = pnl.Height / 2, Dock = System.Windows.Forms.DockStyle.Bottom };
                 pnl.Controls.Add(minus_plot);
-                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = false, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
+                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
                 minus_plot.Model = model2;
                 var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model2.Axes.Add(linearAxis3);
@@ -14054,26 +14055,5 @@ namespace Isotope_fitting
 
         #endregion
 
-       
-        private void show_files_Btn_Click(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { return; }
-        }
-
-        private void fragPlotLbl_chkBx_DoubleClick(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { return; }
-            Form_types f = new Form_types(this, false);
-            f.Location = MousePosition;
-            f.ShowDialog();
-        }
-
-        private void view_fragBtn_Click(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { return; }
-            Form_types f = new Form_types(this,true);
-            f.Location = MousePosition;
-            f.ShowDialog();
-        }
     }
 }

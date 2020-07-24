@@ -2620,6 +2620,7 @@ namespace Isotope_fitting
             this.ppm_legend_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_legend_Btn.Name = "ppm_legend_Btn";
             this.ppm_legend_Btn.Size = new System.Drawing.Size(42, 34);
+            this.ppm_legend_Btn.Text = "Legend";
             this.ppm_legend_Btn.CheckedChanged += new System.EventHandler(this.ppm_legend_Btn_CheckedChanged);
             // 
             // ppm_extract_btn
@@ -3417,6 +3418,7 @@ namespace Isotope_fitting
             this.seqLegendBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtn.Name = "seqLegendBtn";
             this.seqLegendBtn.Size = new System.Drawing.Size(33, 34);
+            this.seqLegendBtn.Text = "Legend";
             this.seqLegendBtn.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // toolStripButton12
@@ -3668,7 +3670,7 @@ namespace Isotope_fitting
             // 
             this.styleFormatBtn.Image = ((System.Drawing.Image)(resources.GetObject("styleFormatBtn.Image")));
             this.styleFormatBtn.Name = "styleFormatBtn";
-            this.styleFormatBtn.Size = new System.Drawing.Size(194, 36);
+            this.styleFormatBtn.Size = new System.Drawing.Size(148, 36);
             this.styleFormatBtn.Text = "Style";
             this.styleFormatBtn.Click += new System.EventHandler(this.styleFormatBtn_Click);
             // 
@@ -3676,7 +3678,7 @@ namespace Isotope_fitting
             // 
             this.extractPlotToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem.Image")));
             this.extractPlotToolStripMenuItem.Name = "extractPlotToolStripMenuItem";
-            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(194, 36);
+            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(148, 36);
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
             // 
@@ -4441,7 +4443,7 @@ namespace Isotope_fitting
             this.statistics_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.statistics_Btn.Name = "statistics_Btn";
             this.statistics_Btn.Size = new System.Drawing.Size(34, 34);
-            this.statistics_Btn.Text = "Statistics ";
+            this.statistics_Btn.Text = "Experimental coverage statistics ";
             this.statistics_Btn.Click += new System.EventHandler(this.statistics_Btn_Click);
             // 
             // toolStripButton14

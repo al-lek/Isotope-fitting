@@ -197,7 +197,7 @@ namespace Isotope_fitting
         /// <summary>
         /// Uncheck all checked Lists in the calculation filter areas
         /// </summary>
-        public static void un_check_all_checkboxes(Control container, bool check = false)
+        public static void un_check_all_checkboxes_ListBx(Control container, bool check = false)
         {
             if (check)
             {
@@ -207,11 +207,7 @@ namespace Isotope_fitting
                     {
                         lstBox.SetItemCheckState(i, CheckState.Checked);
                     }
-                }
-                foreach (CheckBox box in GetControls(container).OfType<CheckBox>())
-                {
-                    box.Checked = true;
-                }
+                }                
             }
             else
             {
@@ -222,7 +218,23 @@ namespace Isotope_fitting
                     {
                         lstBox.SetItemCheckState(i, CheckState.Unchecked);
                     }
+                }              
+            }
+        }
+        /// <summary>
+        /// Uncheck all checkboxes
+        /// </summary>
+        public static void un_check_all_checkboxes(Control container, bool check = false)
+        {
+            if (check)
+            {               
+                foreach (CheckBox box in GetControls(container).OfType<CheckBox>())
+                {
+                    box.Checked = true;
                 }
+            }
+            else
+            {               
                 foreach (CheckBox box in GetControls(container).OfType<CheckBox>())
                 {
                     box.Checked = false;
@@ -393,21 +405,7 @@ namespace Isotope_fitting
             foreach (Form form in list)
                 form.Close();
         }
-        /// <summary>
-        /// Find and return all open forms with the name of (parameter)
-        /// </summary>
-        public static new List<Form> FindOpenForm(string currentForm)
-        {
-            // temp list
-            var list = new List<Form>();
-
-            // fill list
-            foreach (Form form in Application.OpenForms)
-                if (currentForm.Equals(form.Name))
-                    list.Add(form);
-            return list;
-        }
-
+      
         #region extension
         public static bool recognise_extension(string fra_exte, string Extension)
         {
