@@ -3576,7 +3576,7 @@ namespace Isotope_fitting
                 {
                     if (string.IsNullOrEmpty(e.Node.Name) && e.Node.Nodes != null && e.Node.Nodes.Count > 0)
                     {
-                        foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked) { innerNode.Checked = e.Node.Checked; } }
+                        foreach (TreeNode innerNode in e.Node.Nodes) { if (innerNode.Checked != e.Node.Checked){innerNode.Checked = e.Node.Checked;} }
                     }
                     else if ((e.Action == TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard) && !string.IsNullOrEmpty(e.Node.Name))
                     {
@@ -3710,7 +3710,27 @@ namespace Isotope_fitting
                 }
             }
         }
+        private void check_all_fragTypes_Click(object sender, EventArgs e)
+        {
+            if (fragTypes_tree!=null)
+            {
+                foreach (TreeNode node in fragTypes_tree.Nodes)
+                {
+                    node.Checked = true;
+                }
+            }           
+        }
 
+        private void uncheck_all_fragTypes_Click(object sender, EventArgs e)
+        {
+            if (fragTypes_tree != null)
+            {
+                foreach (TreeNode node in fragTypes_tree.Nodes)
+                {
+                    node.Checked = false;
+                }
+            }                
+        }
         #endregion
 
         #region 3.a Recalculate data aligned
@@ -6808,6 +6828,7 @@ namespace Isotope_fitting
                 else if (heavy_present) { save.Filter = "Data Files (*.hfit)|*.hfit"; save.DefaultExt = "hfit"; }
                 if (save.ShowDialog() == DialogResult.OK)
                 {
+                    foreach (FragForm fra in Fragments2) { fra.Fixed = false; }
                     int progress = 0;
                     is_loading = true;
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
@@ -6843,11 +6864,12 @@ namespace Isotope_fitting
                         IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type });
                         progress++;
                         if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
-                    }
+                    }                   
                     populate_fragtypes_treeView();
                     progress_display_stop();
                     file.Flush(); file.Close(); file.Dispose();
                     is_loading = false;
+                    refresh_frag_tree_fixed(fragToSave);
                     MessageBox.Show("You are ready!");
                 }
             }
@@ -6855,11 +6877,13 @@ namespace Isotope_fitting
             {
                 is_loading = true;
                 if (IonDraw.Count > 0) IonDraw.Clear();
+                foreach (FragForm fra in Fragments2) { fra.Fixed = false; }
                 foreach (int indexS in fragToSave)
                 {
                     Form2.Fragments2[indexS - 1].Fixed = true;
                     IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type });
                 }
+                refresh_frag_tree_fixed(fragToSave);
                 populate_fragtypes_treeView();
                 is_loading = false;
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fragment" + name_extension, Filter = "Data Files (*.ifit)|*.ifit", DefaultExt = "ifit", OverwritePrompt = true, AddExtension = true };
@@ -6867,10 +6891,9 @@ namespace Isotope_fitting
                 else if (light_present) { save.Filter = "Data Files (*.lifit)|*.lifit"; save.DefaultExt = "lifit"; }
                 else if (heavy_present) { save.Filter = "Data Files (*.hifit)|*.hifit"; save.DefaultExt = "hifit"; }
                 if (save.ShowDialog() == DialogResult.OK)
-                {
+                {                    
                     is_loading = true;
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
-
                     file.WriteLine("Mode:\tFitted List");
                     file.WriteLine("Multiple extensions:\t" + mult_extension.ToString());
                     if (mult_extension)
@@ -6898,6 +6921,23 @@ namespace Isotope_fitting
                 }
             }
             find_max_min_int();
+        }
+        private void refresh_frag_tree_fixed(List<int> fragToSave)
+        {
+            if (frag_tree != null)
+            {            
+                frag_tree.BeginUpdate();
+                foreach (TreeNode big_node in frag_tree.Nodes)
+                {
+                    foreach (TreeNode node in big_node.Nodes)
+                    {
+                        int idx = Convert.ToInt32(node.Name);
+                        if (fragToSave.Any(p => p.Equals(idx+1))) node.ForeColor = Color.DarkGreen;
+                        else { Fragments2[idx].Fixed = false; node.ForeColor = Color.Black; }
+                    }                    
+                }
+                frag_tree.EndUpdate();
+            }  
         }
         void _bw_save_envipat_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -8859,6 +8899,7 @@ namespace Isotope_fitting
             }
 
         }
+        
         #endregion
 
         #region Data manipulation
@@ -14116,5 +14157,6 @@ namespace Isotope_fitting
 
         #endregion
 
+        
     }
 }

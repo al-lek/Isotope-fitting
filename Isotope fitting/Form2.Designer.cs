@@ -491,6 +491,8 @@ namespace Isotope_fitting
             this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.check_all_fragTypes = new System.Windows.Forms.ToolStripButton();
+            this.uncheck_all_fragTypes = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -4507,7 +4509,9 @@ namespace Isotope_fitting
             this.fragTypes_toolStrip.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.fragTypes_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.save_FragTypes_Btn,
-            this.toggle_FragTypes_Btn});
+            this.toggle_FragTypes_Btn,
+            this.check_all_fragTypes,
+            this.uncheck_all_fragTypes});
             this.fragTypes_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.fragTypes_toolStrip.Location = new System.Drawing.Point(0, 456);
             this.fragTypes_toolStrip.Name = "fragTypes_toolStrip";
@@ -5899,6 +5903,28 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
+            // check_all_fragTypes
+            // 
+            this.check_all_fragTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.check_all_fragTypes.Image = ((System.Drawing.Image)(resources.GetObject("check_all_fragTypes.Image")));
+            this.check_all_fragTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.check_all_fragTypes.Name = "check_all_fragTypes";
+            this.check_all_fragTypes.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.check_all_fragTypes.Size = new System.Drawing.Size(34, 34);
+            this.check_all_fragTypes.Text = "Check all";
+            this.check_all_fragTypes.Click += new System.EventHandler(this.check_all_fragTypes_Click);
+            // 
+            // uncheck_all_fragTypes
+            // 
+            this.uncheck_all_fragTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheck_all_fragTypes.Image = ((System.Drawing.Image)(resources.GetObject("uncheck_all_fragTypes.Image")));
+            this.uncheck_all_fragTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheck_all_fragTypes.Name = "uncheck_all_fragTypes";
+            this.uncheck_all_fragTypes.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.uncheck_all_fragTypes.Size = new System.Drawing.Size(34, 34);
+            this.uncheck_all_fragTypes.Text = "Uncheck all";
+            this.uncheck_all_fragTypes.Click += new System.EventHandler(this.uncheck_all_fragTypes_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -5910,7 +5936,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v26.1.1";
+            this.Text = "Peak Finder v26.1.3";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -6549,5 +6575,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton losses_legendBtn6;
         private System.Windows.Forms.ToolStripButton losses_legendBtn4;
         private System.Windows.Forms.ToolStripButton losses_legendBtn2;
+        private System.Windows.Forms.ToolStripButton check_all_fragTypes;
+        private System.Windows.Forms.ToolStripButton uncheck_all_fragTypes;
     }
 }
