@@ -387,6 +387,7 @@ namespace Isotope_fitting
             this.losses_toolStrip7 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn7 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn7 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn7 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn7 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn7 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check7 = new System.Windows.Forms.ToolStripButton();
@@ -399,6 +400,7 @@ namespace Isotope_fitting
             this.losses_toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn5 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn5 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn5 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn5 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn5 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check5 = new System.Windows.Forms.ToolStripButton();
@@ -411,6 +413,7 @@ namespace Isotope_fitting
             this.losses_toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn3 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn3 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn3 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn3 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check3 = new System.Windows.Forms.ToolStripButton();
@@ -423,6 +426,7 @@ namespace Isotope_fitting
             this.losses_toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn1 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn1 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn1 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn1 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check1 = new System.Windows.Forms.ToolStripButton();
@@ -435,6 +439,7 @@ namespace Isotope_fitting
             this.losses_toolStrip8 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn8 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn8 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn8 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn8 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn8 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check8 = new System.Windows.Forms.ToolStripButton();
@@ -447,6 +452,7 @@ namespace Isotope_fitting
             this.losses_toolStrip6 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn6 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn6 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn6 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn6 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn6 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check6 = new System.Windows.Forms.ToolStripButton();
@@ -459,6 +465,7 @@ namespace Isotope_fitting
             this.losses_toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn4 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn4 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn4 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn4 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check4 = new System.Windows.Forms.ToolStripButton();
@@ -471,6 +478,7 @@ namespace Isotope_fitting
             this.losses_toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.losses_saveBtn2 = new System.Windows.Forms.ToolStripButton();
             this.losses_copyBtn2 = new System.Windows.Forms.ToolStripButton();
+            this.losses_legendBtn2 = new System.Windows.Forms.ToolStripButton();
             this.losses_DropBtn2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_extractBtn2 = new System.Windows.Forms.ToolStripMenuItem();
             this.log_check2 = new System.Windows.Forms.ToolStripButton();
@@ -4662,6 +4670,7 @@ namespace Isotope_fitting
             this.losses_toolStrip7.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn7,
             this.losses_copyBtn7,
+            this.losses_legendBtn7,
             this.losses_DropBtn7,
             this.log_check7,
             this.losses_check7,
@@ -4692,6 +4701,17 @@ namespace Isotope_fitting
             this.losses_copyBtn7.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn7.Text = "Copy";
             this.losses_copyBtn7.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn7
+            // 
+            this.losses_legendBtn7.CheckOnClick = true;
+            this.losses_legendBtn7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn7.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn7.Image")));
+            this.losses_legendBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn7.Name = "losses_legendBtn7";
+            this.losses_legendBtn7.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn7.Text = "Legend";
+            this.losses_legendBtn7.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn7
             // 
@@ -4800,6 +4820,7 @@ namespace Isotope_fitting
             this.losses_toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn5,
             this.losses_copyBtn5,
+            this.losses_legendBtn5,
             this.losses_DropBtn5,
             this.log_check5,
             this.losses_check5,
@@ -4830,6 +4851,17 @@ namespace Isotope_fitting
             this.losses_copyBtn5.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn5.Text = "Copy";
             this.losses_copyBtn5.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn5
+            // 
+            this.losses_legendBtn5.CheckOnClick = true;
+            this.losses_legendBtn5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn5.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn5.Image")));
+            this.losses_legendBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn5.Name = "losses_legendBtn5";
+            this.losses_legendBtn5.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn5.Text = "Legend";
+            this.losses_legendBtn5.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn5
             // 
@@ -4938,6 +4970,7 @@ namespace Isotope_fitting
             this.losses_toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn3,
             this.losses_copyBtn3,
+            this.losses_legendBtn3,
             this.losses_DropBtn3,
             this.log_check3,
             this.losses_check3,
@@ -4968,6 +5001,17 @@ namespace Isotope_fitting
             this.losses_copyBtn3.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn3.Text = "Copy";
             this.losses_copyBtn3.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn3
+            // 
+            this.losses_legendBtn3.CheckOnClick = true;
+            this.losses_legendBtn3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn3.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn3.Image")));
+            this.losses_legendBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn3.Name = "losses_legendBtn3";
+            this.losses_legendBtn3.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn3.Text = "Legend";
+            this.losses_legendBtn3.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn3
             // 
@@ -5076,6 +5120,7 @@ namespace Isotope_fitting
             this.losses_toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn1,
             this.losses_copyBtn1,
+            this.losses_legendBtn1,
             this.losses_DropBtn1,
             this.log_check1,
             this.losses_check1,
@@ -5106,6 +5151,17 @@ namespace Isotope_fitting
             this.losses_copyBtn1.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn1.Text = "Copy";
             this.losses_copyBtn1.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn1
+            // 
+            this.losses_legendBtn1.CheckOnClick = true;
+            this.losses_legendBtn1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn1.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn1.Image")));
+            this.losses_legendBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn1.Name = "losses_legendBtn1";
+            this.losses_legendBtn1.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn1.Text = "Legend";
+            this.losses_legendBtn1.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn1
             // 
@@ -5214,6 +5270,7 @@ namespace Isotope_fitting
             this.losses_toolStrip8.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn8,
             this.losses_copyBtn8,
+            this.losses_legendBtn8,
             this.losses_DropBtn8,
             this.log_check8,
             this.losses_check8,
@@ -5244,6 +5301,17 @@ namespace Isotope_fitting
             this.losses_copyBtn8.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn8.Text = "Copy";
             this.losses_copyBtn8.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn8
+            // 
+            this.losses_legendBtn8.CheckOnClick = true;
+            this.losses_legendBtn8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn8.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn8.Image")));
+            this.losses_legendBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn8.Name = "losses_legendBtn8";
+            this.losses_legendBtn8.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn8.Text = "Legend";
+            this.losses_legendBtn8.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn8
             // 
@@ -5352,6 +5420,7 @@ namespace Isotope_fitting
             this.losses_toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn6,
             this.losses_copyBtn6,
+            this.losses_legendBtn6,
             this.losses_DropBtn6,
             this.log_check6,
             this.losses_check6,
@@ -5382,6 +5451,17 @@ namespace Isotope_fitting
             this.losses_copyBtn6.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn6.Text = "Copy";
             this.losses_copyBtn6.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn6
+            // 
+            this.losses_legendBtn6.CheckOnClick = true;
+            this.losses_legendBtn6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn6.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn6.Image")));
+            this.losses_legendBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn6.Name = "losses_legendBtn6";
+            this.losses_legendBtn6.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn6.Text = "Legend";
+            this.losses_legendBtn6.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn6
             // 
@@ -5490,6 +5570,7 @@ namespace Isotope_fitting
             this.losses_toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn4,
             this.losses_copyBtn4,
+            this.losses_legendBtn4,
             this.losses_DropBtn4,
             this.log_check4,
             this.losses_check4,
@@ -5520,6 +5601,17 @@ namespace Isotope_fitting
             this.losses_copyBtn4.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn4.Text = "Copy";
             this.losses_copyBtn4.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn4
+            // 
+            this.losses_legendBtn4.CheckOnClick = true;
+            this.losses_legendBtn4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn4.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn4.Image")));
+            this.losses_legendBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn4.Name = "losses_legendBtn4";
+            this.losses_legendBtn4.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn4.Text = "Legend";
+            this.losses_legendBtn4.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn4
             // 
@@ -5628,6 +5720,7 @@ namespace Isotope_fitting
             this.losses_toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.losses_saveBtn2,
             this.losses_copyBtn2,
+            this.losses_legendBtn2,
             this.losses_DropBtn2,
             this.log_check2,
             this.losses_check2,
@@ -5658,6 +5751,17 @@ namespace Isotope_fitting
             this.losses_copyBtn2.Size = new System.Drawing.Size(41, 34);
             this.losses_copyBtn2.Text = "Copy";
             this.losses_copyBtn2.Click += new System.EventHandler(this.losses_save_copyBtn_Click);
+            // 
+            // losses_legendBtn2
+            // 
+            this.losses_legendBtn2.CheckOnClick = true;
+            this.losses_legendBtn2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.losses_legendBtn2.Image = ((System.Drawing.Image)(resources.GetObject("losses_legendBtn2.Image")));
+            this.losses_legendBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.losses_legendBtn2.Name = "losses_legendBtn2";
+            this.losses_legendBtn2.Size = new System.Drawing.Size(41, 34);
+            this.losses_legendBtn2.Text = "Legend";
+            this.losses_legendBtn2.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn2
             // 
@@ -6437,5 +6541,13 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton fitSettings_Btn;
         private System.Windows.Forms.ToolStripButton frag_lbl_Btn;
         private System.Windows.Forms.ToolStripButton view_fragBtn;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn7;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn5;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn3;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn1;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn8;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn6;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn4;
+        private System.Windows.Forms.ToolStripButton losses_legendBtn2;
     }
 }

@@ -750,7 +750,7 @@ namespace Isotope_fitting
                 }
                 if (is_riken)
                 {
-                    frag = new string[] { "a", "b", "c", "d", "w", "x", "y", "z", "internal","M" };
+                    frag = new string[] { "a", "b", "c", "d", "w", "x", "y", "z", "internal","B","M" };
                     loadMS_Btn.Text = "Load Riken File";
                     //isoplot display checkboxes
                     /*disp_x.ForeColor =*/ ppm_x.ForeColor = ppm_x_H2O.ForeColor = ppm_x_NH3.ForeColor = Color.DodgerBlue;
@@ -3231,6 +3231,10 @@ namespace Isotope_fitting
                         {
                             if (frag_temp.Any(p => p.Equals("M")) && label_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); }
                         }
+                        else if (ion.Contains("B("))
+                        {
+                            if (frag_temp.Any(p => p.Equals("B")) && label_temp.Any(p => p.Equals("B"))) { to_plot.Add(idx); }
+                        }
                         else
                         {
                             to_plot.Add(idx);
@@ -5660,6 +5664,10 @@ namespace Isotope_fitting
                     {
                         if (frag_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); }
                     }
+                    else if (ion.Contains("B("))
+                    {
+                        if (frag_temp.Any(p => p.Equals("B")) ) { to_plot.Add(idx); }
+                    }
                     else
                     {
                         to_plot.Add(idx);
@@ -6097,6 +6105,10 @@ namespace Isotope_fitting
                     else if (ion.Contains("M"))
                     {
                         if (frag_temp.Any(p => p.Equals("M"))) { max_min_Y_frag(out Y_max, Y_max, fra, x_min, x_max); }
+                    }
+                    else if (ion.Contains("B("))
+                    {
+                        if (frag_temp.Any(p => p.Equals("B"))) { max_min_Y_frag(out Y_max, Y_max, fra, x_min, x_max); }
                     }
                     else
                     {
@@ -8483,6 +8495,10 @@ namespace Isotope_fitting
                 {
                     if (frag_temp.Any(p => p.Equals("M"))) { fragstatistics.Add(idx); }
                 }
+                else if (ion.Contains("B("))
+                {
+                    if (frag_temp.Any(p => p.Equals("B"))) { fragstatistics.Add(idx); }
+                }
                 else
                 {
                     fragstatistics.Add(idx);
@@ -8714,6 +8730,10 @@ namespace Isotope_fitting
                     else if (ion.Contains("M"))
                     {
                         if (frag_temp.Any(p => p.Equals("M")) && label_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); }
+                    }
+                    else if (ion.Contains("B("))
+                    {
+                        if (frag_temp.Any(p => p.Equals("B")) && label_temp.Any(p => p.Equals("B"))) { to_plot.Add(idx); }
                     }
                     else
                     {
@@ -12295,9 +12315,13 @@ namespace Isotope_fitting
             PlotView minus_plot;
             bool is_logarithmic = false;
             bool is_losses = false;
+            bool is_legend = false;
             ToolStrip tt = GetControls(grp).OfType<ToolStrip>().First();
             is_logarithmic = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("log")).First().Checked;
-            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("losses")).First().Checked;                       
+            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("losses")).First().Checked;
+            is_legend = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("legend")).First().Checked;
+           
+
             if (pnl.Controls.Count > 0)
             {
                 //refresh Plotviews' settings that might have changed by the style Form
@@ -12307,7 +12331,7 @@ namespace Isotope_fitting
                 plus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
                 minus_plot = pnl.Controls[1] as PlotView;
                 minus_plot.Height = pnl.Height / 2;
-                minus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() {  MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
+                minus_plot.Model.Axes[0] = new OxyPlot.Axes.LinearAxis() {  MajorGridlineStyle = Ymajor_grid12_2,  IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 minus_plot.Model.Axes[1] = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Xmajor_grid12_2, MinorStep = x_minorStep12_2, MajorStep = x_majorStep12_2, MinorGridlineStyle = Xminor_grid12_2, TickStyle = X_tick12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "Residue Number [#AA]", Position = OxyPlot.Axes.AxisPosition.Bottom };
                 //bind the 2 X axes
                 plus_plot.Model.Axes[1].AxisChanged += (s, e) => {
@@ -12322,14 +12346,15 @@ namespace Isotope_fitting
                         plus_plot.Model.Axes[1].Zoom(minus_plot.Model.Axes[1].ActualMinimum, minus_plot.Model.Axes[1].ActualMaximum); plus_plot.InvalidatePlot(true);
                     }
                 };
-
+                plus_plot.Model.IsLegendVisible = is_legend;
+                minus_plot.Model.IsLegendVisible = is_legend;
             }
             else
             {
                 //create the Plotviews for plus (example:a+1,a+2) and minus(example:a-1,a-2) Hydrogens
                 plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White,Height=pnl.Height/2, Dock = System.Windows.Forms.DockStyle.Top };
                 pnl.Controls.Add(plus_plot);
-                PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
+                PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = is_legend, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
                 plus_plot.Model = model1;
                 var linearAxis1 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength=y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat=y_format12_2+ y_numformat12_2,  FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model1.Axes.Add(linearAxis1);
@@ -12339,7 +12364,7 @@ namespace Isotope_fitting
                 plus_plot.Controller = new CustomPlotController();
                 minus_plot = new PlotView() { Name = "minus_plot", BackColor = Color.White, Height = pnl.Height / 2, Dock = System.Windows.Forms.DockStyle.Bottom };
                 pnl.Controls.Add(minus_plot);
-                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
+                PlotModel model2 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = is_legend, LegendOrientation = LegendOrientation.Horizontal, LegendPosition = LegendPosition.TopCenter, LegendPlacement = LegendPlacement.Outside, LegendFontSize = 10, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = "  ", TitleColor = OxyColors.Green };
                 minus_plot.Model = model2;
                 var linearAxis3 = new OxyPlot.Axes.LinearAxis() { MajorGridlineStyle = Ymajor_grid12_2, IntervalLength = y_interval12_2, MinorGridlineStyle = Yminor_grid12_2, TickStyle = Y_tick12_2, StringFormat = y_format12_2 + y_numformat12_2, FontSize = 10, AxisTitleDistance = 7, TitleFontSize = 11, Title = "k" };
                 model2.Axes.Add(linearAxis3);
@@ -12885,10 +12910,18 @@ namespace Isotope_fitting
             Panel pnl = GetControls(grp).OfType<Panel>().Where(l => l.Name.Contains("plot")).First();
             pnl.Invalidate();
         }
+        private void losses_legendBtn1_CheckStateChanged(object sender, EventArgs e)
+        {
+            ToolStripItem tsp = (sender as ToolStripItem);
+            ToolStrip tt = tsp.GetCurrentParent();
+            GroupBox grp = tt.Parent as GroupBox;
+            Panel pnl = GetControls(grp).OfType<Panel>().Where(l => l.Name.Contains("plot")).First();
+            pnl.Invalidate();
+        }
         #endregion
 
         #endregion
-        
+
         #region EXTRACT PLOTS
 
         #region extract ppm_plot
@@ -13020,6 +13053,10 @@ namespace Isotope_fitting
                 else if (ion.Contains("M"))
                 {
                     if (frag_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); }
+                }
+                else if (ion.Contains("B("))
+                {
+                    if (frag_temp.Any(p => p.Equals("B")) ) { to_plot.Add(idx); }
                 }
                 else
                 {
@@ -14053,7 +14090,12 @@ namespace Isotope_fitting
 
 
 
+
         #endregion
 
+        private void frag_lbl_Btn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
