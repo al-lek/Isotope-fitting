@@ -869,7 +869,7 @@
             this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip2.Location = new System.Drawing.Point(285, 30);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(68, 37);
+            this.toolStrip2.Size = new System.Drawing.Size(37, 37);
             this.toolStrip2.TabIndex = 29;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -906,7 +906,7 @@
             this.Name = "Form12";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Primary Fragments\' plot format";
+            this.Text = "Properties";
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form12_DpiChanged);
             this.tabPage2.ResumeLayout(false);
             this.axisY_Charge_grpBx.ResumeLayout(false);

@@ -160,7 +160,7 @@ namespace Isotope_fitting
 
         private void refresh_Btn_Click(object sender, EventArgs e)
         {
-            frm2.tabs_plots_replot();
+            frm2.tabs_plots_replot("ppm");
         }
 
         private void bullet_size_numUD_ValueChanged(object sender, EventArgs e)

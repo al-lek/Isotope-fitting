@@ -2030,6 +2030,7 @@ namespace Isotope_fitting
             this.ppm_M.Size = new System.Drawing.Size(24, 24);
             this.ppm_M.Text = "M";
             this.ppm_M.ToolTipText = "M";
+            this.ppm_M.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_M_H2O
             // 
@@ -2043,6 +2044,7 @@ namespace Isotope_fitting
             this.ppm_M_H2O.Name = "ppm_M_H2O";
             this.ppm_M_H2O.Size = new System.Drawing.Size(59, 24);
             this.ppm_M_H2O.Text = "M-H2O";
+            this.ppm_M_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_M_NH3
             // 
@@ -2056,6 +2058,7 @@ namespace Isotope_fitting
             this.ppm_M_NH3.Name = "ppm_M_NH3";
             this.ppm_M_NH3.Size = new System.Drawing.Size(59, 24);
             this.ppm_M_NH3.Text = "M-NH3";
+            this.ppm_M_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_uncheckBtn
             // 
@@ -2093,6 +2096,7 @@ namespace Isotope_fitting
             this.ppm_B_.Name = "ppm_B_";
             this.ppm_B_.Size = new System.Drawing.Size(32, 24);
             this.ppm_B_.Text = "B()";
+            this.ppm_B_.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_toolStrip4
             // 
@@ -2121,6 +2125,7 @@ namespace Isotope_fitting
             this.ppm_internal_b.Name = "ppm_internal_b";
             this.ppm_internal_b.Size = new System.Drawing.Size(76, 22);
             this.ppm_internal_b.Text = "internal b";
+            this.ppm_internal_b.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_internal_b_H2O
             // 
@@ -2134,6 +2139,7 @@ namespace Isotope_fitting
             this.ppm_internal_b_H2O.Name = "ppm_internal_b_H2O";
             this.ppm_internal_b_H2O.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_b_H2O.Text = "internal b-H2O";
+            this.ppm_internal_b_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_internal_b_NH3
             // 
@@ -2147,6 +2153,7 @@ namespace Isotope_fitting
             this.ppm_internal_b_NH3.Name = "ppm_internal_b_NH3";
             this.ppm_internal_b_NH3.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_b_NH3.Text = "internal b-NH3";
+            this.ppm_internal_b_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_toolStrip5
             // 
@@ -2175,6 +2182,7 @@ namespace Isotope_fitting
             this.ppm_internal_a.Name = "ppm_internal_a";
             this.ppm_internal_a.Size = new System.Drawing.Size(76, 22);
             this.ppm_internal_a.Text = "internal a";
+            this.ppm_internal_a.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_internal_a_H2O
             // 
@@ -2188,6 +2196,7 @@ namespace Isotope_fitting
             this.ppm_internal_a_H2O.Name = "ppm_internal_a_H2O";
             this.ppm_internal_a_H2O.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_a_H2O.Text = "internal a-H2O";
+            this.ppm_internal_a_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_internal_a_NH3
             // 
@@ -2201,6 +2210,7 @@ namespace Isotope_fitting
             this.ppm_internal_a_NH3.Name = "ppm_internal_a_NH3";
             this.ppm_internal_a_NH3.Size = new System.Drawing.Size(111, 22);
             this.ppm_internal_a_NH3.Text = "internal a-NH3";
+            this.ppm_internal_a_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_toolStrip3
             // 
@@ -2241,6 +2251,7 @@ namespace Isotope_fitting
             this.ppm_w.Name = "ppm_w";
             this.ppm_w.Size = new System.Drawing.Size(23, 22);
             this.ppm_w.Text = "w";
+            this.ppm_w.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_w_H2O
             // 
@@ -2254,6 +2265,7 @@ namespace Isotope_fitting
             this.ppm_w_H2O.Name = "ppm_w_H2O";
             this.ppm_w_H2O.Size = new System.Drawing.Size(57, 22);
             this.ppm_w_H2O.Text = "w-H2O";
+            this.ppm_w_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_w_B
             // 
@@ -2267,6 +2279,7 @@ namespace Isotope_fitting
             this.ppm_w_B.Name = "ppm_w_B";
             this.ppm_w_B.Size = new System.Drawing.Size(47, 22);
             this.ppm_w_B.Text = "w-B()";
+            this.ppm_w_B.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_x
             // 
@@ -2280,6 +2293,7 @@ namespace Isotope_fitting
             this.ppm_x.Name = "ppm_x";
             this.ppm_x.Size = new System.Drawing.Size(23, 22);
             this.ppm_x.Text = "x";
+            this.ppm_x.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_x_H2O
             // 
@@ -2293,6 +2307,7 @@ namespace Isotope_fitting
             this.ppm_x_H2O.Name = "ppm_x_H2O";
             this.ppm_x_H2O.Size = new System.Drawing.Size(54, 22);
             this.ppm_x_H2O.Text = "x-H2O";
+            this.ppm_x_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_x_NH3
             // 
@@ -2306,6 +2321,7 @@ namespace Isotope_fitting
             this.ppm_x_NH3.Name = "ppm_x_NH3";
             this.ppm_x_NH3.Size = new System.Drawing.Size(54, 22);
             this.ppm_x_NH3.Text = "x-NH3";
+            this.ppm_x_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_y
             // 
@@ -2319,6 +2335,7 @@ namespace Isotope_fitting
             this.ppm_y.Name = "ppm_y";
             this.ppm_y.Size = new System.Drawing.Size(23, 22);
             this.ppm_y.Text = "y";
+            this.ppm_y.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_y_H2O
             // 
@@ -2332,6 +2349,7 @@ namespace Isotope_fitting
             this.ppm_y_H2O.Name = "ppm_y_H2O";
             this.ppm_y_H2O.Size = new System.Drawing.Size(55, 22);
             this.ppm_y_H2O.Text = "y-H2O";
+            this.ppm_y_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_y_NH3
             // 
@@ -2345,6 +2363,7 @@ namespace Isotope_fitting
             this.ppm_y_NH3.Name = "ppm_y_NH3";
             this.ppm_y_NH3.Size = new System.Drawing.Size(55, 22);
             this.ppm_y_NH3.Text = "y-NH3";
+            this.ppm_y_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_z
             // 
@@ -2358,6 +2377,7 @@ namespace Isotope_fitting
             this.ppm_z.Name = "ppm_z";
             this.ppm_z.Size = new System.Drawing.Size(23, 22);
             this.ppm_z.Text = "z";
+            this.ppm_z.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_z_H2O
             // 
@@ -2371,6 +2391,7 @@ namespace Isotope_fitting
             this.ppm_z_H2O.Name = "ppm_z_H2O";
             this.ppm_z_H2O.Size = new System.Drawing.Size(54, 22);
             this.ppm_z_H2O.Text = "z-H2O";
+            this.ppm_z_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_z_NH3
             // 
@@ -2384,6 +2405,7 @@ namespace Isotope_fitting
             this.ppm_z_NH3.Name = "ppm_z_NH3";
             this.ppm_z_NH3.Size = new System.Drawing.Size(54, 22);
             this.ppm_z_NH3.Text = "z-NH3";
+            this.ppm_z_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_d2
             // 
@@ -2397,6 +2419,7 @@ namespace Isotope_fitting
             this.ppm_d2.Name = "ppm_d2";
             this.ppm_d2.Size = new System.Drawing.Size(25, 22);
             this.ppm_d2.Text = "d ";
+            this.ppm_d2.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_v
             // 
@@ -2410,6 +2433,7 @@ namespace Isotope_fitting
             this.ppm_v.Name = "ppm_v";
             this.ppm_v.Size = new System.Drawing.Size(23, 20);
             this.ppm_v.Text = "v";
+            this.ppm_v.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_w2
             // 
@@ -2423,6 +2447,7 @@ namespace Isotope_fitting
             this.ppm_w2.Name = "ppm_w2";
             this.ppm_w2.Size = new System.Drawing.Size(23, 20);
             this.ppm_w2.Text = "w";
+            this.ppm_w2.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_toolStrip2
             // 
@@ -2460,6 +2485,7 @@ namespace Isotope_fitting
             this.ppm_a.Name = "ppm_a";
             this.ppm_a.Size = new System.Drawing.Size(23, 22);
             this.ppm_a.Text = "a";
+            this.ppm_a.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_a_H2O
             // 
@@ -2473,6 +2499,7 @@ namespace Isotope_fitting
             this.ppm_a_H2O.Name = "ppm_a_H2O";
             this.ppm_a_H2O.Size = new System.Drawing.Size(56, 22);
             this.ppm_a_H2O.Text = "a-H2O";
+            this.ppm_a_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_a_NH3
             // 
@@ -2486,6 +2513,7 @@ namespace Isotope_fitting
             this.ppm_a_NH3.Name = "ppm_a_NH3";
             this.ppm_a_NH3.Size = new System.Drawing.Size(56, 22);
             this.ppm_a_NH3.Text = "a-NH3";
+            this.ppm_a_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_b
             // 
@@ -2499,6 +2527,7 @@ namespace Isotope_fitting
             this.ppm_b.Name = "ppm_b";
             this.ppm_b.Size = new System.Drawing.Size(23, 22);
             this.ppm_b.Text = "b";
+            this.ppm_b.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_b_H2O
             // 
@@ -2512,6 +2541,7 @@ namespace Isotope_fitting
             this.ppm_b_H2O.Name = "ppm_b_H2O";
             this.ppm_b_H2O.Size = new System.Drawing.Size(56, 22);
             this.ppm_b_H2O.Text = "b-H2O";
+            this.ppm_b_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_b_NH3
             // 
@@ -2525,6 +2555,7 @@ namespace Isotope_fitting
             this.ppm_b_NH3.Name = "ppm_b_NH3";
             this.ppm_b_NH3.Size = new System.Drawing.Size(56, 22);
             this.ppm_b_NH3.Text = "b-NH3";
+            this.ppm_b_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_c
             // 
@@ -2538,6 +2569,7 @@ namespace Isotope_fitting
             this.ppm_c.Name = "ppm_c";
             this.ppm_c.Size = new System.Drawing.Size(23, 22);
             this.ppm_c.Text = "c";
+            this.ppm_c.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_c_H2O
             // 
@@ -2551,6 +2583,7 @@ namespace Isotope_fitting
             this.ppm_c_H2O.Name = "ppm_c_H2O";
             this.ppm_c_H2O.Size = new System.Drawing.Size(55, 22);
             this.ppm_c_H2O.Text = "c-H2O";
+            this.ppm_c_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_c_NH3
             // 
@@ -2564,6 +2597,7 @@ namespace Isotope_fitting
             this.ppm_c_NH3.Name = "ppm_c_NH3";
             this.ppm_c_NH3.Size = new System.Drawing.Size(55, 22);
             this.ppm_c_NH3.Text = "c-NH3";
+            this.ppm_c_NH3.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_d
             // 
@@ -2577,6 +2611,7 @@ namespace Isotope_fitting
             this.ppm_d.Name = "ppm_d";
             this.ppm_d.Size = new System.Drawing.Size(23, 22);
             this.ppm_d.Text = "d";
+            this.ppm_d.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_d_H2O
             // 
@@ -2590,6 +2625,7 @@ namespace Isotope_fitting
             this.ppm_d_H2O.Name = "ppm_d_H2O";
             this.ppm_d_H2O.Size = new System.Drawing.Size(56, 22);
             this.ppm_d_H2O.Text = "d-H2O";
+            this.ppm_d_H2O.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // ppm_d_B
             // 
@@ -2603,6 +2639,7 @@ namespace Isotope_fitting
             this.ppm_d_B.Name = "ppm_d_B";
             this.ppm_d_B.Size = new System.Drawing.Size(46, 22);
             this.ppm_d_B.Text = "d-B()";
+            this.ppm_d_B.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // toolStripContainer1
             // 

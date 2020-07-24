@@ -87,12 +87,12 @@ namespace Isotope_fitting
 
         private void ystepminor_UD13_ValueChanged(object sender, EventArgs e)
         {
-            frm2.yINT_minorStep13 = (double)ystepminor_UD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
+            frm2.yINT_minorStep13 = (double)ystepminor_UD13.Value;frm2.internal_plots_refresh(); 
         }
 
         private void ystepmajor_UD13_ValueChanged(object sender, EventArgs e)
         {
-            frm2.yINT_majorStep13 = (double)ystepmajor_UD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
+            frm2.yINT_majorStep13 = (double)ystepmajor_UD13.Value;frm2.internal_plots_refresh();
         }
 
         private void x_majorGrid_UD13_SelectedItemChanged(object sender, EventArgs e)
@@ -177,7 +177,7 @@ namespace Isotope_fitting
 
         private void intLine_numUD13_ValueChanged(object sender, EventArgs e)
         {
-            frm2.int_width = (double)intLine_numUD13.Value;frm2.internal_plots_refresh(); frm2.tabs_plots_replot();
+            frm2.int_width = (double)intLine_numUD13.Value;frm2.internal_plots_refresh(); 
         }
 
         private void Form13_DpiChanged(object sender, DpiChangedEventArgs e)
@@ -205,7 +205,7 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Please check your input. Fill the box with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             }
-            frm2.paint_annotations_in_graphs(false, 2,true);
+            frm2.paint_annotations_in_graphs(false, 2,true); frm2.tabs_plots_replot("index");
         }
     }
 }

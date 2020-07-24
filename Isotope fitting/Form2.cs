@@ -9292,6 +9292,10 @@ namespace Isotope_fitting
                 pp.InvalidatePlot(true);
             }
         }
+        private void ppm_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!block_tab_diagrams_refresh) initialize_plot_tabs(false, "ppm");
+        }
         #endregion
 
         #region sequence
@@ -11384,46 +11388,6 @@ namespace Isotope_fitting
 
             ppmSave_Btn.Click += (s, e) => { export_copy_plot(false, ppm_plot); }; ppmCopy_Btn.Click += (s, e) => { export_copy_plot(true, ppm_plot); };
             #endregion
-
-            #region ppm plot CHECKBOXES
-            ppm_a.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_a_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_a_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_b.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_b_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_b_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_c.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_c_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_c_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_d.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_d_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_d_B.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_w.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_w_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_w_B.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_x.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_x_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_x_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_y.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_y_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_y_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_z.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_z_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_z_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_internal_a.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_internal_a_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_internal_a_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_internal_b.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_internal_b_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_internal_b_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_M.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_M_H2O.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_M_NH3.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_v.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_d2.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-            ppm_w2.CheckedChanged += (s, e) => { if (!block_tab_diagrams_refresh) initialize_plot_tabs(); };
-
-            #endregion
         }
 
         private void initialize_ions_todraw()
@@ -11435,44 +11399,48 @@ namespace Isotope_fitting
 
         private void initialize_plot_tabs(bool all = true,string ion="")
         {
-            if ((all || ion.Equals("ppm")) &&ppm_plot.Model.Series != null) {ppm_plot.Model.Series.Clear();}
-            if (ax_plot.Model.Series != null) {ax_plot.Model.Series.Clear();}
-            if (by_plot.Model.Series != null) {by_plot.Model.Series.Clear();}
-            if (cz_plot.Model.Series != null) {cz_plot.Model.Series.Clear();}
-            if (axCharge_plot.Model.Series != null) {axCharge_plot.Model.Series.Clear();}
-            if (byCharge_plot.Model.Series != null) {byCharge_plot.Model.Series.Clear();}
-            if (czCharge_plot.Model.Series != null) {czCharge_plot.Model.Series.Clear();}
-            if (index_plot.Model.Series != null) { index_plot.Model.Series.Clear();}
-            if (indexto_plot.Model.Series != null) {indexto_plot.Model.Series.Clear();}
-            if (indexIntensity_plot.Model.Series != null) {indexIntensity_plot.Model.Series.Clear();}
-            if (indextoIntensity_plot.Model.Series != null) { indextoIntensity_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("ppm")) && ppm_plot.Model.Series != null) {ppm_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("a")) && ax_plot.Model.Series != null) {ax_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("b")) && by_plot.Model.Series != null) {by_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("c")) && cz_plot.Model.Series != null) {cz_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("aC")) && axCharge_plot.Model.Series != null) {axCharge_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("bC")) && byCharge_plot.Model.Series != null) {byCharge_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("cC")) && czCharge_plot.Model.Series != null) {czCharge_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("index")) && index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
+            if ((all || ion.Equals("dz")) && dz_plot.Model.Series != null){dz_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("dC")) && dzCharge_plot.Model.Series != null) {dzCharge_plot.Model.Series.Clear(); }
 
-            if (dz_plot.Model.Series != null){dz_plot.Model.Series.Clear();dzCharge_plot.Model.Series.Clear();}
             if (is_riken)
             {
-                charge_plot_init(axCharge_plot, "a", "w", 1, Color.Green, Color.LimeGreen);
-                charge_plot_init(byCharge_plot, "b", "x", 2, Color.Blue, Color.DodgerBlue);
-                charge_plot_init(czCharge_plot, "c", "y", 3, Color.Firebrick, Color.Tomato);
-                charge_plot_init(dzCharge_plot, "d", "z", 4, Color.DeepPink, Color.HotPink);
-                intensity_plot_init(ax_plot, "a", "w", 1, OxyColors.Green, OxyColors.LimeGreen);
-                intensity_plot_init(by_plot, "b", "x", 2, OxyColors.Blue, OxyColors.DodgerBlue);
-                intensity_plot_init(cz_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
-                intensity_plot_init(dz_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
-                ppm_plot_init(ppm_plot);
-                create_internal_plot(index_plot, indexIntensity_plot, 2, Color.Green, Color.Blue);
-                create_internal_plot(indexto_plot, indextoIntensity_plot, 1, Color.Green, Color.Blue);
+                if (all || ion.Equals("aC")) charge_plot_init(axCharge_plot, "a", "w", 1, Color.Green, Color.LimeGreen);
+                if (all || ion.Equals("bC")) charge_plot_init(byCharge_plot, "b", "x", 2, Color.Blue, Color.DodgerBlue);
+                if (all || ion.Equals("cC")) charge_plot_init(czCharge_plot, "c", "y", 3, Color.Firebrick, Color.Tomato);
+                if (all || ion.Equals("dC")) charge_plot_init(dzCharge_plot, "d", "z", 4, Color.DeepPink, Color.HotPink);
+                if (all || ion.Equals("a")) intensity_plot_init(ax_plot, "a", "w", 1, OxyColors.Green, OxyColors.LimeGreen);
+                if (all || ion.Equals("b")) intensity_plot_init(by_plot, "b", "x", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                if (all || ion.Equals("c")) intensity_plot_init(cz_plot, "c", "y", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                if (all || ion.Equals("d")) intensity_plot_init(dz_plot, "d", "z", 4, OxyColors.DeepPink, OxyColors.HotPink);
+                if(all || ion.Equals("ppm"))ppm_plot_init(ppm_plot);
+                if (all || ion.Equals("index"))
+                {
+                    create_internal_plot(index_plot, indexIntensity_plot, 2, Color.Green, Color.Blue);
+                    create_internal_plot(indexto_plot, indextoIntensity_plot, 1, Color.Green, Color.Blue);
+                }
             }
             else
             {
-                charge_plot_init(axCharge_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
-                charge_plot_init(byCharge_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
-                charge_plot_init(czCharge_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
-                intensity_plot_init(ax_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
-                intensity_plot_init(by_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
-                intensity_plot_init(cz_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
-                ppm_plot_init(ppm_plot);
-                create_internal_plot(index_plot, indexIntensity_plot, 2, Color.Green, Color.Blue);
-                create_internal_plot(indexto_plot, indextoIntensity_plot, 1, Color.Green, Color.Blue);
+                if (all || ion.Equals("aC")) charge_plot_init(axCharge_plot, "a", "x", 1, Color.Green, Color.LimeGreen);
+                if (all || ion.Equals("bC")) charge_plot_init(byCharge_plot, "b", "y", 2, Color.Blue, Color.DodgerBlue);
+                if (all || ion.Equals("cC")) charge_plot_init(czCharge_plot, "c", "z", 3, Color.Firebrick, Color.Tomato);
+                if (all || ion.Equals("a")) intensity_plot_init(ax_plot, "a", "x", 1, OxyColors.Green, OxyColors.LimeGreen);
+                if (all || ion.Equals("b")) intensity_plot_init(by_plot, "b", "y", 2, OxyColors.Blue, OxyColors.DodgerBlue);
+                if (all || ion.Equals("c")) intensity_plot_init(cz_plot, "c", "z", 3, OxyColors.Firebrick, OxyColors.Tomato);
+                if (all || ion.Equals("ppm")) ppm_plot_init(ppm_plot);
+                if (all || ion.Equals("index"))
+                {
+                    create_internal_plot(index_plot, indexIntensity_plot, 2, Color.Green, Color.Blue);
+                    create_internal_plot(indexto_plot, indextoIntensity_plot, 1, Color.Green, Color.Blue);
+                }
             }
             paint_annotations_in_graphs();
         }
@@ -12397,9 +12365,9 @@ namespace Isotope_fitting
             plot.Model.Axes[1].MinorStep = x_minorStep12;
             plot.InvalidatePlot(true);
         }
-        public void tabs_plots_replot()
+        public void tabs_plots_replot(string ion="")
         {
-            initialize_plot_tabs();
+            initialize_plot_tabs(false,ion);
         }
 
         #endregion
@@ -14234,6 +14202,7 @@ namespace Isotope_fitting
         }
 
         #endregion
-                
+
+       
     }
 }

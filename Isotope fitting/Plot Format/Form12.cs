@@ -173,7 +173,7 @@ namespace Isotope_fitting
 
         private void bar_numUD_ValueChanged(object sender, EventArgs e)
         {
-            frm2.bar_width = (double)bar_numUD.Value; frm2.primary_plots_refresh(); frm2.tabs_plots_replot();
+            frm2.bar_width = (double)bar_numUD.Value; frm2.primary_plots_refresh(); refresh();
         }
 
         #endregion
@@ -311,10 +311,14 @@ namespace Isotope_fitting
             catch
             {
                 MessageBox.Show("Please check your input. Fill the box with the numbers of the areas you want to be colored  e.g.1-3,6-8");
-            }          
-            frm2.paint_annotations_in_graphs(false, 1,true);
+            } 
+            frm2.paint_annotations_in_graphs(false, 1, true); refresh();
         }
-
+        private void refresh()
+        {
+            frm2.tabs_plots_replot("a"); frm2.tabs_plots_replot("b"); frm2.tabs_plots_replot("c");
+            frm2.tabs_plots_replot("aC"); frm2.tabs_plots_replot("bC"); frm2.tabs_plots_replot("cC");
+        }
         private void color_Btn_Click(object sender, EventArgs e)
         {
             ColorDialog clrDlg = new ColorDialog();

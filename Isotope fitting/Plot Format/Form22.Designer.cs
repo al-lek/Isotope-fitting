@@ -56,10 +56,10 @@
             this.y_ppm_tickUD = new System.Windows.Forms.DomainUpDown();
             this.axisy_ppm_tick_Lbl = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.bullet_size_numUD = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.refresh_Btn = new System.Windows.Forms.ToolStripButton();
+            this.bullet_size_numUD = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.axisX_Charge_grpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.end_valUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.start_valUD)).BeginInit();
@@ -68,8 +68,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepmajor_UD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepminor_UD)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).BeginInit();
             this.toolStrip2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).BeginInit();
             this.SuspendLayout();
             // 
             // axisX_Charge_grpBx
@@ -469,6 +469,31 @@
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             // 
+            // toolStrip2
+            // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refresh_Btn});
+            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip2.Location = new System.Drawing.Point(490, 16);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(68, 52);
+            this.toolStrip2.TabIndex = 28;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // refresh_Btn
+            // 
+            this.refresh_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refresh_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh_Btn.Image")));
+            this.refresh_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refresh_Btn.Name = "refresh_Btn";
+            this.refresh_Btn.Size = new System.Drawing.Size(34, 49);
+            this.refresh_Btn.Text = "Refresh plot";
+            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
+            // 
             // bullet_size_numUD
             // 
             this.bullet_size_numUD.DecimalPlaces = 1;
@@ -510,31 +535,6 @@
             this.label2.TabIndex = 26;
             this.label2.Text = "Point size factor";
             // 
-            // toolStrip2
-            // 
-            this.toolStrip2.BackColor = System.Drawing.Color.Transparent;
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refresh_Btn});
-            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip2.Location = new System.Drawing.Point(521, 16);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(37, 52);
-            this.toolStrip2.TabIndex = 28;
-            this.toolStrip2.Text = "toolStrip2";
-            // 
-            // refresh_Btn
-            // 
-            this.refresh_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.refresh_Btn.Image = ((System.Drawing.Image)(resources.GetObject("refresh_Btn.Image")));
-            this.refresh_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.refresh_Btn.Name = "refresh_Btn";
-            this.refresh_Btn.Size = new System.Drawing.Size(34, 49);
-            this.refresh_Btn.Text = "Refresh plot";
-            this.refresh_Btn.Click += new System.EventHandler(this.refresh_Btn_Click);
-            // 
             // Form22
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -561,9 +561,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.y_ppm_stepminor_UD)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).EndInit();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bullet_size_numUD)).EndInit();
             this.ResumeLayout(false);
 
         }
