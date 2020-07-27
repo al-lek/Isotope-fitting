@@ -3490,7 +3490,7 @@ namespace Isotope_fitting
             this.sequence_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.sequence_toolStrip.Location = new System.Drawing.Point(717, 27);
             this.sequence_toolStrip.Name = "sequence_toolStrip";
-            this.sequence_toolStrip.Size = new System.Drawing.Size(35, 193);
+            this.sequence_toolStrip.Size = new System.Drawing.Size(35, 212);
             this.sequence_toolStrip.TabIndex = 8;
             // 
             // seqSave_Btn
@@ -3841,7 +3841,6 @@ namespace Isotope_fitting
             this.frag_lbl_Btn.Text = "Display Fragments\' Label";
             this.frag_lbl_Btn.ToolTipText = "Show primary fragments label";
             this.frag_lbl_Btn.CheckStateChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
-            this.frag_lbl_Btn.DoubleClick += new System.EventHandler(this.fragPlotLbl_chkBx_DoubleClick);
             this.frag_lbl_Btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frag_lbl_Btn_MouseDown);
             // 
             // toolStripButton1
@@ -6032,7 +6031,7 @@ namespace Isotope_fitting
             // displayIonTypesListToolStripMenuItem
             // 
             this.displayIonTypesListToolStripMenuItem.Name = "displayIonTypesListToolStripMenuItem";
-            this.displayIonTypesListToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.displayIonTypesListToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.displayIonTypesListToolStripMenuItem.Text = "Display ion types list";
             this.displayIonTypesListToolStripMenuItem.Click += new System.EventHandler(this.displayIonTypesListToolStripMenuItem_Click);
             // 
@@ -6047,7 +6046,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v26.1.3";
+            this.Text = "Peak Finder v26.1.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
