@@ -1746,6 +1746,7 @@ namespace Isotope_fitting
                 else base_node_name = "Loaded MS product files";
                 if (MSproduct_treeView == null || MSproduct_treeView.Nodes.Count == 0) { MSproduct_treeView.Nodes.Add(base_node_name); }
                 MSproduct_treeView.Nodes[0].Nodes.Add(loaded_ms);
+                MSproduct_treeView.Visible = true;
                 lista.RemoveAt(0);
                 if (is_riken) lista.RemoveAt(0);
                 progress_display_start(lista.Count, "Importing fragments list...");
@@ -8857,6 +8858,7 @@ namespace Isotope_fitting
             if (ChemFormulas.Count > 0) { ChemFormulas.Clear(); }
             if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
             if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
+            MSproduct_treeView.Visible = false;
         }
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -8866,6 +8868,7 @@ namespace Isotope_fitting
                 ChemFormulas.Clear();
                 if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
                 MSproduct_treeView.Nodes.Clear();
+                MSproduct_treeView.Visible = false;
             }
             else if (MSproduct_treeView.SelectedNode != null)
             {
@@ -13558,6 +13561,7 @@ namespace Isotope_fitting
             CloseAllOpenForm("Form2");
             if (frm24_2 != null) { frm24_2 = null; }
             if (frm24 != null) { frm24 = null; }
+            MSproduct_treeView.Visible = false;
             //plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             is_exp_deconvoluted = false;
             labels_checked.Clear();
