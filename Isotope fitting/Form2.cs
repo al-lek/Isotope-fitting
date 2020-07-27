@@ -714,7 +714,7 @@ namespace Isotope_fitting
         #region riken state change      
         private void application_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows application mode dialog", "Application", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             //if any other form rather than the main is open, it must close
             CloseAllOpenForm("Form2");
             initiate_change_state_form();
@@ -1624,6 +1624,11 @@ namespace Isotope_fitting
             }
             return final;
         }
+        public void recalc_peaks()
+        {
+            Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
+            peak_detection.Start();
+        }
         #endregion
 
         #region 1.b Import fragment list
@@ -2463,7 +2468,7 @@ namespace Isotope_fitting
             if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string file_type = "an 'MS Product'";
             if(is_riken) file_type = "a 'Riken'";
-            if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculation Box'. Please try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculator'. Please try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (is_riken)
             {
                 if (frm24_2 != null)
@@ -6008,14 +6013,7 @@ namespace Isotope_fitting
                 LC_1.ViewXY.Bands.Add(band2);
             }
         }
-        private void legend_chkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-
-            //iso_plot.Model.IsLegendVisible = legend_chkBx.Checked;
-            //invalidate_all();
-            LC_1.ViewXY.LegendBox.Visible = legend_chkBx.Checked;
-        }
+       
 
         private void frag_annotation(List<int> to_plot, LightningChartUltimate plot)
         {
@@ -6061,8 +6059,8 @@ namespace Isotope_fitting
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-
+            if (help_Btn.Checked) { MessageBox.Show(". With left click sets mouse tool to measure distances in a spectrum", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            // 
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
                 // Remove exsisting custom x - axis tickmarks
@@ -6463,7 +6461,7 @@ namespace Isotope_fitting
         }
         private void settingsPeak_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows the experimental data settings dialog. ", "Experimental setings", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             Form8 frm8 = new Form8(this);
             frm8.FormClosed += (s, f) => { save_preferences(); };
             frm8.ShowDialog();
@@ -8487,6 +8485,7 @@ namespace Isotope_fitting
         }
         private void extractPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //exports current spectrum image
             plotview_rebuild();
         }
         private void seqBtn_Click(object sender, EventArgs e)
@@ -12168,7 +12167,7 @@ namespace Isotope_fitting
                             custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
                             custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
                         }
-                        LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        LineSeries tmp = new LineSeries() {CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
                         tmp.ItemsSource = custom_Index;
                         tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
 
@@ -12203,7 +12202,7 @@ namespace Isotope_fitting
                             custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
                         }
 
-                        LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        LineSeries tmp = new LineSeries() {CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
                         tmp.ItemsSource = custom_Index;
                         tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
 
@@ -12217,7 +12216,6 @@ namespace Isotope_fitting
                         plotIntensity.Model.Series.Add(bar);
                         k++;
                         if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
-
                     }
                 }  
                  plotIntensity.Model.Axes[1].Maximum = max_i * 1.2;
@@ -12232,7 +12230,7 @@ namespace Isotope_fitting
                 plot.Model.Axes[0].Maximum =  plotIntensity.Model.Axes[0].Maximum = IonDrawIndexTo.Count + yINT_minorStep13 / 2;
                 plot.Model.Axes[0].Minimum =  plotIntensity.Model.Axes[0].Minimum = -yINT_minorStep13 / 2;
             }
-            plot.InvalidatePlot(true);
+            plot.InvalidatePlot(true); plotIntensity.InvalidatePlot(true);
         }
         private List<ScatterSeries> create_scatterseries(Color clr,string frag, string plot_type, double _size,MarkerType shape=MarkerType.Circle)
         {
@@ -14207,6 +14205,18 @@ namespace Isotope_fitting
 
         #endregion
 
-       
+        private void autoscale_Btn_Click(object sender, EventArgs e)
+        {
+            //enables or disables automatic scaling of intensity axis
+        }
+
+        private void displayIonTypesListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frag_lbl_Btn_MouseDown(object sender, MouseEventArgs e)
+        {
+        }
     }
 }

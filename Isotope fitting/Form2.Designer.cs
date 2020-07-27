@@ -308,7 +308,6 @@ namespace Isotope_fitting
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.zoomIn_Y_Btn = new System.Windows.Forms.ToolStripButton();
             this.zoomOut_Y_Btn = new System.Windows.Forms.ToolStripButton();
-            this.legend_chkBx = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripSeparator();
@@ -497,6 +496,8 @@ namespace Isotope_fitting
             this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -597,6 +598,7 @@ namespace Isotope_fitting
             this.losses_toolStrip2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.frag_lbl_contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -611,7 +613,7 @@ namespace Isotope_fitting
             // 
             this.removeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("removeToolStripMenuItem.Image")));
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.removeToolStripMenuItem.Text = "Delete file";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
@@ -3741,7 +3743,6 @@ namespace Isotope_fitting
             this.cursor_chkBx,
             this.zoomIn_Y_Btn,
             this.zoomOut_Y_Btn,
-            this.legend_chkBx,
             this.frag_lbl_Btn,
             this.toolStripButton1,
             this.toolStripButton3,
@@ -3793,6 +3794,7 @@ namespace Isotope_fitting
             this.autoscale_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.autoscale_Btn.Size = new System.Drawing.Size(34, 29);
             this.autoscale_Btn.Text = "Autoscale";
+            this.autoscale_Btn.Click += new System.EventHandler(this.autoscale_Btn_Click);
             // 
             // cursor_chkBx
             // 
@@ -3826,18 +3828,6 @@ namespace Isotope_fitting
             this.zoomOut_Y_Btn.ToolTipText = "Zoom Out Y Axis";
             this.zoomOut_Y_Btn.Click += new System.EventHandler(this.zoomOut_Y_Btn_Click);
             // 
-            // legend_chkBx
-            // 
-            this.legend_chkBx.CheckOnClick = true;
-            this.legend_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.legend_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("legend_chkBx.Image")));
-            this.legend_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.legend_chkBx.Name = "legend_chkBx";
-            this.legend_chkBx.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.legend_chkBx.Size = new System.Drawing.Size(34, 29);
-            this.legend_chkBx.Text = "Show Legends";
-            this.legend_chkBx.CheckedChanged += new System.EventHandler(this.legend_chkBx_CheckedChanged);
-            // 
             // frag_lbl_Btn
             // 
             this.frag_lbl_Btn.CheckOnClick = true;
@@ -3852,6 +3842,7 @@ namespace Isotope_fitting
             this.frag_lbl_Btn.ToolTipText = "Show primary fragments label";
             this.frag_lbl_Btn.CheckStateChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
             this.frag_lbl_Btn.DoubleClick += new System.EventHandler(this.fragPlotLbl_chkBx_DoubleClick);
+            this.frag_lbl_Btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frag_lbl_Btn_MouseDown);
             // 
             // toolStripButton1
             // 
@@ -4162,7 +4153,7 @@ namespace Isotope_fitting
             this.ProfCalc_Btn.Name = "ProfCalc_Btn";
             this.ProfCalc_Btn.Size = new System.Drawing.Size(34, 34);
             this.ProfCalc_Btn.Text = "Fragment Calculator";
-            this.ProfCalc_Btn.ToolTipText = "Show peak list";
+            this.ProfCalc_Btn.ToolTipText = "Fragment Calculator";
             this.ProfCalc_Btn.Click += new System.EventHandler(this.ProfCalc_Btn_Click);
             // 
             // plotFragProf_chkBox
@@ -4239,7 +4230,8 @@ namespace Isotope_fitting
             this.loadExp_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.loadExp_Btn.Name = "loadExp_Btn";
             this.loadExp_Btn.Size = new System.Drawing.Size(34, 34);
-            this.loadExp_Btn.ToolTipText = "Load Exoerimental Data";
+            this.loadExp_Btn.Text = "Load Experimental Data";
+            this.loadExp_Btn.ToolTipText = "Load Experimental Data";
             this.loadExp_Btn.Click += new System.EventHandler(this.loadExp_Btn_Click);
             // 
             // settingsPeak_Btn
@@ -4459,16 +4451,16 @@ namespace Isotope_fitting
             // 
             this.loadFragmentsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadFragmentsToolStripMenuItem.Image")));
             this.loadFragmentsToolStripMenuItem.Name = "loadFragmentsToolStripMenuItem";
-            this.loadFragmentsToolStripMenuItem.Size = new System.Drawing.Size(227, 36);
-            this.loadFragmentsToolStripMenuItem.Text = "Load Frag.";
+            this.loadFragmentsToolStripMenuItem.Size = new System.Drawing.Size(256, 36);
+            this.loadFragmentsToolStripMenuItem.Text = "Load Fragments";
             this.loadFragmentsToolStripMenuItem.Click += new System.EventHandler(this.loadFragmentsToolStripMenuItem_Click);
             // 
             // loadFragmentsAndRecalculateResolutionToolStripMenuItem
             // 
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadFragmentsAndRecalculateResolutionToolStripMenuItem.Image")));
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Name = "loadFragmentsAndRecalculateResolutionToolStripMenuItem";
-            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Size = new System.Drawing.Size(227, 36);
-            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Text = "Load Frag. and recalc. Res.";
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Size = new System.Drawing.Size(256, 36);
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Text = "Load and recalculate Resolution";
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Click += new System.EventHandler(this.loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click);
             // 
             // saveListBtn11
@@ -6029,6 +6021,21 @@ namespace Isotope_fitting
             this.toolStripButton4.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton4.Text = "toolStripButton4";
             // 
+            // frag_lbl_contextMenuStrip1
+            // 
+            this.frag_lbl_contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.displayIonTypesListToolStripMenuItem});
+            this.frag_lbl_contextMenuStrip1.Name = "frag_lbl_contextMenuStrip1";
+            this.frag_lbl_contextMenuStrip1.ShowImageMargin = false;
+            this.frag_lbl_contextMenuStrip1.Size = new System.Drawing.Size(157, 26);
+            // 
+            // displayIonTypesListToolStripMenuItem
+            // 
+            this.displayIonTypesListToolStripMenuItem.Name = "displayIonTypesListToolStripMenuItem";
+            this.displayIonTypesListToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.displayIonTypesListToolStripMenuItem.Text = "Display ion types list";
+            this.displayIonTypesListToolStripMenuItem.Click += new System.EventHandler(this.displayIonTypesListToolStripMenuItem_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6217,6 +6224,7 @@ namespace Isotope_fitting
             this.panel3.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.frag_lbl_contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -6468,7 +6476,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton cursor_chkBx;
         private System.Windows.Forms.ToolStripButton zoomIn_Y_Btn;
         private System.Windows.Forms.ToolStripButton zoomOut_Y_Btn;
-        private System.Windows.Forms.ToolStripButton legend_chkBx;
         private System.Windows.Forms.ToolStripSeparator toolStripButton1;
         private System.Windows.Forms.ToolStripSeparator toolStripButton3;
         private System.Windows.Forms.GroupBox res_grpBox;
@@ -6686,5 +6693,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton ppm_v;
         private System.Windows.Forms.ToolStripButton ppm_w2;
         private System.Windows.Forms.PictureBox fasm_picBox;
+        private System.Windows.Forms.ContextMenuStrip frag_lbl_contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem displayIonTypesListToolStripMenuItem;
     }
 }

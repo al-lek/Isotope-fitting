@@ -673,7 +673,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form24_2";
-            this.Text = "Calculation Box";
+            this.Text = "Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form24_2_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();

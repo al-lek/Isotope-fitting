@@ -38,17 +38,18 @@
             this.selection_list_1 = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.save_peakBtn = new System.Windows.Forms.ToolStripButton();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.save_btn = new System.Windows.Forms.ToolStripButton();
             this.recalc_Exp_Btn = new System.Windows.Forms.ToolStripButton();
+            this.recalc_peakBtn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -203,22 +204,6 @@
             this.tabPage1.Text = "Peak Detection";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.toolStrip2);
-            this.tabPage2.Controls.Add(this.listRes_radBtn);
-            this.tabPage2.Controls.Add(this.resolution_list_combBox);
-            this.tabPage2.Controls.Add(this.constRes_radBtn);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.selection_list_1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(241, 161);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Deconvolution";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
@@ -226,7 +211,8 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.save_peakBtn});
+            this.save_peakBtn,
+            this.recalc_peakBtn});
             this.toolStrip1.Location = new System.Drawing.Point(3, 121);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(235, 37);
@@ -243,6 +229,22 @@
             this.save_peakBtn.Size = new System.Drawing.Size(34, 34);
             this.save_peakBtn.Text = "Save";
             this.save_peakBtn.Click += new System.EventHandler(this.save_peak_btn_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.toolStrip2);
+            this.tabPage2.Controls.Add(this.listRes_radBtn);
+            this.tabPage2.Controls.Add(this.resolution_list_combBox);
+            this.tabPage2.Controls.Add(this.constRes_radBtn);
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.selection_list_1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(241, 161);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Deconvolution";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // toolStrip2
             // 
@@ -281,6 +283,17 @@
             this.recalc_Exp_Btn.Text = "Recalculate profile";
             this.recalc_Exp_Btn.Click += new System.EventHandler(this.recalc_Exp_Btn_Click);
             // 
+            // recalc_peakBtn
+            // 
+            this.recalc_peakBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.recalc_peakBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.recalc_peakBtn.Image = ((System.Drawing.Image)(resources.GetObject("recalc_peakBtn.Image")));
+            this.recalc_peakBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.recalc_peakBtn.Name = "recalc_peakBtn";
+            this.recalc_peakBtn.Size = new System.Drawing.Size(34, 34);
+            this.recalc_peakBtn.Text = "Recalculate peak list";
+            this.recalc_peakBtn.Click += new System.EventHandler(this.recalc_peakBtn_Click);
+            // 
             // Form8
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -301,10 +314,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
@@ -328,5 +341,6 @@
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton save_btn;
         private System.Windows.Forms.ToolStripButton recalc_Exp_Btn;
+        private System.Windows.Forms.ToolStripButton recalc_peakBtn;
     }
 }
