@@ -8590,7 +8590,7 @@ namespace Isotope_fitting
                 double temp = 0.0;
                 foreach (int indexS in fragstatistics)
                 {
-                    if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                    if (metr[indexS] > 0.0 && Fragments2[indexS - 1].Factor * metr[indexS] > 1)
                     {
                         temp += Fragments2[indexS - 1].Factor * metr[indexS];
                     }
@@ -8604,19 +8604,31 @@ namespace Isotope_fitting
                     sumExp += metr[0];
                 }
             }
-            sumFrag_a=calc_coverage(fragstatistics_a);
-            sumFrag_b = calc_coverage(fragstatistics_b);
-            sumFrag_c = calc_coverage(fragstatistics_c);
-            sumFrag_x = calc_coverage(fragstatistics_x);
-            sumFrag_y = calc_coverage(fragstatistics_y);
-            sumFrag_z = calc_coverage(fragstatistics_z);
-            sumFrag_d = calc_coverage(fragstatistics_d);
-            sumFrag_v = calc_coverage(fragstatistics_v);
-            sumFrag_w = calc_coverage(fragstatistics_w);
-            sumFrag_int1 = calc_coverage(fragstatistics_inter1);
-            sumFrag_int2 = calc_coverage(fragstatistics_inter2);
-            sumFrag_M = calc_coverage(fragstatistics_M);
-            sumFrag_B = calc_coverage(fragstatistics_B);
+            fragstatistics.Clear();
+            try
+            {
+                Parallel.For(0, 12, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                {
+                    if(i==0)sumFrag_a = calc_coverage(fragstatistics_a);
+                    if (i ==1) sumFrag_b = calc_coverage(fragstatistics_b);
+                    if (i ==2) sumFrag_c = calc_coverage(fragstatistics_c);
+                    if (i == 3) sumFrag_x = calc_coverage(fragstatistics_x);
+                    if (i == 4) sumFrag_y = calc_coverage(fragstatistics_y);
+                    if (i == 5) sumFrag_z = calc_coverage(fragstatistics_z);
+                    if (i == 6) sumFrag_d = calc_coverage(fragstatistics_d);
+                    if (i == 7) sumFrag_v = calc_coverage(fragstatistics_v);
+                    if (i == 8) sumFrag_w = calc_coverage(fragstatistics_w);
+                    if (i == 9) sumFrag_int1 = calc_coverage(fragstatistics_inter1);
+                    if (i == 10) sumFrag_int2 = calc_coverage(fragstatistics_inter2);
+                    if (i == 11) sumFrag_M = calc_coverage(fragstatistics_M);
+                    if (i == 12) sumFrag_B = calc_coverage(fragstatistics_B);
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show( ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            };
+            fragstatistics_a.Clear();fragstatistics_b.Clear();fragstatistics_c.Clear();fragstatistics_x.Clear();fragstatistics_y.Clear();fragstatistics_z.Clear();fragstatistics_d.Clear();fragstatistics_v.Clear(); fragstatistics_w.Clear();fragstatistics_inter1.Clear();fragstatistics_inter2.Clear();fragstatistics_M.Clear();fragstatistics_B.Clear();
             coverage = sumFrag / sumExp;
             coverage_a = sumFrag_a / sumExp;
             coverage_b = sumFrag_b / sumExp;
@@ -8635,7 +8647,6 @@ namespace Isotope_fitting
             sb.AppendLine();
             sb.AppendLine("More specifically:");
             sb.AppendLine();
-
             if (!is_riken)
             {
                 sb.AppendLine("a: " + Math.Round(coverage_a * 100, 2) + "%");
@@ -8701,7 +8712,7 @@ namespace Isotope_fitting
                 double temp = 0.0;
                 foreach (int indexS in fragstatistics_temp)
                 {
-                    if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                    if (metr[indexS] > 0.0 && Fragments2[indexS - 1].Factor * metr[indexS] > 1)
                     {
                         temp += Fragments2[indexS - 1].Factor * metr[indexS];
                     }
