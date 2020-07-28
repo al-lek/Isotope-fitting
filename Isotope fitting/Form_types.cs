@@ -33,6 +33,7 @@ namespace Isotope_fitting
                 else if(!is_view && frm2.label_frag.Any(p => p.Equals(s))) { chk.Checked = true; }
                 flowPanel.Controls.Add(chk);
             }
+            changed = false;
         }
         private Color give_color()
         {
@@ -59,11 +60,13 @@ namespace Isotope_fitting
 
         private void check_allBtn_Click(object sender, EventArgs e)
         {
+            changed = true;
             un_check_all_checkboxes(flowPanel, true);
         }
 
         private void uncheck_allBtn_Click(object sender, EventArgs e)
         {
+            changed = true;
             un_check_all_checkboxes(flowPanel, false);
         }
 

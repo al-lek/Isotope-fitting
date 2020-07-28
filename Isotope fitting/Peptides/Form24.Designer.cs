@@ -631,14 +631,14 @@
             this.calcBtn.Image = ((System.Drawing.Image)(resources.GetObject("calcBtn.Image")));
             this.calcBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.calcBtn.Name = "calcBtn";
-            this.calcBtn.Size = new System.Drawing.Size(34, 34);
+            this.calcBtn.Size = new System.Drawing.Size(44, 44);
             this.calcBtn.Text = "Calculate";
             this.calcBtn.Click += new System.EventHandler(this.calcBtn_Click);
             // 
             // toolStripButton2
             // 
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(6, 37);
+            this.toolStripButton2.Size = new System.Drawing.Size(6, 47);
             // 
             // frag_sort_Btn2
             // 
@@ -663,7 +663,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form24";
-            this.Text = "Calculation Box";
+            this.Text = "Calculator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form24_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();

@@ -714,7 +714,7 @@ namespace Isotope_fitting
         #region riken state change      
         private void application_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows application mode dialog", "Application", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             //if any other form rather than the main is open, it must close
             CloseAllOpenForm("Form2");
             initiate_change_state_form();
@@ -1624,6 +1624,11 @@ namespace Isotope_fitting
             }
             return final;
         }
+        public void recalc_peaks()
+        {
+            Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
+            peak_detection.Start();
+        }
         #endregion
 
         #region 1.b Import fragment list
@@ -1746,6 +1751,7 @@ namespace Isotope_fitting
                 else base_node_name = "Loaded MS product files";
                 if (MSproduct_treeView == null || MSproduct_treeView.Nodes.Count == 0) { MSproduct_treeView.Nodes.Add(base_node_name); }
                 MSproduct_treeView.Nodes[0].Nodes.Add(loaded_ms);
+                MSproduct_treeView.Visible = true;
                 lista.RemoveAt(0);
                 if (is_riken) lista.RemoveAt(0);
                 progress_display_start(lista.Count, "Importing fragments list...");
@@ -2462,7 +2468,7 @@ namespace Isotope_fitting
             if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string file_type = "an 'MS Product'";
             if(is_riken) file_type = "a 'Riken'";
-            if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculation Box'. Please try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculator'. Please try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (is_riken)
             {
                 if (frm24_2 != null)
@@ -6007,14 +6013,7 @@ namespace Isotope_fitting
                 LC_1.ViewXY.Bands.Add(band2);
             }
         }
-        private void legend_chkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-
-            //iso_plot.Model.IsLegendVisible = legend_chkBx.Checked;
-            //invalidate_all();
-            LC_1.ViewXY.LegendBox.Visible = legend_chkBx.Checked;
-        }
+       
 
         private void frag_annotation(List<int> to_plot, LightningChartUltimate plot)
         {
@@ -6060,8 +6059,8 @@ namespace Isotope_fitting
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-
+            if (help_Btn.Checked) { MessageBox.Show(". With left click sets mouse tool to measure distances in a spectrum", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            // 
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
                 // Remove exsisting custom x - axis tickmarks
@@ -6462,7 +6461,7 @@ namespace Isotope_fitting
         }
         private void settingsPeak_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows the experimental data settings dialog. ", "Experimental setings", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             Form8 frm8 = new Form8(this);
             frm8.FormClosed += (s, f) => { save_preferences(); };
             frm8.ShowDialog();
@@ -8486,6 +8485,7 @@ namespace Isotope_fitting
         }
         private void extractPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //exports current spectrum image
             plotview_rebuild();
         }
         private void seqBtn_Click(object sender, EventArgs e)
@@ -8497,99 +8497,233 @@ namespace Isotope_fitting
         private void statistics_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            string message_string = String.Empty;
+            StringBuilder sb = new StringBuilder();
             List<int> fragstatistics = new List<int>();
+            List<int> fragstatistics_a = new List<int>();
+            List<int> fragstatistics_b = new List<int>();
+            List<int> fragstatistics_c = new List<int>();
+            List<int> fragstatistics_x = new List<int>();
+            List<int> fragstatistics_y = new List<int>();
+            List<int> fragstatistics_z = new List<int>();
+            List<int> fragstatistics_d= new List<int>();
+            List<int> fragstatistics_v = new List<int>();
+            List<int> fragstatistics_w = new List<int>();
+            List<int> fragstatistics_inter1 = new List<int>();
+            List<int> fragstatistics_inter2 = new List<int>();
+            List<int> fragstatistics_M = new List<int>();
+            List<int> fragstatistics_B = new List<int>();
+
             string[] frag_temp = view_frag.ToArray();
             foreach (int idx in selectedFragments)
             {
                 string ion = Fragments2[idx - 1].Ion_type;
                 if (ion.StartsWith("a") || ion.StartsWith("(a"))
                 {
-                    if (frag_temp.Any(p => p.Equals("a"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("a"))) { fragstatistics.Add(idx); fragstatistics_a.Add(idx); }
                 }
                 else if (ion.StartsWith("b") || ion.StartsWith("(b"))
                 {
-                    if (frag_temp.Any(p => p.Equals("b"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("b"))) { fragstatistics.Add(idx); fragstatistics_b.Add(idx); }
                 }
                 else if (ion.StartsWith("c") || ion.StartsWith("(c"))
                 {
-                    if (frag_temp.Any(p => p.Equals("c"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("c"))) { fragstatistics.Add(idx); fragstatistics_c.Add(idx); }
                 }
                 else if (ion.StartsWith("x") || ion.StartsWith("(x"))
                 {
-                    if (frag_temp.Any(p => p.Equals("x"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("x"))) { fragstatistics.Add(idx); fragstatistics_x.Add(idx); }
                 }
                 else if (ion.StartsWith("y") || ion.StartsWith("(y"))
                 {
-                    if (frag_temp.Any(p => p.Equals("y"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("y"))) { fragstatistics.Add(idx); fragstatistics_y.Add(idx); }
                 }
                 else if (ion.StartsWith("z") || ion.StartsWith("(z"))
                 {
-                    if (frag_temp.Any(p => p.Equals("z"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("z"))) { fragstatistics.Add(idx); fragstatistics_z.Add(idx); }
                 }
-                else if (ion.Contains("int") && ion.Contains("b"))
+                else if (!is_riken && ion.Contains("int") && ion.Contains("b"))
                 {
-                    if (frag_temp.Any(p => p.Equals("internal b"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("internal b"))) { fragstatistics.Add(idx); fragstatistics_inter2.Add(idx); }
                 }
-                else if (ion.Contains("int"))
+                else if (!is_riken && ion.Contains("int"))
                 {
-                    if (frag_temp.Any(p => p.Equals("internal a"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("internal a"))) { fragstatistics.Add(idx); fragstatistics_inter1.Add(idx); }
                 }
                 else if (is_riken && ion.Contains("int"))
                 {
-                    if (frag_temp.Any(p => p.Equals("internal"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("internal"))) { fragstatistics.Add(idx); fragstatistics_inter1.Add(idx); }
                 }
                 else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                 {
-                    if (frag_temp.Any(p => p.Equals("d"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("d"))) { fragstatistics.Add(idx); fragstatistics_d.Add(idx); }
                 }
                 else if (ion.StartsWith("w") || ion.StartsWith("(w"))
                 {
-                    if (frag_temp.Any(p => p.Equals("w"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("w"))) { fragstatistics.Add(idx); fragstatistics_w.Add(idx); }
                 }
                 else if (ion.StartsWith("v") || ion.StartsWith("(v"))
                 {
-                    if (frag_temp.Any(p => p.Equals("v"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("v"))) { fragstatistics.Add(idx); fragstatistics_v.Add(idx); }
                 }
                 else if (ion.Contains("M"))
                 {
-                    if (frag_temp.Any(p => p.Equals("M"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("M"))) { fragstatistics.Add(idx); fragstatistics_M.Add(idx); }
                 }
                 else if (ion.Contains("B("))
                 {
-                    if (frag_temp.Any(p => p.Equals("B"))) { fragstatistics.Add(idx); }
+                    if (frag_temp.Any(p => p.Equals("B"))) { fragstatistics.Add(idx); fragstatistics_B.Add(idx); }
                 }
                 else
                 {
-                    fragstatistics.Add(idx);
+                    fragstatistics.Add(idx); 
                 }
             }
             double sumExp = 0.0;
             double sumFrag = 0.0;
-            double coverage = 0.0;
+            double coverage = 0.0, coverage_a = 0.0, coverage_b = 0.0, coverage_c = 0.0, coverage_x = 0.0, coverage_y = 0.0, coverage_z = 0.0,
+                coverage_d = 0.0, coverage_v = 0.0,coverage_w = 0.0,coverage_int1 = 0.0, coverage_int2 = 0.0, coverage_M = 0.0, coverage_B = 0.0;
+            double sumFrag_a = 0.0, sumFrag_b = 0.0, sumFrag_c = 0.0, sumFrag_x = 0.0, sumFrag_y = 0.0, sumFrag_z = 0.0, sumFrag_d = 0.0,
+                sumFrag_v = 0.0, sumFrag_w = 0.0, sumFrag_int1 = 0.0, sumFrag_int2 = 0.0, sumFrag_B = 0.0, sumFrag_M = 0.0;
             foreach (double[] metr in all_data_aligned)
             {
                 double temp = 0.0;
                 foreach (int indexS in fragstatistics)
                 {
-                    if (Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                    if (metr[indexS] > 0.0 && Fragments2[indexS - 1].Factor * metr[indexS] > 1)
                     {
                         temp += Fragments2[indexS - 1].Factor * metr[indexS];
                     }
                 }
                 if (temp > 1.0)
                 {
-                    sumFrag += temp; sumExp += metr[0];
+                    sumFrag += temp; sumExp += metr[0];                    
                 }
                 else if (metr[0] > min_intes)
                 {
                     sumExp += metr[0];
                 }
             }
-
+            fragstatistics.Clear();
+            try
+            {
+                Parallel.For(0, 12, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                {
+                    if(i==0)sumFrag_a = calc_coverage(fragstatistics_a);
+                    if (i ==1) sumFrag_b = calc_coverage(fragstatistics_b);
+                    if (i ==2) sumFrag_c = calc_coverage(fragstatistics_c);
+                    if (i == 3) sumFrag_x = calc_coverage(fragstatistics_x);
+                    if (i == 4) sumFrag_y = calc_coverage(fragstatistics_y);
+                    if (i == 5) sumFrag_z = calc_coverage(fragstatistics_z);
+                    if (i == 6) sumFrag_d = calc_coverage(fragstatistics_d);
+                    if (i == 7) sumFrag_v = calc_coverage(fragstatistics_v);
+                    if (i == 8) sumFrag_w = calc_coverage(fragstatistics_w);
+                    if (i == 9) sumFrag_int1 = calc_coverage(fragstatistics_inter1);
+                    if (i == 10) sumFrag_int2 = calc_coverage(fragstatistics_inter2);
+                    if (i == 11) sumFrag_M = calc_coverage(fragstatistics_M);
+                    if (i == 12) sumFrag_B = calc_coverage(fragstatistics_B);
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show( ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            };
+            fragstatistics_a.Clear();fragstatistics_b.Clear();fragstatistics_c.Clear();fragstatistics_x.Clear();fragstatistics_y.Clear();fragstatistics_z.Clear();fragstatistics_d.Clear();fragstatistics_v.Clear(); fragstatistics_w.Clear();fragstatistics_inter1.Clear();fragstatistics_inter2.Clear();fragstatistics_M.Clear();fragstatistics_B.Clear();
             coverage = sumFrag / sumExp;
-            MessageBox.Show("The experimental is covered by " + Math.Round(coverage * 100, 2) + "%", "Statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            coverage_a = sumFrag_a / sumExp;
+            coverage_b = sumFrag_b / sumExp;
+            coverage_c = sumFrag_c / sumExp;
+            coverage_d = sumFrag_d / sumExp;
+            coverage_v = sumFrag_v / sumExp;
+            coverage_w = sumFrag_w / sumExp;
+            coverage_x = sumFrag_x / sumExp;
+            coverage_y= sumFrag_y / sumExp;
+            coverage_z = sumFrag_z / sumExp;
+            coverage_int1 = sumFrag_int1 / sumExp;
+            coverage_int2 = sumFrag_int2 / sumExp;
+            coverage_M = sumFrag_M / sumExp;
+            coverage_B = sumFrag_B / sumExp;
+            sb.AppendLine("The experimental is covered by " + Math.Round(coverage * 100, 2) + "%");
+            sb.AppendLine();
+            sb.AppendLine("More specifically:");
+            sb.AppendLine();
+            if (!is_riken)
+            {
+                sb.AppendLine("a: " + Math.Round(coverage_a * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("b: " + Math.Round(coverage_b * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("c: " + Math.Round(coverage_c * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("x: " + Math.Round(coverage_x * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("y: " + Math.Round(coverage_y * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("z: " + Math.Round(coverage_z * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("d: " + Math.Round(coverage_d * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("v: " + Math.Round(coverage_v * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("w: " + Math.Round(coverage_w * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("internal a: " + Math.Round(coverage_int1 * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("internal b: " + Math.Round(coverage_int2 * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("M: " + Math.Round(coverage_M * 100, 2) + "%");
+                sb.AppendLine();
+            }
+            else
+            {
+                sb.AppendLine("a: " + Math.Round(coverage_a * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("b: " + Math.Round(coverage_b * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("c: " + Math.Round(coverage_c * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("d: " + Math.Round(coverage_d * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("w: " + Math.Round(coverage_w * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("x: " + Math.Round(coverage_x * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("y: " + Math.Round(coverage_y * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("z: " + Math.Round(coverage_z * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("internal: " + Math.Round(coverage_int1 * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("M: " + Math.Round(coverage_M * 100, 2) + "%");
+                sb.AppendLine();
+                sb.AppendLine("B: " + Math.Round(coverage_B * 100, 2) + "%");
+                sb.AppendLine();
+            }
+            message_string = sb.ToString();
+            Form17 frm17 = new Form17(message_string);
+            frm17.Text = "Experimental intensity coverage";
+            frm17.ShowDialog();
         }
-        
+        private double calc_coverage(List<int> fragstatistics_temp)
+        {
+            double sumFrag_temp = 0.0;
+            foreach (double[] metr in all_data_aligned)
+            {
+                double temp = 0.0;
+                foreach (int indexS in fragstatistics_temp)
+                {
+                    if (metr[indexS] > 0.0 && Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                    {
+                        temp += Fragments2[indexS - 1].Factor * metr[indexS];
+                    }
+                }
+                if (temp > 1.0)
+                {
+                    sumFrag_temp += temp;
+                }
+            }
+            return sumFrag_temp;
+        }
         private void refresh_frag_Btn2_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
@@ -8730,7 +8864,7 @@ namespace Isotope_fitting
         //plot     
         private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Shows or hides labels for ploted fragments. \r\nWhen double clicked opens a new window with all the basic ion types for which the labels are visible.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Display Fragments' Label", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows or hides labels for ploted fragments. \r\nRight click opens a new window with all the basic ion types for which the labels are visible.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Display Fragments' Label", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (frag_lbl_Btn.Checked)
             {
                 //cursor_chkBx.Checked = false; refresh_iso_plot();
@@ -8836,17 +8970,23 @@ namespace Isotope_fitting
             //Allow chart rendering
             LC_1.EndUpdate();
         }
-        private void fragPlotLbl_chkBx_DoubleClick(object sender, EventArgs e)
+       
+        private void displayIonTypesListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             Form_types f = new Form_types(this, false);
             f.Location = MousePosition;
             f.ShowDialog();
         }
-
+        private void frag_lbl_Btn_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                frag_lbl_contextMenuStrip1.Show(toolStrip_plot, toolStrip_plot.PointToClient(new Point(Cursor.Position.X, Cursor.Position.Y)));
+            }
+        }
         private void view_fragBtn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Opens a new window with all the basic ion types of the visible fragments.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Display properties", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             Form_types f = new Form_types(this, true);
             f.Location = MousePosition;
             f.ShowDialog();
@@ -8857,6 +8997,7 @@ namespace Isotope_fitting
             if (ChemFormulas.Count > 0) { ChemFormulas.Clear(); }
             if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
             if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
+            MSproduct_treeView.Visible = false;
         }
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -8866,6 +9007,7 @@ namespace Isotope_fitting
                 ChemFormulas.Clear();
                 if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
                 MSproduct_treeView.Nodes.Clear();
+                MSproduct_treeView.Visible = false;
             }
             else if (MSproduct_treeView.SelectedNode != null)
             {
@@ -8903,7 +9045,10 @@ namespace Isotope_fitting
             }
 
         }
-        
+        private void autoscale_Btn_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { MessageBox.Show("Enables or disables automatic scaling of intensity axis with padding of 10% of the maximum intensity value", "Autoscale", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
         #endregion
 
         #region Data manipulation
@@ -9399,7 +9544,7 @@ namespace Isotope_fitting
                 y1 = 100 * (double)y_cov1.Count / seq_len;
                 z1 = 100 * (double)z_cov1.Count / seq_len;
                 d1 = 100 * (double)d_cov1.Count / seq_len;
-                w1 = 100 * (double)w_cov1.Count / seq_len;
+                w1 = 100 * (double)w_cov1.Count / seq_len;               
                 t1 = 100 * (double)total_1.Count / seq_len;
 
                 sb.AppendLine("Extension: " + seq.Extension);
@@ -12165,7 +12310,7 @@ namespace Isotope_fitting
                             custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
                             custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
                         }
-                        LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        LineSeries tmp = new LineSeries() {CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
                         tmp.ItemsSource = custom_Index;
                         tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
 
@@ -12200,7 +12345,7 @@ namespace Isotope_fitting
                             custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
                         }
 
-                        LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                        LineSeries tmp = new LineSeries() {CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
                         tmp.ItemsSource = custom_Index;
                         tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
 
@@ -12214,7 +12359,6 @@ namespace Isotope_fitting
                         plotIntensity.Model.Series.Add(bar);
                         k++;
                         if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
-
                     }
                 }  
                  plotIntensity.Model.Axes[1].Maximum = max_i * 1.2;
@@ -12229,7 +12373,7 @@ namespace Isotope_fitting
                 plot.Model.Axes[0].Maximum =  plotIntensity.Model.Axes[0].Maximum = IonDrawIndexTo.Count + yINT_minorStep13 / 2;
                 plot.Model.Axes[0].Minimum =  plotIntensity.Model.Axes[0].Minimum = -yINT_minorStep13 / 2;
             }
-            plot.InvalidatePlot(true);
+            plot.InvalidatePlot(true); plotIntensity.InvalidatePlot(true);
         }
         private List<ScatterSeries> create_scatterseries(Color clr,string frag, string plot_type, double _size,MarkerType shape=MarkerType.Circle)
         {
@@ -13558,6 +13702,7 @@ namespace Isotope_fitting
             CloseAllOpenForm("Form2");
             if (frm24_2 != null) { frm24_2 = null; }
             if (frm24 != null) { frm24 = null; }
+            MSproduct_treeView.Visible = false;
             //plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             is_exp_deconvoluted = false;
             labels_checked.Clear();
@@ -14202,6 +14347,8 @@ namespace Isotope_fitting
         }
 
         #endregion
+
+        
 
        
     }

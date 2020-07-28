@@ -84,6 +84,9 @@ namespace Isotope_fitting
             selection_list_1.Enabled = constRes_radBtn.Checked;
         }
 
-       
+        private void recalc_peakBtn_Click(object sender, EventArgs e)
+        {
+            frm2.recalc_peaks();
+        }
     }
 }
