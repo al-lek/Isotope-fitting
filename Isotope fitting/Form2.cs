@@ -714,7 +714,7 @@ namespace Isotope_fitting
         #region riken state change      
         private void application_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Shows application mode dialog", "Application", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows application mode dialog", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             //if any other form rather than the main is open, it must close
             CloseAllOpenForm("Form2");
             initiate_change_state_form();
@@ -1198,7 +1198,7 @@ namespace Isotope_fitting
         #region 1.a Import data
         private void loadExp_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Loads experimental file in .txt file format. Each line in the file consists of two tab delimited values: m/z and intensity.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             loadExp_Btn.Enabled = false;
             try
             {
@@ -1634,13 +1634,17 @@ namespace Isotope_fitting
         #region 1.b Import fragment list
         private void LoadMS_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (is_riken) load_RIKEN_product_procedure();
             else load_MS_product_procedure();
         }
         //MS product file load
         private void load_MS_product_procedure()
         {
+            if (help_Btn.Checked)
+            {
+                MessageBox.Show("Load 'MS-Product file', created by the Protein Prospector software.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "http://msviewer.ucsf.edu/prospector2/cgi-bin/msform.cgi?form=msproduct", "keyword");  return;
+            }
+
             loadMS_Btn.Enabled = false; calc_FF = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load a fragment file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
@@ -1917,7 +1921,7 @@ namespace Isotope_fitting
                 else if (ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
                 else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
             }
-            if (ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z"))
+            if (ChemFormulas[i].Ion.StartsWith("w") || ChemFormulas[i].Ion.StartsWith("v") || ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z") || ChemFormulas[i].Ion.StartsWith("(v") || ChemFormulas[i].Ion.StartsWith("(w"))
             {
                 ChemFormulas[i].SortIdx = ms_sequence.Length - Int32.Parse(ChemFormulas[i].Index);
             }
@@ -2378,6 +2382,10 @@ namespace Isotope_fitting
         }
         private void load_RIKEN_product_procedure()
         {
+            if (help_Btn.Checked)
+            {
+                MessageBox.Show("Load 'Riken file', created by the Ariadne software.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://ariadne.riken.jp/index.html", "keyword"); return;
+            }
             loadMS_Btn.Enabled = false; calc_FF = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load a fragment file.", "No sequence found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
@@ -2465,7 +2473,7 @@ namespace Isotope_fitting
         #region 2.a Select fragments and calculate their envelopes
         private void ProfCalc_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Opens a Fragment calculator panel.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string file_type = "an 'MS Product'";
             if(is_riken) file_type = "a 'Riken'";
             if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculator'. Please try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
@@ -2473,16 +2481,8 @@ namespace Isotope_fitting
             {
                 if (frm24_2 != null)
                 {
-                    if (!frm24_2.Visible)
-                    {
-                        // Add the message
-                        frm24_2.Show();
-                    }
-                    else
-                    {
-                        // Top
-                        frm24_2.BringToFront();
-                    }
+                    if (!frm24_2.Visible) frm24_2.Show();
+                    else frm24_2.BringToFront();
                 }
                 else
                 {
@@ -2494,16 +2494,8 @@ namespace Isotope_fitting
             {
                 if (frm24 != null)
                 {
-                    if (!frm24.Visible)
-                    {
-                        // Add the message
-                        frm24.Show();
-                    }
-                    else
-                    {
-                        // Top
-                        frm24.BringToFront();
-                    }
+                    if (!frm24.Visible) frm24.Show();                    
+                    else frm24.BringToFront();                   
                 }
                 else
                 {
@@ -2534,15 +2526,11 @@ namespace Isotope_fitting
             catch
             {
                 MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in calculations!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            finally
-            {
-            }
-
+            }           
         }
         private void fragments_and_calculations_sequence_A(List<ChemiForm> selected_fragments)
         {
-            // this the main sequence after loadind data
+            // this the main sequence after loading data
             // 1. select fragments according to UI
             added = 0;
             Fragments2.Clear();
@@ -2572,7 +2560,6 @@ namespace Isotope_fitting
                 all_data.RemoveRange(1, all_data.Count - 1);
                 custom_colors.RemoveRange(1, custom_colors.Count - 1);
             }
-
             all_data_aligned.Clear();
             GC.Collect();
             sw1.Reset(); sw1.Start();
@@ -2600,18 +2587,12 @@ namespace Isotope_fitting
                 if (is_deconv_const_resolution)
                 {
                     res = dParser(machine);
-                    foreach (ChemiForm chem in selected_fragments)
-                    {
-                        chem.Resolution = res;
-                    }
+                    foreach (ChemiForm chem in selected_fragments) { chem.Resolution = res; }
                 }
                 else
                 {
                     machine = deconv_machine;
-                    foreach (ChemiForm chem in selected_fragments)
-                    {
-                        chem.Machine = machine;
-                    }
+                    foreach (ChemiForm chem in selected_fragments) { chem.Machine = machine; }
                 }
             }
             else
@@ -2623,14 +2604,8 @@ namespace Isotope_fitting
                 else machine = Resolution_List.L.Keys.ToList()[9];
                 foreach (ChemiForm chem in selected_fragments)
                 {
-                    if (res == 0)
-                    {
-                        chem.Machine = machine;
-                    }
-                    else
-                    {
-                        chem.Resolution = res;
-                    }
+                    if (res == 0){ chem.Machine = machine; }
+                    else{ chem.Resolution = res;}
                 }
             }
 
@@ -2746,10 +2721,7 @@ namespace Isotope_fitting
 
             if (chem.Resolution == 0)
             {
-                if (String.IsNullOrEmpty(chem.Machine.ToString()))
-                {
-                    chem.Error = true;
-                }
+                if (String.IsNullOrEmpty(chem.Machine.ToString())) {  chem.Error = true;}
                 else
                 {
                     ChemiForm.Get_R(chem, calc_resolution);
@@ -2786,21 +2758,7 @@ namespace Isotope_fitting
             bool fragment_is_canditate = true;
             if (calc_FF)
             {
-                fragment_is_canditate = decision_algorithmFF(chem, cen);
-                //if (ignore_ppm || fragment_is_canditate)
-                //{
-                //    if (is_exp_deconvoluted)  add_fragment_to_Fragments2(chem, cen);                   
-                //    else
-                //    {
-                //        chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                //        // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                //        ChemiForm.Envelope(chem);
-                //        ChemiForm.Vdetect(chem);
-                //        cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                //        chem.Centroid.Clear(); chem.Intensoid.Clear();
-                //        add_fragment_to_Fragments2(chem, cen);
-                //    }                   
-                //}            
+                fragment_is_canditate = decision_algorithmFF(chem, cen);                      
             }
             else
             {
@@ -3404,6 +3362,7 @@ namespace Isotope_fitting
             btn_solo.Click += (s, e) =>
             {
                 if (experimental.Count == 0) { MessageBox.Show("Oops..it seems you forgot to load an experimental file!You have to load the experimental data first in order to adjust fragment's height!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                if (is_frag_calc_recalc || (statusStrp.Visible && progressLabel.Text == "Preparing data for fit...")) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
                 // run solo fit. Fit calls refresh plot.
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(new List<int> { frag_idx + 1 }); // selected fragments have +1 index comparing to Fragments2
 
@@ -3682,7 +3641,13 @@ namespace Isotope_fitting
         }
         private void save_FragTypes_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked)
+            {
+                MessageBox.Show("Save checked fragments to a .fit file.\r\nIn case heavy chain or light chain or both are present the extension is .hfit, .lfit, .hlfit accordingly.\r\n" +
+        "For each fragment multiple information are saved, including ppm error in current experimental spectrum and resolution.\r\n" +
+        "Moreover,if the Profile and Centroids of each fragment ('Envipat' Calculations) are saved an 'i' is added to the extension, for example .ifit, .hifit, .lifit, .hlifit.\r\n" +
+        "Only the saved fragments are presented in the Peak Finder diagrams tabs.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
             selectedFragments_fragTypes.Clear();
             foreach (TreeNode baseNode in fragTypes_tree.Nodes)
             {
@@ -3706,7 +3671,7 @@ namespace Isotope_fitting
 
         private void toggle_FragTypes_Btn_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When ckecked fully expands the tree view to show all nodes. When un-ckecked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
 
             if (fragTypes_tree != null)
             {
@@ -3722,6 +3687,8 @@ namespace Isotope_fitting
         }
         private void check_all_fragTypes_Click(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Checks all nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             if (fragTypes_tree!=null)
             {
                 foreach (TreeNode node in fragTypes_tree.Nodes)
@@ -3733,6 +3700,8 @@ namespace Isotope_fitting
 
         private void uncheck_all_fragTypes_Click(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Un-checks all nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             if (fragTypes_tree != null)
             {
                 foreach (TreeNode node in fragTypes_tree.Nodes)
@@ -3882,7 +3851,14 @@ namespace Isotope_fitting
 
         private void fit_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked)
+            {
+                if ((sender as ToolStripButton) == fit_Btn) { MessageBox.Show("Performs fit on all the fragments of the Fragment List.\r\nDuring fitting, fragments are divided into groups of n fragments\r\n" +
+                    "and n! combinations of fragments are generated for each group.\r\nEach fragment's intensity in each combination is fitted to match the experimental.\r\nThe basic parameters of this procedure are user defined and can be accessed by the 'Settings' button.  ", "Automatic Fitting", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+                else { MessageBox.Show("Performs fit on all the checked fragments of the Fragment List.\r\nDuring fitting, fragments are divided into groups of n fragments\r\n" +
+                    "and n! combinations of fragments are generated for each group.\r\nEach fragment's intensity in each combination is fitted to match the experimental.\r\nThe basic parameters of this procedure are user defined and can be accessed by the 'Settings' button.  ", "Fitting of checked fragments", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            }
+            if (is_frag_calc_recalc || (statusStrp.Visible && progressLabel.Text== "Preparing data for fit...")) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             if (experimental.Count == 0) { MessageBox.Show("Oops...it seems you forgot to load the experimental file!The basic steps are the following:\r\n1.Load the experimental data\r\n2.create a Fragment list\r\nPerform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (Fragments2.Count == 0) { MessageBox.Show("Oops...it seems you forgot to create a Fragment list!The basic steps are the following:\r\n1.Load the experimental data\r\n2.create a Fragment list\r\n3.Perform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             DialogResult dialogResult = MessageBox.Show("Ready to perform fit!Are you sure you want to proceed?", "Perform fit", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
@@ -4873,7 +4849,10 @@ namespace Isotope_fitting
         }
         private void sortSettings_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Displays the sort settings panel.\r\n" +
+                "During the fitting procedure for each fit group solution and for the fragments that form the solution, specific scores are calculated. \r\n" +
+                "The boundaries regarding the accepted score values are user defined.\r\nThe solutions of each fit group are sorted according to their scores and the weight of each score is user defined.\r\n" +
+                "These properties are accessed in the sort settings panel.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             sort_fit_results_form(true);
         }
         private void sort_fit_results_form(bool btn = false)
@@ -4885,7 +4864,7 @@ namespace Isotope_fitting
         }
         private void refresh_fitRes_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Refreshes 'Fit results' based on 'Sort Settings'.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             uncheckall_Frag();
             refresh_fit_tree_sorting();
         }
@@ -5053,7 +5032,7 @@ namespace Isotope_fitting
         /// </summary>
         private void uncheckFit_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Sets check-state to unchecked in all solutions of each fit group and  all fragments in the Fragment List", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             uncheck_all(fit_tree, false);
         }
         /// <summary>
@@ -5061,7 +5040,7 @@ namespace Isotope_fitting
         /// </summary>
         private void check_bestBtn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Select best n fit solutions in each fit group. The amount n is specified in 'Sort Settings' panel.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             best_checked();
         }
         /// <summary>
@@ -5149,7 +5128,7 @@ namespace Isotope_fitting
         }
         private void fitSettings_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows the fitting settings dialog. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             Form7 fit_settings = new Form7();
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
@@ -5160,6 +5139,7 @@ namespace Isotope_fitting
         /// </summary>
         private void fit_checked_groups(bool all_frag = true)
         {
+            if (is_frag_calc_recalc || (statusStrp.Visible && progressLabel.Text == "Preparing data for fit...")) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             if (fit_tree== null || experimental.Count==0 ) { MessageBox.Show("Oops...there aren't any fit results to perform fit! Use this button when you want to perform an additional fitting to specific nodes of the 'Fit results'", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             else
             {
@@ -5270,12 +5250,12 @@ namespace Isotope_fitting
         }
         private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show( "Fit checked groups of the fit results to create one merged group with the fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             fit_checked_groups();
         }
         private void fit_chkGrpsChkFragBtn_Click_1(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Fit checked Fragments in checked groups of the fit results to create one merged group with the checked fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             fit_checked_groups(false);
         }
        
@@ -5644,7 +5624,7 @@ namespace Isotope_fitting
             List<int> to_plot = new List<int>();
             string[] frag_temp =view_frag.ToArray();
             //0.a add only the desired fragments to to_plot
-            if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked)
+            if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || Fitting_chkBox.Checked)
             {
                 foreach (int idx in selectedFragments)
                 {
@@ -6059,7 +6039,7 @@ namespace Isotope_fitting
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show(". With left click sets mouse tool to measure distances in a spectrum", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Sets mouse tool to label exact points coordinates in spectrum area. With left click sets mouse tool as a ruler to measure distances in a spectrum, with left click the ruler vanishes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             // 
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
@@ -6449,7 +6429,7 @@ namespace Isotope_fitting
         }
         private void displayPeakList_btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Displays the experimental peak list. Peak list is created by detecting the centroids in the experimental bell shaped profiles. Peak list settings are accessed by the 'Settings' button. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (experimental.Count == 0 ) {  MessageBox.Show("Oops...it seems you forgot to load the experimental file!You have to load the experimental data first and then view the experimental peaks!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;  }
             if(peak_points.Count == 0) { MessageBox.Show("The list of the experimental peaks is under construction. Please wait...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             display_peakList();
@@ -6461,8 +6441,8 @@ namespace Isotope_fitting
         }
         private void settingsPeak_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Shows the experimental data settings dialog. ", "Experimental setings", MessageBoxButtons.OK, MessageBoxIcon.Information); }
-            Form8 frm8 = new Form8(this);
+            if (help_Btn.Checked) { MessageBox.Show("Shows the experimental data settings dialog. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            Form8 frm8 = new Form8(this, help_Btn.Checked);
             frm8.FormClosed += (s, f) => { save_preferences(); };
             frm8.ShowDialog();
         }
@@ -7263,7 +7243,7 @@ namespace Isotope_fitting
                                                     //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                                 }
                                             }
-                                            if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+                                            if (str[1].StartsWith("w") || str[1].StartsWith("v") || str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z")|| str[1].StartsWith("(v") || str[1].StartsWith("(w"))
                                             {
                                                 if (HEAVY_LIGHT_BOTH)
                                                 {
@@ -7306,7 +7286,11 @@ namespace Isotope_fitting
                                             //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
                                             //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                            //IonDraw.Last().Extension = str[18];                                       
+                                            //IonDraw.Last().Extension = str[18];          
+                                            if ((fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v"))&& str[16].Equals(str[2]))
+                                            {
+                                                fitted_chem.Last().SortIdx = 0;
+                                            }
                                         }
                                         if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                         {
@@ -7355,7 +7339,7 @@ namespace Isotope_fitting
                                             MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                         }
 
-                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
+                                        if (fitted_chem.Last().SortIdx == 0 ) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
                                     }
                                     else
                                     {
@@ -7617,7 +7601,7 @@ namespace Isotope_fitting
                                                     //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                                 }
                                             }
-                                            if (str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z"))
+                                            if (str[1].StartsWith("v") || str[1].StartsWith("w") || str[1].StartsWith("x") || str[1].StartsWith("y") || str[1].StartsWith("z") || str[1].StartsWith("(x") || str[1].StartsWith("(y") || str[1].StartsWith("(z") || str[1].StartsWith("(v") || str[1].StartsWith("(w"))
                                             {
                                                 if (HEAVY_LIGHT_BOTH)
                                                 {
@@ -7660,7 +7644,11 @@ namespace Isotope_fitting
                                             //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
                                             //IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
-                                            //IonDraw.Last().Extension = str[18];                                       
+                                            //IonDraw.Last().Extension = str[18];       
+                                            if ((fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
+                                            {
+                                                fitted_chem.Last().SortIdx = 0;
+                                            }
                                         }
                                         if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                         {
@@ -7713,7 +7701,7 @@ namespace Isotope_fitting
         {
             string s = string.Empty;
             int sort_index = 0;
-            if (chem.Ion_type.StartsWith("x") || chem.Ion_type.StartsWith("y") || chem.Ion_type.StartsWith("z") || chem.Ion_type.StartsWith("(x") || chem.Ion_type.StartsWith("(y") || chem.Ion_type.StartsWith("(z"))
+            if (chem.Ion_type.StartsWith("w") || chem.Ion_type.StartsWith("v") || chem.Ion_type.StartsWith("x") || chem.Ion_type.StartsWith("y") || chem.Ion_type.StartsWith("z") || chem.Ion_type.StartsWith("(v") || chem.Ion_type.StartsWith("(w") || chem.Ion_type.StartsWith("(x") || chem.Ion_type.StartsWith("(y") || chem.Ion_type.StartsWith("(z"))
             {
                 bool found = false;
                 foreach (SequenceTab seq in sequenceList)
@@ -7938,14 +7926,14 @@ namespace Isotope_fitting
         #region FORM 9 fragment calculator
         private void fragCalc_Btn2_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Opens Fragment Calculator Panel, where the user can search for specific fragments,\r\nfind those who match the experimental and add them to Fragment List. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             foreach (Form frm in Application.OpenForms)
                 if (frm.Name == "Form9")
                 {
                     frm.BringToFront(); return;
                 }
 
-            Form9 frag_Calc_form = new Form9(this);
+            Form9 frag_Calc_form = new Form9(this, help_Btn.Checked);
             frag_Calc_form.Show();
         }
         public void recalc_frm9(int prev_count, int curr_count)
@@ -8363,7 +8351,10 @@ namespace Isotope_fitting
         }
         private void saveListBtn11_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Save checked fragments to a .fit file.\r\nIn case heavy chain or light chain or both are present the extension is .hfit, .lfit, .hlfit accordingly.\r\n" +
+                "For each fragment multiple information are saved, including ppm error in current experimental spectrum and resolution.\r\n" +
+                "Moreover,if the Profile and Centroids of each fragment ('Envipat' Calculations) are saved an 'i' is added to the extension, for example .ifit, .hifit, .lifit, .hlifit.\r\n" +
+                "Only the saved fragments are presented in the Peak Finder diagrams tabs.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (Fragments2.Count == 0) { MessageBox.Show("Fragment list is empty. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (selectedFragments.Count == 0) { MessageBox.Show("You have to check fragments first and then select save. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             frag_types_save = false;
@@ -8371,7 +8362,8 @@ namespace Isotope_fitting
         }       
         private void loadFragmentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Loads fragments from a fit file.\r\nFor each fragment ppm error and resolution are not recalculated based on the experimental file.\r\n" +
+                "In case the experimental file is different from the file that these fragments were calculated at, it is suggested to select the button '"+ loadFragmentsAndRecalculateResolutionToolStripMenuItem.Text+"'.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (fitted_results.Count!=0 || all_fitted_results != null)
             {
                 DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
@@ -8391,7 +8383,8 @@ namespace Isotope_fitting
         }
         private void loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Loads fragments from a fit file.\r\nFor each fragment ppm error and resolution are recalculated based on the experimental file.\r\n" +
+                "In case the experimental file is identified as the file that these fragments were calculated at, it is suggested to select the button '" + loadFragmentsToolStripMenuItem.Text + "' for optimization.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (!insert_exp) { MessageBox.Show("You must first load the experimental data for this action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             else if (fitted_results.Count != 0 || all_fitted_results != null)
             { 
@@ -8414,7 +8407,7 @@ namespace Isotope_fitting
         }
         private void clearListBtn11_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Deletes all fragments.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (Fragments2.Count==0) {return;}
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Clear Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.OK)
@@ -8432,7 +8425,7 @@ namespace Isotope_fitting
         }
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When checked fully expands the tree view to show all nodes. When un-checked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
 
             if (frag_tree != null)
             {
@@ -8448,7 +8441,8 @@ namespace Isotope_fitting
         }
         private void checkall_Frag_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Checks all nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             if (frag_tree != null)
             {
                 frag_tree.BeginUpdate();
@@ -8464,7 +8458,8 @@ namespace Isotope_fitting
         }
         private void uncheckall_Frag_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Un-checks all nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             if (fit_tree != null) uncheck_all(fit_tree, false);
             else uncheckall_Frag();
         }
@@ -8485,18 +8480,18 @@ namespace Isotope_fitting
         }
         private void extractPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //exports current spectrum image
+            if (help_Btn.Checked){MessageBox.Show("Exports current spectrum image in a new window.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;}
             plotview_rebuild();
         }
         private void seqBtn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            Form16 frm16 = new Form16(this);
+            Form16 frm16 = new Form16(this, help_Btn.Checked);
             frm16.ShowDialog();
         }
         private void statistics_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Displays the coverage percent of the experimental by the theoretical data.\r\n" +
+                "Each ion type's contribution is analytically shown.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string message_string = String.Empty;
             StringBuilder sb = new StringBuilder();
             List<int> fragstatistics = new List<int>();
@@ -8733,7 +8728,8 @@ namespace Isotope_fitting
         }
         private void refresh_frag_Btn2_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Refreshes Fragment list based on the 'Filter' settings(ppm and 'Exclusion List').\r\n" +
+                "Attention:for each fragment ppm is recalculated and if it is not within the new ppm bound the fragment is disposed, unless it is set otherwise on the 'Filter' settings by enabling 'ignore ppm' button.\r\nAnytime fragment list entries change 'Fit Results' are disposed, as they no longer correspond to the new list.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (experimental.Count == 0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_internal_indexes.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (Fragments2.Count == 0) { return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Refresh Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
@@ -8858,20 +8854,20 @@ namespace Isotope_fitting
        
         private void frag_sort_Btn2_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            Form19 frm19 = new Form19(this);
+            if (help_Btn.Checked) { MessageBox.Show("Displays 'Filter' panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            Form19 frm19 = new Form19(this, help_Btn.Checked);
             //frm19.FormClosed += (s, f) => { save_preferences(); };        //this is a property that the object (Form 19) will always have. It should be declared within the object itself
             frm19.ShowDialog();
             //params_form();
         }
         private void show_files_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Displays loaded Fragment files' names", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
         }
         //plot     
         private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Shows or hides labels for ploted fragments. \r\nRight click opens a new window with all the basic ion types for which the labels are visible.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Display Fragments' Label", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows or hides labels for ploted fragments.\r\nRight click opens a new window with all the basic ion types for which the labels are visible.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (frag_lbl_Btn.Checked)
             {
                 //cursor_chkBx.Checked = false; refresh_iso_plot();
@@ -8955,7 +8951,7 @@ namespace Isotope_fitting
         }
         private void zoomIn_Y_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Zoom In only on Y axis, X axis range is constant.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             //Disable rendering, strongly recommended before updating chart properties
             LC_1.BeginUpdate();
             foreach (AxisY axisY in LC_1.ViewXY.YAxes)
@@ -8967,7 +8963,7 @@ namespace Isotope_fitting
         }
         private void zoomOut_Y_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Zoom Out only on Y axis, X axis range is constant.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             //Disable rendering, strongly recommended before updating chart properties
             LC_1.BeginUpdate();
             foreach (AxisY axisY in LC_1.ViewXY.YAxes)
@@ -8993,7 +8989,7 @@ namespace Isotope_fitting
         }
         private void view_fragBtn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Opens a new window with all the basic ion types of the visible fragments.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Display properties", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Opens a new window with all the basic ion types of the visible fragments.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             Form_types f = new Form_types(this, true);
             f.Location = MousePosition;
             f.ShowDialog();
@@ -9054,7 +9050,7 @@ namespace Isotope_fitting
         }
         private void autoscale_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Enables or disables automatic scaling of intensity axis with padding of 10% of the maximum intensity value", "Autoscale", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Enables or disables automatic scaling of intensity axis with padding of 10% of the maximum intensity value", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
         }
         #endregion
 
@@ -9107,7 +9103,7 @@ namespace Isotope_fitting
         #region Fitting Options
         private void Fitting_chkBox_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When checked the summation of the plotted fragments is displayed in spectrum area with a dashed line.\r\nThe type and the color of the line can be changed in Format Plot Area>Style panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             refresh_iso_plot();
         }
         #endregion
@@ -13700,7 +13696,7 @@ namespace Isotope_fitting
         //clear
         private void clear_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Clears all data inserted from the user.", "Clear all data", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Clears all data inserted from the user.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Clear all data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.OK) Clear_all();
         }
@@ -13764,7 +13760,7 @@ namespace Isotope_fitting
         //load
         private void load_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Loads a project folder into Peak Finder's format.\r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select the project's folder.", "Load Project",MessageBoxButtons.OK,MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Loads a project folder into Peak Finder's format.\r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select the project's folder.", "Help", MessageBoxButtons.OK,MessageBoxIcon.Information); return; }
             project_load();
         }
         private void project_load()
@@ -14189,7 +14185,7 @@ namespace Isotope_fitting
         //save
         private void save_proj_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Saves the current project into Peak Finder's format.. \r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select a new or an already existing folder.", "Save Project", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Saves the current project into Peak Finder's format.. \r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select a new or an already existing folder.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             project_save();
         }
         private void project_save()

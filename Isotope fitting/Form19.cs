@@ -15,10 +15,12 @@ namespace Isotope_fitting
     public partial class Form19 : Form
     {
         Form2 frm2;
-        public Form19(Form2 f)
+        bool help = false;
+        public Form19(Form2 f, bool h = false)
         {
             InitializeComponent();
             frm2 = f;
+            help = h;
             ignore_ppm_chkBox.Checked=frm2.ignore_ppm_refresh;
             ppm_numUD.TextChanged += new EventHandler(ppm_numUD_TextChanged);
             fragGrps_numUD.TextChanged += new EventHandler(fragGrps_numUD_TextChanged);

@@ -40,11 +40,11 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.save_peakBtn = new System.Windows.Forms.ToolStripButton();
+            this.recalc_peakBtn = new System.Windows.Forms.ToolStripButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.save_btn = new System.Windows.Forms.ToolStripButton();
             this.recalc_Exp_Btn = new System.Windows.Forms.ToolStripButton();
-            this.recalc_peakBtn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -62,6 +62,7 @@
             this.minIntensity_lbl.Size = new System.Drawing.Size(131, 13);
             this.minIntensity_lbl.TabIndex = 0;
             this.minIntensity_lbl.Text = "Peak detect min intensity: ";
+            this.minIntensity_lbl.Click += new System.EventHandler(this.minIntensity_lbl_Click);
             // 
             // minIntensity_numUD
             // 
@@ -230,6 +231,17 @@
             this.save_peakBtn.Text = "Save";
             this.save_peakBtn.Click += new System.EventHandler(this.save_peak_btn_Click);
             // 
+            // recalc_peakBtn
+            // 
+            this.recalc_peakBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.recalc_peakBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.recalc_peakBtn.Image = ((System.Drawing.Image)(resources.GetObject("recalc_peakBtn.Image")));
+            this.recalc_peakBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.recalc_peakBtn.Name = "recalc_peakBtn";
+            this.recalc_peakBtn.Size = new System.Drawing.Size(34, 34);
+            this.recalc_peakBtn.Text = "Recalculate peak list";
+            this.recalc_peakBtn.Click += new System.EventHandler(this.recalc_peakBtn_Click);
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.toolStrip2);
@@ -282,17 +294,6 @@
             this.recalc_Exp_Btn.Size = new System.Drawing.Size(34, 34);
             this.recalc_Exp_Btn.Text = "Recalculate profile";
             this.recalc_Exp_Btn.Click += new System.EventHandler(this.recalc_Exp_Btn_Click);
-            // 
-            // recalc_peakBtn
-            // 
-            this.recalc_peakBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.recalc_peakBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.recalc_peakBtn.Image = ((System.Drawing.Image)(resources.GetObject("recalc_peakBtn.Image")));
-            this.recalc_peakBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.recalc_peakBtn.Name = "recalc_peakBtn";
-            this.recalc_peakBtn.Size = new System.Drawing.Size(34, 34);
-            this.recalc_peakBtn.Text = "Recalculate peak list";
-            this.recalc_peakBtn.Click += new System.EventHandler(this.recalc_peakBtn_Click);
             // 
             // Form8
             // 

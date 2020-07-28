@@ -13,10 +13,12 @@ namespace Isotope_fitting
     public partial class Form8 : Form
     {
         Form2 frm2;
-        public Form8(Form2 f)
+        bool help = false;
+        public Form8(Form2 f,bool h=false)
         {
             InitializeComponent();
             frm2 = f;
+            help = h;
             //minIntensity_numUD.TextChanged += new EventHandler(minIntensity_numUD_TextChanged);
             minIntensity_numUD.Value = (decimal)frm2.min_intes;
             constRes_radBtn.Checked = frm2.is_deconv_const_resolution;
@@ -47,10 +49,11 @@ namespace Isotope_fitting
 
         private void save_btn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Saves resolution value.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             if ((constRes_radBtn.Checked && selection_list_1.SelectedIndex == -1) ||(listRes_radBtn.Checked && resolution_list_combBox.SelectedIndex == -1))
             {
                 MessageBox.Show("First select resolution and then press 'save' button!"); return;
-
             }
             else if (constRes_radBtn.Checked)
             {
@@ -66,11 +69,13 @@ namespace Isotope_fitting
 
         private void save_peak_btn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Saves minimum intensity value. To recreate the peak list based on the new minimum intensity value the user needs to click the 'Recalculate peak list' button.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             frm2.min_intes = (double)minIntensity_numUD.Value;
         }
 
         private void recalc_Exp_Btn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Recalculate the experimental profile based on the current 'saved' resolution value.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             frm2.post_load_actions();
         }
 
@@ -86,7 +91,14 @@ namespace Isotope_fitting
 
         private void recalc_peakBtn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Recalculate the peak list based on the current 'saved' minimum intensity value.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             frm2.recalc_peaks();
+        }
+
+        private void minIntensity_lbl_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set the minimum intensity value for which a peak in the experimental spectrum is considered a peak and is added to the 'Peak List'.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
         }
     }
 }

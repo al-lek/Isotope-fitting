@@ -20,11 +20,12 @@ namespace Isotope_fitting
         string output_txt;
         bool active_txt = false;
         bool initial_set = true;
-        public Form16(Form2 f)
+        bool help = false;
+        public Form16(Form2 f, bool hlp = false)
         {
             frm2 =f;
-            InitializeComponent();     
-
+            InitializeComponent();
+            help = hlp;
             IntPtr h = this.seq_tabControl.Handle;
             if (frm2.sequenceList != null && frm2.sequenceList.Count==1)
             {
@@ -43,7 +44,8 @@ namespace Isotope_fitting
             initial_set = false;
             if (frm2.is_riken && frm2.is_rna) { this.Text = "RNA base sequence Editor"; }
             if (frm2.is_riken && !frm2.is_rna) { this.Text = "DNA base sequence Editor"; }
-
+            if (help) { MessageBox.Show("Shows sequence editor with inserted sequences. Multiple sequences can be added.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence and is equivalent to the name of each new tab.\r\nThis extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
+            
         }
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);

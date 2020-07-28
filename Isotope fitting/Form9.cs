@@ -41,9 +41,11 @@ namespace Isotope_fitting
         public static List<int> last_plotted = new List<int>();
         List<ChemiForm> mult_loaded = new List<ChemiForm>();
         bool is_in_calc_mode = false;
-        public Form9(Form2 f)
+        bool help = false;
+        public Form9(Form2 f,bool h=false)
         {
             frm2 = f;
+            help = h;
             InitializeComponent();
             OnCalcFrag3Completed += () => { Fragments3_to_listview(); };
             _lvwItemComparer = new ListViewItemComparer();
@@ -760,7 +762,7 @@ namespace Isotope_fitting
                 else if (c < 0) res.Last().Name = lbl + "_" + Math.Abs(c).ToString() + "-"+extension;
                 else res.Last().Name = lbl + "_" + c.ToString() +  extension;
 
-                if (res.Last().Ion.StartsWith("x") || res.Last().Ion.StartsWith("y") || res.Last().Ion.StartsWith("z") || res.Last().Ion.StartsWith("(x") || res.Last().Ion.StartsWith("(y") || res.Last().Ion.StartsWith("(z"))
+                if (res.Last().Ion.StartsWith("w") || res.Last().Ion.StartsWith("v") || res.Last().Ion.StartsWith("x") || res.Last().Ion.StartsWith("y") || res.Last().Ion.StartsWith("z") || res.Last().Ion.StartsWith("(x") || res.Last().Ion.StartsWith("(y") || res.Last().Ion.StartsWith("(z") || res.Last().Ion.StartsWith("(v") || res.Last().Ion.StartsWith("(w"))
                 {
                     res.Last().SortIdx = s.Length - Int32.Parse(res.Last().Index);
                 }
