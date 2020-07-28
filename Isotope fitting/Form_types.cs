@@ -60,13 +60,11 @@ namespace Isotope_fitting
 
         private void check_allBtn_Click(object sender, EventArgs e)
         {
-            changed = true;
             un_check_all_checkboxes(flowPanel, true);
         }
 
         private void uncheck_allBtn_Click(object sender, EventArgs e)
         {
-            changed = true;
             un_check_all_checkboxes(flowPanel, false);
         }
 

@@ -98,7 +98,16 @@ namespace Isotope_fitting
         private void minIntensity_lbl_Click(object sender, EventArgs e)
         {
             if (help) { MessageBox.Show("Set the minimum intensity value for which a peak in the experimental spectrum is considered a peak and is added to the 'Peak List'.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
 
+        private void selection_list_1_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set resolution as a constant value irrespective of m/z.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void resolution_list_combBox_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Select a resolution list that corresponds to a specific Machine. Each list consists of pairs of m/z and resolution values.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
         }
     }
 }

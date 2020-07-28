@@ -5622,6 +5622,8 @@ namespace Isotope_fitting
             //// 0.a gather info on which fragments are selected to plot, and their respective intensities
             //List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
             List<int> to_plot = new List<int>();
+            List<int> to_plot2 = new List<int>();
+            string[] label_temp = label_frag.ToArray();
             string[] frag_temp =view_frag.ToArray();
             //0.a add only the desired fragments to to_plot
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || Fitting_chkBox.Checked)
@@ -5631,63 +5633,63 @@ namespace Isotope_fitting
                     string ion = Fragments2[idx - 1].Ion_type;
                     if (ion.StartsWith("a") || ion.StartsWith("(a"))
                     {
-                        if (frag_temp.Any(p => p.Equals("a"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("a"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("a"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("b") || ion.StartsWith("(b"))
                     {
-                        if (frag_temp.Any(p => p.Equals("b"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("b"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("b"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("c") || ion.StartsWith("(c"))
                     {
-                        if (frag_temp.Any(p => p.Equals("c"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("c"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("c"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("x") || ion.StartsWith("(x"))
                     {
-                        if (frag_temp.Any(p => p.Equals("x"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("x"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("x"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("y") || ion.StartsWith("(y"))
                     {
-                        if (frag_temp.Any(p => p.Equals("y"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("y"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("y"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("z") || ion.StartsWith("(z"))
                     {
-                        if (frag_temp.Any(p => p.Equals("z"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("z"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("z"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.Contains("int") && ion.Contains("b"))
                     {
-                        if (frag_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal b"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.Contains("int"))
                     {
-                        if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal a"))) { to_plot2.Add(idx); } }
                     }
                     else if (is_riken && ion.Contains("int"))
                     {
-                        if (frag_temp.Any(p => p.Equals("internal"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("internal"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("d") || ion.StartsWith("(d"))
                     {
-                        if (frag_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("d"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("w") || ion.StartsWith("(w"))
                     {
-                        if (frag_temp.Any(p => p.Equals("w"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("w"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("w"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.StartsWith("v") || ion.StartsWith("(v"))
                     {
-                        if (frag_temp.Any(p => p.Equals("v"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("v"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("v"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.Contains("M"))
                     {
-                        if (frag_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("M"))) { to_plot2.Add(idx); } }
                     }
                     else if (ion.Contains("B("))
                     {
-                        if (frag_temp.Any(p => p.Equals("B")) ) { to_plot.Add(idx); }
+                        if (frag_temp.Any(p => p.Equals("B")) ) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("B"))) { to_plot2.Add(idx); } }
                     }
                     else
                     {
-                        to_plot.Add(idx);
+                        to_plot.Add(idx); to_plot2.Add(idx);
                     }
 
                 }
@@ -5788,7 +5790,8 @@ namespace Isotope_fitting
             // 6. fragment annotations
             if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
             {
-                frag_annotation(to_plot, LC_1);
+                // add only the desired fragments to to_plot              
+                frag_annotation(to_plot2, LC_1);
             }
             else
             {
@@ -8029,7 +8032,6 @@ namespace Isotope_fitting
         }
         public void external_refresh_isoplot()
         {
-            //if (!plotFragProf_chkBox.Enabled) { plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true; }
             refresh_iso_plot();
         }
         public void add_frag_frm9()

@@ -91,6 +91,7 @@
             0,
             0,
             0});
+            this.minIntensity_numUD.Click += new System.EventHandler(this.minIntensity_lbl_Click);
             // 
             // label2
             // 
@@ -112,6 +113,7 @@
             this.listRes_radBtn.Text = "Machine List";
             this.listRes_radBtn.UseVisualStyleBackColor = true;
             this.listRes_radBtn.CheckedChanged += new System.EventHandler(this.listRes_radBtn_CheckedChanged);
+            this.listRes_radBtn.Click += new System.EventHandler(this.resolution_list_combBox_Click);
             // 
             // constRes_radBtn
             // 
@@ -123,6 +125,7 @@
             this.constRes_radBtn.Text = "Constant ";
             this.constRes_radBtn.UseVisualStyleBackColor = true;
             this.constRes_radBtn.CheckedChanged += new System.EventHandler(this.constRes_radBtn_CheckedChanged);
+            this.constRes_radBtn.Click += new System.EventHandler(this.selection_list_1_Click);
             // 
             // resolution_list_combBox
             // 
@@ -163,6 +166,7 @@
             this.resolution_list_combBox.Name = "resolution_list_combBox";
             this.resolution_list_combBox.Size = new System.Drawing.Size(122, 21);
             this.resolution_list_combBox.TabIndex = 6;
+            this.resolution_list_combBox.Click += new System.EventHandler(this.resolution_list_combBox_Click);
             // 
             // selection_list_1
             // 
@@ -180,6 +184,7 @@
             this.selection_list_1.Name = "selection_list_1";
             this.selection_list_1.Size = new System.Drawing.Size(122, 21);
             this.selection_list_1.TabIndex = 5;
+            this.selection_list_1.Click += new System.EventHandler(this.selection_list_1_Click);
             // 
             // tabControl1
             // 
