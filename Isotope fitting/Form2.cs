@@ -8585,50 +8585,57 @@ namespace Isotope_fitting
                 coverage_d = 0.0, coverage_v = 0.0,coverage_w = 0.0,coverage_int1 = 0.0, coverage_int2 = 0.0, coverage_M = 0.0, coverage_B = 0.0;
             double sumFrag_a = 0.0, sumFrag_b = 0.0, sumFrag_c = 0.0, sumFrag_x = 0.0, sumFrag_y = 0.0, sumFrag_z = 0.0, sumFrag_d = 0.0,
                 sumFrag_v = 0.0, sumFrag_w = 0.0, sumFrag_int1 = 0.0, sumFrag_int2 = 0.0, sumFrag_B = 0.0, sumFrag_M = 0.0;
-            foreach (double[] metr in all_data_aligned)
-            {
-                double temp = 0.0;
-                foreach (int indexS in fragstatistics)
-                {
-                    if (metr[indexS] > 0.0 && Fragments2[indexS - 1].Factor * metr[indexS] > 1)
-                    {
-                        temp += Fragments2[indexS - 1].Factor * metr[indexS];
-                    }
-                }
-                if (temp > 1.0)
-                {
-                    sumFrag += temp; sumExp += metr[0];                    
-                }
-                else if (metr[0] > min_intes)
-                {
-                    sumExp += metr[0];
-                }
-            }
-            fragstatistics.Clear();
+            
             try
             {
-                Parallel.For(0, 12, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+                Parallel.For(0, 13, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
                 {
-                    if(i==0)sumFrag_a = calc_coverage(fragstatistics_a);
-                    if (i ==1) sumFrag_b = calc_coverage(fragstatistics_b);
-                    if (i ==2) sumFrag_c = calc_coverage(fragstatistics_c);
-                    if (i == 3) sumFrag_x = calc_coverage(fragstatistics_x);
-                    if (i == 4) sumFrag_y = calc_coverage(fragstatistics_y);
-                    if (i == 5) sumFrag_z = calc_coverage(fragstatistics_z);
-                    if (i == 6) sumFrag_d = calc_coverage(fragstatistics_d);
-                    if (i == 7) sumFrag_v = calc_coverage(fragstatistics_v);
-                    if (i == 8) sumFrag_w = calc_coverage(fragstatistics_w);
-                    if (i == 9) sumFrag_int1 = calc_coverage(fragstatistics_inter1);
-                    if (i == 10) sumFrag_int2 = calc_coverage(fragstatistics_inter2);
-                    if (i == 11) sumFrag_M = calc_coverage(fragstatistics_M);
-                    if (i == 12) sumFrag_B = calc_coverage(fragstatistics_B);
+                    if (i == 0)
+                    {
+                        foreach (double[] metr in all_data_aligned)
+                        {
+                            double temp = 0.0;
+                            foreach (int indexS in fragstatistics)
+                            {
+                                if (metr[indexS] > 0.0 && Fragments2[indexS - 1].Factor * metr[indexS] > 1)
+                                {
+                                    temp += Fragments2[indexS - 1].Factor * metr[indexS];
+                                }
+                            }
+                            if (temp > 1.0)
+                            {
+                                sumFrag += temp; sumExp += metr[0];
+                            }
+                            else if (metr[0] > min_intes)
+                            {
+                                sumExp += metr[0];
+                            }
+                        }
+                        fragstatistics.Clear();
+                    }
+                    else if (i == 1) { sumFrag_a = calc_coverage(fragstatistics_a); fragstatistics_a.Clear(); }
+                    else if (i == 2) { sumFrag_b = calc_coverage(fragstatistics_b); fragstatistics_b.Clear(); }
+                    else if (i == 3) { sumFrag_c = calc_coverage(fragstatistics_c); fragstatistics_c.Clear(); }
+                    else if (i == 4) { sumFrag_x = calc_coverage(fragstatistics_x); fragstatistics_x.Clear(); }
+                    else if (i == 5) { sumFrag_y = calc_coverage(fragstatistics_y); fragstatistics_y.Clear(); }
+                    else if (i == 6) { sumFrag_z = calc_coverage(fragstatistics_z); fragstatistics_z.Clear(); }
+                    else if (i == 7) { sumFrag_d = calc_coverage(fragstatistics_d); fragstatistics_d.Clear(); }
+                    else if (i == 8) { sumFrag_v = calc_coverage(fragstatistics_v); fragstatistics_v.Clear(); }
+                    else if (i == 9) { sumFrag_w = calc_coverage(fragstatistics_w); fragstatistics_w.Clear(); }
+                    else if (i == 10) { sumFrag_int1 = calc_coverage(fragstatistics_inter1); fragstatistics_inter1.Clear(); }
+                    else if (i == 11) { sumFrag_int2 = calc_coverage(fragstatistics_inter2); fragstatistics_inter2.Clear(); }
+                    else if (i == 12)
+                    {
+                        sumFrag_M = calc_coverage(fragstatistics_M);
+                        sumFrag_B = calc_coverage(fragstatistics_B);
+                        fragstatistics_M.Clear(); fragstatistics_B.Clear();
+                    }
                 });
             }
             catch (Exception ex)
             {
                 MessageBox.Show( ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            };
-            fragstatistics_a.Clear();fragstatistics_b.Clear();fragstatistics_c.Clear();fragstatistics_x.Clear();fragstatistics_y.Clear();fragstatistics_z.Clear();fragstatistics_d.Clear();fragstatistics_v.Clear(); fragstatistics_w.Clear();fragstatistics_inter1.Clear();fragstatistics_inter2.Clear();fragstatistics_M.Clear();fragstatistics_B.Clear();
+            };          
             coverage = sumFrag / sumExp;
             coverage_a = sumFrag_a / sumExp;
             coverage_b = sumFrag_b / sumExp;
