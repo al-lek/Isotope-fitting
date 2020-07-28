@@ -7712,7 +7712,7 @@ namespace Isotope_fitting
                     }
                 }
                 if (found) { sort_index = s.Length - Int32.Parse(chem.Index); }
-                else { sort_index = 0; MessageBox.Show("Error in fragment " + chem.Name + "index.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
+                else { sort_index = 0; MessageBox.Show("Error in fragment " + chem.Name + " index.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
             }
             else
             {
@@ -9896,12 +9896,12 @@ namespace Isotope_fitting
                     {
                         draw_line(pp, true, 0, Color.DarkTurquoise, g);
                     }
-                    else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && s.Length - nn.Index == idx + 1)
                     {
                         draw_line(temp_p, false, 0, Color.DarkTurquoise, g);
 
                     }
-                    else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && s.Length - nn.Index == idx + 1)
                     {
                         draw_line(temp_p, false, 4, Color.DarkCyan, g);
 
@@ -10442,12 +10442,12 @@ namespace Isotope_fitting
                     {
                         draw_line(pp, true, 0, Color.DarkTurquoise, g);
                     }
-                    else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && s.Length - nn.Index == idx + 1)
                     {
                         draw_line(temp_p, false, 0, Color.DarkTurquoise, g);
 
                     }
-                    else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
+                    else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && s.Length - nn.Index == idx + 1)
                     {
                         draw_line(temp_p, false, 4, Color.DarkCyan, g);
 
@@ -14076,13 +14076,17 @@ namespace Isotope_fitting
                         });
                         if (UInt32.TryParse(str[12], out uint result_color)) Fragments2.Last().Color = OxyColor.FromUInt32(result_color);
                         IonDraw.Add(new ion() { Extension = str[18], Name = Fragments2.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = Fragments2.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                        Fragments2.Last().SortIdx = Convert.ToInt32(str[16]);
+                        if ((Fragments2.Last().Ion_type.StartsWith("w") || Fragments2.Last().Ion_type.StartsWith("(w") || Fragments2.Last().Ion_type.StartsWith("v") || Fragments2.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
+                        {
+                            Fragments2.Last().SortIdx = check_false_sort_idxFragform(Fragments2.Last());
+                        }
+                        else { Fragments2.Last().SortIdx = Convert.ToInt32(str[16]); }                        
                         Fragments2.Last().Chain_type = Convert.ToInt32(str[17]);
                         Fragments2.Last().maxPPM_Error = dParser(str[15]);
                         Fragments2.Last().minPPM_Error = dParser(str[14]);
                         IonDraw.Last().maxPPM_Error = dParser(str[15]);
                         IonDraw.Last().minPPM_Error = dParser(str[14]);
-                        IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
+                        IonDraw.Last().SortIdx = Fragments2.Last().SortIdx;
                         IonDraw.Last().Chain_type = Convert.ToInt32(str[17]);
                         arrayPositionIndex++;
                         j++;
@@ -14129,6 +14133,22 @@ namespace Isotope_fitting
             is_loading = false; is_calc = false;
             exclude_list_make_lists();
             return;
+        }
+        private int check_false_sort_idxFragform(FragForm fra)
+        {
+            string s = string.Empty;
+            int sort_index = 0;
+            bool found = false;
+            foreach (SequenceTab seq in sequenceList)
+            {
+                if ((seq.Extension != "" && recognise_extension(fra.Extension, seq.Extension)) || (seq.Extension == "" && fra.Extension == ""))
+                {
+                    found = true; break;
+                }
+            }
+            if (found) { sort_index = s.Length - Int32.Parse(fra.Index); }
+            else { sort_index = 0; MessageBox.Show("Error in fragment " + fra.Name + " index.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
+            return sort_index;
         }
         private void Project_after_load()
         {
