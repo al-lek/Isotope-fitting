@@ -117,6 +117,7 @@
             this.ppm_lbl.Size = new System.Drawing.Size(79, 13);
             this.ppm_lbl.TabIndex = 6;
             this.ppm_lbl.Text = "max ppm error: ";
+            this.ppm_lbl.Click += new System.EventHandler(this.ppm_lbl_Click);
             // 
             // fragGrps_lbl
             // 
@@ -126,6 +127,7 @@
             this.fragGrps_lbl.Size = new System.Drawing.Size(117, 13);
             this.fragGrps_lbl.TabIndex = 8;
             this.fragGrps_lbl.Text = "size of fragment group: ";
+            this.fragGrps_lbl.Click += new System.EventHandler(this.fragGrps_lbl_Click);
             // 
             // ppm_numUD
             // 
@@ -171,6 +173,7 @@
             0,
             0,
             0});
+            this.fragGrps_numUD.Click += new System.EventHandler(this.fragGrps_lbl_Click);
             // 
             // one_rdBtn
             // 
@@ -843,6 +846,7 @@
             this.label1.Size = new System.Drawing.Size(173, 15);
             this.label1.TabIndex = 5;
             this.label1.Text = "Relative abundance threshold:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // thre_numUD
             // 
@@ -872,6 +876,7 @@
             0,
             0,
             131072});
+            this.thre_numUD.Click += new System.EventHandler(this.label1_Click);
             // 
             // toolStrip1
             // 
@@ -921,7 +926,7 @@
             this.ignore_ppm_chkBox.Name = "ignore_ppm_chkBox";
             this.ignore_ppm_chkBox.Size = new System.Drawing.Size(34, 34);
             this.ignore_ppm_chkBox.Text = "ignore ppm";
-            this.ignore_ppm_chkBox.Click += new System.EventHandler(this.ignore_ppm_chkBox_Click);
+            this.ignore_ppm_chkBox.CheckStateChanged += new System.EventHandler(this.ignore_ppm_chkBox_CheckStateChanged);
             // 
             // Form19
             // 

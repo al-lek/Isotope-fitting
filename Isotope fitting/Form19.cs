@@ -64,6 +64,8 @@ namespace Isotope_fitting
         }
         private void save_Btn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Saves 'Filter' properties.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             frm2.save_preferences();
             //this.Close();
         }
@@ -339,13 +341,41 @@ namespace Isotope_fitting
 
         private void exclusionList_Btn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Displays the 'Exclusion list' panel, where the user can set the ion types and indexes that will be excluded from the Fragment Calculation.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
+
             Form21 frm21 = new Form21(frm2);            
             frm21.ShowDialog();
         }
-       
-        private void ignore_ppm_chkBox_Click(object sender, EventArgs e)
+      
+        private void ignore_ppm_chkBox_CheckStateChanged(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("If 'ignore ppm' button is checked", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             frm2.ignore_ppm_refresh = ignore_ppm_chkBox.Checked;
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Minimum abundance of isotope pattern peaks to be retained during calculation,\r\n" +
+                "given as a percentageof the most abundant peak.\r\nWarning:\r\n(1)Omitting too abundant peaks may distort the profile shape.\r\n(2)Including too many peaks may lead to computational problems for very large molecules.\r\n" +
+                "Set to 0 to calculate all possible isotope pattern peaks.\r\n(From Envipat website)\r\nFor large molecule it is suggested to set to 1.00 in order to minimize the calculation time.\r\nDefault:0.01" +
+                "", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.envipat.eawag.ch/", "keyword");
+                return;
+            }
+
+        }
+
+        private void fragGrps_lbl_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Refers only to the visual representation of the Fragment List and indicates the number of fragments each m/z-treenode contains. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
+        }
+
+        private void ppm_lbl_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Indicates the maximum ppm error that a fragment can have in order to be inserted to Fragment List", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
         }
     }
 }

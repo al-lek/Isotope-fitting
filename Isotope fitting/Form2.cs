@@ -5997,7 +5997,6 @@ namespace Isotope_fitting
             }
         }
        
-
         private void frag_annotation(List<int> to_plot, LightningChartUltimate plot)
         {
             if ((frag_lbl_Btn.Checked) && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
@@ -7818,43 +7817,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region FILTER list fragments
-        private void frag_sort_Btn1_Click(object sender, EventArgs e)
-        {
-            Form19 frm19 = new Form19(this);
-            //frm19.FormClosed += (s, f) => { save_preferences(); };
-            frm19.ShowDialog();
-            //params_form();
-        }
-        private void refresh_frag_Btn1_Click(object sender, EventArgs e)
-        {
-            if (experimental.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            int initial_count = Fragments2.Count;
-            int rr = 0;
-            if (Fragments2.Count > 0)
-            {
-                while (rr < Fragments2.Count)
-                {
-                    if (!decision_algorithm2(Fragments2[rr])) { Fragments2.RemoveAt(rr); }
-                    else { rr++; }
-                }
-                // thread safely fire event to continue calculations
-                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
-            }
-            if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            else
-            {
-                bigPanel.Enabled = false;
-                uncheckall_Frag();
-                fitted_results.Clear(); selectedFragments.Clear();
-                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-                if (fit_tree != null)
-                {
-                    fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                //fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-            }
-        }
+        #region FILTER list fragments       
         private bool decision_algorithm2(FragForm fra)
         {
             if (experimental.Count == 0) return true;
@@ -7923,6 +7886,75 @@ namespace Isotope_fitting
                 fra.maxPPM_Error = 0.0; fra.minPPM_Error = 0.0;
             }
             return fragment_is_canditate;
+        }
+        private void refresh_frag_Btn2_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked)
+            {
+                MessageBox.Show("Refreshes Fragment list based on the 'Filter' settings(ppm and 'Exclusion List').\r\n" +
+"Attention:for each fragment ppm is recalculated and if it is not within the new ppm bound the fragment is disposed, unless it is set otherwise on the 'Filter' settings by enabling 'ignore ppm' button.\r\nAnytime fragment list entries change 'Fit Results' are disposed, as they no longer correspond to the new list.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+            if (experimental.Count == 0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_internal_indexes.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (Fragments2.Count == 0) { return; }
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Refresh Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dialogResult != DialogResult.OK) { return; }
+            int initial_count = Fragments2.Count;
+            int rr = 0;
+            bool first = true;
+            if (Fragments2.Count > 0)
+            {
+                while (rr < Fragments2.Count)
+                {
+                    Fragments2[rr].Candidate = true;
+                    if (is_in_excluded_bounds(Fragments2[rr]))
+                    {
+                        Fragments2.RemoveAt(rr);
+                        if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
+                    }
+                    else if (!decision_algorithm2(Fragments2[rr]))
+                    {
+                        if (ignore_ppm_refresh) { Fragments2[rr].Candidate = false; rr++; }
+                        else
+                        {
+                            Fragments2.RemoveAt(rr);
+                            if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
+                        }
+                    }
+                    else { rr++; }
+                }
+                // thread safely fire event to continue calculations
+                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
+            }
+            if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            else
+            {
+                factor_panel.Visible = false;
+                bigPanel.Enabled = false;
+                uncheckall_Frag();
+                fitted_results.Clear(); selectedFragments.Clear();
+                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+                if (fit_tree != null)
+                {
+                    fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                //fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+                if (IonDraw.Count > 0) IonDraw.Clear();
+                foreach (FragForm fra in Fragments2)
+                {
+                    if (fra.Fixed)
+                    {
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                    }
+                }
+            }
+        }
+        private void frag_sort_Btn2_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { MessageBox.Show("Displays 'Filter' panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            Form19 frm19 = new Form19(this, help_Btn.Checked);
+            //frm19.FormClosed += (s, f) => { save_preferences(); };        //this is a property that the object (Form 19) will always have. It should be declared within the object itself
+            frm19.ShowDialog();
+            //params_form();
         }
         #endregion
 
@@ -8269,62 +8301,8 @@ namespace Isotope_fitting
             plotFragProf_chkBox.CheckedChanged += (s, e) => {  if (!block_plot_refresh) refresh_iso_plot(); };
             _lvwItemComparer = new ListViewItemComparer();
             machine_sel_index = 9;
-            filename_txtBx.Text = file_name;
-            //progress_display_init();
-            //disp_a.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_b.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_c.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_x.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_y.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_z.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_d.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_w.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_internal.CheckedChanged += (s, e) => { refresh_iso_plot(); };
-            //disp_a.Checked = true;disp_b.Checked = true;disp_c.Checked = true; disp_d.Checked = true;
-            //disp_w.Checked = true; disp_x.Checked = true;disp_y.Checked = true;disp_z.Checked = true;          
-            //disp_internal.Checked = true;           
-        }        
-        private void export_copy_plotLightningChartUltimate(bool copy, LightningChartUltimate plot)
-        {
-            if (plot is LightningChartUltimate)
-            {
-                LightningChartUltimate chart = plot as LightningChartUltimate;
-                if (copy)
-                {
-                    try
-                    {
-                        //chart.CopyToClipboard(ClipboardImageFormat.Emf, null);
-                        chart.CopyToClipboardAsEmf();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message + " " + ex.InnerException, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Debug.WriteLine(ex.ToString());
-                    }
-                }
-                else
-                {
-                    SaveFileDialog ofd = new SaveFileDialog();
-                    ofd.Filter = "Image files (*.gif;*.bmp;*.png;*.jpg;*.tif;*.emf;*.svg;*.wmf)|*.gif;*.bmp;*.png;*.jpg;*.tif;*.emf;*.svg;*.wmf|All files (*.*)|*.*";
-                    if (ofd.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            //if (chart.SaveToFile(ofd.FileName, Math.Max((int)((float)(chart.Width) * 0.5f),0), chart.Height ) == false)
-                            if (chart.SaveToFile(ofd.FileName) == false)
-                            {
-                                MessageBox.Show(this, "Save to file has failed.", "Peak Finder", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message + " " + ex.InnerException, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-
-        }
+            filename_txtBx.Text = file_name;                  
+        }             
         private void export_copy_plot(bool copy, PlotView plot)
         {
             if (copy)
@@ -8728,64 +8706,7 @@ namespace Isotope_fitting
             }
             return sumFrag_temp;
         }
-        private void refresh_frag_Btn2_Click(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { MessageBox.Show("Refreshes Fragment list based on the 'Filter' settings(ppm and 'Exclusion List').\r\n" +
-                "Attention:for each fragment ppm is recalculated and if it is not within the new ppm bound the fragment is disposed, unless it is set otherwise on the 'Filter' settings by enabling 'ignore ppm' button.\r\nAnytime fragment list entries change 'Fit Results' are disposed, as they no longer correspond to the new list.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            if (experimental.Count == 0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_internal_indexes.Count == 0) { MessageBox.Show("You have to load the experimental data first in order to refresh the list!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            if (Fragments2.Count == 0) { return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Refresh Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-            if (dialogResult != DialogResult.OK) { return; }
-            int initial_count = Fragments2.Count;
-            int rr = 0;
-            bool first = true;
-            if (Fragments2.Count > 0)
-            {
-                while (rr < Fragments2.Count)
-                {
-                    Fragments2[rr].Candidate = true;
-                    if (is_in_excluded_bounds(Fragments2[rr]))
-                    {
-                        Fragments2.RemoveAt(rr);
-                        if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
-                    }
-                    else if (!decision_algorithm2(Fragments2[rr]))
-                    {
-                        if (ignore_ppm_refresh) { Fragments2[rr].Candidate = false; rr++; }
-                        else
-                        {
-                            Fragments2.RemoveAt(rr);
-                            if (first && selectedFragments != null && selectedFragments.Count > 0) { first = false; selectedFragments.Clear(); }
-                        }
-                    }
-                    else { rr++; }
-                }
-                // thread safely fire event to continue calculations
-                Invoke(new Action(() => OnEnvelopeCalcCompleted()));
-            }
-            if (initial_count == Fragments2.Count) { MessageBox.Show("Fragment list hasn't changed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            else
-            {
-                factor_panel.Visible = false;
-                bigPanel.Enabled = false;
-                uncheckall_Frag();
-                fitted_results.Clear(); selectedFragments.Clear();
-                if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-                if (fit_tree != null)
-                {
-                    fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; MessageBox.Show("Fragment list have changed. Fit results are disposed.", "Refresh Fragment List", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                //fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-                if (IonDraw.Count > 0) IonDraw.Clear();
-                foreach (FragForm fra in Fragments2)
-                {
-                    if (fra.Fixed)
-                    {
-                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
-                    }
-                }
-            }
-        }
+        
         private bool is_in_excluded_bounds(FragForm fra)
         {
             if (fra.Ion_type.Contains("int"))
@@ -8854,14 +8775,7 @@ namespace Isotope_fitting
             return false;
         }
        
-        private void frag_sort_Btn2_Click(object sender, EventArgs e)
-        {
-            if (help_Btn.Checked) { MessageBox.Show("Displays 'Filter' panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
-            Form19 frm19 = new Form19(this, help_Btn.Checked);
-            //frm19.FormClosed += (s, f) => { save_preferences(); };        //this is a property that the object (Form 19) will always have. It should be declared within the object itself
-            frm19.ShowDialog();
-            //params_form();
-        }
+       
         private void show_files_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Displays loaded Fragment files' names", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
