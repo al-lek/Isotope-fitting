@@ -590,5 +590,19 @@ namespace Isotope_fitting
             }
             return value;
         }
+
+        /// <summary>
+        ///return the focused control in a container
+        /// </summary>
+        public static Control FindFocusedControl(Control control)
+        {
+            var container = control as IContainerControl;
+            while (container != null)
+            {
+                control = container.ActiveControl;
+                container = control as IContainerControl;
+            }
+            return control;
+        }
     }
 }

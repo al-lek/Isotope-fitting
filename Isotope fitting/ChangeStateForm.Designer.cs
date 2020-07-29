@@ -99,7 +99,7 @@
             this.save_stateBtn.Location = new System.Drawing.Point(405, 293);
             this.save_stateBtn.Name = "save_stateBtn";
             this.save_stateBtn.Size = new System.Drawing.Size(75, 25);
-            this.save_stateBtn.TabIndex = 4;
+            this.save_stateBtn.TabIndex = 6;
             this.save_stateBtn.Text = "Run";
             this.save_stateBtn.UseVisualStyleBackColor = true;
             this.save_stateBtn.Click += new System.EventHandler(this.save_stateBtn_Click);
@@ -111,11 +111,10 @@
             this.RNA_Btn.Location = new System.Drawing.Point(342, 253);
             this.RNA_Btn.Name = "RNA_Btn";
             this.RNA_Btn.Size = new System.Drawing.Size(48, 17);
-            this.RNA_Btn.TabIndex = 6;
+            this.RNA_Btn.TabIndex = 4;
             this.RNA_Btn.TabStop = true;
             this.RNA_Btn.Text = "RNA";
             this.RNA_Btn.UseVisualStyleBackColor = true;
-            this.RNA_Btn.CheckedChanged += new System.EventHandler(this.RNA_Btn_CheckedChanged);
             // 
             // DNA_Btn
             // 
@@ -124,11 +123,10 @@
             this.DNA_Btn.Location = new System.Drawing.Point(396, 253);
             this.DNA_Btn.Name = "DNA_Btn";
             this.DNA_Btn.Size = new System.Drawing.Size(48, 17);
-            this.DNA_Btn.TabIndex = 7;
+            this.DNA_Btn.TabIndex = 5;
             this.DNA_Btn.TabStop = true;
             this.DNA_Btn.Text = "DNA";
             this.DNA_Btn.UseVisualStyleBackColor = true;
-            this.DNA_Btn.CheckedChanged += new System.EventHandler(this.DNA_Btn_CheckedChanged);
             // 
             // ChangeStateForm
             // 
@@ -150,6 +148,7 @@
             this.MinimizeBox = false;
             this.Name = "ChangeStateForm";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Change State";
             ((System.ComponentModel.ISupportInitialize)(this.peptide_state_Btn)).EndInit();

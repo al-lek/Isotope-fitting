@@ -1373,18 +1373,7 @@ namespace Isotope_fitting
                         //float[] yss = spline.FitAndEval(x, y, xss.ToArray(), Single.NaN, Single.NaN);
                         //xs = xss.ToList();
                         //ys = yss.ToList();
-                        #region in case of saving resolution results
-                        //SaveFileDialog save = new SaveFileDialog() { Title = "Resolution", FileName = "Resolution", Filter = "Data Files (*.txt)|*.txt", DefaultExt = "txt", OverwritePrompt = true, AddExtension = true };
-
-                        //if (save.ShowDialog() == DialogResult.OK)
-                        //{
-                        //    System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
-
-
-                        //    for (int r = 0; r < ys.Count(); r++) file.WriteLine(xs[r] + "\t" + ys[r]);
-                        //    file.Flush(); file.Close(); file.Dispose();
-                        //}
-                        #endregion   
+                       
                     //}
 
                     

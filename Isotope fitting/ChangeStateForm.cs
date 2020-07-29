@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Isotope_fitting.Helpers;
+
 
 namespace Isotope_fitting
 {
@@ -73,19 +75,7 @@ namespace Isotope_fitting
             this.Close();
         }
 
-        private void cancelBtn_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
-        private void RNA_Btn_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DNA_Btn_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+     
     }
 }

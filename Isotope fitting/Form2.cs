@@ -1400,10 +1400,14 @@ namespace Isotope_fitting
             if (is_deconv_const_resolution)
             {
                 resolution = dParser(machine);
+                for (int g = 0; g < peak_points.Count; g++)
+                {
+                    peak_points[g][3] = resolution;
+                }
                 Parallel.For(0, experimental_dec.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
                 {
                     List<double[]> temp_list = Envelope_Experimental(experimental_dec[i], resolution);
-                    lock (_locker) { experimental_f.AddRange(temp_list); }
+                    lock (_locker){experimental_f.AddRange(temp_list);}
                 });
                 experimental = experimental_f.OrderBy(d => d[0]).ToList();
             }
@@ -1412,6 +1416,7 @@ namespace Isotope_fitting
                 machine = deconv_machine;
                 if (Resolution_List.L.TryGetValue(machine, out Resolution_List.MachineR data))
                 {
+                    List<double[]> temp_res = new List<double[]>();
                     int n = 50;
                     double stepSize = (data.m_z[data.m_z.Length - 1] - data.m_z[0]) / (n - 1);
                     double[] x1 = new double[1];
@@ -1431,6 +1436,7 @@ namespace Isotope_fitting
                     Parallel.For(0, experimental_dec.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
                     {
                         List<double[]> initial_entry = new List<double[]>();
+                        List<double[]> res = new List<double[]>();
                         List<List<double[]>> temp_exp_groups = new List<List<double[]>>();
                         for (int ii = 0; ii < experimental_dec[i].Count; ii++)
                         {
@@ -1455,12 +1461,14 @@ namespace Isotope_fitting
                                 initial_entry.Clear();
                                 previous_res = resolution;
                                 initial_entry.Add(new double[] { experimental_dec[i][ii][0], experimental_dec[i][ii][1] });
+
                             }
                             else
                             {
                                 previous_res = resolution;
                                 initial_entry.Add(new double[] { experimental_dec[i][ii][0], experimental_dec[i][ii][1] });
                             }
+                            res.Add(new double[] { experimental_dec[i][ii][0], resolution });
                         }
                         if (initial_entry.Count > 0)
                         {
@@ -1472,9 +1480,9 @@ namespace Isotope_fitting
 
                         lock (_locker) { exp_groups.AddRange(temp_exp_groups); }
                         lock (_locker) { exp_x.AddRange(temp_exp_x); }
-
+                        lock (_locker) { temp_res.AddRange(res); }
                     });
-                    exp_x.Sort();
+                    exp_x.Sort(); temp_res.Sort();
                     Parallel.For(0, exp_x.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
                     {
                         double one_aligned_point = 0.0;
@@ -1504,6 +1512,17 @@ namespace Isotope_fitting
                         if (i % 2 == 0) lock (_locker) { experimental_f.Add(new double[] { mz_toInterp, one_aligned_point }); }
                         else lock (_locker) { experimental_f2.Add(new double[] { mz_toInterp, one_aligned_point }); }
                     });
+                    if (peak_points.Count == temp_res.Count)
+                    {
+                        for (int g = 0; g < peak_points.Count; g++)
+                        {
+                            peak_points[g][3] = temp_res[g][1];
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("An error occured in deconvolution, in the resolution region. Some fragments may appear with false resolution.");
+                    }
                     experimental_f.AddRange(experimental_f2);
                     // sort by mz the aligned intensities list (global) beause it is mixed by multi-threading
                     experimental = experimental_f.OrderBy(d => d[0]).ToList();
@@ -1746,7 +1765,26 @@ namespace Isotope_fitting
                 StreamReader objReader = new StreamReader(fragment_import.FileName);
                 do { lista.Add(objReader.ReadLine()); }
                 while (objReader.Peek() != -1);
-                objReader.Close();
+                objReader.Close();                           
+                lista.RemoveAt(0);
+                if (is_riken) lista.RemoveAt(0);
+                progress_display_start(lista.Count, "Importing fragments list...");
+                for (int j = 0; j != (lista.Count); j++)
+                {
+                    try
+                    {
+                        string[] tmp_str = lista[j].Split('\t');
+                        if (tmp_str.Length <4) { MessageBox.Show("Oops... it seems you have inserted wrong file format. Please try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);return; }
+                        else if (is_riken) assign_riken_fragment(tmp_str);
+                        else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
+                        else if (calc_FF) assign_manually_pro_fragment(tmp_str);
+                    }
+                    catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+
+                    if (j % 1000 == 0 && j > 0) progress_display_update(j);
+                }
+                progress_display_stop();
+                //treeview
                 if (string.IsNullOrEmpty(ms_extension)) { loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + "_"; }
                 else { loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + ms_extension; }
                 loaded_MSproducts.Add(loaded_ms);
@@ -1756,23 +1794,6 @@ namespace Isotope_fitting
                 if (MSproduct_treeView == null || MSproduct_treeView.Nodes.Count == 0) { MSproduct_treeView.Nodes.Add(base_node_name); }
                 MSproduct_treeView.Nodes[0].Nodes.Add(loaded_ms);
                 MSproduct_treeView.Visible = true;
-                lista.RemoveAt(0);
-                if (is_riken) lista.RemoveAt(0);
-                progress_display_start(lista.Count, "Importing fragments list...");
-                for (int j = 0; j != (lista.Count); j++)
-                {
-                    try
-                    {
-                        string[] tmp_str = lista[j].Split('\t');
-                        if (is_riken) assign_riken_fragment(tmp_str);
-                        else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
-                        else if (calc_FF) assign_manually_pro_fragment(tmp_str);
-                    }
-                    catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-
-                    if (j % 1000 == 0 && j > 0) progress_display_update(j);
-                }
-                progress_display_stop();
                 post_import_fragments();
                 sw1.Stop();
                 if (is_riken) Debug.WriteLine("Import frags: " + sw1.ElapsedMilliseconds.ToString());
@@ -2808,10 +2829,10 @@ namespace Isotope_fitting
             {
                 double[] tmp = ppm_calculator(cen[i].X);
                 results.Add(tmp);
-                if (Math.Abs(tmp[0]) > temp_pp /*&& is_exp_deconvoluted*/) { fragment_is_canditate = false; break; }
+                if (Math.Abs(tmp[0]) > (temp_pp+4) /*&& is_exp_deconvoluted*/) { fragment_is_canditate = false; break; }
             }
             //round 2, with the correct resolution
-            if ((fragment_is_canditate || chem.Fixed) && !is_exp_deconvoluted)
+            if ((fragment_is_canditate || chem.Fixed) /*&& !is_exp_deconvoluted*/)
             {
                 chem.Resolution = (double)results.Average(p => p[1]);
                 results = new List<double[]>();
@@ -14285,10 +14306,12 @@ namespace Isotope_fitting
             }
         }
 
+
+
+
+
         #endregion
 
         
-
-       
     }
 }
