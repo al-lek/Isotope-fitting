@@ -3178,7 +3178,7 @@ namespace Isotope_fitting
                         {
                             if (frag_temp.Any(p => p.Equals("internal b")) && label_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); }
                         }
-                        else if (ion.Contains("int"))
+                        else if (!is_riken && ion.Contains("int"))
                         {
                             if (frag_temp.Any(p => p.Equals("internal a")) && label_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
                         }
@@ -5659,7 +5659,7 @@ namespace Isotope_fitting
                     {
                         if (frag_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal b"))) { to_plot2.Add(idx); } }
                     }
-                    else if (ion.Contains("int"))
+                    else if (!is_riken && ion.Contains("int"))
                     {
                         if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal a"))) { to_plot2.Add(idx); } }
                     }
@@ -6099,7 +6099,7 @@ namespace Isotope_fitting
                     {
                         if (frag_temp.Any(p => p.Equals("internal b"))) { max_min_Y_frag(out Y_max, Y_max, fra, x_min, x_max); }
                     }
-                    else if (ion.Contains("int"))
+                    else if (!is_riken && ion.Contains("int"))
                     {
                         if (frag_temp.Any(p => p.Equals("internal a"))) { max_min_Y_frag(out Y_max, Y_max, fra, x_min, x_max); }
                     }
@@ -8909,7 +8909,7 @@ namespace Isotope_fitting
                     {
                         if (frag_temp.Any(p => p.Equals("internal b")) && label_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); }
                     }
-                    else if (ion.Contains("int"))
+                    else if (!is_riken && ion.Contains("int"))
                     {
                         if (frag_temp.Any(p => p.Equals("internal a")) && label_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
                     }
@@ -13293,7 +13293,7 @@ namespace Isotope_fitting
                 {
                     if (frag_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); }
                 }
-                else if (ion.Contains("int"))
+                else if (!is_riken && ion.Contains("int"))
                 {
                     if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
                 }

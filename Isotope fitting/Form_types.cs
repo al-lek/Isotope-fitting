@@ -16,7 +16,6 @@ namespace Isotope_fitting
     {
         Form2 frm2;
         bool is_view = false;
-        bool changed = false;
         public Form_types(Form2 f,bool v)
         {
             InitializeComponent();
@@ -33,7 +32,6 @@ namespace Isotope_fitting
                 else if(!is_view && frm2.label_frag.Any(p => p.Equals(s))) { chk.Checked = true; }
                 flowPanel.Controls.Add(chk);
             }
-            changed = false;
         }
         private Color give_color()
         {
@@ -49,7 +47,7 @@ namespace Isotope_fitting
             }
             if (is_view) { frm2.view_frag = temp.ToArray(); }
             else { frm2.label_frag = temp.ToArray(); }
-            changed = true;
+            frm2.external_refresh_isoplot();
         }
 
         private void reset_btn_Click(object sender, EventArgs e)
@@ -67,10 +65,6 @@ namespace Isotope_fitting
         {
             un_check_all_checkboxes(flowPanel, false);
         }
-
-        private void Form_types_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (changed) frm2.external_refresh_isoplot();
-        }
+      
     }
 }

@@ -130,7 +130,6 @@
             this.Controls.Add(this.toolStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form_types";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_types_FormClosed);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.toolStrip3.ResumeLayout(false);
