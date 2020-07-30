@@ -310,7 +310,6 @@ namespace Isotope_fitting
             this.zoomOut_Y_Btn = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripSeparator();
             this.view_fragBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.user_grpBox = new System.Windows.Forms.Panel();
@@ -498,6 +497,9 @@ namespace Isotope_fitting
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton13 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -3738,13 +3740,14 @@ namespace Isotope_fitting
             this.toolStrip_plot.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip_plot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.chartFormatBtn,
+            this.toolStripSeparator3,
             this.autoscale_Btn,
             this.cursor_chkBx,
             this.zoomIn_Y_Btn,
             this.zoomOut_Y_Btn,
-            this.frag_lbl_Btn,
             this.toolStripButton1,
-            this.toolStripButton3,
+            this.frag_lbl_Btn,
+            this.toolStripSeparator4,
             this.view_fragBtn,
             this.toolStripButton2});
             this.toolStrip_plot.Location = new System.Drawing.Point(0, 0);
@@ -3848,13 +3851,6 @@ namespace Isotope_fitting
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(6, 32);
             // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(6, 32);
-            this.toolStripButton3.Visible = false;
-            // 
             // view_fragBtn
             // 
             this.view_fragBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -3875,6 +3871,7 @@ namespace Isotope_fitting
             this.toolStripButton2.Enabled = false;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.toolStripButton2.Size = new System.Drawing.Size(150, 29);
             // 
             // user_grpBox
@@ -4603,9 +4600,10 @@ namespace Isotope_fitting
             this.fragTypes_toolStrip.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.fragTypes_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.save_FragTypes_Btn,
-            this.toggle_FragTypes_Btn,
+            this.toolStripButton13,
             this.check_all_fragTypes,
-            this.uncheck_all_fragTypes});
+            this.uncheck_all_fragTypes,
+            this.toggle_FragTypes_Btn});
             this.fragTypes_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.fragTypes_toolStrip.Location = new System.Drawing.Point(0, 456);
             this.fragTypes_toolStrip.Name = "fragTypes_toolStrip";
@@ -6034,6 +6032,21 @@ namespace Isotope_fitting
             this.displayIonTypesListToolStripMenuItem.Text = "Display ion types list";
             this.displayIonTypesListToolStripMenuItem.Click += new System.EventHandler(this.displayIonTypesListToolStripMenuItem_Click);
             // 
+            // toolStripButton13
+            // 
+            this.toolStripButton13.Name = "toolStripButton13";
+            this.toolStripButton13.Size = new System.Drawing.Size(6, 37);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 32);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6045,7 +6058,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v27.1.3";
+            this.Text = "Peak Finder v27.1.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -6474,7 +6487,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton zoomIn_Y_Btn;
         private System.Windows.Forms.ToolStripButton zoomOut_Y_Btn;
         private System.Windows.Forms.ToolStripSeparator toolStripButton1;
-        private System.Windows.Forms.ToolStripSeparator toolStripButton3;
         private System.Windows.Forms.GroupBox res_grpBox;
         private System.Windows.Forms.Panel user_grpBox;
         private System.Windows.Forms.GroupBox Fit_results_groupBox;
@@ -6692,5 +6704,8 @@ namespace Isotope_fitting
         private System.Windows.Forms.ContextMenuStrip frag_lbl_contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem displayIonTypesListToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripButton13;
     }
 }

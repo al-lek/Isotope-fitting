@@ -1198,7 +1198,7 @@ namespace Isotope_fitting
         #region 1.a Import data
         private void loadExp_Btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Loads experimental file in .txt file format. Each line in the file consists of two tab delimited values: m/z and intensity.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Loads experimental file in .txt file format.\r\nEach line in the file consists of two tab delimited values: m/z and intensity.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             loadExp_Btn.Enabled = false;
             try
             {
@@ -1282,7 +1282,7 @@ namespace Isotope_fitting
                             }
                             else
                             {
-                                MessageBox.Show("Oops... it seems you have inserted wrong file format. Please try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                 file_name = ""; experimental.Clear(); experimental_dec.Clear();
                                 sw1.Stop(); Debug.WriteLine("load_experimental: failed due to wrong file format");
                                 progress_display_stop();
@@ -1774,7 +1774,7 @@ namespace Isotope_fitting
                     try
                     {
                         string[] tmp_str = lista[j].Split('\t');
-                        if (tmp_str.Length <4) { MessageBox.Show("Oops... it seems you have inserted wrong file format. Please try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);return; }
+                        if (tmp_str.Length <4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);return; }
                         else if (is_riken) assign_riken_fragment(tmp_str);
                         else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
                         else if (calc_FF) assign_manually_pro_fragment(tmp_str);
@@ -1854,21 +1854,21 @@ namespace Isotope_fitting
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
             if (!calc_FF) ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(out is_error, ChemFormulas[i].InputFormula);
-            if (is_exp_deconvoluted)
-            {
-                //in case of a deconvoluted spectra 
-                ChemFormulas[i].Charge = 0;
+            //if (is_exp_deconvoluted)
+            //{
+            //    //in case of a deconvoluted spectra 
+            //    ChemFormulas[i].Charge = 0;
 
-                // all ions have as many H in Adduct as their charge
-                ChemFormulas[i].Adduct = "";
-            }
-            else
-            {
+            //    // all ions have as many H in Adduct as their charge
+            //    ChemFormulas[i].Adduct = "";
+            //}
+            //else
+            //{
                 ChemFormulas[i].Charge = Int32.Parse(frag_info[3]);
 
                 // all ions have as many H in Adduct as their charge
                 ChemFormulas[i].Adduct = "H" + ChemFormulas[i].Charge.ToString();
-            }
+            //}
 
             //check if there are charged x ions
             if (!x_charged && ChemFormulas[i].Ion.Contains("x") && ChemFormulas[i].Charge > 1) { x_charged = true; }
@@ -2208,21 +2208,21 @@ namespace Isotope_fitting
             ChemFormulas[i].Chain_type = 0;
             // in order to maintain an exclusive way of presenting chemical formulas,the riken chemical formulas are converted to Molecular formulas of charge 0
             ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(out is_error, ChemFormulas[i].InputFormula, true, charge * (-1));
-            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". The molecular formula for charge could not be created from the chemical formula : " + ChemFormulas[i].InputFormula + " ,with charge : " + ChemFormulas[i].Charge + " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + " .\r\nThe molecular formula for charge could not be created from the chemical formula : " + ChemFormulas[i].InputFormula + " ,with charge : " + ChemFormulas[i].Charge + " .\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
 
             if (charge > 0) { ChemFormulas[i].Adduct = "H" + charge.ToString(); }
             else if (charge < 0) { ChemFormulas[i].Deduct = "H" + (charge * (-1)).ToString(); }
 
-            if (is_exp_deconvoluted)
-            {
-                ChemFormulas[i].Charge = 0; ChemFormulas[i].Adduct = ""; ChemFormulas[i].Deduct = "";
-                //ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula, true, charge * (-1));
-                return;
-            }
-            else
-            {
+            //if (is_exp_deconvoluted)
+            //{
+            //    ChemFormulas[i].Charge = 0; ChemFormulas[i].Adduct = ""; ChemFormulas[i].Deduct = "";
+            //    //ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula, true, charge * (-1));
+            //    return;
+            //}
+            //else
+            //{
                 ChemFormulas[i].Charge = charge;
-            }
+            //}
             string[] substring = ChemFormulas[i].Ion.Split('-');
             string ion_type = "";
             if (char.IsLower(ChemFormulas[i].Ion[0]))
@@ -2257,7 +2257,7 @@ namespace Isotope_fitting
                     }
                     else
                     {
-                        MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally.");
+                        MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + " .\r\nDon't worry the remaining calculations will continue normally.");
                         ChemFormulas.RemoveAt(i); return;
                     }
 
@@ -2272,15 +2272,15 @@ namespace Isotope_fitting
                         try
                         {
                             ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(out is_error, ChemFormulas[i].InputFormula, -index, 'O');
-                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".You are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + " .\r\nYou are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " .\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
                             ChemiForm.CheckChem(temp_chem);
-                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + " , with m/z " + ChemFormulas[i].Mz + " .\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             double emass = 0.00054858;
                             if (charge == 0) { ChemFormulas[i].Mz = Math.Round(temp_chem.Monoisotopic.Mass, 4).ToString(); }
                             else { ChemFormulas[i].Mz = Math.Round((temp_chem.Monoisotopic.Mass - emass * charge) / Math.Abs(charge), 4).ToString(); }
                         }
-                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + " : The amount of Oxygen couldn't be altered.\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
                 else if (primary_present)
@@ -2301,7 +2301,7 @@ namespace Isotope_fitting
                         }
                         else
                         {
-                            MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally.");
+                            MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".\r\nDon't worry the remaining calculations will continue normally.");
                             ChemFormulas.RemoveAt(i); return;
                         }
                     }
@@ -2319,15 +2319,15 @@ namespace Isotope_fitting
                         try
                         {
                             ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(out is_error, ChemFormulas[i].InputFormula, -index_values[1] + index_values[0], 'O');
-                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".You are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".\r\nYou are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " .\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
                             ChemiForm.CheckChem(temp_chem);
-                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             double emass = 0.00054858;
                             if (charge == 0) { ChemFormulas[i].Mz = Math.Round(temp_chem.Monoisotopic.Mass, 4).ToString(); }
                             else { ChemFormulas[i].Mz = Math.Round((temp_chem.Monoisotopic.Mass - emass * charge) / Math.Abs(charge), 4).ToString(); }
                         }
-                        catch (Exception eee) { MessageBox.Show(eee.ToString() + " ,Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                        catch (Exception eee) { MessageBox.Show(eee.ToString() + " ,Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered.\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
                 else
@@ -2367,15 +2367,15 @@ namespace Isotope_fitting
                         try
                         {
                             ChemFormulas[i].InputFormula = ChemFormulas[i].PrintFormula = find_index_fix_formula(out is_error, ChemFormulas[i].InputFormula, -ms_sequence.Length, 'O');
-                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".You are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " . Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            if (is_error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".\r\nYou are in DNA mode but the Oxygens could not be removed from the chemical formula : " + ChemFormulas[i].InputFormula + " .\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             ChemiForm temp_chem = ChemFormulas[i].DeepCopy();
                             ChemiForm.CheckChem(temp_chem);
-                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ". Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                            if (temp_chem.Error) { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ".\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                             double emass = 0.00054858;
                             if (charge == 0) { ChemFormulas[i].Mz = Math.Round(temp_chem.Monoisotopic.Mass, 4).ToString(); }
                             else { ChemFormulas[i].Mz = Math.Round((temp_chem.Monoisotopic.Mass - emass * charge) / Math.Abs(charge), 4).ToString(); }
                         }
-                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered. Don't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
+                        catch { MessageBox.Show("Error with fragment " + ChemFormulas[i].Ion + ",with m/z " + ChemFormulas[i].Mz + ": The amount of Oxygen couldn't be altered.\r\nDon't worry the remaining calculations will continue normally."); ChemFormulas.RemoveAt(i); return; }
                     }
                 }
                 else
@@ -2425,7 +2425,7 @@ namespace Isotope_fitting
                 var polarity_dialog = this.ShowPolarityDialog();
                 if (string.IsNullOrEmpty(polarity_dialog.ToString()))
                 {
-                    MessageBox.Show("No polarity selected!Therefore, Loading fragments procedure is cancelled.", "Loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return;
+                    MessageBox.Show("No polarity selected! Therefore, 'Loading fragments' procedure is cancelled.", "Loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return;
                 }
                 else if (polarity_dialog.ToString().Equals("Negative")) is_polarity_negative = true;
                 else is_polarity_negative = false;
@@ -2497,7 +2497,7 @@ namespace Isotope_fitting
             if (help_Btn.Checked) { MessageBox.Show("Opens a Fragment calculator panel.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string file_type = "an 'MS Product'";
             if(is_riken) file_type = "a 'Riken'";
-            if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculator'. Please try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (ChemFormulas.Count == 0) { MessageBox.Show("You must first load "+ file_type + " File and then access 'Calculator'.\r\nPlease try again.", "Error in Calculation Box!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (is_riken)
             {
                 if (frm24_2 != null)
@@ -3382,7 +3382,7 @@ namespace Isotope_fitting
                 Location = new Point(275, 7), Size = new Size(60, 20) };
             btn_solo.Click += (s, e) =>
             {
-                if (experimental.Count == 0) { MessageBox.Show("Oops..it seems you forgot to load an experimental file!You have to load the experimental data first in order to adjust fragment's height!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                if (experimental.Count == 0) { MessageBox.Show("Oops..it seems you forgot to load an experimental file!\r\nYou have to load the experimental data first in order to adjust fragment's height!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
                 if (is_frag_calc_recalc || (statusStrp.Visible && progressLabel.Text == "Preparing data for fit...")) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
                 // run solo fit. Fit calls refresh plot.
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(new List<int> { frag_idx + 1 }); // selected fragments have +1 index comparing to Fragments2
@@ -3692,7 +3692,7 @@ namespace Isotope_fitting
 
         private void toggle_FragTypes_Btn_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("When ckecked fully expands the tree view to show all nodes. When un-ckecked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When ckecked fully expands the tree view to show all nodes.\r\nWhen un-ckecked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
 
             if (fragTypes_tree != null)
             {
@@ -3882,7 +3882,7 @@ namespace Isotope_fitting
             if (is_frag_calc_recalc || (statusStrp.Visible && progressLabel.Text== "Preparing data for fit...")) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             if (experimental.Count == 0) { MessageBox.Show("Oops...it seems you forgot to load the experimental file!The basic steps are the following:\r\n1.Load the experimental data\r\n2.create a Fragment list\r\nPerform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             if (Fragments2.Count == 0) { MessageBox.Show("Oops...it seems you forgot to create a Fragment list!The basic steps are the following:\r\n1.Load the experimental data\r\n2.create a Fragment list\r\n3.Perform fit!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-            DialogResult dialogResult = MessageBox.Show("Ready to perform fit!Are you sure you want to proceed?", "Perform fit", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            DialogResult dialogResult = MessageBox.Show("Ready to perform fit! Are you sure you want to proceed?", "Perform fit", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.OK)
             {
                 bigPanel.Enabled = false;
@@ -4413,7 +4413,7 @@ namespace Isotope_fitting
             foreach (Control ctrl in bigPanel.Controls) { bigPanel.Controls.Remove(ctrl); ctrl.Dispose(); }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }
             // init tree view
-            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(3, 3), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 10, bigPanel.Size.Height - 10), ShowNodeToolTips = false, HideSelection = false, TreeViewNodeSorter = new NodeSorter() };
+            fit_tree = new MyTreeView() { CheckBoxes = true, Location = new Point(2, 2), Name = "fit_tree", Size = new Size(bigPanel.Size.Width - 10, bigPanel.Size.Height - 10), ShowNodeToolTips = false, HideSelection = false, TreeViewNodeSorter = new NodeSorter() };
             bigPanel.Controls.Add(fit_tree);
             fit_tree.AfterCheck += (s, e) => { if (!dont_refresh_frag_tree) fit_node_checkChanged(e.Node); };
             //fit_tree.ContextMenu = new ContextMenu(new MenuItem[1] { new MenuItem("Copy", (s, e) => { copy_fitTree_toClipBoard(); }) });
@@ -4581,11 +4581,11 @@ namespace Isotope_fitting
         /// </summary>
         private void show_error(TreeNode node)
         {
-            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             StringBuilder sb = new StringBuilder();
             double lse = 0.0;
             List<double[]> lse_fragments = new List<double[]>();
-            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
             else
             {
@@ -4697,9 +4697,9 @@ namespace Isotope_fitting
         }
         private void copy_solution_fragments_toClipBoard(TreeNode node)
         {
-            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data?", "Headers", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             bool header = true;
             if (dialogResult == DialogResult.No) { header = false; }
             StringBuilder sb = new StringBuilder();
@@ -4721,9 +4721,9 @@ namespace Isotope_fitting
         }
         private void copy_solution_scorestoClipBoard(TreeNode node)
         {
-            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data ?", "Headers", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (node == null) { MessageBox.Show(" First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            DialogResult dialogResult = MessageBox.Show("Do you want to add headers to the copied data?", "Headers", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             bool header = true;
             if (dialogResult == DialogResult.No) { header = false; }
             StringBuilder sb = new StringBuilder();
@@ -4908,14 +4908,14 @@ namespace Isotope_fitting
         /// </summary>
         private void fitnode_Re_Sort(TreeNode node)
         {
-            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             if (string.IsNullOrEmpty(node.Name))
             {
                 form_sort_fitnode(node.Index);
             }
             else
             {
-                MessageBox.Show("'Sort & Filter node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("'Sort & Filter node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-clicked on it.", " None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         /// <summary>
@@ -4923,7 +4923,7 @@ namespace Isotope_fitting
         /// </summary>
         private void refresh_fitnode_sorting(TreeNode node)
         {
-            if (node == null) { MessageBox.Show("Oops...First make sure you have selected the desired node and then right-clicked on it.", "None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (node == null) { MessageBox.Show("Oops...First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             int node_index = node.Index;
             foreach (TreeNode tnn in fit_tree.Nodes[node_index].Nodes)
             {
@@ -4970,7 +4970,7 @@ namespace Isotope_fitting
             }
             else
             {
-                MessageBox.Show("'Refresh node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group. First make sure you have selected the desired node and then right-clicked on it.", " None selected node to perform task.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("'Refresh node' command is implemented on nodes that represent a fit group and not a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-clicked on it.", " None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         /// <summary>
@@ -5202,9 +5202,9 @@ namespace Isotope_fitting
                     }
                 }
                 if (grp_nodes.Count == 0 || frgmts.Count == 0) return;
-                if (frgmts.Count > 12) { MessageBox.Show("Oops...the maximum amount of fragments in each group iteration is 12! Please try again with fewer or smaller fit groups.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-                if (frgmts.Count > 11) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 8 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand); if (dialogResult != DialogResult.OK) { return; } }
-                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 4 minutes to complete. Are you sure you would like to continue?", "Attention", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand); if (dialogResult != DialogResult.OK) { return; } }
+                if (frgmts.Count > 12) { MessageBox.Show("Oops...the maximum amount of fragments in each group iteration is 12!\r\nPlease try again with fewer or smaller fit groups.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                if (frgmts.Count > 11) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 8 minutes to complete.\r\nAre you sure you would like to continue?", "Attention", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand); if (dialogResult != DialogResult.OK) { return; } }
+                if (frgmts.Count > 10) { DialogResult dialogResult = MessageBox.Show("Hmm...Τhe process takes about 4 minutes to complete.\r\nAre you sure you would like to continue?", "Attention", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand); if (dialogResult != DialogResult.OK) { return; } }
                 (List<double[]> res, List<int[]> set) = fit_distros_parallel2(frgmts);
                 grp_nodes.OrderBy(g => g); frgmts.OrderBy(f => f);
                 all_fitted_results.RemoveRange(grp_nodes[0], grp_nodes.Count());
@@ -5271,12 +5271,12 @@ namespace Isotope_fitting
         }
         private void fit_chkGrpsBtn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show( "Fit checked groups of the fit results to create one merged group with the fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show( "Fits the checked groups of the fit results and creates one merged group with all the fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             fit_checked_groups();
         }
         private void fit_chkGrpsChkFragBtn_Click_1(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Fit checked Fragments in checked groups of the fit results to create one merged group with the checked fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Fits the checked Fragments in the checked groups of the fit results and creates one merged group with the checked fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             fit_checked_groups(false);
         }
        
@@ -6062,7 +6062,7 @@ namespace Isotope_fitting
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Sets mouse tool to label exact points coordinates in spectrum area. With left click sets mouse tool as a ruler to measure distances in a spectrum, with left click the ruler vanishes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Sets mouse tool to label exact points coordinates in the spectrum area.\r\nWith left click sets mouse tool as a ruler to measure distances in a spectrum, with right click the ruler vanishes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             // 
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
@@ -6452,9 +6452,9 @@ namespace Isotope_fitting
         }
         private void displayPeakList_btn_Click(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Displays the experimental peak list. Peak list is created by detecting the centroids in the experimental bell shaped profiles. Peak list settings are accessed by the 'Settings' button. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            if (experimental.Count == 0 ) {  MessageBox.Show("Oops...it seems you forgot to load the experimental file!You have to load the experimental data first and then view the experimental peaks!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;  }
-            if(peak_points.Count == 0) { MessageBox.Show("The list of the experimental peaks is under construction. Please wait...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Displays the experimental peak list. Peak list is created by detecting the centroids in the experimental bell shaped profiles.\r\nPeak list settings are accessed by the 'Settings' button. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (experimental.Count == 0 ) {  MessageBox.Show("Oops...it seems you forgot to load the experimental file!\r\nYou have to load the experimental data first and then view the experimental peaks!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;  }
+            if(peak_points.Count == 0) { MessageBox.Show("The peak list is under construction. Please wait...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             display_peakList();
         }
         private void display_peakList()
@@ -6765,7 +6765,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Unfortunately an error occured while reading the sequence rtf. This means that the colored letters of the sequence won't be colored as you want.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+                                    MessageBox.Show("Unfortunately an error occured while reading the sequence rtf.\r\nThis means that the colored letters of the sequence won't be colored as you want.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                 }
                             }
                         }
@@ -6789,7 +6789,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Unfortunately an error occured while reading the sequence rtf. This means that the colored letters of the sequence won't be colored as you want.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+                                    MessageBox.Show("Unfortunately an error occured while reading the sequence rtf.\r\nThis means that the colored letters of the sequence won't be colored as you want.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                 }
                             }
                         }
@@ -6825,7 +6825,7 @@ namespace Isotope_fitting
                     name_extension += "." + sequenceList[s].Extension;
                 }
             }
-            DialogResult dialogResult = MessageBox.Show("By default 'EnviPat' Calculations are not saved. Do you want to save 'EnviPat' Calculations ? ['Yes' recommended in case of a large compound]", "'Save' settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult dialogResult = MessageBox.Show("By default 'EnviPat' Calculations are not saved.\r\nDo you want to save 'EnviPat' Calculations ?\r\n['Yes' recommended in case of a large compound]", "'Save' settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
                 SaveFileDialog save = new SaveFileDialog() { Title = "Save fitted list", FileName = "fragment" + name_extension, Filter = "Data Files (*.fit)|*.fit", DefaultExt = "fit", OverwritePrompt = true, AddExtension = true };
@@ -7068,7 +7068,7 @@ namespace Isotope_fitting
                                         {
                                             if (seq.Extension.Equals(str[1]))
                                             {
-                                                if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
+                                                if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences.\r\nPlease check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
                                                 else { found = true; }
                                                 break;
                                             }
@@ -7086,7 +7086,7 @@ namespace Isotope_fitting
                                     {
                                         if (str.Count() < 3)
                                         {
-                                            MessageBox.Show("You have inserted a .hlfit file without two sequences.The heavy chain and the light chain sequences are needed!And in the format heavy chain TAB light chain in the sequence section of the file. Please close the program and correct data type with the correct extension!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+                                            MessageBox.Show("You have inserted a .hlfit file without two sequences.\r\nThe heavy chain and the light chain sequences are needed!\r\nPlease close the program and correct the file's extension!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                         }
                                         s_chain = str[1];
                                         s2_chain = str[2];
@@ -7097,7 +7097,7 @@ namespace Isotope_fitting
                                         {
                                             if (seq.Extension.Equals("H"))
                                             {
-                                                if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
+                                                if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences.\r\nPlease check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
                                                 else { found = true; }
                                                 break;
                                             }
@@ -7108,7 +7108,7 @@ namespace Isotope_fitting
                                         {
                                             if (seq.Extension.Equals("L"))
                                             {
-                                                if (!seq.Sequence.Equals(str[2])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
+                                                if (!seq.Sequence.Equals(str[2])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences.\r\nPlease check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
                                                 else { found = true; }
                                                 break;
                                             }
@@ -7126,7 +7126,7 @@ namespace Isotope_fitting
                                             {
                                                 if (seq.Extension.Equals("H"))
                                                 {
-                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
+                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences.\r\nPlease check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
                                                     else { found = true; }
                                                     break;
                                                 }
@@ -7141,7 +7141,7 @@ namespace Isotope_fitting
                                             {
                                                 if (seq.Extension.Equals("L"))
                                                 {
-                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
+                                                    if (!seq.Sequence.Equals(str[1])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences.\r\nPlease check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
                                                     else { found = true; }
                                                     break;
                                                 }
@@ -7231,10 +7231,11 @@ namespace Isotope_fitting
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                        if (is_exp_deconvoluted && fitted_chem.Last().Charge != 0)
+                                        if (is_exp_deconvoluted && Math.Abs(fitted_chem.Last().Charge) != 1)
                                         {
-                                            dec = true;
-                                            fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
+                                            dec = true;                                            
+                                            if (fitted_chem.Last().Charge>0) { fitted_chem.Last().Adduct = "H1"; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 1; }
+                                            else { fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = "H1"; fitted_chem.Last().Charge = -1; }
                                             //IonDraw.Last().Charge = 0;
                                         }
                                         if (!new_type)
@@ -7280,7 +7281,7 @@ namespace Isotope_fitting
                                                     }
                                                     else
                                                     {
-                                                        MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name.As a result, the x,y,z will be false. Please close the program and correct data type with the correct extension!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                                        MessageBox.Show("You have inserted a .hlfit file without _H and _L in the fragments name.\r\nAs a result, the x,y,z indexes will be false.\r\nPlease close the program and correct the file's extension!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                                     }
                                                 }
                                                 else
@@ -7427,7 +7428,7 @@ namespace Isotope_fitting
                                         {
                                             if (seq.Extension.Equals(str[1]))
                                             {
-                                                if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences. Please check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
+                                                if (!seq.Sequence.Equals(str[3])) { MessageBox.Show("Two identical extensions were identified but with different amino-acid sequences.\r\nPlease check the Sequence section after the completion of the calculations", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); }
                                                 else { found = true; }
                                                 break;
                                             }
@@ -7445,7 +7446,7 @@ namespace Isotope_fitting
                                     {
                                         if (str.Count() < 3)
                                         {
-                                            MessageBox.Show("You have inserted a .hlfit file without two sequences.The heavy chain and the light chain sequences are needed!And in the format heavy chain TAB light chain in the sequence section of the file. Please close the program and correct data type with the correct extension!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
+                                            MessageBox.Show("You have inserted a .hlfit file without two sequences.\r\nThe heavy chain and the light chain sequences are needed!\r\nPlease close the program and correct the file's extension!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                         }
                                         s_chain = str[1];
                                         s2_chain = str[2];
@@ -7590,10 +7591,11 @@ namespace Isotope_fitting
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
-                                        if (is_exp_deconvoluted)
+                                        if (is_exp_deconvoluted && Math.Abs(fitted_chem.Last().Charge)!=1)
                                         {
-                                            fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 0;
                                             //IonDraw.Last().Charge=0;
+                                            if (fitted_chem.Last().Charge > 0) { fitted_chem.Last().Adduct = "H1"; fitted_chem.Last().Deduct = ""; fitted_chem.Last().Charge = 1; }
+                                            else { fitted_chem.Last().Adduct = ""; fitted_chem.Last().Deduct = "H1"; fitted_chem.Last().Charge = -1; }
                                         }
                                         if (!new_type)
                                         {
@@ -8367,7 +8369,7 @@ namespace Isotope_fitting
                 "In case the experimental file is different from the file that these fragments were calculated at, it is suggested to select the button '"+ loadFragmentsAndRecalculateResolutionToolStripMenuItem.Text+"'.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             if (fitted_results.Count!=0 || all_fitted_results != null)
             {
-                DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?\r\nWhen 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {
                     is_recalc_res = false;
@@ -8389,7 +8391,7 @@ namespace Isotope_fitting
             if (!insert_exp) { MessageBox.Show("You must first load the experimental data for this action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             else if (fitted_results.Count != 0 || all_fitted_results != null)
             { 
-                DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed? When 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed? \r\nWhen 'Fragment list' changes 'Fit results' are automatically disposed.", "Load Fragment List and recalculate resolution", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {
                     is_recalc_res = true;
@@ -8426,7 +8428,7 @@ namespace Isotope_fitting
         }
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("When checked fully expands the tree view to show all nodes. When un-checked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When checked fully expands the tree view to show all nodes. \r\nWhen un-checked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
 
             if (frag_tree != null)
             {
@@ -13639,6 +13641,7 @@ namespace Isotope_fitting
         }
         private bool Clear_all()
         {
+            root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             CloseAllOpenForm("Form2");
             if (frm24_2 != null) { frm24_2 = null; }
             if (frm24 != null) { frm24 = null; }
@@ -13703,10 +13706,10 @@ namespace Isotope_fitting
         private void project_load()
         {
             all = 0;
-            if (!Clear_all()) return;
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
+                if (!Clear_all()) return;
                 // The user selected a folder and pressed the OK button.                
                 string folderName = folderBrowserDialog1.SelectedPath;
                 root_path = folderName;
@@ -13715,9 +13718,18 @@ namespace Isotope_fitting
                 string path_peaks = Path.Combine(folderName, "Peak Data.txt");
                 string path_fragments = Path.Combine(folderName, "Fragment Data.txt");
                 string path_fit = Path.Combine(folderName, "Fit Data.txt");
-                string extension = Path.GetExtension(path_experimental);
-                if (extension.Equals(".dec")) { is_exp_deconvoluted = true; }
+                if (!File.Exists(path_peaks) || !File.Exists(path_fragments) || !File.Exists(path_fit)) { MessageBox.Show("Oops...the selected folder is not in the correct format.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+                if (!File.Exists(path_experimental))
+                {
+                    path_experimental = Path.Combine(folderName, "Experimental Data.dec");
+                    if (File.Exists(path_experimental)) { is_exp_deconvoluted = true; }
+                    else { MessageBox.Show("Oops...the selected folder is not in the correct format.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+                }
                 else { is_exp_deconvoluted = false; }
+               
+                //string extension = Path.GetExtension(path_experimental);
+                //if (extension.Equals(".dec")) { is_exp_deconvoluted = true; }
+                //else { is_exp_deconvoluted = false; }
                 _bw_load_project_exp.RunWorkerAsync(path_experimental);
                 _bw_load_project_peaks.RunWorkerAsync(path_peaks);
                 _bw_load_project_fragments.RunWorkerAsync(path_fragments);
@@ -13741,35 +13753,35 @@ namespace Isotope_fitting
             do { lista.Add(objReader.ReadLine()); }
             while (objReader.Peek() != -1);
             objReader.Close();
-            experimental_dec.Clear();
-            if (is_exp_deconvoluted) peak_points.Clear();
+            //experimental_dec.Clear();
+            //if (is_exp_deconvoluted) peak_points.Clear();
             //add toolstrip progress bar
             //progress_display_start(lista.Count, "Loading experimental data...");
             max_exp = 0.0;
-            if (is_exp_deconvoluted)
-            {
-                for (int j = 0; j != (lista.Count); j++)
-                {
-                    try
-                    {
-                        string[] tmp_str = lista[j].Split('\t');
-                        double mz = dParser(tmp_str[0]);
-                        double y = dParser(tmp_str[1]);
-                        if (tmp_str.Length == 2)
-                        {
-                            peak_points.Add(new double[] { j, mz, y, 10000, 0, y });
-                            if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
-                            else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
-                            experimental_dec.Last().Add(new double[] { mz, y });
-                            mz_prev = mz;
-                        }
-                        if (max_exp < y) max_exp = y;
-                    }
-                    catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
-                }
-            }
-            else
-            {
+            //if (is_exp_deconvoluted)
+            //{
+            //    for (int j = 0; j != (lista.Count); j++)
+            //    {
+            //        try
+            //        {
+            //            string[] tmp_str = lista[j].Split('\t');
+            //            double mz = dParser(tmp_str[0]);
+            //            double y = dParser(tmp_str[1]);
+            //            if (tmp_str.Length == 2)
+            //            {
+            //                peak_points.Add(new double[] { j, mz, y, 10000, 0, y });
+            //                if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
+            //                else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
+            //                experimental_dec.Last().Add(new double[] { mz, y });
+            //                mz_prev = mz;
+            //            }
+            //            if (max_exp < y) max_exp = y;
+            //        }
+            //        catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
+            //    }
+            //}
+            //else
+            //{
                 experimental.Clear();
                 for (int j = 0; j != (lista.Count); j++)
                 {
@@ -13784,29 +13796,60 @@ namespace Isotope_fitting
                         }
                         if (max_exp < y) max_exp = y;
                     }
-                    catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
+                    catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
                 }
-            }
+            //}
 
         }
         void Project_load_peaks(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
+            double mz_prev = 0;
             List<string> lista = new List<string>();
             StreamReader objReader = new StreamReader(filename);
             do { lista.Add(objReader.ReadLine()); }
             while (objReader.Peek() != -1);
             objReader.Close();
             peak_points.Clear();
-            for (int j = 0; j != (lista.Count); j++)
+            if (is_exp_deconvoluted)
             {
-                try
+                for (int j = 0; j != (lista.Count); j++)
                 {
-                    string[] tmp_str = lista[j].Split('\t');
-                    peak_points.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]), dParser(tmp_str[2]), dParser(tmp_str[3]), dParser(tmp_str[4]), dParser(tmp_str[5]) });
-                }
-                catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                    try
+                    {
+                        string[] tmp_str = lista[j].Split('\t');
+                        if (tmp_str.Length == 6)
+                        {
+                            double mz = dParser(tmp_str[1]);
+                            double y = dParser(tmp_str[2]);
+                            peak_points.Add(new double[] { dParser(tmp_str[0]), mz, y, dParser(tmp_str[3]), dParser(tmp_str[4]), dParser(tmp_str[5]) });
+                            if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
+                            else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
+                            experimental_dec.Last().Add(new double[] { mz, y });
+                            mz_prev = mz;
+                        }
+                        else { MessageBox.Show("Wrong format in data file " + filename, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                    }
+                    catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                }                
             }
+            else
+            {
+                for (int j = 0; j != (lista.Count); j++)
+                {
+                    try
+                    {
+                        string[] tmp_str = lista[j].Split('\t');
+                        if (tmp_str.Length == 6)
+                        {
+                            peak_points.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]), dParser(tmp_str[2]), dParser(tmp_str[3]), dParser(tmp_str[4]), dParser(tmp_str[5]) });
+                        }
+                        else { MessageBox.Show("Wrong format in data file " + filename, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                    }
+                    catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                }
+            }
+            
         }
         void Project_load_fit_results(object sender, DoWorkEventArgs e)
         {
@@ -13894,7 +13937,7 @@ namespace Isotope_fitting
                         }
                     }
                 }
-                catch { MessageBox.Show("Error in data file" + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             }
         }
         void Project_load_fragments(object sender, DoWorkEventArgs e)
@@ -14148,27 +14191,32 @@ namespace Isotope_fitting
         private void project_save()
         {
             save_preferences();
-            if (!insert_exp) { MessageBox.Show("Sorry...No project available.There is not any experimental file loaded. You can save Fragment List in a .fit file instead.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
-            else if (Fragments2.Count == 0) { MessageBox.Show("Sorry...No project available.There is not any Fragment List loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+            if (!insert_exp) { MessageBox.Show("Sorry...No project available.\r\nThere is not any experimental file loaded.\r\nYou can save Fragment List in a .fit file instead.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+            else if (Fragments2.Count == 0) { MessageBox.Show("Sorry...No project available.\r\nThere is not any Fragment List loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                if (!Directory.Exists(folderBrowserDialog1.SelectedPath)) { MessageBox.Show("Oops...No folder selected.Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+                if (!Directory.Exists(folderBrowserDialog1.SelectedPath)) { MessageBox.Show("Oops...No folder selected.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
                 progress_display_start(7, "Saving project...");
                 all = 0;
                 // The user selected a folder and pressed the OK button.                
                 string folderName = folderBrowserDialog1.SelectedPath;
                 string path_experimental = Path.Combine(folderName, "Experimental Data.txt");
-                if (is_exp_deconvoluted) { path_experimental = Path.Combine(folderName, "Experimental Data.dec"); }
+                if (is_exp_deconvoluted)
+                {
+                    if (File.Exists(path_experimental)) { File.Delete(path_experimental); }
+                    path_experimental = Path.Combine(folderName, "Experimental Data.dec");
+                }
                 string path_peaks = Path.Combine(folderName, "Peak Data.txt");
                 string path_fragments = Path.Combine(folderName, "Fragment Data.txt");
                 string path_fit = Path.Combine(folderName, "Fit Data.txt");
                 string path_pref = Path.Combine(folderName, "preferences.txt");
-                if (!project_experimental.Equals(path_experimental)) System.IO.File.Copy(project_experimental, path_experimental, true);
+                if (!is_exp_deconvoluted && !project_experimental.Equals(path_experimental)) System.IO.File.Copy(project_experimental, path_experimental, true);
+                if (is_exp_deconvoluted) { Project_save_experimental(path_experimental); }
                 if (!path_pref.Equals(root_path + "\\preferences.txt")) System.IO.File.Copy(root_path + "\\preferences.txt", path_pref, true);
                 _bw_save_project_peaks.RunWorkerAsync(path_peaks);
                 _bw_save_project_frag.RunWorkerAsync(path_fragments);
-                _bw_save_project_fit_results.RunWorkerAsync(path_fit);
+                _bw_save_project_fit_results.RunWorkerAsync(path_fit);                             
             }
         }
         void Project_save_fit_results(object sender, DoWorkEventArgs e)
@@ -14252,20 +14300,23 @@ namespace Isotope_fitting
             if (peak_points.Count == 0 && !is_exp_deconvoluted) { return; }
             using (StreamWriter writer = new StreamWriter(path, append: false))
             {
+                foreach (double[] peak in peak_points)
+                {
+                    writer.WriteLine(peak[0] + "\t" + peak[1] + "\t" + peak[2] + "\t" + peak[3] + "\t" + peak[4] + "\t" + peak[5]);
+                }
+            }
+        }
+        private void Project_save_experimental(string path)
+        {            
+            using (StreamWriter writer = new StreamWriter(path, append: false))
+            {
                 if (is_exp_deconvoluted)
                 {
                     foreach (double[] exp in experimental)
                     {
                         writer.WriteLine(exp[0] + "\t" + exp[1]);
                     }
-                }
-                else
-                {
-                    foreach (double[] peak in peak_points)
-                    {
-                        writer.WriteLine(peak[0] + "\t" + peak[1] + "\t" + peak[2] + "\t" + peak[3] + "\t" + peak[4] + "\t" + peak[5]);
-                    }
-                }
+                }               
             }
         }
         void Project_save_fragments(object sender, DoWorkEventArgs e)
@@ -14306,12 +14357,7 @@ namespace Isotope_fitting
             }
         }
 
-
-
-
-
         #endregion
 
-        
     }
 }

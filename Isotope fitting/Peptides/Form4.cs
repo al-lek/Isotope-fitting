@@ -70,7 +70,7 @@ namespace Isotope_fitting
                 }
                 catch (FormatException ex)
                 {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
+                    MessageBox.Show("Please enter only numbers.\r\nDecimal point is inserted with '.'.");
                     mDm_Box.Text = mDm_Box.Text.Remove(startIndex: mDm_Box.Text.Length - 1);
                 }
             }
@@ -87,7 +87,7 @@ namespace Isotope_fitting
                 }
                 catch (FormatException ex)
                 {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
+                    MessageBox.Show("Please enter only numbers.\r\nDecimal point is inserted with '.'.");
                     Dm_Box.Text = Dm_Box.Text.Remove(startIndex: Dm_Box.Text.Length - 1);
                 }
             }
@@ -103,7 +103,7 @@ namespace Isotope_fitting
                 }
                 catch (FormatException ex)
                 {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
+                    MessageBox.Show("Please enter only numbers.\r\nDecimal point is inserted with '.'.");
                     centBox.Text = centBox.Text.Remove(centBox.Text.Length - 1);
                 }
             }
@@ -119,7 +119,7 @@ namespace Isotope_fitting
                 }
                 catch (FormatException ex)
                 {
-                    MessageBox.Show("Please enter only numbers.Decimal point is inserted with '.'.");
+                    MessageBox.Show("Please enter only numbers.\r\nDecimal point is inserted with '.'.");
                     m_Box.Text = m_Box.Text.Remove(startIndex: m_Box.Text.Length - 1);
                 }
             }
