@@ -10858,7 +10858,6 @@ namespace Isotope_fitting
                 CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
                 by_chBx_temp.ForeColor = Color.Blue;
                 if (los_chkBox_temp.Checked) { ax_chBx_temp.Checked = false; cz_chBx_temp.Checked = false; intB_chBx_temp.Checked = false; intA_chBx_temp.Checked = false; }
-
             }
             else
             {
@@ -10866,7 +10865,7 @@ namespace Isotope_fitting
             }
         }
         private void cz_chBx_CheckedChanged(object sender, EventArgs e)
-        {
+        {            
             CheckBox cz_chBx_temp = sender as CheckBox;
             Panel draw_sequence_panel_temp = cz_chBx_temp.Parent as Panel;
             CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
@@ -10898,7 +10897,7 @@ namespace Isotope_fitting
                 if (los_chkBox_temp.Checked) { ax_chBx_temp.Checked = false; by_chBx_temp.Checked = false; cz_chBx_temp.Checked = false; }
             }
             else intA_chBx_temp.ForeColor = Control.DefaultForeColor;
-        }
+        }       
         private void draw_Btn_Click(object sender, EventArgs e)
         {
             sequence_Pnl.Refresh(); color_range_panel.Refresh(); seq_lbl_panel.Refresh();
@@ -10931,17 +10930,18 @@ namespace Isotope_fitting
         private void dvw_chBx_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox dvw_chBx_temp = sender as CheckBox;
+            Panel draw_sequence_panel_temp = dvw_chBx_temp.Parent as Panel;
+            CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
+            CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
+            CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
+            CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
+            CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
+            CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
             if (dvw_chBx_temp.Checked)
-            {
-                Panel draw_sequence_panel_temp = dvw_chBx_temp.Parent as Panel;
-                CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
-                CheckBox by_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("by_chBx")).ToList().FirstOrDefault();
-                CheckBox cz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
-                CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
-                CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
-                CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
-                ax_chBx_temp.Checked = false;by_chBx_temp.Checked = false;by_chBx_temp.Checked = false;intA_chBx_temp.Checked = false;los_chkBox_temp.Checked = false;intB_chBx_temp.Checked = false;
+            {                
+                ax_chBx_temp.Checked = false;by_chBx_temp.Checked = false;cz_chBx_temp.Checked = false;intA_chBx_temp.Checked = false;los_chkBox_temp.Checked = false;intB_chBx_temp.Checked = false;
             }
+            ax_chBx_temp.Enabled = !dvw_chBx_temp.Checked; by_chBx_temp.Enabled = !dvw_chBx_temp.Checked; cz_chBx_temp.Enabled = !dvw_chBx_temp.Checked; intA_chBx_temp.Enabled = !dvw_chBx_temp.Checked; los_chkBox_temp.Enabled = !dvw_chBx_temp.Checked; intB_chBx_temp.Enabled = !dvw_chBx_temp.Checked;
         }
         private void seq_extensionBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -14359,5 +14359,6 @@ namespace Isotope_fitting
 
         #endregion
 
+       
     }
 }

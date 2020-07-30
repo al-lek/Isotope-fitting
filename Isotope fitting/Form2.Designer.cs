@@ -304,12 +304,14 @@ namespace Isotope_fitting
             this.chartFormatBtn = new System.Windows.Forms.ToolStripDropDownButton();
             this.styleFormatBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.autoscale_Btn = new System.Windows.Forms.ToolStripButton();
             this.cursor_chkBx = new System.Windows.Forms.ToolStripButton();
             this.zoomIn_Y_Btn = new System.Windows.Forms.ToolStripButton();
             this.zoomOut_Y_Btn = new System.Windows.Forms.ToolStripButton();
-            this.frag_lbl_Btn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
+            this.frag_lbl_Btn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.view_fragBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.user_grpBox = new System.Windows.Forms.Panel();
@@ -375,9 +377,10 @@ namespace Isotope_fitting
             this.factor_panel = new System.Windows.Forms.Panel();
             this.fragTypes_toolStrip = new System.Windows.Forms.ToolStrip();
             this.save_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
-            this.toggle_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton13 = new System.Windows.Forms.ToolStripSeparator();
             this.check_all_fragTypes = new System.Windows.Forms.ToolStripButton();
             this.uncheck_all_fragTypes = new System.Windows.Forms.ToolStripButton();
+            this.toggle_FragTypes_Btn = new System.Windows.Forms.ToolStripButton();
             this.fragTypes_tree = new System.Windows.Forms.TreeView();
             this.statusStrp = new System.Windows.Forms.StatusStrip();
             this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -497,9 +500,6 @@ namespace Isotope_fitting
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton13 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -3785,6 +3785,11 @@ namespace Isotope_fitting
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            // 
             // autoscale_Btn
             // 
             this.autoscale_Btn.Checked = true;
@@ -3831,6 +3836,11 @@ namespace Isotope_fitting
             this.zoomOut_Y_Btn.ToolTipText = "Zoom Out Y Axis";
             this.zoomOut_Y_Btn.Click += new System.EventHandler(this.zoomOut_Y_Btn_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(6, 32);
+            // 
             // frag_lbl_Btn
             // 
             this.frag_lbl_Btn.CheckOnClick = true;
@@ -3846,10 +3856,10 @@ namespace Isotope_fitting
             this.frag_lbl_Btn.CheckStateChanged += new System.EventHandler(this.fragPlotLbl_chkBx_CheckedChanged);
             this.frag_lbl_Btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frag_lbl_Btn_MouseDown);
             // 
-            // toolStripButton1
+            // toolStripSeparator4
             // 
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 32);
             // 
             // view_fragBtn
             // 
@@ -4624,17 +4634,10 @@ namespace Isotope_fitting
             this.save_FragTypes_Btn.Text = "Save checked fragments";
             this.save_FragTypes_Btn.Click += new System.EventHandler(this.save_FragTypes_Btn_Click);
             // 
-            // toggle_FragTypes_Btn
+            // toolStripButton13
             // 
-            this.toggle_FragTypes_Btn.CheckOnClick = true;
-            this.toggle_FragTypes_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toggle_FragTypes_Btn.Image = ((System.Drawing.Image)(resources.GetObject("toggle_FragTypes_Btn.Image")));
-            this.toggle_FragTypes_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toggle_FragTypes_Btn.Name = "toggle_FragTypes_Btn";
-            this.toggle_FragTypes_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toggle_FragTypes_Btn.Size = new System.Drawing.Size(34, 34);
-            this.toggle_FragTypes_Btn.Text = "Toggle All Outlining";
-            this.toggle_FragTypes_Btn.CheckedChanged += new System.EventHandler(this.toggle_FragTypes_Btn_CheckedChanged);
+            this.toolStripButton13.Name = "toolStripButton13";
+            this.toolStripButton13.Size = new System.Drawing.Size(6, 37);
             // 
             // check_all_fragTypes
             // 
@@ -4657,6 +4660,18 @@ namespace Isotope_fitting
             this.uncheck_all_fragTypes.Size = new System.Drawing.Size(34, 34);
             this.uncheck_all_fragTypes.Text = "Uncheck all";
             this.uncheck_all_fragTypes.Click += new System.EventHandler(this.uncheck_all_fragTypes_Click);
+            // 
+            // toggle_FragTypes_Btn
+            // 
+            this.toggle_FragTypes_Btn.CheckOnClick = true;
+            this.toggle_FragTypes_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toggle_FragTypes_Btn.Image = ((System.Drawing.Image)(resources.GetObject("toggle_FragTypes_Btn.Image")));
+            this.toggle_FragTypes_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toggle_FragTypes_Btn.Name = "toggle_FragTypes_Btn";
+            this.toggle_FragTypes_Btn.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toggle_FragTypes_Btn.Size = new System.Drawing.Size(34, 34);
+            this.toggle_FragTypes_Btn.Text = "Toggle All Outlining";
+            this.toggle_FragTypes_Btn.CheckedChanged += new System.EventHandler(this.toggle_FragTypes_Btn_CheckedChanged);
             // 
             // fragTypes_tree
             // 
@@ -6031,21 +6046,6 @@ namespace Isotope_fitting
             this.displayIonTypesListToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.displayIonTypesListToolStripMenuItem.Text = "Display ion types list";
             this.displayIonTypesListToolStripMenuItem.Click += new System.EventHandler(this.displayIonTypesListToolStripMenuItem_Click);
-            // 
-            // toolStripButton13
-            // 
-            this.toolStripButton13.Name = "toolStripButton13";
-            this.toolStripButton13.Size = new System.Drawing.Size(6, 37);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 32);
             // 
             // Form2
             // 
