@@ -5282,85 +5282,6 @@ namespace Isotope_fitting
        
         #endregion       
 
-        #region refresh plot        
-        private void recalculate_fitted_residual(List<int> to_plot)
-        {
-            // calculate addition of selected fragments, and the respective residual
-            // it is always called on every refresh of the plot 
-            // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
-            // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
-
-            //sw3.Reset();  sw2.Reset(); sw1.Reset(); 
-            List<int> plot_idxs = new List<int>(to_plot);
-
-            // When ONE fragment is checked/unchecked do NOT recalculate ALL fragments. Just add/subtract the checked/uncheked
-            if (Math.Abs(last_ploted_iso.Count - to_plot.Count) == 1)
-            {
-                //sw2.Start();
-                int operand = 1;
-                int diff = to_plot.Except(last_ploted_iso).ToList().FirstOrDefault();
-
-                if (last_ploted_iso.Count - to_plot.Count == 1)
-                {
-                    operand = -1;
-                    diff = last_ploted_iso.Except(to_plot).ToList().FirstOrDefault();
-                }
-
-                for (int i = 0; i < all_data_aligned.Count(); i++)
-                {
-                    if (all_data_aligned[i][diff] > 0)
-                    {
-                        double change = operand * all_data_aligned[i][diff] * Fragments2[diff - 1].Factor;
-                        summation[i][1] += change;
-                        residual[i][1] -= change;
-                    }
-                }
-
-                last_ploted_iso = new List<int>(to_plot);
-                //sw2.Stop(); Console.WriteLine("single frag change: " + sw2.ElapsedMilliseconds.ToString());
-                return;
-            }
-
-            //sw1.Start();
-            // 1. calculate addition of fragments and residual
-            // This is the case when MANY fragments are selected/unselected. 
-            // a. Major improvement from skiping calculations for zeros (reduce time by 60%). 
-            // b. multi-thread (reduce time by 60%)
-            summation.Clear();
-            residual.Clear();
-
-            double[][] summation_temp = new double[all_data_aligned.Count][];
-            double[][] residual_temp = new double[all_data_aligned.Count][];
-
-            Parallel.For(0, all_data_aligned.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
-            {
-                double intensity = 0.0;
-                for (int j = 0; j < plot_idxs.Count; j++)
-                    if (all_data_aligned[i][plot_idxs[j]] > 0)
-                        intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
-
-                if (Form9.now)
-                {
-                    int count = all_data_aligned[i].Count();
-                    int count_last_plot = Form9.last_plotted.Count;
-                    for (int extras = 0; extras < count_last_plot; extras++)
-                        if (all_data_aligned[i][count - extras - 1] > 0)
-                            intensity += all_data_aligned[i][count - extras - 1] * Form9.Fragments3[Form9.last_plotted[count_last_plot - extras - 1]].Factor;
-                }
-
-                summation_temp[i] = new double[] { all_data[0][i][0], intensity };
-                residual_temp[i] = new double[] { all_data[0][i][0], all_data[0][i][1] - intensity };
-            });
-
-            summation = summation_temp.ToList();
-            residual = residual_temp.ToList();
-
-            last_ploted_iso = new List<int>(to_plot);
-            //sw1.Stop(); Console.WriteLine("Total compute Parallel: " + sw1.ElapsedMilliseconds.ToString()); sw1.Reset();
-        }       
-
-        #endregion
-
         #region LICHTNING CHART
         private void init_chart()
         {
@@ -5485,7 +5406,6 @@ namespace Isotope_fitting
             LC_1.MouseDoubleClick += (s, e) => { v.ZoomToFit(); if (autoscale_Btn.Checked) { xAxis_fox_yAxis(LC_1.ViewXY.XAxes[0].Minimum, LC_1.ViewXY.XAxes[0].Maximum); } };
             LC_1.MouseDown += new MouseEventHandler(_chart_MouseDown);
         }
-
         private void LC_2xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary Y axis
@@ -5495,7 +5415,6 @@ namespace Isotope_fitting
             LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
             LC_2.EndUpdate();
         }
-
         private void yAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary Y axis
@@ -5504,7 +5423,6 @@ namespace Isotope_fitting
             LC_1.ViewXY.YAxes[1].SetRange(e.NewMin, e.NewMax);
             LC_1.EndUpdate();
         }
-
         private void xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
         {
             //Set the same range for secondary X axis
@@ -5613,7 +5531,6 @@ namespace Isotope_fitting
             //Allow rendering
             LC_1.EndUpdate();
         }
-
         public static void DisposeAllAndClear<T>(List<T> list)
         {
             if (list == null)
@@ -5627,7 +5544,7 @@ namespace Isotope_fitting
 
             list.Clear();
         }
-
+        //**********************
         private void refresh_iso_plot()
         {
             if (is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
@@ -5821,7 +5738,6 @@ namespace Isotope_fitting
             LC_1.EndUpdate();
             LC_2.EndUpdate();
         }
-
         private void reset_iso_plot()
         {
             for (int i = 0; i < all_data.Count; i++)
@@ -5909,6 +5825,82 @@ namespace Isotope_fitting
                 Init_LineCollection_Plot(LC_1, "exp", peak_color.ToColor(), (int)peak_width);
             }
         }
+        private void recalculate_fitted_residual(List<int> to_plot)
+        {
+            // calculate addition of selected fragments, and the respective residual
+            // it is always called on every refresh of the plot 
+            // if it is called from a selected fit change, no need to seek info from fit results. Results are already on the UI (checkbox.checked, and factor textBox)
+            // to_plot and UI_intensities may also contain experimental index that is not necessary for sum or residual and has to be removed for coding brevity
+
+            //sw3.Reset();  sw2.Reset(); sw1.Reset(); 
+            List<int> plot_idxs = new List<int>(to_plot);
+
+            // When ONE fragment is checked/unchecked do NOT recalculate ALL fragments. Just add/subtract the checked/uncheked
+            if (Math.Abs(last_ploted_iso.Count - to_plot.Count) == 1)
+            {
+                //sw2.Start();
+                int operand = 1;
+                int diff = to_plot.Except(last_ploted_iso).ToList().FirstOrDefault();
+
+                if (last_ploted_iso.Count - to_plot.Count == 1)
+                {
+                    operand = -1;
+                    diff = last_ploted_iso.Except(to_plot).ToList().FirstOrDefault();
+                }
+
+                for (int i = 0; i < all_data_aligned.Count(); i++)
+                {
+                    if (all_data_aligned[i][diff] > 0)
+                    {
+                        double change = operand * all_data_aligned[i][diff] * Fragments2[diff - 1].Factor;
+                        summation[i][1] += change;
+                        residual[i][1] -= change;
+                    }
+                }
+
+                last_ploted_iso = new List<int>(to_plot);
+                //sw2.Stop(); Console.WriteLine("single frag change: " + sw2.ElapsedMilliseconds.ToString());
+                return;
+            }
+
+            //sw1.Start();
+            // 1. calculate addition of fragments and residual
+            // This is the case when MANY fragments are selected/unselected. 
+            // a. Major improvement from skiping calculations for zeros (reduce time by 60%). 
+            // b. multi-thread (reduce time by 60%)
+            summation.Clear();
+            residual.Clear();
+
+            double[][] summation_temp = new double[all_data_aligned.Count][];
+            double[][] residual_temp = new double[all_data_aligned.Count][];
+
+            Parallel.For(0, all_data_aligned.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+            {
+                double intensity = 0.0;
+                for (int j = 0; j < plot_idxs.Count; j++)
+                    if (all_data_aligned[i][plot_idxs[j]] > 0)
+                        intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
+
+                if (Form9.now)
+                {
+                    int count = all_data_aligned[i].Count();
+                    int count_last_plot = Form9.last_plotted.Count;
+                    for (int extras = 0; extras < count_last_plot; extras++)
+                        if (all_data_aligned[i][count - extras - 1] > 0)
+                            intensity += all_data_aligned[i][count - extras - 1] * Form9.Fragments3[Form9.last_plotted[count_last_plot - extras - 1]].Factor;
+                }
+
+                summation_temp[i] = new double[] { all_data[0][i][0], intensity };
+                residual_temp[i] = new double[] { all_data[0][i][0], all_data[0][i][1] - intensity };
+            });
+
+            summation = summation_temp.ToList();
+            residual = residual_temp.ToList();
+
+            last_ploted_iso = new List<int>(to_plot);
+            //sw1.Stop(); Console.WriteLine("Total compute Parallel: " + sw1.ElapsedMilliseconds.ToString()); sw1.Reset();
+        }
+        //**********************
 
         private Color get_fragment_color1(int idx)
         {
@@ -5916,7 +5908,6 @@ namespace Isotope_fitting
             Color clr = Color.FromArgb(custom_colors[idx]);
             return clr;
         }
-
         private void Init_PointLineSeries(LightningChartUltimate LC, string name, Color color, float width, LinePattern style)
         {
             PointLineSeries pls = new PointLineSeries(LC.ViewXY, LC.ViewXY.XAxes[0], LC.ViewXY.YAxes[0])
@@ -5931,7 +5922,6 @@ namespace Isotope_fitting
             };
             LC.ViewXY.PointLineSeries.Add(pls);
         }
-
         private void PointLine_addSeries(LightningChartUltimate LC, int index, List<double[]> data)
         {
             int pointCount = data.Count;
@@ -5942,7 +5932,6 @@ namespace Isotope_fitting
             LC.ViewXY.PointLineSeries[index].Points = points;
             LC.ViewXY.PointLineSeries[index].Visible = true;
         }
-
         private void PointLine_addSeries(LightningChartUltimate LC, int index, double[] mz, double[] y, double y_factor)
         {
             int pointCount = mz.Length;
@@ -5953,7 +5942,6 @@ namespace Isotope_fitting
             LC.ViewXY.PointLineSeries[index].Points = points;
             LC.ViewXY.PointLineSeries[index].Visible = true;
         }
-
         private void Init_LineCollection_Plot(LightningChartUltimate LC, string title, Color color, float width)
         {
             LineCollection lineCollection = new LineCollection(LC.ViewXY, LC.ViewXY.XAxes[0], LC.ViewXY.YAxes[0])
@@ -5967,7 +5955,6 @@ namespace Isotope_fitting
 
             LC.ViewXY.LineCollections.Add(lineCollection);
         }
-
         private void LineCollection_addLines(LightningChartUltimate LC, int index, List<double[]> data)
         {
             SegmentLine[] segmentLines = new SegmentLine[data.Count()];
@@ -5988,7 +5975,6 @@ namespace Isotope_fitting
             LC.ViewXY.LineCollections[index].Lines = segmentLines;
             LC.ViewXY.LineCollections[index].Visible = true;
         }
-
         private void cursor_distance(int pX)
         {
             double x;
@@ -6016,8 +6002,7 @@ namespace Isotope_fitting
                 band2.ValuesChanged += (s, e) => { band2.Title.Text = "Distance: " + Math.Round(Math.Abs(band2.ValueEnd - band2.ValueBegin), 4).ToString(); };
                 LC_1.ViewXY.Bands.Add(band2);
             }
-        }
-       
+        }       
         private void frag_annotation(List<int> to_plot, LightningChartUltimate plot)
         {
             if ((frag_lbl_Btn.Checked) && (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked))
@@ -6078,7 +6063,6 @@ namespace Isotope_fitting
             }
             else cursor_chkBx.Checked = false;
         }
-
         private double return_Yaxis_range(double x_min, double x_max)
         {
             double Y_max = 0.0;
@@ -13197,72 +13181,77 @@ namespace Isotope_fitting
             //// 0.a gather info on which fragments are selected to plot, and their respective intensities
             //List<int> to_plot = selectedFragments.ToList(); // deep copy, don't mess selectedFragments
             List<int> to_plot = new List<int>();
+            List<int> to_plot2 = new List<int>();
+            string[] label_temp = label_frag.ToArray();
             string[] frag_temp = view_frag.ToArray();
             //0.a add only the desired fragments to to_plot
-            foreach (int idx in selectedFragments)
+            if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || Fitting_chkBox.Checked)
             {
-                string ion = Fragments2[idx - 1].Ion_type;
-                if (ion.StartsWith("a") || ion.StartsWith("(a"))
+                foreach (int idx in selectedFragments)
                 {
-                    if (frag_temp.Any(p => p.Equals("a"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("b") || ion.StartsWith("(b"))
-                {
-                    if (frag_temp.Any(p => p.Equals("b"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("c") || ion.StartsWith("(c"))
-                {
-                    if (frag_temp.Any(p => p.Equals("c"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("x") || ion.StartsWith("(x"))
-                {
-                    if (frag_temp.Any(p => p.Equals("x"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("y") || ion.StartsWith("(y"))
-                {
-                    if (frag_temp.Any(p => p.Equals("y"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("z") || ion.StartsWith("(z"))
-                {
-                    if (frag_temp.Any(p => p.Equals("z"))) { to_plot.Add(idx); }
-                }
-                else if (ion.Contains("int") && ion.Contains("b"))
-                {
-                    if (frag_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); }
-                }
-                else if (!is_riken && ion.Contains("int"))
-                {
-                    if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); }
-                }
-                else if (is_riken && ion.Contains("int"))
-                {
-                    if (frag_temp.Any(p => p.Equals("internal")) ) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("d") || ion.StartsWith("(d"))
-                {
-                    if (frag_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("w") || ion.StartsWith("(w"))
-                {
-                    if (frag_temp.Any(p => p.Equals("w"))) { to_plot.Add(idx); }
-                }
-                else if (ion.StartsWith("v") || ion.StartsWith("(v"))
-                {
-                    if (frag_temp.Any(p => p.Equals("v"))) { to_plot.Add(idx); }
-                }
-                else if (ion.Contains("M"))
-                {
-                    if (frag_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); }
-                }
-                else if (ion.Contains("B("))
-                {
-                    if (frag_temp.Any(p => p.Equals("B")) ) { to_plot.Add(idx); }
-                }
-                else
-                {
-                    to_plot.Add(idx);
-                }
+                    string ion = Fragments2[idx - 1].Ion_type;
+                    if (ion.StartsWith("a") || ion.StartsWith("(a"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("a"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("a"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("b") || ion.StartsWith("(b"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("b"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("b"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("c") || ion.StartsWith("(c"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("c"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("c"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("x") || ion.StartsWith("(x"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("x"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("x"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("y") || ion.StartsWith("(y"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("y"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("y"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("z") || ion.StartsWith("(z"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("z"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("z"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.Contains("int") && ion.Contains("b"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("internal b"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal b"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (!is_riken && ion.Contains("int"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("internal a"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal a"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (is_riken && ion.Contains("int"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("internal"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("internal"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("d") || ion.StartsWith("(d"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("d"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("d"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("w") || ion.StartsWith("(w"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("w"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("w"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.StartsWith("v") || ion.StartsWith("(v"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("v"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("v"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.Contains("M"))
+                    {
+                        if (frag_temp.Any(p => p.Equals("M"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("M"))) { to_plot2.Add(idx); } }
+                    }
+                    else if (ion.Contains("B("))
+                    {
+                        if (frag_temp.Any(p => p.Equals("B"))) { to_plot.Add(idx); if (label_temp.Any(p => p.Equals("B"))) { to_plot2.Add(idx); } }
+                    }
+                    else
+                    {
+                        to_plot.Add(idx); to_plot2.Add(idx);
+                    }
 
+                }
             }
             // 0.b. reset iso plot
             reset_temp_plot(temp_plot);
@@ -13270,12 +13259,12 @@ namespace Isotope_fitting
             // 1.b Add the experimental to plot if selected
             if (plotExp_chkBox.Checked && all_data.Count > 0)
             {
-                if (!is_exp_deconvoluted)
-                {
+                //if (!is_exp_deconvoluted)
+                //{
                     double[] mz = all_data[0].Select(a => a[0]).ToArray();
                     double[] y = all_data[0].Select(a => a[1]).ToArray();
                     PointLine_addSeries(temp_plot, 0, mz, y, 1);
-                }
+                //}
             }
 
             // 2. replot all isotopes
@@ -13335,7 +13324,7 @@ namespace Isotope_fitting
             if (summation.Count > 0 && Fitting_chkBox.Checked) PointLine_addSeries(temp_plot, all_data.Count, summation);
 
             // 5. centroid (bar)
-            if (plotCentr_chkBox.Checked && !is_exp_deconvoluted && peak_points.Count > 0)
+            if (plotCentr_chkBox.Checked /*&& !is_exp_deconvoluted*/ && peak_points.Count > 0)
             {
                 int pointCount = peak_points.Count;
                 List<double[]> data_decon = new List<double[]>();
@@ -13347,16 +13336,12 @@ namespace Isotope_fitting
                     data_decon.Add(new double[] { mz, inten });
                 }
                 LineCollection_addLines(temp_plot, all_data.Count - 1, data_decon);
-            }
-            else if (plotCentr_chkBox.Checked && is_exp_deconvoluted)
-            {
-                LineCollection_addLines(temp_plot, all_data.Count - 1, experimental);
-            }
+            }            
 
             // 6. fragment annotations
             if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
             {
-                frag_annotation(to_plot, temp_plot);
+                frag_annotation(to_plot2, temp_plot);
             }
             else
             {
