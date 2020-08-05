@@ -45,6 +45,7 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.save_btn = new System.Windows.Forms.ToolStripButton();
             this.recalc_Exp_Btn = new System.Windows.Forms.ToolStripButton();
+            this.save_decovBtn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -194,7 +195,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(249, 187);
+            this.tabControl1.Size = new System.Drawing.Size(246, 181);
             this.tabControl1.TabIndex = 24;
             // 
             // tabPage1
@@ -258,7 +259,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(241, 161);
+            this.tabPage2.Size = new System.Drawing.Size(238, 155);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Deconvolution";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -271,10 +272,11 @@
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.save_btn,
-            this.recalc_Exp_Btn});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 121);
+            this.recalc_Exp_Btn,
+            this.save_decovBtn});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 115);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(235, 37);
+            this.toolStrip2.Size = new System.Drawing.Size(232, 37);
             this.toolStrip2.TabIndex = 26;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -300,11 +302,22 @@
             this.recalc_Exp_Btn.Text = "Recalculate profile";
             this.recalc_Exp_Btn.Click += new System.EventHandler(this.recalc_Exp_Btn_Click);
             // 
+            // save_decovBtn
+            // 
+            this.save_decovBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.save_decovBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.save_decovBtn.Image = ((System.Drawing.Image)(resources.GetObject("save_decovBtn.Image")));
+            this.save_decovBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.save_decovBtn.Name = "save_decovBtn";
+            this.save_decovBtn.Size = new System.Drawing.Size(34, 34);
+            this.save_decovBtn.ToolTipText = "Save Profile";
+            this.save_decovBtn.Click += new System.EventHandler(this.save_decovBtn_Click);
+            // 
             // Form8
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(249, 187);
+            this.ClientSize = new System.Drawing.Size(246, 181);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
@@ -348,5 +361,6 @@
         private System.Windows.Forms.ToolStripButton save_btn;
         private System.Windows.Forms.ToolStripButton recalc_Exp_Btn;
         private System.Windows.Forms.ToolStripButton recalc_peakBtn;
+        private System.Windows.Forms.ToolStripButton save_decovBtn;
     }
 }

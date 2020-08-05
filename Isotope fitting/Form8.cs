@@ -76,6 +76,7 @@ namespace Isotope_fitting
         private void recalc_Exp_Btn_Click(object sender, EventArgs e)
         {
             if (help) { MessageBox.Show("Recalculate the experimental profile based on the current 'saved' resolution value.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (!frm2.is_exp_deconvoluted) { MessageBox.Show("Applies only for deconvoluted spectra. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             frm2.post_load_actions();
         }
 
@@ -108,6 +109,14 @@ namespace Isotope_fitting
         private void resolution_list_combBox_Click(object sender, EventArgs e)
         {
             if (help) { MessageBox.Show("Select a resolution list that corresponds to a specific Machine. Each list consists of pairs of m/z and resolution values.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void save_decovBtn_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Save Experimental profile (m/z intensity) in a .txt file. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (!frm2.is_exp_deconvoluted) { MessageBox.Show("Applies only for deconvoluted spectra. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+            SaveFileDialog save = new SaveFileDialog() { Title = "Save Experimental Profile", FileName = frm2.file_name +"_profile", Filter = "Data Files (*.txt)|*.txt", DefaultExt = "txt", OverwritePrompt = true, AddExtension = true };            
+            if (save.ShowDialog() == DialogResult.OK) { frm2.Project_save_experimental(save.FileName); }           
         }
     }
 }

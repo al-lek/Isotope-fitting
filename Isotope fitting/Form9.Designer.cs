@@ -281,6 +281,7 @@
             this.label8.Size = new System.Drawing.Size(152, 13);
             this.label8.TabIndex = 64;
             this.label8.Text = "Relative abundance threshold:";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // thre_numUD
             // 
@@ -310,6 +311,7 @@
             0,
             0,
             131072});
+            this.thre_numUD.Click += new System.EventHandler(this.label8_Click);
             // 
             // resolution_Box
             // 
@@ -321,6 +323,7 @@
             this.resolution_Box.TabIndex = 61;
             this.toolTip1.SetToolTip(this.resolution_Box, "Set custom resolution value for the fragments that are not within ppm error (appl" +
         "ied only when \'ignore ppm\' is checked)");
+            this.resolution_Box.Click += new System.EventHandler(this.res_label1_Click);
             this.resolution_Box.TextChanged += new System.EventHandler(this.resolution_Box_TextChanged);
             // 
             // label1
@@ -334,6 +337,7 @@
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 60;
             this.label1.Text = "Resolution";
+            this.label1.Click += new System.EventHandler(this.res_label1_Click);
             // 
             // ignore_ppm_form9
             // 
@@ -350,6 +354,7 @@
             this.toolTip1.SetToolTip(this.ignore_ppm_form9, "Show all fragments regardless of whether they within acceptable ppm bound");
             this.ignore_ppm_form9.UseVisualStyleBackColor = true;
             this.ignore_ppm_form9.CheckedChanged += new System.EventHandler(this.ignore_ppm_form9_CheckedChanged);
+            this.ignore_ppm_form9.Click += new System.EventHandler(this.ignore_ppm_form9_Click);
             // 
             // FragCalc_TabControl
             // 
@@ -523,6 +528,7 @@
             this.extensionBox2.Name = "extensionBox2";
             this.extensionBox2.Size = new System.Drawing.Size(111, 20);
             this.extensionBox2.TabIndex = 61;
+            this.extensionBox2.Click += new System.EventHandler(this.extension_label9_Click);
             // 
             // label6
             // 
@@ -534,6 +540,7 @@
             this.label6.Size = new System.Drawing.Size(53, 13);
             this.label6.TabIndex = 60;
             this.label6.Text = "Extension";
+            this.label6.Click += new System.EventHandler(this.extension_label9_Click);
             // 
             // groupBox3
             // 
@@ -578,6 +585,7 @@
             this.extensionBox1.Name = "extensionBox1";
             this.extensionBox1.Size = new System.Drawing.Size(111, 20);
             this.extensionBox1.TabIndex = 61;
+            this.extensionBox1.Click += new System.EventHandler(this.extension_label9_Click);
             // 
             // label9
             // 
@@ -589,6 +597,7 @@
             this.label9.Size = new System.Drawing.Size(53, 13);
             this.label9.TabIndex = 60;
             this.label9.Text = "Extension";
+            this.label9.Click += new System.EventHandler(this.extension_label9_Click);
             // 
             // filename_txtBx
             // 
@@ -623,6 +632,7 @@
             this.label3.TabIndex = 51;
             this.label3.Text = "Charge";
             this.toolTip1.SetToolTip(this.label3, "Set charge range for the calculations");
+            this.label3.Click += new System.EventHandler(this.chemFormula_charge_Lbl_Click);
             // 
             // label4
             // 
@@ -688,6 +698,7 @@
             this.chem_ion_Lbl.TabIndex = 46;
             this.chem_ion_Lbl.Text = "Ion";
             this.toolTip1.SetToolTip(this.chem_ion_Lbl, "Set ion type (for internal fragments insert \'internal\')");
+            this.chem_ion_Lbl.Click += new System.EventHandler(this.chem_ion_Lbl_Click);
             // 
             // internal_txtBox
             // 
@@ -708,6 +719,7 @@
             this.chem_index_Lbl.Size = new System.Drawing.Size(33, 13);
             this.chem_index_Lbl.TabIndex = 39;
             this.chem_index_Lbl.Text = "Index";
+            this.chem_index_Lbl.Click += new System.EventHandler(this.chem_index_Lbl_Click);
             // 
             // primary_txtBox
             // 
@@ -760,6 +772,7 @@
             this.chem_charge_Lbl.TabIndex = 34;
             this.chem_charge_Lbl.Text = "Charge";
             this.toolTip1.SetToolTip(this.chem_charge_Lbl, "Set charge range for the calculations");
+            this.chem_charge_Lbl.Click += new System.EventHandler(this.chemFormula_charge_Lbl_Click);
             // 
             // chem_chargeMax_Lbl
             // 
@@ -798,6 +811,7 @@
             this.chemForm_txtBox.Name = "chemForm_txtBox";
             this.chemForm_txtBox.Size = new System.Drawing.Size(391, 20);
             this.chemForm_txtBox.TabIndex = 3;
+            this.chemForm_txtBox.Click += new System.EventHandler(this.chemForm_Lbl_Click);
             // 
             // chemForm_Lbl
             // 
@@ -809,6 +823,7 @@
             this.chemForm_Lbl.Size = new System.Drawing.Size(120, 17);
             this.chemForm_Lbl.TabIndex = 2;
             this.chemForm_Lbl.Text = "Chemical Formula";
+            this.chemForm_Lbl.Click += new System.EventHandler(this.chemForm_Lbl_Click);
             // 
             // Frag_tab
             // 
@@ -863,6 +878,7 @@
             this.toolTip1.SetToolTip(this.sortIdx_chkBx, "#index in AA sequence. \r\nWhen checked :\r\nthe index of x,y,z is counted as for the" +
         " a,b,c fragments.");
             this.sortIdx_chkBx.UseVisualStyleBackColor = true;
+            this.sortIdx_chkBx.Click += new System.EventHandler(this.sortIdx_chkBx_Click);
             // 
             // toolStrip_basic
             // 
@@ -1015,6 +1031,7 @@
             this.charge_Label.Size = new System.Drawing.Size(41, 13);
             this.charge_Label.TabIndex = 14;
             this.charge_Label.Text = "Charge";
+            this.charge_Label.Click += new System.EventHandler(this.charge_Label_Click);
             // 
             // z_lstBox
             // 
@@ -1070,6 +1087,7 @@
             this.mz_Label.Size = new System.Drawing.Size(81, 13);
             this.mz_Label.TabIndex = 11;
             this.mz_Label.Text = "M/z boundaries";
+            this.mz_Label.Click += new System.EventHandler(this.mz_Label_Click);
             // 
             // c_lstBox
             // 
@@ -1254,6 +1272,7 @@
             this.label7.Size = new System.Drawing.Size(33, 13);
             this.label7.TabIndex = 17;
             this.label7.Text = "Index";
+            this.label7.Click += new System.EventHandler(this.Index_Click);
             // 
             // idxPr_Box
             // 
@@ -1529,9 +1548,10 @@
             this.sortIdx_chkBx_riken.Name = "sortIdx_chkBx_riken";
             this.sortIdx_chkBx_riken.Size = new System.Drawing.Size(15, 14);
             this.sortIdx_chkBx_riken.TabIndex = 57;
-            this.toolTip1.SetToolTip(this.sortIdx_chkBx_riken, "#index in AA sequence. \r\nWhen checked :\r\nthe index of x,y,z is counted as for the" +
-        " a,b,c fragments.");
+            this.toolTip1.SetToolTip(this.sortIdx_chkBx_riken, "#index in AA sequence. \r\nWhen checked :\r\nthe index of w,x,y,z is counted as for t" +
+        "he a,b,c,d fragments.");
             this.sortIdx_chkBx_riken.UseVisualStyleBackColor = true;
+            this.sortIdx_chkBx_riken.Click += new System.EventHandler(this.sortIdx_chkBx_Click);
             // 
             // toolStrip_riken
             // 
@@ -1611,6 +1631,7 @@
             this.label11.Size = new System.Drawing.Size(41, 13);
             this.label11.TabIndex = 14;
             this.label11.Text = "Charge";
+            this.label11.Click += new System.EventHandler(this.charge_Label_Click);
             // 
             // chargeAll_Btn_riken
             // 
@@ -1634,6 +1655,7 @@
             this.label12.Size = new System.Drawing.Size(81, 13);
             this.label12.TabIndex = 11;
             this.label12.Text = "M/z boundaries";
+            this.label12.Click += new System.EventHandler(this.mz_Label_Click);
             // 
             // label13
             // 
@@ -1754,6 +1776,7 @@
             this.label19.Size = new System.Drawing.Size(33, 13);
             this.label19.TabIndex = 17;
             this.label19.Text = "Index";
+            this.label19.Click += new System.EventHandler(this.Index_Click);
             // 
             // idxPr_Box_riken
             // 
@@ -1841,6 +1864,7 @@
             this.extensionBox1_riken.Name = "extensionBox1_riken";
             this.extensionBox1_riken.Size = new System.Drawing.Size(111, 20);
             this.extensionBox1_riken.TabIndex = 61;
+            this.extensionBox1_riken.Click += new System.EventHandler(this.extension_rik_label23_Click);
             // 
             // label23
             // 
@@ -1852,6 +1876,7 @@
             this.label23.Size = new System.Drawing.Size(53, 13);
             this.label23.TabIndex = 60;
             this.label23.Text = "Extension";
+            this.label23.Click += new System.EventHandler(this.extension_rik_label23_Click);
             // 
             // ion_txtBox_riken
             // 
@@ -1872,6 +1897,7 @@
             this.chem_ion_Lbl_riken.TabIndex = 46;
             this.chem_ion_Lbl_riken.Text = "Ion";
             this.toolTip1.SetToolTip(this.chem_ion_Lbl_riken, "Set ion type (for internal fragments insert \'internal\')");
+            this.chem_ion_Lbl_riken.Click += new System.EventHandler(this.chem_ion_Lbl_Click);
             // 
             // maxCharge_txtBox_riken
             // 
@@ -1893,6 +1919,7 @@
             this.chem_charge_Lbl_riken.TabIndex = 34;
             this.chem_charge_Lbl_riken.Text = "Charge";
             this.toolTip1.SetToolTip(this.chem_charge_Lbl_riken, "Set charge range for the calculations");
+            this.chem_charge_Lbl_riken.Click += new System.EventHandler(this.chemFormula_charge_Lbl_Click);
             // 
             // chem_chargeMax_Lbl_riken
             // 
@@ -1931,6 +1958,7 @@
             this.chemForm_txtBox_riken.Name = "chemForm_txtBox_riken";
             this.chemForm_txtBox_riken.Size = new System.Drawing.Size(398, 20);
             this.chemForm_txtBox_riken.TabIndex = 3;
+            this.chemForm_txtBox_riken.Click += new System.EventHandler(this.chemForm_Lbl_Click);
             // 
             // chemForm_Lbl_riken
             // 
@@ -1942,6 +1970,7 @@
             this.chemForm_Lbl_riken.Size = new System.Drawing.Size(120, 17);
             this.chemForm_Lbl_riken.TabIndex = 2;
             this.chemForm_Lbl_riken.Text = "Chemical Formula";
+            this.chemForm_Lbl_riken.Click += new System.EventHandler(this.chemForm_Lbl_Click);
             // 
             // half_minus_rdBtn
             // 
@@ -1979,6 +2008,7 @@
             this.ppm9_Lbl.Size = new System.Drawing.Size(73, 13);
             this.ppm9_Lbl.TabIndex = 43;
             this.ppm9_Lbl.Text = "max ppm error";
+            this.ppm9_Lbl.Click += new System.EventHandler(this.ppm9_Lbl_Click);
             // 
             // ppm9_numUD
             // 
@@ -1999,6 +2029,7 @@
             this.ppm9_numUD.Name = "ppm9_numUD";
             this.ppm9_numUD.Size = new System.Drawing.Size(53, 20);
             this.ppm9_numUD.TabIndex = 38;
+            this.ppm9_numUD.Click += new System.EventHandler(this.ppm9_Lbl_Click);
             // 
             // half_plus_rdBtn
             // 

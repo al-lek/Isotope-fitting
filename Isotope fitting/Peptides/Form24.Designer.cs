@@ -193,6 +193,7 @@
             this.sortIdx_chkBx.Size = new System.Drawing.Size(15, 14);
             this.sortIdx_chkBx.TabIndex = 0;
             this.sortIdx_chkBx.UseVisualStyleBackColor = true;
+            this.sortIdx_chkBx.CheckedChanged += new System.EventHandler(this.sortIdx_chkBx_CheckedChanged);
             // 
             // dvw_lstBox
             // 
@@ -300,6 +301,7 @@
             this.charge_Label.Size = new System.Drawing.Size(41, 13);
             this.charge_Label.TabIndex = 28;
             this.charge_Label.Text = "Charge";
+            this.charge_Label.Click += new System.EventHandler(this.charge_Label_Click);
             // 
             // z_lstBox
             // 
@@ -339,6 +341,7 @@
             this.machine_Label.Size = new System.Drawing.Size(48, 13);
             this.machine_Label.TabIndex = 37;
             this.machine_Label.Text = "Machine";
+            this.machine_Label.Click += new System.EventHandler(this.machine_Label_Click);
             // 
             // y_lstBox
             // 
@@ -366,6 +369,7 @@
             this.mz_Label.Size = new System.Drawing.Size(81, 13);
             this.mz_Label.TabIndex = 25;
             this.mz_Label.Text = "M/z boundaries";
+            this.mz_Label.Click += new System.EventHandler(this.mz_Label_Click);
             // 
             // c_lstBox
             // 
@@ -450,6 +454,7 @@
             this.resolution_Label.Size = new System.Drawing.Size(57, 13);
             this.resolution_Label.TabIndex = 36;
             this.resolution_Label.Text = "Resolution";
+            this.resolution_Label.Click += new System.EventHandler(this.resolution_Label_Click);
             // 
             // mzMin_Box
             // 
@@ -572,6 +577,7 @@
             this.label7.Size = new System.Drawing.Size(33, 13);
             this.label7.TabIndex = 31;
             this.label7.Text = "Index";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // idxPr_Box
             // 

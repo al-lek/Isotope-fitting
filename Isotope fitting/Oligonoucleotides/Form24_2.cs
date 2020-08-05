@@ -17,10 +17,11 @@ namespace Isotope_fitting
     public partial class Form24_2 : Form
     {
         Form2 frm2;
+      
 
         public Form24_2(Form2 f)
         {
-            frm2 = f;
+            frm2 = f;           
             InitializeComponent();
             mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
             mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
@@ -76,18 +77,14 @@ namespace Isotope_fitting
         private void mzMin_Box_Click(object sender, EventArgs e)
         {
             mzMin_Box.SelectAll();
+            if (frm2.is_help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
         }
 
         private void mzMax_Box_Click(object sender, EventArgs e)
         {
             mzMax_Box.SelectAll();
-        }
-        private void clearBtn_Click(object sender, EventArgs e)
-        {
-            UncheckAll_calculationPanel();
-
-        }
-
+            if (frm2.is_help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }        
         #endregion
 
         private List<ChemiForm> select_fragments_riken()
@@ -445,12 +442,29 @@ namespace Isotope_fitting
         
         private void frag_sort_Btn2_Click(object sender, EventArgs e)
         {
+            if (frm2.is_help)
+            {
+                MessageBox.Show("Displays 'Filter' panel.\r\n" +
+                "Ere initiating the calculation process the user can select from the 'Filter' panel, the desired maximum ppm error and customize" +
+                "its application method.For instance, if the user selects the “2 most intense” option, the fragments " +
+                "whose 2 most intense centroids are within the ppm bounds pass the Peak Detection" +
+                "filter.On the hand, if the user selects the “half most intense” option, fragments whose half" +
+                "of most intense centroids are within the ppm bounds are promoted to the “Selected" +
+                "Fragments” list. Moreover, Fragment selection filter can also be applied on the Fragment" +
+                "List after the calculation method, on any step of the mass spectrum interpretation process," +
+                "irrespective of the data origin, for example fitted results file or manual processed file.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             Form19 frm19 = new Form19(frm2);
             frm19.ShowDialog();
         }
 
         private void calcBtn_Click(object sender, EventArgs e)
         {
+            if (frm2.is_help) { MessageBox.Show("Initiates the calculation procedure:\r\nfor each of the loaded fragments, the algorithm checks whether they possess " +
+                "the desired properties and selects the candidates. Following the selected fragments' “enviPat” properties profile calculation, a filter is applied " +
+                "to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak by ppm larger than the user-specified bound" +
+                " maximum ppm. This filter distinguishes the candidate fragments from the incorrect.\r\n", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             calcBtn.Enabled = false;
             if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calcBtn.Enabled = true; return; }
             List<ChemiForm> selected_fragments = select_fragments_riken();
@@ -526,6 +540,47 @@ namespace Isotope_fitting
             {
                 e.Cancel = true;
                 Hide();
+            }
+        }
+
+        private void mz_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void charge_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help) { MessageBox.Show("Set the charge range condition to be met when selecting the fragments for calculation.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help) 
+            {
+                MessageBox.Show("Set the index range condition to be met when selecting the fragments for calculation. When the checkbox is checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.   ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void sortIdx_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (frm2.is_help) { MessageBox.Show("When checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void resolution_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help)
+            {
+                MessageBox.Show("Set the initial resolution for the profile calculation of the fragments. In case there is an experimental spectrum, the resolution of the nearest experimental point to the " +
+                    "fragment’s most abundant centroid is computed. This resolution is used for an additional profile calculation of the fragments that have passed all filters.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void machine_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help)
+            {
+                MessageBox.Show("A wide range of instrument's resolution related to m/z measurements is integrated into the software. Choose the resolution of your instrument to perform the profile calculation of the fragments. In case there is an experimental spectrum, the resolution of the nearest experimental point to the " +
+                    "fragment’s most abundant centroid is computed. This resolution is used for an additional profile calculation of the fragments that have passed all filters.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
             }
         }
     }

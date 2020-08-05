@@ -375,7 +375,20 @@ namespace Isotope_fitting
 
         private void ppm_lbl_Click(object sender, EventArgs e)
         {
-            if (help) { MessageBox.Show("Indicates the maximum ppm error that a fragment can have in order to be inserted to Fragment List", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help)
+            {
+                MessageBox.Show("Indicates the maximum ppm error that a fragment can have in order to be inserted to Fragment List.\r\n" +
+                    "During calculation a ppm filter is applied to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak " +
+           "by ppm larger than the user-specified bound maximum ppm. This filter distinguishes the candidate fragments from the incorrect." +
+           " Ere initiating the calculation process the user can select from the 'Filter' panel, the desired maximum ppm error and customize" +
+                "its application method. For instance, if the user selects the “2 most intense” option, the fragments " +
+                "whose 2 most intense centroids are within the ppm bounds pass the Peak Detection" +
+                "filter. On the other hand, if the user selects the “half most intense” option, fragments whose half" +
+                "of the most intense centroids are within the ppm bounds are inserted to Fragment List. Moreover, " +
+                "Fragment selection filter can also be applied on the Fragment List after the calculation method, " +
+                "on any step of the mass spectrum interpretation process," +
+                "irrespective of the data origin, for example a .fit file."   , "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
         }
     }
 }
