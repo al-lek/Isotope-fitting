@@ -24,8 +24,11 @@ namespace Isotope_fitting
         {
             frm2 = f;           
             InitializeComponent();
-            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
-            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
+            if (ChemFormulas.Count > 0)
+            {
+                mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
+                mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
+            }
             if (!string.IsNullOrEmpty(frm2.res_string_24)) resolution_Box.Text = frm2.res_string_24;
             //else if(frm2.machine_sel_index!=-1) machine_listBox.SelectedIndex = frm2.machine_sel_index;
             //else machine_listBox.SelectedIndex = 9;
@@ -389,7 +392,7 @@ namespace Isotope_fitting
                 "List after the calculation method, on any step of the mass spectrum interpretation process," +
                 "irrespective of the data origin, for example fitted results file or manual processed file.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            Form19 frm19 = new Form19(frm2);
+            Form19 frm19 = new Form19(frm2, frm2.is_help);
             frm19.ShowDialog();
         }
 

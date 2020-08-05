@@ -45,7 +45,6 @@ namespace Isotope_fitting
             if (frm2.is_riken && frm2.is_rna) { this.Text = "RNA base sequence Editor"; }
             if (frm2.is_riken && !frm2.is_rna) { this.Text = "DNA base sequence Editor"; }
             if (help) { MessageBox.Show("Shows sequence editor with inserted sequences. Multiple sequences can be added.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence and is equivalent to the name of each new tab.\r\nThis extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.\r\nIn the following tabs for the sequence representation part and also for the other fragments' diagrams the user checks the desired corresponding sequence and automatically the graphs are renewed.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
-            
         }
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
