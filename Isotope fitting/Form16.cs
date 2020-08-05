@@ -44,7 +44,7 @@ namespace Isotope_fitting
             initial_set = false;
             if (frm2.is_riken && frm2.is_rna) { this.Text = "RNA base sequence Editor"; }
             if (frm2.is_riken && !frm2.is_rna) { this.Text = "DNA base sequence Editor"; }
-            if (help) { MessageBox.Show("Shows sequence editor with inserted sequences. Multiple sequences can be added.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence and is equivalent to the name of each new tab.\r\nThis extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
+            if (help) { MessageBox.Show("Shows sequence editor with inserted sequences. Multiple sequences can be added.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence and is equivalent to the name of each new tab.\r\nThis extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.\r\nIn the following tabs for the sequence representation part and also for the other fragments' diagrams the user checks the desired corresponding sequence and automatically the graphs are renewed.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
             
         }
         [DllImport("user32.dll")]
@@ -125,6 +125,8 @@ namespace Isotope_fitting
         }
         private void seq_Btn_Click(object sender, EventArgs e)
         {
+            if (help) { MessageBox.Show("Save the input sequences.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);return; }
+
             frm2.Peptide = seq_BoxFrm16.Text.Replace(Environment.NewLine, "").ToString();
             frm2.Peptide = frm2.Peptide.Replace("\n", "");
             frm2.Peptide = frm2.Peptide.Replace("\t", "");
