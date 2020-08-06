@@ -473,7 +473,7 @@ namespace Isotope_fitting
             //load saved references and reset UI
             load_preferences();
             reset_all();
-            panel2.Controls.Add(frag_tree);
+            fragTreePanel.Controls.Add(frag_tree);
             initialize_BW();
             change_state(true);
             //call change state window

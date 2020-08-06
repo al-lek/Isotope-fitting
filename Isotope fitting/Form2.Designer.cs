@@ -354,9 +354,9 @@ namespace Isotope_fitting
             this.clear_proj_Btn = new System.Windows.Forms.ToolStripButton();
             this.application_proj_Btn = new System.Windows.Forms.ToolStripButton();
             this.help_Btn = new System.Windows.Forms.ToolStripButton();
-            this.splitContainer2 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.FragListContainer = new System.Windows.Forms.Panel();
+            this.fragTreePanel = new System.Windows.Forms.Panel();
+            this.fragList_toolsPanel = new System.Windows.Forms.Panel();
             this.toolStrip_fragList = new System.Windows.Forms.ToolStrip();
             this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
             this.loadFragmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -570,8 +570,8 @@ namespace Isotope_fitting
             this.experimental_toolStrip.SuspendLayout();
             this.project_grpBx.SuspendLayout();
             this.project_toolStrip.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.FragListContainer.SuspendLayout();
+            this.fragList_toolsPanel.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.fragTypes_toolStrip.SuspendLayout();
             this.statusStrp.SuspendLayout();
@@ -3892,7 +3892,7 @@ namespace Isotope_fitting
             this.user_grpBox.Controls.Add(this.theorData_grpBx);
             this.user_grpBox.Controls.Add(this.expData_grpBx);
             this.user_grpBox.Controls.Add(this.project_grpBx);
-            this.user_grpBox.Controls.Add(this.splitContainer2);
+            this.user_grpBox.Controls.Add(this.FragListContainer);
             this.user_grpBox.Controls.Add(this.statusStrp);
             this.user_grpBox.Dock = System.Windows.Forms.DockStyle.Right;
             this.user_grpBox.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -4376,38 +4376,38 @@ namespace Isotope_fitting
             this.help_Btn.Size = new System.Drawing.Size(34, 34);
             this.help_Btn.Text = "Help";
             // 
-            // splitContainer2
+            // FragListContainer
             // 
-            this.splitContainer2.Controls.Add(this.panel2);
-            this.splitContainer2.Controls.Add(this.panel1);
-            this.splitContainer2.Controls.Add(this.factor_panel);
-            this.splitContainer2.Controls.Add(this.fragStorage_Lbl);
-            this.splitContainer2.Controls.Add(this.fragTypes_toolStrip);
-            this.splitContainer2.Controls.Add(this.fragTypes_tree);
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitContainer2.Location = new System.Drawing.Point(214, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Size = new System.Drawing.Size(396, 717);
-            this.splitContainer2.TabIndex = 10000018;
+            this.FragListContainer.Controls.Add(this.fragTreePanel);
+            this.FragListContainer.Controls.Add(this.fragList_toolsPanel);
+            this.FragListContainer.Controls.Add(this.factor_panel);
+            this.FragListContainer.Controls.Add(this.fragStorage_Lbl);
+            this.FragListContainer.Controls.Add(this.fragTypes_toolStrip);
+            this.FragListContainer.Controls.Add(this.fragTypes_tree);
+            this.FragListContainer.Dock = System.Windows.Forms.DockStyle.Right;
+            this.FragListContainer.Location = new System.Drawing.Point(214, 0);
+            this.FragListContainer.Name = "FragListContainer";
+            this.FragListContainer.Size = new System.Drawing.Size(396, 717);
+            this.FragListContainer.TabIndex = 10000018;
             // 
-            // panel2
+            // fragTreePanel
             // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel2.Location = new System.Drawing.Point(0, 59);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(396, 387);
-            this.panel2.TabIndex = 116;
+            this.fragTreePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fragTreePanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fragTreePanel.Location = new System.Drawing.Point(0, 59);
+            this.fragTreePanel.Name = "fragTreePanel";
+            this.fragTreePanel.Size = new System.Drawing.Size(396, 387);
+            this.fragTreePanel.TabIndex = 116;
             // 
-            // panel1
+            // fragList_toolsPanel
             // 
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.toolStrip_fragList);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(396, 59);
-            this.panel1.TabIndex = 115;
+            this.fragList_toolsPanel.Controls.Add(this.label2);
+            this.fragList_toolsPanel.Controls.Add(this.toolStrip_fragList);
+            this.fragList_toolsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.fragList_toolsPanel.Location = new System.Drawing.Point(0, 0);
+            this.fragList_toolsPanel.Name = "fragList_toolsPanel";
+            this.fragList_toolsPanel.Size = new System.Drawing.Size(396, 59);
+            this.fragList_toolsPanel.TabIndex = 115;
             // 
             // toolStrip_fragList
             // 
@@ -6182,10 +6182,10 @@ namespace Isotope_fitting
             this.project_grpBx.PerformLayout();
             this.project_toolStrip.ResumeLayout(false);
             this.project_toolStrip.PerformLayout();
-            this.splitContainer2.ResumeLayout(false);
-            this.splitContainer2.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.FragListContainer.ResumeLayout(false);
+            this.FragListContainer.PerformLayout();
+            this.fragList_toolsPanel.ResumeLayout(false);
+            this.fragList_toolsPanel.PerformLayout();
             this.toolStrip_fragList.ResumeLayout(false);
             this.toolStrip_fragList.PerformLayout();
             this.fragTypes_toolStrip.ResumeLayout(false);
@@ -6496,9 +6496,9 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton uncheckFit_Btn;
         private System.Windows.Forms.ToolStripButton sortSettings_Btn;
         private System.Windows.Forms.ToolStripButton refresh_fitRes_Btn;
-        private System.Windows.Forms.Panel splitContainer2;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel FragListContainer;
+        private System.Windows.Forms.Panel fragTreePanel;
+        private System.Windows.Forms.Panel fragList_toolsPanel;
         private System.Windows.Forms.ToolStrip toolStrip_fragList;
         private System.Windows.Forms.ToolStripButton saveListBtn11;
         private System.Windows.Forms.ToolStripDropDownButton loadListBtn11;
