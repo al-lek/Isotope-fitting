@@ -46,6 +46,15 @@ namespace Isotope_fitting
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.fragStorage_Lbl = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.delele_sequencePnl2 = new System.Windows.Forms.Button();
+            this.delele_sequencePnl1 = new System.Windows.Forms.Button();
+            this.add_sequencePanel1 = new System.Windows.Forms.Button();
+            this.rdBtn50Copy2 = new System.Windows.Forms.RadioButton();
+            this.rdBtn25Copy2 = new System.Windows.Forms.RadioButton();
+            this.rdBtn50Copy1 = new System.Windows.Forms.RadioButton();
+            this.rdBtn25Copy1 = new System.Windows.Forms.RadioButton();
+            this.rdBtn50 = new System.Windows.Forms.RadioButton();
+            this.rdBtn25 = new System.Windows.Forms.RadioButton();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabInternal = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -227,9 +236,6 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBxCopy2 = new System.Windows.Forms.CheckBox();
             this.seq_extensionBoxCopy2 = new System.Windows.Forms.ComboBox();
             this.los_chkBoxCopy2 = new System.Windows.Forms.CheckBox();
-            this.delele_sequencePnl2 = new System.Windows.Forms.Button();
-            this.rdBtn50Copy2 = new System.Windows.Forms.RadioButton();
-            this.rdBtn25Copy2 = new System.Windows.Forms.RadioButton();
             this.sequence_toolStripCopy2 = new System.Windows.Forms.ToolStrip();
             this.seqSave_BtnCopy2 = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_BtnCopy2 = new System.Windows.Forms.ToolStripButton();
@@ -251,9 +257,6 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBxCopy1 = new System.Windows.Forms.CheckBox();
             this.seq_extensionBoxCopy1 = new System.Windows.Forms.ComboBox();
             this.los_chkBoxCopy1 = new System.Windows.Forms.CheckBox();
-            this.delele_sequencePnl1 = new System.Windows.Forms.Button();
-            this.rdBtn50Copy1 = new System.Windows.Forms.RadioButton();
-            this.rdBtn25Copy1 = new System.Windows.Forms.RadioButton();
             this.sequence_toolStripCopy1 = new System.Windows.Forms.ToolStrip();
             this.seqSave_BtnCopy1 = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_BtnCopy1 = new System.Windows.Forms.ToolStripButton();
@@ -275,9 +278,6 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBx = new System.Windows.Forms.CheckBox();
             this.seq_extensionBox = new System.Windows.Forms.ComboBox();
             this.los_chkBox = new System.Windows.Forms.CheckBox();
-            this.add_sequencePanel1 = new System.Windows.Forms.Button();
-            this.rdBtn50 = new System.Windows.Forms.RadioButton();
-            this.rdBtn25 = new System.Windows.Forms.RadioButton();
             this.sequence_toolStrip = new System.Windows.Forms.ToolStrip();
             this.seqSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -686,6 +686,125 @@ namespace Isotope_fitting
             this.label2.Text = "Fragment List";
             this.toolTip1.SetToolTip(this.label2, "Select all fragments presented in the list");
             // 
+            // delele_sequencePnl2
+            // 
+            this.delele_sequencePnl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.delele_sequencePnl2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("delele_sequencePnl2.BackgroundImage")));
+            this.delele_sequencePnl2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.delele_sequencePnl2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.delele_sequencePnl2.Location = new System.Drawing.Point(723, 467);
+            this.delele_sequencePnl2.Name = "delele_sequencePnl2";
+            this.delele_sequencePnl2.Size = new System.Drawing.Size(30, 30);
+            this.delele_sequencePnl2.TabIndex = 13;
+            this.toolTip1.SetToolTip(this.delele_sequencePnl2, "Delete");
+            this.delele_sequencePnl2.UseVisualStyleBackColor = true;
+            this.delele_sequencePnl2.Click += new System.EventHandler(this.delele_sequencePnl2_Click);
+            // 
+            // delele_sequencePnl1
+            // 
+            this.delele_sequencePnl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.delele_sequencePnl1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("delele_sequencePnl1.BackgroundImage")));
+            this.delele_sequencePnl1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.delele_sequencePnl1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.delele_sequencePnl1.Location = new System.Drawing.Point(723, 466);
+            this.delele_sequencePnl1.Name = "delele_sequencePnl1";
+            this.delele_sequencePnl1.Size = new System.Drawing.Size(30, 30);
+            this.delele_sequencePnl1.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.delele_sequencePnl1, "Delete ");
+            this.delele_sequencePnl1.UseVisualStyleBackColor = true;
+            this.delele_sequencePnl1.Click += new System.EventHandler(this.delele_sequencePnl1_Click);
+            // 
+            // add_sequencePanel1
+            // 
+            this.add_sequencePanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("add_sequencePanel1.BackgroundImage")));
+            this.add_sequencePanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.add_sequencePanel1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 341);
+            this.add_sequencePanel1.Name = "add_sequencePanel1";
+            this.add_sequencePanel1.Size = new System.Drawing.Size(30, 30);
+            this.add_sequencePanel1.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.add_sequencePanel1, "Add an extra \'Sequence Panel\'");
+            this.add_sequencePanel1.UseVisualStyleBackColor = true;
+            this.add_sequencePanel1.Click += new System.EventHandler(this.add_sequencePanel1_Click);
+            // 
+            // rdBtn50Copy2
+            // 
+            this.rdBtn50Copy2.AutoSize = true;
+            this.rdBtn50Copy2.Location = new System.Drawing.Point(7, 323);
+            this.rdBtn50Copy2.Name = "rdBtn50Copy2";
+            this.rdBtn50Copy2.Size = new System.Drawing.Size(37, 17);
+            this.rdBtn50Copy2.TabIndex = 10;
+            this.rdBtn50Copy2.Text = "50";
+            this.toolTip1.SetToolTip(this.rdBtn50Copy2, "Display sequence per 50");
+            this.rdBtn50Copy2.UseVisualStyleBackColor = true;
+            this.rdBtn50Copy2.CheckedChanged += new System.EventHandler(this.rdBtn50Copy2_CheckedChanged);
+            // 
+            // rdBtn25Copy2
+            // 
+            this.rdBtn25Copy2.AutoSize = true;
+            this.rdBtn25Copy2.Checked = true;
+            this.rdBtn25Copy2.Location = new System.Drawing.Point(7, 301);
+            this.rdBtn25Copy2.Name = "rdBtn25Copy2";
+            this.rdBtn25Copy2.Size = new System.Drawing.Size(37, 17);
+            this.rdBtn25Copy2.TabIndex = 9;
+            this.rdBtn25Copy2.TabStop = true;
+            this.rdBtn25Copy2.Text = "25";
+            this.toolTip1.SetToolTip(this.rdBtn25Copy2, "Display sequence per 25");
+            this.rdBtn25Copy2.UseVisualStyleBackColor = true;
+            this.rdBtn25Copy2.CheckedChanged += new System.EventHandler(this.rdBtn25Copy2_CheckedChanged);
+            // 
+            // rdBtn50Copy1
+            // 
+            this.rdBtn50Copy1.AutoSize = true;
+            this.rdBtn50Copy1.Location = new System.Drawing.Point(5, 316);
+            this.rdBtn50Copy1.Name = "rdBtn50Copy1";
+            this.rdBtn50Copy1.Size = new System.Drawing.Size(37, 17);
+            this.rdBtn50Copy1.TabIndex = 10;
+            this.rdBtn50Copy1.Text = "50";
+            this.toolTip1.SetToolTip(this.rdBtn50Copy1, "Display sequence per 50");
+            this.rdBtn50Copy1.UseVisualStyleBackColor = true;
+            this.rdBtn50Copy1.CheckedChanged += new System.EventHandler(this.rdBtn50Copy1_CheckedChanged);
+            // 
+            // rdBtn25Copy1
+            // 
+            this.rdBtn25Copy1.AutoSize = true;
+            this.rdBtn25Copy1.Checked = true;
+            this.rdBtn25Copy1.Location = new System.Drawing.Point(5, 291);
+            this.rdBtn25Copy1.Name = "rdBtn25Copy1";
+            this.rdBtn25Copy1.Size = new System.Drawing.Size(37, 17);
+            this.rdBtn25Copy1.TabIndex = 9;
+            this.rdBtn25Copy1.TabStop = true;
+            this.rdBtn25Copy1.Text = "25";
+            this.toolTip1.SetToolTip(this.rdBtn25Copy1, "Display sequence per 25");
+            this.rdBtn25Copy1.UseVisualStyleBackColor = true;
+            this.rdBtn25Copy1.CheckedChanged += new System.EventHandler(this.rdBtn25Copy1_CheckedChanged);
+            // 
+            // rdBtn50
+            // 
+            this.rdBtn50.AutoSize = true;
+            this.rdBtn50.Location = new System.Drawing.Point(7, 311);
+            this.rdBtn50.Name = "rdBtn50";
+            this.rdBtn50.Size = new System.Drawing.Size(37, 17);
+            this.rdBtn50.TabIndex = 10;
+            this.rdBtn50.Text = "50";
+            this.toolTip1.SetToolTip(this.rdBtn50, "Display sequence per 50");
+            this.rdBtn50.UseVisualStyleBackColor = true;
+            this.rdBtn50.CheckedChanged += new System.EventHandler(this.rdBtn50_CheckedChanged);
+            // 
+            // rdBtn25
+            // 
+            this.rdBtn25.AutoSize = true;
+            this.rdBtn25.Checked = true;
+            this.rdBtn25.Location = new System.Drawing.Point(7, 290);
+            this.rdBtn25.Name = "rdBtn25";
+            this.rdBtn25.Size = new System.Drawing.Size(37, 17);
+            this.rdBtn25.TabIndex = 9;
+            this.rdBtn25.TabStop = true;
+            this.rdBtn25.Text = "25";
+            this.toolTip1.SetToolTip(this.rdBtn25, "Display sequence per 25");
+            this.rdBtn25.UseVisualStyleBackColor = true;
+            this.rdBtn25.CheckedChanged += new System.EventHandler(this.rdBtn25_CheckedChanged);
+            // 
             // tabInternal
             // 
             this.tabInternal.AutoScroll = true;
@@ -957,6 +1076,7 @@ namespace Isotope_fitting
             // idxPlotLbl
             // 
             this.idxPlotLbl.AutoSize = true;
+            this.idxPlotLbl.Cursor = System.Windows.Forms.Cursors.Help;
             this.idxPlotLbl.Dock = System.Windows.Forms.DockStyle.Left;
             this.idxPlotLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.idxPlotLbl.ForeColor = System.Drawing.Color.DarkCyan;
@@ -966,6 +1086,7 @@ namespace Isotope_fitting
             this.idxPlotLbl.Size = new System.Drawing.Size(172, 28);
             this.idxPlotLbl.TabIndex = 26;
             this.idxPlotLbl.Text = "Internal fragments\' plot";
+            this.idxPlotLbl.Click += new System.EventHandler(this.idxPlotLbl_Click);
             // 
             // tabPrimary
             // 
@@ -1956,6 +2077,7 @@ namespace Isotope_fitting
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Cursor = System.Windows.Forms.Cursors.Help;
             this.label1.Dock = System.Windows.Forms.DockStyle.Left;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.RosyBrown;
@@ -1965,6 +2087,7 @@ namespace Isotope_fitting
             this.label1.Size = new System.Drawing.Size(170, 29);
             this.label1.TabIndex = 26;
             this.label1.Text = "Primary fragments\' plot";
+            this.label1.Click += new System.EventHandler(this.primary_fragments_plots_Click);
             // 
             // tabDiagram
             // 
@@ -2722,7 +2845,7 @@ namespace Isotope_fitting
             this.ppm_legend_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_legend_Btn.Name = "ppm_legend_Btn";
             this.ppm_legend_Btn.Size = new System.Drawing.Size(42, 34);
-            this.ppm_legend_Btn.Text = "Legend";
+            this.ppm_legend_Btn.Text = "Show Legend";
             this.ppm_legend_Btn.CheckedChanged += new System.EventHandler(this.ppm_legend_Btn_CheckedChanged);
             // 
             // ppm_extract_btn
@@ -2818,9 +2941,9 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBxCopy2.AutoSize = true;
             this.highlight_ibt_ckBxCopy2.Location = new System.Drawing.Point(7, 259);
             this.highlight_ibt_ckBxCopy2.Name = "highlight_ibt_ckBxCopy2";
-            this.highlight_ibt_ckBxCopy2.Size = new System.Drawing.Size(50, 17);
+            this.highlight_ibt_ckBxCopy2.Size = new System.Drawing.Size(69, 17);
             this.highlight_ibt_ckBxCopy2.TabIndex = 20;
-            this.highlight_ibt_ckBxCopy2.Text = "Color";
+            this.highlight_ibt_ckBxCopy2.Text = "Heatmap";
             this.highlight_ibt_ckBxCopy2.UseVisualStyleBackColor = true;
             this.highlight_ibt_ckBxCopy2.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBx_CheckedChanged);
             // 
@@ -2834,6 +2957,7 @@ namespace Isotope_fitting
             this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy2.TabIndex = 19;
             this.seq_extensionBoxCopy2.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy2_SelectionChangeCommitted);
+            this.seq_extensionBoxCopy2.Click += new System.EventHandler(this.seq_extensionBox_Click);
             // 
             // los_chkBoxCopy2
             // 
@@ -2845,43 +2969,6 @@ namespace Isotope_fitting
             this.los_chkBoxCopy2.Text = "losses";
             this.los_chkBoxCopy2.UseVisualStyleBackColor = true;
             this.los_chkBoxCopy2.CheckedChanged += new System.EventHandler(this.los_chkBox_CheckedChanged);
-            // 
-            // delele_sequencePnl2
-            // 
-            this.delele_sequencePnl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.delele_sequencePnl2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("delele_sequencePnl2.BackgroundImage")));
-            this.delele_sequencePnl2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.delele_sequencePnl2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.delele_sequencePnl2.Location = new System.Drawing.Point(723, 467);
-            this.delele_sequencePnl2.Name = "delele_sequencePnl2";
-            this.delele_sequencePnl2.Size = new System.Drawing.Size(30, 30);
-            this.delele_sequencePnl2.TabIndex = 13;
-            this.delele_sequencePnl2.UseVisualStyleBackColor = true;
-            this.delele_sequencePnl2.Click += new System.EventHandler(this.delele_sequencePnl2_Click);
-            // 
-            // rdBtn50Copy2
-            // 
-            this.rdBtn50Copy2.AutoSize = true;
-            this.rdBtn50Copy2.Location = new System.Drawing.Point(7, 323);
-            this.rdBtn50Copy2.Name = "rdBtn50Copy2";
-            this.rdBtn50Copy2.Size = new System.Drawing.Size(37, 17);
-            this.rdBtn50Copy2.TabIndex = 10;
-            this.rdBtn50Copy2.Text = "50";
-            this.rdBtn50Copy2.UseVisualStyleBackColor = true;
-            this.rdBtn50Copy2.CheckedChanged += new System.EventHandler(this.rdBtn50Copy2_CheckedChanged);
-            // 
-            // rdBtn25Copy2
-            // 
-            this.rdBtn25Copy2.AutoSize = true;
-            this.rdBtn25Copy2.Checked = true;
-            this.rdBtn25Copy2.Location = new System.Drawing.Point(7, 301);
-            this.rdBtn25Copy2.Name = "rdBtn25Copy2";
-            this.rdBtn25Copy2.Size = new System.Drawing.Size(37, 17);
-            this.rdBtn25Copy2.TabIndex = 9;
-            this.rdBtn25Copy2.TabStop = true;
-            this.rdBtn25Copy2.Text = "25";
-            this.rdBtn25Copy2.UseVisualStyleBackColor = true;
-            this.rdBtn25Copy2.CheckedChanged += new System.EventHandler(this.rdBtn25Copy2_CheckedChanged);
             // 
             // sequence_toolStripCopy2
             // 
@@ -2925,6 +3012,7 @@ namespace Isotope_fitting
             this.seqLegendBtnCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtnCopy2.Name = "seqLegendBtnCopy2";
             this.seqLegendBtnCopy2.Size = new System.Drawing.Size(33, 34);
+            this.seqLegendBtnCopy2.Text = "Show Legend";
             this.seqLegendBtnCopy2.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // ax_chBxCopy2
@@ -3115,9 +3203,9 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBxCopy1.AutoSize = true;
             this.highlight_ibt_ckBxCopy1.Location = new System.Drawing.Point(5, 252);
             this.highlight_ibt_ckBxCopy1.Name = "highlight_ibt_ckBxCopy1";
-            this.highlight_ibt_ckBxCopy1.Size = new System.Drawing.Size(50, 17);
+            this.highlight_ibt_ckBxCopy1.Size = new System.Drawing.Size(69, 17);
             this.highlight_ibt_ckBxCopy1.TabIndex = 19;
-            this.highlight_ibt_ckBxCopy1.Text = "Color";
+            this.highlight_ibt_ckBxCopy1.Text = "Heatmap";
             this.highlight_ibt_ckBxCopy1.UseVisualStyleBackColor = true;
             this.highlight_ibt_ckBxCopy1.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBx_CheckedChanged);
             // 
@@ -3131,6 +3219,7 @@ namespace Isotope_fitting
             this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy1.TabIndex = 18;
             this.seq_extensionBoxCopy1.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy1_SelectionChangeCommitted);
+            this.seq_extensionBoxCopy1.Click += new System.EventHandler(this.seq_extensionBox_Click);
             // 
             // los_chkBoxCopy1
             // 
@@ -3142,43 +3231,6 @@ namespace Isotope_fitting
             this.los_chkBoxCopy1.Text = "losses";
             this.los_chkBoxCopy1.UseVisualStyleBackColor = true;
             this.los_chkBoxCopy1.CheckedChanged += new System.EventHandler(this.los_chkBox_CheckedChanged);
-            // 
-            // delele_sequencePnl1
-            // 
-            this.delele_sequencePnl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.delele_sequencePnl1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("delele_sequencePnl1.BackgroundImage")));
-            this.delele_sequencePnl1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.delele_sequencePnl1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.delele_sequencePnl1.Location = new System.Drawing.Point(723, 466);
-            this.delele_sequencePnl1.Name = "delele_sequencePnl1";
-            this.delele_sequencePnl1.Size = new System.Drawing.Size(30, 30);
-            this.delele_sequencePnl1.TabIndex = 14;
-            this.delele_sequencePnl1.UseVisualStyleBackColor = true;
-            this.delele_sequencePnl1.Click += new System.EventHandler(this.delele_sequencePnl1_Click);
-            // 
-            // rdBtn50Copy1
-            // 
-            this.rdBtn50Copy1.AutoSize = true;
-            this.rdBtn50Copy1.Location = new System.Drawing.Point(5, 316);
-            this.rdBtn50Copy1.Name = "rdBtn50Copy1";
-            this.rdBtn50Copy1.Size = new System.Drawing.Size(37, 17);
-            this.rdBtn50Copy1.TabIndex = 10;
-            this.rdBtn50Copy1.Text = "50";
-            this.rdBtn50Copy1.UseVisualStyleBackColor = true;
-            this.rdBtn50Copy1.CheckedChanged += new System.EventHandler(this.rdBtn50Copy1_CheckedChanged);
-            // 
-            // rdBtn25Copy1
-            // 
-            this.rdBtn25Copy1.AutoSize = true;
-            this.rdBtn25Copy1.Checked = true;
-            this.rdBtn25Copy1.Location = new System.Drawing.Point(5, 291);
-            this.rdBtn25Copy1.Name = "rdBtn25Copy1";
-            this.rdBtn25Copy1.Size = new System.Drawing.Size(37, 17);
-            this.rdBtn25Copy1.TabIndex = 9;
-            this.rdBtn25Copy1.TabStop = true;
-            this.rdBtn25Copy1.Text = "25";
-            this.rdBtn25Copy1.UseVisualStyleBackColor = true;
-            this.rdBtn25Copy1.CheckedChanged += new System.EventHandler(this.rdBtn25Copy1_CheckedChanged);
             // 
             // sequence_toolStripCopy1
             // 
@@ -3222,6 +3274,7 @@ namespace Isotope_fitting
             this.seqLegendBtnCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtnCopy1.Name = "seqLegendBtnCopy1";
             this.seqLegendBtnCopy1.Size = new System.Drawing.Size(33, 34);
+            this.seqLegendBtnCopy1.Text = "Show Legend";
             this.seqLegendBtnCopy1.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // ax_chBxCopy1
@@ -3411,9 +3464,9 @@ namespace Isotope_fitting
             this.highlight_ibt_ckBx.AutoSize = true;
             this.highlight_ibt_ckBx.Location = new System.Drawing.Point(7, 251);
             this.highlight_ibt_ckBx.Name = "highlight_ibt_ckBx";
-            this.highlight_ibt_ckBx.Size = new System.Drawing.Size(50, 17);
+            this.highlight_ibt_ckBx.Size = new System.Drawing.Size(69, 17);
             this.highlight_ibt_ckBx.TabIndex = 16;
-            this.highlight_ibt_ckBx.Text = "Color";
+            this.highlight_ibt_ckBx.Text = "Heatmap";
             this.highlight_ibt_ckBx.UseVisualStyleBackColor = true;
             this.highlight_ibt_ckBx.CheckedChanged += new System.EventHandler(this.highlight_ibt_ckBx_CheckedChanged);
             // 
@@ -3427,6 +3480,7 @@ namespace Isotope_fitting
             this.seq_extensionBox.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBox.TabIndex = 15;
             this.seq_extensionBox.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBox_SelectionChangeCommitted);
+            this.seq_extensionBox.Click += new System.EventHandler(this.seq_extensionBox_Click);
             // 
             // los_chkBox
             // 
@@ -3438,42 +3492,6 @@ namespace Isotope_fitting
             this.los_chkBox.Text = "losses";
             this.los_chkBox.UseVisualStyleBackColor = true;
             this.los_chkBox.CheckedChanged += new System.EventHandler(this.los_chkBox_CheckedChanged);
-            // 
-            // add_sequencePanel1
-            // 
-            this.add_sequencePanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("add_sequencePanel1.BackgroundImage")));
-            this.add_sequencePanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.add_sequencePanel1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 341);
-            this.add_sequencePanel1.Name = "add_sequencePanel1";
-            this.add_sequencePanel1.Size = new System.Drawing.Size(30, 30);
-            this.add_sequencePanel1.TabIndex = 11;
-            this.add_sequencePanel1.UseVisualStyleBackColor = true;
-            this.add_sequencePanel1.Click += new System.EventHandler(this.add_sequencePanel1_Click);
-            // 
-            // rdBtn50
-            // 
-            this.rdBtn50.AutoSize = true;
-            this.rdBtn50.Location = new System.Drawing.Point(7, 311);
-            this.rdBtn50.Name = "rdBtn50";
-            this.rdBtn50.Size = new System.Drawing.Size(37, 17);
-            this.rdBtn50.TabIndex = 10;
-            this.rdBtn50.Text = "50";
-            this.rdBtn50.UseVisualStyleBackColor = true;
-            this.rdBtn50.CheckedChanged += new System.EventHandler(this.rdBtn50_CheckedChanged);
-            // 
-            // rdBtn25
-            // 
-            this.rdBtn25.AutoSize = true;
-            this.rdBtn25.Checked = true;
-            this.rdBtn25.Location = new System.Drawing.Point(7, 290);
-            this.rdBtn25.Name = "rdBtn25";
-            this.rdBtn25.Size = new System.Drawing.Size(37, 17);
-            this.rdBtn25.TabIndex = 9;
-            this.rdBtn25.TabStop = true;
-            this.rdBtn25.Text = "25";
-            this.rdBtn25.UseVisualStyleBackColor = true;
-            this.rdBtn25.CheckedChanged += new System.EventHandler(this.rdBtn25_CheckedChanged);
             // 
             // sequence_toolStrip
             // 
@@ -3520,7 +3538,7 @@ namespace Isotope_fitting
             this.seqLegendBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.seqLegendBtn.Name = "seqLegendBtn";
             this.seqLegendBtn.Size = new System.Drawing.Size(33, 34);
-            this.seqLegendBtn.Text = "Legend";
+            this.seqLegendBtn.Text = "Show Legend";
             this.seqLegendBtn.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
             // toolStripButton12
@@ -3545,7 +3563,7 @@ namespace Isotope_fitting
             this.highlightProp_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.highlightProp_Btn.Name = "highlightProp_Btn";
             this.highlightProp_Btn.Size = new System.Drawing.Size(33, 34);
-            this.highlightProp_Btn.Text = "Highlight properties";
+            this.highlightProp_Btn.Text = "Highlight options";
             this.highlightProp_Btn.Click += new System.EventHandler(this.highlightProp_Btn_Click);
             // 
             // ax_chBx
@@ -4843,7 +4861,7 @@ namespace Isotope_fitting
             this.losses_legendBtn7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn7.Name = "losses_legendBtn7";
             this.losses_legendBtn7.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn7.Text = "Legend";
+            this.losses_legendBtn7.Text = "Show Legend";
             this.losses_legendBtn7.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn7
@@ -4894,6 +4912,7 @@ namespace Isotope_fitting
             this.losses_check7.Text = "losses";
             this.losses_check7.ToolTipText = "Logarithmic Y Axis";
             this.losses_check7.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check7.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box7
             // 
@@ -4993,7 +5012,7 @@ namespace Isotope_fitting
             this.losses_legendBtn5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn5.Name = "losses_legendBtn5";
             this.losses_legendBtn5.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn5.Text = "Legend";
+            this.losses_legendBtn5.Text = "Show Legend";
             this.losses_legendBtn5.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn5
@@ -5044,6 +5063,7 @@ namespace Isotope_fitting
             this.losses_check5.Text = "losses";
             this.losses_check5.ToolTipText = "Logarithmic Y Axis";
             this.losses_check5.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check5.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box5
             // 
@@ -5143,7 +5163,7 @@ namespace Isotope_fitting
             this.losses_legendBtn3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn3.Name = "losses_legendBtn3";
             this.losses_legendBtn3.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn3.Text = "Legend";
+            this.losses_legendBtn3.Text = "Show Legend";
             this.losses_legendBtn3.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn3
@@ -5194,6 +5214,7 @@ namespace Isotope_fitting
             this.losses_check3.Text = "losses";
             this.losses_check3.ToolTipText = "Logarithmic Y Axis";
             this.losses_check3.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check3.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box3
             // 
@@ -5293,7 +5314,7 @@ namespace Isotope_fitting
             this.losses_legendBtn1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn1.Name = "losses_legendBtn1";
             this.losses_legendBtn1.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn1.Text = "Legend";
+            this.losses_legendBtn1.Text = "Show Legend";
             this.losses_legendBtn1.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn1
@@ -5331,6 +5352,7 @@ namespace Isotope_fitting
             this.log_check1.Text = "log.";
             this.log_check1.ToolTipText = "Logarithmic Y Axis";
             this.log_check1.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.log_check1.Click += new System.EventHandler(this.log_check1_Click);
             // 
             // losses_check1
             // 
@@ -5344,6 +5366,7 @@ namespace Isotope_fitting
             this.losses_check1.Text = "losses";
             this.losses_check1.ToolTipText = "Logarithmic Y Axis";
             this.losses_check1.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check1.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box1
             // 
@@ -5443,7 +5466,7 @@ namespace Isotope_fitting
             this.losses_legendBtn8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn8.Name = "losses_legendBtn8";
             this.losses_legendBtn8.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn8.Text = "Legend";
+            this.losses_legendBtn8.Text = "Show Legend";
             this.losses_legendBtn8.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn8
@@ -5494,6 +5517,7 @@ namespace Isotope_fitting
             this.losses_check8.Text = "losses";
             this.losses_check8.ToolTipText = "Logarithmic Y Axis";
             this.losses_check8.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check8.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box8
             // 
@@ -5593,7 +5617,7 @@ namespace Isotope_fitting
             this.losses_legendBtn6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn6.Name = "losses_legendBtn6";
             this.losses_legendBtn6.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn6.Text = "Legend";
+            this.losses_legendBtn6.Text = "Show Legend";
             this.losses_legendBtn6.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn6
@@ -5644,6 +5668,7 @@ namespace Isotope_fitting
             this.losses_check6.Text = "losses";
             this.losses_check6.ToolTipText = "Logarithmic Y Axis";
             this.losses_check6.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check6.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box6
             // 
@@ -5743,7 +5768,7 @@ namespace Isotope_fitting
             this.losses_legendBtn4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn4.Name = "losses_legendBtn4";
             this.losses_legendBtn4.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn4.Text = "Legend";
+            this.losses_legendBtn4.Text = "Show Legend";
             this.losses_legendBtn4.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn4
@@ -5794,6 +5819,7 @@ namespace Isotope_fitting
             this.losses_check4.Text = "losses";
             this.losses_check4.ToolTipText = "Logarithmic Y Axis";
             this.losses_check4.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check4.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box4
             // 
@@ -5893,7 +5919,7 @@ namespace Isotope_fitting
             this.losses_legendBtn2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.losses_legendBtn2.Name = "losses_legendBtn2";
             this.losses_legendBtn2.Size = new System.Drawing.Size(41, 34);
-            this.losses_legendBtn2.Text = "Legend";
+            this.losses_legendBtn2.Text = "Show Legend";
             this.losses_legendBtn2.CheckStateChanged += new System.EventHandler(this.losses_legendBtn1_CheckStateChanged);
             // 
             // losses_DropBtn2
@@ -5944,6 +5970,7 @@ namespace Isotope_fitting
             this.losses_check2.Text = "losses";
             this.losses_check2.ToolTipText = "Logarithmic Y Axis";
             this.losses_check2.CheckStateChanged += new System.EventHandler(this.replot_grp_CheckStateChanged);
+            this.losses_check2.Click += new System.EventHandler(this.losses_check1_Click);
             // 
             // losses_X_Box2
             // 
@@ -6013,6 +6040,7 @@ namespace Isotope_fitting
             // losses_label
             // 
             this.losses_label.AutoSize = true;
+            this.losses_label.Cursor = System.Windows.Forms.Cursors.Help;
             this.losses_label.Dock = System.Windows.Forms.DockStyle.Left;
             this.losses_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.losses_label.ForeColor = System.Drawing.Color.Crimson;
@@ -6022,6 +6050,7 @@ namespace Isotope_fitting
             this.losses_label.Size = new System.Drawing.Size(349, 29);
             this.losses_label.TabIndex = 2;
             this.losses_label.Text = "Intramolecular Hydrogen Atom Rearrangements";
+            this.losses_label.Click += new System.EventHandler(this.losses_label_Click);
             // 
             // toolStripButton4
             // 

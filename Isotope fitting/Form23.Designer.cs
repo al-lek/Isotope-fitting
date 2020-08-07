@@ -257,7 +257,7 @@
             this.MinimizeBox = false;
             this.Name = "Form23";
             this.ShowInTaskbar = false;
-            this.Text = "Highlight options";
+            this.Text = "Heatmap options";
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.seq_reg_numUD)).EndInit();

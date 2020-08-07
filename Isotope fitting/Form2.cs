@@ -2227,7 +2227,6 @@ namespace Isotope_fitting
             {
                 ChemFormulas[i].Charge = 0; ChemFormulas[i].Adduct = ""; ChemFormulas[i].Deduct = "";
                 //ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(ChemFormulas[i].InputFormula, true, charge * (-1));
-                return;
             }
             else
             {
@@ -2356,12 +2355,12 @@ namespace Isotope_fitting
             }
             else if (ChemFormulas[i].Ion.StartsWith("B("))//base fragments are not followed by losses ex B(G) or B(m7G)
             {
-                string sub = ChemFormulas[i].Ion.Substring(2, ChemFormulas[i].Ion.Length - 2);
-                ChemFormulas[i].Ion_type = "B()";
+                ion_type = "B()";
                 ChemFormulas[i].Color = OxyColors.DarkSalmon;
                 ChemFormulas[i].SortIdx = 0;
                 ChemFormulas[i].Index = "0";
                 ChemFormulas[i].IndexTo = "0";
+                ChemFormulas[i].Ion_type = ion_type;
             }
             else
             {
@@ -3730,7 +3729,7 @@ namespace Isotope_fitting
 
         private void toggle_FragTypes_Btn_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("When ckecked fully expands the tree view to show all nodes.\r\nWhen un-ckecked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When ckecked fully expands the tree view to show all nodes.\r\nWhen un-ckecked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
 
             if (fragTypes_tree != null)
             {
@@ -6047,7 +6046,7 @@ namespace Isotope_fitting
         }
         private void cursor_chkBx_CheckStateChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Sets mouse tool to label exact points coordinates in the spectrum area.\r\nWith left click sets mouse tool as a ruler to measure distances in a spectrum, with right click the ruler vanishes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Sets mouse tool to label exact points coordinates in the spectrum area.\r\nWith left click sets mouse tool as a ruler to measure distances in a spectrum, with right click the ruler vanishes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             // 
             if (plotFragProf_chkBox.Checked || plotFragCent_chkBox.Checked || plotExp_chkBox.Checked || plotCentr_chkBox.Checked)
             {
@@ -8437,7 +8436,7 @@ namespace Isotope_fitting
         }
         private void toggle_toolStripButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("When checked fully expands the tree view to show all nodes. \r\nWhen un-checked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When checked fully expands the tree view to show all nodes. \r\nWhen un-checked collapses the tree view to hide sub-nodes.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
 
             if (frag_tree != null)
             {
@@ -8815,7 +8814,7 @@ namespace Isotope_fitting
         //plot     
         private void fragPlotLbl_chkBx_CheckedChanged(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("Shows or hides labels for ploted fragments.\r\nRight click opens a new window with all the basic ion types for which the labels are visible.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("Shows or hides labels for ploted fragments.\r\nRight click opens a new window with all the basic ion types for which the labels are visible.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
             if (frag_lbl_Btn.Checked)
             {
                 //cursor_chkBx.Checked = false; refresh_iso_plot();
@@ -9051,7 +9050,7 @@ namespace Isotope_fitting
         #region Fitting Options
         private void Fitting_chkBox_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (help_Btn.Checked) { MessageBox.Show("When checked the summation of the plotted fragments is displayed in spectrum area with a dashed line.\r\nThe type and the color of the line can be changed in Format Plot Area>Style panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (help_Btn.Checked) { MessageBox.Show("When checked the summation of the plotted fragments is displayed in spectrum area with a dashed line.\r\nThe type and the color of the line can be changed in Format Plot Area>Style panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             refresh_iso_plot();
         }
         #endregion
@@ -9060,12 +9059,6 @@ namespace Isotope_fitting
         private void Form2_Resize(object sender, EventArgs e)
         {
             Invalidate();
-        }
-        private void customRes_Btn_Click(object sender, EventArgs e)
-        {
-            Form4 frm4 = new Form4();
-            frm4.Show();
-            frm4.FormClosing += (s, f) => { add_machine(false); };
         }
         private void add_machine(bool exp_resolution = false)
         {
@@ -9315,6 +9308,7 @@ namespace Isotope_fitting
         }
         private void ppm_legend_Btn_CheckedChanged(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Shows or hides legend", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             ppm_plot.Model.IsLegendVisible = ppm_legend_Btn.Checked;
             ppm_plot.InvalidatePlot(true);
         }
@@ -9398,6 +9392,8 @@ namespace Isotope_fitting
         //sequence toolstrip
         private void highlightProp_Btn_Click(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Displays the 'Heatmap options' panel. The user can select the color scale," +
+                " the maximum and minimum values of the scale, and the amount of region between the two bounds. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
             Form23 frm23 = new Form23(this);
             frm23.FormClosed += (s, f) =>
             {
@@ -9409,6 +9405,7 @@ namespace Isotope_fitting
         }
         private void seq_coverageBtn_Click(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Calculates the statistical sequence coverage by each ion type and in total. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string message_string = String.Empty;
             StringBuilder sb = new StringBuilder();
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("Don't hurry.You have to add amino-acid sequence first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
@@ -10697,6 +10694,8 @@ namespace Isotope_fitting
         }
         private void highlight_ibt_ckBx_CheckedChanged(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("When checked, a heatmap of the internal fragments' intensity is displayed on the sequence based on their fragmentation indexes. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
             CheckBox clr_ckbx = (sender as CheckBox);
             Panel big_pnl = clr_ckbx.Parent as Panel;
             ToolStrip tsp = GetControls(big_pnl).OfType<ToolStrip>().First();
@@ -10925,6 +10924,16 @@ namespace Isotope_fitting
         }
         private void los_chkBox_CheckedChanged(object sender, EventArgs e)
         {
+            if (help_Btn.Checked)
+            {
+                string tt = "a - x or b - y or c - z";
+                if (is_riken) tt = "a - w or b - x or c - y or d - z";
+                MessageBox.Show("Unless the user makes the appropriate choice, the fragments' losses are not plotted. " +
+                "If the 'losses' selection is enabled the user can choose to display either "+tt +
+                " fragments.In this case, all the primary fragments are noted with an upper mark while the " +
+                "primary with losses with a lower mark.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             CheckBox los_chkBox_temp = sender as CheckBox;
             Panel draw_sequence_panel_temp = los_chkBox_temp.Parent as Panel;
             CheckBox ax_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("ax_chBx")).ToList().FirstOrDefault();
@@ -11152,6 +11161,7 @@ namespace Isotope_fitting
         }
         private void seqLegendBtn_CheckedChanged(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Shows or hides legend", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
             ToolStripButton tsp = (sender as ToolStripButton);
             Panel big_pnl = tsp.GetCurrentParent().Parent as Panel;
             CheckBox clr_ckbx = GetControls(big_pnl).OfType<CheckBox>().Where(n => n.Name.Contains("highlight")).First();
@@ -11265,6 +11275,17 @@ namespace Isotope_fitting
         private void seq_extensionBoxCopy2_SelectionChangeCommitted(object sender, EventArgs e)
         {
             sequence_PnlCopy2.Refresh();
+        }
+        private void seq_extensionBox_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked)
+            {
+                ComboBox btn = sender as ComboBox;
+                string s = "";
+                if (btn.Name.Equals("seq_extensionBox")) s = ", as well as the other fragments' diagrams,";
+                MessageBox.Show("For the sequence representation part" + s + 
+                    " the user checks the desired corresponding sequence and automatically the graphs are renewed.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
         }
         #endregion
 
@@ -13117,6 +13138,7 @@ namespace Isotope_fitting
         }
         private void losses_legendBtn1_CheckStateChanged(object sender, EventArgs e)
         {
+            if (help_Btn.Checked) { MessageBox.Show("Shows or hides legend", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             ToolStripItem tsp = (sender as ToolStripItem);
             ToolStrip tt = tsp.GetCurrentParent();
             GroupBox grp = tt.Parent as GroupBox;
@@ -14330,7 +14352,63 @@ namespace Isotope_fitting
             }
         }
 
+
+
         #endregion
 
+        private void losses_check1_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { MessageBox.Show("Unless the user enables the 'losses' selection, the fragments' losses are not included in the calculations. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);return; }
+        }
+
+        private void log_check1_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { MessageBox.Show("When checked, the Y Axis is logarithmic. The default state is checked. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void primary_fragments_plots_Click(object sender, EventArgs e)
+        {
+            //if (help_Btn.Checked)
+            //{
+                string t = "amino - acid";
+                if(is_riken) t = "base";
+                MessageBox.Show("Primary fragments plots’ include :\r\n -An intensity - residue number(index) in the " + t + " sequence plot.If one " +
+                    "or more fragments share the same index and primary ion type the sum of their " +
+                    "intensities is displayed to the user.\r\n -A charge state - residue number(index) in the " + t + " sequence plot.If " +
+                    "one or more fragments share the same index, primary ion type and charge " +
+                    "state the sum of their intensities is displayed to the user.The size of the charge " +
+                    "point in the scatter plot is in accordance with the order of magnitude of its " +
+                    "intensity.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            //}
+
+        }
+
+        private void idxPlotLbl_Click(object sender, EventArgs e)
+        {
+            //if (help_Btn.Checked)
+            //{
+                string t = "amino - acid";
+                if (is_riken) t = "base";
+                MessageBox.Show("Internal fragments’ plots include a diagram with the initial and terminal residue " +
+                "number(index) in the " + t + " sequence plot, combined with the intensity of each " +
+                "represented number.The same diagram is plotted twice at first by sorting the internal " +
+                "fragments in ascending initial index order and secondly in ascending terminal index " +
+                "order ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            //}
+        }
+
+        private void losses_label_Click(object sender, EventArgs e)
+        {
+            //if (help_Btn.Checked)
+            //{
+                string t = "amino - acid";
+                if (is_riken) t = "base";
+                MessageBox.Show("Intramolecular Hydrogen Atom Rearrangements are represented in a k - residue number(index) in the " + t + " sequence plot." +
+                    "\r\n\r\nk=𝐼[𝑏±𝑛𝐻]/𝐼[𝑏]\r\n\r\nThe parameters’ references are as followed:\r\n𝐼[]=intensity\r\n𝑏±𝑛𝐻= fragment with Hydrogen add or loss(ex: a + 1)\r\n𝑏= primary fragment of the same index and charge as 𝑏±𝑛𝐻" +
+                    "\r\n\r\nFor each ion type there are two plot types :\r\nPlus plots, ex: a+1, a+2\r\nMinus plots, ex: a-1, a-2\r\n", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            //}
+        }
+
+       
     }
 }
