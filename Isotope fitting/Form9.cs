@@ -1213,6 +1213,8 @@ namespace Isotope_fitting
                     types.Add(item.ToString());
 
             // 3. seperate checked types by type
+
+
             List<string> types_precursor = types.Where(t => t.StartsWith("M")).ToList();// M, M-H2O...
             List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();// internal a, internal b-2H2O...
             List<string> types_B_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("B")).ToList();// primary with neutral loss a-H2O, b-NH3, ...
@@ -1562,6 +1564,7 @@ namespace Isotope_fitting
             else if (frm2.is_exp_deconvoluted)
             {
                 string machine = "";
+                machine = frm2.deconv_machine;
                 double res = 0.0;
                 if (frm2.is_deconv_const_resolution)
                 {
@@ -1570,6 +1573,7 @@ namespace Isotope_fitting
                     {
                         chem.Resolution = res;
                     }
+                    if (res == 0 || res.Equals(double.NaN)) { res = 280000; }
                 }
                 else
                 {
@@ -1628,7 +1632,7 @@ namespace Isotope_fitting
         {
             ChemiForm.CheckChem(chem);      // will also generate chem.FinalFormula
 
-            if (chem.Resolution == 0)
+            if (chem.Resolution.Equals(double.NaN) ||chem.Resolution == 0)
             {
                 if (String.IsNullOrEmpty(chem.Machine.ToString()))
                 {
