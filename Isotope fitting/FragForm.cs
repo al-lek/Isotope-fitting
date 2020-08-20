@@ -40,6 +40,7 @@ namespace Isotope_fitting
         private bool candidate_;
         private string extension;
         private int chain_type;
+        private bool true_positive;
         public OxyColor Color
         {
             get { return this.color; }
@@ -89,6 +90,11 @@ namespace Isotope_fitting
         {
             get { return this.fixed_; }
             set { this.fixed_ = value; }
+        }
+        public bool True_positive
+        {
+            get { return this.true_positive; }
+            set { this.true_positive = value; }
         }
         public bool Candidate
         {

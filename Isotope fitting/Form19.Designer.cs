@@ -161,7 +161,7 @@
             // 
             this.fragGrps_numUD.Location = new System.Drawing.Point(143, 44);
             this.fragGrps_numUD.Minimum = new decimal(new int[] {
-            10,
+            1,
             0,
             0,
             0});
