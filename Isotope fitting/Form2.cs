@@ -39,6 +39,9 @@ namespace Isotope_fitting
     public partial class Form2 : Form
     {
         #region PARAMETER SET TAB FIT
+        private Form24 frm24;
+        private Form24_2 frm24_2;        
+        public bool is_help = false;
         public bool is_riken = false;
         public bool is_rna = false;
         bool is_polarity_negative = false;
@@ -46,11 +49,11 @@ namespace Isotope_fitting
         public static ListBox machine_listBox1 = new ListBox();
         public static bool machine_listBox_eventAddedFlag = false;
         public static bool machine_listBox1_eventAddedFlag = false;
-
+        public bool has_adduct = false;
+        public string extra_adduct = "";
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
-        //public string error_string = String.Empty;
         bool x_charged = false;
         public double threshold = 0.01;
         public List<SequenceTab> sequenceList = new List<SequenceTab>();
@@ -457,9 +460,7 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
-        private Form24 frm24;
-        private Form24_2 frm24_2;
-        public bool is_help = false;
+        
 
         public Form2()
         {
@@ -556,7 +557,7 @@ namespace Isotope_fitting
             "TripleTOF5600_R28000@200",
             "QTOF_XevoG2-S_R25000@200",
             "TripleTOF6600_R30000@400             "});
-            machine_listBox1.Location = new System.Drawing.Point(102, 426);
+            machine_listBox1.Location = new System.Drawing.Point(102, 487);
             machine_listBox1.Name = "machine_listBox1";
             machine_listBox1.Size = new System.Drawing.Size(191, 56);
             machine_listBox1.TabIndex = 21;
@@ -13706,7 +13707,7 @@ namespace Isotope_fitting
             root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             CloseAllOpenForm("Form2");
             if (frm24_2 != null) { frm24_2 = null; }
-            if (frm24 != null) { frm24 = null; }
+            if (frm24 != null) { frm24 = null; }            
             MSproduct_treeView.Visible = false;
             //plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             is_exp_deconvoluted = false;

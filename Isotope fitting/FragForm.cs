@@ -41,6 +41,8 @@ namespace Isotope_fitting
         private string extension;
         private int chain_type;
         private bool true_positive;
+        private bool has_adduct;
+
         public OxyColor Color
         {
             get { return this.color; }
@@ -95,6 +97,11 @@ namespace Isotope_fitting
         {
             get { return this.true_positive; }
             set { this.true_positive = value; }
+        }
+        public bool Has_adduct
+        {
+            get { return this.has_adduct; }
+            set { this.has_adduct = value; }
         }
         public bool Candidate
         {

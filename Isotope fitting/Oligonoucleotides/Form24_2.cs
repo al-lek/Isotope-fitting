@@ -17,17 +17,17 @@ namespace Isotope_fitting
     public partial class Form24_2 : Form
     {
         Form2 frm2;
-      
+        
 
         public Form24_2(Form2 f)
         {
-            frm2 = f;           
+            frm2 = f;
             InitializeComponent();
-            if (ChemFormulas.Count>0)
+            if (ChemFormulas.Count > 0)
             {
                 mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
                 mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
-            }            
+            }
             if (!string.IsNullOrEmpty(frm2.res_string_24)) resolution_Box.Text = frm2.res_string_24;
             //else if (frm2.machine_sel_index != -1) Form24_2.machine_listBox1.SelectedIndex = frm2.machine_sel_index;
             //else Form24_2.machine_listBox1.SelectedIndex = 9;
@@ -37,6 +37,9 @@ namespace Isotope_fitting
                 machine_listBox1.SelectedIndexChanged += new System.EventHandler(this.machine_listBox_SelectedIndexChanged);
                 machine_listBox1_eventAddedFlag = true;
             }
+            noAddBtn.Checked = frm2.has_adduct;
+            AdductBtn.Checked = frm2.has_adduct;
+
         }
 
         #region UI    
@@ -69,7 +72,7 @@ namespace Isotope_fitting
         }
         private void machine_listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (resolution_Box.Text != string.Empty) resolution_Box.Text = string.Empty;            
+            if (resolution_Box.Text != string.Empty) resolution_Box.Text = string.Empty;
             frm2.machine_sel_index = machine_listBox1.SelectedIndex;
         }
         private void UncheckAll_calculationPanel()
@@ -87,11 +90,76 @@ namespace Isotope_fitting
         {
             mzMax_Box.SelectAll();
             if (frm2.is_help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }        
+        }
+        private void clear_allBtn_riken_Click(object sender, EventArgs e)
+        {
+            UncheckAll_calculationPanel();
+            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
+            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
+        }
+
+        private void uncheck_all_boxBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes_ListBx(this, false);
+        }
+
+        private void check_all_boxBtn_riken_Click(object sender, EventArgs e)
+        {
+            un_check_all_checkboxes_ListBx(this, true);
+        }
+        private void mz_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void charge_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help) { MessageBox.Show("Set the charge range condition to be met when selecting the fragments for calculation.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help)
+            {
+                MessageBox.Show("Set the index range condition to be met when selecting the fragments for calculation. When the checkbox is checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.   ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void sortIdx_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (frm2.is_help) { MessageBox.Show("When checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void resolution_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help)
+            {
+                MessageBox.Show("Set the initial resolution for the profile calculation of the fragments. In case there is an experimental spectrum, the resolution of the nearest experimental point to the " +
+                    "fragment’s most abundant centroid is computed. This resolution is used for an additional profile calculation of the fragments that have passed all filters.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void machine_Label_Click(object sender, EventArgs e)
+        {
+            if (frm2.is_help)
+            {
+                MessageBox.Show("A wide range of instrument's resolution related to m/z measurements is integrated into the software. Choose the resolution of your instrument to perform the profile calculation of the fragments. In case there is an experimental spectrum, the resolution of the nearest experimental point to the " +
+                    "fragment’s most abundant centroid is computed. This resolution is used for an additional profile calculation of the fragments that have passed all filters.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void AdductBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            adduct_txtBx.Enabled = AdductBtn.Checked;
+        }
         #endregion
 
+     
         private List<ChemiForm> select_fragments_riken()
         {
+            bool add = true;
+            int extra_mz = 0;
+            if (frm2.has_adduct && frm2.extra_adduct[0].Equals("-")) { frm2.extra_adduct = frm2.extra_adduct.Remove(0,1); add = false; }
             List<ChemiForm> res = new List<ChemiForm>();
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
             //other types are M, internal and known MS2
@@ -109,6 +177,10 @@ namespace Isotope_fitting
             if (double.IsNaN(qMax)) qMax = 100.0;
 
             if (frm2.is_exp_deconvoluted) { qMin = 0; qMax = 1; }
+
+            if (frm2.has_adduct && add) { mzMax = mzMax + extra_mz; }
+            if (frm2.has_adduct && !add) { mzMin = mzMin - extra_mz; }
+
             // 2. get checked types
             List<string> types = new List<string>();
             foreach (CheckedListBox lstBox in GetControls(this).OfType<CheckedListBox>())
@@ -357,34 +429,61 @@ namespace Isotope_fitting
 
                 if (is_precursor)
                 {
-                    if (types_precursor.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_precursor.Contains(curr_type))
+                    {
+                        if (frm2.has_adduct) { check_adduct(chem, add, res,true); }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
 
                 if (is_internal)
                 {
-                    if (types_internal.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_internal.Contains(curr_type))
+                    {
+                        if (frm2.has_adduct) { check_adduct(chem, add, res, true); }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 if (is_B)
                 {
-                    if (types_B.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_B.Contains(curr_type))
+                    {
+                        if (frm2.has_adduct) { check_adduct(chem, add, res, true); }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 if (is_B_loss)
                 {
-                    if (types_B_loss.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_B_loss.Contains(curr_type))
+                    {
+                        if (frm2.has_adduct) { check_adduct(chem, add, res, true); }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 if (is_known_MS2)
                 {
-                    if (types_known_MS2.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_known_MS2.Contains(curr_type))
+                    {
+                        if (frm2.has_adduct) { check_adduct(chem, add, res, true); }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 
                 if (is_primary)
                 {
-                    if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_primary.Contains(curr_type))
+                    {
+                        if (frm2.has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);                            
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
 
                     // this code is only for MSProduct that does not provide primary with H gain/loss by default.
                     // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
@@ -394,10 +493,21 @@ namespace Isotope_fitting
                         {
                             bool is_error = false;
                             // add the primary and modify it according to gain or loss of H2O
-                            res.Add(chem.DeepCopy());
+                            if (frm2.has_adduct)
+                            {
+                                is_error = check_adduct(chem, add, res);
+                            }
+                            else { res.Add(chem.DeepCopy()); }
+                            if (is_error) continue;
                             int curr_idx = res.Count - 1;
 
-                            string new_type = "(" + hyd_mod + ")";
+                            string new_type = "(" + hyd_mod;
+                            if (frm2.has_adduct)
+                            {
+                                if (add) { new_type += "+" + frm2.extra_adduct; }
+                                else { new_type += "-" + frm2.extra_adduct; }
+                            }
+                            new_type += ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
@@ -417,10 +527,22 @@ namespace Isotope_fitting
                         {
                             bool is_error = false;
                             // add the primary and modify it according to gain or loss of H
-                            res.Add(chem.DeepCopy());
-                            int curr_idx = res.Count - 1;
 
-                            string new_type ="("+hyd_mod+")";
+                            if (frm2.has_adduct)
+                            {
+                                is_error=check_adduct(chem, add, res);
+                            }
+                            else { res.Add(chem.DeepCopy()); }
+                            if (is_error) continue;
+
+                            int curr_idx = res.Count - 1;
+                            string new_type ="("+hyd_mod;
+                            if (frm2.has_adduct)
+                            {
+                                if (add) { new_type += "+" + frm2.extra_adduct; }
+                                else { new_type += "-" + frm2.extra_adduct; }
+                            }
+                            new_type += ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
@@ -443,6 +565,42 @@ namespace Isotope_fitting
             return res;
         }
         
+        private bool check_adduct(ChemiForm chem, bool add, List<ChemiForm> res,bool name=false)
+        {
+            bool error = true;
+            ChemiForm temp_chem = chem.DeepCopy();
+            try
+            {
+                if(add) { temp_chem.Adduct = temp_chem.Adduct + frm2.extra_adduct; }
+                else { temp_chem.Deduct = temp_chem.Deduct + frm2.extra_adduct; }
+                ChemiForm.CheckChem(temp_chem);                
+            }
+            catch (Exception eee) { return error; }
+            if (!temp_chem.Error )
+            {
+                error = false;
+                ChemiForm last_chem = chem.DeepCopy();
+                last_chem.Adduct = temp_chem.Adduct;
+                last_chem.Deduct = temp_chem.Deduct;
+                last_chem.Mz = temp_chem.Mz;
+                if (name)
+                {
+                    string new_type = "(" + temp_chem.Ion_type;
+                    if (frm2.has_adduct)
+                    {
+                        if (add) { new_type += "+" + frm2.extra_adduct; }
+                        else { new_type += "-" + frm2.extra_adduct; }
+                    }
+                    new_type += ")";
+                    last_chem.Name = temp_chem.Name.Replace(temp_chem.Ion_type, new_type);
+                    last_chem.Radio_label = temp_chem.Radio_label.Replace(temp_chem.Ion_type, new_type);
+                    last_chem.Ion_type = new_type;
+                    res.Add(last_chem);
+                }
+                else res.Add(last_chem);
+            }
+            return error;
+        }
         private void frag_sort_Btn2_Click(object sender, EventArgs e)
         {
             if (frm2.is_help)
@@ -467,15 +625,21 @@ namespace Isotope_fitting
                 "the desired properties and selects the candidates. Following the selected fragments' “enviPat” properties profile calculation, a filter is applied " +
                 "to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak by ppm larger than the user-specified bound" +
                 " maximum ppm. This filter distinguishes the candidate fragments from the incorrect.\r\n", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-
             calcBtn.Enabled = false;
             if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calcBtn.Enabled = true; return; }
+            frm2.has_adduct = AdductBtn.Checked;
+            if (frm2.has_adduct)
+            {
+                frm2.extra_adduct = adduct_txtBx.Text.Replace(Environment.NewLine, " ").ToString();
+                frm2.extra_adduct = frm2.extra_adduct.Replace("\t", "");
+                frm2.extra_adduct = frm2.extra_adduct.Replace(" ", "");
+                if (String.IsNullOrEmpty(frm2.extra_adduct)){ frm2.has_adduct = false; AdductBtn.Checked = false; noAddBtn.Checked = true; }
+            }
             List<ChemiForm> selected_fragments = select_fragments_riken();
             if (selected_fragments == null) return;
             calculate_fragments_resolution(selected_fragments);
             frm2.calculate_procedure(selected_fragments);
             calcBtn.Enabled = true;
-            //this.Close();
         }
         private void calculate_fragments_resolution(List<ChemiForm> selected_fragments)
         {
@@ -519,24 +683,7 @@ namespace Isotope_fitting
             }
 
         }
-
-        private void clear_allBtn_riken_Click(object sender, EventArgs e)
-        {
-            UncheckAll_calculationPanel();
-            mzMin_Box.Text = ChemFormulas.First().Mz.ToString();
-            mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
-        }
-
-        private void uncheck_all_boxBtn_riken_Click(object sender, EventArgs e)
-        {
-            un_check_all_checkboxes_ListBx(this, false);
-        }
-
-        private void check_all_boxBtn_riken_Click(object sender, EventArgs e)
-        {
-            un_check_all_checkboxes_ListBx(this, true);
-        }
-
+         
         private void Form24_2_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -546,45 +693,6 @@ namespace Isotope_fitting
             }
         }
 
-        private void mz_Label_Click(object sender, EventArgs e)
-        {
-            if (frm2.is_help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void charge_Label_Click(object sender, EventArgs e)
-        {
-            if (frm2.is_help) { MessageBox.Show("Set the charge range condition to be met when selecting the fragments for calculation.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-            if (frm2.is_help) 
-            {
-                MessageBox.Show("Set the index range condition to be met when selecting the fragments for calculation. When the checkbox is checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.   ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
-            }
-        }
-
-        private void sortIdx_chkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            if (frm2.is_help) { MessageBox.Show("When checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void resolution_Label_Click(object sender, EventArgs e)
-        {
-            if (frm2.is_help)
-            {
-                MessageBox.Show("Set the initial resolution for the profile calculation of the fragments. In case there is an experimental spectrum, the resolution of the nearest experimental point to the " +
-                    "fragment’s most abundant centroid is computed. This resolution is used for an additional profile calculation of the fragments that have passed all filters.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
-            }
-        }
-
-        private void machine_Label_Click(object sender, EventArgs e)
-        {
-            if (frm2.is_help)
-            {
-                MessageBox.Show("A wide range of instrument's resolution related to m/z measurements is integrated into the software. Choose the resolution of your instrument to perform the profile calculation of the fragments. In case there is an experimental spectrum, the resolution of the nearest experimental point to the " +
-                    "fragment’s most abundant centroid is computed. This resolution is used for an additional profile calculation of the fragments that have passed all filters.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
-            }
-        }
+        
     }
 }
