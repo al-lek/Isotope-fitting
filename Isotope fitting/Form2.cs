@@ -732,6 +732,7 @@ namespace Isotope_fitting
             {
                 Clear_all();
                 /*disp_d.Visible = disp_w.Visible =*/ groupBoxIntensity4.Visible = groupBoxCharge4.Visible = is_riken;
+                has_adduct_chkBxCopy2.Visible = has_adduct_chkBxCopy1.Visible = has_adduct_chkBx.Visible = is_riken;
                 ppm_toolStrip4.Visible = !is_riken;
                 losses_groupBox_d.Visible = is_riken;
                 losses_groupBox_w.Visible = is_riken;
@@ -2736,7 +2737,7 @@ namespace Isotope_fitting
                 {
                     if (fra.Fixed)
                     {
-                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type ,Has_adduct=fra.Has_adduct});
                     }
                 }
                 find_max_min_int();
@@ -2771,7 +2772,7 @@ namespace Isotope_fitting
             {
                 if (fra.Fixed)
                 {
-                    IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                    IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type,Has_adduct=fra.Has_adduct });
                 }
             }
             find_max_min_int();
@@ -3197,7 +3198,7 @@ namespace Isotope_fitting
                 {
                     if (fra.Fixed)
                     {
-                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type,Has_adduct=fra.Has_adduct });
                     }
                 }
             }
@@ -6846,7 +6847,7 @@ namespace Isotope_fitting
                     {
                         Form2.Fragments2[indexS - 1].Fixed = true;
                         file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension);
-                        IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type });
+                        IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type, Has_adduct = Fragments2[indexS-1].Has_adduct });
                         progress++;
                         if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
                     }                   
@@ -6866,7 +6867,7 @@ namespace Isotope_fitting
                 foreach (int indexS in fragToSave)
                 {
                     Form2.Fragments2[indexS - 1].Fixed = true;
-                    IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type });
+                    IonDraw.Add(new ion() { Has_adduct = Form2.Fragments2[indexS - 1].Has_adduct, Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type });
                 }
                 refresh_frag_tree_fixed(fragToSave);
                 populate_fragtypes_treeView();
@@ -7289,6 +7290,7 @@ namespace Isotope_fitting
                                                 //IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                                 //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             }
+                                            fitted_chem.Last().Has_adduct = false;
                                         }
                                         else
                                         {
@@ -7297,6 +7299,8 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                            if (str.Length>19) { fitted_chem.Last().Has_adduct = string_to_bool(str[19]); }
+                                            else { fitted_chem.Last().Has_adduct = false; }
                                             //IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                             //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
@@ -7591,6 +7595,7 @@ namespace Isotope_fitting
                                         }
                                         if (!new_type)
                                         {
+                                            fitted_chem.Last().Has_adduct = false;
                                             fitted_chem.Last().Extension = ""; fitted_chem.Last().Chain_type = 0;
                                             //IonDraw.Last().Extension = ""; IonDraw.Last().Chain_type = 0;
                                             if (heavy)
@@ -7657,6 +7662,8 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
+                                            if (str.Length > 19) { fitted_chem.Last().Has_adduct = string_to_bool(str[19]); }
+                                            else { fitted_chem.Last().Has_adduct = false; }
                                             //IonDraw.Last().maxPPM_Error = dParser(str[15]);
                                             //IonDraw.Last().minPPM_Error = dParser(str[14]);
                                             //IonDraw.Last().SortIdx = Convert.ToInt32(str[16]);
@@ -7987,7 +7994,7 @@ namespace Isotope_fitting
                 {
                     if (fra.Fixed)
                     {
-                        IonDraw.Add(new ion() { Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
+                        IonDraw.Add(new ion() { Has_adduct = fra.Has_adduct, Extension = fra.Extension, SortIdx = fra.SortIdx, Name = fra.Name, Mz = fra.Mz, PPM_Error = fra.PPM_Error, maxPPM_Error = fra.maxPPM_Error, minPPM_Error = fra.minPPM_Error, Charge = fra.Charge, Index = Int32.Parse(fra.Index), IndexTo = Int32.Parse(fra.IndexTo), Ion_type = fra.Ion_type, Max_intensity = fra.Max_intensity * fra.Factor, Color = fra.Color.ToColor(), Chain_type = fra.Chain_type });
                     }
                 }
             }
@@ -9911,15 +9918,19 @@ namespace Isotope_fitting
             CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
+            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("adduct_chBx")).ToList().FirstOrDefault();
 
             if (color_range_picBox_temp.Visible) { color_range_picBox_temp.Visible = false; }
             if (color_range_panel_temp.Visible) { color_range_panel_temp.Visible = false; }
             if (seq_lbl_panel_temp.Visible) { seq_lbl_panel_temp.Visible = false; }       
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int adduct_step1 = 0;
+            int adduct_step2 = 0;
+            if (adduct_chBx_temp.Checked) { adduct_step1 =21; adduct_step2 = 16; }
             int step_x = 20;
-            int step_y = 74;
-            int temp_y_init = 24;
+            int step_y = 74+(2* adduct_step1);
+            int temp_y_init = 24+ adduct_step1;
             int temp_x_init = 5;
             int length_panel =0;
             if (legend_panel_temp.Visible) length_panel = -legend_panel_temp.Width;
@@ -9958,27 +9969,33 @@ namespace Isotope_fitting
                 //counts the internal -B() in the current index
                 foreach (ion nn in IonDraw)
                 {
+                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
                     if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18;  temp_p.Y = temp_p.Y + step_y; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
+                    int safe_dist_up = -adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
+                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    {
+                        safe_dist_up = adduct_step2 +adduct_step1; safe_dist_up =adduct_step1;
+                    }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.LimeGreen, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.LimeGreen, g);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Green, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Green, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 0, nn.Color, g);
+                            draw_line(pp, true, 0 + safe_dist_up, nn.Color, g);
                         }
                     }
                     else if (bx_chBx_temp.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
@@ -9987,16 +10004,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.DodgerBlue, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.DodgerBlue, g);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Blue, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Blue, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 4, nn.Color, g);
+                            draw_line(pp, true, 4 + safe_dist_up, nn.Color, g);
                         }
                     }
                     else if (cy_chBx_temp.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
@@ -10005,16 +10022,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.Tomato, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.Tomato, g);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Firebrick, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Firebrick, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 8, nn.Color, g);
+                            draw_line(pp, true, 8 + safe_dist_up, nn.Color, g);
                         }
                     }
                     else if (dz_chBx_temp.Checked && (nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")) && nn.Index == idx + 1)
@@ -10023,16 +10040,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.DeepPink, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.DeepPink, g);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.HotPink, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.HotPink, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 12, nn.Color, g);
+                            draw_line(pp, true, 12 + safe_dist_up, nn.Color, g);
                         }
                     }
                     else if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && (s.Length - nn.Index == idx + 1))
@@ -10041,16 +10058,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.LimeGreen, g);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Green, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Green, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 0, nn.Color, g);
+                            draw_line(temp_p, false, 0 + safe_dist_down, nn.Color, g);
                         }
                     }
                     else if (bx_chBx_temp.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
@@ -10059,16 +10076,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.DodgerBlue, g);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Blue, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Blue, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 4, nn.Color, g);
+                            draw_line(temp_p, false, 4 + safe_dist_down, nn.Color, g);
                         }
                     }
                     else if (cy_chBx_temp.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
@@ -10077,16 +10094,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.Tomato, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.Tomato, g);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Firebrick, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Firebrick, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 8, nn.Color, g);
+                            draw_line(temp_p, false, 8 + safe_dist_down, nn.Color, g);
                         }
                     }
                     else if (dz_chBx_temp.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
@@ -10095,21 +10112,21 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.DeepPink, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.DeepPink, g);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.HotPink, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.HotPink, g);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 12, nn.Color, g);
+                            draw_line(temp_p, false, 12 + safe_dist_down, nn.Color, g);
                         }
                     }                   
                     else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
                     {
-                        draw_line(pp, false, 0, nn.Color, g, true);
+                        draw_line(pp, false, 0 , nn.Color, g, true);
                     }
                     else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1)&& !los_chkBox_temp.Checked && int_chBx_temp.Checked)
                     {
@@ -12102,13 +12119,13 @@ namespace Isotope_fitting
                         if (merged_up.Count == 0 || (int)merged_up.Last()[0] != nn.SortIdx)
                         {
                             merged_up.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                            charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                            charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
                         }
                         else
                         {
                             merged_up.Last()[1] += nn.Max_intensity;
                             if (charge_merged_up.Last().Charge == nn.Charge) { charge_merged_up.Last().Max_intensity += nn.Max_intensity; charge_merged_up.Last().Mz += " , " + nn.Mz; charge_merged_up.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
+                            else { charge_merged_up.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct=nn.Has_adduct }); }
                         }
                         if (max_ < merged_up.Last()[1]) { max_= merged_up.Last()[1]; }
                         if (maxcharge_ <  nn.Charge) { maxcharge_ =nn.Charge; }
@@ -12123,13 +12140,13 @@ namespace Isotope_fitting
                         if (merged_down.Count == 0 || (int)merged_down.Last()[0] != nn.SortIdx)
                         {
                             merged_down.Add(new double[] { nn.SortIdx, nn.Max_intensity });
-                            charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                            charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
                         }
                         else
                         {
                             merged_down.Last()[1] += nn.Max_intensity;
                             if (charge_merged_down.Last().Charge == nn.Charge) { charge_merged_down.Last().Max_intensity += nn.Max_intensity; charge_merged_down.Last().Mz += " , " + nn.Mz; charge_merged_down.Last().Name += " , " + nn.Name; }
-                            else { charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name }); }
+                            else { charge_merged_down.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct }); }
                         }
                         if (max_ < merged_down.Last()[1]) { max_ = merged_down.Last()[1]; }
                         if (maxcharge_ < nn.Charge) { maxcharge_ = nn.Charge; }
@@ -12292,11 +12309,11 @@ namespace Isotope_fitting
                 {
                     if (nn.Ion_type.Contains("b"))
                     {
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = clr2, Max_intensity = nn.Max_intensity });
+                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = clr2, Max_intensity = nn.Max_intensity, Has_adduct = nn.Has_adduct });
                     }
                     else
                     {
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = clr1, Charge = nn.Charge, Max_intensity = nn.Max_intensity });
+                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = clr1, Charge = nn.Charge, Max_intensity = nn.Max_intensity, Has_adduct = nn.Has_adduct });
                     }
                 }
             }
@@ -12817,7 +12834,7 @@ namespace Isotope_fitting
                                 }
                                 else
                                 {
-                                    merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name });
+                                    merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
                                 }
                             }
                         }
@@ -14057,6 +14074,8 @@ namespace Isotope_fitting
                         // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                         isotope_count++;
                         f++;
+                        bool has_adduct = false;
+                        if (str.Length > 21) { has_adduct = string_to_bool(str[21]); }
                         Fragments2.Add(new FragForm
                         {
                             InputFormula = str[9],
@@ -14086,10 +14105,12 @@ namespace Isotope_fitting
                             Extension = str[18],
                             To_plot = string_to_bool(str[19]),
                             Max_intensity = dParser(str[6]),
-                            Candidate = true
+                            Candidate = true,
+                            Has_adduct=has_adduct
                         });
+                        
                         if (UInt32.TryParse(str[12], out uint result_color)) Fragments2.Last().Color = OxyColor.FromUInt32(result_color);
-                        IonDraw.Add(new ion() { Extension = str[18], Name = Fragments2.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = Fragments2.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
+                        IonDraw.Add(new ion() { Extension = str[18], Name = Fragments2.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = Fragments2.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0, Has_adduct = has_adduct });
                         if ((Fragments2.Last().Ion_type.StartsWith("w") || Fragments2.Last().Ion_type.StartsWith("(w") || Fragments2.Last().Ion_type.StartsWith("v") || Fragments2.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
                         {
                             Fragments2.Last().SortIdx = check_false_sort_idxFragform(Fragments2.Last());

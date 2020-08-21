@@ -23,11 +23,17 @@ namespace Isotope_fitting
         private double minppm_error;
         private string extension;
         private int chain_type;
+        private bool has_adduct;
 
         public Color Color
         {
             get { return this.color; }
             set { this.color = value; }
+        }
+        public bool Has_adduct
+        {
+            get { return this.has_adduct; }
+            set { this.has_adduct = value; }
         }
         public double Max_intensity
         {
