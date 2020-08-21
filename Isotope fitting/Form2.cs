@@ -49,8 +49,7 @@ namespace Isotope_fitting
         public static ListBox machine_listBox1 = new ListBox();
         public static bool machine_listBox_eventAddedFlag = false;
         public static bool machine_listBox1_eventAddedFlag = false;
-        public bool has_adduct = false;
-        public string extra_adduct = "";
+        
         BackgroundWorker _bw_save_envipat = new BackgroundWorker();
         LightningChartUltimate LC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
         LightningChartUltimate LC_2 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
@@ -1852,6 +1851,7 @@ namespace Isotope_fitting
                 PrintFormula = frag_info[4],
                 Max_man_int = 0,
                 Extension = ms_extension,
+                Has_adduct = false
             });
             int i = ChemFormulas.Count - 1;
             if (ms_heavy_chain) ChemFormulas[i].Chain_type = 1;
@@ -2214,6 +2214,7 @@ namespace Isotope_fitting
                 PrintFormula = frag_info[2],
                 Max_man_int = 0,
                 Extension = ms_extension,
+                Has_adduct = false
             });
             int i = ChemFormulas.Count - 1;
             // Note on formulas
@@ -2962,7 +2963,8 @@ namespace Isotope_fitting
                         Extension = chem.Extension,
                         Chain_type = chem.Chain_type,
                         SortIdx = chem.SortIdx,
-                        Candidate = true
+                        Candidate = true,
+                        Has_adduct=chem.Has_adduct
                     });
 
                     Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
@@ -7214,7 +7216,8 @@ namespace Isotope_fitting
                                             Fixed = true,
                                             Max_man_int = 0,
                                             maxPPM_Error = 0,
-                                            minPPM_Error = 0
+                                            minPPM_Error = 0,
+                                            Has_adduct = false
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });
@@ -7575,7 +7578,8 @@ namespace Isotope_fitting
                                             Fixed = true,
                                             Max_man_int = 0,
                                             maxPPM_Error = 0,
-                                            minPPM_Error = 0
+                                            minPPM_Error = 0,
+                                            Has_adduct = false
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         //IonDraw.Add(new ion() { Name = fitted_chem.Last().Name, Mz = str[5], PPM_Error = dParser(str[8]), Charge = Int32.Parse(str[4]), Index = Int32.Parse(str[2]), IndexTo = Int32.Parse(str[3]), Ion_type = str[1], Max_intensity = dParser(str[6]) * dParser(str[7]), Color = fitted_chem.Last().Color.ToColor(), maxPPM_Error = 0, minPPM_Error = 0 });

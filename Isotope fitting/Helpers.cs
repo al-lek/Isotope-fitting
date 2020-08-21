@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -603,6 +604,358 @@ namespace Isotope_fitting
                 container = control as IContainerControl;
             }
             return control;
+        }
+
+
+        public static double calc_m(out bool Error, string FORMULA)
+        {
+            string f = "";
+            string FinalFormula = "";
+            double mono_abundance = 1.0;
+            double mono_mass = 0.0;
+            double iso_total_amount = 0;
+            Error = false;
+            List<Element_set> Elements_set = new List<Element_set>();
+            
+            for (int g = 0; g < FORMULA.Length; g++)
+            {
+                if (Char.IsWhiteSpace(FORMULA, g) && Char.IsNumber(FORMULA, g + 1))
+                {
+                    f += "[";
+                    do
+                    {
+                        g++;
+                        f += FORMULA[g];
+                    } while ((g + 1 < FORMULA.Length) && (Char.IsNumber(FORMULA[g + 1])));
+                    f += "]";
+                }
+                else if (g == 0 && Char.IsNumber(FORMULA, g))
+                {
+                    f += "[";
+                    f += FORMULA[g];
+                    do
+                    {
+                        g++;
+                        f += FORMULA[g];
+                    } while ((g + 1 < FORMULA.Length) && (Char.IsNumber(FORMULA[g + 1])));
+                    f += "]";
+                }
+                else
+                {
+                    f += FORMULA[g];
+                }
+            }
+            FORMULA = f.Replace(" ", "");
+            string[] elem = new string[ChemForm.isoTable.Length];
+            Regex rgx = new Regex("[A-Z]");          
+
+            for (int k = 0; k < ChemForm.isoTable.Length; k++)
+            {
+                elem[k] = ChemForm.isoTable[k].element;
+            }
+            //group isoTable list according to each element and sort each element isotope in descending abundance order
+            var elementGroup = ChemForm.isoTable.GroupBy(el => el.element, el => el)
+                .Select(grp => new {
+                    grp.Key,
+                    sorted_Ab = grp.OrderByDescending(x => x.abundance).TakeWhile(x => x.abundance > 0)
+                }).ToList();
+            //keep from isoTable for each element isotope only the most abundant one
+            var elementGroupMax = ChemForm.isoTable.GroupBy(el => el.element, el => el)
+                   .Select(grp => new
+                   {
+                       grp.Key,
+                       maxAb = grp.OrderByDescending(x => x.abundance).FirstOrDefault()
+                   }).ToList();
+
+
+            List<string> Element = new List<string>();
+            List<int> Number = new List<int>();
+            List<string> Element1 = new List<string>();
+            List<int> Number1 = new List<int>();
+
+        
+            if (FORMULA != null)
+            {
+                Error = false;
+                //all characters possible?
+                if (FORMULA.IndexOfAny("*{}&#$@!`-_,.+^".ToCharArray()) != -1)
+                {
+                    Error = true;
+                }
+                //do all bracket types close and [] only contain numbers?
+                if (Error == false && FORMULA.IndexOfAny("()[]".ToCharArray()) != -1)
+                {
+                    int getit1 = 0;
+                    int getit2 = 0;
+                    foreach (char c in FORMULA)
+                    {
+                        if (c == '[') { getit1++; }
+                        if (c == ']') { getit1--; }
+                        if (c == '(') { getit2++; }
+                        if (c == ')') { getit2--; }
+                        if (getit1 > 0 && (Char.IsNumber(c) == false && c != '[' && c != ']')) { Error = true; }
+                        if (getit1 < 0 || getit2 < 0) { Error = true; }
+                    }
+                    if (getit1 != 0 || getit2 != 0)
+                    {
+                        Error = true;
+                    }
+                }
+
+                //start correct?
+                if (Error == false && char.IsUpper(FORMULA[0]) != true && FORMULA[0] != '(' && FORMULA[0] != '[')
+                {
+                    Error = true;
+                }
+                if (FORMULA.Length == 1)
+                {
+                    FORMULA = FORMULA + "1";
+                }
+
+                //empty brackets?
+                if (Error == false)
+                {
+                    for (int a = 1; a < FORMULA.Length; a++)
+                    {
+                        if (FORMULA[a - 1] == '(' && FORMULA[a] == ')')
+                        {
+                            Error = true;
+                        }
+                    }
+                }
+
+                //insert 1 where missing
+                if (Error == false)
+                {
+                    if (FORMULA.Any(item => item == '('))
+                    {
+                        for (int a = 0; a < FORMULA.Length - 1; a++)
+                        {
+                            if (FORMULA[a] == ')' && Char.IsNumber(FORMULA[a + 1]) == false)
+                            {
+                                var aStringBuilder = new StringBuilder(FORMULA);
+                                aStringBuilder.Insert(a + 1, "1");
+                                FORMULA = aStringBuilder.ToString();
+                            }
+                        }
+                        if (FORMULA[FORMULA.Length - 1] == ')')
+                        {
+                            FORMULA = FORMULA + "1";
+                        }
+                    }
+                    //for all other cases
+                    for (int a = 1; a < FORMULA.Length; a++)
+                    {
+                        if ((char.IsUpper(FORMULA[a]) || FORMULA[a] == ')' || FORMULA[a] == '(')
+                            && char.IsNumber(FORMULA[a - 1]) == false && FORMULA[a - 1] != '(' && FORMULA[a - 1] != ']')
+                        {
+                            var aStringBuilder = new StringBuilder(FORMULA);
+                            aStringBuilder.Insert(a, "1");
+                            FORMULA = aStringBuilder.ToString();
+                            a++;
+                        }
+
+                    }
+                    if (char.IsNumber(FORMULA[FORMULA.Length - 1]) == false)
+                    {
+                        FORMULA = FORMULA + "1";
+                    }
+                }
+                
+                //dissasemble-->chem.InputFormula:chem.Element,chem.Number
+                if (Error == false)
+                {
+                    int i = 0;
+                    do
+                    {
+                        int startIndex = 0;
+                        int endIndex = 0;
+                        int length = 0;
+                        //check for elements with their atomic number in [] an add them to the elements' character list
+                        if (FORMULA[i] == '[')
+                        {
+                            startIndex = i;
+                            do
+                            {
+                                i++;
+                            } while ((i < FORMULA.Length) && (FORMULA[i] != ']'));
+
+                            do
+                            {
+                                i++;
+                            } while ((i < FORMULA.Length) && (Char.IsNumber(FORMULA[i]) != true));
+                            endIndex = i - 1;
+                            length = endIndex - startIndex + 1;
+                            Element.Add(FORMULA.Substring(startIndex, length));
+                        }
+                        //Create elements' character list for deduct chemical formula
+                        if (Char.IsNumber(FORMULA[i]) != true)
+                        {
+                            startIndex = i;
+                            do
+                            {
+                                i++;
+                            } while ((i < FORMULA.Length) && (Char.IsNumber(FORMULA[i]) != true));
+                            i = i - 1;
+                            endIndex = i;
+                            length = endIndex - startIndex + 1;
+                            Element.Add(FORMULA.Substring(startIndex, length));
+
+                        }
+                        //Create elements' number list for deduct chemical formula
+                        if (Char.IsNumber(FORMULA[i]))
+                        {
+                            startIndex = i;
+                            do
+                            {
+                                i++;
+                            } while ((i < FORMULA.Length) && (Char.IsNumber(FORMULA[i]) == true));
+                            i = i - 1;
+                            endIndex = i;
+                            length = endIndex - startIndex + 1;
+                            Number.Add(Int32.Parse(FORMULA.Substring(startIndex, length)));
+
+                        }
+                        i++;
+                    } while (i < FORMULA.Length);
+
+                }
+
+
+                //check if all elements present in isotopes list
+                if (Error == false)
+                {
+                    if (Element.Except(elem).Any())
+                    {
+                        Error = true;
+                    }
+                    if (Element.Count != Number.Count)
+                    {
+                        Error = true;
+                    }
+                }
+
+                //merge non-unique elements
+                if (Error == false)
+                {
+                    //elements merged
+                    //dictionary contains each element(Key) and the number of times it is presented in formula(Value)
+                    IDictionary<string, int> dictionary = new Dictionary<string, int>();
+                    dictionary = Element.Zip(Number, (k, v) => new { Key = k, Value = v })
+                   .GroupBy(d => d.Key)
+                   .Select(g => new { Key = g.Key, Value = g.Sum(s => s.Value) }).ToDictionary(y => y.Key, y => y.Value);
+
+                    
+                    //check if each element's amount in the deduct is larger than the corresponding element in the chemical formula
+                    //in this case the element is "deleted" from the chemical formula
+                    if (dictionary.Any(item => item.Value == 0))
+                    {
+                        dictionary = dictionary.Where(kvp => kvp.Value >= 0).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                    }
+
+                    if (Error == false)
+                    {
+                        //create the final chemical formula that will be used for the calculations
+                        foreach (var p in dictionary)
+                        {
+                            FinalFormula = (FinalFormula + p.Key + p.Value).ToString();
+                        }
+
+                        //sorted_Ab connected to each of the elements found in the formula
+                        var Info_el = from d in dictionary
+                                      orderby d.Key
+                                      join l in elementGroup on d.Key equals l.Key
+                                      select new
+                                      {
+                                          Elements = d.Key,
+                                          Clues = l.sorted_Ab,
+                                          Number = d.Value
+                                      };
+
+                        //elements sorted in INCREASING order of the number of isotopes they have
+                        var Info_iso_amount_sorted = Info_el.OrderBy(x => x.Clues.Count());
+                        //maxAb connected to each of the elements found in the formula
+                        var Info_elMax = from d in dictionary
+                                         orderby d.Key
+                                         join l in elementGroupMax on d.Key equals l.Key
+                                         select new
+                                         {
+                                             Elements = d.Key,
+                                             abundance = l.maxAb.abundance,
+                                             mass = l.maxAb.mass,
+                                             Number = d.Value
+                                         };
+
+
+                        //monoisotopic mass calculation for each chemical formula's elements
+                        foreach (var el in Info_elMax)
+                        {
+                            //create a loop for the calculations between the double type parameters
+                            for (int i = 0; i < el.Number; i++)
+                            {
+                                mono_mass += el.mass;
+                                mono_abundance *= el.abundance;
+                            }
+                        }
+
+                        //pass the grouped values of Info_el in accessible variables
+                        int b = 0;
+                        foreach (var l in Info_iso_amount_sorted)
+                        {
+                            Int16 i = 0;
+
+                            Elements_set.Add(new Element_set
+                            {
+                                Name = l.Elements,
+                                Number = l.Number,
+                                Iso_amount = l.Clues.Count(),
+                                All_iso_calc_amount = 0,
+                                Isotopes = new List<ChemForm.Isotopes2>(),
+                                Isotopes_single = new List<ChemForm.Isotopes2>()
+                            }
+                            );
+                            for (int a = 0; a < l.Clues.Count(); a++)
+                            {
+                                Elements_set[b].Isotopes.Add(new ChemForm.Isotopes2
+                                {
+                                    isotope = l.Clues.ElementAt(a).isotope,
+                                    abundance = l.Clues.ElementAt(a).abundance,
+                                    mass = l.Clues.ElementAt(a).mass,
+                                    element_nr = i,
+                                    iso_e_nr = i,
+                                    element = l.Elements,
+                                    number = l.Number
+                                }
+                                );
+                                i++;
+                            }
+                           iso_total_amount += l.Clues.Count();
+                            b++;
+                        }
+                        //Isotopes_single contains only the isotopes of the elements that have more than one isotope, except the most abundant isotopes ones
+
+                        foreach (Element_set el in Elements_set)
+                        {
+                            if (el.Iso_amount > 1)
+                            {
+                                for (Int16 i = 1; i < el.Isotopes.Count; i++)
+                                {
+                                    el.Isotopes_single.Add(new ChemForm.Isotopes2 { isotope = el.Isotopes[i].isotope, abundance = el.Isotopes[i].abundance, mass = el.Isotopes[i].mass, element_nr = i, iso_e_nr = i, element = el.Name, number = el.Number });
+                                }
+                            }
+                            //isotopes(except the most abundant ones) of each element ordered in DESCENDING order
+                            el.Isotopes_single = el.Isotopes_single.OrderByDescending(x => x.number * x.abundance).ToList();
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                //error message on each formula
+                Error = true;
+            }
+            return mono_mass;
         }
     }
 }

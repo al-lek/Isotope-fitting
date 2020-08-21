@@ -24,6 +24,8 @@ namespace Isotope_fitting
     public partial class Form9 : Form
     {
         Form2 frm2;
+        bool has_adduct = false;
+        string extra_adduct = "";
         private double ppmError9=8.0;
         private double thres9 = 0.01;
         private bool[] selection_rule9 = new bool[] { true, false, false, false, false, false };
@@ -1189,7 +1191,22 @@ namespace Isotope_fitting
         
         private List<ChemiForm> select_fragments2_frm9_riken()
         {
+            has_adduct = AdductBtn.Checked;
+            if (has_adduct)
+            {
+                extra_adduct = adduct_txtBx.Text.Replace(Environment.NewLine, " ").ToString();
+                extra_adduct = extra_adduct.Replace("\t", "");
+                extra_adduct = extra_adduct.Replace(" ", "");
+                if (String.IsNullOrEmpty(extra_adduct)) { has_adduct = false; AdductBtn.Checked = false; noAddBtn.Checked = true; }
+            }
+            bool add = true;
+            bool extra_mz_error = false;
+            double extra_mz = 0;
+            if (has_adduct && extra_adduct[0].Equals('-')) { extra_adduct = extra_adduct.Remove(0, 1); add = false; }
             List<ChemiForm> res = new List<ChemiForm>();
+            if (has_adduct) extra_mz = calc_m(out extra_mz_error, extra_adduct);
+            if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error"); return res; }
+
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
             //other types are M, internal and known MS2
             // 1. get mz and charge limits (if any)
@@ -1204,7 +1221,8 @@ namespace Isotope_fitting
 
             double qMax = txt_to_d(chargeMax_Box_riken);
             if (double.IsNaN(qMax)) qMax = 100.0;
-
+            if (has_adduct && add) { mzMax = mzMax + extra_mz; }
+            if (has_adduct && !add) { mzMin = mzMin - extra_mz; }
             if (frm2.is_exp_deconvoluted) { qMin = -1; qMax = 1; }
             // 2. get checked types
             List<string> types = new List<string>();
@@ -1456,34 +1474,76 @@ namespace Isotope_fitting
 
                 if (is_precursor)
                 {
-                    if (types_precursor.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_precursor.Contains(curr_type))
+                    {
+                        if (has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
 
                 if (is_internal)
                 {
-                    if (types_internal.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_internal.Contains(curr_type))
+                    {
+                        if (has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 if (is_B)
                 {
-                    if (types_B.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_B.Contains(curr_type))
+                    {
+                        if (has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 if (is_B_loss)
                 {
-                    if (types_B_loss.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_B_loss.Contains(curr_type))
+                    {
+                        if (has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
                 if (is_known_MS2)
                 {
-                    if (types_known_MS2.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_known_MS2.Contains(curr_type))
+                    {
+                        if (has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
                     continue;
                 }
 
                 if (is_primary)
                 {
-                    if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_primary.Contains(curr_type))
+                    {
+                        if (has_adduct)
+                        {
+                            check_adduct(chem, add, res, true);
+                        }
+                        else { res.Add(chem.DeepCopy()); }
+                    }
 
                     // this code is only for MSProduct that does not provide primary with H gain/loss by default.
                     // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
@@ -1493,10 +1553,22 @@ namespace Isotope_fitting
                         {
                             bool is_error = false;
                             // add the primary and modify it according to gain or loss of H2O
-                            res.Add(chem.DeepCopy());
+                            // add the primary and modify it according to gain or loss of H2O
+                            if (has_adduct)
+                            {
+                                is_error = check_adduct(chem, add, res);
+                            }
+                            else { res.Add(chem.DeepCopy()); }
+                            if (is_error) continue;
                             int curr_idx = res.Count - 1;
 
-                            string new_type = "(" + hyd_mod + ")";
+                            string new_type = "(" + hyd_mod;
+                            if (has_adduct)
+                            {
+                                if (add) { new_type += "+" + extra_adduct; }
+                                else { new_type += "-" + extra_adduct; }
+                            }
+                            new_type += ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
@@ -1517,9 +1589,22 @@ namespace Isotope_fitting
                         {
                             bool is_error = false;
                             // add the primary and modify it according to gain or loss of H
-                            res.Add(chem.DeepCopy());
+
+                            if (has_adduct)
+                            {
+                                is_error = check_adduct(chem, add, res);
+                            }
+                            else { res.Add(chem.DeepCopy()); }
+                            if (is_error) continue;
+
                             int curr_idx = res.Count - 1;
-                            string new_type = "(" + hyd_mod + ")";
+                            string new_type = "(" + hyd_mod;
+                            if (has_adduct)
+                            {
+                                if (add) { new_type += "+" + extra_adduct; }
+                                else { new_type += "-" + extra_adduct; }
+                            }
+                            new_type += ")";
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
@@ -1541,6 +1626,46 @@ namespace Isotope_fitting
                 }
             }
             return res;
+        }
+        private bool check_adduct(ChemiForm chem, bool add, List<ChemiForm> res, bool name = false)
+        {
+            bool error = true;
+            ChemiForm temp_chem = chem.DeepCopy();
+            try
+            {
+                if (add) { temp_chem.Adduct =/* temp_chem.Adduct +*/ extra_adduct; temp_chem.Deduct = ""; }
+                else { temp_chem.Deduct =/* temp_chem.Deduct +*/ extra_adduct; temp_chem.Adduct = ""; }
+                ChemiForm.CheckChem(temp_chem);
+            }
+            catch (Exception eee) { return error; }
+            if (!temp_chem.Error)
+            {
+                error = false;
+                ChemiForm last_chem = chem.DeepCopy();
+                last_chem.InputFormula = last_chem.PrintFormula = temp_chem.FinalFormula;
+                //last_chem.Mz = temp_chem.Mz;
+                if (name)
+                {
+                    string new_type = "(" + temp_chem.Ion_type;
+                    string add_type = "";
+                    if (has_adduct)
+                    {
+                        if (add) { new_type += "+" + extra_adduct; add_type = "+" + extra_adduct; }
+                        else { new_type += "-" + extra_adduct; add_type = "-" + extra_adduct; }
+                    }
+                    new_type += ")";
+                    string[] str = temp_chem.Name.Split('_');
+                    int s = temp_chem.Name.IndexOf('_');
+                    last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type);
+                    last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0, s);
+                    last_chem.Radio_label = last_chem.Name;
+                    last_chem.Ion_type = new_type;
+
+                    res.Add(last_chem);
+                }
+                else res.Add(last_chem);
+            }
+            return error;
         }
         private void calculate_fragments_resolution_frm9(List<ChemiForm> selected_fragments)
         {
@@ -1708,7 +1833,9 @@ namespace Isotope_fitting
                     Candidate=candidate,
                     Extension = chem.Extension,
                     Chain_type = chem.Chain_type,
-                    SortIdx = chem.SortIdx
+                    SortIdx = chem.SortIdx,
+                    Has_adduct = chem.Has_adduct
+
                 });               
                 Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
@@ -1888,7 +2015,8 @@ namespace Isotope_fitting
                     Extension = Fragments3[new_fragin].Extension,
                     Chain_type = Fragments3[new_fragin].Chain_type,
                     SortIdx = Fragments3[new_fragin].SortIdx,
-                    Candidate = Fragments3[new_fragin].Candidate
+                    Candidate = Fragments3[new_fragin].Candidate,
+                    Has_adduct = Fragments3[new_fragin].Has_adduct
                 });
 
                 Fragments2.Last().Centroid = Fragments3[new_fragin].Centroid.Select(point => point.DeepCopy()).ToList();
@@ -2066,7 +2194,8 @@ namespace Isotope_fitting
                                 minPPM_Error = 0,
                                 Charge = c,
                                 Chain_type=chain_type,
-                                Extension=extension
+                                Extension=extension,
+                                Has_adduct=false
                             });
                             mult_loaded.Last().Adduct = "H" + c.ToString();
                         }
@@ -2248,6 +2377,12 @@ namespace Isotope_fitting
                 "", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.envipat.eawag.ch/", "keyword");
                 return;
             }
+        }
+
+        private void AdductBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            adduct_txtBx.Enabled = AdductBtn.Checked;
+
         }
     }
 }

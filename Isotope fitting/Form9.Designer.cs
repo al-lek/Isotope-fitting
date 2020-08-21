@@ -191,6 +191,9 @@
             this.insert_Btn = new System.Windows.Forms.ToolStripButton();
             this.plot_Btn = new System.Windows.Forms.ToolStripButton();
             this.rem_Btn = new System.Windows.Forms.ToolStripButton();
+            this.AdductBtn = new System.Windows.Forms.RadioButton();
+            this.noAddBtn = new System.Windows.Forms.RadioButton();
+            this.adduct_txtBx = new System.Windows.Forms.TextBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.toolStrip6.SuspendLayout();
@@ -1307,6 +1310,9 @@
             // fragTab_riken
             // 
             this.fragTab_riken.AutoScroll = true;
+            this.fragTab_riken.Controls.Add(this.AdductBtn);
+            this.fragTab_riken.Controls.Add(this.noAddBtn);
+            this.fragTab_riken.Controls.Add(this.adduct_txtBx);
             this.fragTab_riken.Controls.Add(this.M_lstBox_riken);
             this.fragTab_riken.Controls.Add(this.known_lstBox);
             this.fragTab_riken.Controls.Add(this.w_lstBox_riken);
@@ -1544,7 +1550,7 @@
             // sortIdx_chkBx_riken
             // 
             this.sortIdx_chkBx_riken.AutoSize = true;
-            this.sortIdx_chkBx_riken.Location = new System.Drawing.Point(74, 357);
+            this.sortIdx_chkBx_riken.Location = new System.Drawing.Point(74, 420);
             this.sortIdx_chkBx_riken.Name = "sortIdx_chkBx_riken";
             this.sortIdx_chkBx_riken.Size = new System.Drawing.Size(15, 14);
             this.sortIdx_chkBx_riken.TabIndex = 57;
@@ -1564,9 +1570,9 @@
             this.uncheck_all_boxBtn_riken,
             this.clear_allBtn_riken});
             this.toolStrip_riken.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
-            this.toolStrip_riken.Location = new System.Drawing.Point(383, 3);
+            this.toolStrip_riken.Location = new System.Drawing.Point(366, 3);
             this.toolStrip_riken.Name = "toolStrip_riken";
-            this.toolStrip_riken.Size = new System.Drawing.Size(30, 400);
+            this.toolStrip_riken.Size = new System.Drawing.Size(30, 450);
             this.toolStrip_riken.TabIndex = 56;
             // 
             // check_all_boxBtn_riken
@@ -1615,7 +1621,7 @@
             // chargeMax_Box_riken
             // 
             this.chargeMax_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.chargeMax_Box_riken.Location = new System.Drawing.Point(206, 300);
+            this.chargeMax_Box_riken.Location = new System.Drawing.Point(206, 363);
             this.chargeMax_Box_riken.Name = "chargeMax_Box_riken";
             this.chargeMax_Box_riken.Size = new System.Drawing.Size(38, 20);
             this.chargeMax_Box_riken.TabIndex = 33;
@@ -1626,7 +1632,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label11.Location = new System.Drawing.Point(157, 266);
+            this.label11.Location = new System.Drawing.Point(157, 329);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(41, 13);
             this.label11.TabIndex = 14;
@@ -1637,7 +1643,7 @@
             // 
             this.chargeAll_Btn_riken.BackColor = System.Drawing.Color.Gainsboro;
             this.chargeAll_Btn_riken.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.chargeAll_Btn_riken.Location = new System.Drawing.Point(255, 299);
+            this.chargeAll_Btn_riken.Location = new System.Drawing.Point(255, 362);
             this.chargeAll_Btn_riken.Name = "chargeAll_Btn_riken";
             this.chargeAll_Btn_riken.Size = new System.Drawing.Size(37, 23);
             this.chargeAll_Btn_riken.TabIndex = 34;
@@ -1650,7 +1656,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label12.Location = new System.Drawing.Point(6, 266);
+            this.label12.Location = new System.Drawing.Point(6, 329);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(81, 13);
             this.label12.TabIndex = 11;
@@ -1662,7 +1668,7 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.SlateGray;
-            this.label13.Location = new System.Drawing.Point(70, 284);
+            this.label13.Location = new System.Drawing.Point(70, 347);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(26, 13);
             this.label13.TabIndex = 12;
@@ -1673,7 +1679,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.SlateGray;
-            this.label14.Location = new System.Drawing.Point(6, 284);
+            this.label14.Location = new System.Drawing.Point(6, 347);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(23, 13);
             this.label14.TabIndex = 13;
@@ -1682,7 +1688,7 @@
             // mzMax_Box_riken
             // 
             this.mzMax_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.mzMax_Box_riken.Location = new System.Drawing.Point(70, 300);
+            this.mzMax_Box_riken.Location = new System.Drawing.Point(70, 363);
             this.mzMax_Box_riken.Name = "mzMax_Box_riken";
             this.mzMax_Box_riken.Size = new System.Drawing.Size(56, 20);
             this.mzMax_Box_riken.TabIndex = 31;
@@ -1691,7 +1697,7 @@
             // mzMin_Box_riken
             // 
             this.mzMin_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.mzMin_Box_riken.Location = new System.Drawing.Point(6, 300);
+            this.mzMin_Box_riken.Location = new System.Drawing.Point(6, 363);
             this.mzMin_Box_riken.Name = "mzMin_Box_riken";
             this.mzMin_Box_riken.Size = new System.Drawing.Size(56, 20);
             this.mzMin_Box_riken.TabIndex = 30;
@@ -1702,7 +1708,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.SlateGray;
-            this.label15.Location = new System.Drawing.Point(251, 357);
+            this.label15.Location = new System.Drawing.Point(251, 420);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(16, 13);
             this.label15.TabIndex = 21;
@@ -1713,7 +1719,7 @@
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.SlateGray;
-            this.label16.Location = new System.Drawing.Point(150, 357);
+            this.label16.Location = new System.Drawing.Point(150, 420);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(27, 13);
             this.label16.TabIndex = 20;
@@ -1724,7 +1730,7 @@
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.SlateGray;
-            this.label17.Location = new System.Drawing.Point(206, 284);
+            this.label17.Location = new System.Drawing.Point(206, 347);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(26, 13);
             this.label17.TabIndex = 16;
@@ -1735,7 +1741,7 @@
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.SlateGray;
-            this.label18.Location = new System.Drawing.Point(157, 284);
+            this.label18.Location = new System.Drawing.Point(157, 347);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(23, 13);
             this.label18.TabIndex = 15;
@@ -1744,7 +1750,7 @@
             // idxTo_Box_riken
             // 
             this.idxTo_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.idxTo_Box_riken.Location = new System.Drawing.Point(186, 373);
+            this.idxTo_Box_riken.Location = new System.Drawing.Point(186, 436);
             this.idxTo_Box_riken.Name = "idxTo_Box_riken";
             this.idxTo_Box_riken.Size = new System.Drawing.Size(81, 20);
             this.idxTo_Box_riken.TabIndex = 37;
@@ -1752,7 +1758,7 @@
             // chargeMin_Box_riken
             // 
             this.chargeMin_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.chargeMin_Box_riken.Location = new System.Drawing.Point(157, 300);
+            this.chargeMin_Box_riken.Location = new System.Drawing.Point(157, 363);
             this.chargeMin_Box_riken.Name = "chargeMin_Box_riken";
             this.chargeMin_Box_riken.Size = new System.Drawing.Size(38, 20);
             this.chargeMin_Box_riken.TabIndex = 32;
@@ -1761,7 +1767,7 @@
             // idxFrom_Box_riken
             // 
             this.idxFrom_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.idxFrom_Box_riken.Location = new System.Drawing.Point(96, 373);
+            this.idxFrom_Box_riken.Location = new System.Drawing.Point(96, 436);
             this.idxFrom_Box_riken.Name = "idxFrom_Box_riken";
             this.idxFrom_Box_riken.Size = new System.Drawing.Size(81, 20);
             this.idxFrom_Box_riken.TabIndex = 36;
@@ -1771,7 +1777,7 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label19.Location = new System.Drawing.Point(6, 338);
+            this.label19.Location = new System.Drawing.Point(6, 401);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(33, 13);
             this.label19.TabIndex = 17;
@@ -1781,7 +1787,7 @@
             // idxPr_Box_riken
             // 
             this.idxPr_Box_riken.ForeColor = System.Drawing.Color.Black;
-            this.idxPr_Box_riken.Location = new System.Drawing.Point(6, 373);
+            this.idxPr_Box_riken.Location = new System.Drawing.Point(6, 436);
             this.idxPr_Box_riken.Name = "idxPr_Box_riken";
             this.idxPr_Box_riken.Size = new System.Drawing.Size(81, 20);
             this.idxPr_Box_riken.TabIndex = 35;
@@ -1791,7 +1797,7 @@
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.SlateGray;
-            this.label20.Location = new System.Drawing.Point(6, 357);
+            this.label20.Location = new System.Drawing.Point(6, 420);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(43, 13);
             this.label20.TabIndex = 18;
@@ -1802,7 +1808,7 @@
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.ForeColor = System.Drawing.Color.SlateGray;
-            this.label21.Location = new System.Drawing.Point(96, 357);
+            this.label21.Location = new System.Drawing.Point(96, 420);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(41, 13);
             this.label21.TabIndex = 19;
@@ -2229,6 +2235,37 @@
             this.rem_Btn.Text = "Clear plot from fragments";
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
+            // AdductBtn
+            // 
+            this.AdductBtn.AutoSize = true;
+            this.AdductBtn.Location = new System.Drawing.Point(6, 291);
+            this.AdductBtn.Name = "AdductBtn";
+            this.AdductBtn.Size = new System.Drawing.Size(14, 13);
+            this.AdductBtn.TabIndex = 127;
+            this.AdductBtn.UseVisualStyleBackColor = true;
+            this.AdductBtn.CheckedChanged += new System.EventHandler(this.AdductBtn_CheckedChanged);
+            // 
+            // noAddBtn
+            // 
+            this.noAddBtn.AutoSize = true;
+            this.noAddBtn.Checked = true;
+            this.noAddBtn.Location = new System.Drawing.Point(6, 268);
+            this.noAddBtn.Name = "noAddBtn";
+            this.noAddBtn.Size = new System.Drawing.Size(104, 17);
+            this.noAddBtn.TabIndex = 126;
+            this.noAddBtn.TabStop = true;
+            this.noAddBtn.Text = "Without Adducts";
+            this.noAddBtn.UseVisualStyleBackColor = true;
+            // 
+            // adduct_txtBx
+            // 
+            this.adduct_txtBx.Enabled = false;
+            this.adduct_txtBx.ForeColor = System.Drawing.Color.Black;
+            this.adduct_txtBx.Location = new System.Drawing.Point(26, 287);
+            this.adduct_txtBx.Name = "adduct_txtBx";
+            this.adduct_txtBx.Size = new System.Drawing.Size(84, 20);
+            this.adduct_txtBx.TabIndex = 125;
+            // 
             // Form9
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -2449,5 +2486,8 @@
         private System.Windows.Forms.ToolStripButton rem_Btn;
         private System.Windows.Forms.ToolStrip toolStrip6;
         private System.Windows.Forms.ToolStripButton calc_Btn;
+        private System.Windows.Forms.RadioButton AdductBtn;
+        private System.Windows.Forms.RadioButton noAddBtn;
+        private System.Windows.Forms.TextBox adduct_txtBx;
     }
 }
