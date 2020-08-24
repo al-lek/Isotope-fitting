@@ -115,6 +115,9 @@
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
             this.fragTab_riken = new System.Windows.Forms.TabPage();
+            this.AdductBtn = new System.Windows.Forms.RadioButton();
+            this.noAddBtn = new System.Windows.Forms.RadioButton();
+            this.adduct_txtBx = new System.Windows.Forms.TextBox();
             this.M_lstBox_riken = new System.Windows.Forms.CheckedListBox();
             this.known_lstBox = new System.Windows.Forms.CheckedListBox();
             this.w_lstBox_riken = new System.Windows.Forms.CheckedListBox();
@@ -191,9 +194,6 @@
             this.insert_Btn = new System.Windows.Forms.ToolStripButton();
             this.plot_Btn = new System.Windows.Forms.ToolStripButton();
             this.rem_Btn = new System.Windows.Forms.ToolStripButton();
-            this.AdductBtn = new System.Windows.Forms.RadioButton();
-            this.noAddBtn = new System.Windows.Forms.RadioButton();
-            this.adduct_txtBx = new System.Windows.Forms.TextBox();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.toolStrip6.SuspendLayout();
@@ -1354,6 +1354,37 @@
             this.fragTab_riken.Text = "Fragments";
             this.fragTab_riken.UseVisualStyleBackColor = true;
             // 
+            // AdductBtn
+            // 
+            this.AdductBtn.AutoSize = true;
+            this.AdductBtn.Location = new System.Drawing.Point(6, 291);
+            this.AdductBtn.Name = "AdductBtn";
+            this.AdductBtn.Size = new System.Drawing.Size(14, 13);
+            this.AdductBtn.TabIndex = 127;
+            this.AdductBtn.UseVisualStyleBackColor = true;
+            this.AdductBtn.CheckedChanged += new System.EventHandler(this.AdductBtn_CheckedChanged);
+            // 
+            // noAddBtn
+            // 
+            this.noAddBtn.AutoSize = true;
+            this.noAddBtn.Checked = true;
+            this.noAddBtn.Location = new System.Drawing.Point(6, 268);
+            this.noAddBtn.Name = "noAddBtn";
+            this.noAddBtn.Size = new System.Drawing.Size(127, 17);
+            this.noAddBtn.TabIndex = 126;
+            this.noAddBtn.TabStop = true;
+            this.noAddBtn.Text = "Without Modifications";
+            this.noAddBtn.UseVisualStyleBackColor = true;
+            // 
+            // adduct_txtBx
+            // 
+            this.adduct_txtBx.Enabled = false;
+            this.adduct_txtBx.ForeColor = System.Drawing.Color.Black;
+            this.adduct_txtBx.Location = new System.Drawing.Point(26, 287);
+            this.adduct_txtBx.Name = "adduct_txtBx";
+            this.adduct_txtBx.Size = new System.Drawing.Size(84, 20);
+            this.adduct_txtBx.TabIndex = 125;
+            // 
             // M_lstBox_riken
             // 
             this.M_lstBox_riken.CheckOnClick = true;
@@ -2234,37 +2265,6 @@
             this.rem_Btn.Size = new System.Drawing.Size(44, 44);
             this.rem_Btn.Text = "Clear plot from fragments";
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
-            // 
-            // AdductBtn
-            // 
-            this.AdductBtn.AutoSize = true;
-            this.AdductBtn.Location = new System.Drawing.Point(6, 291);
-            this.AdductBtn.Name = "AdductBtn";
-            this.AdductBtn.Size = new System.Drawing.Size(14, 13);
-            this.AdductBtn.TabIndex = 127;
-            this.AdductBtn.UseVisualStyleBackColor = true;
-            this.AdductBtn.CheckedChanged += new System.EventHandler(this.AdductBtn_CheckedChanged);
-            // 
-            // noAddBtn
-            // 
-            this.noAddBtn.AutoSize = true;
-            this.noAddBtn.Checked = true;
-            this.noAddBtn.Location = new System.Drawing.Point(6, 268);
-            this.noAddBtn.Name = "noAddBtn";
-            this.noAddBtn.Size = new System.Drawing.Size(104, 17);
-            this.noAddBtn.TabIndex = 126;
-            this.noAddBtn.TabStop = true;
-            this.noAddBtn.Text = "Without Adducts";
-            this.noAddBtn.UseVisualStyleBackColor = true;
-            // 
-            // adduct_txtBx
-            // 
-            this.adduct_txtBx.Enabled = false;
-            this.adduct_txtBx.ForeColor = System.Drawing.Color.Black;
-            this.adduct_txtBx.Location = new System.Drawing.Point(26, 287);
-            this.adduct_txtBx.Name = "adduct_txtBx";
-            this.adduct_txtBx.Size = new System.Drawing.Size(84, 20);
-            this.adduct_txtBx.TabIndex = 125;
             // 
             // Form9
             // 

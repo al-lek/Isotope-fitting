@@ -1203,6 +1203,7 @@ namespace Isotope_fitting
             bool extra_mz_error = false;
             double extra_mz = 0;
             if (has_adduct && extra_adduct[0].Equals('-')) { extra_adduct = extra_adduct.Remove(0, 1); add = false; }
+            if (has_adduct && extra_adduct[0].Equals('+')) { extra_adduct = extra_adduct.Remove(0, 1); add = true; }
             List<ChemiForm> res = new List<ChemiForm>();
             if (has_adduct) extra_mz = calc_m(out extra_mz_error, extra_adduct);
             if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error"); return res; }
@@ -1221,8 +1222,9 @@ namespace Isotope_fitting
 
             double qMax = txt_to_d(chargeMax_Box_riken);
             if (double.IsNaN(qMax)) qMax = 100.0;
-            if (has_adduct && add) { mzMax = mzMax + extra_mz; }
-            if (has_adduct && !add) { mzMin = mzMin - extra_mz; }
+            if (has_adduct && add) { mzMax = mzMax + extra_mz; mzMin = mzMin + extra_mz; }
+            if (has_adduct && !add) { mzMin = mzMin - extra_mz; mzMax = mzMax - extra_mz; }
+
             if (frm2.is_exp_deconvoluted) { qMin = -1; qMax = 1; }
             // 2. get checked types
             List<string> types = new List<string>();
@@ -1231,8 +1233,6 @@ namespace Isotope_fitting
                     types.Add(item.ToString());
 
             // 3. seperate checked types by type
-
-
             List<string> types_precursor = types.Where(t => t.StartsWith("M")).ToList();// M, M-H2O...
             List<string> types_internal = types.Where(t => t.StartsWith("internal")).ToList();// internal a, internal b-2H2O...
             List<string> types_B_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("B")).ToList();// primary with neutral loss a-H2O, b-NH3, ...

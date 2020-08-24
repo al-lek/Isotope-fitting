@@ -149,10 +149,10 @@
             this.noAddBtn.Checked = true;
             this.noAddBtn.Location = new System.Drawing.Point(11, 268);
             this.noAddBtn.Name = "noAddBtn";
-            this.noAddBtn.Size = new System.Drawing.Size(104, 17);
+            this.noAddBtn.Size = new System.Drawing.Size(127, 17);
             this.noAddBtn.TabIndex = 60;
             this.noAddBtn.TabStop = true;
-            this.noAddBtn.Text = "Without Adducts";
+            this.noAddBtn.Text = "Without Modifications";
             this.noAddBtn.UseVisualStyleBackColor = true;
             // 
             // adduct_txtBx

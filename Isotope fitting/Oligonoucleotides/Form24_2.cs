@@ -163,10 +163,10 @@ namespace Isotope_fitting
             double extra_mz = 0;
             bool extra_mz_error = false; 
             if (has_adduct && extra_adduct[0].Equals('-')) { extra_adduct = extra_adduct.Remove(0, 1); add = false; }
+            if (has_adduct && extra_adduct[0].Equals('+')) { extra_adduct = extra_adduct.Remove(0, 1); add = true; }
             if (has_adduct) extra_mz = calc_m(out extra_mz_error, extra_adduct);
             if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error");  return res; }
             
-
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
             //other types are M, internal and known MS2
             // 1. get mz and charge limits (if any)
@@ -184,8 +184,8 @@ namespace Isotope_fitting
 
             if (frm2.is_exp_deconvoluted) { qMin = 0; qMax = 1; }
 
-            if (has_adduct && add) { mzMax = mzMax + extra_mz; }
-            if (has_adduct && !add) { mzMin = mzMin - extra_mz; }
+            if (has_adduct && add) { mzMax = mzMax + extra_mz; mzMin = mzMin + extra_mz; }
+            if (has_adduct && !add) { mzMin = mzMin - extra_mz; mzMax = mzMax - extra_mz; }
 
             // 2. get checked types
             List<string> types = new List<string>();
@@ -705,6 +705,5 @@ namespace Isotope_fitting
             }
         }
 
-        
     }
 }
