@@ -35,10 +35,14 @@ using System.ComponentModel;
 using OxyPlot.Axes;
 using ClipperLib;
 
+
 namespace Isotope_fitting
 {
+    using Path = List<Point64>;
+    using Paths = List<List<Point64>>;
     public partial class Form2 : Form
-    {
+    {        
+
         #region PARAMETER SET TAB FIT
         private Form24 frm24;
         private Form24_2 frm24_2;        
@@ -1255,7 +1259,7 @@ namespace Isotope_fitting
                     StreamReader objReader = new StreamReader(expData.FileName);
                     project_experimental = expData.FileName;
                     file_name = expData.SafeFileName.Remove(expData.SafeFileName.Length - 4);
-                    string extension = Path.GetExtension(expData.FileName);
+                    string extension = System.IO.Path.GetExtension(expData.FileName);
                     if (extension.Equals(".dec")) { is_exp_deconvoluted = true; }
                     else { is_exp_deconvoluted = false; }
                     do { lista.Add(objReader.ReadLine()); }
@@ -1800,8 +1804,8 @@ namespace Isotope_fitting
                 }
                 progress_display_stop();
                 //treeview
-                if (string.IsNullOrEmpty(ms_extension)) { loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + "_"; }
-                else { loaded_ms = Path.GetFileNameWithoutExtension(fragment_import.FileName) + ms_extension; }
+                if (string.IsNullOrEmpty(ms_extension)) { loaded_ms = System.IO.Path.GetFileNameWithoutExtension(fragment_import.FileName) + "_"; }
+                else { loaded_ms = System.IO.Path.GetFileNameWithoutExtension(fragment_import.FileName) + ms_extension; }
                 loaded_MSproducts.Add(loaded_ms);
                 string base_node_name = string.Empty;
                 if (is_riken) base_node_name = "Loaded Riken files";
@@ -4425,40 +4429,70 @@ namespace Isotope_fitting
         /// <summary>
         /// Ai overlapped area ratio calculation 
         /// </summary>
-        private void overlapped_area_ratio(List<double[]> aligned_intensities_subSet, double[] coeficients, double exp_sum)
+        private void overlapped_area_ratio(List<int>distro_fragm_idxs)
         {
-            double exp_frag_sum = 0.0, frag_sum = 0.0;
-            List<Point> subjectPoly = new List<Point>();
-            List<Point> clipPoly = new List<Point>();
-            for (int i = 0; i < aligned_intensities_subSet.Count; i++)
+            Paths subjects = new Paths();
+            Paths clips = new Paths();
+            Paths solution = new Paths();
+            Path p = new Path();
+            List<int> indexes = distro_fragm_idxs.ToList();
+            int no_of_selected = indexes.Count();
+            clips.Add(new Path());
+            subjects.Add(new Path());
+            for (int i = 0; i < all_data_aligned.Count; i++)
             {
+                List<double> one_aligned_point = new List<double>();
+                bool zero_point = true;
+                first_m_z = 0.0;
+                // build the point with exp and all frag, but keep it only if any frag is NON zero
+                one_aligned_point.Add(all_data_aligned[i][0]);
                 double tmp = 0.0;
-                for (int j = 1; j < aligned_intensities_subSet[0].Length; j++)
+                for (int k = 0; k < no_of_selected; k++)
                 {
-                    tmp += aligned_intensities_subSet[i][j] * coeficients[j - 1];
+                    one_aligned_point.Add(all_data_aligned[i][distro_fragm_idxs[k]]);
+                    if (all_data_aligned[i][distro_fragm_idxs[k]] != 0.0)
+                    {
+                        zero_point = zero_point & false;
+                        tmp += all_data_aligned[i][distro_fragm_idxs[k]];
+                    }
                 }
 
-                if (tmp > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
+                if (!zero_point)
                 {
-                    frag_sum += tmp;
-                    exp_frag_sum += aligned_intensities_subSet[i][0];
-                    subjectPoly.Add(new Point());
+                    if (first_m_z == 0.0) { first_m_z = experimental[i][0]; }
+                    double norm_mz = experimental[i][0]-first_m_z;
+                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
+                    subjects[0].Add(new Point64(norm_mz, tmp));
                 }
             }
-            double res = exp_sum / frag_sum;
-            double res_frag = exp_frag_sum / frag_sum;
-            if (res >= 1)
+            if ((clips.Count > 0 || subjects.Count > 0))
             {
-                res = (frag_sum / exp_sum);
+                Clipper c = new Clipper();
+                c.AddPaths(subjects, PathType.Subject);
+                c.AddPaths(clips, PathType.Clip);
+                solution.Clear();
+                c.Execute(ClipType.Intersection, solution, FillRule.NonZero);                
             }
-            if (res_frag >= 1)
-            {
-                res_frag = (frag_sum / exp_frag_sum);
-            }
-
-            res = (1 - res) * 100; res_frag = (1 - res_frag) * 100;
+            double area = SignedPolygonArea(solution[0].ToList());
         }
+        private  double SignedPolygonArea(List<Point64> polygon)
+        {
+            // Add the first point to the end.
+            int num_points = polygon.Count;
+            Point64[] pts = new Point64[num_points + 1];
+            polygon.CopyTo(pts, 0);
+            pts[num_points] = polygon[0];
 
+            // Get the areas.
+            double area = 0;
+            for (int i = 0; i < num_points; i++)
+            {
+                area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
+            }
+
+            // Return the result.
+            return area;
+        }
         #region unused code, extra test attempt--> not useful, delete it if you like
         private double KolmogorovSmirnovTest(List<double[]> aligned_subData, double[] sub_coeficients)
         {
@@ -7039,8 +7073,8 @@ namespace Isotope_fitting
                     heavy = false; light = false; HEAVY_LIGHT_BOTH = false; extension = "";
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine(loaded_lists);
-                    sb.AppendLine(Path.GetFileNameWithoutExtension(FileName));
-                    extension = Path.GetExtension(FileName);
+                    sb.AppendLine(System.IO.Path.GetFileNameWithoutExtension(FileName));
+                    extension = System.IO.Path.GetExtension(FileName);
                     if (extension.Equals(".hfit")) { heavy = true; heavy_present = true; }
                     else if (extension.Equals(".lfit")) { light = true; light_present = true; }
                     else if (extension.Equals(".hlfit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; }
@@ -13903,14 +13937,14 @@ namespace Isotope_fitting
                 string folderName = folderBrowserDialog1.SelectedPath;
                 root_path = folderName;
                 load_preferences();
-                string path_experimental = Path.Combine(folderName, "Experimental Data.txt");
-                string path_peaks = Path.Combine(folderName, "Peak Data.txt");
-                string path_fragments = Path.Combine(folderName, "Fragment Data.txt");
-                string path_fit = Path.Combine(folderName, "Fit Data.txt");
+                string path_experimental = System.IO.Path.Combine(folderName, "Experimental Data.txt");
+                string path_peaks = System.IO.Path.Combine(folderName, "Peak Data.txt");
+                string path_fragments = System.IO.Path.Combine(folderName, "Fragment Data.txt");
+                string path_fit = System.IO.Path.Combine(folderName, "Fit Data.txt");
                 if (!File.Exists(path_peaks) || !File.Exists(path_fragments) || !File.Exists(path_fit)) { MessageBox.Show("Oops...the selected folder is not in the correct format.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
                 if (!File.Exists(path_experimental))
                 {
-                    path_experimental = Path.Combine(folderName, "Experimental Data.dec");
+                    path_experimental = System.IO.Path.Combine(folderName, "Experimental Data.dec");
                     if (File.Exists(path_experimental)) { is_exp_deconvoluted = true; }
                     else { MessageBox.Show("Oops...the selected folder is not in the correct format.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
                 }
@@ -14362,16 +14396,16 @@ namespace Isotope_fitting
                 all = 0;
                 // The user selected a folder and pressed the OK button.                
                 string folderName = folderBrowserDialog1.SelectedPath;
-                string path_experimental = Path.Combine(folderName, "Experimental Data.txt");
+                string path_experimental = System.IO.Path.Combine(folderName, "Experimental Data.txt");
                 if (is_exp_deconvoluted)
                 {
                     if (File.Exists(path_experimental)) { File.Delete(path_experimental); }
-                    path_experimental = Path.Combine(folderName, "Experimental Data.dec");
+                    path_experimental = System.IO.Path.Combine(folderName, "Experimental Data.dec");
                 }
-                string path_peaks = Path.Combine(folderName, "Peak Data.txt");
-                string path_fragments = Path.Combine(folderName, "Fragment Data.txt");
-                string path_fit = Path.Combine(folderName, "Fit Data.txt");
-                string path_pref = Path.Combine(folderName, "preferences.txt");
+                string path_peaks = System.IO.Path.Combine(folderName, "Peak Data.txt");
+                string path_fragments = System.IO.Path.Combine(folderName, "Fragment Data.txt");
+                string path_fit = System.IO.Path.Combine(folderName, "Fit Data.txt");
+                string path_pref = System.IO.Path.Combine(folderName, "preferences.txt");
                 if (!is_exp_deconvoluted && !project_experimental.Equals(path_experimental)) System.IO.File.Copy(project_experimental, path_experimental, true);
                 if (is_exp_deconvoluted) { Project_save_experimental(path_experimental); }
                 if (!path_pref.Equals(root_path + "\\preferences.txt")) System.IO.File.Copy(root_path + "\\preferences.txt", path_pref, true);
@@ -14535,8 +14569,8 @@ namespace Isotope_fitting
                 envipat = false; extension = "";
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine(loaded_lists);
-                sb.AppendLine(Path.GetFileNameWithoutExtension(FileName));
-                extension = Path.GetExtension(FileName);
+                sb.AppendLine(System.IO.Path.GetFileNameWithoutExtension(FileName));
+                extension = System.IO.Path.GetExtension(FileName);
                 if (extension.Equals(".pfit") || extension.Equals(".ifit") || extension.Equals(".hpfit") || extension.Equals(".hlpfit") || extension.Equals(".hlifit") || extension.Equals(".hifit") || extension.Equals(".lpfit") || extension.Equals(".lifit")) { envipat = true; }
                 fullPath = FileName;
                 string s_chain = string.Empty;

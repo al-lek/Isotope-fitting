@@ -139,6 +139,9 @@
     </Compile>
     <Compile Include="ChemForm.cs" />
     <Compile Include="ChemiForm.cs" />
+    <Compile Include="Clipper.cs" />
+    <Compile Include="ClipperOffset.cs" />
+    <Compile Include="ClipperTriangulation.cs" />
     <Compile Include="ExcludeTypes.cs" />
     <Compile Include="Form_matrix.cs">
       <SubType>Form</SubType>
