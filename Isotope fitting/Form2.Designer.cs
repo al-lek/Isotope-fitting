@@ -121,6 +121,7 @@ namespace Isotope_fitting
             this.Charge_toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.primary_charge_settingsBtn = new System.Windows.Forms.ToolStripDropDownButton();
             this.primary_charge_styleBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.includeModif_charge_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton11 = new System.Windows.Forms.ToolStripSeparator();
             this.axChargeSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.axChargeCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -164,6 +165,7 @@ namespace Isotope_fitting
             this.intensity_toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.primary_intens_settingsBtn = new System.Windows.Forms.ToolStripDropDownButton();
             this.primary_int_styleBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.includeModif_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.axSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.axCopy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -228,6 +230,7 @@ namespace Isotope_fitting
             this.ppm_extract_btn = new System.Windows.Forms.ToolStripDropDownButton();
             this.extractPlotToolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ppm_includeModif_Btn = new System.Windows.Forms.ToolStripButton();
             this.panel1_tab2 = new System.Windows.Forms.Panel();
             this.draw_sequence_panelCopy2 = new System.Windows.Forms.Panel();
             this.has_adduct_chkBxCopy2 = new System.Windows.Forms.CheckBox();
@@ -504,9 +507,6 @@ namespace Isotope_fitting
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.includeModif_Btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.includeModif_charge_Btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.ppm_includeModif_Btn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -1544,10 +1544,19 @@ namespace Isotope_fitting
             // 
             this.primary_charge_styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_charge_styleBtn.Image")));
             this.primary_charge_styleBtn.Name = "primary_charge_styleBtn";
-            this.primary_charge_styleBtn.Size = new System.Drawing.Size(203, 36);
+            this.primary_charge_styleBtn.Size = new System.Drawing.Size(189, 22);
             this.primary_charge_styleBtn.Text = "Style";
             this.primary_charge_styleBtn.ToolTipText = "Format the style of the plots in this tab";
             this.primary_charge_styleBtn.Click += new System.EventHandler(this.primary_charge_styleBtn_Click);
+            // 
+            // includeModif_charge_Btn
+            // 
+            this.includeModif_charge_Btn.CheckOnClick = true;
+            this.includeModif_charge_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includeModif_charge_Btn.Image")));
+            this.includeModif_charge_Btn.Name = "includeModif_charge_Btn";
+            this.includeModif_charge_Btn.Size = new System.Drawing.Size(189, 22);
+            this.includeModif_charge_Btn.Text = "Include modifications";
+            this.includeModif_charge_Btn.CheckedChanged += new System.EventHandler(this.includeModif_charge_Btn_CheckedChanged);
             // 
             // toolStripButton11
             // 
@@ -2002,10 +2011,19 @@ namespace Isotope_fitting
             // 
             this.primary_int_styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_int_styleBtn.Image")));
             this.primary_int_styleBtn.Name = "primary_int_styleBtn";
-            this.primary_int_styleBtn.Size = new System.Drawing.Size(203, 36);
+            this.primary_int_styleBtn.Size = new System.Drawing.Size(189, 22);
             this.primary_int_styleBtn.Text = "Style";
             this.primary_int_styleBtn.ToolTipText = "Format the style of the plots in this tab";
             this.primary_int_styleBtn.Click += new System.EventHandler(this.primary_int_styleBtn_Click);
+            // 
+            // includeModif_Btn
+            // 
+            this.includeModif_Btn.CheckOnClick = true;
+            this.includeModif_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includeModif_Btn.Image")));
+            this.includeModif_Btn.Name = "includeModif_Btn";
+            this.includeModif_Btn.Size = new System.Drawing.Size(189, 22);
+            this.includeModif_Btn.Text = "Include modifications";
+            this.includeModif_Btn.CheckedChanged += new System.EventHandler(this.includeModif_Btn_CheckedChanged);
             // 
             // toolStripSeparator2
             // 
@@ -2857,6 +2875,17 @@ namespace Isotope_fitting
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.settingsToolStripMenuItem.Text = "Properties";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // ppm_includeModif_Btn
+            // 
+            this.ppm_includeModif_Btn.CheckOnClick = true;
+            this.ppm_includeModif_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ppm_includeModif_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_includeModif_Btn.Image")));
+            this.ppm_includeModif_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_includeModif_Btn.Name = "ppm_includeModif_Btn";
+            this.ppm_includeModif_Btn.Size = new System.Drawing.Size(41, 34);
+            this.ppm_includeModif_Btn.Text = "Include modifications";
+            this.ppm_includeModif_Btn.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // panel1_tab2
             // 
@@ -6071,7 +6100,7 @@ namespace Isotope_fitting
             // 
             this.losses_style_Btn.Image = ((System.Drawing.Image)(resources.GetObject("losses_style_Btn.Image")));
             this.losses_style_Btn.Name = "losses_style_Btn";
-            this.losses_style_Btn.Size = new System.Drawing.Size(194, 36);
+            this.losses_style_Btn.Size = new System.Drawing.Size(113, 36);
             this.losses_style_Btn.Text = "Style";
             this.losses_style_Btn.ToolTipText = "Format the style of the plots in this tab";
             this.losses_style_Btn.Click += new System.EventHandler(this.losses_style_Btn_Click);
@@ -6114,35 +6143,6 @@ namespace Isotope_fitting
             this.displayIonTypesListToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.displayIonTypesListToolStripMenuItem.Text = "Display ion types list";
             this.displayIonTypesListToolStripMenuItem.Click += new System.EventHandler(this.displayIonTypesListToolStripMenuItem_Click);
-            // 
-            // includeModif_Btn
-            // 
-            this.includeModif_Btn.CheckOnClick = true;
-            this.includeModif_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includeModif_Btn.Image")));
-            this.includeModif_Btn.Name = "includeModif_Btn";
-            this.includeModif_Btn.Size = new System.Drawing.Size(203, 36);
-            this.includeModif_Btn.Text = "Include modifications";
-            this.includeModif_Btn.CheckedChanged += new System.EventHandler(this.includeModif_Btn_CheckedChanged);
-            // 
-            // includeModif_charge_Btn
-            // 
-            this.includeModif_charge_Btn.CheckOnClick = true;
-            this.includeModif_charge_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includeModif_charge_Btn.Image")));
-            this.includeModif_charge_Btn.Name = "includeModif_charge_Btn";
-            this.includeModif_charge_Btn.Size = new System.Drawing.Size(203, 36);
-            this.includeModif_charge_Btn.Text = "Include modifications";
-            this.includeModif_charge_Btn.CheckedChanged += new System.EventHandler(this.includeModif_charge_Btn_CheckedChanged);
-            // 
-            // ppm_includeModif_Btn
-            // 
-            this.ppm_includeModif_Btn.CheckOnClick = true;
-            this.ppm_includeModif_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ppm_includeModif_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_includeModif_Btn.Image")));
-            this.ppm_includeModif_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ppm_includeModif_Btn.Name = "ppm_includeModif_Btn";
-            this.ppm_includeModif_Btn.Size = new System.Drawing.Size(41, 34);
-            this.ppm_includeModif_Btn.Text = "Include modifications";
-            this.ppm_includeModif_Btn.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // Form2
             // 

@@ -33,6 +33,7 @@ using Arction.WinForms.Charting.Views.ViewXY;
 using Arction.WinForms.Charting.Annotations;
 using System.ComponentModel;
 using OxyPlot.Axes;
+using ClipperLib;
 
 namespace Isotope_fitting
 {
@@ -4003,7 +4004,20 @@ namespace Isotope_fitting
             // 5. display results
             Invoke(new Action(() => OnFittingCalcCompleted()));
         }
+        private List<double> get_UI_intensities(int[] subSet)
+        {
+            // is called from fit to pass a good starting height to the optimizer
+            List<double> UI_intensities = new List<double>();
 
+            for (int i = 0; i < subSet.Length; i++)
+            {
+                double factor = Fragments2[subSet[i] - 1].Factor;
+                if (factor != 0) UI_intensities.Add(Fragments2[subSet[i] - 1].Factor);
+                else UI_intensities.Add(0.1 * max_exp);
+            }
+
+            return UI_intensities;
+        }
         private (List<double[]>, List<int[]>) fit_distros_parallel2(List<int> selectedFragments)
         {
             List<double[]> res = new List<double[]>();
@@ -4349,52 +4363,6 @@ namespace Isotope_fitting
                 return result;
             }
         }
-
-        #region unused code, extra test attempt--> not useful, delete it if you like
-        private double KolmogorovSmirnovTest(List<double[]> aligned_subData, double[] sub_coeficients)
-        {
-            int cand_frag = sub_coeficients.Length;
-            double[] error = new double[cand_frag];
-            for (int j = 1; j < aligned_subData[0].Length; j++)
-            {
-                List<double[]> dissimilarity = new List<double[]>();
-                double max = 0.0; double min = aligned_subData[1][0];
-                for (int i = 0; i < aligned_subData.Count; i++)
-                {
-                    if (aligned_subData[i][j] * sub_coeficients[j - 1] > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
-                    {
-                        if (aligned_subData[i][j] * sub_coeficients[j - 1] > max) max = aligned_subData[i][j] * sub_coeficients[j - 1];
-                        if (aligned_subData[i][j] * sub_coeficients[j - 1] < min) min = aligned_subData[i][j] * sub_coeficients[j - 1];
-                        if (aligned_subData[i][0] > max) max = aligned_subData[i][0];
-                        if (aligned_subData[i][0] < min) min = aligned_subData[i][0];
-                        dissimilarity.Add(new double[2] { aligned_subData[i][0], aligned_subData[i][j] * sub_coeficients[j - 1] });
-                    }
-                }
-                error[j - 1] = GetScalingError(dissimilarity, max, min);
-            }
-            return error.Sum() / cand_frag;
-        }
-        private double GetScalingError(List<double[]> dis, double dis_max, double dis_min)
-        {
-            double min = 0.1;
-            double max = 1;
-            double m = (max - min) / (dis_max - dis_min);
-            double c = min - dis_min * m;
-            var newarr = new double[dis.Count];
-            int k = 0;
-            double frag_sub = 0.0;
-            double exp_sub = 0.0;
-            foreach (double[] ss in dis)
-            {
-                ss[0] = m * ss[0] + c; ss[1] = m * ss[1] + c;
-                frag_sub += ss[1];
-                exp_sub += ss[0];
-                newarr[k] = Math.Abs(exp_sub - frag_sub);
-                k++;
-            }
-            return newarr.Max();
-        }
-        #endregion
         private (double, double) per_cent_fit_coverage(List<double[]> aligned_intensities_subSet, double[] coeficients, double exp_sum)
         {
             double exp_frag_sum = 0.0, frag_sum = 0.0;
@@ -4453,6 +4421,90 @@ namespace Isotope_fitting
                 //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
         }
+
+        /// <summary>
+        /// Ai overlapped area ratio calculation 
+        /// </summary>
+        private void overlapped_area_ratio(List<double[]> aligned_intensities_subSet, double[] coeficients, double exp_sum)
+        {
+            double exp_frag_sum = 0.0, frag_sum = 0.0;
+            List<Point> subjectPoly = new List<Point>();
+            List<Point> clipPoly = new List<Point>();
+            for (int i = 0; i < aligned_intensities_subSet.Count; i++)
+            {
+                double tmp = 0.0;
+                for (int j = 1; j < aligned_intensities_subSet[0].Length; j++)
+                {
+                    tmp += aligned_intensities_subSet[i][j] * coeficients[j - 1];
+                }
+
+                if (tmp > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
+                {
+                    frag_sum += tmp;
+                    exp_frag_sum += aligned_intensities_subSet[i][0];
+                    subjectPoly.Add(new Point());
+                }
+            }
+            double res = exp_sum / frag_sum;
+            double res_frag = exp_frag_sum / frag_sum;
+            if (res >= 1)
+            {
+                res = (frag_sum / exp_sum);
+            }
+            if (res_frag >= 1)
+            {
+                res_frag = (frag_sum / exp_frag_sum);
+            }
+
+            res = (1 - res) * 100; res_frag = (1 - res_frag) * 100;
+        }
+
+        #region unused code, extra test attempt--> not useful, delete it if you like
+        private double KolmogorovSmirnovTest(List<double[]> aligned_subData, double[] sub_coeficients)
+        {
+            int cand_frag = sub_coeficients.Length;
+            double[] error = new double[cand_frag];
+            for (int j = 1; j < aligned_subData[0].Length; j++)
+            {
+                List<double[]> dissimilarity = new List<double[]>();
+                double max = 0.0; double min = aligned_subData[1][0];
+                for (int i = 0; i < aligned_subData.Count; i++)
+                {
+                    if (aligned_subData[i][j] * sub_coeficients[j - 1] > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
+                    {
+                        if (aligned_subData[i][j] * sub_coeficients[j - 1] > max) max = aligned_subData[i][j] * sub_coeficients[j - 1];
+                        if (aligned_subData[i][j] * sub_coeficients[j - 1] < min) min = aligned_subData[i][j] * sub_coeficients[j - 1];
+                        if (aligned_subData[i][0] > max) max = aligned_subData[i][0];
+                        if (aligned_subData[i][0] < min) min = aligned_subData[i][0];
+                        dissimilarity.Add(new double[2] { aligned_subData[i][0], aligned_subData[i][j] * sub_coeficients[j - 1] });
+                    }
+                }
+                error[j - 1] = GetScalingError(dissimilarity, max, min);
+            }
+            return error.Sum() / cand_frag;
+        }
+        private double GetScalingError(List<double[]> dis, double dis_max, double dis_min)
+        {
+            double min = 0.1;
+            double max = 1;
+            double m = (max - min) / (dis_max - dis_min);
+            double c = min - dis_min * m;
+            var newarr = new double[dis.Count];
+            int k = 0;
+            double frag_sub = 0.0;
+            double exp_sub = 0.0;
+            foreach (double[] ss in dis)
+            {
+                ss[0] = m * ss[0] + c; ss[1] = m * ss[1] + c;
+                frag_sub += ss[1];
+                exp_sub += ss[0];
+                newarr[k] = Math.Abs(exp_sub - frag_sub);
+                k++;
+            }
+            return newarr.Max();
+        }
+        #endregion
+       
         //***************************************************
         private void generate_fit_results(bool project = false)
         {
@@ -4851,20 +4903,7 @@ namespace Isotope_fitting
 
             return res;
         }
-        private List<double> get_UI_intensities(int[] subSet)
-        {
-            // is called from fit to pass a good starting height to the optimizer
-            List<double> UI_intensities = new List<double>();
-
-            for (int i = 0; i < subSet.Length; i++)
-            {
-                double factor = Fragments2[subSet[i] - 1].Factor;
-                if (factor != 0) UI_intensities.Add(Fragments2[subSet[i] - 1].Factor);
-                else UI_intensities.Add(0.1 * max_exp);
-            }
-
-            return UI_intensities;
-        }
+       
         private void sortSettings_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Displays the sort settings panel.\r\n" +
@@ -5276,7 +5315,7 @@ namespace Isotope_fitting
             if (help_Btn.Checked) { MessageBox.Show("Fits the checked Fragments in the checked groups of the fit results and creates one merged group with the checked fragments that were included in the previous groups.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             fit_checked_groups(false);
         }
-       
+        
         #endregion       
 
         #region LICHTNING CHART
@@ -14479,7 +14518,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-       
+        #region fixed list 
         //fixed saved list
         private void fixed_listBtn_Click(object sender, EventArgs e)
         {
@@ -14690,5 +14729,7 @@ namespace Isotope_fitting
             initialize_plot_tabs(false, "cC");
             initialize_plot_tabs(false, "dC");
         }
+        #endregion
+
     }
 }
