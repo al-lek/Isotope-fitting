@@ -4429,40 +4429,36 @@ namespace Isotope_fitting
         /// <summary>
         /// Ai overlapped area ratio calculation 
         /// </summary>
-        private void overlapped_area_ratio(List<int>distro_fragm_idxs)
+        private void overlapped_area_ratio(int[] set_array, double[] tmp)
         {
             Paths subjects = new Paths();
             Paths clips = new Paths();
             Paths solution = new Paths();
-            Path p = new Path();
-            List<int> indexes = distro_fragm_idxs.ToList();
+            List<int> indexes = set_array.ToList();
             int no_of_selected = indexes.Count();
             clips.Add(new Path());
             subjects.Add(new Path());
+            double first = 0.0;
             for (int i = 0; i < all_data_aligned.Count; i++)
             {
-                List<double> one_aligned_point = new List<double>();
                 bool zero_point = true;
-                first_m_z = 0.0;
                 // build the point with exp and all frag, but keep it only if any frag is NON zero
-                one_aligned_point.Add(all_data_aligned[i][0]);
-                double tmp = 0.0;
+                double summation = 0.0;
                 for (int k = 0; k < no_of_selected; k++)
                 {
-                    one_aligned_point.Add(all_data_aligned[i][distro_fragm_idxs[k]]);
-                    if (all_data_aligned[i][distro_fragm_idxs[k]] != 0.0)
+                    double frag_factor = tmp[k];
+                    if (all_data_aligned[i][set_array[k]] != 0.0)
                     {
                         zero_point = zero_point & false;
-                        tmp += all_data_aligned[i][distro_fragm_idxs[k]];
+                        summation += frag_factor*all_data_aligned[i][set_array[k]];
                     }
                 }
-
                 if (!zero_point)
                 {
-                    if (first_m_z == 0.0) { first_m_z = experimental[i][0]; }
-                    double norm_mz = experimental[i][0]-first_m_z;
+                    if (first == 0.0) { first = experimental[i][0]; }
+                    double norm_mz = experimental[i][0]-first;
                     clips[0].Add(new Point64(norm_mz, experimental[i][1]));
-                    subjects[0].Add(new Point64(norm_mz, tmp));
+                    subjects[0].Add(new Point64(norm_mz, summation));
                 }
             }
             if ((clips.Count > 0 || subjects.Count > 0))
@@ -4473,23 +4469,284 @@ namespace Isotope_fitting
                 solution.Clear();
                 c.Execute(ClipType.Intersection, solution, FillRule.NonZero);                
             }
-            double area = SignedPolygonArea(solution[0].ToList());
+            double ovrlp_area = SignedPolygonArea(solution);
+            double exp_area = SignedPolygonArea(clips);
         }
-        private  double SignedPolygonArea(List<Point64> polygon)
+        private void node_overlapped_area(TreeNode node, StringBuilder sb)
+        {
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            string idx_str = node.Name;
+            string[] idx_str_arr = idx_str.Split(' ');
+            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
+            // identifies a fit combination in this set
+            string error_string = String.Empty;
+            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+            double first = 0;
+            Paths subjects = new Paths();
+            Paths clips = new Paths();
+            Paths solution = new Paths();            
+            clips.Add(new Path());
+            subjects.Add(new Path());
+            double norm_mz = 0.0;
+            for (int i = 0; i < all_data_aligned.Count; i++)
+            {
+                bool zero_point = true;
+                // build the point with exp and all frag, but keep it only if any frag is NON zero
+                double summation = 0.0;
+                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
+                {
+                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f] - 1;
+                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
+                    double intens = frag_factor * all_data_aligned[i][frag_index];
+                    if (intens > 0.0001)
+                    {
+                        zero_point = zero_point & false;
+                        summation += intens;
+                    }
+                }              
+                if (!zero_point)
+                {
+                    if (first == 0.0)
+                    {
+                        first = experimental[i][0];
+                        clips[0].Add(new Point64(0.0, 0.0));
+                        subjects[0].Add(new Point64(0.0, 0.0));
+                    }
+                    norm_mz = experimental[i][0] - first+0.0001;
+                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
+                    subjects[0].Add(new Point64(norm_mz, summation));
+                }
+            }
+            if ((clips.Count > 0 || subjects.Count > 0))
+            {
+                Clipper c = new Clipper();
+                if (clips[0].Last().Y!=0)
+                {
+                    clips[0].Add(new Point64(norm_mz+0.0002, 0.0));
+                    subjects[0].Add(new Point64(norm_mz + 0.0002, 0.0));
+                }
+                clips[0].Add(new Point64(0.0, 0.0));
+                subjects[0].Add(new Point64(0.0, 0.0));
+                c.AddPaths(subjects, PathType.Subject);
+                c.AddPaths(clips, PathType.Clip);
+                solution.Clear();
+                c.Execute(ClipType.Intersection, solution, FillRule.NonZero);
+                copy_overlapped(subjects[0],clips[0], solution);
+            }
+            double ovrlp_area = AddArea(solution);
+            double exp_area = AddArea(clips);
+            double ratio = ovrlp_area/ exp_area;
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine("Clipper algo:");
+            sb.AppendLine("Overlapped area: "+Math.Round(ovrlp_area,4).ToString());
+            sb.AppendLine("Experimental area: " + Math.Round(exp_area, 4).ToString());
+            sb.AppendLine("Ratio: " + Math.Round(100-(ratio*100), 2).ToString());
+            sb.AppendLine();
+        }
+        private void node_residual_area(TreeNode node, StringBuilder sb)
+        {
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            string idx_str = node.Name;
+            string[] idx_str_arr = idx_str.Split(' ');
+            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
+            // identifies a fit combination in this set
+            string error_string = String.Empty;
+            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+            double first = 0;
+            Paths subjects = new Paths();
+            Paths clips = new Paths();
+            clips.Add(new Path());
+            subjects.Add(new Path());
+            double norm_mz = 0.0;
+            for (int i = 0; i < all_data_aligned.Count; i++)
+            {
+                bool zero_point = true;
+                // build the point with exp and all frag, but keep it only if any frag is NON zero
+                double summation = 0.0;
+                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
+                {
+                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f];
+                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
+                    double intens = frag_factor * all_data_aligned[i][frag_index];
+                    if (intens > 0.0001)
+                    {
+                        zero_point = zero_point & false;                       
+                        summation += intens;
+                    }
+                }
+                double diff = all_data_aligned[i][0] - summation;
+                if (diff < 0) { diff = 0; }
+                if (!zero_point)
+                {
+                    if (first == 0.0)
+                    {
+                        first = experimental[i][0];
+                        clips[0].Add(new Point64(0.0, 0.0));
+                        subjects[0].Add(new Point64(0.0, 0.0));
+                    }
+                    norm_mz = experimental[i][0] - first + 0.0001;
+                    subjects[0].Add(new Point64(norm_mz, diff));
+                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
+                }
+            }
+            copy_overlapped(subjects[0],clips[0], clips);
+
+            double ovrlp_area = AddArea(subjects);
+            double exp_area = AddArea(clips);
+            double ratio = ovrlp_area / exp_area;
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine("Residual algo:");
+            sb.AppendLine("residual area: " + Math.Round(ovrlp_area, 4).ToString());
+            sb.AppendLine("Experimental area: " + Math.Round(exp_area, 4).ToString());
+            sb.AppendLine("Ratio: " + Math.Round(ratio * 100, 2).ToString());
+            sb.AppendLine();
+        }
+        private void node_maxmin_coverage_area(TreeNode node, StringBuilder sb)
+        {
+            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            string idx_str = node.Name;
+            string[] idx_str_arr = idx_str.Split(' ');
+            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
+            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
+            // identifies a fit combination in this set
+            string error_string = String.Empty;
+            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
+            double first = 0;
+            Paths subjects = new Paths();
+            Paths clips = new Paths();
+            clips.Add(new Path());
+            subjects.Add(new Path());
+            double norm_mz = 0.0;
+            for (int i = 0; i < all_data_aligned.Count; i++)
+            {
+                bool zero_point = true;
+                // build the point with exp and all frag, but keep it only if any frag is NON zero
+                double summation = 0.0;
+                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
+                {
+                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f];
+                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
+                    double intens = frag_factor * all_data_aligned[i][frag_index];
+                    if (intens > 0.0001)
+                    {
+                        zero_point = zero_point & false;
+                        summation += intens;
+                    }
+                }
+                //double diff = all_data_aligned[i][0] - summation;
+                //if (diff < 0) { diff = 0; }
+                if (!zero_point)
+                {
+                    if (first == 0.0)
+                    {
+                        first = experimental[i][0];
+                        clips[0].Add(new Point64(0.0, 0.0));
+                        subjects[0].Add(new Point64(0.0, 0.0));
+                    }
+                    norm_mz = experimental[i][0] - first + 0.0001;
+                    subjects[0].Add(new Point64(norm_mz, Math.Min(experimental[i][1],summation)));
+                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
+                }
+            }
+            copy_overlapped(subjects[0], clips[0], clips);
+
+            double ovrlp_area = AddArea(subjects);
+            double exp_area = AddArea(clips);
+            double ratio = ovrlp_area / exp_area;
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine("Max Min algo:");
+            sb.AppendLine("Overlapped area: " + Math.Round(ovrlp_area, 4).ToString());
+            sb.AppendLine("Experimental area: " + Math.Round(exp_area, 4).ToString());
+            sb.AppendLine("Ratio: " + Math.Round((1-ratio )* 100, 2).ToString());
+            sb.AppendLine();
+        }
+        private void copy_overlapped(Path subjects, Path clips, Paths solutions)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Point64 pp in subjects)
+            {
+                sb.AppendLine(pp.X+ "\t" + pp.Y);
+            }
+            sb.AppendLine(); sb.AppendLine();
+            foreach (Point64 pp in clips)
+            {
+                sb.AppendLine(pp.X + "\t" + pp.Y);
+            }
+            sb.AppendLine(); sb.AppendLine();
+            foreach (Path solution in solutions)
+            {
+                foreach (Point64 pp in solution)
+                {
+                    sb.AppendLine(pp.X + "\t" + pp.Y);
+                }
+            }
+            sb.AppendLine(); sb.AppendLine();
+            Clipboard.Clear();
+            Clipboard.SetText(sb.ToString());
+        }
+        private  double SignedPolygonArea(Paths polygon)
         {
             // Add the first point to the end.
             int num_points = polygon.Count;
-            Point64[] pts = new Point64[num_points + 1];
-            polygon.CopyTo(pts, 0);
-            pts[num_points] = polygon[0];
+            //Point64[] pts = new Point64[num_points + 1];
+            //polygon.CopyTo(pts, 0);
+            //pts[num_points] = polygon[0];
 
-            // Get the areas.
+            //// Get the areas.
             double area = 0;
-            for (int i = 0; i < num_points; i++)
+            //for (int i = 0; i < num_points; i++)
+            //{
+            //    area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
+            //}
+            foreach (Path pp in polygon)
             {
-                area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
+                num_points = pp.Count;
+                List<Point64> pts = new List<Point64>();
+                foreach (Point64 p in pp) { pts.Add(new Point64(p.X,p.Y)); }
+                pts = pts.OrderBy(t=>t.X).ToList();
+                pts.Add(new Point64(pts[0].X, pts[0].Y));
+                for (int i = 0; i < num_points; i++)
+                {
+                    area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
+                }
             }
+            // Return the result.
+            return area;
+        }
+        private double AddArea(Paths polygon)
+        {
+            // Add the first point to the end.
+            int num_points = polygon.Count;
+            //Point64[] pts = new Point64[num_points + 1];
+            //polygon.CopyTo(pts, 0);
+            //pts[num_points] = polygon[0];
 
+            //// Get the areas.
+            double area = 0;
+            //for (int i = 0; i < num_points; i++)
+            //{
+            //    area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
+            //}
+            foreach (Path pp in polygon)
+            {
+                num_points = pp.Count;
+                List<Point64> pts = new List<Point64>();
+                foreach (Point64 p in pp) { pts.Add(new Point64(p.X, p.Y)); }
+                pts = pts.OrderBy(t => t.X).ToList();
+                pts.Add(new Point64(pts[0].X, pts[0].Y));
+                for (int i = 0; i < num_points; i++)
+                {
+                    area +=  pts[i].Y;
+                }
+            }
             // Return the result.
             return area;
         }
@@ -4707,7 +4964,6 @@ namespace Isotope_fitting
             double lse = 0.0;
             List<double[]> lse_fragments = new List<double[]>();
             if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-
             else
             {
                 string idx_str = node.Name;
@@ -4785,11 +5041,13 @@ namespace Isotope_fitting
                     sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString() + "% of the centroids were absent |with ei= " + Math.Round(absent_factor, 4).ToString() + " | the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString() + " | sd: " + Math.Round(sd, 4).ToString());
                     sb.AppendLine();
                 }
+                node_overlapped_area(node, sb);
+                node_residual_area(node, sb);
+                node_maxmin_coverage_area(node, sb);
                 error_string = sb.ToString();
                 Form17 frm17 = new Form17(error_string);
                 frm17.ShowDialog();
             }
-
         }
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
         {
