@@ -2984,7 +2984,7 @@ namespace Isotope_fitting
                             else
                                 break;
                         }
-                        pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];                        
+                        pt0 =  peak_points[closest_idx][5];                        
                     }
                     Fragments2.Last().maxFactor = pt0 / Fragments2.Last().Max_intensity;
                     if (!Fragments2.Last().Fixed && chem.Max_man_int == 0) Fragments2.Last().Factor = pt0 / Fragments2.Last().Max_intensity;
@@ -3581,7 +3581,7 @@ namespace Isotope_fitting
                         // selectedFragments list starts with 1, Fragments2 start with 0.
                         selectedFragments.Remove(idx + 1);
                     }
-
+                    //MessageBox.Show(Fragments2[idx].Max_intensity + "    " + Fragments2[idx].maxFactor);
                     selectedFragments = selectedFragments.OrderBy(p => p).ToList();
 
                     int k = node.Parent.Text.IndexOf('(');
@@ -4347,7 +4347,7 @@ namespace Isotope_fitting
                 for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i]; }
                 double max_exp = aligned_intensities_subSet.Max(p=>p[0]);
                 double[] max_frag = new double[distros_num];
-                for (int i = 0; i < distros_num; i++) { bndh[i] = max_exp / aligned_intensities_subSet.Max(p => p[i+1]) ; }
+                //for (int i = 0; i < distros_num; i++) { bndh[i] = max_exp / aligned_intensities_subSet.Max(p => p[i+1]) ; }
                
                 double epsx = 0.000001;
                 int maxits = 1000000;
@@ -4365,7 +4365,7 @@ namespace Isotope_fitting
                 double[] result = new double[6 * distros_num + 6];
                 for (int i = 0; i < distros_num; i++) { result[i] = coeficients[i]; result[i + 4 * distros_num] = 0; result[i + 5 * distros_num] = 0; } //initialize di error and sd
                 result[6 * distros_num + 3] = state.fi[0];
-                (result[6 * distros_num + 4], result[6 * distros_num + 5]) = per_cent_fit_coverage(aligned_intensities_subSet, coeficients, experimental_sum);
+                (result[6 * distros_num + 4], result[6 * distros_num + 5]) = maxmin_area_ratio(aligned_intensities_subSet, coeficients, experimental_sum);
 
                 //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
                 //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coefficients);
@@ -4477,6 +4477,28 @@ namespace Isotope_fitting
             }
             double ovrlp_area = SignedPolygonArea(solution);
             double exp_area = SignedPolygonArea(clips);
+        }
+        private (double, double) maxmin_area_ratio(List<double[]> aligned_intensities_subSet, double[] coeficients,/* int[] set_array, double[] tmp,*/ double exp_sum)
+        {            
+            double ovrlp_area = 0.0;
+            double exp_area = 0.0;            
+            for (int i = 0; i < aligned_intensities_subSet.Count; i++)
+            {
+                double tmp = 0.0;
+                for (int j = 1; j < aligned_intensities_subSet[0].Length; j++)
+                {
+                    double intens = coeficients[j - 1] * aligned_intensities_subSet[i][j];
+                    if (intens > 1) { tmp += intens; }                   
+                }
+                if (tmp > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
+                {
+                    ovrlp_area += Math.Min(aligned_intensities_subSet[i][0], tmp);
+                    exp_area += aligned_intensities_subSet[i][0];
+                }
+            }
+            double ratio = (1 - (ovrlp_area / exp_area)) * 100;
+            double ratio_all = (1 - (ovrlp_area / exp_sum)) * 100;
+            return (ratio, ratio_all);
         }
         private void node_overlapped_area(TreeNode node, StringBuilder sb)
         {
@@ -8054,8 +8076,8 @@ namespace Isotope_fitting
                             else
                                 break;
                         }
-                        pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];
-                        fra.maxFactor = pt0 / Fragments2.Last().Max_intensity;
+                        pt0 =  peak_points[closest_idx][5];
+                        fra.maxFactor = pt0 / fra.Max_intensity;
                     }
                 }
                 // thread safely fire event to continue calculations
@@ -8334,8 +8356,8 @@ namespace Isotope_fitting
                             else
                                 break;
                         }
-                        pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];
-                        fra.maxFactor = pt0 / Fragments2.Last().Max_intensity;
+                        pt0 =  peak_points[closest_idx][5];
+                        fra.maxFactor = pt0 / fra.Max_intensity;
                     }
                 }
                 // thread safely fire event to continue calculations
@@ -14678,8 +14700,8 @@ namespace Isotope_fitting
                         else
                             break;
                     }
-                    pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];
-                    fra.maxFactor = pt0 / Fragments2.Last().Max_intensity;
+                    pt0 =  peak_points[closest_idx][5];
+                    fra.maxFactor = pt0 / fra.Max_intensity;
                 }
             }
             if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); find_max_min_int(); }

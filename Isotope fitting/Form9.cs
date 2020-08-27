@@ -1860,7 +1860,7 @@ namespace Isotope_fitting
                     pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];                   
                 }
                 Fragments3.Last().maxFactor = pt0 / Fragments3.Last().Max_intensity;
-                Fragments3.Last().Factor = pt0 / Fragments2.Last().Max_intensity;
+                Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
                 // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                 // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                 chem.Profile.Clear();
