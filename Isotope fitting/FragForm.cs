@@ -28,10 +28,10 @@ namespace Isotope_fitting
         private List<PointPlot> profile = new List<PointPlot>();
         private List<PointPlot> centroid = new List<PointPlot>();
         private double factor;
+        private double max_factor;
         private bool to_plot;
         private int counter;
-        private OxyColor color;
-        private string[] listName;
+        private OxyColor color;        
         private double fix;
         private double max_intensity;
         private bool fixed_;
@@ -113,6 +113,11 @@ namespace Isotope_fitting
             get { return this.factor; }
             set { this.factor = value; }
         }
+        public double maxFactor
+        {
+            get { return this.max_factor; }
+            set { this.max_factor = value; }
+        }
         public double Fix
         {
             get { return this.fix; }
@@ -137,12 +142,7 @@ namespace Isotope_fitting
         {
             get { return this.inputFormula; }
             set { this.inputFormula = value; }
-        }
-        public string[] ListName
-        {
-            get { return this.listName; }
-            set { this.listName = value; }
-        }
+        }        
         public string FinalFormula
         {
             get { return this.finalFormula; }

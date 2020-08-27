@@ -734,7 +734,8 @@ namespace Isotope_fitting
                     Charge=c,
                     Ion_type=ion,
                     Extension=extension,
-                    Chain_type=chain_type
+                    Chain_type=chain_type,
+                    maxFactor=0.0
                 });
                 res.Last().Adduct = "H" + c.ToString();
                 if (res.Last().Ion.StartsWith("d") || res.Last().Ion.StartsWith("w") || res.Last().Ion.StartsWith("v")) res.Last().Color = OxyColors.Turquoise;
@@ -974,7 +975,8 @@ namespace Isotope_fitting
                     Extension = extension,
                     Chain_type = chain_type,
                     Color=clr,
-                    SortIdx=sortIdx
+                    SortIdx=sortIdx,
+                    maxFactor=0.0
                 });
                 string lbl = "";
                 lbl = ion;
@@ -1823,8 +1825,7 @@ namespace Isotope_fitting
                     Counter = 0,
                     To_plot = false,
                     Color = chem.Color,
-                    Name = chem.Name,
-                    ListName = new string[4],
+                    Name = chem.Name,                   
                     Fix = 1.0,
                     Max_intensity = 0.0,
                     Fixed = chem.Fixed,
@@ -1834,31 +1835,32 @@ namespace Isotope_fitting
                     Extension = chem.Extension,
                     Chain_type = chem.Chain_type,
                     SortIdx = chem.SortIdx,
-                    Has_adduct = chem.Has_adduct
-
+                    Has_adduct = chem.Has_adduct,
+                    maxFactor=chem.maxFactor
                 });               
                 Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
                 Fragments3.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
-                
-                if (chem.Charge > 0) Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, "+" + chem.Charge.ToString(), chem.PrintFormula };
-                else Fragments3.Last().ListName = new string[] { chem.Radio_label, chem.Mz, chem.Charge.ToString(), chem.PrintFormula };
-                if (insert_exp)
+
+                double pt0 = 0.1 * max_exp;
+                if (peak_points.Count > 0)
                 {
-                    double pt0 = 0.1 * Form2.max_exp;
-                    if (all_data[0].Count > 0 )
+                    double exp_cen, curr_diff;
+                    double centroid = Fragments3.Last().Centroid[0].X;
+                    double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
+                    int closest_idx = 0;
+                    for (int i = 1; i < peak_points.Count; i++)
                     {
-                        try
-                        {
-                            pt0 = all_data[0].FindAll(x => (x[0] >= Fragments3.Last().Centroid[0].X -0.5 && x[0] < Fragments3.Last().Centroid[0].X + 0.5)).Max(k => k[1]);
-                        }
-                        catch
-                        {
-                            pt0 = 0.1 * Form2.max_exp;
-                        }
+                        exp_cen = peak_points[i][1] + peak_points[i][4];
+                        curr_diff = Math.Abs(exp_cen - centroid);
+                        if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+                        else
+                            break;
                     }
-                    Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
-                }               
+                    pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];                   
+                }
+                Fragments3.Last().maxFactor = pt0 / Fragments3.Last().Max_intensity;
+                Fragments3.Last().Factor = pt0 / Fragments2.Last().Max_intensity;
                 // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                 // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                 chem.Profile.Clear();
@@ -2005,8 +2007,7 @@ namespace Isotope_fitting
                     Counter = 0,
                     To_plot = true,
                     Color = Fragments3[new_fragin].Color,
-                    Name = Fragments3[new_fragin].Name,
-                    ListName = new string[4],
+                    Name = Fragments3[new_fragin].Name,                    
                     Fix = 1.0,
                     Max_intensity = 0.0,
                     Fixed = false,
@@ -2016,7 +2017,8 @@ namespace Isotope_fitting
                     Chain_type = Fragments3[new_fragin].Chain_type,
                     SortIdx = Fragments3[new_fragin].SortIdx,
                     Candidate = Fragments3[new_fragin].Candidate,
-                    Has_adduct = Fragments3[new_fragin].Has_adduct
+                    Has_adduct = Fragments3[new_fragin].Has_adduct,
+                    maxFactor= Fragments3[new_fragin].maxFactor
                 });
 
                 Fragments2.Last().Centroid = Fragments3[new_fragin].Centroid.Select(point => point.DeepCopy()).ToList();
@@ -2195,7 +2197,8 @@ namespace Isotope_fitting
                                 Charge = c,
                                 Chain_type=chain_type,
                                 Extension=extension,
-                                Has_adduct=false
+                                Has_adduct=false,
+                                maxFactor = 1.0
                             });
                             mult_loaded.Last().Adduct = "H" + c.ToString();
                         }
