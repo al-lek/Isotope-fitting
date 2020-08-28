@@ -4210,7 +4210,9 @@ namespace Isotope_fitting
                     {
                         exp_intensity = 0; exp_cen = 0; absent_factor += sorted_cen[c].Y / summ;
                     }
-                    frag_info.Add(new double[] { exp_cen, exp_intensity, sorted_cen[c].Y * frag_factor, sorted_cen[c].Y / summ, ss, 1, sorted_cen[c].Y / summ });
+                    double frag_int = sorted_cen[c].Y * frag_factor;
+                    //frag_info.Add(new double[] { exp_cen, exp_intensity, sorted_cen[c].Y * frag_factor, sorted_cen[c].Y / summ, ss, 1, sorted_cen[c].Y / summ });
+                    frag_info.Add(new double[] { exp_cen, exp_intensity, frag_int, sorted_cen[c].Y / summ, ss, frag_int, sorted_cen[c].Y / summ });
                 }
                 tmp[ss + 3 * set_array.Length] = 100.00 * absent_factor;
                 ei_average += absent_factor;
@@ -4222,7 +4224,8 @@ namespace Isotope_fitting
                 {
                     if (a == frag_info_sorted.Count - 1)
                     {
-                        frag_info_sorted[a][6] = Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] / Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) / frag_info_sorted[a][5];
+                        //frag_info_sorted[a][6] = Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] / Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) / frag_info_sorted[a][5];
+                        frag_info_sorted[a][6] = (Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3]* frag_info_sorted[a][2]) / (Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) * frag_info_sorted[a][5]);
                         break;
                     }
                     for (int b = a + 1; b < frag_info_sorted.Count; b++)
@@ -4231,11 +4234,14 @@ namespace Isotope_fitting
                         {
                             if (frag_info_sorted[a][0] == frag_info_sorted[b][0])
                             {
-                                frag_info_sorted[a][5]++; frag_info_sorted[b][5]++;
+                                //frag_info_sorted[a][5]++; frag_info_sorted[b][5]++;
+                                frag_info_sorted[a][5]+= frag_info_sorted[b][2];
+                                frag_info_sorted[b][5]+= frag_info_sorted[a][2];
                             }
                             else if (frag_info_sorted[a][0] < frag_info_sorted[b][0])
                             {
-                                frag_info_sorted[a][6] = Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] / Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) / frag_info_sorted[a][5];
+                                //frag_info_sorted[a][6] = Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] / Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) / frag_info_sorted[a][5];
+                                frag_info_sorted[a][6] = (Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] * frag_info_sorted[a][2]) / (Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) * frag_info_sorted[a][5]);
                                 break;
                             }
                         }
@@ -5069,9 +5075,9 @@ namespace Isotope_fitting
                     sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString() + "% of the centroids were absent |with ei= " + Math.Round(absent_factor, 4).ToString() + " | the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString() + " | sd: " + Math.Round(sd, 4).ToString());
                     sb.AppendLine();
                 }
-                node_overlapped_area(node, sb);
-                node_residual_area(node, sb);
-                node_maxmin_coverage_area(node, sb);
+                //node_overlapped_area(node, sb);
+                //node_residual_area(node, sb);
+                //node_maxmin_coverage_area(node, sb);
                 error_string = sb.ToString();
                 Form17 frm17 = new Form17(error_string);
                 frm17.ShowDialog();
