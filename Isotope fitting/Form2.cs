@@ -1356,7 +1356,7 @@ namespace Isotope_fitting
                     List<double> tmp2 = new List<double>();
                     foreach (double[] peak in peak_points)
                     {
-                        if (peak[5] > 10000)
+                        if (peak[5] > 1000)
                         {
                             tmp1.Add((double)(peak[1] + peak[4]));
                             tmp2.Add((double)peak[3]);
