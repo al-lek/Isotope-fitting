@@ -1194,18 +1194,21 @@ namespace Isotope_fitting
         private List<ChemiForm> select_fragments2_frm9_riken()
         {
             has_adduct = AdductBtn.Checked;
+            bool add = true;
+            bool extra_mz_error = false;
+            double extra_mz = 0;
             if (has_adduct)
             {
                 extra_adduct = adduct_txtBx.Text.Replace(Environment.NewLine, " ").ToString();
                 extra_adduct = extra_adduct.Replace("\t", "");
                 extra_adduct = extra_adduct.Replace(" ", "");
                 if (String.IsNullOrEmpty(extra_adduct)) { has_adduct = false; AdductBtn.Checked = false; noAddBtn.Checked = true; }
-            }
-            bool add = true;
-            bool extra_mz_error = false;
-            double extra_mz = 0;
-            if (has_adduct && extra_adduct[0].Equals('-')) { extra_adduct = extra_adduct.Remove(0, 1); add = false; }
-            if (has_adduct && extra_adduct[0].Equals('+')) { extra_adduct = extra_adduct.Remove(0, 1); add = true; }
+                else
+                {
+                    if ( extra_adduct[0].Equals('-')) { extra_adduct = extra_adduct.Remove(0, 1); add = false; }
+                    if (extra_adduct[0].Equals('+')) { extra_adduct = extra_adduct.Remove(0, 1); add = true; }                    
+                }
+            }   
             List<ChemiForm> res = new List<ChemiForm>();
             if (has_adduct) extra_mz = calc_m(out extra_mz_error, extra_adduct);
             if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error"); return res; }
@@ -1730,8 +1733,7 @@ namespace Isotope_fitting
                 Parallel.For(0, selected_fragments.Count, (i, state) =>
                 {
                     Envipat_Calcs_and_filter_byPPM_frm9(selected_fragments[i]);
-
-
+                    
                     Interlocked.Increment(ref progress);
                     if (progress % 10 == 0 && progress > 0)
                     {

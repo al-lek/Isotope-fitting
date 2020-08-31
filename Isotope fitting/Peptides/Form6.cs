@@ -17,11 +17,11 @@ namespace Isotope_fitting
         bool is_node = false;
         int idx ;
         /// <summary>
-        /// [Ai sort,A sort,di sort,sse sort, ei sort, dinew sort](6)
+        /// [Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6)
         /// </summary>
         bool[] sort = new bool[6] { false, false, false, false,false,false };
         /// <summary>
-        /// [Ai thres,A thres,di thres,ei thres,dinew thres, sd, sdnew](7)
+        /// [Mi thres,M thres,di thres,ei thres,dinew thres, sd, sdnew](7)
         /// </summary>
         double[] thres = new double[7] { 100,100,100,100,100, 100, 100 };
         double[] coeff_matrix=new double[6] {0.0,0.0,0.0,0.0,0.0,0.0 };

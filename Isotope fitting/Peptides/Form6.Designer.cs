@@ -109,7 +109,7 @@
             this.A_checkBox.Name = "A_checkBox";
             this.A_checkBox.Size = new System.Drawing.Size(33, 19);
             this.A_checkBox.TabIndex = 1;
-            this.A_checkBox.Text = "A";
+            this.A_checkBox.Text = "M";
             this.A_checkBox.UseVisualStyleBackColor = true;
             this.A_checkBox.CheckedChanged += new System.EventHandler(this.A_checkBox_CheckedChanged);
             // 
@@ -134,7 +134,7 @@
             this.Ai_checkBox.Name = "Ai_checkBox";
             this.Ai_checkBox.Size = new System.Drawing.Size(36, 19);
             this.Ai_checkBox.TabIndex = 0;
-            this.Ai_checkBox.Text = "Ai";
+            this.Ai_checkBox.Text = "Mi";
             this.Ai_checkBox.UseVisualStyleBackColor = true;
             this.Ai_checkBox.CheckedChanged += new System.EventHandler(this.Ai_checkBox_CheckedChanged);
             // 
@@ -286,7 +286,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 15);
             this.label5.TabIndex = 13;
-            this.label5.Text = "Ai  <";
+            this.label5.Text = "Mi  <";
             // 
             // label6
             // 
@@ -297,7 +297,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 15);
             this.label6.TabIndex = 14;
-            this.label6.Text = "A   <";
+            this.label6.Text = "M   <";
             // 
             // label7
             // 

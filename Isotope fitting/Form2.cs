@@ -264,30 +264,30 @@ namespace Isotope_fitting
 
         #region fit results sorting parameteres
         /// <summary>
-        /// [Ai sort,A sort,di sort,sse sort, ei sort, dinew sort](6)
+        /// [Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6)
         /// </summary>
         public static bool[] fit_sort = new bool[] { true, false, false, false, false, false };
         /// <summary>
-        /// [Ai thres,A thres,di thres,ei thres,dinew thres,sd,sdnew](7)
+        /// [Mi thres,M thres,di thres,ei thres,dinew thres,sd,sdnew](7)
         /// </summary>
         public static double[] fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 };
         /// <summary>
-        /// [Ai coef,A coef,di coef,sse coef,ei coef,dinew coef](6)
+        /// [Mi coef,M coef,di coef,sse coef,ei coef,dinew coef](6)
         /// </summary>
         public static double[] a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
         public static int visible_results = 100;
         public static int best_num_results = 1;
 
         /// <summary>
-        /// list [Ai sort,A sort,di sort,sse sort, ei sort, dinew sort](6)
+        /// list [Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6)
         /// </summary>
         public static List<bool[]> tab_node = new List<bool[]>();
         /// <summary>
-        /// list [Ai coef,A coef,di coef,sse coef,ei coef,dinew coef](6)
+        /// list [Mi coef,M coef,di coef,sse coef,ei coef,dinew coef](6)
         /// </summary>
         public static List<double[]> tab_coef = new List<double[]>();
         /// <summary>
-        ///list [Ai thres,A thres,di thres,ei thres,dinew thres,sd, sdnew](7)
+        ///list [Mi thres,M thres,di thres,ei thres,dinew thres,sd, sdnew](7)
         /// </summary>
         public static List<double[]> tab_thres = new List<double[]>();
         List<string> labels_checked = new List<string>();
@@ -1059,23 +1059,23 @@ namespace Isotope_fitting
             preferences[0] += "half(-) most intence: " + selection_rule[4].ToString() + "\r\n";
             preferences[0] += "half(+) most intence: " + selection_rule[5].ToString() + "\r\n";
 
-            preferences[0] += "fit results sorting by Ai: " + fit_sort[0].ToString() + "\r\n";
-            preferences[0] += "fit results sorting by A: " + fit_sort[1].ToString() + "\r\n";
+            preferences[0] += "fit results sorting by Mi: " + fit_sort[0].ToString() + "\r\n";
+            preferences[0] += "fit results sorting by M: " + fit_sort[1].ToString() + "\r\n";
             preferences[0] += "fit results sorting by di: " + fit_sort[2].ToString() + "\r\n";
             preferences[0] += "fit results sorting by sse: " + fit_sort[3].ToString() + "\r\n";
             preferences[0] += "fit results sorting by ei: " + fit_sort[4].ToString() + "\r\n";
             preferences[0] += "fit results sorting by di': " + fit_sort[5].ToString() + "\r\n";
 
-            preferences[0] += "Ai coefficient: " + a_coef[0].ToString() + "\r\n";
-            preferences[0] += "A coefficient: " + a_coef[1].ToString() + "\r\n";
+            preferences[0] += "Mi coefficient: " + a_coef[0].ToString() + "\r\n";
+            preferences[0] += "M coefficient: " + a_coef[1].ToString() + "\r\n";
             preferences[0] += "di coefficient: " + a_coef[2].ToString() + "\r\n";
             preferences[0] += "sse coefficient: " + a_coef[3].ToString() + "\r\n";
             preferences[0] += "ei coefficient: " + a_coef[4].ToString() + "\r\n";
             preferences[0] += "di' coefficient: " + a_coef[5].ToString() + "\r\n";
 
             preferences[0] += "Amount of best solutions presented: " + visible_results.ToString() + "\r\n";
-            preferences[0] += "Ai score threshold: " + fit_thres[0].ToString() + "\r\n";
-            preferences[0] += "A score threshold: " + fit_thres[1].ToString() + "\r\n";
+            preferences[0] += "Mi score threshold: " + fit_thres[0].ToString() + "\r\n";
+            preferences[0] += "M score threshold: " + fit_thres[1].ToString() + "\r\n";
             preferences[0] += "di score threshold: " + fit_thres[2].ToString() + "\r\n";
             preferences[0] += "ei score threshold: " + fit_thres[3].ToString() + "\r\n";
             preferences[0] += "di' score threshold: " + fit_thres[4].ToString() + "\r\n";
@@ -4333,7 +4333,7 @@ namespace Isotope_fitting
                 double[] coeficients = new double[frag_count];
                 for (int i = 0; i < frag_count; i++) coeficients[i] = 0.0;
                 // 2. save result
-                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Ai,A]
+                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Mi,M]
                 double[] result = new double[6 * frag_count + 6];
                 for (int i = 0; i < frag_count; i++) { result[i] = coeficients[i]; result[i + 4 * frag_count] = 0; result[i + 5 * frag_count] = 0; } //initialize di error and sd
                 result[6 * frag_count + 3] = 0;
@@ -4367,7 +4367,7 @@ namespace Isotope_fitting
                 alglib.minlmresults(state, out coeficients, out rep);
 
                 // 2. save result
-                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Ai,A]
+                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Mi,M]
                 double[] result = new double[6 * distros_num + 6];
                 for (int i = 0; i < distros_num; i++) { result[i] = coeficients[i]; result[i + 4 * distros_num] = 0; result[i + 5 * distros_num] = 0; } //initialize di error and sd
                 result[6 * distros_num + 3] = state.fi[0];
@@ -4932,7 +4932,7 @@ namespace Isotope_fitting
             int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);  // identifies a fit combination in this set
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("A:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 1], 2).ToString() + "%" + "    " + "Ai:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 2], 2).ToString() + "%" + "    " + "ei:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 5], 2).ToString() + "%" + "    " + "di':" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 6], 2).ToString() + "%");
+            sb.AppendLine("M:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 1], 2).ToString() + "%" + "    " + "Mi:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 2], 2).ToString() + "%" + "    " + "ei:" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 5], 2).ToString() + "%" + "    " + "di':" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 6], 2).ToString() + "%");
             sb.AppendLine();
             for (int k = 0; k < all_fitted_sets[set_idx][set_pos_idx].Length; k++)
             {
@@ -4989,7 +4989,7 @@ namespace Isotope_fitting
             }
         }
         /// <summary>
-        /// shows the scores(A,Ai,di,ei,di') of  each fragment in the right clicked solution node in a fit group solution
+        /// shows the scores(M,Mi,di,ei,di') of  each fragment in the right clicked solution node in a fit group solution
         /// </summary>
         private void show_error(TreeNode node)
         {
@@ -5151,7 +5151,7 @@ namespace Isotope_fitting
                 int curr_idx = all_fitted_sets[set_idx][set_pos_idx][i] - 1;
                 Name += Fragments2[curr_idx].Name + "   ";
             }
-            if (header) sb.AppendLine("Fragments" + "\t" + "A" + "\t" + "Ai" + "\t" + "di" + "\t" + "ei" + "\t" + "di'" + "\t" + "SSE");
+            if (header) sb.AppendLine("Fragments" + "\t" + "M" + "\t" + "Mi" + "\t" + "di" + "\t" + "ei" + "\t" + "di'" + "\t" + "SSE");
             sb.AppendLine(Name + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 1], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 2], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 4], 3).ToString() + "% " + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 5], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 6], 3).ToString() + "%" + "\t" + all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 3].ToString("0.###e0" + " "));
             Clipboard.Clear();
             Clipboard.SetText(sb.ToString());
@@ -5379,7 +5379,7 @@ namespace Isotope_fitting
                 int ty_set_pos_idx = Convert.ToInt32(ty_idx_str_arr[1]);
                 int ty_compare_item_idx = all_fitted_results[ty_set_idx][ty_set_pos_idx].Length;
                 int compare_result = 0;
-                // value to compare--->sse_coef*sse+Ai_coef*Ai+A_coef*A+di_coef*di+ei_coef*ei+dinew_coef+dinew
+                // value to compare--->sse_coef*sse+Ai_coef*Mi+A_coef*M+di_coef*di+ei_coef*ei+dinew_coef+dinew
                 double value1 = (tab_coef[tx_set_idx][3] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 3]) + (tab_coef[tx_set_idx][0] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 2]) + (tab_coef[tx_set_idx][1] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 4]) + (tab_coef[tx_set_idx][4] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 5]) + (tab_coef[tx_set_idx][5] * all_fitted_results[tx_set_idx][tx_set_pos_idx][tx_compare_item_idx - 6]);
                 double value2 = (tab_coef[tx_set_idx][3] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 3]) + (tab_coef[tx_set_idx][0] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 2]) + (tab_coef[tx_set_idx][1] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 1]) + (tab_coef[tx_set_idx][2] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 4]) + (tab_coef[tx_set_idx][4] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 5]) + (tab_coef[tx_set_idx][5] * all_fitted_results[ty_set_idx][ty_set_pos_idx][ty_compare_item_idx - 6]);
                 compare_result = Decimal.Compare((decimal)value1, (decimal)value2);
