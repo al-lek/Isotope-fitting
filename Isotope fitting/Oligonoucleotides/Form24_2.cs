@@ -517,7 +517,7 @@ namespace Isotope_fitting
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                            res[curr_idx].Has_adduct = true;
+                            res[curr_idx].Has_adduct = has_adduct;
 
                             double hyd_num = 0.0;
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
@@ -553,7 +553,7 @@ namespace Isotope_fitting
                             res[curr_idx].Ion_type = new_type;
                             res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                             res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                            res[curr_idx].Has_adduct = true;
+                            res[curr_idx].Has_adduct = has_adduct;
 
                             if (hyd_mod.Contains('+'))
                             {

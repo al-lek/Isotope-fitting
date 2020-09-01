@@ -10423,7 +10423,10 @@ namespace Isotope_fitting
                     {
                         safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
                     }
-                    else if (adduct_chBx_temp.Checked) { down_adduct = true; }
+                    else if (adduct_chBx_temp.Checked)
+                    {
+                        down_adduct = true;
+                    }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
