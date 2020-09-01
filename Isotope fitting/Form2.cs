@@ -1183,12 +1183,12 @@ namespace Isotope_fitting
             preferences[0] += "ppm_graph_type: " + ppm_graph_type.ToString() + "\r\n";
 
             //hydrogens rearrangement extra parameters
-            preferences[0] += "y_interval12_2: " + y_interval12_2 + "\r\n";
-            preferences[0] += "y_format12_2: " + y_format12_2 + "\r\n";
-            preferences[0] += "y_numformat12_2: " + y_numformat12_2 + "\r\n";
-            preferences[0] += "x_majorStep12_2: " + x_majorStep12_2 + "\r\n";
-            preferences[0] += "x_minorStep12_2: " + x_minorStep12_2 + "\r\n";
-            preferences[0] += "line_width_2: " + line_width_2 + "\r\n";
+            preferences[0] += "y_interval12_2: " + y_interval12_2.ToString() + "\r\n";
+            preferences[0] += "y_format12_2: " + y_format12_2.ToString() + "\r\n";
+            preferences[0] += "y_numformat12_2: " + y_numformat12_2.ToString() + "\r\n";
+            preferences[0] += "x_majorStep12_2: " + x_majorStep12_2.ToString() + "\r\n";
+            preferences[0] += "x_minorStep12_2: " + x_minorStep12_2.ToString() + "\r\n";
+            preferences[0] += "line_width_2: " + line_width_2.ToString() + "\r\n";
 
             //ppm plot extra parameters
             preferences[0] += "x_ppm_interval: " + x_ppm_interval.ToString() + "\r\n";
@@ -7755,7 +7755,7 @@ namespace Isotope_fitting
                             {
                                 string[] str = lista[j].Split('\t');
 
-                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
+                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("\t")) continue; // comments
                                 else if (lista[j].StartsWith("Mode")) continue; // to be implemented
                                 else if (lista[j].StartsWith("Multiple"))
                                 {
@@ -8017,13 +8017,16 @@ namespace Isotope_fitting
                                             fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                             fitted_chem.Last().minPPM_Error = dParser(str[14]);
                                             if (str.Length > 19) { fitted_chem.Last().Has_adduct = string_to_bool(str[19]); }
-                                            else { fitted_chem.Last().Has_adduct = false; }
+                                            else
+                                            {
+                                                fitted_chem.Last().Has_adduct = false;
+                                            }
                                             if (str.Length > 20) { fitted_chem.Last().maxFactor = dParser(str[20]); }
                                             else { fitted_chem.Last().maxFactor = 0.0; }
                                             if ((fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
                                             {
                                                 fitted_chem.Last().SortIdx = 0;
-                                            }
+                                            }                                           
                                         }
                                         if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                         {
@@ -14770,7 +14773,7 @@ namespace Isotope_fitting
                         int length = region[solution].Length;
                         for (int kk = 0; kk < length; kk++)
                         {
-                            line += " " + region[solution][kk];
+                            line += " " + region[solution][kk].ToString();
                         }
                     }
                     writer.WriteLine(line);
@@ -14797,7 +14800,7 @@ namespace Isotope_fitting
                 for (int n = 0; n < tab_node.Count; n++)
                 {
                     line_write += "\t";
-                    line_write += tab_node[n][0] + " " + tab_node[n][1] + " " + tab_node[n][2] + " " + tab_node[n][3] + " " + tab_node[n][4] + " " + tab_node[n][5];
+                    line_write += tab_node[n][0].ToString() + " " + tab_node[n][1].ToString() + " " + tab_node[n][2].ToString() + " " + tab_node[n][3].ToString() + " " + tab_node[n][4].ToString() + " " + tab_node[n][5].ToString();
                 }
                 writer.WriteLine(line_write);
                 writer.WriteLine();
@@ -14806,7 +14809,7 @@ namespace Isotope_fitting
                 for (int n = 0; n < tab_coef.Count; n++)
                 {
                     line_write += "\t";
-                    line_write += tab_coef[n][0] + " " + tab_coef[n][1] + " " + tab_coef[n][2] + " " + tab_coef[n][3] + " " + tab_coef[n][4] + " " + tab_coef[n][5];
+                    line_write += tab_coef[n][0].ToString() + " " + tab_coef[n][1].ToString() + " " + tab_coef[n][2].ToString() + " " + tab_coef[n][3].ToString() + " " + tab_coef[n][4].ToString() + " " + tab_coef[n][5].ToString();
                 }
                 writer.WriteLine(line_write);
                 writer.WriteLine();
@@ -14815,7 +14818,7 @@ namespace Isotope_fitting
                 for (int n = 0; n < tab_thres.Count; n++)
                 {
                     line_write += "\t";
-                    line_write += tab_thres[n][0] + " " + tab_thres[n][1] + " " + tab_thres[n][2] + " " + tab_thres[n][3] + " " + tab_thres[n][4] + " " + tab_thres[n][5] + " " + tab_thres[n][6];
+                    line_write += tab_thres[n][0].ToString() + " " + tab_thres[n][1].ToString() + " " + tab_thres[n][2].ToString() + " " + tab_thres[n][3].ToString() + " " + tab_thres[n][4].ToString() + " " + tab_thres[n][5].ToString() + " " + tab_thres[n][6].ToString();
                 }
                 writer.WriteLine(line_write);
                 writer.WriteLine();
@@ -14884,7 +14887,7 @@ namespace Isotope_fitting
                     {
                         centroid_string += "\t" + pp.X + " " + pp.Y;
                     }
-                    writer.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension + "\t" + Form2.Fragments2[indexS - 1].To_plot.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Fixed.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct.ToString() + "\t" + Form2.Fragments2[indexS - 1].maxFactor.ToString());
+                    writer.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity.ToString() + "\t" + Form2.Fragments2[indexS - 1].Factor.ToString() + "\t" + Form2.Fragments2[indexS - 1].PPM_Error.ToString() + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution.ToString() + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error.ToString() + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error.ToString() + "\t" + Form2.Fragments2[indexS - 1].SortIdx.ToString() + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension + "\t" + Form2.Fragments2[indexS - 1].To_plot.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Fixed.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct.ToString() + "\t" + Form2.Fragments2[indexS - 1].maxFactor.ToString());
                     writer.WriteLine(profile_string);
                     writer.WriteLine(centroid_string);
                 }

@@ -55,7 +55,7 @@ namespace Isotope_fitting
         /// </summary>
         public static bool string_to_bool(string str)
         {
-            if (str == "True") return true;
+            if (str == "True" || str == "TRUE") return true;
             else return false;
         }
 
