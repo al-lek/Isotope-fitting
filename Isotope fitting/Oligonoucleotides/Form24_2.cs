@@ -275,7 +275,7 @@ namespace Isotope_fitting
                 }
                 else if (!is_precursor && !is_known_MS2 && !is_B)
                 {
-                    int index1 = chem.SortIdx;
+                    int index1 = Int32.Parse(chem.Index);
                     bool in_bounds = true;
                     if (primary_indexes.Count > 0)
                     {

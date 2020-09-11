@@ -9967,8 +9967,8 @@ namespace Isotope_fitting
                     {
                         if (los_chkBox.Checked || (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")))
                         {
-                            if (w_cov1.Count == 0 || !w_cov1.Contains(nn.Index)) { w_cov1.Add(nn.Index); }
-                            if (total_1.Count == 0 || !total_1.Contains(nn.Index)) { total_1.Add(nn.Index); }
+                            if (w_cov1.Count == 0 || !w_cov1.Contains(nn.SortIdx)) { w_cov1.Add(nn.SortIdx); }
+                            if (total_1.Count == 0 || !total_1.Contains(nn.SortIdx)) { total_1.Add(nn.SortIdx); }
                         }
                     }
                 }
