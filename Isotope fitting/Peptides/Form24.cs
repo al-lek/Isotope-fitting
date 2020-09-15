@@ -147,9 +147,10 @@ namespace Isotope_fitting
                 bool is_neutral_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("H");
                 bool is_primary = primary.Contains(curr_type);
                 bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("H") && curr_type.Length > 1;
-
+                double range = 0;
+                if (is_primary) range = 2 * 1.007825 / curr_q;
                 // drop frag by mz and charge rules
-                if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+                if (curr_mz < mzMin - range || curr_mz > mzMax + range || curr_q < qMin || curr_q > qMax) continue;
 
                 if (is_internal)
                 {
@@ -346,7 +347,7 @@ namespace Isotope_fitting
 
                 if (is_primary)
                 {
-                    if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_primary.Contains(curr_type) && curr_mz >= mzMin && curr_mz <= mzMax) res.Add(chem.DeepCopy());
 
                     // this code is only for MSProduct that does not provide primary with H gain/loss by default.
                     // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
@@ -354,23 +355,24 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
-                            bool is_error = false;
-                            // add the primary and modify it according to gain or loss of H
-                            res.Add(chem.DeepCopy());
-                            int curr_idx = res.Count - 1;
-
-                            string new_type = "(" + hyd_mod + ")";
-                            res[curr_idx].Ion_type = new_type;
-                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
-                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-
                             double hyd_num = 0.0;
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
-
-                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error,res[curr_idx].InputFormula, true, (int)hyd_num);
-                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+                            double mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4);
+                            // add the primary and modify it according to gain or loss of H
+                            if (mz >= mzMin && mz <= mzMax)
+                            {
+                                bool is_error = false;
+                                res.Add(chem.DeepCopy());
+                                int curr_idx = res.Count - 1;
+                                string new_type = "(" + hyd_mod + ")";
+                                res[curr_idx].Ion_type = new_type;
+                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                res[curr_idx].Mz = mz.ToString();
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                                if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+                            }
                         }
                     }
                 }

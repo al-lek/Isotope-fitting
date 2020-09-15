@@ -1091,9 +1091,10 @@ namespace Isotope_fitting
                 bool is_neutral_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("H");
                 bool is_primary = primary.Contains(curr_type);
                 bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("H") && curr_type.Length > 1;
-
+                double range = 0;
+                if (is_primary) range = 2* 1.007825/ curr_q;
                 // drop frag by mz and charge rules
-                if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+                if (curr_mz < mzMin - range || curr_mz > mzMax+ range || curr_q < qMin || curr_q > qMax) continue;
 
                 if (is_internal && internal_indexesTo.Count > 0 && internal_indexesTo.Count > 0)
                 {
@@ -1159,7 +1160,7 @@ namespace Isotope_fitting
 
                 if (is_primary)
                 {
-                    if (types_primary.Contains(curr_type)) res.Add(chem.DeepCopy());
+                    if (types_primary.Contains(curr_type)&& curr_mz >= mzMin && curr_mz <= mzMax) res.Add(chem.DeepCopy());                   
 
                     // this code is only for MSProduct that does not provide primary with H gain/loss by default.
                     // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
@@ -1167,23 +1168,24 @@ namespace Isotope_fitting
                     {
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
-                            // add the primary and modify it according to gain or loss of H
-                            res.Add(chem.DeepCopy());
-                            int curr_idx = res.Count - 1;
-                            bool is_error = false;
-                            string new_type = "(" + hyd_mod + ")";
-                            res[curr_idx].Ion_type = new_type;
-                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
-                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-
                             double hyd_num = 0.0;
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
-
-                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
-                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
-
+                            double mz = Math.Round(curr_mz + hyd_num * 1.007825 / curr_q, 4);
+                            // add the primary and modify it according to gain or loss of H
+                            if (mz >= mzMin && mz <= mzMax)
+                            {
+                                res.Add(chem.DeepCopy());
+                                int curr_idx = res.Count - 1;
+                                bool is_error = false;
+                                string new_type = "(" + hyd_mod + ")";
+                                res[curr_idx].Ion_type = new_type;
+                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                res[curr_idx].Mz = mz.ToString();
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                                if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+                            }
                         }
                     }
                 }
@@ -1212,7 +1214,7 @@ namespace Isotope_fitting
             List<ChemiForm> res = new List<ChemiForm>();
             if (has_adduct) extra_mz = calc_m(out extra_mz_error, extra_adduct);
             if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error"); return res; }
-
+            if (has_adduct && !add) { extra_mz= - extra_mz; }
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
             //other types are M, internal and known MS2
             // 1. get mz and charge limits (if any)
@@ -1227,8 +1229,7 @@ namespace Isotope_fitting
 
             double qMax = txt_to_d(chargeMax_Box_riken);
             if (double.IsNaN(qMax)) qMax = 100.0;
-            if (has_adduct && add) { mzMax = mzMax + extra_mz; mzMin = mzMin + extra_mz; }
-            if (has_adduct && !add) { mzMin = mzMin - extra_mz; mzMax = mzMax - extra_mz; }
+          
 
             if (frm2.is_exp_deconvoluted) { qMin = -1; qMax = 1; }
             // 2. get checked types
@@ -1260,14 +1261,14 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Wrong format in internal indexes"); internal_indexesTo.Clear(); internal_indexesFrom.Clear();
             }
+            
             // main selection routine
             foreach (ChemiForm chem in ChemFormulas)
             {
                 double curr_mz = dParser(chem.Mz);
-                double curr_q = chem.Charge;
+                int curr_q = chem.Charge;
                 string curr_type = chem.Ion_type;
                 string curr_type_first = curr_type.Substring(0, 1);
-
                 bool is_precursor = curr_type.StartsWith("M");
                 bool is_internal = curr_type.StartsWith("internal");
                 bool is_B_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("B(");
@@ -1275,11 +1276,13 @@ namespace Isotope_fitting
                 bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("B(") && curr_type.Length > 1;
                 bool is_known_MS2 = curr_type.StartsWith("known");
                 bool is_B = curr_type.StartsWith("B(");
-
+                double range = 0;
+                if (is_primary && types_primary_Hyd.Count > 0) range = 2 * 1.007825 / Math.Abs(curr_q);
+                if (is_primary && types_primary_H2O.Count > 0) range = 19 / Math.Abs(curr_q);
 
                 // drop frag by mz and charge rules
-                if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
-
+                if (curr_mz+ extra_mz < mzMin- range || curr_mz + extra_mz > mzMax+range || curr_q < qMin || curr_q > qMax) continue;
+                
                 if (is_internal)
                 {
                     bool in_bounds = true;
@@ -1317,167 +1320,20 @@ namespace Isotope_fitting
                     if (!in_bounds) continue;
 
                 }
-                else if (!is_precursor && !is_known_MS2 && !is_B)
+                else if (!is_precursor && !is_known_MS2 && !is_B && primary_indexes.Count > 0)
                 {
                     int index1 = chem.SortIdx;
-                    bool in_bounds = true;
-                    if (primary_indexes.Count > 0)
+                    bool in_bounds=false;
+                    if (sortIdx_chkBx_riken.Checked) { index1 = Int32.Parse(chem.Index); }
+                    for (int k = 0; k < primary_indexes.Count; k++)
                     {
-                        in_bounds = false;
-                        if (sortIdx_chkBx_riken.Checked) { index1 = Int32.Parse(chem.Index); }
-                        for (int k = 0; k < primary_indexes.Count; k++)
+                        if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
                         {
-                            if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
-                            {
-                                in_bounds = true; break;
-                            }
+                            in_bounds = true; break;
                         }
-                        if (!in_bounds) continue;
                     }
-                    //index1 = Int32.Parse(chem.Index);
-                    //if (chem.Ion.StartsWith("a") && frm2.exclude_a_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_a_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("b") && frm2.exclude_b_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_b_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("c") && frm2.exclude_c_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_c_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("x") && frm2.exclude_x_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_x_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("y") && frm2.exclude_y_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_y_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("z") && frm2.exclude_z_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_z_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("d") && frm2.exclude_d_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_d_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else if (chem.Ion.StartsWith("w") && frm2.exclude_w_indexes.Count > 0)
-                    //{
-                    //    foreach (ExcludeTypes ext in frm2.exclude_w_indexes)
-                    //    {
-                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                    //        {
-                    //            for (int k = 0; k < ext.Index1.Count; k++)
-                    //            {
-                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                    //                {
-                    //                    in_bounds = false; break;
-                    //                }
-                    //            }
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-
-                    //if (!in_bounds) continue;
+                    if (!in_bounds) continue;
                 }
-
-                //// drop frag if type is not selected, 
-                //if (!types.Contains(curr_type) && !types.Any(t => t.StartsWith(curr_type_first))) continue;
-
                 if (is_precursor)
                 {
                     if (types_precursor.Contains(curr_type))
@@ -1490,7 +1346,6 @@ namespace Isotope_fitting
                     }
                     continue;
                 }
-
                 if (is_internal)
                 {
                     if (types_internal.Contains(curr_type))
@@ -1539,10 +1394,9 @@ namespace Isotope_fitting
                     }
                     continue;
                 }
-
                 if (is_primary)
                 {
-                    if (types_primary.Contains(curr_type))
+                    if (types_primary.Contains(curr_type) && curr_mz + extra_mz >= mzMin && curr_mz + extra_mz <= mzMax)
                     {
                         if (has_adduct)
                         {
@@ -1558,35 +1412,39 @@ namespace Isotope_fitting
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
                             bool is_error = false;
-                            // add the primary and modify it according to gain or loss of H2O
-                            // add the primary and modify it according to gain or loss of H2O
-                            if (has_adduct)
-                            {
-                                is_error = check_adduct(chem, add, res);
-                            }
-                            else { res.Add(chem.DeepCopy()); }
-                            if (is_error) continue;
-                            int curr_idx = res.Count - 1;
-
-                            string new_type = "(" + hyd_mod;
-                            if (has_adduct)
-                            {
-                                if (add) { new_type += "+" + extra_adduct; }
-                                else { new_type += "-" + extra_adduct; }
-                            }
-                            new_type += ")";
-                            res[curr_idx].Ion_type = new_type;
-                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
-                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                            res[curr_idx].Has_adduct = has_adduct;
                             double hyd_num = 0.0;
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
+                            double mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4);
+                            if (mz + extra_mz >= mzMin && mz + extra_mz <= mzMax)
+                            {
+                                // add the primary and modify it according to gain or loss of H
+                                if (has_adduct)
+                                {
+                                    is_error = check_adduct(chem, add, res);
+                                }
+                                else { res.Add(chem.DeepCopy()); }
+                                if (is_error) continue;
+                                int curr_idx = res.Count - 1;
 
-                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
-                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+                                string new_type = "(" + hyd_mod;
+                                if (has_adduct)
+                                {
+                                    if (add) { new_type += "+" + extra_adduct; }
+                                    else { new_type += "-" + extra_adduct; }
+                                }
+                                new_type += ")";
+                                res[curr_idx].Ion_type = new_type;
+                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                res[curr_idx].Has_adduct = has_adduct;
 
+                                res[curr_idx].Mz = mz.ToString();
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+
+                                if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
+                            }
                         }
                     }
                     if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
@@ -1594,39 +1452,44 @@ namespace Isotope_fitting
                         foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
                         {
                             bool is_error = false;
-                            // add the primary and modify it according to gain or loss of H
+                            // add the primary and modify it according to gain or loss of H2O
+                            double mz;
+                            if (hyd_mod.Contains('+')) mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4);
+                            else mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4);
+                            if (mz + extra_mz >= mzMin && mz + extra_mz <= mzMax)
+                            {
+                                if (has_adduct)
+                                {
+                                    is_error = check_adduct(chem, add, res);
+                                }
+                                else { res.Add(chem.DeepCopy()); }
+                                if (is_error) continue;
 
-                            if (has_adduct)
-                            {
-                                is_error = check_adduct(chem, add, res);
-                            }
-                            else { res.Add(chem.DeepCopy()); }
-                            if (is_error) continue;
+                                int curr_idx = res.Count - 1;
+                                string new_type = "(" + hyd_mod;
+                                if (has_adduct)
+                                {
+                                    if (add) { new_type += "+" + extra_adduct; }
+                                    else { new_type += "-" + extra_adduct; }
+                                }
+                                new_type += ")";
+                                res[curr_idx].Ion_type = new_type;
+                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                res[curr_idx].Has_adduct = has_adduct;
+                                if (hyd_mod.Contains('+'))
+                                {
+                                    res[curr_idx].Mz = mz.ToString();
+                                    res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, 1);
+                                }
+                                else
+                                {
+                                    res[curr_idx].Mz = mz.ToString();
+                                    res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, -1);
+                                }
+                                if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
 
-                            int curr_idx = res.Count - 1;
-                            string new_type = "(" + hyd_mod;
-                            if (has_adduct)
-                            {
-                                if (add) { new_type += "+" + extra_adduct; }
-                                else { new_type += "-" + extra_adduct; }
                             }
-                            new_type += ")";
-                            res[curr_idx].Ion_type = new_type;
-                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
-                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                            res[curr_idx].Has_adduct = has_adduct;
-                            if (hyd_mod.Contains('+'))
-                            {
-                                res[curr_idx].Mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error,res[curr_idx].InputFormula, false, 0, 1);
-                            }
-                            else
-                            {
-                                res[curr_idx].Mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, -1);
-                            }
-                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
-
                         }
                     }
                 }

@@ -166,7 +166,7 @@ namespace Isotope_fitting
             if (has_adduct && extra_adduct[0].Equals('+')) { extra_adduct = extra_adduct.Remove(0, 1); add = true; }
             if (has_adduct) extra_mz = calc_m(out extra_mz_error, extra_adduct);
             if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error");  return res; }
-            
+            if (has_adduct && !add) { extra_mz = -extra_mz; }
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
             //other types are M, internal and known MS2
             // 1. get mz and charge limits (if any)
@@ -183,9 +183,6 @@ namespace Isotope_fitting
             if (double.IsNaN(qMax)) qMax = 100.0;
 
             if (frm2.is_exp_deconvoluted) { qMin = 0; qMax = 1; }
-
-            if (has_adduct && add) { mzMax = mzMax + extra_mz; mzMin = mzMin + extra_mz; }
-            if (has_adduct && !add) { mzMin = mzMin - extra_mz; mzMax = mzMax - extra_mz; }
 
             // 2. get checked types
             List<string> types = new List<string>();
@@ -220,7 +217,7 @@ namespace Isotope_fitting
             foreach (ChemiForm chem in ChemFormulas)
             {
                 double curr_mz = dParser(chem.Mz);
-                double curr_q = chem.Charge;
+                int curr_q = chem.Charge;
                 string curr_type = chem.Ion_type;
                 string curr_type_first = curr_type.Substring(0, 1);
 
@@ -230,11 +227,13 @@ namespace Isotope_fitting
                 bool is_primary = primary.Contains(curr_type.ToArray()[0].ToString()) && curr_type.Length == 1;
                 bool is_primary_Hyd = primary.Any(curr_type.StartsWith) && !curr_type.Contains("B(") && curr_type.Length > 1;
                 bool is_known_MS2 = curr_type.StartsWith("known"); 
-                bool is_B= curr_type.StartsWith("B("); 
-
+                bool is_B= curr_type.StartsWith("B(");
+                double range = 0;
+                if (is_primary && types_primary_Hyd.Count > 0) range = 2*1.007825 / Math.Abs(curr_q);
+                if (is_primary && types_primary_H2O.Count>0) range = 19 / Math.Abs(curr_q);
 
                 // drop frag by mz and charge rules
-                if (curr_mz < mzMin || curr_mz > mzMax || curr_q < qMin || curr_q > qMax) continue;
+                if (curr_mz + extra_mz < mzMin - range || curr_mz + extra_mz > mzMax + range || curr_q < qMin || curr_q > qMax) continue;
 
                 if (is_internal)
                 {
@@ -482,7 +481,7 @@ namespace Isotope_fitting
                 
                 if (is_primary)
                 {
-                    if (types_primary.Contains(curr_type))
+                    if (types_primary.Contains(curr_type) && curr_mz + extra_mz >=mzMin && curr_mz + extra_mz <= mzMax)
                     {
                         if (has_adduct)
                         {
@@ -498,34 +497,37 @@ namespace Isotope_fitting
                         foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
                         {
                             bool is_error = false;
-                            // add the primary and modify it according to gain or loss of H2O
-                            if (has_adduct)
-                            {
-                                is_error = check_adduct(chem, add, res);
-                            }
-                            else { res.Add(chem.DeepCopy()); }
-                            if (is_error) continue;
-                            int curr_idx = res.Count - 1;
-
-                            string new_type = "(" + hyd_mod;
-                            if (has_adduct)
-                            {
-                                if (add) { new_type += "+" + extra_adduct; }
-                                else { new_type += "-" + extra_adduct; }
-                            }
-                            new_type += ")";
-                            res[curr_idx].Ion_type = new_type;
-                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
-                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                            res[curr_idx].Has_adduct = has_adduct;
-
                             double hyd_num = 0.0;
                             if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
                             else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
+                            double mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4);
+                            if (mz + extra_mz >= mzMin && mz + extra_mz <= mzMax)
+                            {
+                                // add the primary and modify it according to gain or loss of H
+                                if (has_adduct)
+                                {
+                                    is_error = check_adduct(chem, add, res);
+                                }
+                                else { res.Add(chem.DeepCopy()); }
+                                if (is_error) continue;
+                                int curr_idx = res.Count - 1;
 
-                            res[curr_idx].Mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4).ToString();
-                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error,res[curr_idx].InputFormula, true, (int)hyd_num);
-                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+                                string new_type = "(" + hyd_mod;
+                                if (has_adduct)
+                                {
+                                    if (add) { new_type += "+" + extra_adduct; }
+                                    else { new_type += "-" + extra_adduct; }
+                                }
+                                new_type += ")";
+                                res[curr_idx].Ion_type = new_type;
+                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                res[curr_idx].Has_adduct = has_adduct;
+                                res[curr_idx].Mz = mz.ToString();
+                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                                if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
+                            }
                         }
                     }
                     if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
@@ -533,39 +535,47 @@ namespace Isotope_fitting
                         foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
                         {
                             bool is_error = false;
-                            // add the primary and modify it according to gain or loss of H
+                            double mz;
+                            if (hyd_mod.Contains('+')) mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4);
+                            else mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4);
+                            if (mz + extra_mz >= mzMin && mz + extra_mz <= mzMax)
+                            {
 
-                            if (has_adduct)
-                            {
-                                is_error=check_adduct(chem, add, res);
-                            }
-                            else { res.Add(chem.DeepCopy()); }
-                            if (is_error) continue;
+                                // add the primary and modify it according to gain or loss of H2O
+                                if (has_adduct)
+                                {
+                                    is_error = check_adduct(chem, add, res);
+                                }
+                                else { res.Add(chem.DeepCopy()); }
+                                if (is_error) continue;
 
-                            int curr_idx = res.Count - 1;
-                            string new_type ="("+hyd_mod;
-                            if (has_adduct)
-                            {
-                                if (add) { new_type += "+" + extra_adduct; }
-                                else { new_type += "-" + extra_adduct; }
-                            }
-                            new_type += ")";
-                            res[curr_idx].Ion_type = new_type;
-                            res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
-                            res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                            res[curr_idx].Has_adduct = has_adduct;
+                                int curr_idx = res.Count - 1;
+                                string new_type = "(" + hyd_mod;
+                                if (has_adduct)
+                                {
+                                    if (add) { new_type += "+" + extra_adduct; }
+                                    else { new_type += "-" + extra_adduct; }
+                                }
+                                new_type += ")";
+                                res[curr_idx].Ion_type = new_type;
+                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                res[curr_idx].Has_adduct = has_adduct;
 
-                            if (hyd_mod.Contains('+'))
-                            {
-                                res[curr_idx].Mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0,1);
+                                if (hyd_mod.Contains('+'))
+                                {
+                                    res[curr_idx].Mz = mz.ToString();
+                                    res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, 1);
+                                }
+                                else
+                                {
+                                    res[curr_idx].Mz = mz.ToString();
+                                    res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, -1);
+                                }
+                                if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
                             }
-                            else
-                            {
-                                res[curr_idx].Mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4).ToString();
-                                res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0,-1);
-                            }     
-                            if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+
                         }
                     }
                 }
