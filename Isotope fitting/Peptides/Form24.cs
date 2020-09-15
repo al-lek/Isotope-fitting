@@ -190,12 +190,12 @@ namespace Isotope_fitting
                 }
                 else if (!is_precursor)
                 {
-                    int index1 = Int32.Parse(chem.Index);
+                    int index1 = chem.SortIdx; 
                     bool in_bounds = true;
                     if (primary_indexes.Count > 0)
                     {
                         in_bounds = false;
-                        if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }
+                        if (sortIdx_chkBx.Checked) { index1 = Int32.Parse(chem.Index); }
                         for (int k = 0; k < primary_indexes.Count; k++)
                         {
                             if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])

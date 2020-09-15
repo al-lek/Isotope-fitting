@@ -1111,8 +1111,8 @@ namespace Isotope_fitting
                 }
                 else if (!is_precursor && primary_indexes.Count > 0)
                 {
-                    int index1 = Int32.Parse(chem.Index);
-                    if (sortIdx_chkBx.Checked) { index1 = chem.SortIdx; }                    
+                    int index1 = chem.SortIdx;
+                    if (sortIdx_chkBx.Checked) { index1 = Int32.Parse(chem.Index); }                    
                     bool in_bounds = false;
                     for (int k = 0; k < primary_indexes.Count; k++)
                     {
@@ -1319,12 +1319,12 @@ namespace Isotope_fitting
                 }
                 else if (!is_precursor && !is_known_MS2 && !is_B)
                 {
-                    int index1 = Int32.Parse(chem.Index);
+                    int index1 = chem.SortIdx;
                     bool in_bounds = true;
                     if (primary_indexes.Count > 0)
                     {
                         in_bounds = false;
-                        if (sortIdx_chkBx_riken.Checked) { index1 = chem.SortIdx; }
+                        if (sortIdx_chkBx_riken.Checked) { index1 = Int32.Parse(chem.Index); }
                         for (int k = 0; k < primary_indexes.Count; k++)
                         {
                             if (index1 >= primary_indexes[k][0] && index1 <= primary_indexes[k][1])
@@ -1334,144 +1334,145 @@ namespace Isotope_fitting
                         }
                         if (!in_bounds) continue;
                     }
-                    index1 = Int32.Parse(chem.Index);
-                    if (chem.Ion.StartsWith("a") && frm2.exclude_a_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_a_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("b") && frm2.exclude_b_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_b_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("c") && frm2.exclude_c_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_c_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("x") && frm2.exclude_x_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_x_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("y") && frm2.exclude_y_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_y_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("z") && frm2.exclude_z_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_z_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("d") && frm2.exclude_d_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_d_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if (chem.Ion.StartsWith("w") && frm2.exclude_w_indexes.Count > 0)
-                    {
-                        foreach (ExcludeTypes ext in frm2.exclude_w_indexes)
-                        {
-                            if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
-                            {
-                                for (int k = 0; k < ext.Index1.Count; k++)
-                                {
-                                    if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
-                                    {
-                                        in_bounds = false; break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    if (!in_bounds) continue;
+                    //index1 = Int32.Parse(chem.Index);
+                    //if (chem.Ion.StartsWith("a") && frm2.exclude_a_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_a_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("b") && frm2.exclude_b_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_b_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("c") && frm2.exclude_c_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_c_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("x") && frm2.exclude_x_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_x_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("y") && frm2.exclude_y_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_y_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("z") && frm2.exclude_z_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_z_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("d") && frm2.exclude_d_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_d_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else if (chem.Ion.StartsWith("w") && frm2.exclude_w_indexes.Count > 0)
+                    //{
+                    //    foreach (ExcludeTypes ext in frm2.exclude_w_indexes)
+                    //    {
+                    //        if ((ext.Extension != "" && recognise_extension(chem.Extension, ext.Extension)) || (ext.Extension == "" && chem.Extension == ""))
+                    //        {
+                    //            for (int k = 0; k < ext.Index1.Count; k++)
+                    //            {
+                    //                if (index1 >= ext.Index1[k][0] && index1 <= ext.Index1[k][1])
+                    //                {
+                    //                    in_bounds = false; break;
+                    //                }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+
+                    //if (!in_bounds) continue;
                 }
 
                 //// drop frag if type is not selected, 
