@@ -3535,7 +3535,7 @@ namespace Isotope_fitting
                 }
             }
             Clipboard.Clear();
-            Clipboard.SetText(sb.ToString());
+            if(sb!=null && sb.Length>0) Clipboard.SetText(sb.ToString());
         }
         private void saveTree_toFile(TreeView tree)
         {
@@ -4724,7 +4724,7 @@ namespace Isotope_fitting
             }
             sb.AppendLine(); sb.AppendLine();
             Clipboard.Clear();
-            Clipboard.SetText(sb.ToString());
+            if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
         }
         private  double SignedPolygonArea(Paths polygon)
         {
@@ -4946,26 +4946,29 @@ namespace Isotope_fitting
                 pp7 = "(sd')" + Math.Round(all_fitted_results[set_idx][set_pos_idx][k + all_fitted_sets[set_idx][set_pos_idx].Length * 5], 3).ToString();//fragment's sd'
                 sb.AppendLine(pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7);
             }
-            tool_text = sb.ToString();
+            if (sb != null && sb.Length > 0)
+            {
+                tool_text = sb.ToString();
 
-            // Node location in treeView coordinates.
-            Point loc = fitnode.Bounds.Location;
+                // Node location in treeView coordinates.
+                Point loc = fitnode.Bounds.Location;
 
-            // Node location in form client coordinates.
-            loc.Offset(fit_tree.Location);
+                // Node location in form client coordinates.
+                loc.Offset(fit_tree.Location);
 
-            //if (show_Btn.Visible == true)
-            //{
-            // Make balloon point to upper left corner of the node.
-            loc.Offset(0, fitnode.Bounds.Height + 10);
-            //}
-            //else
-            //{
-            //    // Make balloon point to upper right corner of the node.
-            //    loc.Offset(fitnode.Bounds.Width, 0);
-            //}
+                //if (show_Btn.Visible == true)
+                //{
+                // Make balloon point to upper left corner of the node.
+                loc.Offset(0, fitnode.Bounds.Height + 10);
+                //}
+                //else
+                //{
+                //    // Make balloon point to upper right corner of the node.
+                //    loc.Offset(fitnode.Bounds.Width, 0);
+                //}
 
-            toolTip_fit.Show(tool_text, fit_tree, loc);
+                toolTip_fit.Show(tool_text, fit_tree, loc);
+            }
 
         }
         /// <summary>
@@ -5078,9 +5081,12 @@ namespace Isotope_fitting
                 //node_overlapped_area(node, sb);
                 //node_residual_area(node, sb);
                 //node_maxmin_coverage_area(node, sb);
-                error_string = sb.ToString();
-                Form17 frm17 = new Form17(error_string);
-                frm17.ShowDialog();
+                if (sb != null && sb.Length > 0)
+                {
+                    error_string = sb.ToString();
+                    Form17 frm17 = new Form17(error_string);
+                    frm17.ShowDialog();
+                }
             }
         }
         private void node_beforeCheck(object sender, TreeViewCancelEventArgs e)
@@ -5130,7 +5136,7 @@ namespace Isotope_fitting
                 sb.AppendLine(Fragments2[curr_idx].Name + "\t" + Fragments2[curr_idx].Mz + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length], 3).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 3], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][i + all_fitted_sets[set_idx][set_pos_idx].Length * 4], 3).ToString() + "%" + "\t" + Math.Round(Fragments2[curr_idx].PPM_Error, 2).ToString() + "\t" + intensity);
             }
             Clipboard.Clear();
-            Clipboard.SetText(sb.ToString());
+            if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
         }
         private void copy_solution_scorestoClipBoard(TreeNode node)
         {
@@ -5154,7 +5160,7 @@ namespace Isotope_fitting
             if (header) sb.AppendLine("Fragments" + "\t" + "M" + "\t" + "Mi" + "\t" + "di" + "\t" + "ei" + "\t" + "di'" + "\t" + "SSE");
             sb.AppendLine(Name + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 1], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 2], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 4], 3).ToString() + "% " + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 5], 2).ToString() + "%" + "\t" + Math.Round(all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 6], 3).ToString() + "%" + "\t" + all_fitted_results[set_idx][set_pos_idx][all_fitted_results[set_idx][set_pos_idx].Length - 3].ToString("0.###e0" + " "));
             Clipboard.Clear();
-            Clipboard.SetText(sb.ToString());
+            if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
         }        
         private void fit_node_checkChanged(TreeNode fitnode)
         {
@@ -6286,13 +6292,21 @@ namespace Isotope_fitting
         }
         private void PointLine_addSeries(LightningChartUltimate LC, int index, List<double[]> data)
         {
-            int pointCount = data.Count;
-            SeriesPoint[] points = new SeriesPoint[pointCount];
-            for (int i = 0; i < pointCount; i++)
-                points[i] = new SeriesPoint(data[i][0], data[i][1]);
+            try
+            {
+                int pointCount = data.Count;
+                SeriesPoint[] points = new SeriesPoint[pointCount];
+                for (int i = 0; i < pointCount; i++)
+                    points[i] = new SeriesPoint(data[i][0], data[i][1]);
 
-            LC.ViewXY.PointLineSeries[index].Points = points;
-            LC.ViewXY.PointLineSeries[index].Visible = true;
+                LC.ViewXY.PointLineSeries[index].Points = points;
+                LC.ViewXY.PointLineSeries[index].Visible = true;
+            }
+            catch(Exception eeee)
+            {
+                MessageBox.Show("Oops an error occurred while refreshing the basic plot. Please try again. Error: "+ eeee.ToString());
+            }
+           
         }
         private void PointLine_addSeries(LightningChartUltimate LC, int index, double[] mz, double[] y, double y_factor)
         {
@@ -7371,7 +7385,7 @@ namespace Isotope_fitting
                     else if (extension.Equals(".hpfit") || extension.Equals(".hifit")) { heavy = true; heavy_present = true; envipat = true; }
                     else if (extension.Equals(".lpfit") || extension.Equals(".lifit")) { light = true; light_present = true; envipat = true; }
                     else if (extension.Equals(".hlpfit") || extension.Equals(".hlifit")) { HEAVY_LIGHT_BOTH = true; light_present = true; heavy_present = true; envipat = true; }
-                    loaded_lists = sb.ToString();
+                    if (sb != null && sb.Length > 0) loaded_lists = sb.ToString();
                     show_files_Btn.ToolTipText = loaded_lists;
                     is_loading = true;  // performance
                     fullPath = FileName;
@@ -9142,10 +9156,13 @@ namespace Isotope_fitting
                 sb.AppendLine("B: " + Math.Round(coverage_B * 100, 2) + "%");
                 sb.AppendLine();
             }
-            message_string = sb.ToString();
-            Form17 frm17 = new Form17(message_string);
-            frm17.Text = "Experimental intensity coverage";
-            frm17.ShowDialog();
+            if (sb != null && sb.Length > 0)
+            {
+                message_string = sb.ToString();
+                Form17 frm17 = new Form17(message_string);
+                frm17.Text = "Experimental intensity coverage";
+                frm17.ShowDialog();
+            }
         }
         private double calc_coverage(List<int> fragstatistics_temp)
         {
@@ -10006,10 +10023,13 @@ namespace Isotope_fitting
                 sb.AppendLine("Total : " + Math.Round(t1, 1).ToString() + "%");
                 sb.AppendLine();
             }
-            message_string = sb.ToString();
-            Form17 frm17 = new Form17(message_string);
-            frm17.Text = "Sequence coverage";
-            frm17.ShowDialog();
+            if (sb != null && sb.Length > 0)
+            {
+                message_string = sb.ToString();
+                Form17 frm17 = new Form17(message_string);
+                frm17.Text = "Sequence coverage";
+                frm17.ShowDialog();
+            }
         }
         //mouse down
         private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
@@ -14529,7 +14549,7 @@ namespace Isotope_fitting
                         {
                             sb.AppendLine(str[a]);
                         }
-                        loaded_lists = sb.ToString();
+                        if (sb != null && sb.Length > 0) loaded_lists = sb.ToString();
                     }
                     else
                     {

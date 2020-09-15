@@ -503,7 +503,7 @@ namespace Isotope_fitting
                                                     "\t" + Fragments3[i].PPM_Error.ToString("0.##") + "\t" + (Fragments3[i].Factor * Fragments3[i].Max_intensity).ToString("0"));
                 }
                 Clipboard.Clear();
-                Clipboard.SetText(sb.ToString());
+                if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
             }
            
         }

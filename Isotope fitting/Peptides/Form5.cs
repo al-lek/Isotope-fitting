@@ -73,7 +73,7 @@ namespace Isotope_fitting
                 sb.Append(Math.Round((peak[1] + peak[4]), 6).ToString() + "\t"+ Math.Round((peak[5]), 2).ToString() + "\t"+ Math.Round((peak[3]), 0).ToString());               
                 sb.Append("\r\n");
             }
-            Clipboard.SetText(sb.ToString());
+            if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
         }
 
         private void Form5_DpiChanged(object sender, DpiChangedEventArgs e)
