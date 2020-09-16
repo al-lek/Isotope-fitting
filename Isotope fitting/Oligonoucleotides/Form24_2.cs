@@ -531,6 +531,7 @@ namespace Isotope_fitting
                                 res[curr_idx].Has_adduct = has_adduct;
                                 res[curr_idx].Mz = mz.ToString();
                                 res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                                if (extra_name.Equals("B(A)") || extra_name.Equals("B(G)") || extra_name.Equals("B(T)")) { res[curr_idx].Has_adduct = false; }
                                 if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
 
                             }
@@ -567,7 +568,7 @@ namespace Isotope_fitting
                                 res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
-
+                                if (extra_name.Equals("B(A)") || extra_name.Equals("B(G)") || extra_name.Equals("B(T)")) { res[curr_idx].Has_adduct = false; }
                                 if (hyd_mod.Contains('+'))
                                 {
                                     res[curr_idx].Mz = mz.ToString();
@@ -623,6 +624,7 @@ namespace Isotope_fitting
                     last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0,s);
                     last_chem.Radio_label = last_chem.Name;
                     last_chem.Ion_type = new_type;
+                    if (extra_name.Equals("B(A)") || extra_name.Equals("B(G)") || extra_name.Equals("B(T)")) { last_chem.Has_adduct = false; }
                     res.Add(last_chem);
                 }
                 else res.Add(last_chem);

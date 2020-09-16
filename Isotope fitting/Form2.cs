@@ -8052,7 +8052,7 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
-                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); } 
+                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
                                     }
                                     else duplicate_count++;
                                 }
