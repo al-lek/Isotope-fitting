@@ -3003,7 +3003,7 @@ namespace Isotope_fitting
                 }
             }
         }
-        private bool check_duplicates_Fragments2(ChemiForm chem1)
+        public bool check_duplicates_Fragments2(ChemiForm chem1)
         {
             if (Fragments2.Count > 0)
             {
@@ -8053,6 +8053,7 @@ namespace Isotope_fitting
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
                                         if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
+                                       
                                     }
                                     else duplicate_count++;
                                 }
@@ -11190,17 +11191,7 @@ namespace Isotope_fitting
                         {
                             draw_line(temp_p, false, 12 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
-                    }
-                    //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
-                    //{
-                    //    if (!los_chkBox_temp.Checked)
-                    //    {
-                    //        if (int_chBx_temp.Checked)
-                    //        {
-                    //            draw_line(pp, false, 0, nn.Color, g, true);
-                    //        }
-                    //    }
-                    //}
+                    }                   
                 }
                 pp.X = pp.X + step_x;
                 if (pp.X + step_x >= sequence_Pnl_temp.Width + length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }

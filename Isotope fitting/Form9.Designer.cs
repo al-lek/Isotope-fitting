@@ -194,6 +194,8 @@
             this.insert_Btn = new System.Windows.Forms.ToolStripButton();
             this.plot_Btn = new System.Windows.Forms.ToolStripButton();
             this.rem_Btn = new System.Windows.Forms.ToolStripButton();
+            this.checkall_ListBtn = new System.Windows.Forms.ToolStripButton();
+            this.uncheckall_ListBtn = new System.Windows.Forms.ToolStripButton();
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.toolStrip6.SuspendLayout();
@@ -2226,6 +2228,8 @@
             this.toolStrip5.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.insert_Btn,
+            this.checkall_ListBtn,
+            this.uncheckall_ListBtn,
             this.plot_Btn,
             this.rem_Btn});
             this.toolStrip5.Location = new System.Drawing.Point(427, 647);
@@ -2265,6 +2269,24 @@
             this.rem_Btn.Size = new System.Drawing.Size(44, 44);
             this.rem_Btn.Text = "Clear plot from fragments";
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
+            // 
+            // checkall_ListBtn
+            // 
+            this.checkall_ListBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.checkall_ListBtn.Image = ((System.Drawing.Image)(resources.GetObject("checkall_ListBtn.Image")));
+            this.checkall_ListBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.checkall_ListBtn.Name = "checkall_ListBtn";
+            this.checkall_ListBtn.Size = new System.Drawing.Size(44, 44);
+            this.checkall_ListBtn.Click += new System.EventHandler(this.checkall_ListBtn_Click);
+            // 
+            // uncheckall_ListBtn
+            // 
+            this.uncheckall_ListBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheckall_ListBtn.Image = ((System.Drawing.Image)(resources.GetObject("uncheckall_ListBtn.Image")));
+            this.uncheckall_ListBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheckall_ListBtn.Name = "uncheckall_ListBtn";
+            this.uncheckall_ListBtn.Size = new System.Drawing.Size(44, 44);
+            this.uncheckall_ListBtn.Click += new System.EventHandler(this.uncheckall_ListBtn_Click);
             // 
             // Form9
             // 
@@ -2489,5 +2511,7 @@
         private System.Windows.Forms.RadioButton AdductBtn;
         private System.Windows.Forms.RadioButton noAddBtn;
         private System.Windows.Forms.TextBox adduct_txtBx;
+        private System.Windows.Forms.ToolStripButton checkall_ListBtn;
+        private System.Windows.Forms.ToolStripButton uncheckall_ListBtn;
     }
 }

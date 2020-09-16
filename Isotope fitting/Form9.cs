@@ -23,6 +23,7 @@ namespace Isotope_fitting
 {
     public partial class Form9 : Form
     {
+        #region parameters
         Form2 frm2;
         bool has_adduct = false;
         string extra_adduct = "";
@@ -44,6 +45,8 @@ namespace Isotope_fitting
         List<ChemiForm> mult_loaded = new List<ChemiForm>();
         bool is_in_calc_mode = false;
         bool help = false;
+        int duplicates = 0;
+        #endregion
         public Form9(Form2 f,bool h=false)
         {
             frm2 = f;
@@ -133,9 +136,9 @@ namespace Isotope_fitting
             MenuItem remFrag = new MenuItem("Remove fragment", delete_frag);
             MenuItem clearall = new MenuItem("Clear all", delete_all);
             MenuItem copy_frag = new MenuItem("Copy fragment", copy_fragment);
-            MenuItem zoom_frag = new MenuItem("Zoom to fragment", zoom_to_fragment);
-            
-            ctxMn1.MenuItems.AddRange(new MenuItem[] { colorSelection, remFrag, clearall, copy_frag , zoom_frag });
+            MenuItem zoom_frag = new MenuItem("Zoom to fragment", zoom_to_fragment);           
+
+            ctxMn1.MenuItems.AddRange(new MenuItem[] { zoom_frag, copy_frag, colorSelection, remFrag, clearall  });
             fragListView9.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
         }
         #endregion
@@ -305,6 +308,122 @@ namespace Isotope_fitting
         {
             set_textboxes_checks_empty(chemForm_tab_riken);
         }
+        private void AdductBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            adduct_txtBx.Enabled = AdductBtn.Checked;
+
+        }
+        #endregion
+        
+        #region help
+        private void chemForm_Lbl_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Set chemical formula. Formulas are case sensitive and contain only letters, numbers and square brackets(for the individual isotopes)." +
+        " No space characters,pseudoelements, peptide or amino-acid codes are are accepted.    ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void chemFormula_charge_Lbl_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set the charge range for which each chemical formula will be calculated.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+
+        }
+
+        private void chem_ion_Lbl_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set the ion type of the fragment. Space characters are not accepted.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void chem_index_Lbl_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void ignore_ppm_form9_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("During calculation a ppm filter is applied to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak " +
+                    "by ppm larger than the user-specified bound maximum ppm. This filter distinguishes the candidate fragments from the incorrect.  " +
+                    "\r\nWhen 'ignore ppm' is checked the fragments that are out of ppm bounds are displayed to the user in red color. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void ppm9_Lbl_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Indicates the maximum ppm error that a fragment can have in order to be inserted to Fragment List.\r\n" +
+                    "During calculation a ppm filter is applied to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak " +
+           "by ppm larger than the user-specified bound maximum ppm. This filter distinguishes the candidate fragments from the incorrect." +
+           " Ere initiating the calculation process the user can select from the 'Filter' panel, the desired maximum ppm error and customize" +
+                "its application method. For instance, if the user selects the '2 most intense' option, the fragments " +
+                "whose 2 most intense centroids are within the ppm bounds pass the filter. On the other hand, " +
+                "if the user selects the 'half most intense' option, fragments whose half" +
+                "of the most intense centroids are within the ppm bounds pass the filter.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void res_label1_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set a custom resolution value for the fragments that are not within ppm error.\r\n(applied only when 'ignore ppm' is checked)  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void extension_label9_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Set the extension and the chain type of the corresponding sequence, if there are any.\r\n\r\n" +
+                   "Peak Finder supports multiple sequences processing.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence. This extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void extension_rik_label23_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Set the extension of the corresponding sequence, if there is any.\r\n\r\n" +
+                              "Peak Finder supports multiple sequences processing.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence. This extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void mz_Label_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void charge_Label_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("Set the charge range condition to be met when selecting the fragments for calculation.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void Index_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Set the index range condition to be met when selecting the fragments for calculation. " +
+        "When the checkbox is checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.   ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+            }
+        }
+
+        private void sortIdx_chkBx_Click(object sender, EventArgs e)
+        {
+            if (help) { MessageBox.Show("When checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+            if (help)
+            {
+                MessageBox.Show("Minimum abundance of isotope pattern peaks to be retained during calculation,\r\n" +
+                "given as a percentageof the most abundant peak.\r\nWarning:\r\n(1)Omitting too abundant peaks may distort the profile shape.\r\n(2)Including too many peaks may lead to computational problems for very large molecules.\r\n" +
+                "Set to 0 to calculate all possible isotope pattern peaks.\r\n(From Envipat website)\r\nFor large molecule it is suggested to set to 1.00 in order to minimize the calculation time.\r\nDefault:0.01" +
+                "", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.envipat.eawag.ch/", "keyword");
+                return;
+            }
+        }
         #endregion
 
         #endregion
@@ -393,8 +512,9 @@ namespace Isotope_fitting
                 Maximum = 1e8M,
                 Value = (decimal)Math.Round(frag_intensity, 1),
                 Increment = (decimal)Math.Round(frag_intensity) / 50,
-                Location = new Point(275, 7),
-                Size = new Size(60, 20),TabIndex=0
+                Location = new Point(factor_panel9.Width-65, 7),
+                Size = new Size(60, 20),TabIndex=0,
+                Anchor =AnchorStyles.Right|AnchorStyles.Top
             };
             numUD.ValueChanged += (s, e) =>
             {
@@ -538,6 +658,7 @@ namespace Isotope_fitting
                 " is not checked a filter is applied to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak " +
                 "by ppm larger than the user-specified bound maximum ppm. This filter distinguishes the candidate fragments from the incorrect.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             calc_Btn.Enabled = false;
+            duplicates = 0;
             if (frm2.is_frag_calc_recalc || is_in_calc_mode) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); calc_Btn.Enabled = true; return; }
             Remove_plotted();
             during_calc(true);
@@ -1442,8 +1563,9 @@ namespace Isotope_fitting
                                 res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
-                                if (extra_name.Equals("B(A)") || extra_name.Equals("B(G)") || extra_name.Equals("B(T)")) { res[curr_idx].Has_adduct = false; }
-
+                                if (extra_name.Equals("B(A)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
+                                else if (extra_name.Equals("B(G)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(G)", "B()"); }
+                                else if (extra_name.Equals("B(T)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(T)", "B()"); }
                                 res[curr_idx].Mz = mz.ToString();
                                 res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
 
@@ -1482,8 +1604,9 @@ namespace Isotope_fitting
                                 res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
-                                if (extra_name.Equals("B(A)") || extra_name.Equals("B(G)") || extra_name.Equals("B(T)")) { res[curr_idx].Has_adduct = false; }
-
+                                if (extra_name.Equals("B(A)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
+                                else if (extra_name.Equals("B(G)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(G)", "B()"); }
+                                else if (extra_name.Equals("B(T)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(T)", "B()"); }
                                 if (hyd_mod.Contains('+'))
                                 {
                                     res[curr_idx].Mz = mz.ToString();
@@ -1537,7 +1660,9 @@ namespace Isotope_fitting
                     last_chem.Radio_label = last_chem.Name;
                     last_chem.Ion_type = new_type;
                     last_chem.Has_adduct = has_adduct;
-                    if (extra_name.Equals("B(A)") || extra_name.Equals("B(G)") || extra_name.Equals("B(T)")) { last_chem.Has_adduct = false; }
+                    if (extra_name.Equals("B(A)")) { last_chem.Has_adduct = false; last_chem.Ion_type = last_chem.Ion_type.Replace("B(A)", "B()"); }
+                    else if (extra_name.Equals("B(G)")) { last_chem.Has_adduct = false; last_chem.Ion_type = last_chem.Ion_type.Replace("B(G)", "B()"); }
+                    else if (extra_name.Equals("B(T)")) { last_chem.Has_adduct = false; last_chem.Ion_type = last_chem.Ion_type.Replace("B(T)", "B()"); }
                     res.Add(last_chem);
                 }
                 else res.Add(last_chem);
@@ -1626,7 +1751,7 @@ namespace Isotope_fitting
             sw1.Stop(); Debug.WriteLine("Envipat_Calcs_and_filter_byPPM(M): " + sw1.ElapsedMilliseconds.ToString());
             Debug.WriteLine("PPM(): " + sw2.ElapsedMilliseconds.ToString()); sw2.Reset();
             if (!string.IsNullOrEmpty(chemForm_txtBox.Text)) { MessageBox.Show("Chemical formulas profile calculation is completed!From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Chemical formula calculation results"); }
-            else { MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter.", "Fragment selection results"); }
+            else { MessageBox.Show("From " + selected_fragments.Count.ToString() + " fragments in total, " + Fragments3.Count.ToString() + " were within ppm filter and "+duplicates.ToString()+" were duplicate with Fragment List's fragments.", "Fragment selection results"); }
             Invoke(new Action(() => OnCalcFrag3Completed()));
         }
         private void Envipat_Calcs_and_filter_byPPM_frm9(ChemiForm chem)
@@ -1676,70 +1801,81 @@ namespace Isotope_fitting
         {
             // adds safely a matched fragment to Fragments3, and releases memory
             lock (_locker)
-            {                
-                Fragments3.Add(new FragForm()
+            {
+                if (frm2.check_duplicates_Fragments2(chem))
                 {
-                    Adduct = chem.Adduct,
-                    Charge = chem.Charge,
-                    FinalFormula = chem.FinalFormula,
-                    Deduct = chem.Deduct,
-                    Error = chem.Error,
-                    PPM_Error = chem.PPM_Error,
-                    Index = chem.Index,
-                    IndexTo = chem.IndexTo,
-                    InputFormula = chem.InputFormula,
-                    Ion = chem.Ion,
-                    Ion_type = chem.Ion_type,
-                    Machine = chem.Machine,
-                    Multiplier = chem.Multiplier,
-                    Mz = chem.Mz,
-                    Radio_label = chem.Radio_label,
-                    Resolution = chem.Resolution,
-                    Factor = chem.Factor,
-                    Counter = 0,
-                    To_plot = false,
-                    Color = chem.Color,
-                    Name = chem.Name,                   
-                    Fix = 1.0,
-                    Max_intensity = 0.0,
-                    Fixed = chem.Fixed,
-                    maxPPM_Error=chem.maxPPM_Error,
-                    minPPM_Error=chem.minPPM_Error,
-                    Candidate=candidate,
-                    Extension = chem.Extension,
-                    Chain_type = chem.Chain_type,
-                    SortIdx = chem.SortIdx,
-                    Has_adduct = chem.Has_adduct,
-                    maxFactor=chem.maxFactor
-                });               
-                Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
-                Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
-                Fragments3.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
-
-                double pt0 = 0.1 * max_exp;
-                if (peak_points.Count > 0)
-                {
-                    double exp_cen, curr_diff;
-                    double centroid = Fragments3.Last().Centroid[0].X;
-                    double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-                    int closest_idx = 0;
-                    for (int i = 1; i < peak_points.Count; i++)
+                    Fragments3.Add(new FragForm()
                     {
-                        exp_cen = peak_points[i][1] + peak_points[i][4];
-                        curr_diff = Math.Abs(exp_cen - centroid);
-                        if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                        else
-                            break;
+                        Adduct = chem.Adduct,
+                        Charge = chem.Charge,
+                        FinalFormula = chem.FinalFormula,
+                        Deduct = chem.Deduct,
+                        Error = chem.Error,
+                        PPM_Error = chem.PPM_Error,
+                        Index = chem.Index,
+                        IndexTo = chem.IndexTo,
+                        InputFormula = chem.InputFormula,
+                        Ion = chem.Ion,
+                        Ion_type = chem.Ion_type,
+                        Machine = chem.Machine,
+                        Multiplier = chem.Multiplier,
+                        Mz = chem.Mz,
+                        Radio_label = chem.Radio_label,
+                        Resolution = chem.Resolution,
+                        Factor = chem.Factor,
+                        Counter = 0,
+                        To_plot = false,
+                        Color = chem.Color,
+                        Name = chem.Name,
+                        Fix = 1.0,
+                        Max_intensity = 0.0,
+                        Fixed = chem.Fixed,
+                        maxPPM_Error = chem.maxPPM_Error,
+                        minPPM_Error = chem.minPPM_Error,
+                        Candidate = candidate,
+                        Extension = chem.Extension,
+                        Chain_type = chem.Chain_type,
+                        SortIdx = chem.SortIdx,
+                        Has_adduct = chem.Has_adduct,
+                        maxFactor = chem.maxFactor
+                    });
+                    Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
+                    Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
+                    Fragments3.Last().Max_intensity = Fragments3.Last().Profile.Max(p => p.Y);
+                    double pt0 = 0.1 * max_exp;
+                    if (peak_points.Count > 0)
+                    {
+                        double exp_cen, curr_diff;
+                        double centroid = Fragments3.Last().Centroid[0].X;
+                        double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
+                        int closest_idx = 0;
+                        for (int i = 1; i < peak_points.Count; i++)
+                        {
+                            exp_cen = peak_points[i][1] + peak_points[i][4];
+                            curr_diff = Math.Abs(exp_cen - centroid);
+                            if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+                            else
+                                break;
+                        }
+                        pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];
                     }
-                    pt0 = peak_points[closest_idx][2] + peak_points[closest_idx][5];                   
+                    Fragments3.Last().maxFactor = pt0 / Fragments3.Last().Max_intensity;
+                    Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
+                    // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
+                    // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
+                    chem.Profile.Clear();
+                    chem.Points.Clear();
+                    chem.Centroid.Clear(); chem.Intensoid.Clear();
                 }
-                Fragments3.Last().maxFactor = pt0 / Fragments3.Last().Max_intensity;
-                Fragments3.Last().Factor = pt0 / Fragments3.Last().Max_intensity;
-                // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
-                // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
-                chem.Profile.Clear();
-                chem.Points.Clear();
-                chem.Centroid.Clear(); chem.Intensoid.Clear();
+                else
+                {
+                    duplicates++;
+                    // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
+                    // Profile is stored already in Fragments3, no reason to keep it also in selected_fragments (which will be Garbage Collected)
+                    chem.Profile.Clear();
+                    chem.Points.Clear();
+                    chem.Centroid.Clear(); chem.Intensoid.Clear();
+                }                
             }
         }
         private bool decision_algorithm_frm9(ChemiForm chem, List<PointPlot> cen)
@@ -2156,110 +2292,28 @@ namespace Isotope_fitting
             //frm2.ending_frm9();
         }
 
-        private void chemForm_Lbl_Click(object sender, EventArgs e)
+        private void checkall_ListBtn_Click(object sender, EventArgs e)
         {
-            if (help) { MessageBox.Show("Set chemical formula. Formulas are case sensitive and contain only letters, numbers and square brackets(for the individual isotopes)." +
-                " No space characters,pseudoelements, peptide or amino-acid codes are are accepted.    ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void chemFormula_charge_Lbl_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set the charge range for which each chemical formula will be calculated.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-
-        }
-
-        private void chem_ion_Lbl_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set the ion type of the fragment. Space characters are not accepted.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void chem_index_Lbl_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void ignore_ppm_form9_Click(object sender, EventArgs e)
-        {
-            if (help)
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            fragListView9.BeginUpdate();
+            foreach (ListViewItem item in fragListView9.Items)
             {
-                MessageBox.Show("During calculation a ppm filter is applied to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak " +
-                    "by ppm larger than the user-specified bound maximum ppm. This filter distinguishes the candidate fragments from the incorrect.  " +
-                    "\r\nWhen 'ignore ppm' is checked the fragments that are out of ppm bounds are displayed to the user in red color. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+                if (!item.Checked) item.Checked = true;
             }
+            fragListView9.EndUpdate();
+            factor_panel9.Visible = false;
         }
 
-        private void ppm9_Lbl_Click(object sender, EventArgs e)
+        private void uncheckall_ListBtn_Click(object sender, EventArgs e)
         {
-            if (help)
+            if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
+            fragListView9.BeginUpdate();
+            foreach (ListViewItem item in fragListView9.Items)
             {
-                MessageBox.Show("Indicates the maximum ppm error that a fragment can have in order to be inserted to Fragment List.\r\n" +
-                    "During calculation a ppm filter is applied to refine the list from fragments whose most abundant centroid differs from the nearest experimental peak " +
-           "by ppm larger than the user-specified bound maximum ppm. This filter distinguishes the candidate fragments from the incorrect." +
-           " Ere initiating the calculation process the user can select from the 'Filter' panel, the desired maximum ppm error and customize" +
-                "its application method. For instance, if the user selects the '2 most intense' option, the fragments " +
-                "whose 2 most intense centroids are within the ppm bounds pass the filter. On the other hand, " +
-                "if the user selects the 'half most intense' option, fragments whose half" +
-                "of the most intense centroids are within the ppm bounds pass the filter.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
+                if (item.Checked) item.Checked = false;
             }
-        }
-
-        private void res_label1_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set a custom resolution value for the fragments that are not within ppm error.\r\n(applied only when 'ignore ppm' is checked)  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void extension_label9_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set the extension and the chain type of the corresponding sequence, if there are any.\r\n\r\n" +
-                           "Peak Finder supports multiple sequences processing.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence. This extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void extension_rik_label23_Click(object sender, EventArgs e)
-        {
-            if (help)
-            {
-                MessageBox.Show("Set the extension of the corresponding sequence, if there is any.\r\n\r\n" +
-                              "Peak Finder supports multiple sequences processing.\r\nIn order to succeed the distinction of the fragments of the different sequences from each other,\r\nan extension is defined for each sequence. This extension is added to the fragment name.\r\nFor the General Sequence no extension is defined.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return;
-            }
-        }
-
-        private void mz_Label_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set the m/z range condition to be met when selecting the fragments for calculation. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void charge_Label_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set the charge range condition to be met when selecting the fragments for calculation.  Use minus sign for a negative charge. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void Index_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("Set the index range condition to be met when selecting the fragments for calculation. " +
-                "When the checkbox is checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.   ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void sortIdx_chkBx_Click(object sender, EventArgs e)
-        {
-            if (help) { MessageBox.Show("When checked: the index of w, x, y, z is counted as for the a, b, c, d fragments.  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-            if (help)
-            {
-                MessageBox.Show("Minimum abundance of isotope pattern peaks to be retained during calculation,\r\n" +
-                "given as a percentageof the most abundant peak.\r\nWarning:\r\n(1)Omitting too abundant peaks may distort the profile shape.\r\n(2)Including too many peaks may lead to computational problems for very large molecules.\r\n" +
-                "Set to 0 to calculate all possible isotope pattern peaks.\r\n(From Envipat website)\r\nFor large molecule it is suggested to set to 1.00 in order to minimize the calculation time.\r\nDefault:0.01" +
-                "", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.envipat.eawag.ch/", "keyword");
-                return;
-            }
-        }
-
-        private void AdductBtn_CheckedChanged(object sender, EventArgs e)
-        {
-            adduct_txtBx.Enabled = AdductBtn.Checked;
-
+            fragListView9.EndUpdate();
+            factor_panel9.Visible = false;
         }
     }
 }
