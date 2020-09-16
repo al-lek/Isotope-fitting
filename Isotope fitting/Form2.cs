@@ -1908,7 +1908,7 @@ namespace Isotope_fitting
                 string lbl = "";
                 if (ChemFormulas[i].Ion_type.Length == 1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
                 else { lbl = "(" + ChemFormulas[i].Ion_type + ")" + ChemFormulas[i].Index; }
-                ChemFormulas[i].Radio_label = lbl + ms_extension;
+                
                 if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
                 else if (ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
                 else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
@@ -1953,8 +1953,7 @@ namespace Isotope_fitting
                     ChemFormulas[i].Index = (ms_sequence.IndexOf(substring[0]) + 1).ToString();
                     ChemFormulas[i].IndexTo = (ms_sequence.IndexOf(substring[0]) + substring[0].Length).ToString();
                     lbl = "internal_b" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-                }
-                ChemFormulas[i].Radio_label = lbl + ms_extension;
+                }                
                 if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
                 else if (ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
                 else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
@@ -2413,8 +2412,7 @@ namespace Isotope_fitting
                 ChemFormulas[i].Ion_type = ion_type;
             }
             string lbl = "";
-            lbl = ChemFormulas[i].Ion;
-            ChemFormulas[i].Radio_label = lbl + ms_extension;
+            lbl = ChemFormulas[i].Ion;            
             if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+" + ms_extension;
             else if (ChemFormulas[i].Charge < 0) ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-" + ms_extension;
             else ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + ms_extension;
@@ -2940,8 +2938,7 @@ namespace Isotope_fitting
                         Ion_type = chem.Ion_type,
                         Machine = chem.Machine,
                         Multiplier = chem.Multiplier,
-                        Mz = chem.Mz,
-                        Radio_label = chem.Radio_label,
+                        Mz = chem.Mz,                        
                         Resolution = chem.Resolution,
                         Factor = chem.Factor,
                         Counter = 0,
@@ -7588,8 +7585,7 @@ namespace Isotope_fitting
                                             Ion_type = str[1],
                                             PPM_Error = dParser(str[8]),
                                             PrintFormula = str[9],
-                                            Name = str[0],
-                                            Radio_label = string.Empty,
+                                            Name = str[0],                                           
                                             Factor = dParser(str[7]),
                                             Fixed = true,
                                             Max_man_int = 0,
@@ -7948,8 +7944,7 @@ namespace Isotope_fitting
                                             Ion_type = str[1],
                                             PPM_Error = dParser(str[8]),
                                             PrintFormula = str[9],
-                                            Name = str[0],
-                                            Radio_label = string.Empty,
+                                            Name = str[0],                                           
                                             Factor = dParser(str[7]),
                                             Fixed = true,
                                             Max_man_int = 0,
@@ -8052,8 +8047,7 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
-                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
-                                       
+                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }                                       
                                     }
                                     else duplicate_count++;
                                 }

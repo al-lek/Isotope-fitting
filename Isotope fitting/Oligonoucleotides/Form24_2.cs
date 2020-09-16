@@ -525,8 +525,7 @@ namespace Isotope_fitting
                                     else { new_type += "-" + extra_name; }
                                 }
                                 new_type += ")";
-                                res[curr_idx].Ion_type = new_type;
-                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Ion_type = new_type;                               
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
                                 res[curr_idx].Mz = mz.ToString();
@@ -566,8 +565,7 @@ namespace Isotope_fitting
                                     else { new_type += "-" + extra_name; }
                                 }
                                 new_type += ")";
-                                res[curr_idx].Ion_type = new_type;
-                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Ion_type = new_type;                               
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
                                 if (extra_name.Equals("B(A)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
@@ -625,8 +623,7 @@ namespace Isotope_fitting
                     string[] str = temp_chem.Name.Split('_');
                     int s = temp_chem.Name.IndexOf('_');
                     last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type);
-                    last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0,s);
-                    last_chem.Radio_label = last_chem.Name;
+                    last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0,s);                    
                     last_chem.Ion_type = new_type;
                     if (extra_name.Equals("B(A)") ) { last_chem.Has_adduct = false; last_chem.Ion_type = last_chem.Ion_type.Replace("B(A)","B()"); }
                     else if (extra_name.Equals("B(G)") ) { last_chem.Has_adduct = false; last_chem.Ion_type = last_chem.Ion_type.Replace("B(G)", "B()"); }

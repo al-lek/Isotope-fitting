@@ -661,7 +661,6 @@ namespace Isotope_fitting
         private string printFormula;
         private int multiplier;
         private string index;
-        private string radio_label;
         private string indexTo;
         private int sortIdx;
         private string ion;
@@ -802,17 +801,7 @@ namespace Isotope_fitting
                 this.color = value;
             }
         }
-        public string Radio_label
-        {
-            get
-            {
-                return this.radio_label;
-            }
-            set
-            {
-                this.radio_label = value;
-            }
-        }
+       
         public string InputFormula
         {
             get
@@ -1080,7 +1069,7 @@ namespace Isotope_fitting
         {
             ChemiForm deepcopyChemiform = new ChemiForm() { Adduct = this.Adduct, Centroid = this.Centroid.ConvertAll(item => item.DeepCopy()), Charge = this.Charge, Color= this.Color, Combinations= (List<Combination_1>)this.Combinations.ConvertAll(item => item.DeepCopy()), Combinations4 = (List<Combination_4>)this.Combinations4.ConvertAll(item => item.DeepCopy()), Deduct=this.Deduct, Elements_set= (List<Element_set>)this.Elements_set.ConvertAll(item => item.DeepCopy()),
                 Error =this.Error, FinalFormula=this.FinalFormula, Index=this.Index, IndexTo=this.IndexTo, InputFormula=this.InputFormula, Ion=this.Ion, Ion_type=this.Ion_type, Iso_total_amount=this.Iso_total_amount, Machine= this.Machine, Monoisotopic=this.Monoisotopic.DeepCopy(), Multiplier=this.Multiplier, Mz=this.Mz, Name=this.Name, Points=this.Points.ConvertAll(item => item.DeepCopy()), PrintFormula=this.PrintFormula, Profile=this.Profile.ConvertAll(item => item.DeepCopy()),
-                Radio_label=this.Radio_label, Resolution=this.Resolution ,PPM_Error=this.PPM_Error,maxPPM_Error = this.maxPPM_Error,minPPM_Error = this.minPPM_Error,Factor = this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int,Intensoid=this.Intensoid.ConvertAll(item => item.DeepCopy()), Extension=this.Extension,SortIdx=this.SortIdx,Chain_type=this.Chain_type,
+                 Resolution=this.Resolution ,PPM_Error=this.PPM_Error,maxPPM_Error = this.maxPPM_Error,minPPM_Error = this.minPPM_Error,Factor = this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int,Intensoid=this.Intensoid.ConvertAll(item => item.DeepCopy()), Extension=this.Extension,SortIdx=this.SortIdx,Chain_type=this.Chain_type,
                 Has_adduct = this.Has_adduct,maxFactor=this.maxFactor
             };
 

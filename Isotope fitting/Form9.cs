@@ -884,8 +884,7 @@ namespace Isotope_fitting
                 {
                     if (res.Last().Ion_type.Length == 1) { lbl = res.Last().Ion_type + res.Last().Index; }
                     else { lbl = "(" + res.Last().Ion_type + ")" + res.Last().Index; }                                     
-                }
-                res.Last().Radio_label = lbl + extension;
+                }               
                 if (c > 0) res.Last().Name = lbl + "_" +c.ToString() + "+" + extension;
                 else if (c < 0) res.Last().Name = lbl + "_" + Math.Abs(c).ToString() + "-"+extension;
                 else res.Last().Name = lbl + "_" + c.ToString() +  extension;
@@ -1100,8 +1099,7 @@ namespace Isotope_fitting
                     maxFactor=0.0
                 });
                 string lbl = "";
-                lbl = ion;
-                res.Last().Radio_label = lbl + extension;
+                lbl = ion;                
                 //res.Last().InputFormula= res.Last().PrintFormula= fix_formula(chem_form, true, res.Last().Charge);
                 if (c > 0)
                 {
@@ -1300,8 +1298,7 @@ namespace Isotope_fitting
                                 int curr_idx = res.Count - 1;
                                 bool is_error = false;
                                 string new_type = "(" + hyd_mod + ")";
-                                res[curr_idx].Ion_type = new_type;
-                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Ion_type = new_type;                                
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Mz = mz.ToString();
                                 res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
@@ -1559,8 +1556,7 @@ namespace Isotope_fitting
                                     else { new_type += "-" + extra_name; }
                                 }
                                 new_type += ")";
-                                res[curr_idx].Ion_type = new_type;
-                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Ion_type = new_type;                                
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
                                 if (extra_name.Equals("B(A)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
@@ -1600,8 +1596,7 @@ namespace Isotope_fitting
                                     else { new_type += "-" + extra_name; }
                                 }
                                 new_type += ")";
-                                res[curr_idx].Ion_type = new_type;
-                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Ion_type = new_type;                                
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Has_adduct = has_adduct;
                                 if (extra_name.Equals("B(A)")) { res[curr_idx].Has_adduct = false; res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
@@ -1656,8 +1651,7 @@ namespace Isotope_fitting
                     string[] str = temp_chem.Name.Split('_');
                     int s = temp_chem.Name.IndexOf('_');
                     last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type);
-                    last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0, s);
-                    last_chem.Radio_label = last_chem.Name;
+                    last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0, s);                    
                     last_chem.Ion_type = new_type;
                     last_chem.Has_adduct = has_adduct;
                     if (extra_name.Equals("B(A)")) { last_chem.Has_adduct = false; last_chem.Ion_type = last_chem.Ion_type.Replace("B(A)", "B()"); }
@@ -1819,8 +1813,7 @@ namespace Isotope_fitting
                         Ion_type = chem.Ion_type,
                         Machine = chem.Machine,
                         Multiplier = chem.Multiplier,
-                        Mz = chem.Mz,
-                        Radio_label = chem.Radio_label,
+                        Mz = chem.Mz,                       
                         Resolution = chem.Resolution,
                         Factor = chem.Factor,
                         Counter = 0,
@@ -2200,8 +2193,7 @@ namespace Isotope_fitting
                                 Fixed = false,
                                 Max_man_int = 0,
                                 Ion_type = "extra",
-                                Name = tmp_str[1]+extension,
-                                Radio_label = string.Empty,
+                                Name = tmp_str[1]+extension,                                
                                 maxPPM_Error = 0,
                                 minPPM_Error = 0,
                                 Charge = c,

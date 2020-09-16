@@ -366,8 +366,7 @@ namespace Isotope_fitting
                                 res.Add(chem.DeepCopy());
                                 int curr_idx = res.Count - 1;
                                 string new_type = "(" + hyd_mod + ")";
-                                res[curr_idx].Ion_type = new_type;
-                                res[curr_idx].Radio_label = new_type + res[curr_idx].Radio_label.Remove(0, 1);
+                                res[curr_idx].Ion_type = new_type;                               
                                 res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
                                 res[curr_idx].Mz = mz.ToString();
                                 res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
