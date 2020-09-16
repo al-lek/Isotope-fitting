@@ -1640,14 +1640,14 @@ namespace Isotope_fitting
                 //last_chem.Mz = temp_chem.Mz;
                 if (name)
                 {
-                    string new_type = "(" + temp_chem.Ion_type;
+                    string new_type =/* "(" +*/ temp_chem.Ion_type;
                     string add_type = "";
                     if (has_adduct)
                     {
                         if (add) { new_type += "+" + extra_name; add_type = "+" + extra_name; }
                         else { new_type += "-" + extra_name; add_type = "-" + extra_name; }
                     }
-                    new_type += ")";
+                    //new_type += ")";
                     string[] str = temp_chem.Name.Split('_');
                     int s = temp_chem.Name.IndexOf('_');
                     last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type);
