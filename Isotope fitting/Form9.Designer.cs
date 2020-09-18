@@ -192,10 +192,11 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.insert_Btn = new System.Windows.Forms.ToolStripButton();
-            this.plot_Btn = new System.Windows.Forms.ToolStripButton();
-            this.rem_Btn = new System.Windows.Forms.ToolStripButton();
             this.checkall_ListBtn = new System.Windows.Forms.ToolStripButton();
             this.uncheckall_ListBtn = new System.Windows.Forms.ToolStripButton();
+            this.plot_Btn = new System.Windows.Forms.ToolStripButton();
+            this.rem_Btn = new System.Windows.Forms.ToolStripButton();
+            this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
             z_clmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel_calc.SuspendLayout();
             this.toolStrip6.SuspendLayout();
@@ -2249,6 +2250,24 @@
             this.insert_Btn.Text = "Insert to Fragment List";
             this.insert_Btn.Click += new System.EventHandler(this.insert_Btn_Click);
             // 
+            // checkall_ListBtn
+            // 
+            this.checkall_ListBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.checkall_ListBtn.Image = ((System.Drawing.Image)(resources.GetObject("checkall_ListBtn.Image")));
+            this.checkall_ListBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.checkall_ListBtn.Name = "checkall_ListBtn";
+            this.checkall_ListBtn.Size = new System.Drawing.Size(44, 44);
+            this.checkall_ListBtn.Click += new System.EventHandler(this.checkall_ListBtn_Click);
+            // 
+            // uncheckall_ListBtn
+            // 
+            this.uncheckall_ListBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uncheckall_ListBtn.Image = ((System.Drawing.Image)(resources.GetObject("uncheckall_ListBtn.Image")));
+            this.uncheckall_ListBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uncheckall_ListBtn.Name = "uncheckall_ListBtn";
+            this.uncheckall_ListBtn.Size = new System.Drawing.Size(44, 44);
+            this.uncheckall_ListBtn.Click += new System.EventHandler(this.uncheckall_ListBtn_Click);
+            // 
             // plot_Btn
             // 
             this.plot_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -2270,23 +2289,10 @@
             this.rem_Btn.Text = "Clear plot from fragments";
             this.rem_Btn.Click += new System.EventHandler(this.rem_Btn_Click);
             // 
-            // checkall_ListBtn
+            // chartManager1
             // 
-            this.checkall_ListBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.checkall_ListBtn.Image = ((System.Drawing.Image)(resources.GetObject("checkall_ListBtn.Image")));
-            this.checkall_ListBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.checkall_ListBtn.Name = "checkall_ListBtn";
-            this.checkall_ListBtn.Size = new System.Drawing.Size(44, 44);
-            this.checkall_ListBtn.Click += new System.EventHandler(this.checkall_ListBtn_Click);
-            // 
-            // uncheckall_ListBtn
-            // 
-            this.uncheckall_ListBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.uncheckall_ListBtn.Image = ((System.Drawing.Image)(resources.GetObject("uncheckall_ListBtn.Image")));
-            this.uncheckall_ListBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.uncheckall_ListBtn.Name = "uncheckall_ListBtn";
-            this.uncheckall_ListBtn.Size = new System.Drawing.Size(44, 44);
-            this.uncheckall_ListBtn.Click += new System.EventHandler(this.uncheckall_ListBtn_Click);
+            this.chartManager1.MemoryGarbageCollecting = false;
+            this.chartManager1.Name = "";
             // 
             // Form9
             // 
@@ -2513,5 +2519,6 @@
         private System.Windows.Forms.TextBox adduct_txtBx;
         private System.Windows.Forms.ToolStripButton checkall_ListBtn;
         private System.Windows.Forms.ToolStripButton uncheckall_ListBtn;
+        private Arction.WinForms.Charting.ChartManager.ChartManager chartManager1;
     }
 }

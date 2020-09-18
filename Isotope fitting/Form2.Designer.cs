@@ -507,6 +507,7 @@ namespace Isotope_fitting
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -6144,6 +6145,11 @@ namespace Isotope_fitting
             this.displayIonTypesListToolStripMenuItem.Text = "Display ion types list";
             this.displayIonTypesListToolStripMenuItem.Click += new System.EventHandler(this.displayIonTypesListToolStripMenuItem_Click);
             // 
+            // chartManager1
+            // 
+            this.chartManager1.MemoryGarbageCollecting = false;
+            this.chartManager1.Name = "";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6806,5 +6812,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripMenuItem includeModif_Btn;
         private System.Windows.Forms.ToolStripMenuItem includeModif_charge_Btn;
         private System.Windows.Forms.ToolStripButton ppm_includeModif_Btn;
+        private Arction.WinForms.Charting.ChartManager.ChartManager chartManager1;
     }
 }

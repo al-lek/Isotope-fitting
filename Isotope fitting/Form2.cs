@@ -2255,7 +2255,7 @@ namespace Isotope_fitting
                 else if (ChemFormulas[i].Ion.StartsWith("y")) { ChemFormulas[i].Color = OxyColors.Tomato; primary_present = true; }
                 else if (ChemFormulas[i].Ion.StartsWith("z")) { ChemFormulas[i].Color = OxyColors.HotPink; primary_present = true; }
                 else ChemFormulas[i].Color = OxyColors.Orange;
-                if (primary_present && (substring.Length == 1 || (substring.Length == 2 && substring[1].StartsWith("B("))))
+                if (primary_present && (substring.Length == 1 || (substring.Length == 2 && substring[1].StartsWith("B("))/*||(substring.Length > 2 && !char.IsLower(substring[1][0]))*/))
                 {
                     ion_type = substring[0][0].ToString();
                     bool is_number = Int32.TryParse(substring[0].Remove(0, 1), out int index);
@@ -3104,15 +3104,15 @@ namespace Isotope_fitting
                     frag_node_checkChanged(e.Node, e.Node.Checked);
                 };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[9] {new MenuItem("Copy fragment", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                frag_tree.ContextMenu = new ContextMenu(new MenuItem[8] {
+                                                                      new MenuItem("Zoom to fragment",(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  }),
+                                                                      new MenuItem("Copy fragment", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
                                                                       new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
                                                                       new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
-                                                                      new MenuItem("Save to File", (s, e) => { saveTree_toFile(frag_tree); }),
-                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode.Name); } }),
-                                                                      new MenuItem("Remove Unchecked", (s, e) => {remove_node("",true); }),
                                                                       new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
-                                                                      new MenuItem("Replace Extension", (s, e) => {replace_extension();  }),
-                                                                      new MenuItem("Zoom to fragment",(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  })
+                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode.Name); } }),
+                                                                      new MenuItem("Remove Unchecked", (s, e) => {remove_node("",true); }),                                                                      
+                                                                      new MenuItem("Replace Extension", (s, e) => {replace_extension();  })
 
                 });
 
@@ -3534,10 +3534,7 @@ namespace Isotope_fitting
             Clipboard.Clear();
             if(sb!=null && sb.Length>0) Clipboard.SetText(sb.ToString());
         }
-        private void saveTree_toFile(TreeView tree)
-        {
-            // to be implemented
-        }
+        
         private void frag_node_checkChanged(TreeNode node, bool is_checked)
         {
             this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
@@ -3627,12 +3624,11 @@ namespace Isotope_fitting
                         find_node_and_expand(frag_tree, e.Node.Checked, e.Node.Name);
                     }
                 };
-                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[5] {
-                    new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
-                    new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
-                    new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); }),
-                    new MenuItem("Save to File", (s, e) => { saveTree_toFile(fragTypes_tree); }) ,
-                    new MenuItem("Zoom to fragment",(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  })
+                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[4] {
+                                        new MenuItem("Zoom to fragment",(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  }),
+                                        new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
+                                        new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
+                                        new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); })
                 });
             }
             fragTypes_tree.BeginUpdate();

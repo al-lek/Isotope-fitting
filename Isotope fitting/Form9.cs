@@ -139,7 +139,7 @@ namespace Isotope_fitting
             MenuItem zoom_frag = new MenuItem("Zoom to fragment", zoom_to_fragment);           
 
             ctxMn1.MenuItems.AddRange(new MenuItem[] { zoom_frag, copy_frag, colorSelection, remFrag, clearall  });
-            fragListView9.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) { ContextMenu = ctxMn1; } };
+            fragListView9.ContextMenu = ctxMn1; 
         }
         #endregion
 
@@ -954,7 +954,7 @@ namespace Isotope_fitting
                 else if (ion.StartsWith("y")) { clr = OxyColors.Tomato; primary_present = true; }
                 else if (ion.StartsWith("z")) { clr = OxyColors.HotPink; primary_present = true; }
                 else clr = OxyColors.Orange;
-                if (primary_present && (substring.Length == 1 || (substring.Length == 2 && substring[1].StartsWith("B("))))
+                if (primary_present && (substring.Length == 1 || (substring.Length == 2 && substring[1].StartsWith("B(")) || (substring.Length > 2 && !Char.IsLower(substring[1], 0))))
                 {
                     ion_type = substring[0][0].ToString();
                     bool is_number = Int32.TryParse(substring[0].Remove(0, 1), out int index);
@@ -982,6 +982,7 @@ namespace Isotope_fitting
                         if (substring[c].StartsWith("B")) ion_type += "-B()";
                         else ion_type += "-" + substring[c];
                     }
+                    Console.WriteLine(ion.ToString());
                 }
                 else if (primary_present)
                 {
