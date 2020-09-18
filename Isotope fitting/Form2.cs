@@ -3093,7 +3093,7 @@ namespace Isotope_fitting
             {
                 frag_tree.Nodes.Clear();
             }
-            else if (frag_tree.ContextMenu == null)
+            else if (frag_tree.ContextMenuStrip == null)
             {
                 frag_tree.AfterCheck += (s, e) =>
                 {
@@ -3104,16 +3104,20 @@ namespace Isotope_fitting
                     frag_node_checkChanged(e.Node, e.Node.Checked);
                 };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
-                frag_tree.ContextMenu = new ContextMenu(new MenuItem[8] {
-                                                                      new MenuItem("Zoom to fragment",(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  }),
-                                                                      new MenuItem("Copy fragment", (s, e) => { copyTree_toClip(frag_tree, false,true); }),
-                                                                      new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(frag_tree, false); }),
-                                                                      new MenuItem("Copy All", (s, e) => { copyTree_toClip(frag_tree, true); }),
-                                                                      new MenuItem("Fragment color", (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
-                                                                      new MenuItem("Remove", (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode.Name); } }),
-                                                                      new MenuItem("Remove Unchecked", (s, e) => {remove_node("",true); }),                                                                      
-                                                                      new MenuItem("Replace Extension", (s, e) => {replace_extension();  })
-
+                frag_tree.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+                frag_tree.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {                
+                                                                      new ToolStripMenuItem("Zoom to fragment",null,(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  }),
+                                                                      new ToolStripSeparator (),
+                                                                      new ToolStripMenuItem("Copy fragment", null,(s, e) => { copyTree_toClip(frag_tree, false,true); }),
+                                                                      new ToolStripMenuItem("Copy Checked",null, (s, e) => { copyTree_toClip(frag_tree, false); }),
+                                                                      new ToolStripMenuItem("Copy All",null, (s, e) => { copyTree_toClip(frag_tree, true); }),
+                                                                      new ToolStripSeparator (),
+                                                                      new ToolStripMenuItem("Fragment color",null, (s, e) => {if(frag_tree.SelectedNode!=null){ colorSelection_frag_tree(frag_tree.SelectedNode); } }),
+                                                                      new ToolStripSeparator (),
+                                                                      new ToolStripMenuItem("Remove",null, (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode.Name); } }),
+                                                                      new ToolStripMenuItem("Remove Unchecked",null, (s, e) => {remove_node("",true); }),
+                                                                      new ToolStripSeparator (),
+                                                                      new ToolStripMenuItem("Replace Extension",null, (s, e) => {replace_extension();  })
                 });
 
             }
@@ -3624,11 +3628,13 @@ namespace Isotope_fitting
                         find_node_and_expand(frag_tree, e.Node.Checked, e.Node.Name);
                     }
                 };
-                fragTypes_tree.ContextMenu = new ContextMenu(new MenuItem[4] {
-                                        new MenuItem("Zoom to fragment",(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  }),
-                                        new MenuItem("Copy Only Selected", (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
-                                        new MenuItem("Copy Checked", (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
-                                        new MenuItem("Copy All", (s, e) => { copyTree_toClip(fragTypes_tree, true); })
+                fragTypes_tree.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+                frag_tree.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                                        new ToolStripMenuItem("Zoom to fragment",null,(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  }),
+                                        new ToolStripSeparator (),
+                                        new ToolStripMenuItem("Copy Only Selected",null, (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
+                                        new ToolStripMenuItem("Copy Checked",null, (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
+                                        new ToolStripMenuItem("Copy All", null,(s, e) => { copyTree_toClip(fragTypes_tree, true); })
                 });
             }
             fragTypes_tree.BeginUpdate();
