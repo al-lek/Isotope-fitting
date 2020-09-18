@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public class Helpers
+    public static class Helpers
     {
         /// <summary>
         /// Get the controls that are in the control c
@@ -606,7 +606,9 @@ namespace Isotope_fitting
             return control;
         }
 
-
+        /// <summary>
+        ///Calculate monoisotopic mass of a chemican formula and return 'out' 'error'=true in case something goes wrong
+        /// </summary>
         public static double calc_m(out bool Error, string FORMULA)
         {
             string f = "";
@@ -956,6 +958,83 @@ namespace Isotope_fitting
                 Error = true;
             }
             return mono_mass;
+        }
+
+        /// <summary>
+        ///Find all occurences of a substring within a string
+        /// </summary>
+        public static List<int> AllIndexesOf(this string str, string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                throw new ArgumentException("the string to find may not be empty", "value");
+            List<int> indexes = new List<int>();
+            for (int index = 0; ; index += value.Length)
+            {
+                index = str.IndexOf(value, index);
+                if (index == -1)
+                    return indexes;
+                indexes.Add(index);
+            }
+        }
+
+        /// <summary>
+        ///Find the count of occurences of a substring within a string
+        /// </summary>
+        public static int CountOccurenceswWithinString( string str, string value)
+        {            
+            int wordCount = 0;
+            for (int index = 0; ; index += value.Length)
+            {
+                index = str.IndexOf(value, index);
+                if (index == -1)
+                    break;
+                wordCount++;
+            }           
+            return wordCount;
+        }
+
+        public static bool check_ion_for_base(ChemiForm chem, string adduct, List<SequenceTab> TEMP_sequenceList)
+        {
+            if (TEMP_sequenceList == null || TEMP_sequenceList.Count == 0 || chem.Ion_type.Equals("B()") || chem.Ion_type.Contains("known MS2")) return false;
+            bool base_present = false;
+            bool proceed = Int32.TryParse(chem.Index, out int index);
+            if (!proceed) return base_present;
+            proceed = Int32.TryParse(chem.IndexTo, out int indexTo);
+            if (!proceed) return base_present;
+            string curr_ss = "";
+            string sub_ss = "";
+            foreach (SequenceTab seq in TEMP_sequenceList)
+            {
+                if (seq.Extension.Equals(chem.Extension) && seq.Type.Equals(chem.Chain_type)) { curr_ss = seq.Sequence; break; }
+            }
+            if (curr_ss == "") return base_present;
+            if (chem.Ion_type.Contains("internal")) sub_ss = curr_ss.Substring(index - 1, indexTo - index + 1);
+            else if (chem.Ion_type.StartsWith("M") || chem.Ion_type.StartsWith("(M") || chem.Ion_type.StartsWith("[M")) sub_ss = curr_ss.ToString();
+            else if (index == indexTo)
+            {
+                if (chem.Ion_type.StartsWith("a") || chem.Ion_type.StartsWith("(a") || chem.Ion_type.StartsWith("b") || chem.Ion_type.StartsWith("(b") || chem.Ion_type.StartsWith("c") || chem.Ion_type.StartsWith("(c") || chem.Ion_type.StartsWith("d") || chem.Ion_type.StartsWith("(d"))
+                {
+                    sub_ss = curr_ss.Substring(0, index);
+                }
+                else if (chem.Ion_type.StartsWith("w") || chem.Ion_type.StartsWith("(w") || chem.Ion_type.StartsWith("x") || chem.Ion_type.StartsWith("(x") || chem.Ion_type.StartsWith("y") || chem.Ion_type.StartsWith("(y") || chem.Ion_type.StartsWith("z") || chem.Ion_type.StartsWith("(z"))
+                {
+                    sub_ss = curr_ss.Substring(chem.SortIdx);
+                }
+                else return base_present;
+            }
+            else return base_present;
+            if (check_base(sub_ss, "A", chem.Ion_type, adduct) && check_base(sub_ss, "G", chem.Ion_type, adduct) && check_base(sub_ss, "T", chem.Ion_type, adduct)) base_present = true;
+            return base_present;
+        }
+        public static bool check_base(string sub_ss, string base_s, string ion_type, string adduct)
+        {
+            int count = 0;
+            int count_B = CountOccurenceswWithinString(sub_ss, base_s);
+            count = CountOccurenceswWithinString(adduct, "B(" + base_s);
+            if (count == 0) return true;
+            count += CountOccurenceswWithinString(ion_type, "B(" + base_s);
+            if (count > count_B) return false;
+            else return true;
         }
     }
 }
