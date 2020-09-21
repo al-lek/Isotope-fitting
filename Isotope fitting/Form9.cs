@@ -131,15 +131,10 @@ namespace Isotope_fitting
         }
         private void initialize_Fragment_List_UI()
         {
-            ContextMenu ctxMn1 = new ContextMenu() { };
-            MenuItem colorSelection = new MenuItem("Fragment color", colorSelectionList);
-            MenuItem remFrag = new MenuItem("Remove fragment", delete_frag);
-            MenuItem clearall = new MenuItem("Clear all", delete_all);
-            MenuItem copy_frag = new MenuItem("Copy fragment", copy_fragment);
-            MenuItem zoom_frag = new MenuItem("Zoom to fragment", zoom_to_fragment);           
-
-            ctxMn1.MenuItems.AddRange(new MenuItem[] { zoom_frag, copy_frag, colorSelection, remFrag, clearall  });
-            fragListView9.ContextMenu = ctxMn1; 
+            ContextMenuStrip ctxMn1 =   new System.Windows.Forms.ContextMenuStrip(this.components); 
+            ctxMn1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { new ToolStripMenuItem("Zoom to fragment", null,zoom_to_fragment),new ToolStripSeparator (),
+                new ToolStripMenuItem("Copy fragment",null, copy_fragment),new ToolStripSeparator (),  new ToolStripMenuItem("Fragment color",null, colorSelectionList), new ToolStripSeparator (),new ToolStripMenuItem("Remove fragment",null, delete_frag), new ToolStripMenuItem("Clear all", null,delete_all)  });
+            fragListView9.ContextMenuStrip = ctxMn1; 
         }
         #endregion
 

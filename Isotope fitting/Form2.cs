@@ -1220,7 +1220,6 @@ namespace Isotope_fitting
             }
 
         }
-
         private void load_experimental_sequence()
         {
             // load experimental and break if not loaded ok
@@ -1242,7 +1241,6 @@ namespace Isotope_fitting
             //plotCentr_chkBox.Enabled = true;
             //plotExp_chkBox.Checked = true;
         }
-
         private bool load_experimental()
         {
             if (!is_loading && !is_calc)
@@ -1307,7 +1305,6 @@ namespace Isotope_fitting
             }
             else { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return false; }
         }
-
         public void post_load_actions()
         {
             insert_exp = true;
@@ -1390,7 +1387,6 @@ namespace Isotope_fitting
                 LC_1.EndUpdate();
             }
         }
-
         void find_resolution(object sender, DoWorkEventArgs e)
         {
             if (!is_exp_deconvoluted) return;
@@ -3105,6 +3101,7 @@ namespace Isotope_fitting
                 };
                 frag_tree.AfterSelect += (s, e) => { if (!string.IsNullOrEmpty(e.Node.Name)) { singleFrag_manipulation(e.Node); } };
                 frag_tree.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+                frag_tree.ContextMenuStrip.Items.Clear();
                 frag_tree.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {                
                                                                       new ToolStripMenuItem("Zoom to fragment",null,(s, e) => { if(frag_tree.SelectedNode!=null)zoom_to_fragment(frag_tree.SelectedNode);  }),
                                                                       new ToolStripSeparator (),
@@ -3615,7 +3612,7 @@ namespace Isotope_fitting
         private void populate_fragtypes_treeView()
         {
             if (fragTypes_tree.Nodes.Count > 0) { fragTypes_tree.Nodes.Clear(); }
-            if (fragTypes_tree.ContextMenu == null)
+            if (fragTypes_tree.ContextMenuStrip == null)
             {
                 fragTypes_tree.AfterCheck += (s, e) =>
                 {
@@ -3629,10 +3626,10 @@ namespace Isotope_fitting
                     }
                 };
                 fragTypes_tree.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-                frag_tree.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                fragTypes_tree.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                                         new ToolStripMenuItem("Zoom to fragment",null,(s, e) => { if(fragTypes_tree.SelectedNode!=null)zoom_to_fragment(fragTypes_tree.SelectedNode);  }),
                                         new ToolStripSeparator (),
-                                        new ToolStripMenuItem("Copy Only Selected",null, (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
+                                        new ToolStripMenuItem("Copy fragment",null, (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
                                         new ToolStripMenuItem("Copy Checked",null, (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
                                         new ToolStripMenuItem("Copy All", null,(s, e) => { copyTree_toClip(fragTypes_tree, true); })
                 });
@@ -14992,16 +14989,14 @@ namespace Isotope_fitting
                                 arrayPositionIndex++;
                                 j++;
                                 str = lista[j].Split('\t');
-                                if (lista[j].StartsWith("Prof")) ;
-                                else
+                                if (!lista[j].StartsWith("Prof"))
                                 {
                                     MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                 }
                                 arrayPositionIndex++;
                                 j++;
                                 str = lista[j].Split('\t');
-                                if (lista[j].StartsWith("Cen")) ;
-                                else
+                                if (!lista[j].StartsWith("Cen")) 
                                 {
                                     MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                 }
