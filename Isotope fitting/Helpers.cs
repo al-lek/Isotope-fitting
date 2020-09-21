@@ -611,12 +611,13 @@ namespace Isotope_fitting
         /// </summary>
         public static double calc_m(out bool Error, string FORMULA)
         {
+            Error = false;
+            if (string.IsNullOrEmpty(FORMULA)) return 0.0;
             string f = "";
             string FinalFormula = "";
             double mono_abundance = 1.0;
             double mono_mass = 0.0;
-            double iso_total_amount = 0;
-            Error = false;
+            double iso_total_amount = 0;            
             List<Element_set> Elements_set = new List<Element_set>();
             
             for (int g = 0; g < FORMULA.Length; g++)

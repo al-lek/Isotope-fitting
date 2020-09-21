@@ -115,6 +115,7 @@
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
             this.fragTab_riken = new System.Windows.Forms.TabPage();
+            this.aks_modifChk = new System.Windows.Forms.CheckBox();
             this.AdductBtn = new System.Windows.Forms.RadioButton();
             this.noAddBtn = new System.Windows.Forms.RadioButton();
             this.adduct_txtBx = new System.Windows.Forms.TextBox();
@@ -1313,6 +1314,7 @@
             // fragTab_riken
             // 
             this.fragTab_riken.AutoScroll = true;
+            this.fragTab_riken.Controls.Add(this.aks_modifChk);
             this.fragTab_riken.Controls.Add(this.AdductBtn);
             this.fragTab_riken.Controls.Add(this.noAddBtn);
             this.fragTab_riken.Controls.Add(this.adduct_txtBx);
@@ -1357,6 +1359,19 @@
             this.fragTab_riken.Text = "Fragments";
             this.fragTab_riken.UseVisualStyleBackColor = true;
             // 
+            // aks_modifChk
+            // 
+            this.aks_modifChk.AutoSize = true;
+            this.aks_modifChk.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.aks_modifChk.ForeColor = System.Drawing.Color.Red;
+            this.aks_modifChk.Location = new System.Drawing.Point(148, 289);
+            this.aks_modifChk.Name = "aks_modifChk";
+            this.aks_modifChk.Size = new System.Drawing.Size(105, 17);
+            this.aks_modifChk.TabIndex = 128;
+            this.aks_modifChk.Text = "Set as Modified?";
+            this.aks_modifChk.UseVisualStyleBackColor = true;
+            this.aks_modifChk.Visible = false;
+            // 
             // AdductBtn
             // 
             this.AdductBtn.AutoSize = true;
@@ -1385,7 +1400,7 @@
             this.adduct_txtBx.ForeColor = System.Drawing.Color.Black;
             this.adduct_txtBx.Location = new System.Drawing.Point(26, 287);
             this.adduct_txtBx.Name = "adduct_txtBx";
-            this.adduct_txtBx.Size = new System.Drawing.Size(84, 20);
+            this.adduct_txtBx.Size = new System.Drawing.Size(104, 20);
             this.adduct_txtBx.TabIndex = 125;
             // 
             // M_lstBox_riken
@@ -1923,7 +1938,7 @@
             this.ion_txtBox_riken.ForeColor = System.Drawing.Color.Black;
             this.ion_txtBox_riken.Location = new System.Drawing.Point(3, 135);
             this.ion_txtBox_riken.Name = "ion_txtBox_riken";
-            this.ion_txtBox_riken.Size = new System.Drawing.Size(87, 20);
+            this.ion_txtBox_riken.Size = new System.Drawing.Size(150, 20);
             this.ion_txtBox_riken.TabIndex = 47;
             // 
             // chem_ion_Lbl_riken
@@ -2520,5 +2535,6 @@
         private System.Windows.Forms.ToolStripButton checkall_ListBtn;
         private System.Windows.Forms.ToolStripButton uncheckall_ListBtn;
         private Arction.WinForms.Charting.ChartManager.ChartManager chartManager1;
+        private System.Windows.Forms.CheckBox aks_modifChk;
     }
 }

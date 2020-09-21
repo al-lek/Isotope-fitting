@@ -12040,11 +12040,11 @@ namespace Isotope_fitting
             if ((all || ion.Equals("a")) && ax_plot.Model.Series != null) {ax_plot.Model.Series.Clear();}
             if ((all || ion.Equals("b")) && by_plot.Model.Series != null) {by_plot.Model.Series.Clear();}
             if ((all || ion.Equals("c")) && cz_plot.Model.Series != null) {cz_plot.Model.Series.Clear();}
+            if ((all || ion.Equals("d")) && dz_plot.Model.Series != null) { dz_plot.Model.Series.Clear(); }
             if ((all || ion.Equals("aC")) && axCharge_plot.Model.Series != null) {axCharge_plot.Model.Series.Clear();}
             if ((all || ion.Equals("bC")) && byCharge_plot.Model.Series != null) {byCharge_plot.Model.Series.Clear();}
             if ((all || ion.Equals("cC")) && czCharge_plot.Model.Series != null) {czCharge_plot.Model.Series.Clear();}
             if ((all || ion.Equals("index")) && index_plot.Model.Series != null) { index_plot.Model.Series.Clear(); indexto_plot.Model.Series.Clear(); indexIntensity_plot.Model.Series.Clear(); indextoIntensity_plot.Model.Series.Clear(); }
-            if ((all || ion.Equals("dz")) && dz_plot.Model.Series != null){dz_plot.Model.Series.Clear();}
             if ((all || ion.Equals("dC")) && dzCharge_plot.Model.Series != null) {dzCharge_plot.Model.Series.Clear(); }
 
             if (is_riken)
