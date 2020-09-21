@@ -533,7 +533,7 @@ namespace Isotope_fitting
             if (frm2.is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             during_calc(true);
             int count = last_plotted.Count;
-            if ((sender as MenuItem).Text == "Clear all")
+            if ((sender as ToolStripMenuItem).Text == "Clear all")
             {
                 //when closing the form public data from this form are restored in their initial values
                 initialize_data();
@@ -560,7 +560,7 @@ namespace Isotope_fitting
             if (fragListView9.SelectedIndices.Count == 0) { MessageBox.Show("First select the fragment and then press delete!"); return; }
             during_calc(true);
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
-            if ((sender as MenuItem).Text == "Remove fragment" && selectedItems.Count > 0)
+            if ((sender as ToolStripMenuItem).Text == "Remove fragment" && selectedItems.Count > 0)
             {
                 now = false;
                 int count = 0;
@@ -592,7 +592,7 @@ namespace Isotope_fitting
         private void colorSelectionList(object sender, EventArgs e)
         {
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
-            if ((sender as MenuItem).Text == "Fragment color" && selectedItems.Count > 0)
+            if ((sender as ToolStripMenuItem).Text == "Fragment color" && selectedItems.Count > 0)
             {
                 foreach (ListViewItem item in fragListView9.SelectedItems)
                 {
@@ -606,7 +606,7 @@ namespace Isotope_fitting
         {
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
             StringBuilder sb = new StringBuilder();
-            if ((sender as MenuItem).Text == "Copy fragment" && selectedItems.Count > 0)
+            if ((sender as ToolStripMenuItem).Text == "Copy fragment" && selectedItems.Count > 0)
             {
                 foreach (ListViewItem item in fragListView9.SelectedItems)
                 {
@@ -626,7 +626,7 @@ namespace Isotope_fitting
         private void zoom_to_fragment(object sender, EventArgs e)
         {
             ListView.SelectedListViewItemCollection selectedItems = fragListView9.SelectedItems;
-            if ((sender as MenuItem).Text == "Zoom to fragment" && selectedItems.Count > 0)
+            if ((sender as ToolStripMenuItem).Text == "Zoom to fragment" && selectedItems.Count > 0)
             {
                 foreach (ListViewItem item in fragListView9.SelectedItems)
                 {
