@@ -3928,8 +3928,8 @@ namespace Isotope_fitting
                     {
                         int[] pair = new int[2];
                         pair = find_closest(mz_toInterp, all_data[distro_idx]);
-                        aligned_value = interpolate(all_data[distro_idx][pair[0]][0], all_data[distro_idx][pair[0]][1], all_data[distro_idx][pair[1]][0], all_data[distro_idx][pair[1]][1], mz_toInterp);
-
+                        if (pair[0]== pair[1]){aligned_value = all_data[distro_idx][pair[0]][1];}
+                        else{aligned_value = interpolate(all_data[distro_idx][pair[0]][0], all_data[distro_idx][pair[0]][1], all_data[distro_idx][pair[1]][0], all_data[distro_idx][pair[1]][1], mz_toInterp);}
                     }                    
                     one_aligned_point.Add(aligned_value);
                 }
@@ -3990,7 +3990,6 @@ namespace Isotope_fitting
             {
                 if(mi + 1< data.Count) result = new int[] { mi, mi + 1 };
                 else result = new int[] { mi, mi };
-
             }
             else
             {
