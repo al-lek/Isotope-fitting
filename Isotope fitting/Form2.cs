@@ -3801,7 +3801,7 @@ namespace Isotope_fitting
             List<int> idxs = new List<int>();
             for (int i = 1; i < all_data.Count; i++) { idxs.Add(i); }
 
-            Thread allign = new Thread(() => align_distros(idxs));
+            Thread allign = new Thread(() => align_distros_2(idxs));
             allign.Start();
             recalc = false;
         }
@@ -3886,6 +3886,119 @@ namespace Isotope_fitting
             return aligned_intensities;
         }
 
+        private List<double[]> align_distros_2(List<int> distro_fragm_idxs)
+        {
+            sw1.Reset(); sw1.Start();
+            is_frag_calc_recalc = true;
+
+            all_data_aligned.Clear();
+            List<double[]> aligned_intensities = new List<double[]>();
+            List<int> aux_idx = new List<int>();
+
+            progress_display_start(all_data[0].Count, "Preparing data for fit...");
+
+            // generate alligned (in m/z) isotope distributions at the same step as the experimental
+            // pickup each point in experimental and find (interpolate) the intensity of each fragment
+            int progress = 0;
+            Parallel.For(0, all_data[0].Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
+            {
+                // one by one for all points
+                List<double> one_aligned_point = new List<double>();
+
+                //// when adding new fragments, we dont need to start from the first. Just copy the already aligned frags.                 
+                one_aligned_point.Add(all_data[0][i][1]);
+
+                double mz_toInterp = all_data[0][i][0];//(M)prosthetei apo ta experimental ola ta x-->m/z
+
+                for (int j = 0; j < distro_fragm_idxs.Count; j++)
+                {
+                    int distro_idx = distro_fragm_idxs[j];
+
+                    // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
+                    double aligned_value = 0.0;
+                    if ( mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                    {
+                        aligned_value = 0.0; 
+                    }
+                    else if ( mz_toInterp < all_data[distro_idx][0][0])
+                    {
+                        aligned_value = 0.0; 
+                    }
+                    else
+                    {
+                        int[] pair = new int[2];
+                        pair = find_closest(mz_toInterp, all_data[distro_idx]);
+                        aligned_value = interpolate(all_data[distro_idx][pair[0]][0], all_data[distro_idx][pair[0]][1], all_data[distro_idx][pair[1]][0], all_data[distro_idx][pair[1]][1], mz_toInterp);
+
+                    }                    
+                    one_aligned_point.Add(aligned_value);
+                }
+                lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                try
+                {
+                    lock (_locker)
+                    {
+                        Interlocked.Increment(ref progress); if (progress % 5000 == 0 && i > 0) progress_display_update(progress);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("progress: " + progress.ToString() + "  " + i.ToString() + " X " + all_data[0][i][0].ToString() + " Y " + all_data[0][i][1].ToString() + "  " + ex);
+                    is_frag_calc_recalc = false;
+                }
+
+            });
+            // sort by mz the aligned intensities list (global) because it is mixed by multi-threading
+            int sort_idx = 0;
+            all_data_aligned = aligned_intensities.OrderBy(d => aux_idx[sort_idx++]).ToList();
+            sw1.Stop(); Debug.WriteLine("All data aligned(M): " + sw1.ElapsedMilliseconds.ToString());
+            is_frag_calc_recalc = false;
+            progress_display_stop();
+            Invoke(new Action(() => OnRecalculate_completed()));
+            return aligned_intensities;
+        }
+        private int[] find_closest(double mz_toInterp,List<double[]> data)
+        {
+            int[] result = new int[2];
+            double length = data.Count;
+            int mi =(int)Math.Floor( length / 2);
+            double min_diff =mz_toInterp - data[mi][0];
+            while (mi<length && mi>=0)
+            {
+                int temp_mi = 0;
+                double temp_m = data[mi][0];
+                double diff = mz_toInterp - data[mi][0];
+                if (Math.Abs(diff) < Math.Abs(min_diff)) min_diff = diff;
+                if (diff == 0.0) break;
+                else if (diff < 0)
+                {                    
+                    length = mi;
+                    temp_mi = (int)Math.Floor(length / 2);
+                }
+                else
+                {
+                    temp_mi = mi+(int)Math.Ceiling((length-mi )/ 2);
+                }
+                if (mi == temp_mi) break;
+                else { mi = temp_mi; }
+            }
+            if (min_diff== 0)
+            {
+                result = new int[] { mi, mi };
+            }
+            else if (min_diff>0)
+            {
+                if(mi + 1< data.Count) result = new int[] { mi, mi + 1 };
+                else result = new int[] { mi, mi };
+
+            }
+            else
+            {
+                if (mi - 1 >0) result = new int[] { mi - 1, mi };
+                else result = new int[] { mi, mi };
+            }
+            return result;
+        }
         private List<double[]> subset_of_aligned_distros(int[] distro_fragm_idxs)
         {
             // will return the requested subset of aligned_intensities for the given fragments, it is called only from the fiting algorithm
