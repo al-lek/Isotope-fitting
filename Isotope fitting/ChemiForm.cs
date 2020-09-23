@@ -1282,7 +1282,7 @@ namespace Isotope_fitting
                     //{
                         if (c > 0)
                         {
-                            if (value > 0.0 || (value == 0.0 && chem.Profile[c - 1].Y > 0.0))
+                            if (value > 0.00000001 || (value == 0.00000001 && chem.Profile[c - 1].Y > 0.00000001))
                             {
                                 chem.Profile.Add(new PointPlot { X = tr, Y = value });
                                 c++;
@@ -1290,7 +1290,7 @@ namespace Isotope_fitting
                         }
                         else
                         {
-                            if (value > 0.0)
+                            if (value > 0.0000000001)
                             {
                                 chem.Profile.Add(new PointPlot { X = tr, Y = value });
                                 c++;

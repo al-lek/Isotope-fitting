@@ -4026,7 +4026,6 @@ namespace Isotope_fitting
             }
             return subset_of_aligned_intensities;
         }
-
         private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
         {
             // linear interpolation
@@ -7331,7 +7330,7 @@ namespace Isotope_fitting
                     foreach (int indexS in fragToSave)
                     {
                         Form2.Fragments2[indexS - 1].Fixed = true;
-                        file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" +Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge+ "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity + "\t" +Form2.Fragments2[indexS - 1].Factor + "\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" +Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" +Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" +Form2.Fragments2[indexS - 1].Resolution + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" +Form2.Fragments2[indexS - 1].maxPPM_Error + "\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" +Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct + "\t" + Form2.Fragments2[indexS - 1].maxFactor);
+                        file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" +Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge+ "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Math.Round(Form2.Fragments2[indexS - 1].Max_intensity,6)+ "\t" +Form2.Fragments2[indexS - 1].Factor + "\t" +Math.Round( Form2.Fragments2[indexS - 1].PPM_Error,4)+ "\t" +Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" +Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Math.Round(Form2.Fragments2[indexS - 1].Resolution,2) + "\t" + Math.Round(Form2.Fragments2[indexS - 1].minPPM_Error,4) + "\t" +Math.Round(Form2.Fragments2[indexS - 1].maxPPM_Error,4) + "\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" +Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct + "\t" + Form2.Fragments2[indexS - 1].maxFactor);
                         IonDraw.Add(new ion() { Extension = Form2.Fragments2[indexS - 1].Extension, SortIdx = Form2.Fragments2[indexS - 1].SortIdx, Name = Form2.Fragments2[indexS - 1].Name, Mz = Form2.Fragments2[indexS - 1].Mz, PPM_Error = Fragments2[indexS - 1].PPM_Error, maxPPM_Error = Fragments2[indexS - 1].maxPPM_Error, minPPM_Error = Fragments2[indexS - 1].minPPM_Error, Charge = Fragments2[indexS - 1].Charge, Index = Int32.Parse(Fragments2[indexS - 1].Index), IndexTo = Int32.Parse(Fragments2[indexS - 1].IndexTo), Ion_type = Fragments2[indexS - 1].Ion_type, Max_intensity = Fragments2[indexS - 1].Max_intensity * Fragments2[indexS - 1].Factor, Color = Fragments2[indexS - 1].Color.ToColor(), Chain_type = Fragments2[indexS - 1].Chain_type, Has_adduct = Fragments2[indexS-1].Has_adduct });
                         progress++;
                         if (progress % 10 == 0 && progress > 0) { progress_display_update(progress); }
@@ -7428,13 +7427,13 @@ namespace Isotope_fitting
                 string centroid_string = "Centr:";
                 foreach (PointPlot pp in Fragments2[indexS - 1].Profile)
                 {
-                    profile_string += "\t" + pp.X + " " + pp.Y;
+                    profile_string += "\t" + Math.Round(pp.X ,6)+ " " + Math.Round(pp.Y,6);
                 }
                 foreach (PointPlot pp in Fragments2[indexS - 1].Centroid)
                 {
-                    centroid_string += "\t" + pp.X + " " + pp.Y;
+                    centroid_string += "\t" + Math.Round(pp.X,6) + " " + Math.Round(pp.Y,6);
                 }
-                file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" +Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" +Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" +Form2.Fragments2[indexS - 1].Max_intensity + "\t" + Form2.Fragments2[indexS - 1].Factor +"\t" + Form2.Fragments2[indexS - 1].PPM_Error + "\t" + Form2.Fragments2[indexS - 1].InputFormula +"\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" +Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution +"\t" + Form2.Fragments2[indexS - 1].minPPM_Error + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error +"\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" + Form2.Fragments2[indexS - 1].Chain_type+ "\t" + Form2.Fragments2[indexS - 1].Extension+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct + "\t" + Form2.Fragments2[indexS - 1].maxFactor);
+                file.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" +Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" +Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Math.Round(Form2.Fragments2[indexS - 1].Max_intensity,6) + "\t" + Form2.Fragments2[indexS - 1].Factor +"\t" + Math.Round(Form2.Fragments2[indexS - 1].PPM_Error,4) + "\t" + Form2.Fragments2[indexS - 1].InputFormula +"\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" +Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Math.Round(Form2.Fragments2[indexS - 1].Resolution,2) +"\t" + Math.Round(Form2.Fragments2[indexS - 1].minPPM_Error,4) + "\t" + Math.Round(Form2.Fragments2[indexS - 1].maxPPM_Error,4) +"\t" + Form2.Fragments2[indexS - 1].SortIdx + "\t" + Form2.Fragments2[indexS - 1].Chain_type+ "\t" + Form2.Fragments2[indexS - 1].Extension+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct + "\t" + Form2.Fragments2[indexS - 1].maxFactor);
                 file.WriteLine(profile_string);
                 file.WriteLine(centroid_string);
                 progress++;
@@ -14956,7 +14955,7 @@ namespace Isotope_fitting
             {
                 foreach (double[] peak in peak_points)
                 {
-                    writer.WriteLine(peak[0] + "\t" + peak[1] + "\t" + peak[2] + "\t" + peak[3] + "\t" + peak[4] + "\t" + peak[5]);
+                    writer.WriteLine(peak[0] + "\t" + Math.Round(peak[1],6) + "\t" + Math.Round(peak[2],6) + "\t" + Math.Round(peak[3],2) + "\t" + peak[4] + "\t" + peak[5]);
                 }
             }
         }
@@ -14968,7 +14967,7 @@ namespace Isotope_fitting
             {
                 foreach (double[] exp in experimental)
                 {
-                    writer.WriteLine(exp[0] + "\t" + exp[1]);
+                    writer.WriteLine(Math.Round(exp[0],6) + "\t" + Math.Round(exp[1],6));
                 }
             }
         }
@@ -14997,13 +14996,13 @@ namespace Isotope_fitting
                     string centroid_string = "Centr:";
                     foreach (PointPlot pp in Fragments2[indexS - 1].Profile)
                     {
-                        profile_string += "\t" + pp.X + " " + pp.Y;
+                        profile_string += "\t" + Math.Round(pp.X,6) + " " + Math.Round(pp.Y,6);
                     }
                     foreach (PointPlot pp in Fragments2[indexS - 1].Centroid)
                     {
-                        centroid_string += "\t" + pp.X + " " + pp.Y;
+                        centroid_string += "\t" + Math.Round(pp.X ,6)+ " " + Math.Round(pp.Y,6);
                     }
-                    writer.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Form2.Fragments2[indexS - 1].Max_intensity.ToString() + "\t" + Form2.Fragments2[indexS - 1].Factor.ToString() + "\t" + Form2.Fragments2[indexS - 1].PPM_Error.ToString() + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Form2.Fragments2[indexS - 1].Resolution.ToString() + "\t" + Form2.Fragments2[indexS - 1].minPPM_Error.ToString() + "\t" + Form2.Fragments2[indexS - 1].maxPPM_Error.ToString() + "\t" + Form2.Fragments2[indexS - 1].SortIdx.ToString() + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension + "\t" + Form2.Fragments2[indexS - 1].To_plot.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Fixed.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct.ToString() + "\t" + Form2.Fragments2[indexS - 1].maxFactor.ToString());
+                    writer.WriteLine(Form2.Fragments2[indexS - 1].Name + "\t" + Form2.Fragments2[indexS - 1].Ion_type + "\t" + Form2.Fragments2[indexS - 1].Index + "\t" + Form2.Fragments2[indexS - 1].IndexTo + "\t" + Form2.Fragments2[indexS - 1].Charge + "\t" + Form2.Fragments2[indexS - 1].Mz + "\t" + Math.Round(Form2.Fragments2[indexS - 1].Max_intensity,6).ToString() + "\t" + Form2.Fragments2[indexS - 1].Factor.ToString() + "\t" + Math.Round(Form2.Fragments2[indexS - 1].PPM_Error,4).ToString() + "\t" + Form2.Fragments2[indexS - 1].InputFormula + "\t" + Form2.Fragments2[indexS - 1].Adduct + "\t" + Form2.Fragments2[indexS - 1].Deduct + "\t" + Form2.Fragments2[indexS - 1].Color.ToUint() + "\t" + Math.Round(Form2.Fragments2[indexS - 1].Resolution,2).ToString() + "\t" + Math.Round(Form2.Fragments2[indexS - 1].minPPM_Error,4).ToString() + "\t" + Math.Round(Form2.Fragments2[indexS - 1].maxPPM_Error,4).ToString() + "\t" + Form2.Fragments2[indexS - 1].SortIdx.ToString() + "\t" + Form2.Fragments2[indexS - 1].Chain_type + "\t" + Form2.Fragments2[indexS - 1].Extension + "\t" + Form2.Fragments2[indexS - 1].To_plot.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Fixed.ToString()+ "\t" + Form2.Fragments2[indexS - 1].Has_adduct.ToString() + "\t" + Form2.Fragments2[indexS - 1].maxFactor.ToString());
                     writer.WriteLine(profile_string);
                     writer.WriteLine(centroid_string);
                 }

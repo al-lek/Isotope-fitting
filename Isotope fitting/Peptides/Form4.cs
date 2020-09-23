@@ -219,7 +219,7 @@ namespace Isotope_fitting
                     System.IO.StreamWriter file = new System.IO.StreamWriter(save.OpenFile());  // Create the path and filename.
 
                     file.WriteLine("Mode:\tCustom Resolution");
-                    for (int r = 0; r < tmp1.Count(); r++) file.WriteLine(tmp1[r] + "\t" + tmp2[r]);
+                    for (int r = 0; r < tmp1.Count(); r++) file.WriteLine(Math.Round(tmp1[r],4) + "\t" + Math.Round(tmp2[r],4));
                     new_machine = Path.GetFileNameWithoutExtension(save.FileName);
                     file.Flush(); file.Close(); file.Dispose();
                     Resolution_List.L.Add(new_machine, new Resolution_List.MachineR(tmp1, tmp2));
