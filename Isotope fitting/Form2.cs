@@ -5887,7 +5887,15 @@ namespace Isotope_fitting
             e.CancelRendering = true;
             LC_2.BeginUpdate();
             bool scaleChanged = false;
-            LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+            try
+            {
+                LC_2.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+            }
+            catch
+            {
+                LC_2.EndUpdate();
+                return;
+            }
             LC_2.EndUpdate();
         }
         private void yAxis_RangeChanged(object sender, RangeChangedEventArgs e)
@@ -5895,7 +5903,15 @@ namespace Isotope_fitting
             //Set the same range for secondary Y axis
             e.CancelRendering = true;
             LC_1.BeginUpdate();
-            LC_1.ViewXY.YAxes[1].SetRange(e.NewMin, e.NewMax);
+            try
+            {
+                LC_1.ViewXY.YAxes[1].SetRange(e.NewMin, e.NewMax);
+            }
+            catch
+            {
+                LC_1.EndUpdate();
+                return;
+            }
             LC_1.EndUpdate();
         }
         private void xAxis_RangeChanged(object sender, RangeChangedEventArgs e)
@@ -5904,7 +5920,15 @@ namespace Isotope_fitting
             e.CancelRendering = true;
             double x_min = e.NewMin;
             double x_max = e.NewMax;
-            xAxis_fox_yAxis(e.NewMin, e.NewMax);
+            try
+            {
+                xAxis_fox_yAxis(e.NewMin, e.NewMax);
+            }
+            catch
+            {
+                LC_1.EndUpdate();
+                LC_2.EndUpdate();
+            }
         }
         private void xAxis_fox_yAxis(double x_min, double x_max)
         {
@@ -5949,18 +5973,8 @@ namespace Isotope_fitting
                         LC_1.ViewXY.XAxes[0].CoordToValue(e.X, out x, false);
                         LC_1.ViewXY.Bands[0].ValueEnd = x;
                     }
-                }
-                //if (first_move_cursor_chkBx)
-                //{
-                //    // fragment annotations
-                //    if (plotFragCent_chkBox.Checked || plotFragProf_chkBox.Checked)
-                //    {
-                //        frag_annotation(selectedFragments.ToList(), LC_1);
-                //    }
-                //    first_move_cursor_chkBx = false;
-                //}                
+                }                          
             }
-
         }
         private void _chart_MouseDown(object sender, MouseEventArgs e)
         {
@@ -5979,7 +5993,6 @@ namespace Isotope_fitting
                 LC_1.EndUpdate();
             }
             else if (e.Button == MouseButtons.Right) { DisposeAllAndClear(LC_1.ViewXY.Bands); count_distance = false; }
-
         }
         private void CreateProjections(int pX, int pY)
         {
@@ -5994,7 +6007,6 @@ namespace Isotope_fitting
             DisposeAllAndClear(secondaryXAxis.CustomTicks);
             secondaryXAxis.CustomTicks.Add(new CustomAxisTick(secondaryXAxis, x, x.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
             secondaryXAxis.InvalidateCustomTicks();
-
             //Remove exsisting custom y-axis tickmarks
             DisposeAllAndClear(secondaryYAxis.CustomTicks);
             secondaryYAxis.CustomTicks.Add(new CustomAxisTick(secondaryYAxis, y, y.ToString("0.000"), 10, true, Color.DarkRed, CustomTickStyle.TickAndGrid));
