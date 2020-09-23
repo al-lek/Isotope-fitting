@@ -577,7 +577,7 @@ namespace Isotope_fitting
             _bw_save_project_fit_results.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_project_fitResults_RunWorkerCompleted);
             //load project
             _bw_load_project_exp.DoWork += new DoWorkEventHandler(Project_load_experimental);
-            _bw_load_project_exp.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_exp_RunWorkerCompleted);
+            _bw_load_project_exp.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_exp_RunWorkerCompletedAsync);
             _bw_load_project_peaks.DoWork += new DoWorkEventHandler(Project_load_peaks);
             _bw_load_project_peaks.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_load_project_peaks_RunWorkerCompleted);
             _bw_load_project_fragments.DoWork += new DoWorkEventHandler(Project_load_fragments);
@@ -621,42 +621,42 @@ namespace Isotope_fitting
                 MessageBox.Show("You are ready!! Save project procedure is completed!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString(); }
         }
-        void _bw_load_project_exp_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+         void _bw_load_project_exp_RunWorkerCompletedAsync(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
             {
-                Project_after_load();
+                 Project_after_load();
                 MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
-        void _bw_load_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+         void _bw_load_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
             {
-                Project_after_load();
+                 Project_after_load();
                 MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
-        void _bw_load_project_fragments_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+         void _bw_load_project_fragments_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
             {
-                Project_after_load();
+                 Project_after_load();
                 MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
-        void _bw_load_project_fit_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+         void _bw_load_project_fit_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
             {
-                Project_after_load();
+                 Project_after_load();
                 MessageBox.Show("Load project procedure is completed! You are all set to start processing!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
@@ -2806,7 +2806,7 @@ namespace Isotope_fitting
 
             // case where there is no experimental data OR fitted list's fragments are inserted with their resolution in order to decrease calculations in half(ptofile is calculated once!!!!)
             if (!insert_exp || (chem.Fixed && !is_recalc_res)) { add_fragment_to_Fragments2(chem, cen); return; }
-            // MAIN decesion algorithm
+            // MAIN decision algorithm
             bool fragment_is_canditate = true;
             //if (calc_FF)
             //{
@@ -2893,23 +2893,24 @@ namespace Isotope_fitting
         {
             // find the closest experimental peak, and return calculated ppm and resolution
             double exp_cen, curr_diff, ppm;
-            int closest_idx = 0;
-            double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
+            //int closest_idx = 0;
+            //double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
 
-            for (int i = 1; i < peak_points.Count; i++)
-            {
-                exp_cen = peak_points[i][1] + peak_points[i][4];
-                curr_diff = Math.Abs(exp_cen - centroid);
+            //for (int i = 1; i < peak_points.Count; i++)
+            //{
+            //    exp_cen = peak_points[i][1] + peak_points[i][4];
+            //    curr_diff = Math.Abs(exp_cen - centroid);
 
-                if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                else
-                    break;
-            }
-
-            exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
+            //    if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
+            //    else
+            //        break;
+            //}
+            int[] pair = new int[2];
+            pair=find_closest(centroid, peak_points, true);
+            exp_cen = peak_points[pair[0]][1] + peak_points[pair[0]][4];            
             //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
             ppm = (exp_cen - centroid) * 1e6 / (centroid);
-            return new double[] { ppm, peak_points[closest_idx][3] };
+            return new double[] { ppm, peak_points[pair[0]][3] };
         }
         private void add_fragment_to_Fragments2(ChemiForm chem, List<PointPlot> cen, bool project = false)
         {
@@ -2919,7 +2920,7 @@ namespace Isotope_fitting
                 if (project || check_duplicates_Fragments2(chem))
                 {
                     is_calc = true;
-                    Fragments2.Add(new FragForm()
+                    FragForm fra = new FragForm()
                     {
                         Adduct = chem.Adduct,
                         Charge = chem.Charge,
@@ -2934,7 +2935,7 @@ namespace Isotope_fitting
                         Ion_type = chem.Ion_type,
                         Machine = chem.Machine,
                         Multiplier = chem.Multiplier,
-                        Mz = chem.Mz,                        
+                        Mz = chem.Mz,
                         Resolution = chem.Resolution,
                         Factor = chem.Factor,
                         Counter = 0,
@@ -2950,41 +2951,31 @@ namespace Isotope_fitting
                         Chain_type = chem.Chain_type,
                         SortIdx = chem.SortIdx,
                         Candidate = true,
-                        Has_adduct=chem.Has_adduct,
+                        Has_adduct = chem.Has_adduct,
                         maxFactor = chem.maxFactor
-                    });
-
-                    Fragments2.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
-                    Fragments2.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
-                    Fragments2.Last().Counter = Fragments2.Count;
-                    Fragments2.Last().Max_intensity = Fragments2.Last().Profile.Max(p => p.Y);
+                    };
+                    fra.Centroid = cen.Select(point => point.DeepCopy()).ToList();
+                    fra.Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
+                    fra.Counter = Fragments2.Count;
+                    fra.Max_intensity = fra.Profile.Max(p => p.Y);
                     //when manually processed data is added sometimes they don't want to fit the data to create the plots in the other tabs,
                     // so factor is calculated based on the input txt the user add that in the last position has the intensity of the fragment
-                    if (chem.Max_man_int != 0) { Fragments2.Last().Factor = chem.Max_man_int / Fragments2.Last().Max_intensity; }
-                    //else if (!Fragments2.Last().Fixed && max_exp > 0) Fragments2.Last().Factor = 0.1 * max_exp / Fragments2.Last().Max_intensity; // start all fragments at 10% of the main experimental peak (one order of mag. less)                    
+                    if (chem.Max_man_int != 0) { fra.Factor = chem.Max_man_int / fra.Max_intensity; }
                     double pt0 = 0.1 * max_exp;
                     if (peak_points.Count > 0)
                     {
-                        double exp_cen, curr_diff;
-                        double centroid = Fragments2.Last().Centroid[0].X;
-                        double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-                        int closest_idx = 0;
-                        for (int i = 1; i < peak_points.Count; i++)
-                        {
-                            exp_cen = peak_points[i][1] + peak_points[i][4];
-                            curr_diff = Math.Abs(exp_cen - centroid);
-                            if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                            else
-                                break;
-                        }
-                        pt0 =  peak_points[closest_idx][5];                        
-                    }
-                    Fragments2.Last().maxFactor = pt0 / Fragments2.Last().Max_intensity;
-                    if (!Fragments2.Last().Fixed && chem.Max_man_int == 0) Fragments2.Last().Factor = pt0 / Fragments2.Last().Max_intensity;
+                        double centroid = fra.Centroid[0].X;
+                        int[] pair = new int[2];
+                        pair = find_closest(centroid, peak_points, true);
+                        pt0 = peak_points[pair[0]][5];
+                        fra.maxFactor = pt0 / fra.Max_intensity;
+                    }                                     
+                    if (!fra.Fixed && chem.Max_man_int == 0) fra.Factor = pt0 / fra.Max_intensity;
                     // Prog: Very important memory leak!!! Clear envelope and isopatern of matched fragments to reduce waste of memory DURING calculations! 
                     // Profile is stored already in Fragments2, no reason to keep it also in selected_fragments (which will be Garbage Collected)
                     chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                    check_tp(Fragments2.Last());
+                    check_tp(fra);
+                    Fragments2.Add(fra);
                 }
                 else
                 {
@@ -3957,18 +3948,23 @@ namespace Isotope_fitting
             Invoke(new Action(() => OnRecalculate_completed()));
             return aligned_intensities;
         }
-        private int[] find_closest(double mz_toInterp,List<double[]> data)
+        public static int[] find_closest(double mz_toInterp,List<double[]> data,bool is_peaklist=false)
         {
             int[] result = new int[2];
             double length = data.Count;
             int mi =(int)Math.Floor( length / 2);
-            double min_diff =mz_toInterp - data[mi][0];
+            double temp_m = data[mi][0];
+            if (is_peaklist) temp_m = data[mi][1] + data[mi][4];
+            double min_diff =mz_toInterp - temp_m;
+            int minimum = 0;
+            int min_mi = mi;
             while (mi<length && mi>=0)
             {
-                int temp_mi = 0;
-                double temp_m = data[mi][0];
-                double diff = mz_toInterp - data[mi][0];
-                if (Math.Abs(diff) < Math.Abs(min_diff)) min_diff = diff;
+                int temp_mi = 0;                 
+                if(is_peaklist) temp_m = data[mi][1]+ data[mi][4];
+                else temp_m = data[mi][0];
+                double diff = mz_toInterp - temp_m;
+                if (Math.Abs(diff) < Math.Abs(min_diff)) { min_diff = diff; min_mi = mi; }
                 if (diff == 0.0) break;
                 else if (diff < 0)
                 {                    
@@ -3977,24 +3973,29 @@ namespace Isotope_fitting
                 }
                 else
                 {
+                    minimum = mi;
                     temp_mi = mi+(int)Math.Ceiling((length-mi )/ 2);
                 }
-                if (mi == temp_mi) break;
+                if (temp_mi < minimum)
+                {
+                    temp_mi = minimum;
+                }
+                if (mi == temp_mi) break;                
                 else { mi = temp_mi; }
-            }
-            if (min_diff== 0)
+            }            
+            if (min_diff== 0 || is_peaklist)
             {
-                result = new int[] { mi, mi };
+                result = new int[] { min_mi, min_mi };
             }
             else if (min_diff>0)
             {
-                if(mi + 1< data.Count) result = new int[] { mi, mi + 1 };
-                else result = new int[] { mi, mi };
+                if(min_mi + 1< data.Count) result = new int[] { min_mi, min_mi + 1 };
+                else result = new int[] { min_mi, min_mi };
             }
             else
             {
-                if (mi - 1 >0) result = new int[] { mi - 1, mi };
-                else result = new int[] { mi, mi };
+                if (min_mi - 1 >0) result = new int[] { min_mi - 1, min_mi };
+                else result = new int[] { min_mi, min_mi };
             }
             return result;
         }
@@ -5328,6 +5329,7 @@ namespace Isotope_fitting
                 // because of multiple checked events it was disabled
                 // it will be called once, now that all coresponding fragments are checked
             }
+            block_plot_refresh = false; block_fit_refresh = false;
             dont_refresh_frag_tree = false;
             refresh_iso_plot();
         }
@@ -6417,25 +6419,35 @@ namespace Isotope_fitting
                 SeriesPoint[] points = new SeriesPoint[pointCount];
                 for (int i = 0; i < pointCount; i++)
                     points[i] = new SeriesPoint(data[i][0], data[i][1]);
-
-                LC.ViewXY.PointLineSeries[index].Points = points;
-                LC.ViewXY.PointLineSeries[index].Visible = true;
+                if (LC.ViewXY.PointLineSeries.Count> index)
+                {
+                    LC.ViewXY.PointLineSeries[index].Points = points;
+                    LC.ViewXY.PointLineSeries[index].Visible = true;
+                }                
             }
             catch(Exception eeee)
             {
-                MessageBox.Show("Oops an error occurred while refreshing the basic plot. Please try again. Error: "+ eeee.ToString());
-            }
-           
+                MessageBox.Show("Oops an error occurred while refreshing the basic plot. Please try again.\r\n\r\n Error:\r\n" + eeee.ToString());
+            }           
         }
         private void PointLine_addSeries(LightningChartUltimate LC, int index, double[] mz, double[] y, double y_factor)
         {
-            int pointCount = mz.Length;
-            SeriesPoint[] points = new SeriesPoint[pointCount];
-            for (int i = 0; i < pointCount; i++)
-                points[i] = new SeriesPoint(mz[i], y_factor * y[i]);
-
-            LC.ViewXY.PointLineSeries[index].Points = points;
-            LC.ViewXY.PointLineSeries[index].Visible = true;
+            try
+            {
+                int pointCount = mz.Length;
+                SeriesPoint[] points = new SeriesPoint[pointCount];
+                for (int i = 0; i < pointCount; i++)
+                    points[i] = new SeriesPoint(mz[i], y_factor * y[i]);
+                if (LC.ViewXY.PointLineSeries.Count > index)
+                {
+                    LC.ViewXY.PointLineSeries[index].Points = points;
+                    LC.ViewXY.PointLineSeries[index].Visible = true;
+                }
+            }
+            catch (Exception eeee)
+            {
+                MessageBox.Show("Oops an error occurred while refreshing the basic plot. Please try again.\r\n\r\n Error:\r\n" + eeee.ToString());
+            }
         }
         private void Init_LineCollection_Plot(LightningChartUltimate LC, string title, Color color, float width)
         {
@@ -6453,12 +6465,13 @@ namespace Isotope_fitting
         private void LineCollection_addLines(LightningChartUltimate LC, int index, List<double[]> data)
         {
             SegmentLine[] segmentLines = new SegmentLine[data.Count()];
-
             for (int i = 0; i < data.Count(); i++)
                 segmentLines[i] = new SegmentLine(data[i][0], 0, data[i][0], data[i][1]);
-
-            LC.ViewXY.LineCollections[index].Lines = segmentLines;
-            LC.ViewXY.LineCollections[index].Visible = true;
+            if (LC.ViewXY.LineCollections.Count>index)
+            {
+                LC.ViewXY.LineCollections[index].Lines = segmentLines;
+                LC.ViewXY.LineCollections[index].Visible = true;
+            }            
         }
         private void LineCollection_addLines1(LightningChartUltimate LC, int index, List<PointPlot> data, double factor)
         {
@@ -6466,9 +6479,11 @@ namespace Isotope_fitting
 
             for (int i = 0; i < data.Count(); i++)
                 segmentLines[i] = new SegmentLine(data[i].X, 0, data[i].X, data[i].Y * factor);
-
-            LC.ViewXY.LineCollections[index].Lines = segmentLines;
-            LC.ViewXY.LineCollections[index].Visible = true;
+            if (LC.ViewXY.LineCollections.Count>index)
+            {
+                LC.ViewXY.LineCollections[index].Lines = segmentLines;
+                LC.ViewXY.LineCollections[index].Visible = true;
+            }         
         }
         private void cursor_distance(int pX)
         {
@@ -6950,7 +6965,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region Data manipulation 
+        #region Data manipulation
         private void experimental_to_all_data(bool selected_part = false)
         {
             // copy experimental to all data. After loading the whole range. After cahnge in fit range, only selected region
@@ -6964,6 +6979,67 @@ namespace Isotope_fitting
                 foreach (double[] exp in experimental)
                     all_data[0].Add(exp);
         }
+        private void reset_all()
+        {
+            //FormWindowState curr_state = this.WindowState;
+            //Size curr_size = this.Size;
+
+            //this.WindowState = FormWindowState.Normal;
+            //this.Size = new Size(2200, 925);           
+
+            Initialize_data_struct();
+            Initialize_UI();
+            init_chart();
+            //Initialize_Oxy();
+            initialize_tabs();
+
+            //this.WindowState = curr_state;
+            //this.Size = curr_size;
+        }
+        private void Initialize_data_struct()
+        {
+            aligned_intensities.Clear();
+            all_data_aligned.Clear();
+            //if (last_ploted_iso.Count > 0) last_ploted_iso.Clear();
+            fitted_results.Clear();
+            powerSet.Clear();
+            powerSet_distroIdx.Clear();
+            summation.Clear();
+            residual.Clear();
+            custom_colors.Clear();
+            all_data.Clear();
+            file_name = "";
+            project_experimental = "";
+            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
+            //fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
+            fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
+            fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid;
+            exp_width = 1; frag_width = 2; fit_width = 1;
+            //exp deconvoluted
+            is_exp_deconvoluted = false;
+            deconv_machine = "";
+            is_deconv_const_resolution = false;
+            experimental_dec = new List<List<double[]>>();
+        }
+        private void frags_maxFactor()
+        {
+            if (peak_points.Count > 0)
+            {
+                Parallel.ForEach<FragForm>(Fragments2, (fra) =>
+                {
+                    if (fra.maxFactor == 0)
+                    {
+                        double pt0 = 0.1 * max_exp;
+                        double centroid = fra.Centroid[0].X;
+                        int[] pair = new int[2];
+                        pair = find_closest(centroid, peak_points, true);
+                        pt0 = peak_points[pair[0]][5];
+                        fra.maxFactor = pt0 / fra.Max_intensity;
+                    }
+                });
+            }
+        }
+
         #endregion
 
         #region Helpers     
@@ -8198,28 +8274,7 @@ namespace Isotope_fitting
                 // sort by mz the fragments list (global) beause it is mixed by multi-threading
                 Fragments2 = Fragments2.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
                 change_name_duplicates();
-                if (peak_points.Count > 0)
-                {
-                    foreach (FragForm fra in Fragments2)
-                    {
-                        if (fra.maxFactor != 0) continue;
-                        double pt0 = 0.1 * max_exp;
-                        double exp_cen, curr_diff;
-                        double centroid = fra.Centroid[0].X;
-                        double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-                        int closest_idx = 0;
-                        for (int i = 1; i < peak_points.Count; i++)
-                        {
-                            exp_cen = peak_points[i][1] + peak_points[i][4];
-                            curr_diff = Math.Abs(exp_cen - centroid);
-                            if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                            else
-                                break;
-                        }
-                        pt0 =  peak_points[closest_idx][5];
-                        fra.maxFactor = pt0 / fra.Max_intensity;
-                    }
-                }
+                frags_maxFactor();
                 // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
                 MessageBox.Show(added.ToString() + " fragments added from file. " + duplicate_count.ToString() + " duplicates removed from current files.", "Fitted fragments files");
@@ -8479,27 +8534,7 @@ namespace Isotope_fitting
                     }
                     else { rr++; }
                 }
-                if (peak_points.Count > 0)
-                {
-                    foreach (FragForm fra in Fragments2)
-                    {
-                        double pt0 = 0.1 * max_exp;
-                        double exp_cen, curr_diff;
-                        double centroid = fra.Centroid[0].X;
-                        double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-                        int closest_idx = 0;
-                        for (int i = 1; i < peak_points.Count; i++)
-                        {
-                            exp_cen = peak_points[i][1] + peak_points[i][4];
-                            curr_diff = Math.Abs(exp_cen - centroid);
-                            if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                            else
-                                break;
-                        }
-                        pt0 =  peak_points[closest_idx][5];
-                        fra.maxFactor = pt0 / fra.Max_intensity;
-                    }
-                }
+                frags_maxFactor();
                 // thread safely fire event to continue calculations
                 Invoke(new Action(() => OnEnvelopeCalcCompleted()));
             }
@@ -9622,57 +9657,13 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region Data manipulation
-        private void reset_all()
-        {
-            //FormWindowState curr_state = this.WindowState;
-            //Size curr_size = this.Size;
-
-            //this.WindowState = FormWindowState.Normal;
-            //this.Size = new Size(2200, 925);           
-
-            Initialize_data_struct();
-            Initialize_UI();
-            init_chart();
-            //Initialize_Oxy();
-            initialize_tabs();
-
-            //this.WindowState = curr_state;
-            //this.Size = curr_size;
-        }
-        private void Initialize_data_struct()
-        {
-            aligned_intensities.Clear();
-            all_data_aligned.Clear();
-            //if (last_ploted_iso.Count > 0) last_ploted_iso.Clear();
-            fitted_results.Clear();
-            powerSet.Clear();
-            powerSet_distroIdx.Clear();
-            summation.Clear();
-            residual.Clear();
-            custom_colors.Clear();
-            all_data.Clear();
-            file_name = "";
-            project_experimental = "";
-            if (all_fitted_results != null) { all_fitted_results.Clear(); all_fitted_sets.Clear(); }
-            //fit_chkGrpsBtn.Enabled = fit_chkGrpsChkFragBtn.Enabled = false;
-            fit_color = OxyColors.Black; exp_color = OxyColors.Black.ToColor().ToArgb();
-            fit_style = LinePattern.Dot; exper_style = LinePattern.Solid; frag_style = LinePattern.Solid;
-            exp_width = 1; frag_width = 2; fit_width = 1;
-            //exp deconvoluted
-            is_exp_deconvoluted = false;
-            deconv_machine = "";
-            is_deconv_const_resolution = false;
-            experimental_dec = new List<List<double[]>>();
-        }
-
-        #endregion
+        
 
         #region Fitting Options
         private void Fitting_chkBox_CheckedChanged_1(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("When checked the summation of the plotted fragments is displayed in spectrum area with a dashed line.\r\nThe type and the color of the line can be changed in Format Plot Area>Style panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
-            refresh_iso_plot();
+            if(!block_plot_refresh)refresh_iso_plot();
         }
         #endregion
 
@@ -10212,7 +10203,7 @@ namespace Isotope_fitting
                             is_present = true; is_primary = true;
                             //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
-                        else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
+                        else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx  || nn.IndexTo == idx + 1))
                         {
                             is_present = true;
                             //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
@@ -10711,11 +10702,11 @@ namespace Isotope_fitting
                             draw_line(temp_p, false, 12 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }                   
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
                     {
                         draw_line(pp, false, 0 , nn.Color, g, true);
                     }
-                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1)&& !los_chkBox_temp.Checked && int_chBx_temp.Checked)
+                    else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1)&& !los_chkBox_temp.Checked && int_chBx_temp.Checked)
                     {
                         bool is_left = true;
                         bool is_up = true;
@@ -11127,7 +11118,7 @@ namespace Isotope_fitting
                 {
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
+                    if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                      //if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 1 || nn.IndexTo == idx + 1))
                     {
                         if (!los_chkBox_temp.Checked && int_chBx_temp.Checked){intensity += nn.Max_intensity;}
@@ -14315,6 +14306,7 @@ namespace Isotope_fitting
         }
         private bool Clear_all()
         {
+            block_plot_refresh = true;
             root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             CloseAllOpenForm("Form2");
             if (frm24_2 != null) { frm24_2 = null; }
@@ -14368,6 +14360,7 @@ namespace Isotope_fitting
             list_21.Clear();
             //reset_all();
             Initialize_data_struct();
+            block_plot_refresh = false;
             refresh_iso_plot();
             return true;
         }
@@ -14392,7 +14385,7 @@ namespace Isotope_fitting
                 string path_peaks = System.IO.Path.Combine(folderName, "Peak Data.txt");
                 string path_fragments = System.IO.Path.Combine(folderName, "Fragment Data.txt");
                 string path_fit = System.IO.Path.Combine(folderName, "Fit Data.txt");
-                if (!File.Exists(path_peaks) || !File.Exists(path_fragments) || !File.Exists(path_fit)) { MessageBox.Show("Oops...the selected folder is not in the correct format.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
+                if (!File.Exists(path_peaks) || !File.Exists(path_fragments) ) { MessageBox.Show("Oops...the selected folder is not in the correct format.\r\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
                 if (!File.Exists(path_experimental))
                 {
                     path_experimental = System.IO.Path.Combine(folderName, "Experimental Data.dec");
@@ -14403,7 +14396,7 @@ namespace Isotope_fitting
                 _bw_load_project_exp.RunWorkerAsync(path_experimental);
                 _bw_load_project_peaks.RunWorkerAsync(path_peaks);
                 _bw_load_project_fragments.RunWorkerAsync(path_fragments);
-                _bw_load_project_fit_results.RunWorkerAsync(path_fit);
+               _bw_load_project_fit_results.RunWorkerAsync(path_fit);
 
             }
 
@@ -14495,6 +14488,7 @@ namespace Isotope_fitting
         void Project_load_fit_results(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
+            if (File.Exists(filename)) return;
             int mode = 0;
             List<string> lista = new List<string>();
             StreamReader objReader = new StreamReader(filename);
@@ -14820,33 +14814,15 @@ namespace Isotope_fitting
             //frag            
             show_files_Btn.ToolTipText = loaded_lists;           
             loadExp_Btn.Enabled = true;
-            plotFragProf_chkBox.Checked = true;
-            if (peak_points.Count > 0)
-            {
-                foreach (FragForm fra in Fragments2)
-                {
-                    if (fra.maxFactor != 0) continue;
-                    double pt0 = 0.1 * max_exp;
-                    double exp_cen, curr_diff;
-                    double centroid = fra.Centroid[0].X;
-                    double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-                    int closest_idx = 0;
-                    for (int i = 1; i < peak_points.Count; i++)
-                    {
-                        exp_cen = peak_points[i][1] + peak_points[i][4];
-                        curr_diff = Math.Abs(exp_cen - centroid);
-                        if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                        else
-                            break;
-                    }
-                    pt0 =  peak_points[closest_idx][5];
-                    fra.maxFactor = pt0 / fra.Max_intensity;
-                }
-            }
+            plotFragProf_chkBox.Checked = true;            
+             frags_maxFactor();
             if (Fragments2.Count > 0) { Invoke(new Action(() => OnEnvelopeCalcCompleted())); find_max_min_int(); }
+            block_plot_refresh = false;
             //fit
             generate_fit_results(true);
         }
+
+        
         //save
         private void save_proj_Btn_Click(object sender, EventArgs e)
         {
@@ -15232,6 +15208,6 @@ namespace Isotope_fitting
             initialize_plot_tabs(false, "dC");
         }
         #endregion
-
+      
     }
 }
