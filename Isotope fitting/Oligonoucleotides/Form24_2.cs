@@ -165,10 +165,7 @@ namespace Isotope_fitting
             bool extra_mz_error = false;
             string extra_name = "";
             string deduct = "";
-            string adduct = "";            
-            //if (extra_adduct.Contains("B(A)")) { extra_adduct = extra_adduct.Replace("B(A)", "C5H5N5"); }
-            //if (extra_adduct.Contains("B(G)")) { extra_adduct = extra_adduct.Replace("B(G)", "C5H5N5O1"); }
-            //if (extra_adduct.Contains("B(T)")) { extra_adduct = extra_adduct.Replace("B(T)", "C5H6N2O2"); }
+            string adduct = ""; 
             if (has_adduct)
             {
                 extra_name = extra_adduct.ToString();
@@ -240,7 +237,6 @@ namespace Isotope_fitting
                 int curr_q = chem.Charge;
                 string curr_type = chem.Ion_type;
                 string curr_type_first = curr_type.Substring(0, 1);
-
                 bool is_precursor = curr_type.StartsWith("M");
                 bool is_internal = curr_type.StartsWith("internal");
                 bool is_B_loss = primary.Any(curr_type.StartsWith) && curr_type.Contains("B(");
@@ -252,10 +248,11 @@ namespace Isotope_fitting
                 if (is_primary && types_primary_Hyd.Count > 0) range = 2*1.007825 / Math.Abs(curr_q);
                 if (is_primary && types_primary_H2O.Count>0) range = 19 / Math.Abs(curr_q);
                 double extra_mz_temp = extra_mz / Math.Abs(curr_q);
-
+                double extra_B_temp = 0; // 151.0494098 is the mass of B(G), which is the biggest of the B()
+                //if (is_primary && types_B_loss.Count > 0) { extra_B_temp = 151.0494098 / Math.Abs(curr_q); }// 151.0494098 is the mass of B(G), which is the biggest of the B() 
                 // drop frag by mz and charge rules
-                if (curr_mz + extra_mz_temp < mzMin - range || curr_mz + extra_mz_temp > mzMax + range || curr_q < qMin || curr_q > qMax) continue;
-                if (!extra_name.Contains("B(") || check_ion_for_base(chem, extra_name, frm2.sequenceList))
+                if (curr_mz + extra_mz_temp < mzMin - range || curr_mz + extra_mz_temp > mzMax + range+ extra_B_temp || curr_q < qMin || curr_q > qMax) continue;
+                if (!extra_name.Contains("B(")|| check_ion_for_base(chem, extra_name, frm2.sequenceList))
                 {
                     if (is_internal)
                     {
@@ -498,102 +495,108 @@ namespace Isotope_fitting
                     }
                     if (is_primary)
                     {
-                        if (types_primary.Contains(curr_type) && curr_mz + extra_mz_temp >= mzMin && curr_mz + extra_mz_temp <= mzMax)
-                        {
-                            if (has_adduct)
-                            {
-                                check_adduct(chem, adduct, deduct, res, extra_name, true);
-                            }
-                            else { res.Add(chem.DeepCopy()); }
-                        }
+                        //if (is_primary && types_B_loss.Count > 0)
+                        //{
 
-                        // this code is only for MSProduct that does not provide primary with H gain/loss by default.
-                        // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
-                        if (types_primary_Hyd.Any(t => t.StartsWith(curr_type)))
-                        {
-                            foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
+                        //}
+                        //else
+                        //{
+                            if (types_primary.Contains(curr_type) && curr_mz + extra_mz_temp >= mzMin && curr_mz + extra_mz_temp <= mzMax)
                             {
-                                bool is_error = false;
-                                double hyd_num = 0.0;
-                                if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
-                                else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
-                                double mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4);
-                                if (mz + extra_mz_temp >= mzMin && mz + extra_mz_temp <= mzMax)
+                                if (has_adduct)
                                 {
-                                    // add the primary and modify it according to gain or loss of H
-                                    if (has_adduct)
+                                    check_adduct(chem, adduct, deduct, res, extra_name, true);
+                                }
+                                else { res.Add(chem.DeepCopy()); }
+                            }
+                            // this code is only for MSProduct that does not provide primary with H gain/loss by default.
+                            // Whenever a primary is detected, we have to check if Hydrogen adducts or losses are requested and GENERATE ions (i.e y-2) respective ions
+                            if (types_primary_Hyd.Any(t => t.StartsWith(curr_type)))
+                            {
+                                foreach (string hyd_mod in types_primary_Hyd.Where(t => t.StartsWith(curr_type)))
+                                {
+                                    bool is_error = false;
+                                    double hyd_num = 0.0;
+                                    if (hyd_mod.Contains('+')) hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('+')));
+                                    else hyd_num = Convert.ToDouble(hyd_mod.Substring(hyd_mod.IndexOf('-')));
+                                    double mz = Math.Round(curr_mz + hyd_num * 1.007825 / Math.Abs(curr_q), 4);
+                                    if (mz + extra_mz_temp >= mzMin && mz + extra_mz_temp <= mzMax)
                                     {
-                                        is_error = check_adduct(chem, adduct, deduct, res, extra_name);
-                                    }
-                                    else { res.Add(chem.DeepCopy()); }
-                                    if (is_error) continue;
-                                    int curr_idx = res.Count - 1;
+                                        // add the primary and modify it according to gain or loss of H
+                                        if (has_adduct)
+                                        {
+                                            is_error = check_adduct(chem, adduct, deduct, res, extra_name);
+                                        }
+                                        else { res.Add(chem.DeepCopy()); }
+                                        if (is_error) continue;
+                                        int curr_idx = res.Count - 1;
 
-                                    string new_type = "(" + hyd_mod;
-                                    if (has_adduct)
-                                    {
-                                        new_type += extra_name;
-                                    }
-                                    new_type += ")";
-                                    res[curr_idx].Ion_type = new_type;
-                                    res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                                    res[curr_idx].Has_adduct = has_adduct;
-                                    if (has_adduct) res[curr_idx].Has_adduct = aks_modifChk.Checked;
-                                    res[curr_idx].Mz = mz.ToString();
-                                    res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
-                                    if (extra_name.Contains("B(A)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
-                                    if (extra_name.Contains("B(G)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(G)", "B()"); }
-                                    if (extra_name.Contains("B(T)")) {/* res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(T)", "B()"); }
-                                    if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
+                                        string new_type = "(" + hyd_mod;
+                                        if (has_adduct)
+                                        {
+                                            new_type += extra_name;
+                                        }
+                                        new_type += ")";
+                                        res[curr_idx].Ion_type = new_type;
+                                        res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                        res[curr_idx].Has_adduct = has_adduct;
+                                        if (has_adduct) res[curr_idx].Has_adduct = aks_modifChk.Checked;
+                                        res[curr_idx].Mz = mz.ToString();
+                                        res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, true, (int)hyd_num);
+                                        if (extra_name.Contains("B(A)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
+                                        if (extra_name.Contains("B(G)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(G)", "B()"); }
+                                        if (extra_name.Contains("B(T)")) {/* res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(T)", "B()"); }
+                                        if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
 
+                                    }
                                 }
                             }
-                        }
-                        if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
-                        {
-                            foreach (string hyd_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
+                            if (types_primary_H2O.Any(t => t.StartsWith(curr_type)))
                             {
-                                bool is_error = false;
-                                double mz;
-                                if (hyd_mod.Contains('+')) mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4);
-                                else mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4);
-                                if (mz + extra_mz_temp >= mzMin && mz + extra_mz_temp <= mzMax)
+                                foreach (string h2o_mod in types_primary_H2O.Where(t => t.StartsWith(curr_type)))
                                 {
-                                    // add the primary and modify it according to gain or loss of H2O
-                                    if (has_adduct)
+                                    bool is_error = false;
+                                    double mz;
+                                    if (h2o_mod.Contains('+')) mz = Math.Round(curr_mz + 18.01056468 / Math.Abs(curr_q), 4);
+                                    else mz = Math.Round(curr_mz - 18.01056468 / Math.Abs(curr_q), 4);
+                                    if (mz + extra_mz_temp >= mzMin && mz + extra_mz_temp <= mzMax)
                                     {
-                                        is_error = check_adduct(chem, adduct,deduct, res, extra_name);
+                                        // add the primary and modify it according to gain or loss of H2O
+                                        if (has_adduct)
+                                        {
+                                            is_error = check_adduct(chem, adduct, deduct, res, extra_name);
+                                        }
+                                        else { res.Add(chem.DeepCopy()); }
+                                        if (is_error) continue;
+                                        int curr_idx = res.Count - 1;
+                                        string new_type = "(" + h2o_mod;
+                                        if (has_adduct)
+                                        {
+                                            new_type += extra_name;
+                                        }
+                                        new_type += ")";
+                                        res[curr_idx].Ion_type = new_type;
+                                        res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
+                                        res[curr_idx].Has_adduct = has_adduct;
+                                        if (has_adduct) res[curr_idx].Has_adduct = aks_modifChk.Checked;
+                                        if (extra_name.Contains("B(A)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
+                                        if (extra_name.Contains("B(G)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(G)", "B()"); }
+                                        if (extra_name.Contains("B(T)")) {/* res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(T)", "B()"); }
+                                        if (h2o_mod.Contains('+'))
+                                        {
+                                            res[curr_idx].Mz = mz.ToString();
+                                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, 1);
+                                        }
+                                        else
+                                        {
+                                            res[curr_idx].Mz = mz.ToString();
+                                            res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, -1);
+                                        }
+                                        if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
                                     }
-                                    else { res.Add(chem.DeepCopy()); }
-                                    if (is_error) continue;
-                                    int curr_idx = res.Count - 1;
-                                    string new_type = "(" + hyd_mod;
-                                    if (has_adduct)
-                                    {
-                                        new_type += extra_name;
-                                    }
-                                    new_type += ")";
-                                    res[curr_idx].Ion_type = new_type;
-                                    res[curr_idx].Name = new_type + res[curr_idx].Name.Remove(0, 1);
-                                    res[curr_idx].Has_adduct = has_adduct;
-                                    if (has_adduct) res[curr_idx].Has_adduct = aks_modifChk.Checked;
-                                    if (extra_name.Contains("B(A)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(A)", "B()"); }
-                                    if (extra_name.Contains("B(G)")) { /*res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(G)", "B()"); }
-                                    if (extra_name.Contains("B(T)")) {/* res[curr_idx].Has_adduct = false;*/ res[curr_idx].Ion_type = res[curr_idx].Ion_type.Replace("B(T)", "B()"); }
-                                    if (hyd_mod.Contains('+'))
-                                    {
-                                        res[curr_idx].Mz = mz.ToString();
-                                        res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, 1);
-                                    }
-                                    else
-                                    {
-                                        res[curr_idx].Mz = mz.ToString();
-                                        res[curr_idx].PrintFormula = res[curr_idx].InputFormula = fix_formula(out is_error, res[curr_idx].InputFormula, false, 0, -1);
-                                    }
-                                    if (is_error) { MessageBox.Show("Error with fragment " + res[curr_idx].Ion + ",with m/z " + res[curr_idx].Mz + " . Don't worry the remaining calculations will continue normally."); res.RemoveAt(curr_idx); }
                                 }
                             }
-                        }
+                        //}                                               
                     }
                 }
                 else continue;
@@ -659,7 +662,6 @@ namespace Isotope_fitting
             Form19 frm19 = new Form19(frm2, frm2.is_help);
             frm19.ShowDialog();
         }
-
         private void calcBtn_Click(object sender, EventArgs e)
         {
             if (frm2.is_help) { MessageBox.Show("Initiates the calculation procedure:\r\nfor each of the loaded fragments, the algorithm checks whether they possess " +
@@ -724,8 +726,7 @@ namespace Isotope_fitting
                 }
             }
 
-        }
-         
+        }         
         private void Form24_2_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)

@@ -10688,7 +10688,7 @@ namespace Isotope_fitting
                         int step = 0;
                         Color clr = Color.Orange;
                         // 4/O,707=5.6
-                        if (nn.Index == idx + 2)
+                        if (nn.Index == idx + 1)
                         {
                             is_left = false;
                             if (nn.Name.StartsWith("(w") || nn.Name.StartsWith("w")) { step = 0 * 6; clr = Color.LimeGreen; }
