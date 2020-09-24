@@ -2907,7 +2907,11 @@ namespace Isotope_fitting
             //}
             int[] pair = new int[2];
             pair=find_closest(centroid, peak_points, true);
-            exp_cen = peak_points[pair[0]][1] + peak_points[pair[0]][4];            
+            exp_cen = peak_points[pair[0]][1] + peak_points[pair[0]][4];
+            //if (pair[0]!= closest_idx)
+            //{
+            //    MessageBox.Show("oh NO");
+            //}
             //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
             ppm = (exp_cen - centroid) * 1e6 / (centroid);
             return new double[] { ppm, peak_points[pair[0]][3] };
@@ -3969,7 +3973,7 @@ namespace Isotope_fitting
                 else if (diff < 0)
                 {                    
                     length = mi;
-                    temp_mi = (int)Math.Floor(length / 2);
+                    temp_mi =minimum+ (int)Math.Floor((length-minimum) / 2);
                 }
                 else
                 {
@@ -6126,6 +6130,7 @@ namespace Isotope_fitting
             reset_iso_plot();
 
             // 1.a rerun calculations for fit and residual
+
             recalculate_fitted_residual(to_plot);
 
             // 1.b Add the experimental to plot if selected
@@ -6272,26 +6277,14 @@ namespace Isotope_fitting
                     for (int f = 0; f < Form9.last_plotted.Count; f++)
                     {
                         int frag = Form9.last_plotted[f];
-                        Color cc = Form9.Fragments3[frag].Color.ToColor();
-                        ////LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
-                        ////iso_plot.Model.Series.Add(bar);
-                        //Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None };
-                        //bs.Title.Text = Form9.Fragments3[frag].Name; bs.BorderWidth = 1; bs.BorderColor = cc; bs.BarThickness = (int)cen_width;
-                        //LC_1.ViewXY.BarSeries.Add(bs); LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
-
+                        Color cc = Form9.Fragments3[frag].Color.ToColor();                      
                         Init_LineCollection_Plot(LC_1, Form9.Fragments3[frag].Name, cc, (int)cen_width);
                     }
                     break;
                 }
                 else
                 {
-                    Color cc = get_fragment_color1(i);
-                    ////LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = cc, FillColor = cc, BarWidth = cen_width };
-                    ////iso_plot.Model.Series.Add(bar);
-                    //Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None };
-                    //bs.Title.Text = Fragments2[i - 1].Name; bs.BorderWidth = 1; bs.BorderColor = cc; bs.BarThickness = (int)cen_width;
-                    //LC_1.ViewXY.BarSeries.Add(bs); LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
-
+                    Color cc = get_fragment_color1(i);                  
                     Init_LineCollection_Plot(LC_1, Fragments2[i - 1].Name, cc, (int)cen_width);
                 }
             }
@@ -6301,16 +6294,7 @@ namespace Isotope_fitting
                 Init_PointLineSeries(LC_2, "res", Color.Black, 1, LinePattern.Solid);
             }
             if (plotCentr_chkBox.Checked)
-            {
-                ////RectangleBarSeries bar = new RectangleBarSeries { StrokeColor = OxyColors.Crimson, FillColor = OxyColors.Crimson };
-                ////iso_plot.Model.Series.Add(bar);
-                //LinearBarSeries bar = new LinearBarSeries() { StrokeThickness = 1, StrokeColor = peak_color, FillColor = peak_color, BarWidth = peak_width };
-                //iso_plot.Model.Series.Add(bar);
-                //Arction.WinForms.Charting.SeriesXY.BarSeries bs = new Arction.WinForms.Charting.SeriesXY.BarSeries(LC_1.ViewXY, LC_1.ViewXY.XAxes[0], LC_1.ViewXY.YAxes[0]) { Visible = false, MouseHighlight = MouseOverHighlight.None,MouseInteraction=false,Shadow=new Shadow() {Visible=false,Color=Color.Transparent } };
-
-                //bs.Title.Text = "Exp"; bs.BorderWidth = 0F;  bs.Fill=new Fill() { Color = peak_color.ToColor(),GradientColor= peak_color.ToColor(), Style=RectFillStyle.ColorOnly }; bs.BorderColor = peak_color.ToColor(); bs.BarThickness = (int)peak_width;
-                //LC_1.ViewXY.BarSeries.Add(bs);
-                //LC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+            {                
                 Init_LineCollection_Plot(LC_1, "exp", peak_color.ToColor(), (int)peak_width);
             }
         }
@@ -7042,7 +7026,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region Helpers     
+        #region Helpers    
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -7063,7 +7047,6 @@ namespace Isotope_fitting
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
-
         public T[][] FastPowerSet<T>(T[] seq)
         {
             var powerSet = new T[1 << seq.Length][];
@@ -7083,7 +7066,6 @@ namespace Isotope_fitting
             }
             return powerSet;
         }
-
         public class ListViewItemComparer : IComparer
         {
             // Specifies the column to be sorted
@@ -7229,14 +7211,12 @@ namespace Isotope_fitting
                 }
             }
         }
-
         private void display_objects_memory()
         {
             Debug.WriteLine("Memory of experimental: " + estimate_memory(experimental).ToString());
             Debug.WriteLine("Memory of all_data: " + estimate_memory(all_data).ToString());
             Debug.WriteLine("Memory of all_data_aligned: " + estimate_memory(all_data_aligned).ToString());
         }
-
         private int FindClosestPoint(double val, List<Double> list)
         {
             int max = list.Count;
@@ -9657,17 +9637,12 @@ namespace Isotope_fitting
         }
         #endregion
 
-        
-
-        #region Fitting Options
+        #region Fitting-Calculation Options
         private void Fitting_chkBox_CheckedChanged_1(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("When checked the summation of the plotted fragments is displayed in spectrum area with a dashed line.\r\nThe type and the color of the line can be changed in Format Plot Area>Style panel", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
             if(!block_plot_refresh)refresh_iso_plot();
-        }
-        #endregion
-
-        #region Calculation Options              
+        }                     
         private void Form2_Resize(object sender, EventArgs e)
         {
             Invalidate();
