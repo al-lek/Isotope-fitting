@@ -2677,6 +2677,7 @@ namespace Isotope_fitting
             is_calc = true;
             sw1.Reset(); sw1.Start();
             int progress = 0;
+            int dubs = 0;
             progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");
             try
             {

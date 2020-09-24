@@ -1037,5 +1037,55 @@ namespace Isotope_fitting
             if (count > count_B) return false;
             else return true;
         }
+        public static bool check_duplicates_SelectedFragments(ChemiForm chem1, List<ChemiForm> selRes)
+        {
+            if (selRes.Count > 0)
+            {
+                foreach (ChemiForm fra in selRes)
+                {
+                    if (fra.Extension.Equals(chem1.Extension)&& fra.Name.Equals(chem1.Name) && fra.Index.Equals(chem1.Index) && fra.IndexTo.Equals(chem1.IndexTo) && fra.Ion_type.Equals(chem1.Ion_type) && fra.Chain_type.Equals(chem1.Chain_type) && fra.Charge.Equals(chem1.Charge))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        public static ChemiForm check_adduct(out bool is_error, ChemiForm chem, string adduct, string deduct, string extra_name, bool has_Adduct, bool name = false)
+        {
+            is_error = true;
+            ChemiForm temp_chem = chem.DeepCopy();
+            try
+            {
+                temp_chem.Adduct = adduct; temp_chem.Deduct = deduct;
+                ChemiForm.CheckChem(temp_chem);
+            }
+            catch (Exception eee) { return null; }
+            if (!temp_chem.Error)
+            {
+                is_error = false;
+                ChemiForm last_chem = chem.DeepCopy();
+                last_chem.InputFormula = last_chem.PrintFormula = temp_chem.FinalFormula;
+                last_chem.Has_adduct = has_Adduct;
+                //last_chem.Mz = temp_chem.Mz;
+                if (name)
+                {
+                    string new_type = temp_chem.Ion_type;
+                    string add_type = "";
+                    new_type += extra_name; add_type = extra_name;
+                    string[] str = temp_chem.Name.Split('_');
+                    int s = temp_chem.Name.IndexOf('_');
+                    last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type);
+                    last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0, s);
+                    last_chem.Ion_type = new_type;
+                    last_chem.Has_adduct = has_Adduct;
+                    if (extra_name.Contains("B(A)")) { last_chem.Ion_type = last_chem.Ion_type.Replace("B(A)", "B()"); }
+                    if (extra_name.Contains("B(G)")) { last_chem.Ion_type = last_chem.Ion_type.Replace("B(G)", "B()"); }
+                    if (extra_name.Contains("B(T)")) { last_chem.Ion_type = last_chem.Ion_type.Replace("B(T)", "B()"); }
+                }
+                return last_chem;
+            }
+            return null;
+        }
     }
 }
