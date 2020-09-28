@@ -13760,9 +13760,11 @@ namespace Isotope_fitting
         public void plotview_rebuild()
         {
             LightningChartUltimate temp_plot = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
-            temp_plot.BeginUpdate();
+            temp_plot.BeginUpdate();           
             //temp_plot.BackColor = Color.White;
             ViewXY v = temp_plot.ViewXY;
+            v.ZoomPanOptions.RightToLeftZoomAction = RightToLeftZoomActionXY.PopFromZoomStack;
+            v.ZoomPanOptions.AxisMouseWheelAction = AxisMouseWheelAction.PanAll;
             temp_plot.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
             v.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
             temp_plot.Parent = this;
