@@ -9724,10 +9724,12 @@ namespace Isotope_fitting
             public string Index { get; set; }
             public string Charge { get; set; }
             public string Intensity { get; set; }
+            public string Mz { get; set; }
+
 
 
             public DataPoint GetDataPoint() => new DataPoint(X, Y);
-            public CustomDataPointIndex(double x, double y, string ionreal, string t, string c, string i)
+            public CustomDataPointIndex(double x, double y, string ionreal, string t, string c, string i,string mz)
             {
                 X = x;
                 Y = y;
@@ -9735,6 +9737,7 @@ namespace Isotope_fitting
                 Index = t;
                 Charge = c;
                 Intensity = i;
+                Mz = mz;
             }
         }
         class CI : IComparer<ion>
@@ -12844,6 +12847,8 @@ namespace Isotope_fitting
         }        
         private void create_internal_plot(PlotView plot, PlotView plotIntensity, int t, Color clr1, Color clr2)
         {
+            //parameter 't' stands for the type of the plot
+            //t=1:indexTo plot, t=2:index plot
             if (IonDrawIndexTo.Count > 0) { IonDrawIndexTo.Clear(); }
             string s_ext = "";
             string s_chain = Peptide;
@@ -12865,86 +12870,50 @@ namespace Isotope_fitting
                 {
                     if (nn.Ion_type.Contains("b"))
                     {
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = clr2, Max_intensity = nn.Max_intensity, Has_adduct = nn.Has_adduct });
+                        IonDrawIndexTo.Add(new ion() {Name=nn.Name, Mz=nn.Mz, Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Charge = nn.Charge, Color = clr2, Max_intensity = nn.Max_intensity, Has_adduct = nn.Has_adduct });
                     }
                     else
                     {
-                        IonDrawIndexTo.Add(new ion() { Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = clr1, Charge = nn.Charge, Max_intensity = nn.Max_intensity, Has_adduct = nn.Has_adduct });
+                        IonDrawIndexTo.Add(new ion() { Name = nn.Name, Mz = nn.Mz, Extension = nn.Extension, Chain_type = nn.Chain_type, Ion_type = nn.Ion_type, Index = nn.Index, IndexTo = nn.IndexTo, Color = clr1, Charge = nn.Charge, Max_intensity = nn.Max_intensity, Has_adduct = nn.Has_adduct });
                     }
                 }
             }
             if (IonDrawIndexTo.Count() > 0)
             {
-                if (t==1)
+                if (t==1)//indexTo plot
                 {
-                    CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);
-                    int k = 1;
-                    foreach (ion nn in IonDrawIndexTo)
-                    {
-                        List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
-                        List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
-                        if (nn.Charge > 0)
-                        {
-                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        }
-                        else
-                        {
-                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        }
-                        LineSeries tmp = new LineSeries() {CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                        tmp.ItemsSource = custom_Index;
-                        tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-
-                        plot.Model.Series.Add(tmp);
-
-                        custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                        bar.ItemsSource = custom_IndIntensity;
-                        bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-                        plotIntensity.Model.Series.Add(bar);
-                        k++;
-                        if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
-                    }
+                    CI_indexTo com1 = new CI_indexTo(); IonDrawIndexTo.Sort(com1);                    
                 }
-                else
+                else//index plot
                 {
-                    CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);
-                    int k = 1;
-                    foreach (ion nn in IonDrawIndexTo)
-                    {
-                        List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
-                        List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
-                        if (nn.Charge > 0)
-                        {
-                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", "+" + nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        }
-                        else
-                        {
-                            custom_Index.Add(new CustomDataPointIndex(nn.Index, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                            custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        }
-
-                        LineSeries tmp = new LineSeries() {CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                        tmp.ItemsSource = custom_Index;
-                        tmp.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-
-                        plot.Model.Series.Add(tmp);
-
-                        custom_IndIntensity.Add(new CustomDataPointIndex(0, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, nn.Ion_type, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", nn.Charge.ToString(), nn.Max_intensity.ToString("0.###")));
-                        LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
-                        bar.ItemsSource = custom_IndIntensity;
-                        bar.TrackerFormatString = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}";
-                        plotIntensity.Model.Series.Add(bar);
-                        k++;
-                        if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
-                    }
-                }  
-                 plotIntensity.Model.Axes[1].Maximum = max_i * 1.2;
+                    CI_index com2 = new CI_index(); IonDrawIndexTo.Sort(com2);                   
+                }
+                int k = 1;
+                foreach (ion nn in IonDrawIndexTo)
+                {
+                    List<CustomDataPointIndex> custom_Index = new List<CustomDataPointIndex>();
+                    List<CustomDataPointIndex> custom_IndIntensity = new List<CustomDataPointIndex>();
+                    string charge_text = nn.Charge.ToString();
+                    string ion_type_text = nn.Ion_type;
+                    string tracker_text = "{Ion}\n{Index}\nCharge: {Charge}\nMax Intens.: {Intensity}\nm/z: {Mz}";
+                    if (nn.Charge > 0) charge_text = "+" + nn.Charge.ToString();
+                    if (is_riken) { ion_type_text = nn.Name; tracker_text = "{Ion}\n{Index}\nMax Intens.: {Intensity}\nm/z: {Mz}"; }
+                    custom_Index.Add(new CustomDataPointIndex(nn.Index, k, ion_type_text, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", charge_text, nn.Max_intensity.ToString("0.###"), nn.Mz));
+                    custom_Index.Add(new CustomDataPointIndex(nn.IndexTo, k, ion_type_text, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", charge_text, nn.Max_intensity.ToString("0.###"), nn.Mz));
+                    LineSeries tmp = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                    tmp.ItemsSource = custom_Index;
+                    tmp.TrackerFormatString = tracker_text;
+                    plot.Model.Series.Add(tmp);
+                    custom_IndIntensity.Add(new CustomDataPointIndex(0, k, ion_type_text, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", charge_text, nn.Max_intensity.ToString("0.###"), nn.Mz));
+                    custom_IndIntensity.Add(new CustomDataPointIndex(nn.Max_intensity, k, ion_type_text, "[" + nn.Index.ToString() + "-" + nn.IndexTo.ToString() + "]", charge_text, nn.Max_intensity.ToString("0.###"), nn.Mz));
+                    LineSeries bar = new LineSeries() { CanTrackerInterpolatePoints = true, StrokeThickness = int_width, Color = nn.Color.ToOxyColor() };
+                    bar.ItemsSource = custom_IndIntensity;
+                    bar.TrackerFormatString = tracker_text;
+                    plotIntensity.Model.Series.Add(bar);
+                    k++;
+                    if (nn.Max_intensity > max_i) max_i = nn.Max_intensity;
+                }
+                plotIntensity.Model.Axes[1].Maximum = max_i * 1.2;
                 plotIntensity.Model.Axes[0].Minimum = 0;
                 plot.Model.Axes[1].Minimum =  0;
                 plot.Model.Axes[1].Maximum = s_chain.Length;
