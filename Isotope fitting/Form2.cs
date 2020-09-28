@@ -1274,14 +1274,17 @@ namespace Isotope_fitting
                             double y = dParser(tmp_str[1]);
                             if (tmp_str.Length == 2)
                             {
-                                experimental.Add(new double[] { mz, y });
-                                if (is_exp_deconvoluted)
+                                if (!Double.IsNaN(mz)&& !Double.IsNaN(y))
                                 {
-                                    if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
-                                    else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
-                                    if (mz_prev != mz) experimental_dec.Last().Add(new double[] { mz, y });
-                                    mz_prev = mz;
-                                }
+                                    experimental.Add(new double[] { mz, y });
+                                    if (is_exp_deconvoluted)
+                                    {
+                                        if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
+                                        else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
+                                        if (mz_prev != mz) experimental_dec.Last().Add(new double[] { mz, y });
+                                        mz_prev = mz;
+                                    }
+                                }                                
                             }
                             else
                             {
@@ -4995,7 +4998,7 @@ namespace Isotope_fitting
                 {
                     if (all_fitted_results[i][j][all_fitted_results[i][j].Length - 2] < tab_thres[i][0] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 1] < tab_thres[i][1] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 4] < tab_thres[i][2] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 5] < tab_thres[i][3] && (all_fitted_results[i][j][all_fitted_results[i][j].Length - 6] < tab_thres[i][4] /*|| all_fitted_sets[i][j].Length== 1*/))
                     {
-                        bool print = true;
+                        bool print = true;                        
                         for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
                         {
                             if (all_fitted_results[i][j][k + all_fitted_sets[i][j].Length] > tab_thres[i][2] || all_fitted_results[i][j][k + 3 * all_fitted_sets[i][j].Length] > tab_thres[i][3] || (all_fitted_results[i][j][k + 4 * all_fitted_sets[i][j].Length] > tab_thres[i][4]/* && all_fitted_sets[i][j].Length>1*/) || all_fitted_results[i][j][k + 2 * all_fitted_sets[i][j].Length] > tab_thres[i][5] || all_fitted_results[i][j][k + 5 * all_fitted_sets[i][j].Length] > tab_thres[i][6] || Fragments2[all_fitted_sets[i][j][k] - 1].Max_intensity * all_fitted_results[i][j][k] < min_intes + 0.1)
