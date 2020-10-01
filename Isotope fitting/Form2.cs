@@ -3915,14 +3915,10 @@ namespace Isotope_fitting
 
                     // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
                     double aligned_value = 0.0;
-                    if ( mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
+                    if( ( mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0]) || (mz_toInterp < all_data[distro_idx][0][0]))
                     {
                         aligned_value = 0.0; 
-                    }
-                    else if ( mz_toInterp < all_data[distro_idx][0][0])
-                    {
-                        aligned_value = 0.0; 
-                    }
+                    }                    
                     else
                     {
                         int[] pair = new int[2];
@@ -3932,7 +3928,18 @@ namespace Isotope_fitting
                     }                    
                     one_aligned_point.Add(aligned_value);
                 }
-                lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                lock (_locker)
+                {
+                    try
+                    {
+                        aligned_intensities.Add(one_aligned_point.ToArray());
+                        aux_idx.Add(i);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.ToString());
+                    }
+                }
                 try
                 {
                     lock (_locker)
@@ -14376,7 +14383,10 @@ namespace Isotope_fitting
                     double y = dParser(tmp_str[1]);
                     if (tmp_str.Length == 2)
                     {
-                        experimental.Add(new double[] { mz, y });
+                        if (!Double.IsNaN(mz) && !Double.IsNaN(y))
+                        {
+                            experimental.Add(new double[] { mz, y });
+                        }
                     }
                     if (max_exp < y) max_exp = y;
                 }
@@ -14438,7 +14448,7 @@ namespace Isotope_fitting
         void Project_load_fit_results(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
-            if (File.Exists(filename)) return;
+            if (!File.Exists(filename)) return;
             int mode = 0;
             List<string> lista = new List<string>();
             StreamReader objReader = new StreamReader(filename);
