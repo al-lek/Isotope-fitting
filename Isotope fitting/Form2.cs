@@ -3923,7 +3923,7 @@ namespace Isotope_fitting
                     {
                         int[] pair = new int[2];
                         pair = find_closest(mz_toInterp, all_data[distro_idx]);
-                        if (pair[0]== pair[1]){aligned_value = all_data[distro_idx][pair[0]][1];}
+                        if (pair[0]-pair[1]==0.00){aligned_value = all_data[distro_idx][pair[0]][1];}
                         else{aligned_value = interpolate(all_data[distro_idx][pair[0]][0], all_data[distro_idx][pair[0]][1], all_data[distro_idx][pair[1]][0], all_data[distro_idx][pair[1]][1], mz_toInterp);}
                     }                    
                     one_aligned_point.Add(aligned_value);
@@ -4044,8 +4044,19 @@ namespace Isotope_fitting
         }
         private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
         {
-            // linear interpolation
-            return ((x_inter - x1) * y2 + (x2 - x_inter) * y1) / (x2 - x1);
+            if (x_inter - x2==0.00 )
+            {
+                return y2;
+            }
+            else if (x_inter - x1 == 0.00)
+            {
+                return y1;
+            }
+            else
+            {
+                // linear interpolation
+                return ((x_inter - x1) * y2 + (x2 - x_inter) * y1) / (x2 - x1);
+            }            
         }
 
         #endregion
@@ -8622,32 +8633,22 @@ namespace Isotope_fitting
                         for (int j = curr_count; j > 0; j--)
                         {
                             int distro_idx = all_data.Count - j;
-
                             // interpolate to find the proper intensity. Intensity will be zero outside of the fragment envelope.
                             double aligned_value = 0.0;
-
-                            for (int k = 0; k < all_data[distro_idx].Count - 1; k++)
+                            if ((mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0]) || (mz_toInterp < all_data[distro_idx][0][0]))
                             {
-                                if (k == 0 && mz_toInterp > all_data[distro_idx][all_data[distro_idx].Count - 1][0])
-                                {
-                                    aligned_value = 0.0; break;
-                                }
-                                if (k == 0 && mz_toInterp < all_data[distro_idx][k][0])
-                                {
-                                    aligned_value = 0.0; break;
-                                }
-                                if (mz_toInterp >= all_data[distro_idx][k][0] && mz_toInterp <= all_data[distro_idx][k + 1][0])
-                                {
-                                    //aligned_value = interpolate(all_data[distro_idx][k][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], Fragments2[distro_idx - 1].Fix * all_data[distro_idx][k + 1][1], mz_toInterp);
-                                    aligned_value = interpolate(all_data[distro_idx][k][0], all_data[distro_idx][k][1], all_data[distro_idx][k + 1][0], all_data[distro_idx][k + 1][1], mz_toInterp);
-                                    break;
-                                }
+                                aligned_value = 0.0;
                             }
-                            one_aligned_point.Add(aligned_value);
+                            else
+                            {
+                                int[] pair = new int[2];
+                                pair = find_closest(mz_toInterp, all_data[distro_idx]);
+                                if (pair[0] - pair[1] == 0.00) { aligned_value = all_data[distro_idx][pair[0]][1]; }
+                                else { aligned_value = interpolate(all_data[distro_idx][pair[0]][0], all_data[distro_idx][pair[0]][1], all_data[distro_idx][pair[1]][0], all_data[distro_idx][pair[1]][1], mz_toInterp); }
+                            }
+                            one_aligned_point.Add(aligned_value);                           
                         }
-                        ////all_data_aligned[i] = one_aligned_point.ToArray();
-
-                        lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
+                       lock (_locker) { aligned_intensities.Add(one_aligned_point.ToArray()); aux_idx.Add(i); }
                         try
                         {
                             lock (_locker)
