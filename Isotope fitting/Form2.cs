@@ -5021,7 +5021,7 @@ namespace Isotope_fitting
                         {
                             if (all_fitted_results[i][j][k + all_fitted_sets[i][j].Length] > tab_thres[i][2] || all_fitted_results[i][j][k + 3 * all_fitted_sets[i][j].Length] > tab_thres[i][3] || (all_fitted_results[i][j][k + 4 * all_fitted_sets[i][j].Length] > tab_thres[i][4]/* && all_fitted_sets[i][j].Length>1*/) || all_fitted_results[i][j][k + 2 * all_fitted_sets[i][j].Length] > tab_thres[i][5] || all_fitted_results[i][j][k + 5 * all_fitted_sets[i][j].Length] > tab_thres[i][6] || Fragments2[all_fitted_sets[i][j][k] - 1].Max_intensity * all_fitted_results[i][j][k] < min_intes + 0.1)
                             {
-                                print = false;
+                                print = false;break;
                             }
                         }
                         if (print)
