@@ -3923,7 +3923,7 @@ namespace Isotope_fitting
                     {
                         int[] pair = new int[2];
                         pair = find_closest(mz_toInterp, all_data[distro_idx]);
-                        if (pair[0]-pair[1]==0.00){aligned_value = all_data[distro_idx][pair[0]][1];}
+                        if (Math.Abs(pair[0]-pair[1])<=0.000){aligned_value = all_data[distro_idx][pair[0]][1];}
                         else{aligned_value = interpolate(all_data[distro_idx][pair[0]][0], all_data[distro_idx][pair[0]][1], all_data[distro_idx][pair[1]][0], all_data[distro_idx][pair[1]][1], mz_toInterp);}
                     }                    
                     one_aligned_point.Add(aligned_value);
@@ -4044,11 +4044,11 @@ namespace Isotope_fitting
         }
         private double interpolate(double x1, double y1, double x2, double y2, double x_inter)
         {
-            if (x_inter - x2==0.00 )
+            if (Math.Abs(x_inter - x2)<=0.000 )
             {
                 return y2;
             }
-            else if (x_inter - x1 == 0.00)
+            else if (Math.Abs(x_inter - x1) <= 0.000)
             {
                 return y1;
             }
@@ -5189,13 +5189,13 @@ namespace Isotope_fitting
                             //double eee = ee * max_cen / sorted_cen[c].Y;
                             //if (eee > 1) { eee = 1 / eee; }
                             //iso_lse_sum +=eee;       
-                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error:" + Math.Round(ee1, 10).ToString() + " , adjusted to:" + Math.Round(ee, 10).ToString());
+                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error:" + Math.Round(ee1, 4).ToString() + " , adjusted to:" + Math.Round(ee, 4).ToString());
                         }
                         else
                         {
                             tmp_error[c] = 1.0;
                             iso_lse_sum += tmp_error[c] * sorted_cen[c].Y / summ; absent_factor += tmp_error[c] * sorted_cen[c].Y / summ; absent_isotope++;
-                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error: 1.0" + " , adjusted to:" + Math.Round(tmp_error[c] * sorted_cen[c].Y / summ, 10).ToString() + " (absent isotope)");
+                            sb.AppendLine("Centroid " + (c + 1).ToString() + " error: 1.0" + " , adjusted to:" + Math.Round(tmp_error[c] * sorted_cen[c].Y / summ,4).ToString() + " (absent isotope)");
                         }
                     }
 
