@@ -3469,14 +3469,14 @@ namespace Isotope_fitting
             if (Fragments2[idx].Fixed)
             {
                 tr.ForeColor = Color.DarkGreen;
+            }            
+            if (Fragments2[idx].True_positive)
+            {
+                tr.ForeColor = Color.HotPink;
             }
             if (!Fragments2[idx].Candidate)
             {
                 tr.ForeColor = Color.Red;
-            }
-            if (Fragments2[idx].True_positive)
-            {
-                tr.ForeColor = Color.HotPink;
             }
             selectedFragments = selectedFragments.OrderBy(p => p).ToList();
             return tr;
@@ -9330,6 +9330,10 @@ namespace Isotope_fitting
         }        
         private bool is_in_excluded_bounds(FragForm fra)
         {
+            if (exclude_internal_indexes.Count==0 && exclude_a_indexes.Count == 0 && exclude_b_indexes.Count == 0 && exclude_c_indexes.Count == 0 && exclude_x_indexes.Count == 0 && exclude_y_indexes.Count == 0 && exclude_z_indexes.Count == 0 && exclude_d_indexes.Count == 0 && exclude_w_indexes.Count == 0 )
+            {
+                return false;
+            }
             if (fra.Ion_type.Contains("int"))
             {
                 bool in_bounds = true;
@@ -15010,6 +15014,23 @@ namespace Isotope_fitting
                                 // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                 isotope_count++;
                                 f++;
+                                string letter = "";
+                                string type = "";
+                                if (!str[1].Contains("H2O") && !str[1].Contains("NH3") && !str[1].Contains("CO") && (str[1].Contains("+") || str[1].Contains("-")))
+                                {
+                                    if (str[0].StartsWith("(a")) letter = "a";
+                                    else if (str[0].StartsWith("(b")) letter = "b";
+                                    else if (str[0].StartsWith("(c")) letter = "c";
+                                    else if (str[0].StartsWith("(x")) letter = "x";
+                                    else if (str[0].StartsWith("(y")) letter = "y";
+                                    else if (str[0].StartsWith("(z")) letter = "z";
+                                }
+
+                                if (letter != "" && (str[1].Contains(letter + "-1") || str[1].Contains(letter + "-2") || str[1].Contains(letter + "+1") || str[1].Contains(letter + "+2")))
+                                {
+                                    type = letter + str[0].Remove(0, 5);
+                                }
+                                if (type == "") { type = str[0]; }
                                 Fragments5.Add(new FragForm
                                 {
                                     //InputFormula = str[9],
@@ -15030,7 +15051,7 @@ namespace Isotope_fitting
                                     //Charge = Int32.Parse(str[4]),
                                     //Ion_type = str[1],
                                     //PPM_Error = dParser(str[8]),
-                                    Name = str[0],
+                                    Name = type,
                                     //Radio_label = string.Empty,
                                     //Factor = dParser(str[7]),
                                     //Fixed = true,
@@ -15045,7 +15066,7 @@ namespace Isotope_fitting
                                 //    Fragments5.Last().SortIdx = 0;
                                 //}
                                 //if (Fragments5.Last().SortIdx == 0) { Fragments5.Last().SortIdx = check_false_sort_idx(Fragments5.Last()); }
-
+                                
                                 arrayPositionIndex++;
                                 j++;
                                 str = lista[j].Split('\t');
@@ -15089,6 +15110,23 @@ namespace Isotope_fitting
                                 // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
                                 isotope_count++;
                                 f++;
+                                string letter = "";
+                                string type = "";
+                                if (!str[1].Contains("H2O")&& !str[1].Contains("NH3")&& !str[1].Contains("CO")&&(str[1].Contains("+") || str[1].Contains("-")))
+                                {
+                                    if (str[0].StartsWith("(a")) letter = "a";
+                                    else if (str[0].StartsWith("(b")) letter = "b";
+                                    else if (str[0].StartsWith("(c")) letter = "c";
+                                    else if (str[0].StartsWith("(x")) letter = "x";
+                                    else if (str[0].StartsWith("(y")) letter = "y";
+                                    else if (str[0].StartsWith("(z")) letter = "z";
+                                }
+
+                                if (letter != "" && (str[1].Contains(letter + "-1") || str[1].Contains(letter + "-2") || str[1].Contains(letter + "+1") || str[1].Contains(letter + "+2")))
+                                {
+                                    type = letter + str[0].Remove(0, 5);
+                                }
+                                if (type == "") { type = str[0]; }
                                 Fragments5.Add(new FragForm
                                 {
                                     //InputFormula = str[9],
@@ -15109,7 +15147,7 @@ namespace Isotope_fitting
                                     //Charge = Int32.Parse(str[4]),
                                     //Ion_type = str[1],
                                     //PPM_Error = dParser(str[8]),
-                                    Name = str[0],
+                                    Name = type,
                                     //Radio_label = string.Empty,
                                     //Factor = dParser(str[7]),
                                     //Fixed = true,
@@ -15136,9 +15174,10 @@ namespace Isotope_fitting
         private void check_tp(FragForm fra)
         {
             if (Fragments5.Count == 0) return;
+           
             foreach (FragForm basic_fra in Fragments5)
             {
-                if (fra.Name.Equals(basic_fra.Name)) { fra.True_positive = true; return; }
+                if (fra.Name.Equals(basic_fra.Name)) { fra.True_positive = true; return; }               
             }
             fra.True_positive = false;
         }
