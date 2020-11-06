@@ -15001,14 +15001,7 @@ namespace Isotope_fitting
                         try
                         {
                             string[] str = lista[j].Split('\t');
-                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
-                            else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                            else if (lista[j].StartsWith("Multiple")) continue;
-                            else if (lista[j].StartsWith("Extension")) continue;
-                            else if (lista[j].StartsWith("AA")) continue;
-                            else if (lista[j].StartsWith("Fitted")) continue;
-                            else if (lista[j].StartsWith("Exclusion")) continue;
-                            else if (lista[j].StartsWith("Name")) continue;
+                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")|| lista[j].StartsWith("Mode") || lista[j].StartsWith("Multiple") || lista[j].StartsWith("Extension") || lista[j].StartsWith("AA") || lista[j].StartsWith("Fitted") || lista[j].StartsWith("Exclusion") || lista[j].StartsWith("Name")) continue; // comments
                             else
                             {
                                 // when there is a new name, all the data accumulated at tmp holder has to be assigned to textBox and all_data[] and reset
@@ -15016,57 +15009,22 @@ namespace Isotope_fitting
                                 f++;
                                 string letter = "";
                                 string type = "";
-                                if (!str[1].Contains("H2O") && !str[1].Contains("NH3") && !str[1].Contains("CO") && (str[1].Contains("+") || str[1].Contains("-")))
-                                {
-                                    if (str[0].StartsWith("(a")) letter = "a";
-                                    else if (str[0].StartsWith("(b")) letter = "b";
-                                    else if (str[0].StartsWith("(c")) letter = "c";
-                                    else if (str[0].StartsWith("(x")) letter = "x";
-                                    else if (str[0].StartsWith("(y")) letter = "y";
-                                    else if (str[0].StartsWith("(z")) letter = "z";
-                                }
-
-                                if (letter != "" && (str[1].Contains(letter + "-1") || str[1].Contains(letter + "-2") || str[1].Contains(letter + "+1") || str[1].Contains(letter + "+2")))
-                                {
-                                    type = letter + str[0].Remove(0, 5);
-                                }
-                                if (type == "") { type = str[0]; }
-                                Fragments5.Add(new FragForm
-                                {
-                                    //InputFormula = str[9],
-                                    //Adduct = str[10],
-                                    //Deduct = str[11],
-                                    //Multiplier = 1,
-                                    //Mz = str[5],
-                                    //Ion = string.Empty,
-                                    //Index = str[2],
-                                    //IndexTo = str[3],
-                                    //Error = false,
-                                    //Machine = string.Empty,
-                                    //Resolution = double.Parse(str[13]),
-                                    //Profile = new List<PointPlot>(),
-                                    //Centroid = new List<PointPlot>(),
-                                    //FinalFormula = str[9],
-                                    //Color = new OxyColor(),
-                                    //Charge = Int32.Parse(str[4]),
-                                    //Ion_type = str[1],
-                                    //PPM_Error = dParser(str[8]),
-                                    Name = type,
-                                    //Radio_label = string.Empty,
-                                    //Factor = dParser(str[7]),
-                                    //Fixed = true,
-                                    //maxPPM_Error = dParser(str[15]),
-                                    //minPPM_Error = dParser(str[14]),
-                                    //Extension = str[18],
-                                    //SortIdx = Convert.ToInt32(str[16]),
-                                    //Chain_type = Convert.ToInt32(str[17]),
-                                });
-                                //if ((Fragments5.Last().Ion_type.StartsWith("w") || Fragments5.Last().Ion_type.StartsWith("(w") || Fragments5.Last().Ion_type.StartsWith("v") || Fragments5.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
+                                //if (!str[1].Contains("H2O") && !str[1].Contains("NH3") && !str[1].Contains("CO") && (str[1].Contains("+") || str[1].Contains("-")))
                                 //{
-                                //    Fragments5.Last().SortIdx = 0;
+                                //    if (str[0].StartsWith("(a")) letter = "a";
+                                //    else if (str[0].StartsWith("(b")) letter = "b";
+                                //    else if (str[0].StartsWith("(c")) letter = "c";
+                                //    else if (str[0].StartsWith("(x")) letter = "x";
+                                //    else if (str[0].StartsWith("(y")) letter = "y";
+                                //    else if (str[0].StartsWith("(z")) letter = "z";
                                 //}
-                                //if (Fragments5.Last().SortIdx == 0) { Fragments5.Last().SortIdx = check_false_sort_idx(Fragments5.Last()); }
-                                
+
+                                //if (letter != "" && (str[1].Contains(letter + "-1") || str[1].Contains(letter + "-2") || str[1].Contains(letter + "+1") || str[1].Contains(letter + "+2")))
+                                //{
+                                //    type = letter + str[0].Remove(0, 5);
+                                //}
+                                if (type == "") { type = str[0]; }
+                                Fragments5.Add(new FragForm{Name = type});
                                 arrayPositionIndex++;
                                 j++;
                                 str = lista[j].Split('\t');
@@ -15096,14 +15054,7 @@ namespace Isotope_fitting
                         try
                         {
                             string[] str = lista[j].Split('\t');
-                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
-                            else if (lista[j].StartsWith("Mode")) continue; // to be implemented
-                            else if (lista[j].StartsWith("Multiple")) continue;
-                            else if (lista[j].StartsWith("Extension")) continue;
-                            else if (lista[j].StartsWith("AA")) continue;
-                            else if (lista[j].StartsWith("Fitted")) continue;
-                            else if (lista[j].StartsWith("Exclusion")) continue;
-                            else if (lista[j].StartsWith("Name")) continue;
+                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("Mode") || lista[j].StartsWith("Multiple") || lista[j].StartsWith("Extension") || lista[j].StartsWith("AA") || lista[j].StartsWith("Fitted") || lista[j].StartsWith("Exclusion") || lista[j].StartsWith("Name")) continue; // comments
                             else
                             {
                                 added++;
@@ -15112,56 +15063,22 @@ namespace Isotope_fitting
                                 f++;
                                 string letter = "";
                                 string type = "";
-                                if (!str[1].Contains("H2O")&& !str[1].Contains("NH3")&& !str[1].Contains("CO")&&(str[1].Contains("+") || str[1].Contains("-")))
-                                {
-                                    if (str[0].StartsWith("(a")) letter = "a";
-                                    else if (str[0].StartsWith("(b")) letter = "b";
-                                    else if (str[0].StartsWith("(c")) letter = "c";
-                                    else if (str[0].StartsWith("(x")) letter = "x";
-                                    else if (str[0].StartsWith("(y")) letter = "y";
-                                    else if (str[0].StartsWith("(z")) letter = "z";
-                                }
-
-                                if (letter != "" && (str[1].Contains(letter + "-1") || str[1].Contains(letter + "-2") || str[1].Contains(letter + "+1") || str[1].Contains(letter + "+2")))
-                                {
-                                    type = letter + str[0].Remove(0, 5);
-                                }
-                                if (type == "") { type = str[0]; }
-                                Fragments5.Add(new FragForm
-                                {
-                                    //InputFormula = str[9],
-                                    //Adduct = str[10],
-                                    //Deduct = str[11],
-                                    //Multiplier = 1,
-                                    //Mz = str[5],
-                                    //Ion = string.Empty,
-                                    //Index = str[2],
-                                    //IndexTo = str[3],
-                                    //Error = false,
-                                    //Machine = string.Empty,
-                                    //Resolution = double.Parse(str[13]),
-                                    //Profile = new List<PointPlot>(),
-                                    //Centroid = new List<PointPlot>(),
-                                    //FinalFormula = str[9],
-                                    //Color = new OxyColor(),
-                                    //Charge = Int32.Parse(str[4]),
-                                    //Ion_type = str[1],
-                                    //PPM_Error = dParser(str[8]),
-                                    Name = type,
-                                    //Radio_label = string.Empty,
-                                    //Factor = dParser(str[7]),
-                                    //Fixed = true,
-                                    //maxPPM_Error = dParser(str[15]),
-                                    //minPPM_Error = dParser(str[14]),
-                                    //Extension = str[18],
-                                    //SortIdx = Convert.ToInt32(str[16]),
-                                    //Chain_type = Convert.ToInt32(str[17])
-                                });
-                                //if ((Fragments5.Last().Ion_type.StartsWith("w") || Fragments5.Last().Ion_type.StartsWith("(w") || Fragments5.Last().Ion_type.StartsWith("v") || Fragments5.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
+                                //if (!str[1].Contains("H2O")&& !str[1].Contains("NH3")&& !str[1].Contains("CO")&&(str[1].Contains("+") || str[1].Contains("-")))
                                 //{
-                                //    Fragments5.Last().SortIdx = 0;
+                                //    if (str[0].StartsWith("(a")) letter = "a";
+                                //    else if (str[0].StartsWith("(b")) letter = "b";
+                                //    else if (str[0].StartsWith("(c")) letter = "c";
+                                //    else if (str[0].StartsWith("(x")) letter = "x";
+                                //    else if (str[0].StartsWith("(y")) letter = "y";
+                                //    else if (str[0].StartsWith("(z")) letter = "z";
                                 //}
-                                //if (Fragments5.Last().SortIdx == 0) { Fragments5.Last().SortIdx = check_false_sort_idx(Fragments5.Last()); }
+
+                                //if (letter != "" && (str[1].Contains(letter + "-1") || str[1].Contains(letter + "-2") || str[1].Contains(letter + "+1") || str[1].Contains(letter + "+2")))
+                                //{
+                                //    type = letter + str[0].Remove(0, 5);
+                                //}
+                                if (type == "") { type = str[0]; }
+                                Fragments5.Add(new FragForm{Name = type});
                             }
                         }
                         catch (Exception ex) { MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j] + "\r\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); is_loading = false; return; }
