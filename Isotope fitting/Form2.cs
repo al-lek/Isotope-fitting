@@ -12763,7 +12763,7 @@ namespace Isotope_fitting
             string s_chain = Peptide;
             List<ion> temp_iondraw = IonDraw.ToList();
             int iondraw_count = temp_iondraw.Count;
-            double max_ = 100;
+            double max_ = 1;
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)

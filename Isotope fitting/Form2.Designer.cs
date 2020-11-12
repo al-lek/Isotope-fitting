@@ -4449,7 +4449,6 @@ namespace Isotope_fitting
             this.fixed_listBtn.Name = "fixed_listBtn";
             this.fixed_listBtn.Size = new System.Drawing.Size(34, 34);
             this.fixed_listBtn.Text = "Load List";
-            this.fixed_listBtn.Visible = false;
             this.fixed_listBtn.Click += new System.EventHandler(this.fixed_listBtn_Click);
             // 
             // fixed_statistics_Byn
@@ -4460,7 +4459,6 @@ namespace Isotope_fitting
             this.fixed_statistics_Byn.Name = "fixed_statistics_Byn";
             this.fixed_statistics_Byn.Size = new System.Drawing.Size(34, 34);
             this.fixed_statistics_Byn.Text = "Display stats";
-            this.fixed_statistics_Byn.Visible = false;
             this.fixed_statistics_Byn.Click += new System.EventHandler(this.fixed_statistics_Byn_Click);
             // 
             // FragListContainer
