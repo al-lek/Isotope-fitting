@@ -2865,10 +2865,12 @@ namespace Isotope_fitting
                 double[] tmp = ppm_calculator(cen[i].X);
                 results.Add(tmp);
                 if (Math.Abs(tmp[0]) > (temp_pp+1) /*&& is_exp_deconvoluted*/) { fragment_is_canditate = false; break; }
+               
             }
             //round 2, with the correct resolution
             if ((fragment_is_canditate || chem.Fixed) /*&& !is_exp_deconvoluted*/)
             {
+                fragment_is_canditate = false;
                 chem.Resolution = (double)results.Average(p => p[1]);
                 results = new List<double[]>();
                 chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
@@ -2881,8 +2883,7 @@ namespace Isotope_fitting
                 {
                     double[] tmp = ppm_calculator(cen[i].X);
                     results.Add(tmp);
-                    if (Math.Abs(tmp[0]) < temp_pp) {/* results.Add(tmp); */}
-                    else { fragment_is_canditate = false; break; }
+                    if (Math.Abs(tmp[0]) > temp_pp) { fragment_is_canditate = false; break; }                                  
                 }
             }
             if (!fragment_is_canditate && !chem.Fixed) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
@@ -2896,27 +2897,10 @@ namespace Isotope_fitting
         public static double[] ppm_calculator(double centroid)
         {
             // find the closest experimental peak, and return calculated ppm and resolution
-            double exp_cen, curr_diff, ppm;
-            //int closest_idx = 0;
-            //double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - centroid);
-
-            //for (int i = 1; i < peak_points.Count; i++)
-            //{
-            //    exp_cen = peak_points[i][1] + peak_points[i][4];
-            //    curr_diff = Math.Abs(exp_cen - centroid);
-
-            //    if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-            //    else
-            //        break;
-            //}
+            double exp_cen, curr_diff, ppm;           
             int[] pair = new int[2];
             pair=find_closest(centroid, peak_points, true);
-            exp_cen = peak_points[pair[0]][1] + peak_points[pair[0]][4];
-            //if (pair[0]!= closest_idx)
-            //{
-            //    MessageBox.Show("oh NO");
-            //}
-            //ppm = Math.Abs(exp_cen - centroid) * 1e6 / (exp_cen);
+            exp_cen = peak_points[pair[0]][1] + peak_points[pair[0]][4];           
             ppm = (exp_cen - centroid) * 1e6 / (centroid);
             return new double[] { ppm, peak_points[pair[0]][3] };
         }
@@ -14441,13 +14425,15 @@ namespace Isotope_fitting
                         if (tmp_str.Length == 6)
                         {
                             peak_points.Add(new double[] { dParser(tmp_str[0]), dParser(tmp_str[1]), dParser(tmp_str[2]), dParser(tmp_str[3]), dParser(tmp_str[4]), dParser(tmp_str[5]) });
+
+
                         }
                         else { MessageBox.Show("Wrong format in data file " + filename, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
                     }
                     catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+
                 }
-            }
-            
+            }           
         }
         void Project_load_fit_results(object sender, DoWorkEventArgs e)
         {
@@ -14759,7 +14745,7 @@ namespace Isotope_fitting
                 List<double> tmp2 = new List<double>();
                 foreach (double[] peak in peak_points)
                 {
-                    if (peak[5] > 200000)
+                    if (peak[5] > 1000)
                     {
                         tmp1.Add((double)(peak[1] + peak[4]));
                         tmp2.Add((double)peak[3]);
