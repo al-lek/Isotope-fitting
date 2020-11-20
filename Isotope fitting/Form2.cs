@@ -733,7 +733,7 @@ namespace Isotope_fitting
             {
                 Clear_all();
                 /*disp_d.Visible = disp_w.Visible =*/ groupBoxIntensity4.Visible = groupBoxCharge4.Visible = is_riken;
-                has_adduct_chkBxCopy2.Visible = has_adduct_chkBxCopy1.Visible = has_adduct_chkBx.Visible = is_riken;
+                //has_adduct_chkBxCopy2.Visible = has_adduct_chkBxCopy1.Visible = has_adduct_chkBx.Visible = is_riken;
                 ppm_toolStrip4.Visible = !is_riken;
                 losses_groupBox_d.Visible = is_riken;
                 losses_groupBox_w.Visible = is_riken;
@@ -10123,6 +10123,7 @@ namespace Isotope_fitting
             int y = e.Y;
             int adduct_step1 = 0;
             if (has_adduct_chkBx.Checked && is_riken) { adduct_step1 = 16; }
+            else if (has_adduct_chkBx.Checked) { adduct_step1 = 12; }
             int temp_x_init = 3;
             int temp_y_init = 20;            
             int step_x = 20;
@@ -10473,7 +10474,8 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             int adduct_step1 = 0;
             int adduct_step2 = 0;
-            if (adduct_chBx_temp.Checked) { adduct_step1 =16; adduct_step2 = 8; }
+            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 =16; adduct_step2 = 8; }
+            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
             int step_y = 74+(2* adduct_step1);
             int temp_y_init = 24+ adduct_step1;
@@ -11051,7 +11053,8 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             int adduct_step1 = 0;
             int adduct_step2 = 0;
-            if (adduct_chBx_temp.Checked) { adduct_step1 = 16; adduct_step2 = 8; }
+            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
+            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
             int step_y = 74 + (2 * adduct_step1);
             int temp_y_init = 24 + adduct_step1;
