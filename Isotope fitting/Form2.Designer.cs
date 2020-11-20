@@ -3556,7 +3556,7 @@ namespace Isotope_fitting
             this.sequence_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.sequence_toolStrip.Location = new System.Drawing.Point(717, 27);
             this.sequence_toolStrip.Name = "sequence_toolStrip";
-            this.sequence_toolStrip.Size = new System.Drawing.Size(35, 193);
+            this.sequence_toolStrip.Size = new System.Drawing.Size(35, 212);
             this.sequence_toolStrip.TabIndex = 8;
             // 
             // seqSave_Btn

@@ -10087,32 +10087,27 @@ namespace Isotope_fitting
 
                 sb.AppendLine("Extension: " + seq.Extension);
                 sb.AppendLine();
-                sb.AppendLine("a : " + Math.Round(a1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("b : " + Math.Round(b1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("c : " + Math.Round(c1, 1).ToString() + "%");
-                sb.AppendLine();
                 if (is_riken)
                 {
-                    sb.AppendLine("d : " + Math.Round(d1, 1).ToString() + "%");
-                    sb.AppendLine();
-                    sb.AppendLine("w : " + Math.Round(w1, 1).ToString() + "%");
-                    sb.AppendLine();
-                }                
-                sb.AppendLine("x : " + Math.Round(x1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("y : " + Math.Round(y1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("z : " + Math.Round(z1, 1).ToString() + "%");
-                sb.AppendLine();
-                sb.AppendLine("Total : " + Math.Round(t1, 1).ToString() + "%");
+                    sb.AppendLine("a : " + Math.Round(a1, 0).ToString() + "%" + "\t" + "\t"+ "w : " + Math.Round(w1, 0).ToString() + "%");
+                    sb.AppendLine("b : " + Math.Round(b1,0).ToString() + "%" + "\t" + "\t" + "x : " + Math.Round(x1, 0).ToString() + "%");
+                    sb.AppendLine("c : " + Math.Round(c1, 0).ToString() + "%" + "\t" + "\t" + "y : " + Math.Round(y1, 0).ToString() + "%");
+                    sb.AppendLine("d : " + Math.Round(d1,0).ToString() + "%" + "\t" + "\t" + "z : " + Math.Round(z1, 0).ToString() + "%");
+                }
+                else
+                {
+                    sb.AppendLine("a : " + Math.Round(a1, 0).ToString() + "%" + "\t" + "\t" + "x : " + Math.Round(x1, 0).ToString() + "%");
+                    sb.AppendLine("b : " + Math.Round(b1, 0).ToString() + "%" + "\t" + "\t" + "y : " + Math.Round(y1, 0).ToString() + "%");
+                    sb.AppendLine("c : " + Math.Round(c1, 0).ToString() + "%" + "\t" + "\t" + "z : " + Math.Round(z1, 0).ToString() + "%");
+                }                  
+                sb.AppendLine();              
+                sb.AppendLine("Sequence coverage : " + Math.Round(t1, 1).ToString() + "%");
                 sb.AppendLine();
             }
             if (sb != null && sb.Length > 0)
             {
                 message_string = sb.ToString();
-                Form17 frm17 = new Form17(message_string);
+                Form17 frm17 = new Form17(message_string,true, is_riken);
                 frm17.Text = "Sequence coverage";
                 frm17.ShowDialog();
             }
