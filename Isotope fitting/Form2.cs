@@ -740,7 +740,6 @@ namespace Isotope_fitting
                 protein_seq_Btn.Visible = !is_riken;
                 riken_seq_Btn.Visible = is_riken;
                 dvw_chBx.Visible = dvw_chBxCopy1.Visible = dvw_chBxCopy2.Visible = !is_riken;
-                ppm_includeModif_Btn.Visible= includeModif_Btn.Visible = includeModif_charge_Btn.Visible = is_riken;
                 foreach (ToolStrip strip in GetControls(panel2_tab2).OfType<ToolStrip>().Where(l => l.Name.Contains("ppm")))
                 {
                     foreach (ToolStripButton btn in strip.Items.OfType<ToolStripButton>())
