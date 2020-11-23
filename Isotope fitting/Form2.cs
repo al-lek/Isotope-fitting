@@ -2870,7 +2870,7 @@ namespace Isotope_fitting
             //round 2, with the correct resolution
             if ((fragment_is_canditate || chem.Fixed) /*&& !is_exp_deconvoluted*/)
             {
-                fragment_is_canditate = false;
+                fragment_is_canditate = true;
                 chem.Resolution = (double)results.Average(p => p[1]);
                 results = new List<double[]>();
                 chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
@@ -10242,15 +10242,20 @@ namespace Isotope_fitting
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
             CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
+            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
 
             if (color_range_picBox_temp.Visible) { color_range_picBox_temp.Visible = false; }
             if (color_range_panel_temp.Visible) { color_range_panel_temp.Visible = false; }
             if (seq_lbl_panel_temp.Visible){ seq_lbl_panel_temp.Visible = false;}
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int adduct_step1 = 0;
+            int adduct_step2 = 0;
+            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
+            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
-            int step_y = 50;
-            int temp_y_init = 20;
+            int step_y = 50 + (2 * adduct_step1);
+            int temp_y_init = 20 + adduct_step1;
             int temp_x_init = 3;
             int length_panel = 0;
             if (legend_panel_temp.Visible) length_panel =-legend_panel_temp.Width;
@@ -10292,22 +10297,32 @@ namespace Isotope_fitting
                     Point temp_p = pp;
                     if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + step_y; }
+                    int safe_dist_up = +adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
+                    bool up_adduct = false, down_adduct = false;
+                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    {
+                        safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
+                    }
+                    else if (adduct_chBx_temp.Checked)
+                    {
+                        down_adduct = true;
+                    }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.LimeGreen, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.LimeGreen, g, adduct: up_adduct);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Green, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Green, g, adduct: up_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 0, nn.Color, g);
+                            draw_line(pp, true, 0 + safe_dist_up, nn.Color, g, adduct: up_adduct);
                         }
                     }
                     else if (by_chBx_temp.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
@@ -10316,16 +10331,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.DodgerBlue, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.DodgerBlue, g, adduct: up_adduct);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Blue, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Blue, g, adduct: up_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 4, nn.Color, g);
+                            draw_line(pp, true, 4 + safe_dist_up, nn.Color, g, adduct: up_adduct);
                         }
                     }
                     else if (cz_chBx_temp.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
@@ -10334,16 +10349,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.Tomato, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.Tomato, g, adduct: up_adduct);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Firebrick, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Firebrick, g, adduct: up_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 8, nn.Color, g);
+                            draw_line(pp, true, 8 + safe_dist_up, nn.Color, g, adduct: up_adduct);
                         }
                     }
                     else if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
@@ -10352,16 +10367,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.LimeGreen, g, adduct: down_adduct);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Green, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Green, g, adduct: down_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 0, nn.Color, g);
+                            draw_line(temp_p, false, 0 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }
                     else if (by_chBx_temp.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
@@ -10370,16 +10385,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.DodgerBlue, g, adduct: down_adduct);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Blue, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Blue, g, adduct: down_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 4, nn.Color, g);
+                            draw_line(temp_p, false, 4 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }
                     else if (cz_chBx_temp.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
@@ -10388,16 +10403,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.Tomato, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.Tomato, g, adduct: down_adduct);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Firebrick, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Firebrick, g, adduct: down_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 8, nn.Color, g);
+                            draw_line(temp_p, false, 8 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }                  
                     else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1) && !los_chkBox_temp.Checked &&( intB_chBx_temp.Checked || intA_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked ))
@@ -10794,6 +10809,7 @@ namespace Isotope_fitting
             CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
+            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
 
             color_range_picBox_temp.Visible = is_rgb_color_range;
             color_range_panel_temp.Visible = !is_rgb_color_range;
@@ -10801,9 +10817,13 @@ namespace Isotope_fitting
             //g = pnl.CreateGraphics();
             CI ion_comp = new CI();
             IonDraw.Sort(ion_comp);
+            int adduct_step1 = 0;
+            int adduct_step2 = 0;
+            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
+            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
-            int step_y = 50;
-            int temp_y_init = 20;
+            int step_y = 50 + (2 * adduct_step1);
+            int temp_y_init = 20 + adduct_step1;
             int temp_x_init = 3;
             int length_panel = -21 - 50;
             Pen p = new Pen(Color.Black);
@@ -10885,22 +10905,29 @@ namespace Isotope_fitting
                     Point temp_p = pp;
                     if (pp.X + (2* step_x) >= sequence_Pnl_temp.Width + length_panel) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
+                    int safe_dist_up = +adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
+                    bool up_adduct = false, down_adduct = false;
+                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    {
+                        safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
+                    }
+                    else if (adduct_chBx_temp.Checked) { down_adduct = true; }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.LimeGreen, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.LimeGreen, g, adduct: up_adduct);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Green, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Green, g, adduct: up_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 0, nn.Color, g);
+                            draw_line(pp, true, 0 + safe_dist_up, nn.Color, g, adduct: up_adduct);
                         }
                     }
                     else if (by_chBx_temp.Checked && (nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b")) && nn.Index == idx + 1)
@@ -10909,16 +10936,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.DodgerBlue, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.DodgerBlue, g, adduct: up_adduct);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Blue, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Blue, g, adduct: up_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 4, nn.Color, g);
+                            draw_line(pp, true, 4 + safe_dist_up, nn.Color, g, adduct: up_adduct);
                         }
                     }
                     else if (cz_chBx_temp.Checked && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c")) && nn.Index == idx + 1)
@@ -10927,16 +10954,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(pp, true, 4, Color.Tomato, g);
+                                draw_line(pp, true, 4 + safe_dist_up, Color.Tomato, g, adduct: up_adduct);
                             }
                             else
                             {
-                                draw_line(pp, true, 0, Color.Firebrick, g);
+                                draw_line(pp, true, 0 + safe_dist_up, Color.Firebrick, g, adduct: up_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(pp, true, 8, nn.Color, g);
+                            draw_line(pp, true, 8 + safe_dist_up, nn.Color, g, adduct: up_adduct);
                         }
                     }
                     else if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x")) && (s.Length - nn.Index == idx + 1))
@@ -10945,16 +10972,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.LimeGreen, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.LimeGreen, g, adduct: down_adduct);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Green, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Green, g, adduct: down_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 0, nn.Color, g);
+                            draw_line(temp_p, false, 0 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }
                     else if (by_chBx_temp.Checked && (nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y")) && (s.Length - nn.Index == idx + 1))
@@ -10963,16 +10990,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.DodgerBlue, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.DodgerBlue, g, adduct: down_adduct);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Blue, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Blue, g, adduct: down_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 4, nn.Color, g);
+                            draw_line(temp_p, false, 4 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }
                     else if (cz_chBx_temp.Checked && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z")) && (s.Length - nn.Index == idx + 1))
@@ -10981,16 +11008,16 @@ namespace Isotope_fitting
                         {
                             if (nn.Ion_type.Contains("H2O") || nn.Ion_type.Contains("NH3") || nn.Ion_type.Contains("CO"))
                             {
-                                draw_line(temp_p, false, 4, Color.Tomato, g);
+                                draw_line(temp_p, false, 4 + safe_dist_down, Color.Tomato, g, adduct: down_adduct);
                             }
                             else
                             {
-                                draw_line(temp_p, false, 0, Color.Firebrick, g);
+                                draw_line(temp_p, false, 0 + safe_dist_down, Color.Firebrick, g, adduct: down_adduct);
                             }
                         }
                         else if (!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO"))
                         {
-                            draw_line(temp_p, false, 8, nn.Color, g);
+                            draw_line(temp_p, false, 8 + safe_dist_down, nn.Color, g, adduct: down_adduct);
                         }
                     }
                     else if ((nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
@@ -11007,20 +11034,7 @@ namespace Isotope_fitting
                         draw_line(temp_p, false, 4, Color.DarkCyan, g);
 
                     }
-                    //else if (nn.Ion_type.StartsWith("int") && (nn.Index == idx + 2 || nn.IndexTo == idx + 1))
-                    //{
-                    //    if (!los_chkBox_temp.Checked)
-                    //    {
-                    //        if (intA_chBx_temp.Checked && !nn.Ion_type.Contains("b"))
-                    //        {
-                    //            draw_line(pp, false, 0, nn.Color, g, true);
-                    //        }
-                    //        else if (intB_chBx_temp.Checked && nn.Ion_type.Contains("b"))
-                    //        {
-                    //            draw_line(pp, false, 0, nn.Color, g, true);
-                    //        }
-                    //    }
-                    //}
+                  
                 }
                 pp.X = pp.X + step_x;
                 if (pp.X + step_x >= sequence_Pnl_temp.Width + length_panel) { pp.X = temp_x_init; pp.Y = pp.Y + step_y; }

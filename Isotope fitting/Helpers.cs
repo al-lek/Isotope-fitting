@@ -1075,7 +1075,8 @@ namespace Isotope_fitting
                     new_type += extra_name; add_type = extra_name;
                     string[] str = temp_chem.Name.Split('_');
                     int s = temp_chem.Name.IndexOf('_');
-                    last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type);
+                    if (last_chem.Ion.Contains("(")) { last_chem.Ion = str[0].Replace(temp_chem.Ion, temp_chem.Ion + add_type); }
+                    else { last_chem.Ion = str[0].Replace(temp_chem.Ion,"("+ temp_chem.Ion + add_type+")"); }                                  
                     last_chem.Name = last_chem.Ion + temp_chem.Name.Remove(0, s);
                     last_chem.Ion_type = new_type;
                     last_chem.Has_adduct = has_Adduct;

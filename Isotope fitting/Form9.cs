@@ -1169,7 +1169,7 @@ namespace Isotope_fitting
             List<ChemiForm> res = new List<ChemiForm>();
             if (has_adduct)
             {
-                extra_adduct = adduct_txtBx.Text.Replace(Environment.NewLine, " ").ToString().Replace("\t", "").Replace(" ", "");
+                extra_adduct = adduct_txtBxMS.Text.Replace(Environment.NewLine, " ").ToString().Replace("\t", "").Replace(" ", "");
                 if (String.IsNullOrEmpty(extra_adduct)) { has_adduct = false; AdductBtnMS.Checked = false; noAddBtnMS.Checked = true; }
                 if (extra_adduct[0] != '+' && extra_adduct[0] != '-') { extra_adduct = "+" + extra_adduct; }
                 extra_name = extra_adduct.ToString();

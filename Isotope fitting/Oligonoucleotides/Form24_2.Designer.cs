@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24_2));
             this.panel_calc = new System.Windows.Forms.Panel();
+            this.aks_modifChk = new System.Windows.Forms.CheckBox();
             this.AdductBtn = new System.Windows.Forms.RadioButton();
             this.noAddBtn = new System.Windows.Forms.RadioButton();
             this.adduct_txtBx = new System.Windows.Forms.TextBox();
@@ -76,7 +77,6 @@
             this.idxPr_Box = new System.Windows.Forms.TextBox();
             this.primary_Label = new System.Windows.Forms.Label();
             this.internal_Label = new System.Windows.Forms.Label();
-            this.aks_modifChk = new System.Windows.Forms.CheckBox();
             this.panel_calc.SuspendLayout();
             this.toolStrip_riken.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
@@ -134,6 +134,20 @@
             this.panel_calc.Name = "panel_calc";
             this.panel_calc.Size = new System.Drawing.Size(417, 608);
             this.panel_calc.TabIndex = 5;
+            // 
+            // aks_modifChk
+            // 
+            this.aks_modifChk.AutoSize = true;
+            this.aks_modifChk.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.aks_modifChk.ForeColor = System.Drawing.Color.DarkViolet;
+            this.aks_modifChk.Location = new System.Drawing.Point(144, 289);
+            this.aks_modifChk.Name = "aks_modifChk";
+            this.aks_modifChk.Size = new System.Drawing.Size(72, 17);
+            this.aks_modifChk.TabIndex = 129;
+            this.aks_modifChk.Text = "Modified?";
+            this.aks_modifChk.UseVisualStyleBackColor = true;
+            this.aks_modifChk.Visible = false;
+            this.aks_modifChk.CheckedChanged += new System.EventHandler(this.aks_modifChk_CheckedChanged);
             // 
             // AdductBtn
             // 
@@ -706,19 +720,6 @@
             this.internal_Label.Size = new System.Drawing.Size(41, 13);
             this.internal_Label.TabIndex = 33;
             this.internal_Label.Text = "internal";
-            // 
-            // aks_modifChk
-            // 
-            this.aks_modifChk.AutoSize = true;
-            this.aks_modifChk.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.aks_modifChk.ForeColor = System.Drawing.Color.Red;
-            this.aks_modifChk.Location = new System.Drawing.Point(144, 287);
-            this.aks_modifChk.Name = "aks_modifChk";
-            this.aks_modifChk.Size = new System.Drawing.Size(105, 17);
-            this.aks_modifChk.TabIndex = 129;
-            this.aks_modifChk.Text = "Set as Modified?";
-            this.aks_modifChk.UseVisualStyleBackColor = true;
-            this.aks_modifChk.Visible = false;
             // 
             // Form24_2
             // 

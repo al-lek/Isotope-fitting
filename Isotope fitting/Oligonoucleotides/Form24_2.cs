@@ -179,9 +179,9 @@ namespace Isotope_fitting
                     else { deduct += extra_adduct[i]; }
                 }
                 double m_ded =calc_m(out extra_mz_error, deduct);
-                if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error"); return res; }
+                if (extra_mz_error) { MessageBox.Show("Adduct chemical formula is not in the correct format", "Error"); return res; }
                 double m_add = calc_m(out extra_mz_error, adduct);
-                if (extra_mz_error) { MessageBox.Show("Adduct chemical is not in the correct format", "Error"); return res; }
+                if (extra_mz_error) { MessageBox.Show("Adduct chemical formula is not in the correct format", "Error"); return res; }
                 extra_mz = m_add- m_ded;   
             }            
             List<string> primary = new List<string> { "a", "b", "c", "d", "x", "y", "z", "w" };
@@ -752,5 +752,11 @@ namespace Isotope_fitting
             }
         }
 
+        private void aks_modifChk_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox temp = sender as CheckBox;
+            if (temp.Checked) temp.ForeColor = Color.DarkViolet;
+            else temp.ForeColor = Color.Black;
+        }
     }
 }
