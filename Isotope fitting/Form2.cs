@@ -9975,6 +9975,21 @@ namespace Isotope_fitting
         {
             if (!block_tab_diagrams_refresh) initialize_plot_tabs(false, "ppm");
         }
+        private void includeModif_Btn_CheckedChanged(object sender, EventArgs e)
+        {
+            initialize_plot_tabs(false, "a");
+            initialize_plot_tabs(false, "b");
+            initialize_plot_tabs(false, "c");
+            initialize_plot_tabs(false, "d");
+        }
+
+        private void includeModif_charge_Btn_CheckedChanged(object sender, EventArgs e)
+        {
+            initialize_plot_tabs(false, "aC");
+            initialize_plot_tabs(false, "bC");
+            initialize_plot_tabs(false, "cC");
+            initialize_plot_tabs(false, "dC");
+        }
         #endregion
 
         #region sequence
@@ -12975,6 +12990,8 @@ namespace Isotope_fitting
             return list_index;
         }
 
+       
+
         #region export and resize panels
 
         private void export_panel(bool copy, Panel pnl)
@@ -15105,21 +15122,7 @@ namespace Isotope_fitting
             MessageBox.Show("Found "+ counter.ToString() + " out of "+ Fragments5.Count.ToString());
         }
 
-        private void includeModif_Btn_CheckedChanged(object sender, EventArgs e)
-        {
-            initialize_plot_tabs(false, "a");
-            initialize_plot_tabs(false, "b");
-            initialize_plot_tabs(false, "c");
-            initialize_plot_tabs(false, "d");
-        }
-
-        private void includeModif_charge_Btn_CheckedChanged(object sender, EventArgs e)
-        {
-            initialize_plot_tabs(false, "aC");
-            initialize_plot_tabs(false, "bC");
-            initialize_plot_tabs(false, "cC");
-            initialize_plot_tabs(false, "dC");
-        }
+       
         #endregion
 
         
