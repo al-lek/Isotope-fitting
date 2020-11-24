@@ -239,7 +239,7 @@
             "known MS2",
             "known MS2-H2O",
             "known MS2-2(H2O)"});
-            this.known_lstBox.Location = new System.Drawing.Point(251, 199);
+            this.known_lstBox.Location = new System.Drawing.Point(251, 155);
             this.known_lstBox.Name = "known_lstBox";
             this.known_lstBox.Size = new System.Drawing.Size(121, 52);
             this.known_lstBox.TabIndex = 12;
@@ -354,12 +354,10 @@
             this.internal_lstBox.FormattingEnabled = true;
             this.internal_lstBox.Items.AddRange(new object[] {
             "internal",
-            "internal-H2O",
-            "internal-2(H2O)",
             "internal-B()"});
             this.internal_lstBox.Location = new System.Drawing.Point(251, 29);
             this.internal_lstBox.Name = "internal_lstBox";
-            this.internal_lstBox.Size = new System.Drawing.Size(121, 64);
+            this.internal_lstBox.Size = new System.Drawing.Size(121, 34);
             this.internal_lstBox.TabIndex = 10;
             // 
             // frag_Label
@@ -386,7 +384,7 @@
             "M-B()",
             "M-H2O-B()",
             "B()"});
-            this.M_lstBox.Location = new System.Drawing.Point(251, 106);
+            this.M_lstBox.Location = new System.Drawing.Point(251, 69);
             this.M_lstBox.Name = "M_lstBox";
             this.M_lstBox.Size = new System.Drawing.Size(121, 80);
             this.M_lstBox.TabIndex = 11;

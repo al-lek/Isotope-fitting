@@ -1632,7 +1632,7 @@ namespace Isotope_fitting
                             if (has_adduct)
                             {
                                 bool is_error;
-                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true);
+                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true,is_riken:true);
                                 if (!is_error) res.Add(c);
                                 else continue;
                             }
@@ -1647,7 +1647,7 @@ namespace Isotope_fitting
                             if (has_adduct)
                             {
                                 bool is_error;
-                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true);
+                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true, is_riken: true);
                                 if (!is_error) res.Add(c);
                                 else continue;
                             }
@@ -1662,7 +1662,7 @@ namespace Isotope_fitting
                             if (has_adduct)
                             {
                                 bool is_error;
-                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true);
+                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true, is_riken: true);
                                 if (!is_error) res.Add(c);
                                 else continue;
                             }
@@ -1677,7 +1677,7 @@ namespace Isotope_fitting
                             if (has_adduct)
                             {
                                 bool is_error;
-                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true);
+                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true, is_riken: true);
                                 if (!is_error) res.Add(c);
                                 else continue;
                             }
@@ -1692,7 +1692,7 @@ namespace Isotope_fitting
                             if (has_adduct)
                             {
                                 bool is_error;
-                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true);
+                                ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true, is_riken: true);
                                 if (!is_error) res.Add(c);
                                 else continue;
                             }
@@ -1714,7 +1714,7 @@ namespace Isotope_fitting
                                     // add the primary and modify it according to gain or loss of H
                                     if (has_adduct)
                                     {
-                                        ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked);
+                                        ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, is_riken: true);
                                         if (!is_error) res.Add(c);
                                         else continue;
                                     }
@@ -1754,7 +1754,7 @@ namespace Isotope_fitting
                                 {
                                     if (has_adduct)
                                     {
-                                        ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked);
+                                        ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, is_riken: true);
                                         if (!is_error) res.Add(c);
                                         else continue;
                                     }
@@ -1803,12 +1803,12 @@ namespace Isotope_fitting
                                         mz = Math.Round(curr_mz - mass[f] / Math.Abs(curr_q), 4);
                                         if (mz + extra_mz_temp >= mzMin- 0.05 && mz + extra_mz_temp <= mzMax+ 0.05)
                                         {
-                                            ChemiForm c = check_adduct(out is_error, chem, "", formula[f], name[f], false, true);
+                                            ChemiForm c = check_adduct(out is_error, chem, "", formula[f], name[f], false, true, is_riken: true);
                                             if (is_error) continue;
                                             c.Has_adduct = false;
                                             if (has_adduct)
                                             {
-                                                ChemiForm c1 = check_adduct(out is_error, c, adduct, deduct, extra_name, aks_modifChk.Checked, true);
+                                                ChemiForm c1 = check_adduct(out is_error, c, adduct, deduct, extra_name, aks_modifChk.Checked, true, is_riken: true);
                                                 if (!is_error && check_duplicates_SelectedFragments(c1,res)) res.Add(c1);
                                                 else continue;
                                             }

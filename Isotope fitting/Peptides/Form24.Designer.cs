@@ -259,10 +259,10 @@
             "db",
             "wb",
             "v"});
-            this.dvw_lstBox.Location = new System.Drawing.Point(257, 85);
+            this.dvw_lstBox.Location = new System.Drawing.Point(257, 81);
             this.dvw_lstBox.MultiColumn = true;
             this.dvw_lstBox.Name = "dvw_lstBox";
-            this.dvw_lstBox.Size = new System.Drawing.Size(104, 50);
+            this.dvw_lstBox.Size = new System.Drawing.Size(100, 50);
             this.dvw_lstBox.TabIndex = 11;
             // 
             // chargeMax_Box
@@ -286,9 +286,9 @@
             "internal b-NH3",
             "internal b-2H2O",
             "internal b-2NH3"});
-            this.internal_lstBox.Location = new System.Drawing.Point(257, 141);
+            this.internal_lstBox.Location = new System.Drawing.Point(257, 133);
             this.internal_lstBox.Name = "internal_lstBox";
-            this.internal_lstBox.Size = new System.Drawing.Size(104, 94);
+            this.internal_lstBox.Size = new System.Drawing.Size(100, 94);
             this.internal_lstBox.TabIndex = 5;
             // 
             // addin_lstBox
@@ -339,7 +339,7 @@
             "M-NH3"});
             this.M_lstBox.Location = new System.Drawing.Point(257, 29);
             this.M_lstBox.Name = "M_lstBox";
-            this.M_lstBox.Size = new System.Drawing.Size(104, 50);
+            this.M_lstBox.Size = new System.Drawing.Size(100, 50);
             this.M_lstBox.TabIndex = 9;
             // 
             // charge_Label

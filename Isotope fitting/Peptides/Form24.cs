@@ -142,7 +142,6 @@ namespace Isotope_fitting
             List<string> types_neutral_loss = types.Where(t => primary.Contains(t[0].ToString()) && t.Contains("H")).ToList();                  // primary with neutral loss a-H2O, b-NH3, ...
             List<string> types_primary = types.Where(t => primary.Contains(t[0].ToString()) && t.Length == 1).ToList();                         // a, b, y.....
             List<string> types_primary_Hyd = types.Where(t => primary.Contains(t[0].ToString()) && !t.Contains("H") && t.Length > 1).ToList();  // a+1, y-2....
-
             //4.index primary
             List<int[]> primary_indexes = new List<int[]>();
             if (!string.IsNullOrEmpty(idxPr_Box.Text.ToString())) add_to_indexes_list(idxPr_Box.Text, primary_indexes);
@@ -395,7 +394,7 @@ namespace Isotope_fitting
                         {
                             bool is_error;
                             ChemiForm c = check_adduct(out is_error, chem, adduct, deduct, extra_name, aks_modifChk.Checked, true);
-                            if (!is_error) res.Add(c);
+                            if (!is_error){res.Add(c);}
                             else continue;
                         }
                         else { res.Add(chem.DeepCopy()); }
@@ -532,32 +531,20 @@ namespace Isotope_fitting
                 if (frm2.is_deconv_const_resolution)
                 {
                     res = dParser(machine);
-                    foreach (ChemiForm chem in selected_fragments)
-                    {
-                        chem.Resolution = res;
-                    }
+                    foreach (ChemiForm chem in selected_fragments){chem.Resolution = res;}
                 }
                 else
                 {
                     machine = frm2.deconv_machine;
-                    foreach (ChemiForm chem in selected_fragments)
-                    {
-                        chem.Machine = machine;
-                    }
+                    foreach (ChemiForm chem in selected_fragments){chem.Machine = machine;}
                 }
             }
             else
             {
                 foreach (ChemiForm chem in selected_fragments)
                 {
-                    if (machine_listBox.SelectedItems.Count > 0)
-                    {
-                        chem.Machine = machine_listBox.SelectedItem.ToString();
-                    }
-                    else
-                    {
-                        chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
-                    }
+                    if (machine_listBox.SelectedItems.Count > 0){chem.Machine = machine_listBox.SelectedItem.ToString();}
+                    else{chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);}
                 }
             }
 

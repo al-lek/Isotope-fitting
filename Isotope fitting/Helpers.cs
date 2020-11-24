@@ -1051,7 +1051,7 @@ namespace Isotope_fitting
             }
             return true;
         }
-        public static ChemiForm check_adduct(out bool is_error, ChemiForm chem, string adduct, string deduct, string extra_name, bool has_Adduct, bool name = false)
+        public static ChemiForm check_adduct(out bool is_error, ChemiForm chem, string adduct, string deduct, string extra_name, bool has_Adduct, bool name = false,bool is_riken=false)
         {
             is_error = true;
             ChemiForm temp_chem = chem.DeepCopy();
@@ -1063,10 +1063,14 @@ namespace Isotope_fitting
             catch (Exception eee) { return null; }
             if (!temp_chem.Error)
             {
+                List<string> ion_adducts = new List<string>() {"a-NH3","b-NH3","b-H2O","b+H2O","y-NH3","y-H2O","b-2NH3","b-2H2O","y-2NH3","y-2H2O","b-N2H6","b-H4O2","y-N2H6","y-H4O2","b-2(NH3)","b-2(H2O)","y-2(NH3)","y-2(H2O)","b-H2O-NH3","b-NH3-H2O",
+            "y-H2O-NH3","y-NH3-H2O","x-H2O", "internal b-H2O","internal b-NH3","internal b-2H2O","internal b-2(H2O)","internal b-2(NH3)","internal b-2NH3" ,"internal b-N2H6","internal b-H4O2", "M-H2O","M-NH3"};
+                if(is_riken)ion_adducts = new List<string>() { "a-H2O", "b-H2O", "c-H2O", "d-H2O", "w-H2O", "x-H2O", "y-H2O", "z-H2O" ,"known MS2-H2O","known MS2-2(H2O)","M-H2O","M-B()","M-H2O-B()"};
                 is_error = false;
                 ChemiForm last_chem = chem.DeepCopy();
                 last_chem.InputFormula = last_chem.PrintFormula = temp_chem.FinalFormula;
                 last_chem.Has_adduct = has_Adduct;
+                if (ion_adducts.Contains(last_chem.Ion_type)) { last_chem.Has_adduct = false; }
                 //last_chem.Mz = temp_chem.Mz;
                 if (name)
                 {
@@ -1083,6 +1087,7 @@ namespace Isotope_fitting
                     if (extra_name.Contains("B(A)")) { last_chem.Ion_type = last_chem.Ion_type.Replace("B(A)", "B()"); }
                     if (extra_name.Contains("B(G)")) { last_chem.Ion_type = last_chem.Ion_type.Replace("B(G)", "B()"); }
                     if (extra_name.Contains("B(T)")) { last_chem.Ion_type = last_chem.Ion_type.Replace("B(T)", "B()"); }
+                    if (ion_adducts.Contains(last_chem.Ion_type)) { last_chem.Has_adduct = false; }
                 }
                 return last_chem;
             }
