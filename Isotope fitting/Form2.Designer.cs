@@ -166,6 +166,10 @@ namespace Isotope_fitting
             this.ax_X_Box = new System.Windows.Forms.ToolStripTextBox();
             this.ax_Y_Box = new System.Windows.Forms.ToolStripTextBox();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.primary_settingsBtn = new System.Windows.Forms.ToolStripDropDownButton();
+            this.primary_styleBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.includeModif_Btn = new System.Windows.Forms.ToolStripButton();
             this.label1 = new System.Windows.Forms.Label();
             this.tabDiagram = new System.Windows.Forms.TabPage();
             this.splitter4 = new System.Windows.Forms.Splitter();
@@ -500,10 +504,6 @@ namespace Isotope_fitting
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.primary_settingsBtn = new System.Windows.Forms.ToolStripDropDownButton();
-            this.primary_styleBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.includeModif_Btn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -536,6 +536,7 @@ namespace Isotope_fitting
             this.groupBoxIntensity1.SuspendLayout();
             this.intensity_toolStrip1.SuspendLayout();
             this.panel5.SuspendLayout();
+            this.toolStrip3.SuspendLayout();
             this.tabDiagram.SuspendLayout();
             this.panel2_tab2.SuspendLayout();
             this.ppm_toolStrip6.SuspendLayout();
@@ -601,7 +602,6 @@ namespace Isotope_fitting
             this.panel3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.frag_lbl_contextMenuStrip1.SuspendLayout();
-            this.toolStrip3.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -1070,7 +1070,7 @@ namespace Isotope_fitting
             // 
             this.internal_style_Btn.Image = ((System.Drawing.Image)(resources.GetObject("internal_style_Btn.Image")));
             this.internal_style_Btn.Name = "internal_style_Btn";
-            this.internal_style_Btn.Size = new System.Drawing.Size(194, 36);
+            this.internal_style_Btn.Size = new System.Drawing.Size(113, 36);
             this.internal_style_Btn.Text = "Style";
             this.internal_style_Btn.ToolTipText = "Format the style of the plots in this tab";
             this.internal_style_Btn.Click += new System.EventHandler(this.internal_style_Btn_Click);
@@ -1986,7 +1986,7 @@ namespace Isotope_fitting
             // 
             this.extractPlotToolStripMenuItem3.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem3.Image")));
             this.extractPlotToolStripMenuItem3.Name = "extractPlotToolStripMenuItem3";
-            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(189, 32);
+            this.extractPlotToolStripMenuItem3.Size = new System.Drawing.Size(134, 22);
             this.extractPlotToolStripMenuItem3.Text = "Extract Plot";
             this.extractPlotToolStripMenuItem3.ToolTipText = "Extract plot and edit its shape";
             this.extractPlotToolStripMenuItem3.Click += new System.EventHandler(this.extractPlotToolStripMenuItem3_Click);
@@ -2018,6 +2018,55 @@ namespace Isotope_fitting
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(1356, 40);
             this.panel5.TabIndex = 34;
+            // 
+            // toolStrip3
+            // 
+            this.toolStrip3.BackColor = System.Drawing.Color.White;
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.primary_settingsBtn,
+            this.includeModif_Btn});
+            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip3.Location = new System.Drawing.Point(170, 0);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
+            this.toolStrip3.Size = new System.Drawing.Size(79, 40);
+            this.toolStrip3.TabIndex = 29;
+            // 
+            // primary_settingsBtn
+            // 
+            this.primary_settingsBtn.AutoToolTip = false;
+            this.primary_settingsBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.primary_settingsBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.primary_styleBtn});
+            this.primary_settingsBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_settingsBtn.Image")));
+            this.primary_settingsBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.primary_settingsBtn.Name = "primary_settingsBtn";
+            this.primary_settingsBtn.Size = new System.Drawing.Size(43, 37);
+            this.primary_settingsBtn.Text = " ";
+            this.primary_settingsBtn.ToolTipText = "Settings";
+            // 
+            // primary_styleBtn
+            // 
+            this.primary_styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_styleBtn.Image")));
+            this.primary_styleBtn.Name = "primary_styleBtn";
+            this.primary_styleBtn.Size = new System.Drawing.Size(113, 36);
+            this.primary_styleBtn.Text = "Style";
+            this.primary_styleBtn.ToolTipText = "Format the style of the plots in this tab";
+            this.primary_styleBtn.Click += new System.EventHandler(this.primary_styleBtn_Click);
+            // 
+            // includeModif_Btn
+            // 
+            this.includeModif_Btn.CheckOnClick = true;
+            this.includeModif_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.includeModif_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includeModif_Btn.Image")));
+            this.includeModif_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.includeModif_Btn.Name = "includeModif_Btn";
+            this.includeModif_Btn.Size = new System.Drawing.Size(34, 37);
+            this.includeModif_Btn.Text = "Include modifications";
+            this.includeModif_Btn.CheckedChanged += new System.EventHandler(this.includeModif_Btn_CheckedChanged);
             // 
             // label1
             // 
@@ -6021,7 +6070,7 @@ namespace Isotope_fitting
             // 
             this.losses_style_Btn.Image = ((System.Drawing.Image)(resources.GetObject("losses_style_Btn.Image")));
             this.losses_style_Btn.Name = "losses_style_Btn";
-            this.losses_style_Btn.Size = new System.Drawing.Size(194, 36);
+            this.losses_style_Btn.Size = new System.Drawing.Size(113, 36);
             this.losses_style_Btn.Text = "Style";
             this.losses_style_Btn.ToolTipText = "Format the style of the plots in this tab";
             this.losses_style_Btn.Click += new System.EventHandler(this.losses_style_Btn_Click);
@@ -6069,55 +6118,6 @@ namespace Isotope_fitting
             // 
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
-            // 
-            // toolStrip3
-            // 
-            this.toolStrip3.BackColor = System.Drawing.Color.White;
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(30, 30);
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.primary_settingsBtn,
-            this.includeModif_Btn});
-            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip3.Location = new System.Drawing.Point(170, 0);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip3.Size = new System.Drawing.Size(79, 40);
-            this.toolStrip3.TabIndex = 29;
-            // 
-            // primary_settingsBtn
-            // 
-            this.primary_settingsBtn.AutoToolTip = false;
-            this.primary_settingsBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.primary_settingsBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.primary_styleBtn});
-            this.primary_settingsBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_settingsBtn.Image")));
-            this.primary_settingsBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.primary_settingsBtn.Name = "primary_settingsBtn";
-            this.primary_settingsBtn.Size = new System.Drawing.Size(43, 37);
-            this.primary_settingsBtn.Text = " ";
-            this.primary_settingsBtn.ToolTipText = "Settings";
-            // 
-            // primary_styleBtn
-            // 
-            this.primary_styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_styleBtn.Image")));
-            this.primary_styleBtn.Name = "primary_styleBtn";
-            this.primary_styleBtn.Size = new System.Drawing.Size(194, 36);
-            this.primary_styleBtn.Text = "Style";
-            this.primary_styleBtn.ToolTipText = "Format the style of the plots in this tab";
-            this.primary_styleBtn.Click += new System.EventHandler(this.primary_styleBtn_Click);
-            // 
-            // includeModif_Btn
-            // 
-            this.includeModif_Btn.CheckOnClick = true;
-            this.includeModif_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.includeModif_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includeModif_Btn.Image")));
-            this.includeModif_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.includeModif_Btn.Name = "includeModif_Btn";
-            this.includeModif_Btn.Size = new System.Drawing.Size(34, 37);
-            this.includeModif_Btn.Text = "Include modifications";
-            this.includeModif_Btn.CheckedChanged += new System.EventHandler(this.includeModif_Btn_CheckedChanged);
             // 
             // Form2
             // 
@@ -6189,6 +6189,8 @@ namespace Isotope_fitting
             this.intensity_toolStrip1.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            this.toolStrip3.ResumeLayout(false);
+            this.toolStrip3.PerformLayout();
             this.tabDiagram.ResumeLayout(false);
             this.panel2_tab2.ResumeLayout(false);
             this.panel2_tab2.PerformLayout();
@@ -6302,8 +6304,6 @@ namespace Isotope_fitting
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.frag_lbl_contextMenuStrip1.ResumeLayout(false);
-            this.toolStrip3.ResumeLayout(false);
-            this.toolStrip3.PerformLayout();
             this.ResumeLayout(false);
 
         }

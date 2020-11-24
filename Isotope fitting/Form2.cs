@@ -10317,6 +10317,7 @@ namespace Isotope_fitting
                 draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
+                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
@@ -10928,6 +10929,7 @@ namespace Isotope_fitting
 
                 foreach (ion nn in IonDraw)
                 {
+                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
@@ -11161,6 +11163,7 @@ namespace Isotope_fitting
                 draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
+                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
