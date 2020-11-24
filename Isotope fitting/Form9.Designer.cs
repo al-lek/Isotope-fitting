@@ -2231,7 +2231,6 @@
             this.fragListView9.GridLines = true;
             this.fragListView9.HideSelection = false;
             this.fragListView9.Location = new System.Drawing.Point(427, 37);
-            this.fragListView9.MultiSelect = false;
             this.fragListView9.Name = "fragListView9";
             this.fragListView9.Size = new System.Drawing.Size(341, 610);
             this.fragListView9.TabIndex = 55;
