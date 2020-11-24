@@ -9981,15 +9981,26 @@ namespace Isotope_fitting
             initialize_plot_tabs(false, "b");
             initialize_plot_tabs(false, "c");
             initialize_plot_tabs(false, "d");
-        }
-
-        private void includeModif_charge_Btn_CheckedChanged(object sender, EventArgs e)
-        {
             initialize_plot_tabs(false, "aC");
             initialize_plot_tabs(false, "bC");
             initialize_plot_tabs(false, "cC");
             initialize_plot_tabs(false, "dC");
         }
+        private void primary_styleBtn_Click(object sender, EventArgs e)
+        {
+            foreach (SequenceTab seq in sequenceList)
+            {
+                if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                {
+                    color_primary_indexes = seq.Index_SS_primary.ToList();
+                    break;
+                }
+            }
+            Form12 frm12 = new Form12(this, 0);
+            frm12.FormClosed += (s, f) => { save_preferences(); };
+            frm12.ShowDialog();
+        }
+
         #endregion
 
         #region sequence
@@ -10460,16 +10471,16 @@ namespace Isotope_fitting
                     }
                     else if ((nn.Ion_type.StartsWith("d") || nn.Ion_type.StartsWith("(d")) && dvw_chBx_temp.Checked && nn.Index == idx + 1)
                     {
-                        draw_line(pp, true, 0, Color.DarkTurquoise, g);
+                        draw_line(pp, true, 0 + safe_dist_up, Color.DarkTurquoise, g, adduct: up_adduct);
                     }
                     else if ((nn.Ion_type.StartsWith("v") || nn.Ion_type.StartsWith("(v")) && dvw_chBx_temp.Checked && s.Length - nn.Index == idx + 1)
                     {
-                        draw_line(temp_p, false, 0, Color.DarkTurquoise, g);
+                        draw_line(temp_p, false, 0 + safe_dist_down, Color.DarkTurquoise, g, adduct: down_adduct);
 
                     }
                     else if ((nn.Ion_type.StartsWith("w") || nn.Ion_type.StartsWith("(w")) && dvw_chBx_temp.Checked && s.Length - nn.Index == idx + 1)
                     {
-                        draw_line(temp_p, false, 4, Color.DarkCyan, g);
+                        draw_line(temp_p, false, 4 + safe_dist_down, Color.DarkCyan, g,adduct: down_adduct);
 
                     }
                 }
@@ -10787,9 +10798,12 @@ namespace Isotope_fitting
             }
             else
             {
+                int y_step =3;
+                int y_init = 0;
+                if (adduct) { y_step = -3; y_init =3; }
                 if (inter) { x1 = pf.X; x2 = x1; y1 = pf.Y; y2 = y1 + 6; x3 = x2; y3 = y2; }
                 else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y ; y2 = y1 - 3; y3 = y2; x3 = x2 - 6; }
-                else { x1 = pf.X; x2 = x1; y1 = pf.Y  ; y2 = y1 + 3; y3 = y2; x3 = x2 + 6; }
+                else { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init; y2 = y1 + y_step; y3 = y2; x3 = x2 + 6; }
             }            
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
@@ -11622,6 +11636,8 @@ namespace Isotope_fitting
             int y_step =5;
             int y_step_up =10;
             int step_x =6;
+            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
+            bool is_modif_enabled = adduct_chBx_temp.Checked;
             if (!is_riken)
             {
                 CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
@@ -11631,13 +11647,14 @@ namespace Isotope_fitting
                 CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
                 CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
                 CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
+                
                 if (dvw_chBx_temp.Checked)
                 {
-                    draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                    draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true, adduct: is_modif_enabled); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
                     pp.Y += 5;
-                    draw_line(pp, false, 0, Color.Turquoise, g, false, true); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                    draw_line(pp, false, 0, Color.Turquoise, g, false, true, adduct: is_modif_enabled); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                     pp.Y += 10;
-                    draw_line(pp, false, 0, Color.DarkCyan, g, false, true); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                    draw_line(pp, false, 0, Color.DarkCyan, g, false, true, adduct: is_modif_enabled); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                 }
                 else if (los_chkBox_temp.Checked)                    
                 {
@@ -11648,13 +11665,13 @@ namespace Isotope_fitting
                     if (cz_chBx_temp.Checked){clr2 = Color.Tomato;clr1 = Color.Firebrick; str = new string[] { "c-losses", "c", "z", "z-losses" }; }
                     if (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, 0, clr2, g,false,true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X+ step_x, pp.Y- y_step_up));
+                        draw_line(pp, true, 0, clr2, g,false,true, adduct: is_modif_enabled); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X+ step_x, pp.Y- y_step_up));
                         pp.Y += 10;
-                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                        draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
                         pp.Y += 10;
-                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step));
+                        draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step));
                         pp.Y += 10;
-                        draw_line(pp, false, 0, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                        draw_line(pp, false, 0, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                     }
                 }
                 else
@@ -11664,20 +11681,20 @@ namespace Isotope_fitting
                     int step = 0;
                     if (ax_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, step, clr1, g,false, true); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step));pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g,false, true, adduct: is_modif_enabled); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step));pp.Y += 20;
                     }
                     if (by_chBx_temp.Checked)
                     {
                         clr1 = Color.Blue; clr2 = Color.DodgerBlue;
-                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
                     }
                     if (cz_chBx_temp.Checked)
                     {
                         clr2 = Color.Tomato; clr1 = Color.Firebrick;
-                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
 
                     }
                     if ((intA_chBx_temp.Checked || intB_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked))
@@ -11731,10 +11748,10 @@ namespace Isotope_fitting
                     if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }                                       
                     if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, 4, clr2, g, false, true); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
-                        draw_line(pp, true, 0, clr1, g, false, true); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y +=10;
-                        draw_line(pp, false, 0, clr1, g, false, true); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
-                        draw_line(pp, false, 4, clr2, g, false, true); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
+                        draw_line(pp, true, 4, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                        draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y +=10;
+                        draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                        draw_line(pp, false, 4, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
                     }
                 }
                 else
@@ -11744,26 +11761,26 @@ namespace Isotope_fitting
                     int step = 0;
                     if (aw_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                     }
                     if (bx_chBx_temp.Checked)
                     {
                        clr1 = Color.Blue; clr2 = Color.DodgerBlue;
-                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
                     }
                     if (cy_chBx_temp.Checked)
                     {
                        clr2 = Color.Tomato; clr1 = Color.Firebrick;
-                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
                     }
                     if (dz_chBx_temp.Checked)
                     {
                         step =0; clr1 = Color.DeepPink; clr2 = Color.HotPink;
-                        draw_line(pp, true, step, clr1, g, false, true); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
+                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
                     }
                     if (int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
                     {
@@ -12692,7 +12709,7 @@ namespace Isotope_fitting
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = temp_iondraw[i];
-                if(!includeModif_charge_Btn.Checked && nn.Has_adduct) { continue; }
+                if(!includeModif_Btn.Checked && nn.Has_adduct) { continue; }
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith(up_type) || nn.Ion_type.StartsWith("("+ up_type))
@@ -15122,9 +15139,10 @@ namespace Isotope_fitting
             MessageBox.Show("Found "+ counter.ToString() + " out of "+ Fragments5.Count.ToString());
         }
 
-       
+
+
         #endregion
 
-        
+       
     }
 }
