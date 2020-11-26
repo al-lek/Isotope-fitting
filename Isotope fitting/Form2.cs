@@ -136,9 +136,7 @@ namespace Isotope_fitting
         int start_idx = 0;
         int end_idx = 0;
         public static double max_exp = 0.0;
-        public static List<WindowSet> windowList = new List<WindowSet>();
-        public static int window_count = 1;
-        public static int selected_window = 1000000;
+       
 
         private ListViewItemComparer _lvwItemComparer;
         #region colours     
@@ -3096,7 +3094,9 @@ namespace Isotope_fitting
                                                                       new ToolStripMenuItem("Remove",null, (s, e) => {if(frag_tree.SelectedNode!=null){ remove_node(frag_tree.SelectedNode.Name); } }),
                                                                       new ToolStripMenuItem("Remove Unchecked",null, (s, e) => {remove_node("",true); }),
                                                                       new ToolStripSeparator (),
-                                                                      new ToolStripMenuItem("Replace Extension",null, (s, e) => {replace_extension();  })
+                                                                      new ToolStripMenuItem("Replace Extension",null, (s, e) => {replace_extension();  }),
+                                                                      new ToolStripSeparator (),
+                                                                      new ToolStripMenuItem("Edit fragment properties",null, (s, e) => {show_frag_prop(frag_tree);  })
                 });
 
             }
@@ -3517,7 +3517,19 @@ namespace Isotope_fitting
             Clipboard.Clear();
             if(sb!=null && sb.Length>0) Clipboard.SetText(sb.ToString());
         }
-        
+        private void show_frag_prop(TreeView tree)
+        {
+            if (tree.SelectedNode != null)
+            {
+                TreeNode subNode = tree.SelectedNode;
+                if (!string.IsNullOrEmpty(subNode.Name))
+                {                    
+                    int i = Convert.ToInt32(subNode.Name);
+                    Frag_properties frm = new Frag_properties(Fragments2[i],i,this);
+                    frm.ShowDialog();
+                }
+            }
+        }
         private void frag_node_checkChanged(TreeNode node, bool is_checked)
         {
             this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
@@ -8878,6 +8890,17 @@ namespace Isotope_fitting
         #endregion
 
         #region UI
+        public void change_Fragment(FragForm fra, int index)
+        {
+            Fragments2[index].Name = fra.Name;
+            Fragments2[index].Ion_type = fra.Ion_type;
+            Fragments2[index].IndexTo = fra.IndexTo;
+            Fragments2[index].SortIdx = fra.SortIdx;
+            Fragments2[index].Index = fra.Index;
+            Fragments2[index].Fixed = fra.Fixed;
+            Fragments2[index].Has_adduct = fra.Has_adduct;
+
+        }
         private void enable_UIcontrols(string status)
         {
             if (status == "post load")
@@ -13170,7 +13193,7 @@ namespace Isotope_fitting
             bool is_legend = false;
             ToolStrip tt = GetControls(grp).OfType<ToolStrip>().First();
             is_logarithmic = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("log")).First().Checked;
-            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("losses")).First().Checked;
+            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Text.Contains("losses")).First().Checked;
             is_legend = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("legend")).First().Checked;
            
 
@@ -13245,7 +13268,7 @@ namespace Isotope_fitting
             bool is_losses = false;
             ToolStrip tt = GetControls(grp).OfType<ToolStrip>().First();
             is_logarithmic = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("log")).First().Checked;
-            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Name.Contains("losses")).First().Checked;
+            is_losses = tt.Items.OfType<ToolStripButton>().Where(l => l.Text.Contains("losses")).First().Checked;
             PlotView plus_plot = new PlotView() { Name = "plus_plot", BackColor = Color.White, /*Dock = System.Windows.Forms.DockStyle.Top,*/Height=100 };
             PlotModel model1 = new PlotModel { PlotType = PlotType.XY, IsLegendVisible = true,LegendOrientation=LegendOrientation.Horizontal,LegendPosition=LegendPosition.TopCenter,LegendPlacement=LegendPlacement.Outside, LegendFontSize = 13, TitleFontSize = 14, TitleFont = "Arial", DefaultFont = "Arial", Title = type + "  fragments", TitleColor = OxyColors.Green };
             plus_plot.Model = model1;
@@ -13318,6 +13341,8 @@ namespace Isotope_fitting
         }
         private void create_losses_diagram(string type, PlotView plus_plot, PlotView minus_plot, Panel checks_panel, Color[] clr,bool is_logarithmic,bool is_losses)
         {
+            //string pattern = @"[a-z][+-][1-9][0-9]?(?![(])|[a-z][+-][H][1-9][0-9]?(?!a-zA-Z)";
+            string pattern = @"["+type+"][+-][1-9][0-9]?(?![(])|[a-z][+-][H][1-9][0-9]?(?!a-zA-Z)";
             string text = "Amino Acid";
             if(is_riken) text = "Base";
             if (plus_plot.Model.Series != null) { plus_plot.Model.Series.Clear(); }
@@ -13384,6 +13409,7 @@ namespace Isotope_fitting
                     if (name.Contains("-1")) { shape = MarkerType.Square; /*style = OxyPlot.LineStyle.LongDash;*/ temp = clr[1]; }
                     else if (name.Contains("+2")) { shape = MarkerType.Diamond; /*style = OxyPlot.LineStyle.LongDashDotDot;*/ temp = clr[3]; }
                     else if (name.Contains("-2")) { shape = MarkerType.Triangle; /*style = OxyPlot.LineStyle.Dot;*/ temp = clr[0]; }
+                    else { shape = MarkerType.Triangle;  temp = clr[0]; }
                     List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                     List<ion> merged_names = new List<ion>();
                     List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
@@ -13392,22 +13418,32 @@ namespace Isotope_fitting
                     for (int i = 0; i < iondraw_count; i++)
                     {
                         ion nn = temp_iondraw[i];
-                        if (nn.Has_adduct) { continue; }
+                        //if (nn.Has_adduct) { continue; }
+                        if (name.Length == 1) { continue; }
                         if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                         if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
-                        if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
-                        if (name.Length > 1 && (nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
+                        //if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
+                        if ((nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge, true)))
                             {
-                                if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
+                                Match matches = Regex.Match(nn.Ion_type, pattern);
+                                if (matches.Success)
                                 {
-                                    merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
+                                    if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
+                                    {
+                                        merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
+                                    }
+                                    else
+                                    {
+                                        merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
+                                    }
                                 }
                                 else
                                 {
-                                    merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
+                                    Console.WriteLine(nn.Ion_type);
                                 }
+                               
                             }
                         }
                     }
@@ -14325,12 +14361,10 @@ namespace Isotope_fitting
             Fragments2.Clear(); ChemFormulas.Clear();
             selectedFragments.Clear();
             machine_sel_index = 9;
-            loadExp_Btn.Enabled = true;
-            selected_window = 1000000;
+            loadExp_Btn.Enabled = true;           
             bigPanel.Controls.Clear();
             candidate_fragments = 1;
-            //fit_sel_Btn.Enabled = false;
-            windowList.Clear();
+            //fit_sel_Btn.Enabled = false;          
             mark_neues = false; 
             neues = 0;
             Form4.active = false;
@@ -15147,5 +15181,6 @@ namespace Isotope_fitting
         #endregion
 
        
+
     }
 }

@@ -155,6 +155,12 @@
     <Compile Include="Form_types.Designer.cs">
       <DependentUpon>Form_types.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frag_properties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frag_properties.Designer.cs">
+      <DependentUpon>Frag_properties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers.cs" />
     <Compile Include="Oligonoucleotides\Form24_2.cs">
       <SubType>Form</SubType>
@@ -252,10 +258,10 @@
     <Compile Include="Plot Format\Form22.Designer.cs">
       <DependentUpon>Form22.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form23.cs">
+    <Compile Include="Plot Format\Form23.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form23.Designer.cs">
+    <Compile Include="Plot Format\Form23.Designer.cs">
       <DependentUpon>Form23.cs</DependentUpon>
     </Compile>
     <Compile Include="Peptides\Form24.cs">
@@ -308,7 +314,6 @@
     <Compile Include="Resolution_List.cs" />
     <Compile Include="SequenceTab.cs" />
     <Compile Include="SutherlandHodgman.cs" />
-    <Compile Include="WindowSet.cs" />
     <EmbeddedResource Include="ChangeStateForm.resx">
       <DependentUpon>ChangeStateForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -317,6 +322,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_types.resx">
       <DependentUpon>Form_types.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frag_properties.resx">
+      <DependentUpon>Frag_properties.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Oligonoucleotides\Form24_2.resx">
       <DependentUpon>Form24_2.cs</DependentUpon>
@@ -366,7 +374,7 @@
     <EmbeddedResource Include="Plot Format\Form22.resx">
       <DependentUpon>Form22.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form23.resx">
+    <EmbeddedResource Include="Plot Format\Form23.resx">
       <DependentUpon>Form23.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Peptides\Form24.resx">

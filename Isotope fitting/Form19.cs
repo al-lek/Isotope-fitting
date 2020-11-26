@@ -67,7 +67,7 @@ namespace Isotope_fitting
             if (help) { MessageBox.Show("Saves 'Filter' properties.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
 
             frm2.save_preferences();
-            //this.Close();
+            this.Close();
         }
         private void regions_chkBx_CheckedChanged(object sender, EventArgs e)
         {
