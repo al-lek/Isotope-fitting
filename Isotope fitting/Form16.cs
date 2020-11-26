@@ -362,13 +362,13 @@ namespace Isotope_fitting
             RichTextBox box = seq_tabControl.SelectedTab.Controls.OfType<RichTextBox>().First();
             int start = box.SelectionStart;
             int length = box.SelectionLength;
-            ColorDialog clrDlg = new ColorDialog();
-            clrDlg.Color = box.SelectionColor;
-            if (clrDlg.ShowDialog() == DialogResult.OK)
+            //ColorDialog clrDlg = new ColorDialog();
+            Form2.clrDlg.Color = box.SelectionColor;
+            if (Form2.clrDlg.ShowDialog() == DialogResult.OK)
             {
                 active_txt = true;
                 box.Select(start,length);
-                box.SelectionColor = clrDlg.Color;
+                box.SelectionColor = Form2.clrDlg.Color;
             }
         }
         //remove selected tab

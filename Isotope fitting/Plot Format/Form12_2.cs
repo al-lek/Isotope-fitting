@@ -32,10 +32,10 @@ namespace Isotope_fitting
 
         private void color_Btn_Click(object sender, EventArgs e)
         {
-            ColorDialog clrDlg = new ColorDialog();
-            if (clrDlg.ShowDialog() == DialogResult.OK)
+            //ColorDialog clrDlg = new ColorDialog();
+            if (Form2.clrDlg.ShowDialog() == DialogResult.OK)
             {
-                frm2.color_primary = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb());
+                frm2.color_primary = OxyColor.FromUInt32((uint)Form2.clrDlg.Color.ToArgb());
             }
         }
 

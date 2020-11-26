@@ -41,8 +41,8 @@ namespace Isotope_fitting
     using Path = List<Point64>;
     using Paths = List<List<Point64>>;
     public partial class Form2 : Form
-    {        
-
+    {
+        public static ColorDialog clrDlg = new ColorDialog();
         #region PARAMETER SET TAB FIT
         private Form24 frm24;
         private Form24_2 frm24_2;        
@@ -3135,7 +3135,7 @@ namespace Isotope_fitting
             else
             {
                 int idx = Convert.ToInt32(node.Name);
-                ColorDialog clrDlg = new ColorDialog();
+                //ColorDialog clrDlg = new ColorDialog();
                 if (clrDlg.ShowDialog() == DialogResult.OK)
                 {
                     custom_colors[idx + 1] = clrDlg.Color.ToArgb();
@@ -8242,7 +8242,10 @@ namespace Isotope_fitting
                                             fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                             //IonDraw.Last().Extension = "_H"; IonDraw.Last().Chain_type = 1;
                                         }
-                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }                                       
+                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
+                                        if (fitted_chem.Last().Name.Contains("SH")) {
+                                            fitted_chem.Last().Has_adduct = true;
+                                        }
                                     }
                                     else duplicate_count++;
                                 }
@@ -10311,7 +10314,7 @@ namespace Isotope_fitting
             int point_x, point_y;
             point_y = temp_y_init;
             point_x = temp_x_init;
-            int grp_num = 25;
+            double grp_num = 25;
             if (rdBtn50_temp.Checked) grp_num = 50;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
@@ -10330,7 +10333,7 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y + 10) * s.Length / grp_num; }
+            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y + 10) *(int) Math.Ceiling(s.Length / grp_num); }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
             
@@ -10550,7 +10553,7 @@ namespace Isotope_fitting
             int point_x, point_y;
             point_y = temp_y_init;
             point_x = temp_x_init;
-            int grp_num = 25;
+            double grp_num = 25;
             if (rdBtn50_temp.Checked) grp_num = 50;
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
@@ -10569,7 +10572,7 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y + 10) * s.Length / grp_num; }
+            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y + 10) * (int)Math.Ceiling(s.Length / grp_num); }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
            
@@ -10889,7 +10892,7 @@ namespace Isotope_fitting
 
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
-            int grp_num = 25;
+            double grp_num = 25;
             if (rdBtn50_temp.Checked) grp_num = 50;
             if (tab_mode && seq_extensionBox_temp.Enabled && seq_extensionBox_temp.SelectedIndex != -1)
             {
@@ -10903,7 +10906,7 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y+10) * s.Length / grp_num; }
+            if (s.Length / grp_num >= (400 / (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y+10) * (int)Math.Ceiling(s.Length / grp_num); }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
            
@@ -11134,7 +11137,7 @@ namespace Isotope_fitting
             SolidBrush sb = new SolidBrush(Color.Black);
             string s = Peptide;
             string s_ext = "";//the desired extension
-            int grp_num = 25;
+            double grp_num = 25;
             if (rdBtn50_temp.Checked) grp_num = 50;
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
@@ -11150,7 +11153,7 @@ namespace Isotope_fitting
                     }
                 }
             }
-            if (s.Length / grp_num >= (400/ (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y+10) * s.Length / grp_num; }
+            if (s.Length / grp_num >= (400/ (step_y + 10))) { draw_sequence_panel_temp.Height = (step_y+10) * (int)Math.Ceiling(s.Length / grp_num); }
             else { draw_sequence_panel_temp.Height = 400; }
             Point pp = new Point(point_x, point_y);
             //draw the rectangles
@@ -13342,7 +13345,7 @@ namespace Isotope_fitting
         private void create_losses_diagram(string type, PlotView plus_plot, PlotView minus_plot, Panel checks_panel, Color[] clr,bool is_logarithmic,bool is_losses)
         {
             //string pattern = @"[a-z][+-][1-9][0-9]?(?![(])|[a-z][+-][H][1-9][0-9]?(?!a-zA-Z)";
-            string pattern = @"["+type+"][+-][1-9][0-9]?(?![(])|[a-z][+-][H][1-9][0-9]?(?!a-zA-Z)";
+            string pattern = @"["+type+"][+-][1-9][0-9]?(?![(])";
             string text = "Amino Acid";
             if(is_riken) text = "Base";
             if (plus_plot.Model.Series != null) { plus_plot.Model.Series.Clear(); }
@@ -13406,9 +13409,9 @@ namespace Isotope_fitting
                     string name = check_names[k];
                     MarkerType shape = MarkerType.Circle;
                     OxyPlot.LineStyle style = OxyPlot.LineStyle.Solid;
-                    if (name.Contains("-1")) { shape = MarkerType.Square; /*style = OxyPlot.LineStyle.LongDash;*/ temp = clr[1]; }
-                    else if (name.Contains("+2")) { shape = MarkerType.Diamond; /*style = OxyPlot.LineStyle.LongDashDotDot;*/ temp = clr[3]; }
-                    else if (name.Contains("-2")) { shape = MarkerType.Triangle; /*style = OxyPlot.LineStyle.Dot;*/ temp = clr[0]; }
+                    if (name.Contains("-1")) { shape = MarkerType.Square; temp = clr[1]; }
+                    else if (name.Contains("+2")) { shape = MarkerType.Diamond; temp = clr[3]; }
+                    else if (name.Contains("-2")) { shape = MarkerType.Triangle;  temp = clr[0]; }
                     else { shape = MarkerType.Triangle;  temp = clr[0]; }
                     List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                     List<ion> merged_names = new List<ion>();
@@ -13423,27 +13426,20 @@ namespace Isotope_fitting
                         if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                         if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         //if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
+                        Match matches = Regex.Match(nn.Ion_type, pattern);
+                        if (!matches.Success) { Console.WriteLine(nn.Ion_type); continue; }
                         if ((nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge, true)))
                             {
-                                Match matches = Regex.Match(nn.Ion_type, pattern);
-                                if (matches.Success)
+                                if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
                                 {
-                                    if (merged_names.Count > 0 && merged_names.Last().SortIdx == nn.SortIdx && merged_names.Last().Charge == nn.Charge)
-                                    {
-                                        merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
-                                    }
-                                    else
-                                    {
-                                        merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
-                                    }
+                                    merged_names.Last().Max_intensity += nn.Max_intensity; merged_names.Last().Mz += " , " + nn.Mz; merged_names.Last().Name += " , " + nn.Name;
                                 }
                                 else
                                 {
-                                    Console.WriteLine(nn.Ion_type);
+                                    merged_names.Add(new ion { Extension = nn.Extension, Chain_type = nn.Chain_type, SortIdx = nn.SortIdx, Charge = nn.Charge, Index = nn.Index, Mz = nn.Mz, Max_intensity = nn.Max_intensity, Name = nn.Name, Has_adduct = nn.Has_adduct });
                                 }
-                               
                             }
                         }
                     }
@@ -13582,6 +13578,7 @@ namespace Isotope_fitting
         }
         private Color[] create_check_boxes(string type, Panel checks_panel, Panel pnl)
         {
+            string pattern = @"[" + type + "][+-][1-9][0-9]?(?![(])";
             Color[] clr = return_check_boxes_colors(type, checks_panel);
             string s_ext = "";
             string s_chain = Peptide;
@@ -13592,7 +13589,7 @@ namespace Isotope_fitting
             List<CheckBox> check_names = new List<CheckBox>();
             foreach (Control cc in checks_panel.Controls)
             {
-                check_names .AddRange( GetControls(cc).OfType<CheckBox>().ToList());
+                check_names.AddRange( GetControls(cc).OfType<CheckBox>().ToList());
             }
             if (check_names.Count > 0) checks_panel.Controls.Clear();
             FlowLayoutPanel flowpnl_1 = new FlowLayoutPanel() { Height= checks_panel.Height/2-20,Width= checks_panel.Width-10,Location=new Point(3,20)};
@@ -13608,8 +13605,11 @@ namespace Isotope_fitting
             for (int i = 0; i < iondraw_count; i++)
             {
                 ion nn = temp_iondraw[i];
+                if (nn.Ion_type.Count()==1) { continue; }
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
+                Match matches = Regex.Match(nn.Ion_type, pattern);
+                if (!matches.Success) { continue; }
                 if (nn.Ion_type.StartsWith(type) || nn.Ion_type.StartsWith("(" + type))
                 {
                     string tt = type.ToString();
@@ -13619,6 +13619,7 @@ namespace Isotope_fitting
                     if (index != -1 && iParser(nn.Ion_type[index + type.Length + 1].ToString()) != 0)
                     {
                         tt = nn.Ion_type.Substring(index, type.Length + 2);
+                        if (int.TryParse(nn.Ion_type.Substring(index + type.Length + 2), out int i2)) { tt = nn.Ion_type.Substring(index, type.Length + 3); }
                         if (check_names.Count == 0 || !check_names.Any(p => p.Text.Equals(tt)))
                         {
                             CheckBox ckbx = new CheckBox() { Text = tt, Checked = true };
@@ -13626,6 +13627,7 @@ namespace Isotope_fitting
                             else if (ckbx.Text.Contains("-1")) { ckbx.ForeColor = clr[1]; }
                             else if (ckbx.Text.Contains("+1")) { ckbx.ForeColor = clr[2]; }
                             else if (ckbx.Text.Contains("+2")) { ckbx.ForeColor = clr[3]; }
+                            else { ckbx.ForeColor = clr[3]; }
                             ckbx.CheckedChanged += (s, e) =>
                             {
                                 ckbx.Parent.Parent.Parent.Controls.OfType<Panel>().Where(l=>l.Name.Contains("plot")).First().Invalidate();
@@ -13635,8 +13637,7 @@ namespace Isotope_fitting
                                 if (e.Button == MouseButtons.Right)
                                 {
                                     ContextMenu ctxMn = new ContextMenu(new MenuItem[1] {
-                                        new MenuItem("Select Color", (ss, ee) =>{
-                                        ColorDialog clrDlg = new ColorDialog();
+                                        new MenuItem("Select Color", (ss, ee) =>{                                        
                                         if (clrDlg.ShowDialog() == DialogResult.OK){ckbx.ForeColor = clrDlg.Color; pnl.Invalidate();}
                                         })
                                     });

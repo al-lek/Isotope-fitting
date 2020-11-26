@@ -30,10 +30,10 @@ namespace Isotope_fitting
 
         private void hightlight_clr_Btn_Click(object sender, EventArgs e)
         {
-            ColorDialog clrDlg = new ColorDialog();
-            if (clrDlg.ShowDialog() == DialogResult.OK)
+            //ColorDialog clrDlg = new ColorDialog();
+            if (Form2.clrDlg.ShowDialog() == DialogResult.OK)
             {
-                temp_highlight_color = clrDlg.Color;
+                temp_highlight_color = Form2.clrDlg.Color;
                 hightlight_clr_Btn.BackColor= temp_highlight_color;
             }
         }

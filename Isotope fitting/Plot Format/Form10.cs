@@ -37,18 +37,18 @@ namespace Isotope_fitting
         #region tab1 Line Style
         private void expW1_Btn_Click(object sender, EventArgs e)
         {
-            ColorDialog clrDlg = new ColorDialog();            
-            if (clrDlg.ShowDialog() == DialogResult.OK) { frm2.exp_color = clrDlg.Color.ToArgb(); if (Form2.custom_colors.Count > 0) { Form2.custom_colors[0] = clrDlg.Color.ToArgb(); } }
+            //ColorDialog clrDlg = new ColorDialog();            
+            if (Form2.clrDlg.ShowDialog() == DialogResult.OK) { frm2.exp_color = Form2.clrDlg.Color.ToArgb(); if (Form2.custom_colors.Count > 0) { Form2.custom_colors[0] = Form2.clrDlg.Color.ToArgb(); } }
         }
         private void fitW1_Btn_Click(object sender, EventArgs e)
         {
-            ColorDialog clrDlg = new ColorDialog();
-            if (clrDlg.ShowDialog() == DialogResult.OK) { frm2.fit_color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb());  }
+            //ColorDialog clrDlg = new ColorDialog();
+            if (Form2.clrDlg.ShowDialog() == DialogResult.OK) { frm2.fit_color = OxyColor.FromUInt32((uint)Form2.clrDlg.Color.ToArgb());  }
         }
         private void peakW1_Btn_Click(object sender, EventArgs e)
         {
-            ColorDialog clrDlg = new ColorDialog();
-            if (clrDlg.ShowDialog() == DialogResult.OK) { frm2.peak_color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
+            //ColorDialog clrDlg = new ColorDialog();
+            if (Form2.clrDlg.ShowDialog() == DialogResult.OK) { frm2.peak_color = OxyColor.FromUInt32((uint)Form2.clrDlg.Color.ToArgb()); }
         }
         private void expW1_numUD_ValueChanged(object sender, EventArgs e)
         {

@@ -635,8 +635,8 @@ namespace Isotope_fitting
                 foreach (ListViewItem item in fragListView9.SelectedItems)
                 {
                     int frag_idx = System.Convert.ToInt32(item.SubItems[5].Text);
-                    ColorDialog clrDlg = new ColorDialog();
-                    if (clrDlg.ShowDialog() == DialogResult.OK) { Fragments3[frag_idx].Color = OxyColor.FromUInt32((uint)clrDlg.Color.ToArgb()); }
+                    //ColorDialog clrDlg = new ColorDialog();
+                    if (Form2.clrDlg.ShowDialog() == DialogResult.OK) { Fragments3[frag_idx].Color = OxyColor.FromUInt32((uint)Form2.clrDlg.Color.ToArgb()); }
                 }
             }
         }
