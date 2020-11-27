@@ -160,6 +160,7 @@ namespace Isotope_fitting
 
         private List<ChemiForm> select_fragments_riken()
         {
+            string pattern = @"^[+-][1-9][0-9]?(?![(])";
             List<ChemiForm> res = new List<ChemiForm>();          
             double extra_mz = 0;
             bool extra_mz_error = false;
@@ -169,6 +170,11 @@ namespace Isotope_fitting
             if (has_adduct)
             {
                 extra_name = extra_adduct.ToString();
+                Match matches = Regex.Match(extra_name, pattern);
+                if (matches.Success)
+                {
+                    extra_adduct = extra_adduct.Insert(1, "H");
+                }
                 extra_adduct = extra_adduct.Replace("B(A)", "C5H5N5").Replace("B(G)", "C5H5N5O1").Replace("B(T)", "C5H6N2O2");
                 bool add_ = true;
                 for (int i=0; i< extra_adduct.Length; i++)

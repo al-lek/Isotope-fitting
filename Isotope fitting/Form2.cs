@@ -13446,7 +13446,7 @@ namespace Isotope_fitting
                         if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                         //if (!nn.Ion_type.StartsWith(type) && !nn.Ion_type.StartsWith("(" + type)) { continue; }
                         Match matches = Regex.Match(nn.Ion_type, pattern);
-                        if (!matches.Success) { Console.WriteLine(nn.Ion_type); continue; }
+                        if (!matches.Success) {  continue; }
                         if ((nn.Ion_type.StartsWith(name) || nn.Ion_type.StartsWith("(" + name)))
                         {
                             if ((!nn.Ion_type.Contains("H2O") && !nn.Ion_type.Contains("NH3") && !nn.Ion_type.Contains("CO")) || (is_losses && search_primary(type, nn.SortIdx, s_ext, temp_iondraw, true, nn.Charge, true)))
