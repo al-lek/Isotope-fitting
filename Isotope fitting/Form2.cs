@@ -10166,6 +10166,7 @@ namespace Isotope_fitting
         //mouse down
         private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
         {
+            string pattern = @"[a-z][+-][1-9][0-9]?(?![(])";
             List<string[]> frags = new List<string[]>();
             List<ion> temp_iondraw = IonDraw.ToList();
             CI ion_comp = new CI();
@@ -10235,7 +10236,9 @@ namespace Isotope_fitting
                         }
                         if (is_primary)
                         {
-                            if(nn.Ion_type.Contains("+1")|| nn.Ion_type.Contains("+2") || nn.Ion_type.Contains("-1") || nn.Ion_type.Contains("-2"))
+                            Match matches = Regex.Match(nn.Ion_type, pattern);
+                            if (matches.Success) 
+                            //if (nn.Ion_type.Contains("+1")|| nn.Ion_type.Contains("+2") || nn.Ion_type.Contains("-1") || nn.Ion_type.Contains("-2"))
                             {
                                 if (nn.Ion_type.StartsWith("(")) { type = nn.Ion_type[1].ToString(); }
                                 else { type = nn.Ion_type[0].ToString(); }
@@ -10265,7 +10268,7 @@ namespace Isotope_fitting
                     //string message_string = sb.ToString();
                     Form_matrix frm_matrix = new Form_matrix(frags);
                     frm_matrix.Text = "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")";
-                    frm_matrix.ShowDialog();
+                    frm_matrix.Show();
                     return;
                 }
                 else
@@ -13355,6 +13358,8 @@ namespace Isotope_fitting
             List<ion> temp_iondraw = IonDraw.ToList();
             var s1a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2a = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
             var s1b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Red, }; var s2b = new ScatterSeries { MarkerType = MarkerType.Square, MarkerSize = 3, MarkerFill = OxyColors.Blue };
+            List<Color> clr1 = new List<Color>();
+            List<MarkerType> shape = new List<MarkerType>() { MarkerType.Circle, MarkerType.Square , MarkerType.Diamond , MarkerType.Triangle };
             int iondraw_count = temp_iondraw.Count;
             double maximum = 1.0;
             double minimum = -0.10 * maximum;
@@ -13387,7 +13392,7 @@ namespace Isotope_fitting
                 }
                 if (list.Count > 0)
                 {
-                    foreach (CheckBox vv in list) { if (vv.Checked) check_names.Add(vv.Text); }
+                    foreach (CheckBox vv in list) { if (vv.Checked) { check_names.Add(vv.Text); clr1.Add(vv.ForeColor); } }
                 }
                 if (is_logarithmic)
                 {
@@ -13405,17 +13410,20 @@ namespace Isotope_fitting
                 int count = check_names.Count();
                 for (int k = 0; k < count; k++)
                 {
-                    Color temp = clr[2];
                     string name = check_names[k];
-                    MarkerType shape = MarkerType.Circle;
+                    int ii_s =k;
+                    //int ii_c = k;
+                    if (ii_s > 3) { ii_s = k % 4;/* while (ii_c > 3) { ii_c =ii_c / 4; }*/ }
+                    MarkerType temp_shape = shape[ii_s];
+                    Color temp = clr1[k];
                     OxyPlot.LineStyle style = OxyPlot.LineStyle.Solid;
-                    if (name.Contains("-1")) { shape = MarkerType.Square; temp = clr[1]; }
-                    else if (name.Contains("+2")) { shape = MarkerType.Diamond; temp = clr[3]; }
-                    else if (name.Contains("-2")) { shape = MarkerType.Triangle;  temp = clr[0]; }
-                    else { shape = MarkerType.Triangle;  temp = clr[0]; }
+                    //if (name.Contains("-1")) { temp_shape = MarkerType.Square; temp = clr[1]; }
+                    //else if (name.Contains("+2")) { temp_shape = MarkerType.Diamond; temp = clr[3]; }
+                    //else if (name.Contains("-2")) { temp_shape = MarkerType.Triangle;  temp = clr[0]; }
+                    //else { temp_shape = MarkerType.Triangle;  temp = clr[0]; }
                     List<List<CustomDataPoint>> datapoint_list = create_datapoint_list();
                     List<ion> merged_names = new List<ion>();
-                    List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, shape);
+                    List<ScatterSeries> series_list = create_scatterseries(temp, name, "losses", 1, temp_shape);
                     LineSeries line_ = new LineSeries { StrokeThickness = line_width_2, Color = temp.ToOxyColor(), CanTrackerInterpolatePoints = false, LineStyle = style };
                     List<double[]> points_line_ = new List<double[]>();
                     for (int i = 0; i < iondraw_count; i++)
@@ -13582,6 +13590,7 @@ namespace Isotope_fitting
             Color[] clr = return_check_boxes_colors(type, checks_panel);
             string s_ext = "";
             string s_chain = Peptide;
+            int color_counter = 0;
             List<ion> temp_iondraw = IonDraw.ToList();
             int iondraw_count = temp_iondraw.Count;                      
             //if ion list is empty clear checkboxes and return
@@ -13592,8 +13601,8 @@ namespace Isotope_fitting
                 check_names.AddRange( GetControls(cc).OfType<CheckBox>().ToList());
             }
             if (check_names.Count > 0) checks_panel.Controls.Clear();
-            FlowLayoutPanel flowpnl_1 = new FlowLayoutPanel() { Height= checks_panel.Height/2-20,Width= checks_panel.Width-10,Location=new Point(3,20)};
-            FlowLayoutPanel flowpnl_2 = new FlowLayoutPanel() { Height = checks_panel.Height / 2-20, Width = checks_panel.Width-10, Location = new Point(3,20+pnl.Height / 2) };
+            FlowLayoutPanel flowpnl_1 = new FlowLayoutPanel() { Height= checks_panel.Height/2-20,Width= checks_panel.Width-10,Location=new Point(3,20),AutoScroll=true,AutoScrollMargin=new Size(1,0)};
+            FlowLayoutPanel flowpnl_2 = new FlowLayoutPanel() { Height = checks_panel.Height / 2-20, Width = checks_panel.Width-10, Location = new Point(3,20+pnl.Height / 2), AutoScroll = true, AutoScrollMargin = new Size(1, 0) };
             if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
@@ -13623,11 +13632,16 @@ namespace Isotope_fitting
                         if (check_names.Count == 0 || !check_names.Any(p => p.Text.Equals(tt)))
                         {
                             CheckBox ckbx = new CheckBox() { Text = tt, Checked = true };
-                            if (ckbx.Text.Contains("-2")) { ckbx.ForeColor= clr[0]; }
+                            if (ckbx.Text.Contains("-2")) { ckbx.ForeColor = clr[0]; }
                             else if (ckbx.Text.Contains("-1")) { ckbx.ForeColor = clr[1]; }
                             else if (ckbx.Text.Contains("+1")) { ckbx.ForeColor = clr[2]; }
                             else if (ckbx.Text.Contains("+2")) { ckbx.ForeColor = clr[3]; }
-                            else { ckbx.ForeColor = clr[3]; }
+                            else
+                            {
+                                if (color_counter>3) {  color_counter = 0; }
+                                ckbx.ForeColor = clr[color_counter];
+                                color_counter ++ ;
+                            }
                             ckbx.CheckedChanged += (s, e) =>
                             {
                                 ckbx.Parent.Parent.Parent.Controls.OfType<Panel>().Where(l=>l.Name.Contains("plot")).First().Invalidate();
@@ -13653,7 +13667,9 @@ namespace Isotope_fitting
             check_names = check_names.OrderBy(p => p.Text).ToList();
             foreach (CheckBox ckbx in check_names)
             {
-                if(ckbx.Text.Contains("+"))flowpnl_1.Controls.Add(ckbx);
+                //ckbx.Width = checks_panel.Width - 20;
+                ckbx.AutoSize = true;
+                if (ckbx.Text.Contains("+"))flowpnl_1.Controls.Add(ckbx);
                 else flowpnl_2.Controls.Add(ckbx);
             }
             checks_panel.Controls.AddRange(new Control[] { flowpnl_1 , flowpnl_2});
