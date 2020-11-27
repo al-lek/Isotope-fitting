@@ -10814,7 +10814,7 @@ namespace Isotope_fitting
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
         }
-        private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false,bool legend=false, bool adduct = false)
+        private void draw_line(Point pf, bool up, int step, Color color_draw, Graphics g, bool inter = false,bool legend=false, bool adduct = false, int times=0)
         {
             int x1, x2, x3, y1, y2, y3;
             Pen mypen = new Pen(color_draw, 2F);
@@ -10828,12 +10828,13 @@ namespace Isotope_fitting
             }
             else
             {
-                int y_step =3;
-                int y_init = 0;
-                if (adduct) { y_step = -3; y_init =3; }
+                int y_step1 =3;int y_init1 = 0;
+                int y_step2 = 3; int y_init2 = 0;
+                if (adduct && times==0) { y_step1 = -3; y_init1 =3; }
+                if (adduct && times == 1) { y_step2 = -3; y_init2 = -3; }
                 if (inter) { x1 = pf.X; x2 = x1; y1 = pf.Y; y2 = y1 + 6; x3 = x2; y3 = y2; }
-                else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y ; y2 = y1 - 3; y3 = y2; x3 = x2 - 6; }
-                else { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init; y2 = y1 + y_step; y3 = y2; x3 = x2 + 6; }
+                else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y+ y_init2; y2 = y1 - y_step2; y3 = y2; x3 = x2 - 6; }
+                else { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init1; y2 = y1 + y_step1; y3 = y2; x3 = x2 + 6; }
             }            
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
@@ -11661,6 +11662,7 @@ namespace Isotope_fitting
             int height = pnl.Size.Height - (padding * 2);
             Panel seq_pnl = pnl.Parent as Panel;
             Panel draw_sequence_panel_temp = seq_pnl.Parent as Panel;
+            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
             Point pp = new Point(5, padding);
             Graphics g = e.Graphics;
             SolidBrush sb = new SolidBrush(Color.Black);
@@ -11668,8 +11670,9 @@ namespace Isotope_fitting
             int y_step =5;
             int y_step_up =10;
             int step_x =6;
-            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
             bool is_modif_enabled = adduct_chBx_temp.Checked;
+            int times_repeated = 1;//when is_modif_enabled=true the legends are printed twice (once for the unmofies primaries(up) and once for the modified primaries(down))
+            if (is_modif_enabled) times_repeated = 2;
             if (!is_riken)
             {
                 CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
@@ -11679,88 +11682,91 @@ namespace Isotope_fitting
                 CheckBox intA_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
                 CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
                 CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
-                
-                if (dvw_chBx_temp.Checked)
+                for (int m=0;m< times_repeated; m++)
                 {
-                    draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true, adduct: is_modif_enabled); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
-                    pp.Y += 5;
-                    draw_line(pp, false, 0, Color.Turquoise, g, false, true, adduct: is_modif_enabled); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
-                    pp.Y += 10;
-                    draw_line(pp, false, 0, Color.DarkCyan, g, false, true, adduct: is_modif_enabled); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
-                }
-                else if (los_chkBox_temp.Checked)                    
-                {
-                    Color clr1 = Color.Green;
-                    Color clr2 = Color.LimeGreen;
-                    string[] str = new string[] { "a-losses", "a", "x", "x-losses" };
-                    if (by_chBx_temp.Checked){clr2 = Color.DodgerBlue;clr1 = Color.Blue; str = new string[] { "b-losses", "b", "y", "y-losses" }; }
-                    if (cz_chBx_temp.Checked){clr2 = Color.Tomato;clr1 = Color.Firebrick; str = new string[] { "c-losses", "c", "z", "z-losses" }; }
-                    if (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked)
+                    if (m==1) { pp.Y += 5; g.DrawString("Modified", pnl.Font, sb, new Point(0 , pp.Y - y_step)); pp.Y += 20; }
+                    if (dvw_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, 0, clr2, g,false,true, adduct: is_modif_enabled); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X+ step_x, pp.Y- y_step_up));
+                        draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                        pp.Y += 5;
+                        draw_line(pp, false, 0, Color.Turquoise, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                         pp.Y += 10;
-                        draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
-                        pp.Y += 10;
-                        draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step));
-                        pp.Y += 10;
-                        draw_line(pp, false, 0, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                        draw_line(pp, false, 0, Color.DarkCyan, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                     }
-                }
-                else
-                {
-                    Color clr1 = Color.Green;
-                    Color clr2 = Color.LimeGreen;
-                    int step = 0;
-                    if (ax_chBx_temp.Checked)
+                    else if (los_chkBox_temp.Checked)
                     {
-                        draw_line(pp, true, step, clr1, g,false, true, adduct: is_modif_enabled); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step));pp.Y += 20;
-                    }
-                    if (by_chBx_temp.Checked)
-                    {
-                        clr1 = Color.Blue; clr2 = Color.DodgerBlue;
-                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
-                    }
-                    if (cz_chBx_temp.Checked)
-                    {
-                        clr2 = Color.Tomato; clr1 = Color.Firebrick;
-                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up));pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));pp.Y += 20;
-
-                    }
-                    if ((intA_chBx_temp.Checked || intB_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked))
-                    {
-                        if (intA_chBx_temp.Checked) { clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up/2)); pp.Y += 15;}
-                        if (intB_chBx_temp.Checked) { clr1 = Color.MediumOrchid; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up/2)); pp.Y += 15;}
+                        Color clr1 = Color.Green;
+                        Color clr2 = Color.LimeGreen;
+                        string[] str = new string[] { "a-losses", "a", "x", "x-losses" };
+                        if (by_chBx_temp.Checked) { clr2 = Color.DodgerBlue; clr1 = Color.Blue; str = new string[] { "b-losses", "b", "y", "y-losses" }; }
+                        if (cz_chBx_temp.Checked) { clr2 = Color.Tomato; clr1 = Color.Firebrick; str = new string[] { "c-losses", "c", "z", "z-losses" }; }
+                        if (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked)
+                        {
+                            draw_line(pp, true, 0, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                            pp.Y += 10;
+                            draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                            pp.Y += 10;
+                            draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                            pp.Y += 10;
+                            draw_line(pp, false, 0, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                        }
                     }
                     else
                     {
-                        bool is_left = false;
-                        bool is_up = true;
-                        step = 6;
-                        if (intA_chBx_temp.Checked )
+                        Color clr1 = Color.Green;
+                        Color clr2 = Color.LimeGreen;
+                        int step = 0;
+                        if (ax_chBx_temp.Checked)
                         {
-                            is_up = true;
-                            clr1 = Color.Green;
-                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step_up)); pp.Y += 10;
-                            is_up = false;
-                            //draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.a-H20", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                            //draw_internal_riken_line(pp, is_left, is_up, 1 * step, clr1, g, true); g.DrawString("int.a-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, clr1, g, true); g.DrawString("int.a-losses", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 25;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
-                        if (intB_chBx_temp.Checked )
+                        if (by_chBx_temp.Checked)
                         {
-                            clr1 = Color.Blue;
-                            is_up = true;
-                            draw_internal_riken_line(pp, is_left, is_up,0* step, clr1, g, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
-                            is_up = false;
-                            //draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.b-H20", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                            //draw_internal_riken_line(pp, is_left, is_up, 1 * step, clr1, g, true); g.DrawString("int.b-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, clr1, g, true); g.DrawString("int.b-losses", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 25;
-                        }                       
+                            clr1 = Color.Blue; clr2 = Color.DodgerBlue;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }
+                        if (cz_chBx_temp.Checked)
+                        {
+                            clr2 = Color.Tomato; clr1 = Color.Firebrick;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+
+                        }
+                        if (m == 0 && (intA_chBx_temp.Checked || intB_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked))
+                        {
+                            if (intA_chBx_temp.Checked) { clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 2)); pp.Y += 15; }
+                            if (intB_chBx_temp.Checked) { clr1 = Color.MediumOrchid; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 2)); pp.Y += 15; }
+                        }
+                        else if (m == 0 )
+                        {
+                            bool is_left = false;
+                            bool is_up = true;
+                            step = 6;
+                            if (intA_chBx_temp.Checked)
+                            {
+                                is_up = true;
+                                clr1 = Color.Green;
+                                draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                                is_up = false;
+                                //draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.a-H20", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                                //draw_internal_riken_line(pp, is_left, is_up, 1 * step, clr1, g, true); g.DrawString("int.a-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                                draw_internal_riken_line(pp, is_left, is_up, 2 * step, clr1, g, true); g.DrawString("int.a-losses", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 25;
+                            }
+                            if (intB_chBx_temp.Checked)
+                            {
+                                clr1 = Color.Blue;
+                                is_up = true;
+                                draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                                is_up = false;
+                                //draw_internal_riken_line(pp, is_left, is_up, 0 * step, clr1, g, true); g.DrawString("int.b-H20", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                                //draw_internal_riken_line(pp, is_left, is_up, 1 * step, clr1, g, true); g.DrawString("int.b-NH3", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                                draw_internal_riken_line(pp, is_left, is_up, 2 * step, clr1, g, true); g.DrawString("int.b-losses", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 25;
+                            }
+                        }
                     }
-                } 
+                }
             }
             else
             {
@@ -11770,81 +11776,86 @@ namespace Isotope_fitting
                 CheckBox cy_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("cz_chBx")).ToList().FirstOrDefault();
                 CheckBox dz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
                 CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
-                if (los_chkBox_temp.Checked )
+                for (int m = 0; m < times_repeated; m++)
                 {
-                    Color clr1 = Color.LimeGreen;
-                    Color clr2 = Color.Green;
-                    string[] str = new string[] { "a-losses", "a", "w", "w-losses" };
-                    if (bx_chBx_temp.Checked) { clr1 = Color.DodgerBlue; clr2 = Color.Blue; str = new string[] { "b-losses", "b", "x", "x-losses" }; }
-                    if (cy_chBx_temp.Checked) { clr1 = Color.Tomato; clr2 = Color.Firebrick; str = new string[] { "c-losses", "c", "y", "y-losses" }; }
-                    if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }                                       
-                    if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
+                    if (m == 1) { pp.Y += 5; g.DrawString("Modified", pnl.Font, sb, new Point(0, pp.Y - y_step)); pp.Y += 20; }
+
+                    if (los_chkBox_temp.Checked)
                     {
-                        draw_line(pp, true, 4, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
-                        draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y +=10;
-                        draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
-                        draw_line(pp, false, 4, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
+                        Color clr1 = Color.LimeGreen;
+                        Color clr2 = Color.Green;
+                        string[] str = new string[] { "a-losses", "a", "w", "w-losses" };
+                        if (bx_chBx_temp.Checked) { clr1 = Color.DodgerBlue; clr2 = Color.Blue; str = new string[] { "b-losses", "b", "x", "x-losses" }; }
+                        if (cy_chBx_temp.Checked) { clr1 = Color.Tomato; clr2 = Color.Firebrick; str = new string[] { "c-losses", "c", "y", "y-losses" }; }
+                        if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }
+                        if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
+                        {
+                            draw_line(pp, true, 4, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                            draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                            draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                            draw_line(pp, false, 4, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
+                        }
                     }
-                }
-                else
-                {
-                    Color clr1 = Color.Green;
-                    Color clr2 = Color.LimeGreen;
-                    int step = 0;
-                    if (aw_chBx_temp.Checked)
+                    else
                     {
-                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        Color clr1 = Color.Green;
+                        Color clr2 = Color.LimeGreen;
+                        int step = 0;
+                        if (aw_chBx_temp.Checked)
+                        {
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }
+                        if (bx_chBx_temp.Checked)
+                        {
+                            clr1 = Color.Blue; clr2 = Color.DodgerBlue;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }
+                        if (cy_chBx_temp.Checked)
+                        {
+                            clr2 = Color.Tomato; clr1 = Color.Firebrick;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }
+                        if (dz_chBx_temp.Checked)
+                        {
+                            step = 0; clr1 = Color.DeepPink; clr2 = Color.HotPink;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                        }
+                        if (m == 0 && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
+                        {
+                            clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 2)); pp.Y += 15;
+                        }
+                        else if (m==0 && int_chBx_temp.Checked)
+                        {                           
+                            bool is_left = true;
+                            bool is_up = true;
+                            step = 0;
+                            is_up = true; is_left = true;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g, true); g.DrawString("int[-,a]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            is_left = false;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 20;
+                            is_up = false; is_left = true;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g, true); g.DrawString("int[-,a]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            is_left = false;
+                            draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15; ;
+                            draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                            draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
+                        }
                     }
-                    if (bx_chBx_temp.Checked)
-                    {
-                       clr1 = Color.Blue; clr2 = Color.DodgerBlue;
-                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
-                    }
-                    if (cy_chBx_temp.Checked)
-                    {
-                       clr2 = Color.Tomato; clr1 = Color.Firebrick;
-                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
-                    }
-                    if (dz_chBx_temp.Checked)
-                    {
-                        step =0; clr1 = Color.DeepPink; clr2 = Color.HotPink;
-                        draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                        draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step)); pp.Y += 20;
-                    }
-                    if (int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
-                    {
-                         clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true,true); g.DrawString("int.", pnl.Font, sb, new Point(pp.X + step_x, pp.Y-  y_step_up/2)); pp.Y += 15;
-                    }
-                    else if(int_chBx_temp.Checked)
-                    {
-                        bool is_left = true;
-                        bool is_up = true;
-                        step = 0;        
-                        is_up = true; is_left = true;
-                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g,true); g.DrawString("int[-,a]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y- y_step_up)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
-                        is_left = false;
-                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 20;
-                        is_up = false; is_left = true;
-                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.Green, g, true); g.DrawString("int[-,a]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y -  y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.Blue, g, true); g.DrawString("int[-,b]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Firebrick, g, true); g.DrawString("int[-,c]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.DeepPink, g, true); g.DrawString("int[-,d]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y-y_step)); pp.Y += 15;
-                        is_left = false;
-                        draw_internal_riken_line(pp, is_left, is_up, 0 * step, Color.LimeGreen, g, true); g.DrawString("int[w,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 1 * step, Color.DodgerBlue, g, true); g.DrawString("int[x,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15; ;
-                        draw_internal_riken_line(pp, is_left, is_up, 2 * step, Color.Tomato, g, true); g.DrawString("int[y,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                        draw_internal_riken_line(pp, is_left, is_up, 3 * step, Color.HotPink, g, true); g.DrawString("int[z,-]-B", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 15;
-                    }
-                } 
+                }                    
             }
         }
         private void seqLegendBtn_CheckedChanged(object sender, EventArgs e)
