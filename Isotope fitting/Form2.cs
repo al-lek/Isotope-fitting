@@ -3625,7 +3625,9 @@ namespace Isotope_fitting
                                         new ToolStripSeparator (),
                                         new ToolStripMenuItem("Copy fragment",null, (s, e) => { copyTree_toClip(fragTypes_tree, false,true); }),
                                         new ToolStripMenuItem("Copy Checked",null, (s, e) => { copyTree_toClip(fragTypes_tree, false); }),
-                                        new ToolStripMenuItem("Copy All", null,(s, e) => { copyTree_toClip(fragTypes_tree, true); })
+                                        new ToolStripMenuItem("Copy All", null,(s, e) => { copyTree_toClip(fragTypes_tree, true); }),
+                                        new ToolStripSeparator (),
+                                        new ToolStripMenuItem("Edit fragment properties",null, (s, e) => {show_frag_prop(fragTypes_tree);  })
                 });
             }
             fragTypes_tree.BeginUpdate();
@@ -8902,7 +8904,14 @@ namespace Isotope_fitting
             Fragments2[index].Index = fra.Index;
             Fragments2[index].Fixed = fra.Fixed;
             Fragments2[index].Has_adduct = fra.Has_adduct;
-
+            List<TreeNode> all_nodes_frag_tree = get_all_nodes(frag_tree);
+            TreeNode curr_node1 = all_nodes_frag_tree.FirstOrDefault(n => n.Name == (index).ToString());
+            curr_node1.Text = Fragments2[index].Name + "  -  " + Fragments2[index].Mz + "  -  " + Fragments2[index].InputFormula + "  -  " + Fragments2[index].PPM_Error.ToString("0.##") + "  -  " +
+                                       (Fragments2[index].Factor * Fragments2[index].Max_intensity).ToString("0");
+            List<TreeNode> all_nodes_frag_types = get_all_nodes(fragTypes_tree);
+            TreeNode curr_node2 = all_nodes_frag_types.FirstOrDefault(n => n.Name == (index).ToString());
+            curr_node2.Text = Fragments2[index].Name + "  -  " + Fragments2[index].Mz + "  -  " + Fragments2[index].InputFormula + "  -  " + Fragments2[index].PPM_Error.ToString("0.##") + "  -  " +
+                                       (Fragments2[index].Factor * Fragments2[index].Max_intensity).ToString("0");
         }
         private void enable_UIcontrols(string status)
         {
