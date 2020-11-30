@@ -517,7 +517,7 @@ namespace Isotope_fitting
             if (ChemFormulas.Count == 0) { MessageBox.Show("First load MS Product File and then press 'Calculate'", "Error in calculations!"); calcBtn.Enabled = true; return; }
             has_adduct = AdductBtn.Checked;
             if (has_adduct)
-            {
+            {               
                 extra_adduct = adduct_txtBx.Text.Replace(Environment.NewLine, " ").ToString();
                 extra_adduct = extra_adduct.Replace("\t", "");
                 extra_adduct = extra_adduct.Replace(" ", "");

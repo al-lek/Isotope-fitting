@@ -229,6 +229,7 @@ namespace Isotope_fitting
             this.ppm_includeModif_Btn = new System.Windows.Forms.ToolStripButton();
             this.panel1_tab2 = new System.Windows.Forms.Panel();
             this.draw_sequence_panelCopy2 = new System.Windows.Forms.Panel();
+            this.primary_chkBxCopy2 = new System.Windows.Forms.CheckBox();
             this.has_adduct_chkBxCopy2 = new System.Windows.Forms.CheckBox();
             this.dvw_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.seq_LblCopy2 = new System.Windows.Forms.Label();
@@ -251,6 +252,7 @@ namespace Isotope_fitting
             this.seq_lbl_panelCopy2 = new System.Windows.Forms.Panel();
             this.draw_BtnCopy2 = new System.Windows.Forms.Button();
             this.draw_sequence_panelCopy1 = new System.Windows.Forms.Panel();
+            this.primary_chkBxCopy1 = new System.Windows.Forms.CheckBox();
             this.has_adduct_chkBxCopy1 = new System.Windows.Forms.CheckBox();
             this.dvw_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.seq_LblCopy1 = new System.Windows.Forms.Label();
@@ -273,6 +275,7 @@ namespace Isotope_fitting
             this.seq_lbl_panelCopy1 = new System.Windows.Forms.Panel();
             this.draw_BtnCopy1 = new System.Windows.Forms.Button();
             this.draw_sequence_panel = new System.Windows.Forms.Panel();
+            this.primary_chkBx = new System.Windows.Forms.CheckBox();
             this.has_adduct_chkBx = new System.Windows.Forms.CheckBox();
             this.dvw_chBx = new System.Windows.Forms.CheckBox();
             this.seq_Lbl = new System.Windows.Forms.Label();
@@ -504,6 +507,8 @@ namespace Isotope_fitting
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
+            this.includePrimary_Btn = new System.Windows.Forms.ToolStripButton();
+            this.ppm_includePrimary_Btn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -721,7 +726,7 @@ namespace Isotope_fitting
             this.add_sequencePanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("add_sequencePanel1.BackgroundImage")));
             this.add_sequencePanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.add_sequencePanel1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 339);
+            this.add_sequencePanel1.Location = new System.Drawing.Point(7, 365);
             this.add_sequencePanel1.Name = "add_sequencePanel1";
             this.add_sequencePanel1.Size = new System.Drawing.Size(30, 30);
             this.add_sequencePanel1.TabIndex = 11;
@@ -732,7 +737,7 @@ namespace Isotope_fitting
             // rdBtn50Copy2
             // 
             this.rdBtn50Copy2.AutoSize = true;
-            this.rdBtn50Copy2.Location = new System.Drawing.Point(7, 330);
+            this.rdBtn50Copy2.Location = new System.Drawing.Point(10, 351);
             this.rdBtn50Copy2.Name = "rdBtn50Copy2";
             this.rdBtn50Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy2.TabIndex = 10;
@@ -745,7 +750,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25Copy2.AutoSize = true;
             this.rdBtn25Copy2.Checked = true;
-            this.rdBtn25Copy2.Location = new System.Drawing.Point(7, 308);
+            this.rdBtn25Copy2.Location = new System.Drawing.Point(10, 329);
             this.rdBtn25Copy2.Name = "rdBtn25Copy2";
             this.rdBtn25Copy2.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy2.TabIndex = 9;
@@ -758,7 +763,7 @@ namespace Isotope_fitting
             // rdBtn50Copy1
             // 
             this.rdBtn50Copy1.AutoSize = true;
-            this.rdBtn50Copy1.Location = new System.Drawing.Point(5, 327);
+            this.rdBtn50Copy1.Location = new System.Drawing.Point(5, 349);
             this.rdBtn50Copy1.Name = "rdBtn50Copy1";
             this.rdBtn50Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50Copy1.TabIndex = 10;
@@ -771,7 +776,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25Copy1.AutoSize = true;
             this.rdBtn25Copy1.Checked = true;
-            this.rdBtn25Copy1.Location = new System.Drawing.Point(5, 302);
+            this.rdBtn25Copy1.Location = new System.Drawing.Point(5, 324);
             this.rdBtn25Copy1.Name = "rdBtn25Copy1";
             this.rdBtn25Copy1.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25Copy1.TabIndex = 9;
@@ -784,7 +789,7 @@ namespace Isotope_fitting
             // rdBtn50
             // 
             this.rdBtn50.AutoSize = true;
-            this.rdBtn50.Location = new System.Drawing.Point(7, 315);
+            this.rdBtn50.Location = new System.Drawing.Point(7, 336);
             this.rdBtn50.Name = "rdBtn50";
             this.rdBtn50.Size = new System.Drawing.Size(37, 17);
             this.rdBtn50.TabIndex = 10;
@@ -797,7 +802,7 @@ namespace Isotope_fitting
             // 
             this.rdBtn25.AutoSize = true;
             this.rdBtn25.Checked = true;
-            this.rdBtn25.Location = new System.Drawing.Point(7, 297);
+            this.rdBtn25.Location = new System.Drawing.Point(7, 318);
             this.rdBtn25.Name = "rdBtn25";
             this.rdBtn25.Size = new System.Drawing.Size(37, 17);
             this.rdBtn25.TabIndex = 9;
@@ -2027,12 +2032,13 @@ namespace Isotope_fitting
             this.toolStrip3.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.primary_settingsBtn,
+            this.includePrimary_Btn,
             this.includeModif_Btn});
             this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip3.Location = new System.Drawing.Point(170, 0);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip3.Size = new System.Drawing.Size(79, 40);
+            this.toolStrip3.Size = new System.Drawing.Size(113, 40);
             this.toolStrip3.TabIndex = 29;
             // 
             // primary_settingsBtn
@@ -2065,7 +2071,7 @@ namespace Isotope_fitting
             this.includeModif_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.includeModif_Btn.Name = "includeModif_Btn";
             this.includeModif_Btn.Size = new System.Drawing.Size(34, 37);
-            this.includeModif_Btn.Text = "Include modifications";
+            this.includeModif_Btn.Text = "Display modified primary";
             this.includeModif_Btn.CheckedChanged += new System.EventHandler(this.includeModif_Btn_CheckedChanged);
             // 
             // label1
@@ -2784,6 +2790,7 @@ namespace Isotope_fitting
             this.ppmCopy_Btn,
             this.ppm_legend_Btn,
             this.ppm_extract_btn,
+            this.ppm_includePrimary_Btn,
             this.ppm_includeModif_Btn});
             this.ppm_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ppm_toolStrip.Location = new System.Drawing.Point(540, 0);
@@ -2835,14 +2842,14 @@ namespace Isotope_fitting
             // 
             this.extractPlotToolStripMenuItem9.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem9.Image")));
             this.extractPlotToolStripMenuItem9.Name = "extractPlotToolStripMenuItem9";
-            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(134, 22);
+            this.extractPlotToolStripMenuItem9.Size = new System.Drawing.Size(189, 32);
             this.extractPlotToolStripMenuItem9.Text = "Extract plot";
             this.extractPlotToolStripMenuItem9.Click += new System.EventHandler(this.extractPlotToolStripMenuItem9_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(189, 32);
             this.settingsToolStripMenuItem.Text = "Properties";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -2854,7 +2861,7 @@ namespace Isotope_fitting
             this.ppm_includeModif_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ppm_includeModif_Btn.Name = "ppm_includeModif_Btn";
             this.ppm_includeModif_Btn.Size = new System.Drawing.Size(36, 29);
-            this.ppm_includeModif_Btn.Text = "Include modifications";
+            this.ppm_includeModif_Btn.Text = "Display modified primary";
             this.ppm_includeModif_Btn.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
             // 
             // panel1_tab2
@@ -2874,6 +2881,7 @@ namespace Isotope_fitting
             // 
             this.draw_sequence_panelCopy2.AutoScroll = true;
             this.draw_sequence_panelCopy2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.draw_sequence_panelCopy2.Controls.Add(this.primary_chkBxCopy2);
             this.draw_sequence_panelCopy2.Controls.Add(this.has_adduct_chkBxCopy2);
             this.draw_sequence_panelCopy2.Controls.Add(this.dvw_chBxCopy2);
             this.draw_sequence_panelCopy2.Controls.Add(this.seq_LblCopy2);
@@ -2898,14 +2906,27 @@ namespace Isotope_fitting
             this.draw_sequence_panelCopy2.TabIndex = 12;
             this.draw_sequence_panelCopy2.Visible = false;
             // 
+            // primary_chkBxCopy2
+            // 
+            this.primary_chkBxCopy2.AutoSize = true;
+            this.primary_chkBxCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.primary_chkBxCopy2.Location = new System.Drawing.Point(10, 178);
+            this.primary_chkBxCopy2.Name = "primary_chkBxCopy2";
+            this.primary_chkBxCopy2.Size = new System.Drawing.Size(67, 17);
+            this.primary_chkBxCopy2.TabIndex = 23;
+            this.primary_chkBxCopy2.Text = "Primary";
+            this.primary_chkBxCopy2.UseVisualStyleBackColor = true;
+            this.primary_chkBxCopy2.Visible = false;
+            // 
             // has_adduct_chkBxCopy2
             // 
             this.has_adduct_chkBxCopy2.AutoSize = true;
-            this.has_adduct_chkBxCopy2.Location = new System.Drawing.Point(10, 184);
+            this.has_adduct_chkBxCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.has_adduct_chkBxCopy2.Location = new System.Drawing.Point(10, 189);
             this.has_adduct_chkBxCopy2.Name = "has_adduct_chkBxCopy2";
-            this.has_adduct_chkBxCopy2.Size = new System.Drawing.Size(60, 17);
+            this.has_adduct_chkBxCopy2.Size = new System.Drawing.Size(74, 30);
             this.has_adduct_chkBxCopy2.TabIndex = 22;
-            this.has_adduct_chkBxCopy2.Text = "Adduct";
+            this.has_adduct_chkBxCopy2.Text = "Modified\r\nPrimary";
             this.has_adduct_chkBxCopy2.UseVisualStyleBackColor = true;
             // 
             // dvw_chBxCopy2
@@ -2933,7 +2954,7 @@ namespace Isotope_fitting
             // highlight_ibt_ckBxCopy2
             // 
             this.highlight_ibt_ckBxCopy2.AutoSize = true;
-            this.highlight_ibt_ckBxCopy2.Location = new System.Drawing.Point(7, 274);
+            this.highlight_ibt_ckBxCopy2.Location = new System.Drawing.Point(10, 295);
             this.highlight_ibt_ckBxCopy2.Name = "highlight_ibt_ckBxCopy2";
             this.highlight_ibt_ckBxCopy2.Size = new System.Drawing.Size(69, 17);
             this.highlight_ibt_ckBxCopy2.TabIndex = 20;
@@ -2945,11 +2966,13 @@ namespace Isotope_fitting
             // 
             this.seq_extensionBoxCopy2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seq_extensionBoxCopy2.Enabled = false;
+            this.seq_extensionBoxCopy2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.seq_extensionBoxCopy2.FormattingEnabled = true;
-            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(7, 238);
+            this.seq_extensionBoxCopy2.Location = new System.Drawing.Point(10, 259);
             this.seq_extensionBoxCopy2.Name = "seq_extensionBoxCopy2";
             this.seq_extensionBoxCopy2.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy2.TabIndex = 19;
+            this.toolTip1.SetToolTip(this.seq_extensionBoxCopy2, "Select the associated extension of the sequence");
             this.seq_extensionBoxCopy2.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy2_SelectionChangeCommitted);
             this.seq_extensionBoxCopy2.Click += new System.EventHandler(this.seq_extensionBox_Click);
             // 
@@ -3133,9 +3156,10 @@ namespace Isotope_fitting
             // draw_BtnCopy2
             // 
             this.draw_BtnCopy2.BackColor = System.Drawing.Color.Teal;
-            this.draw_BtnCopy2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.draw_BtnCopy2.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.draw_BtnCopy2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.draw_BtnCopy2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.draw_BtnCopy2.Location = new System.Drawing.Point(7, 211);
+            this.draw_BtnCopy2.Location = new System.Drawing.Point(10, 232);
             this.draw_BtnCopy2.Name = "draw_BtnCopy2";
             this.draw_BtnCopy2.Size = new System.Drawing.Size(87, 21);
             this.draw_BtnCopy2.TabIndex = 6;
@@ -3147,6 +3171,7 @@ namespace Isotope_fitting
             // 
             this.draw_sequence_panelCopy1.AutoScroll = true;
             this.draw_sequence_panelCopy1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.draw_sequence_panelCopy1.Controls.Add(this.primary_chkBxCopy1);
             this.draw_sequence_panelCopy1.Controls.Add(this.has_adduct_chkBxCopy1);
             this.draw_sequence_panelCopy1.Controls.Add(this.dvw_chBxCopy1);
             this.draw_sequence_panelCopy1.Controls.Add(this.seq_LblCopy1);
@@ -3171,14 +3196,27 @@ namespace Isotope_fitting
             this.draw_sequence_panelCopy1.TabIndex = 11;
             this.draw_sequence_panelCopy1.Visible = false;
             // 
+            // primary_chkBxCopy1
+            // 
+            this.primary_chkBxCopy1.AutoSize = true;
+            this.primary_chkBxCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.primary_chkBxCopy1.Location = new System.Drawing.Point(10, 171);
+            this.primary_chkBxCopy1.Name = "primary_chkBxCopy1";
+            this.primary_chkBxCopy1.Size = new System.Drawing.Size(67, 17);
+            this.primary_chkBxCopy1.TabIndex = 22;
+            this.primary_chkBxCopy1.Text = "Primary";
+            this.primary_chkBxCopy1.UseVisualStyleBackColor = true;
+            this.primary_chkBxCopy1.Visible = false;
+            // 
             // has_adduct_chkBxCopy1
             // 
             this.has_adduct_chkBxCopy1.AutoSize = true;
-            this.has_adduct_chkBxCopy1.Location = new System.Drawing.Point(10, 177);
+            this.has_adduct_chkBxCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.has_adduct_chkBxCopy1.Location = new System.Drawing.Point(10, 187);
             this.has_adduct_chkBxCopy1.Name = "has_adduct_chkBxCopy1";
-            this.has_adduct_chkBxCopy1.Size = new System.Drawing.Size(60, 17);
+            this.has_adduct_chkBxCopy1.Size = new System.Drawing.Size(74, 30);
             this.has_adduct_chkBxCopy1.TabIndex = 21;
-            this.has_adduct_chkBxCopy1.Text = "Adduct";
+            this.has_adduct_chkBxCopy1.Text = "Modified\r\nPrimary";
             this.has_adduct_chkBxCopy1.UseVisualStyleBackColor = true;
             // 
             // dvw_chBxCopy1
@@ -3206,7 +3244,7 @@ namespace Isotope_fitting
             // highlight_ibt_ckBxCopy1
             // 
             this.highlight_ibt_ckBxCopy1.AutoSize = true;
-            this.highlight_ibt_ckBxCopy1.Location = new System.Drawing.Point(5, 272);
+            this.highlight_ibt_ckBxCopy1.Location = new System.Drawing.Point(5, 294);
             this.highlight_ibt_ckBxCopy1.Name = "highlight_ibt_ckBxCopy1";
             this.highlight_ibt_ckBxCopy1.Size = new System.Drawing.Size(69, 17);
             this.highlight_ibt_ckBxCopy1.TabIndex = 19;
@@ -3218,11 +3256,13 @@ namespace Isotope_fitting
             // 
             this.seq_extensionBoxCopy1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seq_extensionBoxCopy1.Enabled = false;
+            this.seq_extensionBoxCopy1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.seq_extensionBoxCopy1.FormattingEnabled = true;
-            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(5, 236);
+            this.seq_extensionBoxCopy1.Location = new System.Drawing.Point(5, 258);
             this.seq_extensionBoxCopy1.Name = "seq_extensionBoxCopy1";
             this.seq_extensionBoxCopy1.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBoxCopy1.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.seq_extensionBoxCopy1, "Select the associated extension of the sequence");
             this.seq_extensionBoxCopy1.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBoxCopy1_SelectionChangeCommitted);
             this.seq_extensionBoxCopy1.Click += new System.EventHandler(this.seq_extensionBox_Click);
             // 
@@ -3406,9 +3446,11 @@ namespace Isotope_fitting
             // draw_BtnCopy1
             // 
             this.draw_BtnCopy1.BackColor = System.Drawing.Color.Teal;
-            this.draw_BtnCopy1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.draw_BtnCopy1.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.draw_BtnCopy1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.draw_BtnCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.draw_BtnCopy1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.draw_BtnCopy1.Location = new System.Drawing.Point(5, 209);
+            this.draw_BtnCopy1.Location = new System.Drawing.Point(5, 231);
             this.draw_BtnCopy1.Name = "draw_BtnCopy1";
             this.draw_BtnCopy1.Size = new System.Drawing.Size(87, 21);
             this.draw_BtnCopy1.TabIndex = 6;
@@ -3420,6 +3462,7 @@ namespace Isotope_fitting
             // 
             this.draw_sequence_panel.AutoScroll = true;
             this.draw_sequence_panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.draw_sequence_panel.Controls.Add(this.primary_chkBx);
             this.draw_sequence_panel.Controls.Add(this.has_adduct_chkBx);
             this.draw_sequence_panel.Controls.Add(this.dvw_chBx);
             this.draw_sequence_panel.Controls.Add(this.seq_Lbl);
@@ -3443,14 +3486,27 @@ namespace Isotope_fitting
             this.draw_sequence_panel.Size = new System.Drawing.Size(760, 500);
             this.draw_sequence_panel.TabIndex = 10;
             // 
+            // primary_chkBx
+            // 
+            this.primary_chkBx.AutoSize = true;
+            this.primary_chkBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.primary_chkBx.Location = new System.Drawing.Point(10, 178);
+            this.primary_chkBx.Name = "primary_chkBx";
+            this.primary_chkBx.Size = new System.Drawing.Size(67, 17);
+            this.primary_chkBx.TabIndex = 19;
+            this.primary_chkBx.Text = "Primary";
+            this.primary_chkBx.UseVisualStyleBackColor = true;
+            this.primary_chkBx.Visible = false;
+            // 
             // has_adduct_chkBx
             // 
             this.has_adduct_chkBx.AutoSize = true;
-            this.has_adduct_chkBx.Location = new System.Drawing.Point(10, 184);
+            this.has_adduct_chkBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.has_adduct_chkBx.Location = new System.Drawing.Point(10, 195);
             this.has_adduct_chkBx.Name = "has_adduct_chkBx";
-            this.has_adduct_chkBx.Size = new System.Drawing.Size(66, 17);
+            this.has_adduct_chkBx.Size = new System.Drawing.Size(74, 30);
             this.has_adduct_chkBx.TabIndex = 18;
-            this.has_adduct_chkBx.Text = "Modified";
+            this.has_adduct_chkBx.Text = "Modified\r\nPrimary";
             this.has_adduct_chkBx.UseVisualStyleBackColor = true;
             // 
             // dvw_chBx
@@ -3478,7 +3534,7 @@ namespace Isotope_fitting
             // highlight_ibt_ckBx
             // 
             this.highlight_ibt_ckBx.AutoSize = true;
-            this.highlight_ibt_ckBx.Location = new System.Drawing.Point(7, 272);
+            this.highlight_ibt_ckBx.Location = new System.Drawing.Point(7, 293);
             this.highlight_ibt_ckBx.Name = "highlight_ibt_ckBx";
             this.highlight_ibt_ckBx.Size = new System.Drawing.Size(69, 17);
             this.highlight_ibt_ckBx.TabIndex = 16;
@@ -3490,11 +3546,13 @@ namespace Isotope_fitting
             // 
             this.seq_extensionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seq_extensionBox.Enabled = false;
+            this.seq_extensionBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.seq_extensionBox.FormattingEnabled = true;
-            this.seq_extensionBox.Location = new System.Drawing.Point(4, 239);
+            this.seq_extensionBox.Location = new System.Drawing.Point(4, 260);
             this.seq_extensionBox.Name = "seq_extensionBox";
             this.seq_extensionBox.Size = new System.Drawing.Size(87, 21);
             this.seq_extensionBox.TabIndex = 15;
+            this.toolTip1.SetToolTip(this.seq_extensionBox, "Select the associated extension of the sequence");
             this.seq_extensionBox.SelectionChangeCommitted += new System.EventHandler(this.seq_extensionBox_SelectionChangeCommitted);
             this.seq_extensionBox.Click += new System.EventHandler(this.seq_extensionBox_Click);
             // 
@@ -3707,9 +3765,11 @@ namespace Isotope_fitting
             // draw_Btn
             // 
             this.draw_Btn.BackColor = System.Drawing.Color.Teal;
-            this.draw_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.draw_Btn.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.draw_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.draw_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.draw_Btn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.draw_Btn.Location = new System.Drawing.Point(4, 213);
+            this.draw_Btn.Location = new System.Drawing.Point(4, 234);
             this.draw_Btn.Name = "draw_Btn";
             this.draw_Btn.Size = new System.Drawing.Size(87, 21);
             this.draw_Btn.TabIndex = 6;
@@ -6119,6 +6179,32 @@ namespace Isotope_fitting
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
             // 
+            // includePrimary_Btn
+            // 
+            this.includePrimary_Btn.Checked = true;
+            this.includePrimary_Btn.CheckOnClick = true;
+            this.includePrimary_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.includePrimary_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.includePrimary_Btn.Image = ((System.Drawing.Image)(resources.GetObject("includePrimary_Btn.Image")));
+            this.includePrimary_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.includePrimary_Btn.Name = "includePrimary_Btn";
+            this.includePrimary_Btn.Size = new System.Drawing.Size(34, 37);
+            this.includePrimary_Btn.Text = "Display primary";
+            this.includePrimary_Btn.CheckedChanged += new System.EventHandler(this.includeModif_Btn_CheckedChanged);
+            // 
+            // ppm_includePrimary_Btn
+            // 
+            this.ppm_includePrimary_Btn.Checked = true;
+            this.ppm_includePrimary_Btn.CheckOnClick = true;
+            this.ppm_includePrimary_Btn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ppm_includePrimary_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ppm_includePrimary_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ppm_includePrimary_Btn.Image")));
+            this.ppm_includePrimary_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ppm_includePrimary_Btn.Name = "ppm_includePrimary_Btn";
+            this.ppm_includePrimary_Btn.Size = new System.Drawing.Size(36, 29);
+            this.ppm_includePrimary_Btn.Text = "Display primary";
+            this.ppm_includePrimary_Btn.CheckedChanged += new System.EventHandler(this.ppm_CheckedChanged);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6130,7 +6216,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v28.3.2";
+            this.Text = "Peak Finder v28.3.3";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -6780,5 +6866,10 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripDropDownButton primary_settingsBtn;
         private System.Windows.Forms.ToolStripMenuItem primary_styleBtn;
         private System.Windows.Forms.ToolStripButton includeModif_Btn;
+        private System.Windows.Forms.CheckBox primary_chkBx;
+        private System.Windows.Forms.CheckBox primary_chkBxCopy2;
+        private System.Windows.Forms.CheckBox primary_chkBxCopy1;
+        private System.Windows.Forms.ToolStripButton includePrimary_Btn;
+        private System.Windows.Forms.ToolStripButton ppm_includePrimary_Btn;
     }
 }

@@ -742,7 +742,7 @@ namespace Isotope_fitting
                 {
                     foreach (ToolStripButton btn in strip.Items.OfType<ToolStripButton>())
                     {
-                        if (btn.Name.Contains("ppm_B_") || btn.Name.Contains("w") || btn.Name.Contains("d")) btn.Visible = is_riken;
+                        if (btn.Name.Contains("ppm_B_") || btn.Name.Contains("_w") || btn.Name.Contains("_d")) btn.Visible = is_riken;
                         if (is_riken && btn.Text.Contains("NH3")) { btn.Text = btn.Text.Replace("NH3", "B()"); }
                         if (is_riken && btn.Text.Contains("internal a")) { btn.Text = btn.Text.Replace("internal a", "internal"); }
                         if (!is_riken && btn.Text.Contains("internal") && !btn.Text.Contains("internal a") && !btn.Text.Contains("internal b")) { btn.Text = btn.Text.Replace("internal", "internal a"); }
@@ -12352,6 +12352,7 @@ namespace Isotope_fitting
                     int list_index = 0;
                     ion nn = temp_iondraw[i];
                     if (!ppm_includeModif_Btn.Checked && nn.Has_adduct) { continue; }
+                    if (!ppm_includePrimary_Btn.Checked && !nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     if (nn.minPPM_Error == 0 && nn.maxPPM_Error == 0) ppm_range = " -";
@@ -12504,6 +12505,7 @@ namespace Isotope_fitting
                     int list_index = 0;
                     ion nn = temp_iondraw[i];
                     if (!ppm_includeModif_Btn.Checked && nn.Has_adduct) { continue; }
+                    if (!ppm_includePrimary_Btn.Checked && !nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     double m_z = dParser(nn.Mz);
@@ -12753,6 +12755,7 @@ namespace Isotope_fitting
             {
                 ion nn = temp_iondraw[i];
                 if(!includeModif_Btn.Checked && nn.Has_adduct) { continue; }
+                if (!includePrimary_Btn.Checked && !nn.Has_adduct) { continue; }
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith(up_type) || nn.Ion_type.StartsWith("("+ up_type))
@@ -12858,6 +12861,7 @@ namespace Isotope_fitting
             {
                 ion nn = temp_iondraw[i];
                 if (!includeModif_Btn.Checked && nn.Has_adduct) { continue; }
+                if (!includePrimary_Btn.Checked && !nn.Has_adduct) { continue; }
                 if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                 if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                 if (nn.Ion_type.StartsWith(up_type) || nn.Ion_type.StartsWith("(" + up_type))
@@ -15206,9 +15210,9 @@ namespace Isotope_fitting
 
 
 
+
+
         #endregion
-
        
-
     }
 }
