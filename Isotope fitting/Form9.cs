@@ -2240,7 +2240,7 @@ namespace Isotope_fitting
             first = true;
             frm2.add_frag_frm9();
             int count = 0;
-            HashSet<int> remove_codes_list = new HashSet<int>();
+            SortedSet<int> remove_codes_list = new SortedSet<int>();
             foreach (ListViewItem item in fragListView9.CheckedItems)
             {
                 int new_fragin = System.Convert.ToInt32(item.SubItems[5].Text);
