@@ -1156,6 +1156,7 @@ namespace Isotope_fitting
         private List<ChemiForm> select_fragments2_frm9()
         {
             string pattern = @"^[+-][1-9][0-9]?(?![(])";
+            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?!a-zA-Z)";
             has_adduct = AdductBtnMS.Checked;
             bool extra_mz_error = false;
             double extra_mz = 0;
@@ -1173,6 +1174,11 @@ namespace Isotope_fitting
                 if (matches.Success)
                 {
                     extra_adduct = extra_adduct.Insert(1,"H");                    
+                }
+                Match matches_H2 = Regex.Match(extra_name, pattern_H2);
+                if (matches_H2.Success)
+                {
+                    extra_name = extra_name.Remove(1, 1);
                 }
                 bool add_ = true;
                 for (int i = 0; i < extra_adduct.Length; i++)
@@ -1460,6 +1466,7 @@ namespace Isotope_fitting
         private List<ChemiForm> select_fragments2_frm9_riken()
         {
             string pattern = @"^[+-][1-9][0-9]?(?![(])";
+            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?!a-zA-Z)";
             has_adduct = AdductBtn.Checked;            
             bool extra_mz_error = false;
             double extra_mz = 0;
@@ -1479,6 +1486,11 @@ namespace Isotope_fitting
                 if (matches.Success)
                 {
                     extra_adduct = extra_adduct.Insert(1, "H");
+                }
+                Match matches_H2 = Regex.Match(extra_name, pattern_H2);
+                if (matches_H2.Success)
+                {
+                    extra_name = extra_name.Remove(1, 1);
                 }
                 extra_adduct = extra_adduct.Replace("B(A)", "C5H5N5").Replace("B(G)", "C5H5N5O1").Replace("B(T)", "C5H6N2O2");
                 bool add_ = true;
