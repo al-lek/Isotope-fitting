@@ -2240,12 +2240,17 @@ namespace Isotope_fitting
             first = true;
             frm2.add_frag_frm9();
             int count = 0;
+            HashSet<int> remove_codes_list = new HashSet<int>();
             foreach (ListViewItem item in fragListView9.CheckedItems)
             {
                 int new_fragin = System.Convert.ToInt32(item.SubItems[5].Text);
+                remove_codes_list.Add(new_fragin);               
+            }
+            foreach (int k in remove_codes_list)
+            {
                 //remove fragment from the current listview
-                Fragments3.RemoveAt(new_fragin- count); count++;
-            }                
+                Fragments3.RemoveAt(k - count); count++;
+            }
             // sort by mz the fragments list 
             Fragments3 = Fragments3.OrderBy(f => Convert.ToDouble(f.Mz)).ToList();
             // also restore indexes to match array position
