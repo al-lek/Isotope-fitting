@@ -993,14 +993,24 @@ namespace Isotope_fitting
                         x_minorStep12_2 = Convert.ToDouble(preferences[98].Split(':')[1]);
                         line_width_2 = Convert.ToDouble(preferences[99].Split(':')[1]);
                         x_ppm_interval = Convert.ToDouble(preferences[100].Split(':')[1]);
+
+                        try
+                        {
+                            if (UInt32.TryParse(preferences[101].Split(':')[1], out uint result_color)) color_primary = OxyColor.FromUInt32(result_color);
+                            if (UInt32.TryParse(preferences[102].Split(':')[1], out uint result_color1)) color_internal = OxyColor.FromUInt32(result_color1);
+                        }
+                        catch
+                        {
+                            color_primary = OxyColors.Lavender; color_internal = OxyColors.Lavender;
+                            save_preferences();
+                        }
+
                     }
                     catch
                     {
-                        init_preferences();
+                        y_interval12_2 = 50; y_format12_2 = "0.0E+"; y_numformat12_2 = "0"; x_majorStep12_2 = 5; x_minorStep12_2 = 1; line_width_2 = 2; x_ppm_interval = 20;
                         save_preferences();
                     }
-
-
                 }
                 catch
                 {
@@ -1033,6 +1043,7 @@ namespace Isotope_fitting
             entire_spectrum = true; threshold = 0.01; annotation_size = 9.0; deconv_machine = ""; is_deconv_const_resolution = false;
             y_ppm_majorStep = 2; y_ppm_minorStep = 1; x_ppm_majorStep = 5; x_ppm_minorStep = 1; ppm_bullet_size = 1.0; ppm_graph_type = 1; x_ppm_interval = 20;
             y_interval12_2 = 50; y_format12_2 = "0.0E+"; y_numformat12_2 = "0"; x_majorStep12_2 = 5; x_minorStep12_2 = 1; line_width_2 = 2;
+            color_primary = OxyColors.Lavender;color_internal = OxyColors.Lavender;
         }
         public void save_preferences()
         {
@@ -1190,6 +1201,9 @@ namespace Isotope_fitting
             //ppm plot extra parameters
             preferences[0] += "x_ppm_interval: " + x_ppm_interval.ToString() + "\r\n";
 
+            //SS regions colours
+            preferences[0] += "color_primary: " + color_primary.ToUint().ToString() + "\r\n";
+            preferences[0] += "color_internal: " + color_internal.ToUint().ToString() + "\r\n";
 
             // save to default file
             File.WriteAllLines(root_path + "\\preferences.txt", preferences);
@@ -7603,8 +7617,7 @@ namespace Isotope_fitting
                             try
                             {
                                 string[] str = lista[j].Split('\t');
-                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z")) continue; // comments
-                                else if (lista[j].StartsWith("Mode")) continue; // to be implemented
+                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("Name") || lista[j].StartsWith("Mode")) continue; // comments
                                 else if (lista[j].StartsWith("Multiple"))
                                 {
                                     mult_extensions = string_to_bool(str[1]); new_type = true;
@@ -7738,7 +7751,6 @@ namespace Isotope_fitting
                                         }
                                     }
                                 }
-                                else if (lista[j].StartsWith("Name")) continue;
                                 else
                                 {
                                     bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
@@ -7962,8 +7974,7 @@ namespace Isotope_fitting
                             {
                                 string[] str = lista[j].Split('\t');
 
-                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("\t")) continue; // comments
-                                else if (lista[j].StartsWith("Mode")) continue; // to be implemented
+                                if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("\t")|| lista[j].StartsWith("Name")|| lista[j].StartsWith("Mode")) continue; // comments
                                 else if (lista[j].StartsWith("Multiple"))
                                 {
                                     mult_extensions = string_to_bool(str[1]); new_type = true;
@@ -8097,7 +8108,6 @@ namespace Isotope_fitting
                                         }
                                     }
                                 }
-                                else if (lista[j].StartsWith("Name")) continue;
                                 else
                                 {
                                     bool check_mate = check_for_duplicates(str[0], dParser(str[5]));
@@ -15221,8 +15231,8 @@ namespace Isotope_fitting
 
 
 
+
         #endregion
 
-       
     }
 }
