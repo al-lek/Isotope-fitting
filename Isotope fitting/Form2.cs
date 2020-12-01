@@ -10061,6 +10061,8 @@ namespace Isotope_fitting
         {
             if (help_Btn.Checked) { MessageBox.Show("Calculates the statistical sequence coverage by each ion type and in total. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             string message_string = String.Empty;
+            bool include_primary = seq_primary_chkBx.Checked;
+            bool include_modified = seq_has_adduct_chkBx.Checked;
             StringBuilder sb = new StringBuilder();
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("Don't hurry.You have to add amino-acid sequence first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); return; }
             foreach (SequenceTab seq in sequenceList)
@@ -10072,6 +10074,8 @@ namespace Isotope_fitting
                 double a1 = 0, b1 = 0, c1 = 0, x1 = 0, y1 = 0, z1 = 0, d1 = 0, w1 = 0, t1 = 0;
                 foreach (ion nn in IonDraw)
                 {
+                    if (!include_modified && nn.Has_adduct) { continue; }
+                    if (!include_primary && !nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(seq.Extension) && !recognise_extension(nn.Extension, seq.Extension)) { continue; }
                     else if (string.IsNullOrEmpty(seq.Extension) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     if (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a"))
@@ -11683,6 +11687,14 @@ namespace Isotope_fitting
         {
             initialize_ions_todraw(); initialize_plot_tabs();
             sequence_Pnl.Refresh();
+        }
+        private void seq_primary_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripButton tsp = (sender as ToolStripButton);
+            if (help_Btn.Checked) { if (tsp.Name.Contains("adduct")) MessageBox.Show("Display modified primary fragments", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); else MessageBox.Show("Display primary fragments", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            Panel big_pnl = tsp.GetCurrentParent().Parent as Panel;
+            Panel seq_pnl = GetControls(big_pnl).OfType<Panel>().Where(n => n.Name.Contains("sequence_Pnl")).First();
+            seq_pnl.Invalidate();
         }
         //legend Panel
         private void legend_panel_Paint(object sender, PaintEventArgs e)
@@ -15245,13 +15257,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void seq_primary_chkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            ToolStripButton tsp = (sender as ToolStripButton);
-            if (help_Btn.Checked) {if(tsp.Name.Contains("adduct")) MessageBox.Show("Display modified primary fragments", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); else MessageBox.Show("Display primary fragments", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
-            Panel big_pnl = tsp.GetCurrentParent().Parent as Panel;           
-            Panel seq_pnl = GetControls(big_pnl).OfType<Panel>().Where(n => n.Name.Contains("sequence_Pnl")).First();
-            seq_pnl.Invalidate();
-        }
+       
+
     }
 }
