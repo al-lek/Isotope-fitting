@@ -8914,7 +8914,7 @@ namespace Isotope_fitting
                                        (Fragments2[index].Factor * Fragments2[index].Max_intensity).ToString("0");
             List<TreeNode> all_nodes_frag_types = get_all_nodes(fragTypes_tree);
             TreeNode curr_node2 = all_nodes_frag_types.FirstOrDefault(n => n.Name == (index).ToString());
-            curr_node2.Text = Fragments2[index].Name + "  -  " + Fragments2[index].Mz + "  -  " + Fragments2[index].InputFormula + "  -  " + Fragments2[index].PPM_Error.ToString("0.##") + "  -  " +
+           if(curr_node2!=null) curr_node2.Text = Fragments2[index].Name + "  -  " + Fragments2[index].Mz + "  -  " + Fragments2[index].InputFormula + "  -  " + Fragments2[index].PPM_Error.ToString("0.##") + "  -  " +
                                        (Fragments2[index].Factor * Fragments2[index].Max_intensity).ToString("0");
         }
         private void enable_UIcontrols(string status)
