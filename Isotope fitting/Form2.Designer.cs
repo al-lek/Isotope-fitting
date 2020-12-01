@@ -242,6 +242,9 @@ namespace Isotope_fitting
             this.seqSave_BtnCopy2 = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_BtnCopy2 = new System.Windows.Forms.ToolStripButton();
             this.seqLegendBtnCopy2 = new System.Windows.Forms.ToolStripButton();
+            this.seq_primary_chkBxCopy2 = new System.Windows.Forms.ToolStripButton();
+            this.seq_has_adduct_chkBxCopy2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.ax_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.by_chBxCopy2 = new System.Windows.Forms.CheckBox();
             this.cz_chBxCopy2 = new System.Windows.Forms.CheckBox();
@@ -262,6 +265,9 @@ namespace Isotope_fitting
             this.seqSave_BtnCopy1 = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_BtnCopy1 = new System.Windows.Forms.ToolStripButton();
             this.seqLegendBtnCopy1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.seq_primary_chkBxCopy1 = new System.Windows.Forms.ToolStripButton();
+            this.seq_has_adduct_chkBxCopy1 = new System.Windows.Forms.ToolStripButton();
             this.ax_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.by_chBxCopy1 = new System.Windows.Forms.CheckBox();
             this.cz_chBxCopy1 = new System.Windows.Forms.CheckBox();
@@ -282,6 +288,9 @@ namespace Isotope_fitting
             this.seqSave_Btn = new System.Windows.Forms.ToolStripButton();
             this.seqCopy_Btn = new System.Windows.Forms.ToolStripButton();
             this.seqLegendBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.seq_primary_chkBx = new System.Windows.Forms.ToolStripButton();
+            this.seq_has_adduct_chkBx = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton12 = new System.Windows.Forms.ToolStripSeparator();
             this.seq_coverageBtn = new System.Windows.Forms.ToolStripButton();
             this.highlightProp_Btn = new System.Windows.Forms.ToolStripButton();
@@ -503,15 +512,6 @@ namespace Isotope_fitting
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
-            this.seq_primary_chkBx = new System.Windows.Forms.ToolStripButton();
-            this.seq_has_adduct_chkBx = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.seq_has_adduct_chkBxCopy1 = new System.Windows.Forms.ToolStripButton();
-            this.seq_primary_chkBxCopy1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.seq_has_adduct_chkBxCopy2 = new System.Windows.Forms.ToolStripButton();
-            this.seq_primary_chkBxCopy2 = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -3070,6 +3070,35 @@ namespace Isotope_fitting
             this.seqLegendBtnCopy2.Text = "Show Legend";
             this.seqLegendBtnCopy2.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
             // 
+            // seq_primary_chkBxCopy2
+            // 
+            this.seq_primary_chkBxCopy2.Checked = true;
+            this.seq_primary_chkBxCopy2.CheckOnClick = true;
+            this.seq_primary_chkBxCopy2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.seq_primary_chkBxCopy2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_primary_chkBxCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seq_primary_chkBxCopy2.Image")));
+            this.seq_primary_chkBxCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_primary_chkBxCopy2.Name = "seq_primary_chkBxCopy2";
+            this.seq_primary_chkBxCopy2.Size = new System.Drawing.Size(33, 34);
+            this.seq_primary_chkBxCopy2.Text = "Display primary";
+            this.seq_primary_chkBxCopy2.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
+            // 
+            // seq_has_adduct_chkBxCopy2
+            // 
+            this.seq_has_adduct_chkBxCopy2.CheckOnClick = true;
+            this.seq_has_adduct_chkBxCopy2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_has_adduct_chkBxCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seq_has_adduct_chkBxCopy2.Image")));
+            this.seq_has_adduct_chkBxCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_has_adduct_chkBxCopy2.Name = "seq_has_adduct_chkBxCopy2";
+            this.seq_has_adduct_chkBxCopy2.Size = new System.Drawing.Size(33, 34);
+            this.seq_has_adduct_chkBxCopy2.Text = "Display modified primary";
+            this.seq_has_adduct_chkBxCopy2.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(33, 6);
+            // 
             // ax_chBxCopy2
             // 
             this.ax_chBxCopy2.AutoSize = true;
@@ -3324,6 +3353,35 @@ namespace Isotope_fitting
             this.seqLegendBtnCopy1.Size = new System.Drawing.Size(33, 34);
             this.seqLegendBtnCopy1.Text = "Show Legend";
             this.seqLegendBtnCopy1.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(33, 6);
+            // 
+            // seq_primary_chkBxCopy1
+            // 
+            this.seq_primary_chkBxCopy1.Checked = true;
+            this.seq_primary_chkBxCopy1.CheckOnClick = true;
+            this.seq_primary_chkBxCopy1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.seq_primary_chkBxCopy1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_primary_chkBxCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seq_primary_chkBxCopy1.Image")));
+            this.seq_primary_chkBxCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_primary_chkBxCopy1.Name = "seq_primary_chkBxCopy1";
+            this.seq_primary_chkBxCopy1.Size = new System.Drawing.Size(33, 34);
+            this.seq_primary_chkBxCopy1.Text = "Display primary";
+            this.seq_primary_chkBxCopy1.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
+            // 
+            // seq_has_adduct_chkBxCopy1
+            // 
+            this.seq_has_adduct_chkBxCopy1.CheckOnClick = true;
+            this.seq_has_adduct_chkBxCopy1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_has_adduct_chkBxCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seq_has_adduct_chkBxCopy1.Image")));
+            this.seq_has_adduct_chkBxCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_has_adduct_chkBxCopy1.Name = "seq_has_adduct_chkBxCopy1";
+            this.seq_has_adduct_chkBxCopy1.Size = new System.Drawing.Size(33, 34);
+            this.seq_has_adduct_chkBxCopy1.Text = "Display modified primary";
+            this.seq_has_adduct_chkBxCopy1.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
             // 
             // ax_chBxCopy1
             // 
@@ -3582,6 +3640,35 @@ namespace Isotope_fitting
             this.seqLegendBtn.Size = new System.Drawing.Size(33, 34);
             this.seqLegendBtn.Text = "Show Legend";
             this.seqLegendBtn.CheckedChanged += new System.EventHandler(this.seqLegendBtn_CheckedChanged);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(33, 6);
+            // 
+            // seq_primary_chkBx
+            // 
+            this.seq_primary_chkBx.Checked = true;
+            this.seq_primary_chkBx.CheckOnClick = true;
+            this.seq_primary_chkBx.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.seq_primary_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_primary_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("seq_primary_chkBx.Image")));
+            this.seq_primary_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_primary_chkBx.Name = "seq_primary_chkBx";
+            this.seq_primary_chkBx.Size = new System.Drawing.Size(33, 34);
+            this.seq_primary_chkBx.Text = "Display primary";
+            this.seq_primary_chkBx.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
+            // 
+            // seq_has_adduct_chkBx
+            // 
+            this.seq_has_adduct_chkBx.CheckOnClick = true;
+            this.seq_has_adduct_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.seq_has_adduct_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("seq_has_adduct_chkBx.Image")));
+            this.seq_has_adduct_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.seq_has_adduct_chkBx.Name = "seq_has_adduct_chkBx";
+            this.seq_has_adduct_chkBx.Size = new System.Drawing.Size(33, 34);
+            this.seq_has_adduct_chkBx.Text = "Display modified primary";
+            this.seq_has_adduct_chkBx.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
             // 
             // toolStripButton12
             // 
@@ -6147,93 +6234,6 @@ namespace Isotope_fitting
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
             // 
-            // seq_primary_chkBx
-            // 
-            this.seq_primary_chkBx.Checked = true;
-            this.seq_primary_chkBx.CheckOnClick = true;
-            this.seq_primary_chkBx.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.seq_primary_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.seq_primary_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("seq_primary_chkBx.Image")));
-            this.seq_primary_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.seq_primary_chkBx.Name = "seq_primary_chkBx";
-            this.seq_primary_chkBx.Size = new System.Drawing.Size(33, 34);
-            this.seq_primary_chkBx.Text = "Display primary";
-            this.seq_primary_chkBx.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
-            // 
-            // seq_has_adduct_chkBx
-            // 
-            this.seq_has_adduct_chkBx.CheckOnClick = true;
-            this.seq_has_adduct_chkBx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.seq_has_adduct_chkBx.Image = ((System.Drawing.Image)(resources.GetObject("seq_has_adduct_chkBx.Image")));
-            this.seq_has_adduct_chkBx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.seq_has_adduct_chkBx.Name = "seq_has_adduct_chkBx";
-            this.seq_has_adduct_chkBx.Size = new System.Drawing.Size(33, 34);
-            this.seq_has_adduct_chkBx.Text = "Display modified primary";
-            this.seq_has_adduct_chkBx.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(33, 6);
-            // 
-            // seq_has_adduct_chkBxCopy1
-            // 
-            this.seq_has_adduct_chkBxCopy1.CheckOnClick = true;
-            this.seq_has_adduct_chkBxCopy1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.seq_has_adduct_chkBxCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seq_has_adduct_chkBxCopy1.Image")));
-            this.seq_has_adduct_chkBxCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.seq_has_adduct_chkBxCopy1.Name = "seq_has_adduct_chkBxCopy1";
-            this.seq_has_adduct_chkBxCopy1.Size = new System.Drawing.Size(33, 34);
-            this.seq_has_adduct_chkBxCopy1.Text = "Display modified primary";
-            this.seq_has_adduct_chkBxCopy1.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
-            // 
-            // seq_primary_chkBxCopy1
-            // 
-            this.seq_primary_chkBxCopy1.Checked = true;
-            this.seq_primary_chkBxCopy1.CheckOnClick = true;
-            this.seq_primary_chkBxCopy1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.seq_primary_chkBxCopy1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.seq_primary_chkBxCopy1.Image = ((System.Drawing.Image)(resources.GetObject("seq_primary_chkBxCopy1.Image")));
-            this.seq_primary_chkBxCopy1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.seq_primary_chkBxCopy1.Name = "seq_primary_chkBxCopy1";
-            this.seq_primary_chkBxCopy1.Size = new System.Drawing.Size(33, 34);
-            this.seq_primary_chkBxCopy1.Text = "Display primary";
-            this.seq_primary_chkBxCopy1.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(33, 6);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(33, 6);
-            // 
-            // seq_has_adduct_chkBxCopy2
-            // 
-            this.seq_has_adduct_chkBxCopy2.CheckOnClick = true;
-            this.seq_has_adduct_chkBxCopy2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.seq_has_adduct_chkBxCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seq_has_adduct_chkBxCopy2.Image")));
-            this.seq_has_adduct_chkBxCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.seq_has_adduct_chkBxCopy2.Name = "seq_has_adduct_chkBxCopy2";
-            this.seq_has_adduct_chkBxCopy2.Size = new System.Drawing.Size(33, 34);
-            this.seq_has_adduct_chkBxCopy2.Text = "Display modified primary";
-            this.seq_has_adduct_chkBxCopy2.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
-            // 
-            // seq_primary_chkBxCopy2
-            // 
-            this.seq_primary_chkBxCopy2.Checked = true;
-            this.seq_primary_chkBxCopy2.CheckOnClick = true;
-            this.seq_primary_chkBxCopy2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.seq_primary_chkBxCopy2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.seq_primary_chkBxCopy2.Image = ((System.Drawing.Image)(resources.GetObject("seq_primary_chkBxCopy2.Image")));
-            this.seq_primary_chkBxCopy2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.seq_primary_chkBxCopy2.Name = "seq_primary_chkBxCopy2";
-            this.seq_primary_chkBxCopy2.Size = new System.Drawing.Size(33, 34);
-            this.seq_primary_chkBxCopy2.Text = "Display primary";
-            this.seq_primary_chkBxCopy2.CheckedChanged += new System.EventHandler(this.seq_primary_chkBx_CheckedChanged);
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6245,7 +6245,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v28.3.7";
+            this.Text = "Peak Finder v28.3.8";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);

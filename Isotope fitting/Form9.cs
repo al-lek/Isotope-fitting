@@ -810,6 +810,7 @@ namespace Isotope_fitting
             chem_form = chemForm_txtBox.Text.Replace(Environment.NewLine, " ").ToString();
             chem_form = chem_form.Replace("\t", "");
             chem_form = chem_form.Replace(" ", "");
+            chem_form = square_brackets_formula(chem_form);
             ion = ion_txtBox.Text.Replace(Environment.NewLine, " ").ToString();
             ion = ion.Replace("\t", "");
             ion = ion.Replace(" ", "");
@@ -967,6 +968,7 @@ namespace Isotope_fitting
             chem_form = chemForm_txtBox_riken.Text.Replace(Environment.NewLine, " ").ToString();
             chem_form = chem_form.Replace("\t", "");
             chem_form = chem_form.Replace(" ", "");
+            chem_form = square_brackets_formula(chem_form);
             ion = ion_txtBox_riken.Text.Replace(Environment.NewLine, " ").ToString();
             ion = ion.Replace("\t", "");
             ion = ion.Replace(" ", "");     
@@ -1188,6 +1190,8 @@ namespace Isotope_fitting
                     else if (add_) { adduct += extra_adduct[i]; }
                     else { deduct += extra_adduct[i]; }
                 }
+                adduct = square_brackets_formula(adduct);
+                deduct = square_brackets_formula(deduct);
                 double m_ded = calc_m(out extra_mz_error, deduct);
                 if (extra_mz_error) { MessageBox.Show("Adduct chemical formula is not in the correct format", "Error"); return res; }
                 double m_add = calc_m(out extra_mz_error, adduct);
@@ -1501,6 +1505,8 @@ namespace Isotope_fitting
                     else if (add_) { adduct += extra_adduct[i]; }
                     else { deduct += extra_adduct[i]; }
                 }
+                adduct = square_brackets_formula(adduct);
+                deduct = square_brackets_formula(deduct);
                 double m_ded = calc_m(out extra_mz_error, deduct);
                 if (extra_mz_error) { MessageBox.Show("Adduct chemical formula is not in the correct format", "Error"); return res; }
                 double m_add = calc_m(out extra_mz_error, adduct);

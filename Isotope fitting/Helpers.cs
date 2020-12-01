@@ -970,6 +970,118 @@ namespace Isotope_fitting
             return mono_mass;
         }
 
+        public static string square_brackets_formula(string FORMULA)
+        {
+            if (FORMULA.Length == 0) { return FORMULA; }            
+            if (FORMULA.Any(item => item == '('))
+            {
+                for (int a = 0; a < FORMULA.Length - 1; a++)
+                {
+                    if (FORMULA[a] == ')' && Char.IsNumber(FORMULA[a + 1]) == false)
+                    {
+                        var aStringBuilder = new StringBuilder(FORMULA);
+                        aStringBuilder.Insert(a + 1, "1");
+                        FORMULA = aStringBuilder.ToString();
+                    }
+                }
+                if (FORMULA[FORMULA.Length - 1] == ')')
+                {
+                    FORMULA = FORMULA + "1";
+                }
+            }
+            //for all other cases
+            for (int a = 1; a < FORMULA.Length; a++)
+            {
+                if ((char.IsUpper(FORMULA[a]) || FORMULA[a] == ')' || FORMULA[a] == '(')
+                    && char.IsNumber(FORMULA[a - 1]) == false && FORMULA[a - 1] != '(' && FORMULA[a - 1] != ']')
+                {
+                    var aStringBuilder = new StringBuilder(FORMULA);
+                    aStringBuilder.Insert(a, "1");
+                    FORMULA = aStringBuilder.ToString();
+                    a++;
+                }
+
+            }
+            if (char.IsNumber(FORMULA[FORMULA.Length - 1]) == false)
+            {
+                FORMULA = FORMULA + "1";
+            }
+            //multiply for square brackets, with nesting
+            if (FORMULA.Any(item => item == '('))
+            {
+                int getit1 = 1;
+                int getit2 = 1;
+                List<int> from = new List<int>();
+                int to = -1;
+                List<int> factor = new List<int>();
+                List<string> formula = new List<string>();
+                List<string> final = new List<string>();
+                List<int> length_r = new List<int>();
+                int a = 0;
+                int i = -1;
+
+                while (a < FORMULA.Length && getit1 != 0 && getit2 != 0)
+                {
+                    if (FORMULA[a] == '(')
+                    {
+                        getit1 = 2;
+                        from.Add(a);
+                    }
+                    if (FORMULA[a] == ')')
+                    {
+                        getit2 = 2;
+                        to = a;
+                    }
+                    if (getit1 == 2 && getit2 == 2)
+                    {
+                        i++;
+                        int b1 = a + 1;
+                        int b2 = a + 1;
+                        while (b2 < FORMULA.Length && char.IsNumber(FORMULA[b2]))
+                        {
+                            b2++;
+                        }
+                        length_r.Add(b2 - from[i]);
+
+                        try
+                        {
+                            try
+                            {
+                                factor.Add(Int32.Parse(FORMULA.Substring(b1, b2 - b1)));
+
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                        catch (FormatException e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        //call Multif  
+                        formula.Add(FORMULA.Substring(from[i] + 1, to - 1));
+                        final.Add(ChemiForm.Multif(formula[i], factor[i]));
+                        //ston allo kvdika exei getit1=0,getit2=0,alla etsi elegxei gia mia parenthesi mono                                                  
+                        getit1 = 1;
+                        getit2 = 1;
+                    }
+                    a++;
+                }
+
+                var aStringBuilder = new StringBuilder(FORMULA);
+                for (int k = 0; k < formula.Count; k++)
+                {
+                    //InputFormula = InputFormula.Replace(formula[i], final[i]);
+                    aStringBuilder.Remove(from[i], length_r[i]);
+                    aStringBuilder.Insert(from[i], final[i]);
+                    FORMULA = aStringBuilder.ToString();
+                }
+
+            }
+            return FORMULA;
+        }
+
         /// <summary>
         ///Find all occurences of a substring within a string
         /// </summary>
