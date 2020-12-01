@@ -4072,7 +4072,6 @@ namespace Isotope_fitting
         #endregion
 
         #region 4.Fitting
-
         private void fit_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked)
@@ -4104,8 +4103,7 @@ namespace Isotope_fitting
             {
                 return;
             }
-        }
-        
+        }        
         private void main_fit(bool all_fragments)
         {
             bool last_bunch = false;
@@ -5019,12 +5017,10 @@ namespace Isotope_fitting
                 if (all_fitted_sets[i].Count == 0) continue;
                 // get first and last mz of this fit, from the array that contains all the indexes (the longest)
                 int[] longest = all_fitted_sets[i].OrderBy(x => x.Length).Last();
-                fit_tree.Nodes.Add(Fragments2[longest.First() - 1].Mz + " - " + Fragments2[longest.Last() - 1].Mz);
-                //double[] tree_index = new double[all_fitted_results[i].Count];
-                //double[] tree_sse = new double[all_fitted_results[i].Count];                            
+                fit_tree.Nodes.Add(Fragments2[longest.First() - 1].Mz + " - " + Fragments2[longest.Last() - 1].Mz);                                      
                 for (int j = 0; j < all_fitted_results[i].Count; j++)
                 {
-                    if (all_fitted_results[i][j][all_fitted_results[i][j].Length - 2] < tab_thres[i][0] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 1] < tab_thres[i][1] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 4] < tab_thres[i][2] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 5] < tab_thres[i][3] && (all_fitted_results[i][j][all_fitted_results[i][j].Length - 6] < tab_thres[i][4] /*|| all_fitted_sets[i][j].Length== 1*/))
+                    if (all_fitted_results[i][j][all_fitted_results[i][j].Length - 2] <=tab_thres[i][0] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 1] <= tab_thres[i][1] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 4] <= tab_thres[i][2] && all_fitted_results[i][j][all_fitted_results[i][j].Length - 5] <= tab_thres[i][3] && (all_fitted_results[i][j][all_fitted_results[i][j].Length - 6] <= tab_thres[i][4] /*|| all_fitted_sets[i][j].Length== 1*/))
                     {
                         bool print = true;                        
                         for (int k = 0; k < all_fitted_sets[i][j].Length; k++)
@@ -5049,8 +5045,7 @@ namespace Isotope_fitting
                             fit_tree.Nodes[i].Nodes.Add(tr);
                         }
                     }
-                }
-                //find_min_SSE(fit_tree.Nodes[i], tree_index, tree_sse);
+                }               
             }
             fit_tree.EndUpdate();
             remove_child_nodes();

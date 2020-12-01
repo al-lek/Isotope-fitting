@@ -282,10 +282,10 @@
     <Compile Include="Peptides\Form5.Designer.cs">
       <DependentUpon>Form5.cs</DependentUpon>
     </Compile>
-    <Compile Include="Peptides\Form6.cs">
+    <Compile Include="Form6.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Peptides\Form6.Designer.cs">
+    <Compile Include="Form6.Designer.cs">
       <DependentUpon>Form6.cs</DependentUpon>
     </Compile>
     <Compile Include="Form7.cs">
@@ -386,7 +386,7 @@
     <EmbeddedResource Include="Peptides\Form5.resx">
       <DependentUpon>Form5.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\Form6.resx">
+    <EmbeddedResource Include="Form6.resx">
       <DependentUpon>Form6.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form7.resx">

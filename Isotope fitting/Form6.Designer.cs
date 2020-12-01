@@ -107,7 +107,7 @@
             this.A_checkBox.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.A_checkBox.Location = new System.Drawing.Point(16, 282);
             this.A_checkBox.Name = "A_checkBox";
-            this.A_checkBox.Size = new System.Drawing.Size(33, 19);
+            this.A_checkBox.Size = new System.Drawing.Size(37, 19);
             this.A_checkBox.TabIndex = 1;
             this.A_checkBox.Text = "M";
             this.A_checkBox.UseVisualStyleBackColor = true;
@@ -132,7 +132,7 @@
             this.Ai_checkBox.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.Ai_checkBox.Location = new System.Drawing.Point(16, 257);
             this.Ai_checkBox.Name = "Ai_checkBox";
-            this.Ai_checkBox.Size = new System.Drawing.Size(36, 19);
+            this.Ai_checkBox.Size = new System.Drawing.Size(40, 19);
             this.Ai_checkBox.TabIndex = 0;
             this.Ai_checkBox.Text = "Mi";
             this.Ai_checkBox.UseVisualStyleBackColor = true;
@@ -284,9 +284,9 @@
             this.label5.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.label5.Location = new System.Drawing.Point(178, 97);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 15);
+            this.label5.Size = new System.Drawing.Size(39, 15);
             this.label5.TabIndex = 13;
-            this.label5.Text = "Mi  <";
+            this.label5.Text = "Mi  ≤";
             // 
             // label6
             // 
@@ -295,9 +295,9 @@
             this.label6.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.label6.Location = new System.Drawing.Point(178, 122);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 15);
+            this.label6.Size = new System.Drawing.Size(39, 15);
             this.label6.TabIndex = 14;
-            this.label6.Text = "M   <";
+            this.label6.Text = "M   ≤";
             // 
             // label7
             // 
@@ -308,7 +308,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(35, 15);
             this.label7.TabIndex = 15;
-            this.label7.Text = "di  <";
+            this.label7.Text = "di  ≤";
             // 
             // Ai_numUD
             // 
@@ -496,7 +496,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(34, 15);
             this.label8.TabIndex = 24;
-            this.label8.Text = "εi  <";
+            this.label8.Text = "εi  ≤";
             // 
             // labelei
             // 
@@ -634,7 +634,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(35, 15);
             this.label9.TabIndex = 32;
-            this.label9.Text = "di\' <";
+            this.label9.Text = "di\' ≤";
             // 
             // best_num_UD
             // 
@@ -692,7 +692,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(34, 15);
             this.label10.TabIndex = 36;
-            this.label10.Text = "sd <";
+            this.label10.Text = "sd ≤";
             // 
             // sdnew_numUD
             // 
@@ -724,7 +724,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(38, 15);
             this.label11.TabIndex = 38;
-            this.label11.Text = "sd\' <";
+            this.label11.Text = "sd\' ≤";
             // 
             // Form6
             // 
