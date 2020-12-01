@@ -299,6 +299,15 @@ namespace Isotope_fitting
                 }
             }
         }
+        public static ToolStripButton find_toolstripBtn(ToolStrip strip, string key_word = "")
+        {
+            ToolStripButton btn = new ToolStripButton() ;
+            foreach (ToolStripButton btn1 in strip.Items.OfType<ToolStripButton>().ToList())
+            {
+                if (btn1.CheckOnClick == true && btn1.Name.Contains(key_word)) { return btn1; }
+            }
+            return btn;
+        }
 
         /// <summary>
         /// For Exclude types feature, checks each input and add it in the list

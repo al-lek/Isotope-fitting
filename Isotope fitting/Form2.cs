@@ -730,8 +730,7 @@ namespace Isotope_fitting
             if (changed)
             {
                 Clear_all();
-                /*disp_d.Visible = disp_w.Visible =*/ groupBoxIntensity4.Visible = groupBoxCharge4.Visible = is_riken;
-                //has_adduct_chkBxCopy2.Visible = has_adduct_chkBxCopy1.Visible = has_adduct_chkBx.Visible = is_riken;
+                groupBoxIntensity4.Visible = groupBoxCharge4.Visible = is_riken;
                 ppm_toolStrip4.Visible = !is_riken;
                 losses_groupBox_d.Visible = is_riken;
                 losses_groupBox_w.Visible = is_riken;
@@ -10193,16 +10192,26 @@ namespace Isotope_fitting
             int x = e.X;
             int y = e.Y;
             int adduct_step1 = 0;
-            if (has_adduct_chkBx.Checked && is_riken) { adduct_step1 = 16; }
-            else if (has_adduct_chkBx.Checked) { adduct_step1 = 12; }
+            Panel sequence_Pnl_temp = sender as Panel;
+            Panel draw_sequence_panel_temp = sequence_Pnl_temp.Parent as Panel;
+            RadioButton rdBtn50_temp = GetControls(draw_sequence_panel_temp).OfType<RadioButton>().Where(l => l.Name.Contains("rdBtn50")).ToList().FirstOrDefault();
+            ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
+            Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
+            CheckBox highlight_ibt_ckBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("highlight_ibt_ckBx")).ToList().FirstOrDefault();
+            ToolStrip tsp = GetControls(draw_sequence_panel_temp).OfType<ToolStrip>().First();
+            bool include_primary = find_toolstripBtn(tsp, "_primary_").Checked;
+            bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
+            bool merged_prim_modif = include_primary && include_modified;
+            if (merged_prim_modif && is_riken) { adduct_step1 = 16; }
+            else if (merged_prim_modif) { adduct_step1 = 12; }
             int temp_x_init = 3;
             int temp_y_init = 20;            
             int step_x = 20;
             int step_y = 50;
             int length_panel =0;
-            if (is_riken ) { temp_x_init = 5; temp_y_init = 24; step_y = 74; }           
-            if(highlight_ibt_ckBx.Checked) {  length_panel = -21 - 50; }
-            if (legend_panel.Visible) length_panel = -legend_panel.Width;
+            if (is_riken) { temp_x_init = 5; temp_y_init = 24; step_y = 74; }           
+            if(highlight_ibt_ckBx_temp.Checked) {  length_panel = -21 - 50; }
+            if (legend_panel_temp.Visible) length_panel = -legend_panel_temp.Width;
              step_y += (2 * adduct_step1);
              temp_y_init += adduct_step1;
             int temp_x = temp_x_init;
@@ -10212,11 +10221,11 @@ namespace Isotope_fitting
             string s_ext = "";//the desired extension
             if (sequenceList == null || sequenceList.Count == 0) return;
             SequenceTab curr_ss = sequenceList[0];
-            if (tab_mode && seq_extensionBox.Enabled && seq_extensionBox.SelectedIndex != -1)
+            if (tab_mode && seq_extensionBox_temp.Enabled && seq_extensionBox_temp.SelectedIndex != -1)
             {
                 foreach (SequenceTab seq in sequenceList)
                 {
-                    if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
+                    if (seq.Extension.Equals(seq_extensionBox_temp.SelectedItem))
                     {
                         curr_ss = seq;
                         s = seq.Sequence; s_ext = seq.Extension;
@@ -10225,7 +10234,7 @@ namespace Isotope_fitting
                 }
             }
             int grp_num = 25;
-            if (rdBtn50.Checked) grp_num = 50;
+            if (rdBtn50_temp.Checked) grp_num = 50;
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (temp_x <= x && temp_x + step_x >= x && temp_y <= y && temp_y + 15 >= y)
@@ -10241,17 +10250,14 @@ namespace Isotope_fitting
                         if (nn.Index == idx + 1 && (nn.Ion_type.StartsWith("c") || nn.Ion_type.StartsWith("(c") || nn.Ion_type.StartsWith("b") || nn.Ion_type.StartsWith("(b") || nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a") || (nn.Ion_type.StartsWith("d")&&is_riken) || (nn.Ion_type.StartsWith("(d") && is_riken)))
                         {
                             is_present = true; is_primary = true;
-                            //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
                         else if (nn.SortIdx == idx && (nn.Ion_type.StartsWith("z") || nn.Ion_type.StartsWith("(z") || nn.Ion_type.StartsWith("y") || nn.Ion_type.StartsWith("(y") || nn.Ion_type.StartsWith("x") || nn.Ion_type.StartsWith("(x") || (nn.Ion_type.StartsWith("w") && is_riken) || (nn.Ion_type.StartsWith("(w") && is_riken)))
                         {
                             is_present = true; is_primary = true;
-                            //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
                         else if ((nn.Ion_type.StartsWith("int") || nn.Ion_type.StartsWith("(int")) && (nn.Index == idx+1  || nn.IndexTo == idx + 1))
                         {
                             is_present = true;
-                            //sb.AppendLine(nn.Name + "\t m/z:" + nn.Mz.ToString() + "\t intensity:" + Math.Round(nn.Max_intensity, 4).ToString());
                         }
                         if (is_primary)
                         {
@@ -10273,18 +10279,13 @@ namespace Isotope_fitting
                     }
                     if (frags.Count == 0)
                     {
-                        //sb.AppendLine("No ions match to your research");
                         MessageBox.Show("No ions match to your research", "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")",MessageBoxButtons.OK,MessageBoxIcon.Information);
                         return;
                     }
                     else
                     {
-                        frags=frags.OrderBy(p=>p[0]).ToList();
-                        //List<string> items = new List<string>(sb.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
-                        //items.Sort();
-                        //sb = new StringBuilder(string.Join("\r\n", items.ToArray()));
+                        frags=frags.OrderBy(p=>p[0]).ToList();                       
                     }
-                    //string message_string = sb.ToString();
                     Form_matrix frm_matrix = new Form_matrix(frags);
                     frm_matrix.Text = "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")";
                     frm_matrix.Show();
@@ -10315,7 +10316,10 @@ namespace Isotope_fitting
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
             CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
-            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
+            ToolStrip tsp= GetControls(draw_sequence_panel_temp).OfType<ToolStrip>().First();
+            bool include_primary = find_toolstripBtn(tsp,"_primary_").Checked;
+            bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
+            bool merged_prim_modif = include_primary && include_modified;
 
             if (color_range_picBox_temp.Visible) { color_range_picBox_temp.Visible = false; }
             if (color_range_panel_temp.Visible) { color_range_panel_temp.Visible = false; }
@@ -10324,8 +10328,8 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             int adduct_step1 = 0;
             int adduct_step2 = 0;
-            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
-            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
+            if (merged_prim_modif && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
+            else if (merged_prim_modif) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
             int step_y = 50 + (2 * adduct_step1);
             int temp_y_init = 20 + adduct_step1;
@@ -10365,7 +10369,8 @@ namespace Isotope_fitting
                 draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
-                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
+                    if (!include_modified && nn.Has_adduct) { continue; }
+                    if (!include_primary && !nn.Has_adduct) { continue; }                    
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
@@ -10373,11 +10378,11 @@ namespace Isotope_fitting
                     if ((idx + 1) % grp_num == 0) { temp_p.X = 3 - 18; temp_p.Y = temp_p.Y + step_y; }
                     int safe_dist_up = +adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
                     bool up_adduct = false, down_adduct = false;
-                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    if (merged_prim_modif && nn.Has_adduct)
                     {
                         safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
                     }
-                    else if (adduct_chBx_temp.Checked)
+                    else if (merged_prim_modif)
                     {
                         down_adduct = true;
                     }
@@ -10554,7 +10559,10 @@ namespace Isotope_fitting
             CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             Panel legend_panel_temp = GetControls(draw_sequence_panel_temp).OfType<Panel>().Where(l => l.Name.Contains("legend_panel")).ToList().FirstOrDefault();
-            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
+            ToolStrip tsp = GetControls(draw_sequence_panel_temp).OfType<ToolStrip>().First();
+            bool include_primary = find_toolstripBtn(tsp, "_primary_").Checked;
+            bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
+            bool merged_prim_modif = include_primary && include_modified;
 
             if (color_range_picBox_temp.Visible) { color_range_picBox_temp.Visible = false; }
             if (color_range_panel_temp.Visible) { color_range_panel_temp.Visible = false; }
@@ -10563,8 +10571,8 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             int adduct_step1 = 0;
             int adduct_step2 = 0;
-            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 =16; adduct_step2 = 8; }
-            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
+            if (merged_prim_modif && is_riken) { adduct_step1 =16; adduct_step2 = 8; }
+            else if (merged_prim_modif) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
             int step_y = 74+(2* adduct_step1);
             int temp_y_init = 24+ adduct_step1;
@@ -10606,7 +10614,8 @@ namespace Isotope_fitting
                 //counts the internal -B() in the current index
                 foreach (ion nn in IonDraw)
                 {
-                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
+                    if (!include_modified && nn.Has_adduct) { continue; }
+                    if (!include_primary && !nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
@@ -10614,11 +10623,11 @@ namespace Isotope_fitting
                     if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     int safe_dist_up = +adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
                     bool up_adduct = false, down_adduct = false;
-                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    if (merged_prim_modif && nn.Has_adduct)
                     {
                         safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
                     }
-                    else if (adduct_chBx_temp.Checked)
+                    else if (merged_prim_modif)
                     {
                         down_adduct = true;
                     }
@@ -10887,7 +10896,10 @@ namespace Isotope_fitting
             CheckBox intB_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
             CheckBox dvw_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("dvw_chBx")).ToList().FirstOrDefault();
-            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
+            ToolStrip tsp = GetControls(draw_sequence_panel_temp).OfType<ToolStrip>().First();
+            bool include_primary = find_toolstripBtn(tsp, "_primary_").Checked;
+            bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
+            bool merged_prim_modif = include_primary && include_modified;
 
             color_range_picBox_temp.Visible = is_rgb_color_range;
             color_range_panel_temp.Visible = !is_rgb_color_range;
@@ -10897,8 +10909,8 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             int adduct_step1 = 0;
             int adduct_step2 = 0;
-            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
-            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
+            if (merged_prim_modif && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
+            else if (merged_prim_modif) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
             int step_y = 50 + (2 * adduct_step1);
             int temp_y_init = 20 + adduct_step1;
@@ -10978,7 +10990,8 @@ namespace Isotope_fitting
 
                 foreach (ion nn in IonDraw)
                 {
-                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
+                    if (!include_modified && nn.Has_adduct) { continue; }
+                    if (!include_primary && !nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
@@ -10986,11 +10999,11 @@ namespace Isotope_fitting
                     if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     int safe_dist_up = +adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
                     bool up_adduct = false, down_adduct = false;
-                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    if (merged_prim_modif && nn.Has_adduct)
                     {
                         safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
                     }
-                    else if (adduct_chBx_temp.Checked) { down_adduct = true; }
+                    else if (merged_prim_modif) { down_adduct = true; }
                     if (ax_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -11136,7 +11149,10 @@ namespace Isotope_fitting
             CheckBox dz_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intA_chBx")).ToList().FirstOrDefault();
             CheckBox int_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("intB_chBx")).ToList().FirstOrDefault();
             ComboBox seq_extensionBox_temp = GetControls(draw_sequence_panel_temp).OfType<ComboBox>().Where(l => l.Name.Contains("seq_extensionBox")).ToList().FirstOrDefault();
-            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
+            ToolStrip tsp = GetControls(draw_sequence_panel_temp).OfType<ToolStrip>().First();
+            bool include_primary = find_toolstripBtn(tsp, "_primary_").Checked;
+            bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
+            bool merged_prim_modif = include_primary && include_modified;
 
             color_range_picBox_temp.Visible = is_rgb_color_range;
             color_range_panel_temp.Visible = !is_rgb_color_range;
@@ -11146,8 +11162,8 @@ namespace Isotope_fitting
             IonDraw.Sort(ion_comp);
             int adduct_step1 = 0;
             int adduct_step2 = 0;
-            if (adduct_chBx_temp.Checked && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
-            else if (adduct_chBx_temp.Checked) { adduct_step1 = 12; adduct_step2 = 8; }
+            if (merged_prim_modif && is_riken) { adduct_step1 = 16; adduct_step2 = 8; }
+            else if (merged_prim_modif) { adduct_step1 = 12; adduct_step2 = 8; }
             int step_x = 20;
             int step_y = 74 + (2 * adduct_step1);
             int temp_y_init = 24 + adduct_step1;
@@ -11212,7 +11228,8 @@ namespace Isotope_fitting
                 draw_letter(g, s[idx].ToString(), sequence_Pnl_temp, sb, pp);
                 foreach (ion nn in IonDraw)
                 {
-                    if (!adduct_chBx_temp.Checked && nn.Has_adduct) { continue; }
+                    if (!include_modified && nn.Has_adduct) { continue; }
+                    if (!include_primary && !nn.Has_adduct) { continue; }
                     if (!string.IsNullOrEmpty(s_ext) && !recognise_extension(nn.Extension, s_ext)) { continue; }
                     else if (string.IsNullOrEmpty(s_ext) && !string.IsNullOrEmpty(nn.Extension)) { continue; }
                     Point temp_p = pp;
@@ -11220,11 +11237,11 @@ namespace Isotope_fitting
                     if ((idx + 1) % grp_num == 0) { temp_p.X = temp_x_init - 18; temp_p.Y = temp_p.Y + step_y; }
                     int safe_dist_up = +adduct_step1, safe_dist_down = -adduct_step2 - adduct_step1;
                     bool up_adduct = false, down_adduct = false;
-                    if (adduct_chBx_temp.Checked && nn.Has_adduct)
+                    if (merged_prim_modif && nn.Has_adduct)
                     {
                         safe_dist_up = -adduct_step2 - adduct_step1; safe_dist_down = adduct_step1; up_adduct = true;
                     }
-                    else if (adduct_chBx_temp.Checked) { down_adduct = true; }
+                    else if (merged_prim_modif) { down_adduct = true; }
                     if (aw_chBx_temp.Checked && (nn.Ion_type.StartsWith("a") || nn.Ion_type.StartsWith("(a")) && nn.Index == idx + 1)
                     {
                         if (los_chkBox_temp.Checked)
@@ -11681,7 +11698,11 @@ namespace Isotope_fitting
             int height = pnl.Size.Height - (padding * 2);
             Panel seq_pnl = pnl.Parent as Panel;
             Panel draw_sequence_panel_temp = seq_pnl.Parent as Panel;
-            CheckBox adduct_chBx_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("has_adduct_chkBx")).ToList().FirstOrDefault();
+            ToolStrip tsp = GetControls(draw_sequence_panel_temp).OfType<ToolStrip>().First();
+            bool include_primary = find_toolstripBtn(tsp, "_primary_").Checked;
+            bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
+            bool merged_prim_modif = include_primary && include_modified;
+
             Point pp = new Point(5, padding);
             Graphics g = e.Graphics;
             SolidBrush sb = new SolidBrush(Color.Black);
@@ -11689,9 +11710,8 @@ namespace Isotope_fitting
             int y_step =5;
             int y_step_up =10;
             int step_x =6;
-            bool is_modif_enabled = adduct_chBx_temp.Checked;
             int times_repeated = 1;//when is_modif_enabled=true the legends are printed twice (once for the unmofies primaries(up) and once for the modified primaries(down))
-            if (is_modif_enabled) times_repeated = 2;
+            if (merged_prim_modif) times_repeated = 2;
             if (!is_riken)
             {
                 CheckBox los_chkBox_temp = GetControls(draw_sequence_panel_temp).OfType<CheckBox>().Where(l => l.Name.Contains("los_chkBox")).ToList().FirstOrDefault();
@@ -11706,11 +11726,11 @@ namespace Isotope_fitting
                     if (m==1) { pp.Y += 5; g.DrawString("Modified", pnl.Font, sb, new Point(0 , pp.Y - y_step)); pp.Y += 20; }
                     if (dvw_chBx_temp.Checked)
                     {
-                        draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                        draw_line(pp, true, 0, Color.DarkTurquoise, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
                         pp.Y += 5;
-                        draw_line(pp, false, 0, Color.Turquoise, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                        draw_line(pp, false, 0, Color.Turquoise, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("v", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                         pp.Y += 10;
-                        draw_line(pp, false, 0, Color.DarkCyan, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                        draw_line(pp, false, 0, Color.DarkCyan, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                     }
                     else if (los_chkBox_temp.Checked)
                     {
@@ -11721,13 +11741,13 @@ namespace Isotope_fitting
                         if (cz_chBx_temp.Checked) { clr2 = Color.Tomato; clr1 = Color.Firebrick; str = new string[] { "c-losses", "c", "z", "z-losses" }; }
                         if (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked)
                         {
-                            draw_line(pp, true, 0, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                            draw_line(pp, true, 0, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
                             pp.Y += 10;
-                            draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
+                            draw_line(pp, true, 0, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up));
                             pp.Y += 10;
-                            draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                            draw_line(pp, false, 0, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                             pp.Y += 10;
-                            draw_line(pp, false, 0, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
+                            draw_line(pp, false, 0, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step));
                         }
                     }
                     else
@@ -11737,20 +11757,20 @@ namespace Isotope_fitting
                         int step = 0;
                         if (ax_chBx_temp.Checked)
                         {
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
                         if (by_chBx_temp.Checked)
                         {
                             clr1 = Color.Blue; clr2 = Color.DodgerBlue;
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
                         if (cz_chBx_temp.Checked)
                         {
                             clr2 = Color.Tomato; clr1 = Color.Firebrick;
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
 
                         }
                         if (m == 0 && (intA_chBx_temp.Checked || intB_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked))
@@ -11809,10 +11829,10 @@ namespace Isotope_fitting
                         if (dz_chBx_temp.Checked) { clr1 = Color.HotPink; clr2 = Color.DeepPink; str = new string[] { "d-losses", "d", "z", "z-losses" }; }
                         if (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked)
                         {
-                            draw_line(pp, true, 4, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
-                            draw_line(pp, true, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
-                            draw_line(pp, false, 0, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
-                            draw_line(pp, false, 4, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
+                            draw_line(pp, true, 4, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[0], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                            draw_line(pp, true, 0, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[1], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 10;
+                            draw_line(pp, false, 0, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[2], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 10;
+                            draw_line(pp, false, 4, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString(str[3], pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step + 4));
                         }
                     }
                     else
@@ -11822,26 +11842,26 @@ namespace Isotope_fitting
                         int step = 0;
                         if (aw_chBx_temp.Checked)
                         {
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("w", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
                         if (bx_chBx_temp.Checked)
                         {
                             clr1 = Color.Blue; clr2 = Color.DodgerBlue;
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("x", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
                         if (cy_chBx_temp.Checked)
                         {
                             clr2 = Color.Tomato; clr1 = Color.Firebrick;
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("c", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("y", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
                         if (dz_chBx_temp.Checked)
                         {
                             step = 0; clr1 = Color.DeepPink; clr2 = Color.HotPink;
-                            draw_line(pp, true, step, clr1, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
-                            draw_line(pp, false, step, clr2, g, false, true, adduct: is_modif_enabled, times: m); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
+                            draw_line(pp, true, step, clr1, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("d", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up)); pp.Y += 5;
+                            draw_line(pp, false, step, clr2, g, false, true, adduct: merged_prim_modif, times: m); g.DrawString("z", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step)); pp.Y += 20;
                         }
                         if (m == 0 && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
                         {
@@ -14392,7 +14412,6 @@ namespace Isotope_fitting
             if (frm24_2 != null) { frm24_2 = null; }
             if (frm24 != null) { frm24 = null; }            
             MSproduct_treeView.Visible = false;
-            //plotExp_chkBox.Checked = false; plotCentr_chkBox.Checked = false; plotFragCent_chkBox.Checked = false; plotFragProf_chkBox.Checked = false;
             is_exp_deconvoluted = false;
             labels_checked.Clear();
             if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
@@ -14400,22 +14419,17 @@ namespace Isotope_fitting
             tab_mode = false;
             loaded_lists = ""; show_files_Btn.ToolTipText = "";
             file_name = ""; filename_txtBx.Text = file_name;
-            //displayPeakList_btn.Enabled = false;
             Peptide = String.Empty;
             heavy_chain = String.Empty; light_chain = String.Empty; light_present = false; heavy_present = false;
             if (sequenceList != null) { sequenceList.Clear(); }
-            insert_exp = false;
-            //plotExp_chkBox.Enabled = false; plotCentr_chkBox.Enabled = false; plotFragProf_chkBox.Enabled = false; plotFragCent_chkBox.Enabled = false;
-            //loadMS_Btn.Enabled = true;
+            insert_exp = false;            
             Fitting_chkBox.Checked = false;
-            //Fitting_chkBox.Enabled = false;
             Fragments2.Clear(); ChemFormulas.Clear();
             selectedFragments.Clear();
             machine_sel_index = 9;
             loadExp_Btn.Enabled = true;           
             bigPanel.Controls.Clear();
             candidate_fragments = 1;
-            //fit_sel_Btn.Enabled = false;          
             mark_neues = false; 
             neues = 0;
             Form4.active = false;
@@ -14427,6 +14441,8 @@ namespace Isotope_fitting
             if (IonDraw.Count > 0) IonDraw.Clear();
             if (IonDrawIndex.Count > 0) IonDrawIndex.Clear();
             if (IonDrawIndexTo.Count > 0) IonDrawIndexTo.Clear();
+            color_primary_indexes = new List<int[]>();
+            color_internal_indexes = new List<int[]>();
             //exclusion lists
             exclude_a_indexes.Clear();
             exclude_b_indexes.Clear();
@@ -15234,5 +15250,13 @@ namespace Isotope_fitting
 
         #endregion
 
+        private void seq_primary_chkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripButton tsp = (sender as ToolStripButton);
+            if (help_Btn.Checked) {if(tsp.Name.Contains("adduct")) MessageBox.Show("Display modified primary fragments", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); else MessageBox.Show("Display primary fragments", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            Panel big_pnl = tsp.GetCurrentParent().Parent as Panel;           
+            Panel seq_pnl = GetControls(big_pnl).OfType<Panel>().Where(n => n.Name.Contains("sequence_Pnl")).First();
+            seq_pnl.Invalidate();
+        }
     }
 }
