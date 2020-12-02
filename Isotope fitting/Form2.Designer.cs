@@ -2950,6 +2950,7 @@ namespace Isotope_fitting
             this.panel1_tab2.Name = "panel1_tab2";
             this.panel1_tab2.Size = new System.Drawing.Size(777, 717);
             this.panel1_tab2.TabIndex = 0;
+            this.panel1_tab2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_tab2_MouseDown);
             // 
             // draw_sequence_panelCopy2
             // 
@@ -2977,6 +2978,7 @@ namespace Isotope_fitting
             this.draw_sequence_panelCopy2.Size = new System.Drawing.Size(760, 500);
             this.draw_sequence_panelCopy2.TabIndex = 12;
             this.draw_sequence_panelCopy2.Visible = false;
+            this.draw_sequence_panelCopy2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_tab2_MouseDown);
             // 
             // dvw_chBxCopy2
             // 
@@ -3261,6 +3263,7 @@ namespace Isotope_fitting
             this.draw_sequence_panelCopy1.Size = new System.Drawing.Size(760, 500);
             this.draw_sequence_panelCopy1.TabIndex = 11;
             this.draw_sequence_panelCopy1.Visible = false;
+            this.draw_sequence_panelCopy1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_tab2_MouseDown);
             // 
             // dvw_chBxCopy1
             // 
@@ -3545,6 +3548,7 @@ namespace Isotope_fitting
             this.draw_sequence_panel.Name = "draw_sequence_panel";
             this.draw_sequence_panel.Size = new System.Drawing.Size(760, 500);
             this.draw_sequence_panel.TabIndex = 10;
+            this.draw_sequence_panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_tab2_MouseDown);
             // 
             // dvw_chBx
             // 

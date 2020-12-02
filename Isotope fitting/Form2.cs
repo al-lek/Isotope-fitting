@@ -517,7 +517,7 @@ namespace Isotope_fitting
             "TripleTOF5600_R28000@200",
             "QTOF_XevoG2-S_R25000@200",
             "TripleTOF6600_R30000@400             "});
-            machine_listBox.Location = new System.Drawing.Point(94, 504);
+            machine_listBox.Location = new System.Drawing.Point(94, 470);
             machine_listBox.Name = "machine_listBox";
             machine_listBox.Size = new System.Drawing.Size(191, 56);
             machine_listBox.TabIndex = 21;
@@ -15256,9 +15256,13 @@ namespace Isotope_fitting
 
 
 
+
+
         #endregion
 
-       
-
+        private void panel1_tab2_MouseDown(object sender, MouseEventArgs e)
+        {
+            CloseForm("Form_matrix");
+        }
     }
 }
