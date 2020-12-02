@@ -10183,6 +10183,7 @@ namespace Isotope_fitting
         //mouse down
         private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
         {
+            CloseForm("Form_matrix");
             string pattern = @"[a-z][+-][1-9][0-9]?(?![(])";
             List<string[]> frags = new List<string[]>();
             List<ion> temp_iondraw = IonDraw.ToList();

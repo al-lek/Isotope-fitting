@@ -410,12 +410,33 @@ namespace Isotope_fitting
             foreach (Form form in Application.OpenForms)
                 if (!currentForm.Equals(form.Name))
                     list.Add(form);
-
-            // close selected forms
-            foreach (Form form in list)
-                form.Close();
+            if (list.Count>0)
+            {
+                // close selected forms
+                foreach (Form form in list)
+                    form.Close();
+            }          
         }
-      
+        /// <summary>
+        /// Closes all open forms that are equal to the (parameter)
+        /// </summary>
+        public static void CloseForm(string currentForm)
+        {
+            // temp list
+            var list = new List<Form>();
+
+            // fill list
+            foreach (Form form in Application.OpenForms)
+                if (currentForm.Equals(form.Name))
+                    list.Add(form);
+            if (list.Count > 0)
+            {
+                // close selected forms
+                foreach (Form form in list)
+                    form.Close();
+            }
+        }
+
         #region extension
         public static bool recognise_extension(string fra_exte, string Extension)
         {
