@@ -10039,7 +10039,10 @@ namespace Isotope_fitting
             frm12.FormClosed += (s, f) => { save_preferences(); };
             frm12.ShowDialog();
         }
-
+        private void panel1_tab2_MouseDown(object sender, MouseEventArgs e)
+        {
+            CloseForm("Form_matrix");
+        }
         #endregion
 
         #region sequence
@@ -10856,13 +10859,20 @@ namespace Isotope_fitting
             }
             else
             {
-                int y_step1 =3;int y_init1 = 0;
-                int y_step2 = 3; int y_init2 = 0;
-                if (adduct && times==0) { y_step1 = -3; y_init1 =3; }
-                if (adduct && times == 1) { y_step2 = -3; y_init2 = -3; }
-                if (inter) { x1 = pf.X; x2 = x1; y1 = pf.Y; y2 = y1 + 6; x3 = x2; y3 = y2; }
-                else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y+ y_init2; y2 = y1 - y_step2; y3 = y2; x3 = x2 - 6; }
-                else { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init1; y2 = y1 + y_step1; y3 = y2; x3 = x2 + 6; }
+                //int y_step1 =3;int y_init1 = 0;
+                //int y_step2 = 3; int y_init2 = 0;
+                //if (adduct && times==0) { y_step1 = -3; y_init1 =3; }
+                //if (adduct && times == 1) { y_step2 = -3; y_init2 = -3; }
+                //if (inter) { x1 = pf.X; x2 = x1; y1 = pf.Y; y2 = y1 + 6; x3 = x2; y3 = y2; }
+                //else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y+ y_init2; y2 = y1 - y_step2; y3 = y2; x3 = x2 - 6; }
+                //else { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init1; y2 = y1 + y_step1; y3 = y2; x3 = x2 + 6; }
+                int y_step1 = 5; int y_init1 = 0;
+                int y_step2 = 5; int y_init2 = 0;
+                if (adduct && times == 0) { y_step1 = -5; y_init1 = 3; }
+                if (adduct && times == 1) { y_step2 = -5; y_init2 = -3; }
+                if (inter) { x1 = pf.X; x2 = x1; y1 = pf.Y; y2 = y1 + 10; x3 = x2; y3 = y2; }
+                else if (up) { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init2; y2 = y1 - y_step2; y3 = y2; x3 = x2 - 10; }
+                else { x1 = pf.X; x2 = x1; y1 = pf.Y + y_init1; y2 = y1 + y_step1; y3 = y2; x3 = x2 + 10; }
             }            
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
@@ -11711,13 +11721,13 @@ namespace Isotope_fitting
             bool include_modified = find_toolstripBtn(tsp, "has_adduct").Checked;
             bool merged_prim_modif = include_primary && include_modified;
 
-            Point pp = new Point(5, padding);
+            Point pp = new Point(10, padding);
             Graphics g = e.Graphics;
             SolidBrush sb = new SolidBrush(Color.Black);
             Pen mypen = new Pen(Color.Black, 2F);
             int y_step =5;
             int y_step_up =10;
-            int step_x =6;
+            int step_x =10;
             int times_repeated = 1;//when is_modif_enabled=true the legends are printed twice (once for the unmofies primaries(up) and once for the modified primaries(down))
             if (merged_prim_modif) times_repeated = 2;
             if (!is_riken)
@@ -11783,11 +11793,12 @@ namespace Isotope_fitting
                         }
                         if (m == 0 && (intA_chBx_temp.Checked || intB_chBx_temp.Checked) && (ax_chBx_temp.Checked || by_chBx_temp.Checked || cz_chBx_temp.Checked))
                         {
-                            if (intA_chBx_temp.Checked) { clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 2)); pp.Y += 15; }
-                            if (intB_chBx_temp.Checked) { clr1 = Color.MediumOrchid; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 2)); pp.Y += 15; }
+                            if (intA_chBx_temp.Checked) { clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.a", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 3)); pp.Y += 15; }
+                            if (intB_chBx_temp.Checked) { clr1 = Color.MediumOrchid; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.b", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 3)); pp.Y += 15; }
                         }
                         else if (m == 0 )
                         {
+                            pp.X = 5;
                             bool is_left = false;
                             bool is_up = true;
                             step = 6;
@@ -11873,10 +11884,11 @@ namespace Isotope_fitting
                         }
                         if (m == 0 && int_chBx_temp.Checked && (aw_chBx_temp.Checked || bx_chBx_temp.Checked || cy_chBx_temp.Checked || dz_chBx_temp.Checked))
                         {
-                            clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 2)); pp.Y += 15;
+                            clr1 = Color.DarkViolet; draw_line(pp, false, 0, clr1, g, true, true); g.DrawString("int.", pnl.Font, sb, new Point(pp.X + step_x, pp.Y - y_step_up / 3)); pp.Y += 15;
                         }
                         else if (m==0 && int_chBx_temp.Checked)
-                        {                           
+                        {      
+                            pp.X = 5;
                             bool is_left = true;
                             bool is_up = true;
                             step = 0;
@@ -15260,9 +15272,6 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void panel1_tab2_MouseDown(object sender, MouseEventArgs e)
-        {
-            CloseForm("Form_matrix");
-        }
+        
     }
 }
