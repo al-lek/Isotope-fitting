@@ -1158,7 +1158,7 @@ namespace Isotope_fitting
         private List<ChemiForm> select_fragments2_frm9()
         {
             string pattern = @"^[+-][1-9][0-9]?(?![(])";
-            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?!a-zA-Z)";
+            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?![a-zA-Z])";
             has_adduct = AdductBtnMS.Checked;
             bool extra_mz_error = false;
             double extra_mz = 0;
@@ -1470,7 +1470,7 @@ namespace Isotope_fitting
         private List<ChemiForm> select_fragments2_frm9_riken()
         {
             string pattern = @"^[+-][1-9][0-9]?(?![(])";
-            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?!a-zA-Z)";
+            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?![a-zA-Z])";
             has_adduct = AdductBtn.Checked;            
             bool extra_mz_error = false;
             double extra_mz = 0;

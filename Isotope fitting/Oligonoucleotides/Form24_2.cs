@@ -161,7 +161,7 @@ namespace Isotope_fitting
         private List<ChemiForm> select_fragments_riken()
         {
             string pattern = @"^[+-][1-9][0-9]?(?![(])";
-            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?!a-zA-Z)";
+            string pattern_H2 = @"^[+-][H][1-9][0-9]?(?![a-zA-Z])";
             List<ChemiForm> res = new List<ChemiForm>();          
             double extra_mz = 0;
             bool extra_mz_error = false;
