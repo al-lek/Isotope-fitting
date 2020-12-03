@@ -14481,8 +14481,20 @@ namespace Isotope_fitting
             //reset_all();
             Initialize_data_struct();
             block_plot_refresh = false;
-            refresh_iso_plot();
+            refresh_iso_plot(); 
+            clear_sequence_panel_info();
             return true;
+        }
+        private void clear_sequence_panel_info()
+        {
+            List<Panel> seq_pnls = new List<Panel>();
+            seq_pnls = GetControls(panel1_tab2).OfType<Panel>().Where<Panel>(p => p.Name.Contains("draw_sequence_panel")).ToList();
+            foreach (Panel pnl in seq_pnls)
+            {
+                un_check_all_checkboxes(pnl,false);
+                ComboBox temp_seq_box= GetControls(pnl).OfType<ComboBox>().First();
+                if (temp_seq_box.Items!=null && temp_seq_box.Items.Count != 0) { temp_seq_box.Items.Clear(); }
+            }
         }
         //load
         private void load_proj_Btn_Click(object sender, EventArgs e)
