@@ -14495,6 +14495,9 @@ namespace Isotope_fitting
                 ComboBox temp_seq_box= GetControls(pnl).OfType<ComboBox>().First();
                 if (temp_seq_box.Items!=null && temp_seq_box.Items.Count != 0) { temp_seq_box.Items.Clear(); }
             }
+            draw_sequence_panelCopy1.Visible = false;
+            draw_sequence_panelCopy2.Visible = false;
+
         }
         //load
         private void load_proj_Btn_Click(object sender, EventArgs e)
