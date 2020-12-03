@@ -3776,11 +3776,11 @@ namespace Isotope_fitting
             // legend_panel
             // 
             this.legend_panel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.legend_panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legend_panel.Location = new System.Drawing.Point(441, 0);
+            this.legend_panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legend_panel.Location = new System.Drawing.Point(436, 0);
             this.legend_panel.Name = "legend_panel";
             this.legend_panel.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            this.legend_panel.Size = new System.Drawing.Size(81, 444);
+            this.legend_panel.Size = new System.Drawing.Size(86, 444);
             this.legend_panel.TabIndex = 19;
             this.legend_panel.Visible = false;
             this.legend_panel.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
