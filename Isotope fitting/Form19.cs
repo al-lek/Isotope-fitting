@@ -359,8 +359,8 @@ namespace Isotope_fitting
             if (help)
             {
                 MessageBox.Show("Minimum abundance of isotope pattern peaks to be retained during calculation,\r\n" +
-                "given as a percentageof the most abundant peak.\r\nWarning:\r\n(1)Omitting too abundant peaks may distort the profile shape.\r\n(2)Including too many peaks may lead to computational problems for very large molecules.\r\n" +
-                "Set to 0 to calculate all possible isotope pattern peaks.\r\n(From Envipat website)\r\nFor large molecule it is suggested to set to 1.00 in order to minimize the calculation time.\r\nDefault:0.01" +
+                "given as a percentage of the most abundant peak.\r\nWarning:\r\n(1)Omitting too abundant peaks may distort the profile shape.\r\n(2)Including too many peaks may lead to computational problems for very large molecules.\r\n" +
+                "Set to 0 to calculate all possible isotope pattern peaks.\r\n(From Envipat website)\r\nFor large molecules it is suggested to set to 1.00 in order to minimize the calculation time.\r\nDefault:0.01" +
                 "", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.envipat.eawag.ch/", "keyword");
                 return;
             }
