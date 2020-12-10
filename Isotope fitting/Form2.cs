@@ -3424,7 +3424,7 @@ namespace Isotope_fitting
             factor_panel.Controls.Clear();
             Label factor_lbl = new Label { Text = Fragments2[frag_idx].Name, Location = new Point(5, 10), AutoSize = true };
             Button btn_solo = new Button { Text = "fit", Location = new Point(200, 6), Size = new Size(60, 23) };
-            NumericUpDown numUD = new NumericUpDown { Minimum = 0, Maximum = 1e8M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
+            NumericUpDown numUD = new NumericUpDown { Minimum = 0, Maximum = 1e12M, Value = (decimal)Math.Round(frag_intensity, 1), Increment = (decimal)Math.Round(frag_intensity) / 50,
                 Location = new Point(275, 7), Size = new Size(60, 20) };
             btn_solo.Click += (s, e) =>
             {

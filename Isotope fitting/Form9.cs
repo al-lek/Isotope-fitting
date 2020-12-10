@@ -548,7 +548,7 @@ namespace Isotope_fitting
             NumericUpDown numUD = new NumericUpDown
             {
                 Minimum = 0,
-                Maximum = 1e8M,
+                Maximum = 1e12M,
                 Value = (decimal)Math.Round(frag_intensity, 1),
                 Increment = (decimal)Math.Round(frag_intensity) / 50,
                 Location = new Point(factor_panel9.Width-65, 7),
