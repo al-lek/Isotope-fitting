@@ -558,7 +558,12 @@ namespace Isotope_fitting
                 foreach (ChemiForm chem in selected_fragments)
                 {
                     if (machine_listBox.SelectedItems.Count > 0){chem.Machine = machine_listBox.SelectedItem.ToString();}
-                    else{chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);}
+                    else
+                    {
+                        bool success = double.TryParse(resolution_Box.Text, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out double result);
+                        if (success) { chem.Resolution = result; }
+                        else { machine_listBox.SelectedIndex = machine_listBox.Items.Count-1; chem.Machine = machine_listBox.SelectedItem.ToString(); }
+                    }
                 }
             }
 

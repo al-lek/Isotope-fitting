@@ -751,7 +751,10 @@ namespace Isotope_fitting
                     }
                     else
                     {
-                        chem.Resolution = double.Parse(resolution_Box.Text, CultureInfo.InvariantCulture.NumberFormat);
+                        bool success = double.TryParse(resolution_Box.Text,NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out double result);
+                        if (success) { chem.Resolution = result; }
+                        else { machine_listBox1.SelectedIndex = machine_listBox1.Items.Count - 1;  chem.Machine= machine_listBox1.SelectedItem.ToString(); }
+                          
                     }
                 }
             }
