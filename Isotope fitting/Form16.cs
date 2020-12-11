@@ -149,6 +149,7 @@ namespace Isotope_fitting
             {
                 RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
                 string tab_name = seq_tabControl.TabPages[k].Text;
+                tab_name = tab_name.Replace(" ", "");
                 string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
                 s = s.Replace("\t", "");
                 s = s.Replace("\n", "");
