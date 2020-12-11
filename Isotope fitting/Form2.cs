@@ -3172,8 +3172,8 @@ namespace Isotope_fitting
             int final_chain_type = 0;
             int present = 0;//if present=2 both extension are present in sequence list and chain types matter
             var showDialog = ShowRenameExtensionDialog();
-            previous_exte = showDialog[0].Replace(" ", "");
-            final_exte = showDialog[1].Replace(" ", "");
+            previous_exte = remove_empty_spaces(showDialog[0]);
+            final_exte = remove_empty_spaces(showDialog[1]);
             if (string.IsNullOrEmpty(previous_exte) || string.IsNullOrEmpty(final_exte)) { return; }
             if (sequenceList == null || sequenceList.Count == 0) return;
             foreach (SequenceTab seq in sequenceList)

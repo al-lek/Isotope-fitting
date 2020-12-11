@@ -1235,5 +1235,27 @@ namespace Isotope_fitting
             }
             return null;
         }
+
+        public static string remove_empty_spaces(string initial)
+        {
+            string final = "";            
+            int start = 0;int finish = 0;
+            for (int k=0;k< initial.Length; k++)
+            {
+                if(! Char.IsWhiteSpace(initial[k]))
+                {
+                    start = k;break;
+                }               
+            }
+            for (int k = initial.Length-1; k>-1; k--)
+            {
+                if (!Char.IsWhiteSpace(initial[k]))
+                {
+                    finish = k; break;
+                }
+            }
+            final = initial.Substring(start, finish-start+1);
+           return final;
+        }
     }
 }

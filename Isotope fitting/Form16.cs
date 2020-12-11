@@ -148,8 +148,7 @@ namespace Isotope_fitting
             for (int k = 0; k < seq_tabControl.TabPages.Count - 1; k++)
             {
                 RichTextBox txtbox = seq_tabControl.TabPages[k].Controls.OfType<RichTextBox>().First();
-                string tab_name = seq_tabControl.TabPages[k].Text;
-                tab_name = tab_name.Replace(" ", "");
+                string tab_name =Helpers.remove_empty_spaces(seq_tabControl.TabPages[k].Text);               
                 string s = txtbox.Text.Replace(Environment.NewLine, "").ToString();
                 s = s.Replace("\t", "");
                 s = s.Replace("\n", "");
