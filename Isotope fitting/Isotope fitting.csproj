@@ -101,6 +101,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\Arction.WinForms.SignalProcessing.SignalTools.dll</HintPath>
     </Reference>
+    <Reference Include="Extreme.Numerics, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9e513770f58567b2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extreme.Numerics.7.0.0\lib\net40\Extreme.Numerics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Extreme.Numerics.IronPython, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9e513770f58567b2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extreme.Numerics.IronPython.7.0.0\lib\net40\Extreme.Numerics.IronPython.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="IronPython, Version=2.7.11.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPython.2.7.11\lib\net45\IronPython.dll</HintPath>
     </Reference>

@@ -138,8 +138,6 @@ namespace Isotope_fitting
         bool frag_types_save = false;
         public List<int> selectedFragments = new List<int>();
         public List<int> selectedFragments_fragTypes = new List<int>();
-        int start_idx = 0;
-        int end_idx = 0;
         public static double max_exp = 0.0;
        
 
@@ -484,7 +482,8 @@ namespace Isotope_fitting
             change_state(true);
             //call change state window
             initiate_change_state_form();
-            PatchParameter("",0);
+            //PatchParameter("", 0);
+            //run_cmd("", "");
         }
         
         #region init
@@ -791,11 +790,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region TAB FIT
-        // UI UncheckAll()
-        // UI Initialize_fit_UI()
-        // UI merge textBox input control
-        // Debug.WriteLine("peak thread id: " + Thread.CurrentThread.ManagedThreadId);
+        #region TAB FIT     
 
         #region 0. Preferences and params
         private void optionBtn_Click(object sender, EventArgs e)
@@ -1350,8 +1345,6 @@ namespace Isotope_fitting
             experimental_to_all_data();
             recalculate_all_data_aligned();
             ////// add experimental to plot
-            start_idx = 0;
-            end_idx = experimental.Count;
             MessageBox.Show("Processing is completed.", "Load experimental data", MessageBoxButtons.OK);
             LC_1.ViewXY.ZoomToFit();
         }
@@ -2696,7 +2689,6 @@ namespace Isotope_fitting
             is_calc = true;
             sw1.Reset(); sw1.Start();
             int progress = 0;
-            int dubs = 0;
             progress_display_start(selected_fragments.Count, "Calculating fragment isotopic distributions...");
             try
             {
@@ -2913,7 +2905,7 @@ namespace Isotope_fitting
         public static double[] ppm_calculator(double centroid)
         {
             // find the closest experimental peak, and return calculated ppm and resolution
-            double exp_cen, curr_diff, ppm;           
+            double exp_cen, ppm;           
             int[] pair = new int[2];
             pair=find_closest(centroid, peak_points, true);
             exp_cen = peak_points[pair[0]][1] + peak_points[pair[0]][4];           
@@ -14933,8 +14925,6 @@ namespace Isotope_fitting
             else custom_colors.Add(exp_color);
             // copy experimental to all_data
             experimental_to_all_data();
-            start_idx = 0;
-            end_idx = experimental.Count;           
             if (!is_exp_deconvoluted)
             {
                 //displayPeakList_btn.Enabled = true;
@@ -15316,38 +15306,58 @@ namespace Isotope_fitting
             }
         }
         public void PatchParameter(string parameter, int serviceid)
-        {
-            var engine = Python.CreateEngine(); // Extract Python language engine from their grasp
-            var scope = engine.CreateScope(); // Introduce Python namespace (scope)
-            //var d = new Dictionary<string, object>
-            //{
-            //    { "serviceid", serviceid},
-            //    { "parameter", parameter}
-            //}; // Add some sample parameters. Notice that there is no need in specifically setting the object type, interpreter will do that part for us in the script properly with high probability
+        {          
+            // 1) Create engine
+            var engine = Python.CreateEngine();
+            var paths = engine.GetSearchPaths();
+            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\");
+            engine.SetSearchPaths(paths);
+            // 2) Provide script and arguments
+            var script = @"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\ultimate_fragmentor.py";
+            var source = engine.CreateScriptSourceFromFile(script);
 
-            //scope.SetVariable("params", d); // This will be the name of the dictionary in python script, initialized with previously created .NET Dictionary
-            ScriptSource source = engine.CreateScriptSourceFromFile( "C:\\Users\\Maro\\Desktop\\Utlimate_Fragment\\ultimate_fragmentor.py"); // Load the script
-            object result = source.Execute(scope);
-            //parameter = scope.GetVariable<string>("parameter"); // To get the finally set variable 'parameter' from the python script
-            //return parameter;
+            var argv = new List<string>();
+            argv.Add("");
+            argv.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\input.json");
+            engine.GetSysModule().SetVariable("argv", argv);
+
+            // 3) Output redirect
+            var eIO = engine.Runtime.IO;
+
+            var errors = new MemoryStream();
+            eIO.SetErrorOutput(errors, Encoding.Default);
+
+            var results = new MemoryStream();
+            eIO.SetOutput(results, Encoding.Default);
+
+            // 4) Execute script
+            var scope = engine.CreateScope();
+            source.Execute(scope);
+
+            //// 5) Display output
+            //string str(byte[] x) => Encoding.Default.GetString(x);
+
+            //Console.WriteLine("ERRORS:");
+            //Console.WriteLine(str(errors.ToArray()));
+            //Console.WriteLine();
+            //Console.WriteLine("Results:");
+            //Console.WriteLine(str(results.ToArray()));
         }
 
-        public void run_cmd(string cmd, string args)
+        
+        public void read_csv()
         {
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = "C:\\Users\\Maro\\Desktop\\Utlimate_Fragment\\ultimate_fragmentor.py";
-            //start.Arguments = string.Format("\"{0}\" \"{1}\"", cmd, args);
-            start.UseShellExecute = false;// Do not use OS shell
-            start.CreateNoWindow = true; // We don't need new window
-            start.RedirectStandardOutput = true;// Any output, generated by application will be redirected back
-            start.RedirectStandardError = true; // Any error in standard output will be redirected back (for example exceptions)
-            using (Process process = Process.Start(start))
+            using (var reader = new StreamReader(@"My_fragments.csv"))
             {
-                using (StreamReader reader = process.StandardOutput)
+                List<string> listA = new List<string>();
+                List<string> listB = new List<string>();
+                while (!reader.EndOfStream)
                 {
-                    string stderr = process.StandardError.ReadToEnd(); // Here are the exceptions from our Python script
-                    string result = reader.ReadToEnd(); // Here is the result of StdOut(for example: print "test")
-                    return ;
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+
+                    listA.Add(values[0]);
+                    listB.Add(values[1]);
                 }
             }
         }

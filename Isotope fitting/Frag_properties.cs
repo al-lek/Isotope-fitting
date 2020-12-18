@@ -19,7 +19,6 @@ namespace Isotope_fitting
         FragForm new_fra = new FragForm();
         Form2 frm2;
         int index_list;
-        private System.Windows.Forms.TextBox editBox;
         public Frag_properties(FragForm fra, int i, Form2 f)
         {
             InitializeComponent();

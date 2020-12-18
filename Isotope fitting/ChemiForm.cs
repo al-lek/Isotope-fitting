@@ -1334,73 +1334,22 @@ namespace Isotope_fitting
                     {
                         l.Resolution = data.R[0]; return;
                     }
-                    //if (l.Machine.Contains("resolution from file"))
-                    //{
-                    //    for (int kx = 0; kx < x.Count(); kx++)
-                    //    {
-                    //        if (x[kx] >= x1[0])
-                    //        {
-                    //            if (kx == 0) { l.Resolution = y[kx]; break; }
-                    //            l.Resolution = Math.Abs(y[kx] + y[kx - 1]) / 2; break;
-                    //        }                           
-                    //    }                       
-                    //}
-                    //else
-                    //{
-                    // Create the upsampled X values to interpolate
-                    //if (calculate_matrix == true)
-                    //{
-
                     double[] x = data.m_z;
                     double[] y = data.R;
-                        List<double> xss = new List<double>();
-                    double step = new double();
-                        //for (int i = 0; i < n; i++)
-                        //{
-                        //    xs.Add( x[0] + i * stepSize);
-                        //}
-                        xss.Add( x.Last());
-                        double[] x_ = Array.ConvertAll(data.m_z, k => (double)k);
-                        double[] y_ = Array.ConvertAll(data.R, k => (double)k);
-                        double[] w = new double[y_.Count()];
-                        double v = 0.0;
-                        for (int u=0;u< y_.Count(); u++){ w[u] = 1; }
-                        int info = new int();
-                        alglib.spline1dinterpolant s = new alglib.spline1dinterpolant();
-                        alglib.spline1dfitreport rep = new alglib.spline1dfitreport();
-                        double rho = 1;
-                        alglib.spline1dfitpenalized(x_,y_, 50,rho,out info,out s,out rep);
-                        v = alglib.spline1dcalc(s, x1[0]);
-                        l.Resolution = (float)v;
-                        //for (int h=0; h< xs.Count(); h++)
-                        //{
-                        //    v = alglib.spline1dcalc(s, xs[h]);
-                        //    ys.Add(v);
-                        //}
-                        // Fit and eval
-                        //CubicSpline spline = new CubicSpline();
-                        //float[] yss = spline.FitAndEval(x, y, xss.ToArray(), Single.NaN, Single.NaN);
-                        //xs = xss.ToList();
-                        //ys = yss.ToList();
-                       
-                    //}
-
-                    
-                    //for (int kx = 1; kx < xs.Count(); kx++)
-                    //{
-                    //    if (xs[kx] >= x1[0])
-                    //    {
-                    //        if (kx == 0) { l.Resolution = ys[kx]; break; }
-                    //        l.Resolution = Math.Abs(ys[kx] + ys[kx - 1]) / 2;
-                    //        break;
-                    //    }
-                    //    //else if (xs[kx] < x1[0] - 100 * stepSize && (kx + 100) < xs.Count()) kx = kx + 99;
-                    //    //else if (xs[kx] < x1[0] - 50 * stepSize && (kx + 50) < xs.Count()) kx = kx + 48;
-                    //    //else if (xs[kx] < x1[0] - 10 * stepSize && (kx + 10) < xs.Count()) kx = kx + 6;
-                    //}
-                    //}
-
-
+                    List<double> xss = new List<double>();
+                    xss.Add(x.Last());
+                    double[] x_ = Array.ConvertAll(data.m_z, k => (double)k);
+                    double[] y_ = Array.ConvertAll(data.R, k => (double)k);
+                    double[] w = new double[y_.Count()];
+                    double v = 0.0;
+                    for (int u = 0; u < y_.Count(); u++) { w[u] = 1; }
+                    int info = new int();
+                    alglib.spline1dinterpolant s = new alglib.spline1dinterpolant();
+                    alglib.spline1dfitreport rep = new alglib.spline1dfitreport();
+                    double rho = 1;
+                    alglib.spline1dfitpenalized(x_, y_, 50, rho, out info, out s, out rep);
+                    v = alglib.spline1dcalc(s, x1[0]);
+                    l.Resolution = (float)v;
                 }
                 else
                 {
