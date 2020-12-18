@@ -35,7 +35,6 @@ using System.ComponentModel;
 using OxyPlot.Axes;
 using ClipperLib;
 using Newtonsoft.Json;
-using IronPython;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 
@@ -482,7 +481,7 @@ namespace Isotope_fitting
             change_state(true);
             //call change state window
             initiate_change_state_form();
-            //PatchParameter("", 0);
+            PatchParameter("", 0);
             //run_cmd("", "");
         }
         
@@ -15306,19 +15305,25 @@ namespace Isotope_fitting
             }
         }
         public void PatchParameter(string parameter, int serviceid)
-        {          
+        {
             // 1) Create engine
-            var engine = Python.CreateEngine();
+            ScriptEngine engine = Python.CreateEngine();
             var paths = engine.GetSearchPaths();
             paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\");
+            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\.idea");
+            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\fragment_lib");
+            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\params");
+
             engine.SetSearchPaths(paths);
             // 2) Provide script and arguments
             var script = @"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\ultimate_fragmentor.py";
-            var source = engine.CreateScriptSourceFromFile(script);
+            ScriptSource source = engine.CreateScriptSourceFromFile(script);
 
             var argv = new List<string>();
             argv.Add("");
+            //argv.Add("input.json");
             argv.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\input.json");
+
             engine.GetSysModule().SetVariable("argv", argv);
 
             // 3) Output redirect
@@ -15331,8 +15336,10 @@ namespace Isotope_fitting
             eIO.SetOutput(results, Encoding.Default);
 
             // 4) Execute script
-            var scope = engine.CreateScope();
-            source.Execute(scope);
+            //engine.ExecuteFile(script);
+            //var scope = engine.CreateScope();
+            //source.Execute(scope);
+            source.Execute();
 
             //// 5) Display output
             //string str(byte[] x) => Encoding.Default.GetString(x);
@@ -15343,8 +15350,23 @@ namespace Isotope_fitting
             //Console.WriteLine("Results:");
             //Console.WriteLine(str(results.ToArray()));
         }
+        private void run_cmd(string cmd, string args)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = "my/full/path/to/python.exe";
+            start.Arguments = string.Format("{0} {1}", cmd, args);
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            using (Process process = Process.Start(start))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd();
+                    Console.Write(result);
+                }
+            }
+        }
 
-        
         public void read_csv()
         {
             using (var reader = new StreamReader(@"My_fragments.csv"))
