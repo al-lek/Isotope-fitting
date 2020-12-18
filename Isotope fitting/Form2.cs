@@ -481,7 +481,7 @@ namespace Isotope_fitting
             change_state(true);
             //call change state window
             initiate_change_state_form();
-            PatchParameter("", 0);
+            //PatchParameter("", 0);
             //run_cmd("", "");
         }
         
