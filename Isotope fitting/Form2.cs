@@ -2585,6 +2585,7 @@ namespace Isotope_fitting
                 try
                 {
                     clearList();
+                    if (Form9.now && Form9.last_plotted.Count > 0) if (Form9.now && Form9.last_plotted.Count > 0) { Form9.last_plotted.Clear(); }
                 }
                 catch
                 {
