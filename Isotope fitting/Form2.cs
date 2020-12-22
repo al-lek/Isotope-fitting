@@ -33,15 +33,12 @@ using Arction.WinForms.Charting.Views.ViewXY;
 using Arction.WinForms.Charting.Annotations;
 using System.ComponentModel;
 using OxyPlot.Axes;
-using ClipperLib;
 using Newtonsoft.Json;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 
 namespace Isotope_fitting
-{
-    using Path = List<Point64>;
-    using Paths = List<List<Point64>>;
+{   
     public partial class Form2 : Form
     {
         public static ColorDialog clrDlg = new ColorDialog();
@@ -466,7 +463,7 @@ namespace Isotope_fitting
         {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             InitializeComponent();
-            initialize_machine_listboxes();
+            Initialize_machine_listboxes();
             // declare event to continue calculations after Fragments2 are complete
             OnEnvelopeCalcCompleted += () => { fragments_and_calculations_sequence_B(); };
             // declare event to plot fit results after fitting calculations are complete
@@ -477,16 +474,17 @@ namespace Isotope_fitting
             load_preferences();
             reset_all();
             fragTreePanel.Controls.Add(frag_tree);
-            initialize_BW();
+            Initialize_BW();
             change_state(true);
             //call change state window
             initiate_change_state_form();
-            //PatchParameter("", 0);
+            PatchParameter("", 0);
             //run_cmd("", "");
+            //rin_python();
         }
         
         #region init
-        private void initialize_machine_listboxes()
+        private void Initialize_machine_listboxes()
         {
             // 
             // machine_listBox
@@ -565,7 +563,7 @@ namespace Isotope_fitting
             machine_listBox1.TabIndex = 21;
             machine_listBox1.SelectedIndex = machine_sel_index;
         }
-        private void initialize_BW()
+        private void Initialize_BW()
         {
             //save .fit file
             _bw_save_envipat.DoWork += new DoWorkEventHandler(Save_frag_envipat);
@@ -1829,6 +1827,7 @@ namespace Isotope_fitting
         }
         private void assign_resolve_fragment(string[] frag_info)
         {
+            //m/z,ion,index,charge,formula
             int charge = Int32.Parse(frag_info[3]);
             if (is_exp_deconvoluted && charge > 1) { return; }
             bool is_error = false;
@@ -1974,177 +1973,7 @@ namespace Isotope_fitting
                 ChemFormulas[i].SortIdx = Int32.Parse(ChemFormulas[i].Index);
             }
         }
-
-        //private void assign_manually_pro_fragment(string[] frag_info)
-        //{
-        //    if (is_exp_deconvoluted && Int32.Parse(frag_info[4]) > 1) { return; }
-
-        //    //frag_info 0:m/z monoisotopic , 1:ion type , 2:index  ,3:index to ,4:charge ,5:formula ,6: iso_ amount
-        //    ChemFormulas.Add(new ChemiForm
-        //    {
-        //        InputFormula = frag_info[5],
-        //        Adduct = string.Empty,
-        //        Deduct = string.Empty,
-        //        Multiplier = 1,
-        //        Mz = frag_info[0],
-        //        Ion = frag_info[1],
-        //        Index = frag_info[2],
-        //        IndexTo = frag_info[3],
-        //        Error = false,
-        //        Elements_set = new List<Element_set>(),
-        //        Iso_total_amount = 0,
-        //        Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
-        //        Points = new List<PointPlot>(),
-        //        Machine = string.Empty,
-        //        Resolution = new double(),
-        //        Combinations = new List<Combination_1>(),
-        //        Profile = new List<PointPlot>(),
-        //        Centroid = new List<PointPlot>(),
-        //        Intensoid = new List<PointPlot>(),
-        //        Combinations4 = new List<Combination_4>(),
-        //        FinalFormula = string.Empty,
-        //        Factor = 1.0,
-        //        Fixed = false,
-        //        PrintFormula = frag_info[5],
-        //        Max_man_int = 0,
-        //        Extension = ms_extension,
-        //        Chain_type = 0
-        //    });
-
-        //    int i = ChemFormulas.Count - 1;
-        //    // Note on formulas
-        //    // InputFormula is the text from MSProduct. It has 1 more H. We remove it, and we store at the same variable ONCE, on loading of the text file.
-        //    // So, we need to add Adduct H. They are exactly the same amount with the charge.
-        //    // PrintFormula is the same and it should be redundant. FinalFormula is all elements together and it is not used outside of enviPat code.
-        //    // Example: a13 +3 Ubiquitin
-        //    // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
-        //    // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
-
-        //    ChemFormulas[i].Charge = Int32.Parse(frag_info[4]);
-        //    if (frag_info.Length > 6) { ChemFormulas[i].Max_man_int = dParser(frag_info[6]); }
-        //    // all ions have as many H in Adduct as their charge
-        //    ChemFormulas[i].Adduct = "H" + ChemFormulas[i].Charge.ToString();
-
-        //    if (char.IsLower(frag_info[1][0]))
-        //    {
-        //        // normal fragment
-        //        ChemFormulas[i].Ion_type = ChemFormulas[i].Ion;
-        //        if (ChemFormulas[i].Ion.StartsWith("d") || ChemFormulas[i].Ion.StartsWith("w") || ChemFormulas[i].Ion.StartsWith("v")) ChemFormulas[i].Color = OxyColors.Turquoise;
-        //        else if (ChemFormulas[i].Ion.StartsWith("a")) ChemFormulas[i].Color = OxyColors.Green;
-        //        else if (ChemFormulas[i].Ion.StartsWith("b")) ChemFormulas[i].Color = OxyColors.Blue;
-        //        else if (ChemFormulas[i].Ion.StartsWith("x")) ChemFormulas[i].Color = OxyColors.LimeGreen;
-        //        else if (ChemFormulas[i].Ion.StartsWith("y")) ChemFormulas[i].Color = OxyColors.DodgerBlue;
-        //        else if (ChemFormulas[i].Ion.StartsWith("z")) ChemFormulas[i].Color = OxyColors.Tomato;
-        //        else if (ChemFormulas[i].Ion.StartsWith("c")) ChemFormulas[i].Color = OxyColors.Firebrick;
-        //        else if (ChemFormulas[i].Ion.Contains("int") && ChemFormulas[i].Ion.Contains("b")) ChemFormulas[i].Color = OxyColors.MediumOrchid;
-        //        else if (ChemFormulas[i].Ion.Contains("int")) ChemFormulas[i].Color = OxyColors.DarkViolet;
-        //        else ChemFormulas[i].Color = OxyColors.Orange;
-
-        //        string lbl = "";
-        //        if (ChemFormulas[i].Ion.StartsWith("int"))//for internal fragments
-        //        {
-        //            string[] substring = new string[2] { "", "" };
-        //            int dash_idx = ChemFormulas[i].Ion.IndexOf('-');
-        //            if (dash_idx != -1)
-        //            {
-        //                substring[0] = ChemFormulas[i].Ion.Substring(0, dash_idx);
-        //                substring[1] = ChemFormulas[i].Ion.Substring(dash_idx);
-        //            }
-        //            else substring[0] = ChemFormulas[i].Ion;
-
-        //            if (ChemFormulas[i].Ion.Contains("b"))//internal b
-        //            {
-        //                ChemFormulas[i].Ion_type = "internal b" + substring[1];
-
-        //                lbl = "internal_b" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-        //                ChemFormulas[i].Radio_label = lbl;
-        //                if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
-        //                else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
-        //            }
-        //            else//internal a
-        //            {
-        //                ChemFormulas[i].Ion_type = "internal a" + substring[1];
-        //                lbl = "internal_a" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-        //                ChemFormulas[i].Radio_label = lbl;
-        //                if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
-        //                else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
-        //            }
-        //        }
-        //        else//for primary fragments
-        //        {
-        //            if (ChemFormulas[i].Ion_type.Length == 1) { lbl = ChemFormulas[i].Ion_type + ChemFormulas[i].Index; }
-        //            else { lbl = "(" + ChemFormulas[i].Ion_type + ")" + ChemFormulas[i].Index; }
-        //            ChemFormulas[i].Radio_label = lbl;
-        //            if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
-        //            else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        // internal fragment or precursor (KIQDKEGIP-H2O-NH3, MH-H2O)
-        //        // split string in two parts, [0] main [1]adduct (if any)
-        //        string[] substring = new string[2] { "", "" };
-        //        int dash_idx = ChemFormulas[i].Ion.IndexOf('-');
-        //        if (dash_idx != -1)
-        //        {
-        //            substring[0] = ChemFormulas[i].Ion.Substring(0, dash_idx);
-        //            substring[1] = ChemFormulas[i].Ion.Substring(dash_idx);
-        //        }
-        //        else substring[0] = ChemFormulas[i].Ion;
-
-        //        if (substring[0].StartsWith("MH"))  // an internal b could be MHQRP for example, so check also carbons
-        //        {
-        //            ChemFormulas[i].Ion_type = "M" + substring[1];
-        //            ChemFormulas[i].Color = OxyColors.DarkRed;
-        //            ChemFormulas[i].Index = 0.ToString();
-        //            ChemFormulas[i].IndexTo = (Peptide.Length - 1).ToString();
-
-        //            string lbl = ChemFormulas[i].Ion_type;
-        //            ChemFormulas[i].Radio_label = lbl;
-        //            if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
-        //            else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
-        //        }
-        //        else if (substring[1].Contains("-CO"))
-        //        {
-        //            substring[1] = substring[1].Replace("-CO", "");
-
-        //            ChemFormulas[i].Ion_type = "internal a" + substring[1];
-        //            ChemFormulas[i].Color = OxyColors.DarkViolet;
-        //            ChemFormulas[i].Index = (Peptide.IndexOf(substring[0]) + 1).ToString();
-        //            ChemFormulas[i].IndexTo = (Peptide.IndexOf(substring[0]) + substring[0].Length).ToString();
-
-        //            string lbl = "internal_a" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-        //            ChemFormulas[i].Radio_label = lbl;
-        //            if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
-        //            else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
-        //        }
-        //        else
-        //        {
-        //            ChemFormulas[i].Ion_type = "internal b" + substring[1];
-        //            ChemFormulas[i].Color = OxyColors.MediumOrchid;
-        //            ChemFormulas[i].Index = (Peptide.IndexOf(substring[0]) + 1).ToString();
-        //            ChemFormulas[i].IndexTo = (Peptide.IndexOf(substring[0]) + substring[0].Length).ToString();
-
-        //            string lbl = "internal_b" + substring[1] + "[" + ChemFormulas[i].Index + "-" + ChemFormulas[i].IndexTo + "]";
-        //            ChemFormulas[i].Radio_label = lbl;
-        //            if (ChemFormulas[i].Charge > 0) ChemFormulas[i].Name = lbl + "_" + ChemFormulas[i].Charge.ToString() + "+";
-        //            else ChemFormulas[i].Name = lbl + "_" + Math.Abs(ChemFormulas[i].Charge).ToString() + "-";
-        //        }
-        //    }
-        //    ChemFormulas[i].Radio_label += ms_extension;
-        //    ChemFormulas[i].Name += ms_extension;
-        //    if (ms_heavy_chain) { ChemFormulas[i].Chain_type = 1; }
-        //    else if (ms_light_chain) { ChemFormulas[i].Chain_type = 2; }
-        //    if (ChemFormulas[i].Ion.StartsWith("x") || ChemFormulas[i].Ion.StartsWith("y") || ChemFormulas[i].Ion.StartsWith("z") || ChemFormulas[i].Ion.StartsWith("(x") || ChemFormulas[i].Ion.StartsWith("(y") || ChemFormulas[i].Ion.StartsWith("(z"))
-        //    {
-        //        ChemFormulas[i].SortIdx = ms_sequence.Length - Int32.Parse(ChemFormulas[i].Index);
-        //    }
-        //    else
-        //    {
-        //        ChemFormulas[i].SortIdx = Int32.Parse(ChemFormulas[i].Index);
-        //    }
-        //}
+        
         private void post_import_fragments()
         {
             // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
@@ -4276,13 +4105,8 @@ namespace Isotope_fitting
                     if (ppm < ppmDi)
                     {
                         double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
-                        //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
                         double ee = ee1 * sorted_cen[c].Y;
-                        iso_lse_sum += ee; tmp_error[c] = ee1;
-                        //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
-                        //double eee = ee * max_cen / sorted_cen[c].Y;
-                        //if (eee > 1) { eee = 1 / eee; }
-                        //iso_lse_sum +=eee;                        
+                        iso_lse_sum += ee; tmp_error[c] = ee1;                                         
                     }
                     else
                     {
@@ -4351,7 +4175,6 @@ namespace Isotope_fitting
                         exp_intensity = 0; exp_cen = 0; absent_factor += sorted_cen[c].Y / summ;
                     }
                     double frag_int = sorted_cen[c].Y * frag_factor;
-                    //frag_info.Add(new double[] { exp_cen, exp_intensity, sorted_cen[c].Y * frag_factor, sorted_cen[c].Y / summ, ss, 1, sorted_cen[c].Y / summ });
                     frag_info.Add(new double[] { exp_cen, exp_intensity, frag_int, sorted_cen[c].Y / summ, ss, frag_int, sorted_cen[c].Y / summ });
                 }
                 tmp[ss + 3 * set_array.Length] = 100.00 * absent_factor;
@@ -4364,7 +4187,6 @@ namespace Isotope_fitting
                 {
                     if (a == frag_info_sorted.Count - 1)
                     {
-                        //frag_info_sorted[a][6] = Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] / Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) / frag_info_sorted[a][5];
                         frag_info_sorted[a][6] = (Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3]* frag_info_sorted[a][2]) / (Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) * frag_info_sorted[a][5]);
                         break;
                     }
@@ -4374,13 +4196,11 @@ namespace Isotope_fitting
                         {
                             if (frag_info_sorted[a][0] == frag_info_sorted[b][0])
                             {
-                                //frag_info_sorted[a][5]++; frag_info_sorted[b][5]++;
                                 frag_info_sorted[a][5]+= frag_info_sorted[b][2];
                                 frag_info_sorted[b][5]+= frag_info_sorted[a][2];
                             }
                             else if (frag_info_sorted[a][0] < frag_info_sorted[b][0])
                             {
-                                //frag_info_sorted[a][6] = Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] / Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) / frag_info_sorted[a][5];
                                 frag_info_sorted[a][6] = (Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] * frag_info_sorted[a][2]) / (Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) * frag_info_sorted[a][5]);
                                 break;
                             }
@@ -4512,10 +4332,7 @@ namespace Isotope_fitting
                 for (int i = 0; i < distros_num; i++) { result[i] = coeficients[i]; result[i + 4 * distros_num] = 0; result[i + 5 * distros_num] = 0; } //initialize di error and sd
                 result[6 * distros_num + 3] = state.fi[0];
                 (result[6 * distros_num + 4], result[6 * distros_num + 5]) = maxmin_area_ratio(aligned_intensities_subSet, coeficients, experimental_sum);
-
-                //einai kati pou dokimaza mh dwseis shmasia, apla eipa na to krathsw mpas kai xreiastei, an thes diegrapse to endelws kai auto kai tis synarthseis
-                //result[distros_num + 2] = KolmogorovSmirnovTest(aligned_intensities_subSet, coefficients);
-                //result[distros_num + 3] = (result[distros_num])+ result[distros_num + 2] +(10/result[distros_num + 1]);
+                              
                 return result;
             }
         }
@@ -4577,53 +4394,7 @@ namespace Isotope_fitting
                 //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
         }
-
-        /// <summary>
-        /// Ai overlapped area ratio calculation 
-        /// </summary>
-        private void overlapped_area_ratio(int[] set_array, double[] tmp)
-        {
-            Paths subjects = new Paths();
-            Paths clips = new Paths();
-            Paths solution = new Paths();
-            List<int> indexes = set_array.ToList();
-            int no_of_selected = indexes.Count();
-            clips.Add(new Path());
-            subjects.Add(new Path());
-            double first = 0.0;
-            for (int i = 0; i < all_data_aligned.Count; i++)
-            {
-                bool zero_point = true;
-                // build the point with exp and all frag, but keep it only if any frag is NON zero
-                double summation = 0.0;
-                for (int k = 0; k < no_of_selected; k++)
-                {
-                    double frag_factor = tmp[k];
-                    if (all_data_aligned[i][set_array[k]] != 0.0)
-                    {
-                        zero_point = zero_point & false;
-                        summation += frag_factor*all_data_aligned[i][set_array[k]];
-                    }
-                }
-                if (!zero_point)
-                {
-                    if (first == 0.0) { first = experimental[i][0]; }
-                    double norm_mz = experimental[i][0]-first;
-                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
-                    subjects[0].Add(new Point64(norm_mz, summation));
-                }
-            }
-            if ((clips.Count > 0 || subjects.Count > 0))
-            {
-                Clipper c = new Clipper();
-                c.AddPaths(subjects, PathType.Subject);
-                c.AddPaths(clips, PathType.Clip);
-                solution.Clear();
-                c.Execute(ClipType.Intersection, solution, FillRule.NonZero);                
-            }
-            double ovrlp_area = SignedPolygonArea(solution);
-            double exp_area = SignedPolygonArea(clips);
-        }
+             
         private (double, double) maxmin_area_ratio(List<double[]> aligned_intensities_subSet, double[] coeficients,/* int[] set_array, double[] tmp,*/ double exp_sum)
         {            
             double ovrlp_area = 0.0;
@@ -4645,332 +4416,8 @@ namespace Isotope_fitting
             double ratio = (1 - (ovrlp_area / exp_area)) * 100;
             double ratio_all = (1 - (ovrlp_area / exp_sum)) * 100;
             return (ratio, ratio_all);
-        }
-        private void node_overlapped_area(TreeNode node, StringBuilder sb)
-        {
-            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            string idx_str = node.Name;
-            string[] idx_str_arr = idx_str.Split(' ');
-            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
-            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
-            // identifies a fit combination in this set
-            string error_string = String.Empty;
-            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
-            double first = 0;
-            Paths subjects = new Paths();
-            Paths clips = new Paths();
-            Paths solution = new Paths();            
-            clips.Add(new Path());
-            subjects.Add(new Path());
-            double norm_mz = 0.0;
-            for (int i = 0; i < all_data_aligned.Count; i++)
-            {
-                bool zero_point = true;
-                // build the point with exp and all frag, but keep it only if any frag is NON zero
-                double summation = 0.0;
-                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
-                {
-                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f] - 1;
-                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
-                    double intens = frag_factor * all_data_aligned[i][frag_index];
-                    if (intens > 1)
-                    {
-                        zero_point = zero_point & false;
-                        summation += intens;
-                    }
-                }              
-                if (!zero_point)
-                {
-                    if (first == 0.0)
-                    {
-                        first = experimental[i][0];
-                        clips[0].Add(new Point64(0.0, 0.0));
-                        subjects[0].Add(new Point64(0.0, 0.0));
-                    }
-                    norm_mz = experimental[i][0] - first+0.0001;
-                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
-                    subjects[0].Add(new Point64(norm_mz, summation));
-                }
-            }
-            if ((clips.Count > 0 || subjects.Count > 0))
-            {
-                Clipper c = new Clipper();
-                if (clips[0].Last().Y!=0)
-                {
-                    clips[0].Add(new Point64(norm_mz+0.0002, 0.0));
-                    subjects[0].Add(new Point64(norm_mz + 0.0002, 0.0));
-                }
-                clips[0].Add(new Point64(0.0, 0.0));
-                subjects[0].Add(new Point64(0.0, 0.0));
-                c.AddPaths(subjects, PathType.Subject);
-                c.AddPaths(clips, PathType.Clip);
-                solution.Clear();
-                c.Execute(ClipType.Intersection, solution, FillRule.NonZero);
-                copy_overlapped(subjects[0],clips[0], solution);
-            }
-            double ovrlp_area = AddArea(solution);
-            double exp_area = AddArea(clips);
-            double ratio = ovrlp_area/ exp_area;
-            sb.AppendLine();
-            sb.AppendLine();
-            sb.AppendLine("Clipper algo:");
-            sb.AppendLine("Overlapped area: "+Math.Round(ovrlp_area,4).ToString());
-            sb.AppendLine("Experimental area: " + Math.Round(exp_area, 4).ToString());
-            sb.AppendLine("Ratio: " + Math.Round(100-(ratio*100), 2).ToString());
-            sb.AppendLine();
-        }
-        private void node_residual_area(TreeNode node, StringBuilder sb)
-        {
-            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            string idx_str = node.Name;
-            string[] idx_str_arr = idx_str.Split(' ');
-            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
-            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
-            // identifies a fit combination in this set
-            string error_string = String.Empty;
-            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
-            double first = 0;
-            Paths subjects = new Paths();
-            Paths clips = new Paths();
-            clips.Add(new Path());
-            subjects.Add(new Path());
-            double norm_mz = 0.0;
-            for (int i = 0; i < all_data_aligned.Count; i++)
-            {
-                bool zero_point = true;
-                // build the point with exp and all frag, but keep it only if any frag is NON zero
-                double summation = 0.0;
-                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
-                {
-                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f];
-                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
-                    double intens = frag_factor * all_data_aligned[i][frag_index];
-                    if (intens > 1)
-                    {
-                        zero_point = zero_point & false;                       
-                        summation += intens;
-                    }
-                }
-                double diff = all_data_aligned[i][0] - summation;
-                if (diff < 0) { diff = 0; }
-                if (!zero_point)
-                {
-                    if (first == 0.0)
-                    {
-                        first = experimental[i][0];
-                        clips[0].Add(new Point64(0.0, 0.0));
-                        subjects[0].Add(new Point64(0.0, 0.0));
-                    }
-                    norm_mz = experimental[i][0] - first + 0.0001;
-                    subjects[0].Add(new Point64(norm_mz, diff));
-                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
-                }
-            }
-            copy_overlapped(subjects[0],clips[0], clips);
-
-            double ovrlp_area = AddArea(subjects);
-            double exp_area = AddArea(clips);
-            double ratio = ovrlp_area / exp_area;
-            sb.AppendLine();
-            sb.AppendLine();
-            sb.AppendLine("Residual algo:");
-            sb.AppendLine("residual area: " + Math.Round(ovrlp_area, 4).ToString());
-            sb.AppendLine("Experimental area: " + Math.Round(exp_area, 4).ToString());
-            sb.AppendLine("Ratio: " + Math.Round(ratio * 100, 2).ToString());
-            sb.AppendLine();
-        }
-        private void node_maxmin_coverage_area(TreeNode node, StringBuilder sb)
-        {
-            if (node == null) { MessageBox.Show("Oops... First make sure you have selected the desired node and then right-clicked on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(node.Name)) { MessageBox.Show("'Error' command is implemented on nodes that represent a specific solution of the fit group.\r\nFirst make sure you have selected the desired node and then right-click on it.", "None selected node", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            string idx_str = node.Name;
-            string[] idx_str_arr = idx_str.Split(' ');
-            int set_idx = Convert.ToInt32(idx_str_arr[0]);      // identifies the set or group of ions
-            int set_pos_idx = Convert.ToInt32(idx_str_arr[1]);
-            // identifies a fit combination in this set
-            string error_string = String.Empty;
-            List<TreeNode> all_nodes = get_all_nodes(frag_tree);
-            double first = 0;
-            Paths subjects = new Paths();
-            Paths clips = new Paths();
-            clips.Add(new Path());
-            subjects.Add(new Path());
-            double norm_mz = 0.0;
-            for (int i = 0; i < all_data_aligned.Count; i++)
-            {
-                bool zero_point = true;
-                // build the point with exp and all frag, but keep it only if any frag is NON zero
-                double summation = 0.0;
-                for (int f = 0; f < all_fitted_sets[set_idx][set_pos_idx].Length; f++)
-                {
-                    int frag_index = all_fitted_sets[set_idx][set_pos_idx][f];
-                    double frag_factor = all_fitted_results[set_idx][set_pos_idx][f];
-                    double intens = frag_factor * all_data_aligned[i][frag_index];
-                    if (intens > 1)
-                    {
-                        zero_point = zero_point & false;
-                        summation += intens;
-                    }
-                }
-                //double diff = all_data_aligned[i][0] - summation;
-                //if (diff < 0) { diff = 0; }
-                if (!zero_point)
-                {
-                    if (first == 0.0)
-                    {
-                        first = experimental[i][0];
-                        clips[0].Add(new Point64(0.0, 0.0));
-                        subjects[0].Add(new Point64(0.0, 0.0));
-                    }
-                    norm_mz = experimental[i][0] - first + 0.0001;
-                    subjects[0].Add(new Point64(norm_mz, Math.Min(experimental[i][1],summation)));
-                    clips[0].Add(new Point64(norm_mz, experimental[i][1]));
-                }
-            }
-            copy_overlapped(subjects[0], clips[0], clips);
-
-            double ovrlp_area = AddArea(subjects);
-            double exp_area = AddArea(clips);
-            double ratio = ovrlp_area / exp_area;
-            sb.AppendLine();
-            sb.AppendLine();
-            sb.AppendLine("Max Min algo:");
-            sb.AppendLine("Overlapped area: " + Math.Round(ovrlp_area, 4).ToString());
-            sb.AppendLine("Experimental area: " + Math.Round(exp_area, 4).ToString());
-            sb.AppendLine("Ratio: " + Math.Round((1-ratio )* 100, 2).ToString());
-            sb.AppendLine();
-        }
-        private void copy_overlapped(Path subjects, Path clips, Paths solutions)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (Point64 pp in subjects)
-            {
-                sb.AppendLine(pp.X+ "\t" + pp.Y);
-            }
-            sb.AppendLine(); sb.AppendLine();
-            foreach (Point64 pp in clips)
-            {
-                sb.AppendLine(pp.X + "\t" + pp.Y);
-            }
-            sb.AppendLine(); sb.AppendLine();
-            foreach (Path solution in solutions)
-            {
-                foreach (Point64 pp in solution)
-                {
-                    sb.AppendLine(pp.X + "\t" + pp.Y);
-                }
-            }
-            sb.AppendLine(); sb.AppendLine();
-            Clipboard.Clear();
-            if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
-        }
-        private  double SignedPolygonArea(Paths polygon)
-        {
-            // Add the first point to the end.
-            int num_points = polygon.Count;
-            //Point64[] pts = new Point64[num_points + 1];
-            //polygon.CopyTo(pts, 0);
-            //pts[num_points] = polygon[0];
-
-            //// Get the areas.
-            double area = 0;
-            //for (int i = 0; i < num_points; i++)
-            //{
-            //    area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
-            //}
-            foreach (Path pp in polygon)
-            {
-                num_points = pp.Count;
-                List<Point64> pts = new List<Point64>();
-                foreach (Point64 p in pp) { pts.Add(new Point64(p.X,p.Y)); }
-                pts = pts.OrderBy(t=>t.X).ToList();
-                pts.Add(new Point64(pts[0].X, pts[0].Y));
-                for (int i = 0; i < num_points; i++)
-                {
-                    area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
-                }
-            }
-            // Return the result.
-            return area;
-        }
-        private double AddArea(Paths polygon)
-        {
-            // Add the first point to the end.
-            int num_points = polygon.Count;
-            //Point64[] pts = new Point64[num_points + 1];
-            //polygon.CopyTo(pts, 0);
-            //pts[num_points] = polygon[0];
-
-            //// Get the areas.
-            double area = 0;
-            //for (int i = 0; i < num_points; i++)
-            //{
-            //    area += (pts[i + 1].X - pts[i].X) * (pts[i + 1].Y + pts[i].Y) / 2;
-            //}
-            foreach (Path pp in polygon)
-            {
-                num_points = pp.Count;
-                List<Point64> pts = new List<Point64>();
-                foreach (Point64 p in pp) { pts.Add(new Point64(p.X, p.Y)); }
-                pts = pts.OrderBy(t => t.X).ToList();
-                pts.Add(new Point64(pts[0].X, pts[0].Y));
-                for (int i = 0; i < num_points; i++)
-                {
-                    area +=  pts[i].Y;
-                }
-            }
-            // Return the result.
-            return area;
-        }
-        #region unused code, extra test attempt--> not useful, delete it if you like
-        private double KolmogorovSmirnovTest(List<double[]> aligned_subData, double[] sub_coeficients)
-        {
-            int cand_frag = sub_coeficients.Length;
-            double[] error = new double[cand_frag];
-            for (int j = 1; j < aligned_subData[0].Length; j++)
-            {
-                List<double[]> dissimilarity = new List<double[]>();
-                double max = 0.0; double min = aligned_subData[1][0];
-                for (int i = 0; i < aligned_subData.Count; i++)
-                {
-                    if (aligned_subData[i][j] * sub_coeficients[j - 1] > 1)        // envelopes have a lot of garbage upFront and in tail ( < 1e-2)
-                    {
-                        if (aligned_subData[i][j] * sub_coeficients[j - 1] > max) max = aligned_subData[i][j] * sub_coeficients[j - 1];
-                        if (aligned_subData[i][j] * sub_coeficients[j - 1] < min) min = aligned_subData[i][j] * sub_coeficients[j - 1];
-                        if (aligned_subData[i][0] > max) max = aligned_subData[i][0];
-                        if (aligned_subData[i][0] < min) min = aligned_subData[i][0];
-                        dissimilarity.Add(new double[2] { aligned_subData[i][0], aligned_subData[i][j] * sub_coeficients[j - 1] });
-                    }
-                }
-                error[j - 1] = GetScalingError(dissimilarity, max, min);
-            }
-            return error.Sum() / cand_frag;
-        }
-        private double GetScalingError(List<double[]> dis, double dis_max, double dis_min)
-        {
-            double min = 0.1;
-            double max = 1;
-            double m = (max - min) / (dis_max - dis_min);
-            double c = min - dis_min * m;
-            var newarr = new double[dis.Count];
-            int k = 0;
-            double frag_sub = 0.0;
-            double exp_sub = 0.0;
-            foreach (double[] ss in dis)
-            {
-                ss[0] = m * ss[0] + c; ss[1] = m * ss[1] + c;
-                frag_sub += ss[1];
-                exp_sub += ss[0];
-                newarr[k] = Math.Abs(exp_sub - frag_sub);
-                k++;
-            }
-            return newarr.Max();
-        }
-        #endregion
-       
-        //***************************************************
+        }       
+      
         private void generate_fit_results(bool project = false)
         {
             if (all_fitted_results == null || all_fitted_results.Count == 0) return;
@@ -5185,13 +4632,8 @@ namespace Isotope_fitting
                         if (ppm < ppmDi)
                         {
                             double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
-                            //if (ee > 1) ee = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / (exp_intensity);
                             double ee = ee1 * sorted_cen[c].Y / summ;
-                            iso_lse_sum += ee; tmp_error[c] = ee1;
-                            //double ee = exp_intensity / (sorted_cen[c].Y * frag_factor);
-                            //double eee = ee * max_cen / sorted_cen[c].Y;
-                            //if (eee > 1) { eee = 1 / eee; }
-                            //iso_lse_sum +=eee;       
+                            iso_lse_sum += ee; tmp_error[c] = ee1;                                
                             sb.AppendLine("Centroid " + (c + 1).ToString() + " error:" + Math.Round(ee1, 4).ToString() + " , adjusted to:" + Math.Round(ee, 4).ToString());
                         }
                         else
@@ -5214,10 +4656,7 @@ namespace Isotope_fitting
                     sd = Math.Sqrt(sd / (summ));
                     sb.AppendLine(Math.Round(lse_fragments.Last()[0], 2).ToString() + "% of the centroids were absent |with ei= " + Math.Round(absent_factor, 4).ToString() + " | the average error is " + Math.Round(lse_fragments.Last()[1], 5).ToString() + " | sd: " + Math.Round(sd, 4).ToString());
                     sb.AppendLine();
-                }
-                //node_overlapped_area(node, sb);
-                //node_residual_area(node, sb);
-                //node_maxmin_coverage_area(node, sb);
+                }               
                 if (sb != null && sb.Length > 0)
                 {
                     error_string = sb.ToString();
@@ -5437,10 +4876,7 @@ namespace Isotope_fitting
             }
             if (all_fitted_results != null && string.IsNullOrEmpty(node.Name))
             {
-                frag_tree.BeginUpdate();
-                //generate_fit_results();
-                //best_checked(true, node.Index);
-                //checked_labels();
+                frag_tree.BeginUpdate();               
                 fit_tree.BeginUpdate();
                 if (fit_tree.Nodes[node_index].Nodes.Count > 0) fit_tree.Nodes[node_index].Nodes.Clear();
                 for (int j = 0; j < all_fitted_results[node_index].Count; j++)
@@ -15310,20 +14746,20 @@ namespace Isotope_fitting
             // 1) Create engine
             ScriptEngine engine = Python.CreateEngine();
             var paths = engine.GetSearchPaths();
-            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\");
-            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\.idea");
-            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\fragment_lib");
-            paths.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\params");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\.idea");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\fragment_lib");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\params");
 
             engine.SetSearchPaths(paths);
             // 2) Provide script and arguments
-            var script = @"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\ultimate_fragmentor.py";
+            var script = @"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\ultimate_fragmentor.py";
             ScriptSource source = engine.CreateScriptSourceFromFile(script);
 
             var argv = new List<string>();
             argv.Add("");
             //argv.Add("input.json");
-            argv.Add(@"C:\\Users\\Lab\\Desktop\\Utlimate_Fragment\\input.json");
+            argv.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\input.json");
 
             engine.GetSysModule().SetVariable("argv", argv);
 
@@ -15367,20 +14803,42 @@ namespace Isotope_fitting
                 }
             }
         }
+        public void rin_python()
+        {
+            string progToRun = "C:\\Users\\Maro\\Utlimate_Fragment\\setup.py";
+            Process proc = new Process();
+            proc.StartInfo.FileName = "C:\\Users\\Maro\\anaconda3\\python.exe";
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.WorkingDirectory = "C:\\Users\\Maro\\Utlimate_Fragment";
+            proc.StartInfo.Arguments = progToRun;
+
+            proc.Start();
+
+            //StreamReader sReader = proc.StandardOutput;
+            //string[] output = sReader.ReadToEnd().Split('\r');
+
+            //foreach (string s in output)
+            //    Console.WriteLine(s);
+
+            proc.WaitForExit();
+        }
 
         public void read_csv()
         {
             using (var reader = new StreamReader(@"My_fragments.csv"))
             {
-                List<string> listA = new List<string>();
-                List<string> listB = new List<string>();
+                //csv example 
+                //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
+                //[0]y,[1]y9,[2]1,[3]QIFVKTLYT,[4]1112.6350229193602,[5],[6]C54H85N11O14,[7]1,[8]2,[9]10
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     var values = line.Split(';');
+                    string index = values[1].Replace(values[0],"");
+                    //m/z,ion,index,charge,formula
+                    string[] frag_string = new string[] { values[4], index, values[0], values[2], values[6] };
 
-                    listA.Add(values[0]);
-                    listB.Add(values[1]);
                 }
             }
         }
