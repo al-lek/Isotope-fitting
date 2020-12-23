@@ -1214,6 +1214,7 @@ namespace Isotope_fitting
                 last_chem.Has_adduct = has_Adduct;
                 if (ion_adducts.Contains(last_chem.Ion_type)) { last_chem.Has_adduct = false; }
                 //last_chem.Mz = temp_chem.Mz;
+
                 if (name)
                 {
                     string new_type = temp_chem.Ion_type;
