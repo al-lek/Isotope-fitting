@@ -689,8 +689,19 @@ namespace Isotope_fitting
         private string extension;
         private int chain_type;
         private bool has_adduct;
-
         private double max_man_int;
+        private string modif_formula;
+        private string modif_name;
+        public string Modif_formula
+        {
+            get { return this.modif_formula; }
+            set { this.modif_formula = value; }
+        }
+        public string Modif_name
+        {
+            get { return this.modif_name; }
+            set { this.modif_name = value; }
+        }
         public string Extension
         {
             get
@@ -1070,7 +1081,7 @@ namespace Isotope_fitting
             ChemiForm deepcopyChemiform = new ChemiForm() { Adduct = this.Adduct, Centroid = this.Centroid.ConvertAll(item => item.DeepCopy()), Charge = this.Charge, Color= this.Color, Combinations= (List<Combination_1>)this.Combinations.ConvertAll(item => item.DeepCopy()), Combinations4 = (List<Combination_4>)this.Combinations4.ConvertAll(item => item.DeepCopy()), Deduct=this.Deduct, Elements_set= (List<Element_set>)this.Elements_set.ConvertAll(item => item.DeepCopy()),
                 Error =this.Error, FinalFormula=this.FinalFormula, Index=this.Index, IndexTo=this.IndexTo, InputFormula=this.InputFormula, Ion=this.Ion, Ion_type=this.Ion_type, Iso_total_amount=this.Iso_total_amount, Machine= this.Machine, Monoisotopic=this.Monoisotopic.DeepCopy(), Multiplier=this.Multiplier, Mz=this.Mz, Name=this.Name, Points=this.Points.ConvertAll(item => item.DeepCopy()), PrintFormula=this.PrintFormula, Profile=this.Profile.ConvertAll(item => item.DeepCopy()),
                  Resolution=this.Resolution ,PPM_Error=this.PPM_Error,maxPPM_Error = this.maxPPM_Error,minPPM_Error = this.minPPM_Error,Factor = this.Factor,Fixed=this.Fixed,Max_man_int=this.Max_man_int,Intensoid=this.Intensoid.ConvertAll(item => item.DeepCopy()), Extension=this.Extension,SortIdx=this.SortIdx,Chain_type=this.Chain_type,
-                Has_adduct = this.Has_adduct,maxFactor=this.maxFactor
+                Has_adduct = this.Has_adduct,maxFactor=this.maxFactor, Modif_formula=this.Modif_formula,Modif_name=this.Modif_name
             };
 
             return deepcopyChemiform;

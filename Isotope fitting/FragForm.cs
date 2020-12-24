@@ -42,7 +42,18 @@ namespace Isotope_fitting
         private int chain_type;
         private bool true_positive;
         private bool has_adduct;
-
+        private string modif_formula;
+        private string modif_name;
+        public string Modif_formula
+        {
+            get { return this.modif_formula; }
+            set { this.modif_formula = value; }
+        }
+        public string Modif_name
+        {
+            get { return this.modif_name; }
+            set { this.modif_name = value; }
+        }
         public OxyColor Color
         {
             get { return this.color; }

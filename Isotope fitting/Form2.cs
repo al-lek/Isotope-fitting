@@ -1797,7 +1797,6 @@ namespace Isotope_fitting
                         if (tmp_str.Length <4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);return; }
                         else if (is_riken) assign_riken_fragment(tmp_str);
                         else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
-                        //else if (calc_FF) assign_manually_pro_fragment(tmp_str);
                     }
                     catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
 
@@ -1861,7 +1860,9 @@ namespace Isotope_fitting
                 Max_man_int = 0,
                 Extension = ms_extension,
                 Has_adduct = false,
-                maxFactor=0.0
+                maxFactor=0.0,
+                Modif_formula= string.Empty,
+                Modif_name= string.Empty
             });
             int i = ChemFormulas.Count - 1;
             if (ms_heavy_chain) ChemFormulas[i].Chain_type = 1;
@@ -2055,7 +2056,9 @@ namespace Isotope_fitting
                 Max_man_int = 0,
                 Extension = ms_extension,
                 Has_adduct = false,
-                maxFactor=0.0
+                maxFactor=0.0,
+                Modif_formula = string.Empty,
+                Modif_name = string.Empty
             });
             int i = ChemFormulas.Count - 1;
             // Note on formulas
@@ -2782,7 +2785,9 @@ namespace Isotope_fitting
                         SortIdx = chem.SortIdx,
                         Candidate = true,
                         Has_adduct = chem.Has_adduct,
-                        maxFactor = chem.maxFactor
+                        maxFactor = chem.maxFactor,
+                        Modif_formula = string.Empty,
+                        Modif_name = string.Empty
                     };
                     fra.Centroid = cen.Select(point => point.DeepCopy()).ToList();
                     fra.Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
@@ -7229,7 +7234,9 @@ namespace Isotope_fitting
                                             Max_man_int = 0,
                                             maxPPM_Error = 0,
                                             minPPM_Error = 0,
-                                            Has_adduct = false
+                                            Has_adduct = false,
+                                            Modif_formula = string.Empty,
+                                            Modif_name = string.Empty
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         if (is_exp_deconvoluted && Math.Abs(fitted_chem.Last().Charge) != dec_charge)
@@ -7586,7 +7593,9 @@ namespace Isotope_fitting
                                             Max_man_int = 0,
                                             maxPPM_Error = 0,
                                             minPPM_Error = 0,
-                                            Has_adduct = false
+                                            Has_adduct = false,
+                                            Modif_formula = string.Empty,
+                                            Modif_name = string.Empty
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         if (is_exp_deconvoluted && Math.Abs(fitted_chem.Last().Charge)!=dec_charge)
@@ -14267,7 +14276,9 @@ namespace Isotope_fitting
                             To_plot = string_to_bool(str[19]),
                             Max_intensity = dParser(str[6]),
                             Candidate = true,
-                            Has_adduct=has_adduct
+                            Has_adduct=has_adduct,
+                            Modif_formula = string.Empty,
+                            Modif_name = string.Empty
                         });
                         if (str.Length > 22) { Fragments2.Last().maxFactor = dParser(str[22]); }
                         else { Fragments2.Last().maxFactor = 0.0; }
@@ -14728,121 +14739,121 @@ namespace Isotope_fitting
 
         #endregion
 
-        //#region Ultimate Fragment Calculator Manipulation
-        //private void write_params_input_json()
-        //{
-        //    if (_data == null) return;
-        //    root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
+        #region Ultimate Fragment Calculator Manipulation
+        private void write_params_input_json()
+        {
+            if (_data == null) return;
+            root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
 
-        //    //open file stream
-        //    using (StreamWriter file = File.CreateText(root_path + "\\input.json"))
-        //    {
-        //        JsonSerializer serializer = new JsonSerializer();
-        //        //serialize object directly into file stream
-        //        serializer.Serialize(file, _data);
-        //    }
-        //}
-        //public void PatchParameter(string parameter, int serviceid)
-        //{
-        //    // 1) Create engine
-        //    ScriptEngine engine = Python.CreateEngine();
-        //    var paths = engine.GetSearchPaths();
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\");
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\.idea");
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\fragment_lib");
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\params");
+            //open file stream
+            using (StreamWriter file = File.CreateText(root_path + "\\input.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                //serialize object directly into file stream
+                serializer.Serialize(file, _data);
+            }
+        }
+        public void PatchParameter(string parameter, int serviceid)
+        {
+            // 1) Create engine
+            ScriptEngine engine = Python.CreateEngine();
+            var paths = engine.GetSearchPaths();
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\.idea");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\fragment_lib");
+            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\params");
 
-        //    engine.SetSearchPaths(paths);
-        //    // 2) Provide script and arguments
-        //    var script = @"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\ultimate_fragmentor.py";
-        //    ScriptSource source = engine.CreateScriptSourceFromFile(script);
+            engine.SetSearchPaths(paths);
+            // 2) Provide script and arguments
+            var script = @"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\ultimate_fragmentor.py";
+            ScriptSource source = engine.CreateScriptSourceFromFile(script);
 
-        //    var argv = new List<string>();
-        //    argv.Add("");
-        //    //argv.Add("input.json");
-        //    argv.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\input.json");
+            var argv = new List<string>();
+            argv.Add("");
+            //argv.Add("input.json");
+            argv.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\input.json");
 
-        //    engine.GetSysModule().SetVariable("argv", argv);
+            engine.GetSysModule().SetVariable("argv", argv);
 
-        //    // 3) Output redirect
-        //    var eIO = engine.Runtime.IO;
+            // 3) Output redirect
+            var eIO = engine.Runtime.IO;
 
-        //    var errors = new MemoryStream();
-        //    eIO.SetErrorOutput(errors, Encoding.Default);
+            var errors = new MemoryStream();
+            eIO.SetErrorOutput(errors, Encoding.Default);
 
-        //    var results = new MemoryStream();
-        //    eIO.SetOutput(results, Encoding.Default);
+            var results = new MemoryStream();
+            eIO.SetOutput(results, Encoding.Default);
 
-        //    // 4) Execute script
-        //    //engine.ExecuteFile(script);
-        //    //var scope = engine.CreateScope();
-        //    //source.Execute(scope);
-        //    source.Execute();
+            // 4) Execute script
+            //engine.ExecuteFile(script);
+            //var scope = engine.CreateScope();
+            //source.Execute(scope);
+            source.Execute();
 
-        //    //// 5) Display output
-        //    //string str(byte[] x) => Encoding.Default.GetString(x);
+            //// 5) Display output
+            //string str(byte[] x) => Encoding.Default.GetString(x);
 
-        //    //Console.WriteLine("ERRORS:");
-        //    //Console.WriteLine(str(errors.ToArray()));
-        //    //Console.WriteLine();
-        //    //Console.WriteLine("Results:");
-        //    //Console.WriteLine(str(results.ToArray()));
-        //}
-        //private void run_cmd(string cmd, string args)
-        //{
-        //    ProcessStartInfo start = new ProcessStartInfo();
-        //    start.FileName = "my/full/path/to/python.exe";
-        //    start.Arguments = string.Format("{0} {1}", cmd, args);
-        //    start.UseShellExecute = false;
-        //    start.RedirectStandardOutput = true;
-        //    using (Process process = Process.Start(start))
-        //    {
-        //        using (StreamReader reader = process.StandardOutput)
-        //        {
-        //            string result = reader.ReadToEnd();
-        //            Console.Write(result);
-        //        }
-        //    }
-        //}
-        //public void rin_python()
-        //{
-        //    string progToRun = "C:\\Users\\Maro\\Utlimate_Fragment\\setup.py";
-        //    Process proc = new Process();
-        //    proc.StartInfo.FileName = "C:\\Users\\Maro\\anaconda3\\python.exe";
-        //    proc.StartInfo.RedirectStandardOutput = true;
-        //    proc.StartInfo.UseShellExecute = false;
-        //    proc.StartInfo.WorkingDirectory = "C:\\Users\\Maro\\Utlimate_Fragment";
-        //    proc.StartInfo.Arguments = progToRun;
+            //Console.WriteLine("ERRORS:");
+            //Console.WriteLine(str(errors.ToArray()));
+            //Console.WriteLine();
+            //Console.WriteLine("Results:");
+            //Console.WriteLine(str(results.ToArray()));
+        }
+        private void run_cmd(string cmd, string args)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = "my/full/path/to/python.exe";
+            start.Arguments = string.Format("{0} {1}", cmd, args);
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            using (Process process = Process.Start(start))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd();
+                    Console.Write(result);
+                }
+            }
+        }
+        public void rin_python()
+        {
+            string progToRun = "C:\\Users\\Maro\\Utlimate_Fragment\\setup.py";
+            Process proc = new Process();
+            proc.StartInfo.FileName = "C:\\Users\\Maro\\anaconda3\\python.exe";
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.WorkingDirectory = "C:\\Users\\Maro\\Utlimate_Fragment";
+            proc.StartInfo.Arguments = progToRun;
 
-        //    proc.Start();
+            proc.Start();
 
-        //    //StreamReader sReader = proc.StandardOutput;
-        //    //string[] output = sReader.ReadToEnd().Split('\r');
+            //StreamReader sReader = proc.StandardOutput;
+            //string[] output = sReader.ReadToEnd().Split('\r');
 
-        //    //foreach (string s in output)
-        //    //    Console.WriteLine(s);
+            //foreach (string s in output)
+            //    Console.WriteLine(s);
 
-        //    proc.WaitForExit();
-        //}
+            proc.WaitForExit();
+        }
 
-        //public void read_csv()
-        //{
-        //    using (var reader = new StreamReader(@"My_fragments.csv"))
-        //    {
-        //        //csv example 
-        //        //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
-        //        //[0]y,[1]y9,[2]1,[3]QIFVKTLYT,[4]1112.6350229193602,[5],[6]C54H85N11O14,[7]1,[8]2,[9]10
-        //        while (!reader.EndOfStream)
-        //        {
-        //            var line = reader.ReadLine();
-        //            var values = line.Split(';');
-        //            string index = values[1].Replace(values[0],"");
-        //            //m/z,ion,index,charge,formula
-        //            string[] frag_string = new string[] { values[4], index, values[0], values[2], values[6] };
+        public void read_csv()
+        {
+            using (var reader = new StreamReader(@"My_fragments.csv"))
+            {
+                //csv format example 
+                //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
+                //[0]y,[1]y9,[2]1,[3]QIFVKTLYT,[4]1112.6350229193602,[5],[6]C54H85N11O14,[7]1,[8]2,[9]10
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+                    string index = values[1].Replace(values[0], "");
+                    //m/z,ion,index,charge,formula
+                    string[] frag_string = new string[] { values[4], index, values[0], values[2], values[6] };
 
-        //        }
-        //    }
-        //}
-        //#endregion
+                }
+            }
+        }
+        #endregion
     }
 }

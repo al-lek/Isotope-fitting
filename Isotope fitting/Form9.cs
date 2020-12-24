@@ -891,7 +891,9 @@ namespace Isotope_fitting
                     Ion_type=ion,
                     Extension=extension,
                     Chain_type=chain_type,
-                    maxFactor=0.0
+                    maxFactor=0.0,
+                    Modif_formula = string.Empty,
+                    Modif_name = string.Empty
                 });
                 res.Last().Adduct = "H" + c.ToString();
                 if (res.Last().Ion.StartsWith("d") || res.Last().Ion.StartsWith("w") || res.Last().Ion.StartsWith("v")) res.Last().Color = OxyColors.Turquoise;
@@ -1133,7 +1135,9 @@ namespace Isotope_fitting
                     Chain_type = chain_type,
                     Color=clr,
                     SortIdx=sortIdx,
-                    maxFactor=0.0
+                    maxFactor=0.0,
+                    Modif_formula = string.Empty,
+                    Modif_name = string.Empty
                 });
                 string lbl = "";
                 lbl = ion;                
@@ -2019,7 +2023,9 @@ namespace Isotope_fitting
                         Chain_type = chem.Chain_type,
                         SortIdx = chem.SortIdx,
                         Has_adduct = chem.Has_adduct,
-                        maxFactor = chem.maxFactor
+                        maxFactor = chem.maxFactor,
+                        Modif_formula = chem.Modif_formula,
+                        Modif_name = chem.Modif_name
                     });
                     Fragments3.Last().Centroid = cen.Select(point => point.DeepCopy()).ToList();
                     Fragments3.Last().Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
@@ -2229,7 +2235,9 @@ namespace Isotope_fitting
                     SortIdx = Fragments3[new_fragin].SortIdx,
                     Candidate = Fragments3[new_fragin].Candidate,
                     Has_adduct = Fragments3[new_fragin].Has_adduct,
-                    maxFactor= Fragments3[new_fragin].maxFactor
+                    maxFactor= Fragments3[new_fragin].maxFactor,
+                    Modif_formula = Fragments3[new_fragin].Modif_formula,
+                    Modif_name = Fragments3[new_fragin].Modif_name
                 });
 
                 Fragments2.Last().Centroid = Fragments3[new_fragin].Centroid.Select(point => point.DeepCopy()).ToList();
@@ -2413,7 +2421,9 @@ namespace Isotope_fitting
                                 Chain_type=chain_type,
                                 Extension=extension,
                                 Has_adduct=false,
-                                maxFactor = 1.0
+                                maxFactor = 1.0,
+                                Modif_formula = string.Empty,
+                                Modif_name = string.Empty
                             });
                             mult_loaded.Last().Adduct = "H" + c.ToString();
                         }
