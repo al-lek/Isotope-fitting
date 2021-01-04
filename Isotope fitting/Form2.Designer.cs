@@ -512,6 +512,7 @@ namespace Isotope_fitting
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
+            this.loadUltimateFragmentorFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -4617,7 +4618,8 @@ namespace Isotope_fitting
             this.loadListBtn11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.loadListBtn11.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadFragmentsToolStripMenuItem,
-            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem});
+            this.loadFragmentsAndRecalculateResolutionToolStripMenuItem,
+            this.loadUltimateFragmentorFileToolStripMenuItem});
             this.loadListBtn11.Image = ((System.Drawing.Image)(resources.GetObject("loadListBtn11.Image")));
             this.loadListBtn11.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.loadListBtn11.Name = "loadListBtn11";
@@ -6238,6 +6240,14 @@ namespace Isotope_fitting
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
             // 
+            // loadUltimateFragmentorFileToolStripMenuItem
+            // 
+            this.loadUltimateFragmentorFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadUltimateFragmentorFileToolStripMenuItem.Image")));
+            this.loadUltimateFragmentorFileToolStripMenuItem.Name = "loadUltimateFragmentorFileToolStripMenuItem";
+            this.loadUltimateFragmentorFileToolStripMenuItem.Size = new System.Drawing.Size(256, 36);
+            this.loadUltimateFragmentorFileToolStripMenuItem.Text = "Load Ultimate Fragmentor File";
+            this.loadUltimateFragmentorFileToolStripMenuItem.Click += new System.EventHandler(this.loadUltimateFragmentorFileToolStripMenuItem_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6907,5 +6917,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton seq_primary_chkBx;
         private System.Windows.Forms.ToolStripButton seq_has_adduct_chkBx;
+        private System.Windows.Forms.ToolStripMenuItem loadUltimateFragmentorFileToolStripMenuItem;
     }
 }

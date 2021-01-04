@@ -43,6 +43,7 @@ namespace Isotope_fitting
     {
         public static ColorDialog clrDlg = new ColorDialog();
         Calculator_input _data = new Calculator_input();
+        bool is_ult_fragmentor_file = false;
 
         #region PARAMETER SET TAB FIT
         private Form24 frm24;
@@ -1774,42 +1775,69 @@ namespace Isotope_fitting
         }
         private void import_fragments()
         {
+             is_ult_fragmentor_file = false;
             string loaded_ms = "";
             if (ms_extension.Equals("_")) { ms_extension = ""; }
-            OpenFileDialog fragment_import = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Filter = "txt files (*.txt)|*.txt", FilterIndex = 2, RestoreDirectory = true, CheckFileExists = true, CheckPathExists = true };
+            OpenFileDialog fragment_import = new OpenFileDialog() { InitialDirectory = Application.StartupPath + "\\Data", Filter = "data file|*.txt;*.csv;|All files|*.*", FilterIndex = 1, RestoreDirectory = true, CheckFileExists = true, CheckPathExists = true };
             List<string> lista = new List<string>();
             x_charged = false;
             if (fragment_import.ShowDialog() != DialogResult.Cancel)
             {
                 sw1.Reset(); sw1.Start();
-                StreamReader objReader = new StreamReader(fragment_import.FileName);
-                do { lista.Add(objReader.ReadLine()); }
-                while (objReader.Peek() != -1);
-                objReader.Close();                           
-                lista.RemoveAt(0);
-                if (is_riken) lista.RemoveAt(0);
-                progress_display_start(lista.Count, "Importing fragments list...");
-                for (int j = 0; j != (lista.Count); j++)
+               
+                if (fragment_import.FileName.EndsWith(".csv"))
                 {
-                    try
-                    {
-                        string[] tmp_str = lista[j].Split('\t');
-                        if (tmp_str.Length <4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);return; }
-                        else if (is_riken) assign_riken_fragment(tmp_str);
-                        else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
+                    is_ult_fragmentor_file = true;
+                    using (var reader = new StreamReader(fragment_import.FileName))
+                    {                       
+                        while (!reader.EndOfStream)
+                        {
+                            var line_csv = reader.ReadLine();
+                            if (!string.IsNullOrEmpty(line_csv) && !line_csv.StartsWith("ion type"))
+                            {
+                                var values_csv = line_csv.Split(',');
+                                try
+                                {
+                                    if (values_csv.Length < 4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                                    assign_Ultimate_Fragmentor_fragment(values_csv,ChemFormulas);
+                                }
+                                catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + line_csv.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                            }
+                               
+                        }
                     }
-                    catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-
-                    if (j % 1000 == 0 && j > 0) progress_display_update(j);
                 }
-                progress_display_stop();
+                else
+                {
+                    StreamReader objReader = new StreamReader(fragment_import.FileName);
+                    do { lista.Add(objReader.ReadLine()); }
+                    while (objReader.Peek() != -1);
+                    objReader.Close();
+                    lista.RemoveAt(0);
+                    if (is_riken) lista.RemoveAt(0);
+                    progress_display_start(lista.Count, "Importing fragments list...");
+                    for (int j = 0; j != (lista.Count); j++)
+                    {
+                        try
+                        {
+                            string[] tmp_str = lista[j].Split('\t');
+                            if (tmp_str.Length < 4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                            else if (is_riken) assign_riken_fragment(tmp_str);
+                            else if (tmp_str.Length == 5) assign_resolve_fragment(tmp_str);
+                        }
+                        catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+
+                        if (j % 1000 == 0 && j > 0) progress_display_update(j);
+                    }
+                    progress_display_stop();
+                }               
                 //treeview
                 if (string.IsNullOrEmpty(ms_extension)) { loaded_ms = System.IO.Path.GetFileNameWithoutExtension(fragment_import.FileName) + "_"; }
                 else { loaded_ms = System.IO.Path.GetFileNameWithoutExtension(fragment_import.FileName) + ms_extension; }
                 loaded_MSproducts.Add(loaded_ms);
                 string base_node_name = string.Empty;
-                if (is_riken) base_node_name = "Loaded Riken files";
-                else base_node_name = "Loaded MS product files";
+                if (is_riken) base_node_name = "Loaded Oligonucleotides' fragments files";                
+                else base_node_name = "Loaded Peptides' fragments files";
                 if (MSproduct_treeView == null || MSproduct_treeView.Nodes.Count == 0) { MSproduct_treeView.Nodes.Add(base_node_name); }
                 MSproduct_treeView.Nodes[0].Nodes.Add(loaded_ms);
                 MSproduct_treeView.Visible = true;
@@ -1860,9 +1888,7 @@ namespace Isotope_fitting
                 Max_man_int = 0,
                 Extension = ms_extension,
                 Has_adduct = false,
-                maxFactor=0.0,
-                Modif_formula= string.Empty,
-                Modif_name= string.Empty
+                maxFactor=0.0
             });
             int i = ChemFormulas.Count - 1;
             if (ms_heavy_chain) ChemFormulas[i].Chain_type = 1;
@@ -1979,7 +2005,8 @@ namespace Isotope_fitting
         private void post_import_fragments()
         {
             // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
-            if (!calc_FF && !is_exp_deconvoluted && !is_riken) generate_x();
+            //If we are using 'Ultimate Fragmentor' we are not calculating extra x fragments
+            if (!calc_FF && !is_exp_deconvoluted && !is_riken && !is_ult_fragmentor_file) generate_x();
             ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
             ms_light_chain = false; ms_heavy_chain = false;
             enable_UIcontrols("post import fragments");
@@ -2056,9 +2083,7 @@ namespace Isotope_fitting
                 Max_man_int = 0,
                 Extension = ms_extension,
                 Has_adduct = false,
-                maxFactor=0.0,
-                Modif_formula = string.Empty,
-                Modif_name = string.Empty
+                maxFactor=0.0
             });
             int i = ChemFormulas.Count - 1;
             // Note on formulas
@@ -2618,12 +2643,12 @@ namespace Isotope_fitting
 
             if (chem.Resolution == 0)
             {
-                if (String.IsNullOrEmpty(chem.Machine.ToString())) {  chem.Error = true;}
+                if (String.IsNullOrEmpty(chem.Machine.ToString())) { chem.Error = true; }
                 else
                 {
                     ChemiForm.Get_R(chem, calc_resolution);
 
-                    if (chem.Resolution == 0) chem.Error = true;
+                    if (chem.Resolution == 0) { chem.Error = true; }
                     calc_resolution = false;//the resolution matrix is calculated only once for the forst fragment, and is constant for the other fragments
                 }
             }
@@ -2785,9 +2810,7 @@ namespace Isotope_fitting
                         SortIdx = chem.SortIdx,
                         Candidate = true,
                         Has_adduct = chem.Has_adduct,
-                        maxFactor = chem.maxFactor,
-                        Modif_formula = string.Empty,
-                        Modif_name = string.Empty
+                        maxFactor = chem.maxFactor
                     };
                     fra.Centroid = cen.Select(point => point.DeepCopy()).ToList();
                     fra.Profile = chem.Profile.Select(point => point.DeepCopy()).ToList();
@@ -7234,9 +7257,7 @@ namespace Isotope_fitting
                                             Max_man_int = 0,
                                             maxPPM_Error = 0,
                                             minPPM_Error = 0,
-                                            Has_adduct = false,
-                                            Modif_formula = string.Empty,
-                                            Modif_name = string.Empty
+                                            Has_adduct = false
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         if (is_exp_deconvoluted && Math.Abs(fitted_chem.Last().Charge) != dec_charge)
@@ -7593,9 +7614,7 @@ namespace Isotope_fitting
                                             Max_man_int = 0,
                                             maxPPM_Error = 0,
                                             minPPM_Error = 0,
-                                            Has_adduct = false,
-                                            Modif_formula = string.Empty,
-                                            Modif_name = string.Empty
+                                            Has_adduct = false
                                         });
                                         if (UInt32.TryParse(str[12], out uint result_color)) fitted_chem.Last().Color = OxyColor.FromUInt32(result_color);
                                         if (is_exp_deconvoluted && Math.Abs(fitted_chem.Last().Charge)!=dec_charge)
@@ -8181,166 +8200,7 @@ namespace Isotope_fitting
             LC_2.ViewXY.YAxes[0].LabelsNumberFormat = y_format + y_numformat;
         }
         #endregion
-
-        #region load MS/MS file
-        private void loadFF_Btn_Click(object sender, EventArgs e)
-        {
-            
-        }
-        private void loadFF_file()
-        {
-            //loadFF_Btn.Enabled = false;
-            ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
-            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("First insert Sequence. Then load a fragment file.", "No sequence found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); calc_FF = false; /*loadFF_Btn.Enabled = true;*/ return; }
-            DialogResult dialogResult = MessageBox.Show("Are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.No)
-            {
-                Form16 frm16 = new Form16(this);
-                frm16.ShowDialog();
-            }
-            if (dialogResult == DialogResult.Cancel)
-            {
-                /*loadFF_Btn.Enabled = true;*/ calc_FF = false; return;
-            }
-            try
-            {
-                if (ChemFormulas.Count > 0) { ChemFormulas.Clear(); }
-                if (loaded_MSproducts.Count > 0) { loaded_MSproducts.Clear(); }
-                if (MSproduct_treeView.Nodes.Count > 0) { MSproduct_treeView.Nodes.Clear(); }
-                calc_FF = true;
-                clearList();
-                if (sequenceList.Count == 1)
-                {
-                    ms_sequence = sequenceList[0].Sequence;
-                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequencecorresponding to the selected extension is empty!", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); calc_FF = false; /*loadFF_Btn.Enabled = true;*/ return; }
-                    import_fragments();
-                }
-                else if (sequenceList.Count == 2)
-                {
-                    ms_sequence = sequenceList[1].Sequence; ms_extension = "_" + sequenceList[1].Extension;
-                    if (sequenceList[1].Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
-                    else { ms_light_chain = true; ms_heavy_chain = false; }
-                    if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequence corresponding to the selected extension is empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); calc_FF = false; /*loadFF_Btn.Enabled = true;*/ return; }
-                    import_fragments();
-                }
-                else
-                {
-                    var extension_dialog = this.ShowTabModeDialog();
-                    if (string.IsNullOrEmpty(extension_dialog.ToString()) && string.IsNullOrEmpty(sequenceList[0].Sequence))
-                    {
-                        MessageBox.Show("No extension selected!Loading fragments procedure is cancelled.", "Loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); /*loadFF_Btn.Enabled = true;*/ calc_FF = false; return;
-                    }
-                    else
-                    {
-                        ms_extension = "_" + extension_dialog.ToString();
-                    }
-                    //ms_tab_mode = true;
-                    DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.", "Message", MessageBoxButtons.OKCancel);
-                    if (dialogResult1 != DialogResult.OK) { /*loadFF_Btn.Enabled = true;*/ return; }
-                    foreach (SequenceTab seq in sequenceList)
-                    {
-                        if (("_" + seq.Extension).Equals(ms_extension))
-                        {
-                            ms_sequence = seq.Sequence;
-                            if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequence corresponding to the selected extension is empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);/* loadFF_Btn.Enabled = true;*/ calc_FF = false; return; }
-                            if (seq.Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
-                            else { ms_light_chain = true; ms_heavy_chain = false; }
-                            import_fragments();
-                            break;
-                        }
-                    }
-                }
-                if (ChemFormulas.Count > 0)
-                {
-                    Form14 frm14 = new Form14(this);
-                    frm14.Show();
-                    frm14.FormClosed += (s, f) => { if (calc_form14) { calc_form14 = false; FF_sequence_a(); } };
-                }
-                else
-                {
-                    calc_FF = false;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Please close the program, make sure you load the correct file and restart the procedure.", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); calc_FF = false;
-            }
-            finally
-            {
-               /* loadFF_Btn.Enabled = true;*/ calc_FF = false;
-            }
-
-        }
-        public void FF_sequence_a()
-        {
-            // this the main sequence after loadind data
-            // 1. select fragments according to UI
-            Fragments2.Clear();
-            selectedFragments.Clear();
-            custom_colors.Clear();
-            custom_colors.Add(exp_color);
-            sw1.Reset(); sw1.Start();
-            List<ChemiForm> selected_fragments = new List<ChemiForm>();
-            foreach (ChemiForm chem in ChemFormulas)
-            {
-                selected_fragments.Add(chem.DeepCopy());
-            }
-            if (selected_fragments == null) return;
-            sw1.Stop(); Debug.WriteLine("Select frags: " + sw1.ElapsedMilliseconds.ToString());
-            sw1.Reset(); sw1.Start();
-            // 2. calculate fragments resolution
-            calculate_fragments_resolution(selected_fragments);
-            sw1.Stop(); Debug.WriteLine("Resolution from fragments: " + sw1.ElapsedMilliseconds.ToString());
-            // 3. calculate fragment properties and keep only those within ppm error from experimental. Store in Fragments2.
-            Thread envipat_properties = new Thread(() => calculate_fragment_properties(selected_fragments));
-            envipat_properties.Start();
-            //plotFragProf_chkBox.Enabled = true; plotFragCent_chkBox.Enabled = true;
-        }
-        private bool decision_algorithmFF(ChemiForm chem, List<PointPlot> cen)
-        {
-            // all the decisions if a fragment is canidate for fitting
-            bool fragment_is_canditate = true;
-            // decide how many peaks will be involved in the selection process
-            // results = {[resol1, ppm1], [resol2, ppm2], ....}
-            List<double[]> results = new List<double[]>();
-            int total_peaks = cen.Count;
-            double[] tmp = ppm_calculator(cen[0].X);
-
-            //round 1 , to find the correct resolution 
-            //for the deconvoluted spectra the resolution is not derived from the experimental therefore there is only round 1
-            results.Add(tmp);
-            if (Math.Abs(tmp[0]) > ppmErrorFF && is_exp_deconvoluted) { fragment_is_canditate = false; }
-            //round 2, with the correct resolution
-            if (fragment_is_canditate && !is_exp_deconvoluted)
-            {
-                // only if the frag is candidate we have to re-calculate Envelope (time costly method) with the new resolution (the matched from experimental peak)
-                chem.Resolution = (double)results.Average(p => p[1]);
-                results = new List<double[]>();
-                chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();
-                ChemiForm.Envelope(chem);
-                ChemiForm.Vdetect(chem);
-                cen = chem.Centroid.OrderByDescending(p => p.Y).ToList();
-                tmp = ppm_calculator(cen[0].X);
-                results.Add(tmp);
-                if (Math.Abs(tmp[0]) > ppmErrorFF) { fragment_is_canditate = false; }
-            }
-            // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate && !ignore_ppm_FF) { chem.Profile.Clear(); chem.Points.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear(); return false; }
-            //set PPM error
-            chem.PPM_Error = results.Average(p => p[0]);
-            if (results.Count > 1)
-            {
-                chem.maxPPM_Error = results.Max(p => p[0]);
-                chem.minPPM_Error = results.Min(p => p[0]);
-            }
-            else
-            {
-                chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0;
-            }
-            add_fragment_to_Fragments2(chem, cen);
-            return fragment_is_canditate;
-        }
-        #endregion
+                
 
         #region UI
         public void change_Fragment(FragForm fra, int index)
@@ -14276,9 +14136,7 @@ namespace Isotope_fitting
                             To_plot = string_to_bool(str[19]),
                             Max_intensity = dParser(str[6]),
                             Candidate = true,
-                            Has_adduct=has_adduct,
-                            Modif_formula = string.Empty,
-                            Modif_name = string.Empty
+                            Has_adduct=has_adduct
                         });
                         if (str.Length > 22) { Fragments2.Last().maxFactor = dParser(str[22]); }
                         else { Fragments2.Last().maxFactor = 0.0; }
@@ -14730,13 +14588,6 @@ namespace Isotope_fitting
             MessageBox.Show("Found "+ counter.ToString() + " out of "+ Fragments5.Count.ToString());
         }
 
-
-
-
-
-
-
-
         #endregion
 
         #region Ultimate Fragment Calculator Manipulation
@@ -14836,24 +14687,156 @@ namespace Isotope_fitting
             proc.WaitForExit();
         }
 
-        public void read_csv()
-        {
-            using (var reader = new StreamReader(@"My_fragments.csv"))
+        public void read_csv_and_Calculate(string file)
+        {            
+            //csv example 
+            //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
+            //[0]y,[1]y9,[2]1,[3]QIFVKTLYT,[4]1112.6350229193602,[5],[6]C54H85N11O14,[7]1,[8]2,[9]10
+            if (file.EndsWith(".csv"))
             {
-                //csv format example 
-                //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
-                //[0]y,[1]y9,[2]1,[3]QIFVKTLYT,[4]1112.6350229193602,[5],[6]C54H85N11O14,[7]1,[8]2,[9]10
-                while (!reader.EndOfStream)
+                is_ult_fragmentor_file = true;
+                List<ChemiForm> selected_fragments = new List<ChemiForm>();
+                using (var reader = new StreamReader(file))
                 {
-                    var line = reader.ReadLine();
-                    var values = line.Split(';');
-                    string index = values[1].Replace(values[0], "");
-                    //m/z,ion,index,charge,formula
-                    string[] frag_string = new string[] { values[4], index, values[0], values[2], values[6] };
+                    while (!reader.EndOfStream)
+                    {
+                        var line_csv = reader.ReadLine();
+                        if (!string.IsNullOrEmpty(line_csv) && !line_csv.StartsWith("ion type"))
+                        {
+                            var values_csv = line_csv.Split(',');
+                            try
+                            {
+                                if (values_csv.Length < 4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                                assign_Ultimate_Fragmentor_fragment(values_csv, selected_fragments);
+                            }
+                            catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + line_csv.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                        }
 
+                    }
+                }
+                try
+                {
+                    try
+                    {
+                        clearList();
+                        if (Form9.now && Form9.last_plotted.Count > 0) if (Form9.now && Form9.last_plotted.Count > 0) { Form9.last_plotted.Clear(); }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in clear list!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    finally
+                    {
+                        fragments_and_calculations_sequence_A(selected_fragments);
+                    }
+
+                }
+                catch
+                {
+                    MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in calculations!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }
+
+        private void assign_Ultimate_Fragmentor_fragment(string[] frag_info,List<ChemiForm> Utimate_Frag_List)
+        {
+            //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
+            int charge = Int32.Parse(frag_info[2]);
+            if (is_exp_deconvoluted && charge > 1) { return; }
+            bool is_error = false;
+            Utimate_Frag_List.Add(new ChemiForm
+            {
+                InputFormula = frag_info[6],
+                Adduct = string.Empty,
+                Deduct = string.Empty,
+                Multiplier = 1,
+                Mz = frag_info[4],
+                Ion = frag_info[0],
+                Index = frag_info[7],
+                IndexTo = frag_info[7],
+                Error = false,
+                Elements_set = new List<Element_set>(),
+                Iso_total_amount = 0,
+                Monoisotopic = new CompoundMulti() { Sum = new int[1], Counter = new int[1] },
+                Points = new List<PointPlot>(),
+                Machine = string.Empty,
+                Resolution = 100000,
+                Combinations = new List<Combination_1>(),
+                Profile = new List<PointPlot>(),
+                Centroid = new List<PointPlot>(),
+                Intensoid = new List<PointPlot>(),
+                Combinations4 = new List<Combination_4>(),
+                FinalFormula = string.Empty,
+                Factor = 1.0,
+                Fixed = false,
+                PrintFormula = frag_info[6],
+                Max_man_int = 0,
+                Extension = ms_extension,
+                Has_adduct = false,
+                maxFactor = 0.0,
+                Modif_formula="",
+                Modif_name = frag_info[5]
+            });
+            int i = Utimate_Frag_List.Count - 1;
+            if (!string.IsNullOrEmpty(frag_info[5])) { Utimate_Frag_List[i].Has_adduct = true; }
+            if (!frag_info[9].EndsWith(frag_info[7]))
+            {
+                //in case of w,x,y,z
+                string index = frag_info[1].Replace(frag_info[0], "");
+                Utimate_Frag_List[i].Index = index;
+                Utimate_Frag_List[i].IndexTo = index;
+            }
+            if (ms_heavy_chain) Utimate_Frag_List[i].Chain_type = 1;
+            else if (ms_light_chain) Utimate_Frag_List[i].Chain_type = 2;
+            else Utimate_Frag_List[i].Chain_type = 0;
+            Utimate_Frag_List[i].SortIdx = Int32.Parse(frag_info[7]);
+            //remove the extra Hydrogen from the chemical Formula
+            Utimate_Frag_List[i].PrintFormula = Utimate_Frag_List[i].InputFormula = fix_formula(out is_error, Utimate_Frag_List[i].InputFormula);
+            if (is_exp_deconvoluted && dec_charge == 0)
+            {
+                //in case of a deconvoluted spectra 
+                Utimate_Frag_List[i].Charge = 0;
+                // all ions have as many H in Adduct as their charge
+                Utimate_Frag_List[i].Adduct = "";
+            }
+            else
+            {
+                Utimate_Frag_List[i].Charge = Int32.Parse(frag_info[2]);
+                //all ions have as many H in Adduct as their charge
+                Utimate_Frag_List[i].Adduct = "H" + Utimate_Frag_List[i].Charge.ToString();
+            }
+            // normal fragment
+            Utimate_Frag_List[i].Ion_type = Utimate_Frag_List[i].Ion;
+            if (Utimate_Frag_List[i].Ion.StartsWith("d")) Utimate_Frag_List[i].Color = OxyColors.Turquoise;
+            if (Utimate_Frag_List[i].Ion.StartsWith("v")) Utimate_Frag_List[i].Color = OxyColors.Turquoise;
+            if (Utimate_Frag_List[i].Ion.StartsWith("w")) Utimate_Frag_List[i].Color = OxyColors.Turquoise;
+            else if (Utimate_Frag_List[i].Ion.StartsWith("a")) Utimate_Frag_List[i].Color = OxyColors.Green;
+            else if (Utimate_Frag_List[i].Ion.StartsWith("b")) Utimate_Frag_List[i].Color = OxyColors.Blue;
+            else if (Utimate_Frag_List[i].Ion.StartsWith("c")) Utimate_Frag_List[i].Color = OxyColors.Firebrick;
+            else if (Utimate_Frag_List[i].Ion.StartsWith("x")) { Utimate_Frag_List[i].Color = OxyColors.LimeGreen; }
+            else if (Utimate_Frag_List[i].Ion.StartsWith("y")) { Utimate_Frag_List[i].Color = OxyColors.DodgerBlue; }
+            else if (Utimate_Frag_List[i].Ion.StartsWith("z")) { Utimate_Frag_List[i].Color = OxyColors.Tomato; }
+            else Utimate_Frag_List[i].Color = OxyColors.Orange;
+            string lbl = "";
+            if (Utimate_Frag_List[i].Ion_type.Length == 1) { lbl = frag_info[2]; }
+            else { lbl = "(" + Utimate_Frag_List[i].Ion_type + ")" + Utimate_Frag_List[i].Index; }
+            if (Utimate_Frag_List[i].Charge > 0) Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + "+" + ms_extension;
+            else if (Utimate_Frag_List[i].Charge < 0) Utimate_Frag_List[i].Name = lbl + "_" + Math.Abs(Utimate_Frag_List[i].Charge).ToString() + "-" + ms_extension;
+            else Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + ms_extension;          
+        }
         #endregion
+
+        private void loadUltimateFragmentorFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog loadData = new OpenFileDialog() { Multiselect = false, Title = "Load Ultimate Fragmentor data", FileName = "", Filter = "data file|*.csv;|All files|*.*" };
+                    
+            if (loadData.ShowDialog() != DialogResult.Cancel)
+            {                           
+                selectedFragments.Clear();
+                string FileName = loadData.FileName;
+                read_csv_and_Calculate(FileName);
+            }
+            else { return; }
+        }
     }
 }
