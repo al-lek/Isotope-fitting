@@ -1788,24 +1788,7 @@ namespace Isotope_fitting
                 if (fragment_import.FileName.EndsWith(".csv"))
                 {
                     is_ult_fragmentor_file = true;
-                    using (var reader = new StreamReader(fragment_import.FileName))
-                    {                       
-                        while (!reader.EndOfStream)
-                        {
-                            var line_csv = reader.ReadLine();
-                            if (!string.IsNullOrEmpty(line_csv) && !line_csv.StartsWith("ion type"))
-                            {
-                                var values_csv = line_csv.Split(',');
-                                try
-                                {
-                                    if (values_csv.Length < 4) { MessageBox.Show("Oops... it seems you have inserted wrong file format.\r\nPlease try again.", "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-                                    assign_Ultimate_Fragmentor_fragment(values_csv,ChemFormulas);
-                                }
-                                catch (Exception eeeee) { MessageBox.Show(eeeee.ToString() + "\r\n Error in data file in line: " + line_csv.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
-                            }
-                               
-                        }
-                    }
+                    read_csv_and_Calculate(fragment_import.FileName,false);                    
                 }
                 else
                 {
@@ -14591,103 +14574,24 @@ namespace Isotope_fitting
         #endregion
 
         #region Ultimate Fragment Calculator Manipulation
-        private void write_params_input_json()
+        private void write_params_input_json(string path="")
         {
+            if (path == "")
+            {
+                root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
+                path = root_path + "\\input.json";
+            }           
             if (_data == null) return;
-            root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
-
             //open file stream
-            using (StreamWriter file = File.CreateText(root_path + "\\input.json"))
+            using (StreamWriter file = File.CreateText(path))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 //serialize object directly into file stream
                 serializer.Serialize(file, _data);
             }
-        }
-        public void PatchParameter(string parameter, int serviceid)
-        {
-            // 1) Create engine
-            ScriptEngine engine = Python.CreateEngine();
-            var paths = engine.GetSearchPaths();
-            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\");
-            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\.idea");
-            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\fragment_lib");
-            paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\params");
+        }       
 
-            engine.SetSearchPaths(paths);
-            // 2) Provide script and arguments
-            var script = @"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\ultimate_fragmentor.py";
-            ScriptSource source = engine.CreateScriptSourceFromFile(script);
-
-            var argv = new List<string>();
-            argv.Add("");
-            //argv.Add("input.json");
-            argv.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\input.json");
-
-            engine.GetSysModule().SetVariable("argv", argv);
-
-            // 3) Output redirect
-            var eIO = engine.Runtime.IO;
-
-            var errors = new MemoryStream();
-            eIO.SetErrorOutput(errors, Encoding.Default);
-
-            var results = new MemoryStream();
-            eIO.SetOutput(results, Encoding.Default);
-
-            // 4) Execute script
-            //engine.ExecuteFile(script);
-            //var scope = engine.CreateScope();
-            //source.Execute(scope);
-            source.Execute();
-
-            //// 5) Display output
-            //string str(byte[] x) => Encoding.Default.GetString(x);
-
-            //Console.WriteLine("ERRORS:");
-            //Console.WriteLine(str(errors.ToArray()));
-            //Console.WriteLine();
-            //Console.WriteLine("Results:");
-            //Console.WriteLine(str(results.ToArray()));
-        }
-        private void run_cmd(string cmd, string args)
-        {
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = "my/full/path/to/python.exe";
-            start.Arguments = string.Format("{0} {1}", cmd, args);
-            start.UseShellExecute = false;
-            start.RedirectStandardOutput = true;
-            using (Process process = Process.Start(start))
-            {
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    string result = reader.ReadToEnd();
-                    Console.Write(result);
-                }
-            }
-        }
-        public void rin_python()
-        {
-            string progToRun = "C:\\Users\\Maro\\Utlimate_Fragment\\setup.py";
-            Process proc = new Process();
-            proc.StartInfo.FileName = "C:\\Users\\Maro\\anaconda3\\python.exe";
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.WorkingDirectory = "C:\\Users\\Maro\\Utlimate_Fragment";
-            proc.StartInfo.Arguments = progToRun;
-
-            proc.Start();
-
-            //StreamReader sReader = proc.StandardOutput;
-            //string[] output = sReader.ReadToEnd().Split('\r');
-
-            //foreach (string s in output)
-            //    Console.WriteLine(s);
-
-            proc.WaitForExit();
-        }
-
-        public void read_csv_and_Calculate(string file)
+        public void read_csv_and_Calculate(string file,bool is_calculation=false)
         {            
             //csv example 
             //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
@@ -14714,30 +14618,33 @@ namespace Isotope_fitting
 
                     }
                 }
-                try
+                if (is_calculation)
                 {
                     try
                     {
-                        clearList();
-                        if (Form9.now && Form9.last_plotted.Count > 0) if (Form9.now && Form9.last_plotted.Count > 0) { Form9.last_plotted.Clear(); }
+                        try
+                        {
+                            clearList();
+                            if (Form9.now && Form9.last_plotted.Count > 0) if (Form9.now && Form9.last_plotted.Count > 0) { Form9.last_plotted.Clear(); }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in clear list!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                        finally
+                        {
+                            fragments_and_calculations_sequence_A(selected_fragments);
+                        }
+
                     }
                     catch
                     {
-                        MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in clear list!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in calculations!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
-                    finally
-                    {
-                        fragments_and_calculations_sequence_A(selected_fragments);
-                    }
-
                 }
-                catch
-                {
-                    MessageBox.Show("Oops an unexpected error occurred!Please close the program and restart the procedure.", "Error in calculations!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
+                else { ChemFormulas.AddRange(selected_fragments); }
             }
         }
-
         private void assign_Ultimate_Fragmentor_fragment(string[] frag_info,List<ChemiForm> Utimate_Frag_List)
         {
             //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
@@ -14824,19 +14731,103 @@ namespace Isotope_fitting
             else if (Utimate_Frag_List[i].Charge < 0) Utimate_Frag_List[i].Name = lbl + "_" + Math.Abs(Utimate_Frag_List[i].Charge).ToString() + "-" + ms_extension;
             else Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + ms_extension;          
         }
-        #endregion
-
         private void loadUltimateFragmentorFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog loadData = new OpenFileDialog() { Multiselect = false, Title = "Load Ultimate Fragmentor data", FileName = "", Filter = "data file|*.csv;|All files|*.*" };
-                    
+
             if (loadData.ShowDialog() != DialogResult.Cancel)
-            {                           
+            {
                 selectedFragments.Clear();
                 string FileName = loadData.FileName;
-                read_csv_and_Calculate(FileName);
+                read_csv_and_Calculate(FileName, true);
             }
             else { return; }
         }
+
+        //public void PatchParameter(string parameter, int serviceid)
+        //{
+        //    // 1) Create engine
+        //    ScriptEngine engine = Python.CreateEngine();
+        //    var paths = engine.GetSearchPaths();
+        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\");
+        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\.idea");
+        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\fragment_lib");
+        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\params");
+
+        //    engine.SetSearchPaths(paths);
+        //    // 2) Provide script and arguments
+        //    var script = @"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\ultimate_fragmentor.py";
+        //    ScriptSource source = engine.CreateScriptSourceFromFile(script);
+
+        //    var argv = new List<string>();
+        //    argv.Add("");
+        //    //argv.Add("input.json");
+        //    argv.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\input.json");
+
+        //    engine.GetSysModule().SetVariable("argv", argv);
+
+        //    // 3) Output redirect
+        //    var eIO = engine.Runtime.IO;
+
+        //    var errors = new MemoryStream();
+        //    eIO.SetErrorOutput(errors, Encoding.Default);
+
+        //    var results = new MemoryStream();
+        //    eIO.SetOutput(results, Encoding.Default);
+
+        //    // 4) Execute script
+        //    //engine.ExecuteFile(script);
+        //    //var scope = engine.CreateScope();
+        //    //source.Execute(scope);
+        //    source.Execute();
+
+        //    //// 5) Display output
+        //    //string str(byte[] x) => Encoding.Default.GetString(x);
+
+        //    //Console.WriteLine("ERRORS:");
+        //    //Console.WriteLine(str(errors.ToArray()));
+        //    //Console.WriteLine();
+        //    //Console.WriteLine("Results:");
+        //    //Console.WriteLine(str(results.ToArray()));
+        //}
+        //private void run_cmd(string cmd, string args)
+        //{
+        //    ProcessStartInfo start = new ProcessStartInfo();
+        //    start.FileName = "my/full/path/to/python.exe";
+        //    start.Arguments = string.Format("{0} {1}", cmd, args);
+        //    start.UseShellExecute = false;
+        //    start.RedirectStandardOutput = true;
+        //    using (Process process = Process.Start(start))
+        //    {
+        //        using (StreamReader reader = process.StandardOutput)
+        //        {
+        //            string result = reader.ReadToEnd();
+        //            Console.Write(result);
+        //        }
+        //    }
+        //}
+        //public void rin_python()
+        //{
+        //    string progToRun = "C:\\Users\\Maro\\Utlimate_Fragment\\setup.py";
+        //    Process proc = new Process();
+        //    proc.StartInfo.FileName = "C:\\Users\\Maro\\anaconda3\\python.exe";
+        //    proc.StartInfo.RedirectStandardOutput = true;
+        //    proc.StartInfo.UseShellExecute = false;
+        //    proc.StartInfo.WorkingDirectory = "C:\\Users\\Maro\\Utlimate_Fragment";
+        //    proc.StartInfo.Arguments = progToRun;
+
+        //    proc.Start();
+
+        //    //StreamReader sReader = proc.StandardOutput;
+        //    //string[] output = sReader.ReadToEnd().Split('\r');
+
+        //    //foreach (string s in output)
+        //    //    Console.WriteLine(s);
+
+        //    proc.WaitForExit();
+        //}
+
+        #endregion
+
     }
 }

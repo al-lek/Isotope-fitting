@@ -372,6 +372,7 @@ namespace Isotope_fitting
             this.loadListBtn11 = new System.Windows.Forms.ToolStripDropDownButton();
             this.loadFragmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadUltimateFragmentorFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.clearListBtn11 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton10 = new System.Windows.Forms.ToolStripSeparator();
@@ -512,7 +513,6 @@ namespace Isotope_fitting
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
-            this.loadUltimateFragmentorFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -3179,11 +3179,11 @@ namespace Isotope_fitting
             // legend_panelCopy2
             // 
             this.legend_panelCopy2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.legend_panelCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legend_panelCopy2.Location = new System.Drawing.Point(441, 0);
+            this.legend_panelCopy2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legend_panelCopy2.Location = new System.Drawing.Point(436, 0);
             this.legend_panelCopy2.Name = "legend_panelCopy2";
             this.legend_panelCopy2.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            this.legend_panelCopy2.Size = new System.Drawing.Size(81, 455);
+            this.legend_panelCopy2.Size = new System.Drawing.Size(86, 455);
             this.legend_panelCopy2.TabIndex = 24;
             this.legend_panelCopy2.Visible = false;
             this.legend_panelCopy2.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
@@ -3464,11 +3464,11 @@ namespace Isotope_fitting
             // legend_panelCopy1
             // 
             this.legend_panelCopy1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.legend_panelCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legend_panelCopy1.Location = new System.Drawing.Point(441, 0);
+            this.legend_panelCopy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legend_panelCopy1.Location = new System.Drawing.Point(436, 0);
             this.legend_panelCopy1.Name = "legend_panelCopy1";
             this.legend_panelCopy1.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            this.legend_panelCopy1.Size = new System.Drawing.Size(81, 455);
+            this.legend_panelCopy1.Size = new System.Drawing.Size(86, 455);
             this.legend_panelCopy1.TabIndex = 23;
             this.legend_panelCopy1.Visible = false;
             this.legend_panelCopy1.Paint += new System.Windows.Forms.PaintEventHandler(this.legend_panel_Paint);
@@ -4643,6 +4643,14 @@ namespace Isotope_fitting
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Size = new System.Drawing.Size(256, 36);
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Text = "Load and recalculate Resolution";
             this.loadFragmentsAndRecalculateResolutionToolStripMenuItem.Click += new System.EventHandler(this.loadFragmentsAndRecalculateResolutionToolStripMenuItem_Click);
+            // 
+            // loadUltimateFragmentorFileToolStripMenuItem
+            // 
+            this.loadUltimateFragmentorFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadUltimateFragmentorFileToolStripMenuItem.Image")));
+            this.loadUltimateFragmentorFileToolStripMenuItem.Name = "loadUltimateFragmentorFileToolStripMenuItem";
+            this.loadUltimateFragmentorFileToolStripMenuItem.Size = new System.Drawing.Size(256, 36);
+            this.loadUltimateFragmentorFileToolStripMenuItem.Text = "Load Ultimate Fragmentor File";
+            this.loadUltimateFragmentorFileToolStripMenuItem.Click += new System.EventHandler(this.loadUltimateFragmentorFileToolStripMenuItem_Click);
             // 
             // saveListBtn11
             // 
@@ -6239,14 +6247,6 @@ namespace Isotope_fitting
             // 
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
-            // 
-            // loadUltimateFragmentorFileToolStripMenuItem
-            // 
-            this.loadUltimateFragmentorFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadUltimateFragmentorFileToolStripMenuItem.Image")));
-            this.loadUltimateFragmentorFileToolStripMenuItem.Name = "loadUltimateFragmentorFileToolStripMenuItem";
-            this.loadUltimateFragmentorFileToolStripMenuItem.Size = new System.Drawing.Size(256, 36);
-            this.loadUltimateFragmentorFileToolStripMenuItem.Text = "Load Ultimate Fragmentor File";
-            this.loadUltimateFragmentorFileToolStripMenuItem.Click += new System.EventHandler(this.loadUltimateFragmentorFileToolStripMenuItem_Click);
             // 
             // Form2
             // 
