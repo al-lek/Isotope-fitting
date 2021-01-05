@@ -8807,11 +8807,7 @@ namespace Isotope_fitting
             {
                 AxisY axisY = LC_1.ViewXY.YAxes[ii];
                 axisY.SetRange(axisY.Minimum / 2.0, axisY.Maximum / 2.0);
-            }
-            //foreach (AxisY axisY in LC_1.ViewXY.YAxes)
-            //{
-            //    axisY.SetRange(axisY.Minimum / 2.0, axisY.Maximum / 2.0);
-            //}
+            }            
             //Allow chart rendering
             LC_1.EndUpdate();
         }
@@ -8824,11 +8820,7 @@ namespace Isotope_fitting
             {
                 AxisY axisY = LC_1.ViewXY.YAxes[ii];
                 axisY.SetRange(axisY.Minimum * 2.0, axisY.Maximum * 2.0);
-            }
-            //foreach (AxisY axisY in LC_1.ViewXY.YAxes)
-            //{
-            //    axisY.SetRange(axisY.Minimum * 2.0, axisY.Maximum * 2.0);
-            //}
+            }           
             //Allow chart rendering
             LC_1.EndUpdate();
         }
@@ -9339,7 +9331,7 @@ namespace Isotope_fitting
         private void highlightProp_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Displays the 'Heatmap options' panel. The user can select the color scale," +
-                " the maximum and minimum values of the scale, and the amount of region between the two bounds. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
+                " the maximum and minimum values of the scale, and the amount of regions between the two intensity bounds. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
             Form23 frm23 = new Form23(this);
             frm23.FormClosed += (s, f) =>
             {

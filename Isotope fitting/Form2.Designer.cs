@@ -2087,7 +2087,7 @@ namespace Isotope_fitting
             this.toolStrip3.Location = new System.Drawing.Point(170, 0);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip3.Size = new System.Drawing.Size(113, 40);
+            this.toolStrip3.Size = new System.Drawing.Size(144, 40);
             this.toolStrip3.TabIndex = 29;
             // 
             // primary_settingsBtn
