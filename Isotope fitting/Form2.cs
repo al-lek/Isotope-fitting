@@ -14717,7 +14717,7 @@ namespace Isotope_fitting
             else if (Utimate_Frag_List[i].Ion.StartsWith("z")) { Utimate_Frag_List[i].Color = OxyColors.Tomato; }
             else Utimate_Frag_List[i].Color = OxyColors.Orange;
             string lbl = "";
-            if (Utimate_Frag_List[i].Ion_type.Length == 1) { lbl = frag_info[2]; }
+            if (Utimate_Frag_List[i].Ion_type.Length == 1) { lbl = frag_info[1]; }
             else { lbl = "(" + Utimate_Frag_List[i].Ion_type + ")" + Utimate_Frag_List[i].Index; }
             if (Utimate_Frag_List[i].Charge > 0) Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + "+" + ms_extension;
             else if (Utimate_Frag_List[i].Charge < 0) Utimate_Frag_List[i].Name = lbl + "_" + Math.Abs(Utimate_Frag_List[i].Charge).ToString() + "-" + ms_extension;
