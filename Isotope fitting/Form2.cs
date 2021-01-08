@@ -319,7 +319,7 @@ namespace Isotope_fitting
         List<ion> IonDraw = new List<ion>();
         List<ion> IonDrawIndex = new List<ion>();
         List<ion> IonDrawIndexTo = new List<ion>();
-        //Graphics g = null;
+       
         //sequence
         Pen p = new Pen(Color.Black);
         public Color highlight_color = Color.SlateGray;
@@ -342,7 +342,7 @@ namespace Isotope_fitting
         PlotView indextoIntensity_plot;
         PlotView ppm_plot;
 
-        #region plot area format        
+        #region plot areas format        
         //ppm plot
         public OxyPlot.LineStyle Xmajor_ppm_grid = OxyPlot.LineStyle.Solid;
         public OxyPlot.LineStyle Xminor_ppm_grid = OxyPlot.LineStyle.None;
@@ -421,7 +421,6 @@ namespace Isotope_fitting
 
         #endregion
         
-
         public Form2()
         {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -438,9 +437,9 @@ namespace Isotope_fitting
             reset_all();
             fragTreePanel.Controls.Add(frag_tree);
             Initialize_BW();
-            change_state(true);
+            change_application(true);
             //call change state window
-            initiate_change_state_form();
+            initiate_change_app_mode_form();
             //PatchParameter("", 0);
             //run_cmd("", "");
             //rin_python();
@@ -687,20 +686,21 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region riken state change      
+        #region Change application mode      
         private void application_proj_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Shows application mode dialog", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            //if any other form rather than the main is open, it must close
+            //if any other form rather than the main is open, it must be closed
             CloseAllOpenForm("Form2");
-            initiate_change_state_form();
+            initiate_change_app_mode_form();
         }
-        private void initiate_change_state_form()
+        private void initiate_change_app_mode_form()
         {
             ChangeStateForm frmC = new ChangeStateForm(this);
             frmC.ShowDialog();
         }
-        public void change_state(bool changed = true)
+        /// <summary>Clear all the data and changes application mode </summary>
+        public void change_application(bool changed = true)
         {
             if (changed)
             {
@@ -763,7 +763,7 @@ namespace Isotope_fitting
         #region TAB FIT     
 
         #region 0. Preferences and params      
-
+        /// <summary>Load user settings from a preferences.txt file. If the application is used for the first time the file is created with default settings. </summary>
         private void load_preferences()
         {
             // will look for the preferences file and load last session state
@@ -824,9 +824,7 @@ namespace Isotope_fitting
                     Xmajor_grid = string_to_bool(preferences[35].Split(':')[1]);
                     Xminor_grid = string_to_bool(preferences[36].Split(':')[1]);
                     Ymajor_grid = string_to_bool(preferences[37].Split(':')[1]);
-                    Yminor_grid = string_to_bool(preferences[38].Split(':')[1]);
-                    //preferences[0] += X_tick = OxyPlot.Axes.TickStyle.Outside;
-                    //preferences[0] += Y_tick = OxyPlot.Axes.TickStyle.Outside;
+                    Yminor_grid = string_to_bool(preferences[38].Split(':')[1]);                   
                     x_interval = Convert.ToDouble(preferences[39].Split(':')[1]);
                     y_interval = Convert.ToDouble(preferences[40].Split(':')[1]);
                     x_format = preferences[41].Split(':')[1].ToString();
@@ -835,7 +833,6 @@ namespace Isotope_fitting
                     y_numformat = preferences[44].Split(':')[1].ToString();
 
                     //primary tab plots
-
                     //intensity
                     if (string_to_bool(preferences[45].Split(':')[1])) { Xmajor_grid12 = OxyPlot.LineStyle.Solid; }
                     else { Xmajor_grid12 = OxyPlot.LineStyle.None; }
@@ -845,9 +842,7 @@ namespace Isotope_fitting
                     else { Ymajor_grid12 = OxyPlot.LineStyle.None; }
                     if (string_to_bool(preferences[48].Split(':')[1])) { Yminor_grid12 = OxyPlot.LineStyle.Solid; }
                     else { Yminor_grid12 = OxyPlot.LineStyle.None; }
-                    y_interval12 = Convert.ToDouble(preferences[49].Split(':')[1]);
-                    //preferences[0] += X_tick12 = OxyPlot.Axes.TickStyle.Outside;
-                    //preferences[0] += Y_tick12 = OxyPlot.Axes.TickStyle.Outside;
+                    y_interval12 = Convert.ToDouble(preferences[49].Split(':')[1]);                   
                     y_format12 = preferences[50].Split(':')[1].ToString();
                     y_numformat12 = preferences[51].Split(':')[1].ToString();
                     x_majorStep12 = Convert.ToDouble(preferences[52].Split(':')[1]);
@@ -862,9 +857,7 @@ namespace Isotope_fitting
                     if (string_to_bool(preferences[57].Split(':')[1])) { Ymajor_charge_grid12 = OxyPlot.LineStyle.Solid; }
                     else { Ymajor_charge_grid12 = OxyPlot.LineStyle.None; }
                     if (string_to_bool(preferences[58].Split(':')[1])) { Yminor_charge_grid12 = OxyPlot.LineStyle.Solid; }
-                    else { Yminor_charge_grid12 = OxyPlot.LineStyle.None; }
-                    //preferences[0] += X_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
-                    //preferences[0] += Y_charge_tick12 = OxyPlot.Axes.TickStyle.Outside;
+                    else { Yminor_charge_grid12 = OxyPlot.LineStyle.None; }                    
                     y_charge_majorStep12 = Convert.ToDouble(preferences[59].Split(':')[1]);
                     y_charge_minorStep12 = Convert.ToDouble(preferences[60].Split(':')[1]);
                     x_charge_majorStep12 = Convert.ToDouble(preferences[61].Split(':')[1]);
@@ -881,9 +874,7 @@ namespace Isotope_fitting
                     else { Yint_minor_grid13 = OxyPlot.LineStyle.None; }
                     x_format13 = preferences[67].Split(':')[1].ToString();
                     x_numformat13 = preferences[68].Split(':')[1].ToString();
-                    x_interval13 = Convert.ToDouble(preferences[69].Split(':')[1]);
-                    //preferences[0] += Xint_tick13 = OxyPlot.Axes.TickStyle.Outside;
-                    //preferences[0] += Yint_tick13 = OxyPlot.Axes.TickStyle.Outside;
+                    x_interval13 = Convert.ToDouble(preferences[69].Split(':')[1]);                  
                     xINT_majorStep13 = Convert.ToDouble(preferences[70].Split(':')[1]);
                     xINT_minorStep13 = Convert.ToDouble(preferences[71].Split(':')[1]);
                     yINT_majorStep13 = Convert.ToDouble(preferences[72].Split(':')[1]);
@@ -912,7 +903,7 @@ namespace Isotope_fitting
                     x_ppm_minorStep = Convert.ToDouble(preferences[91].Split(':')[1]);
                     ppm_bullet_size = Convert.ToDouble(preferences[92].Split(':')[1]);
                     ppm_graph_type = Int32.Parse(preferences[93].Split(':')[1]);
-
+                    //new parameters extracted are within a try{} and as a result if the user loads an old preferences.txt without these parameters, only the new parameters are set to default
                     try
                     {
                         //hydrogens rearrangement extra parameters
@@ -955,6 +946,7 @@ namespace Isotope_fitting
                 save_preferences();
             }
         }
+        /// <summary>Set user settings to the default settings. </summary>
         public void init_preferences()
         {
             ppmError = 8.0; min_intes = 50.0; frag_mzGroups = 40; fit_bunch = 6; fit_cover = 0; selection_rule = new bool[] { true, false, false, false, false, false };
@@ -975,6 +967,7 @@ namespace Isotope_fitting
             y_interval12_2 = 50; y_format12_2 = "0.0E+"; y_numformat12_2 = "0"; x_majorStep12_2 = 5; x_minorStep12_2 = 1; line_width_2 = 2;
             color_primary = OxyColors.Lavender;color_internal = OxyColors.Lavender;
         }
+        /// <summary>Save user settings to a preferences.txt file. </summary>
         public void save_preferences()
         {
             // will save user preferences in file
@@ -1178,9 +1171,7 @@ namespace Isotope_fitting
                 MessageBox.Show(l.ToString(), "Error in loading experimental data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }          
         }
-        /// <summary>
-        /// Read experimental file information 
-        /// </summary>
+        /// <summary> Read experimental file information  </summary>
         private bool load_experimental()
         {
             if (!is_loading && !is_calc)
@@ -1257,9 +1248,7 @@ namespace Isotope_fitting
             }
             else { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return false; }
         }
-        /// <summary>
-        /// Actions taken post experimental data loading or recalculation 
-        /// </summary>
+        /// <summary> Actions taken post experimental data loading or recalculation  </summary>
         public void post_load_actions()
         {
             insert_exp = true;
@@ -1279,22 +1268,23 @@ namespace Isotope_fitting
             _bw_deconcoluted_exp_resolution.RunWorkerAsync();
 
         }
+        /// <summary> Case of a deconvoluted experimental file: Initiated when the Backgroundworker completed the Experimental profile calculation  </summary>
         void _bw_find_exp_resolution_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             progress_display_stop();
             // copy experimental to all_data
             experimental_to_all_data();
             recalculate_all_data_aligned();
-            ////// add experimental to plot
+            // add experimental to plot
             MessageBox.Show("Processing is completed.", "Load experimental data", MessageBoxButtons.OK);
             LC_1.ViewXY.ZoomToFit();
         }
+        /// <summary>Peak Detection in case of a mass spectrum or Profile calculation in of a deconvoluted mass spectrum </summary>
         private void peakDetect_and_resolutionRef()
         {
             // run peak detection and add new resolution map from experimental
             if (experimental.Count() > 0 && !is_exp_deconvoluted)
             {
-                //plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true));   //thread safe call
                 peak_detect();
                 if (peak_points.Count() > 0)
                 {
@@ -1324,7 +1314,6 @@ namespace Isotope_fitting
             }
             else if (is_exp_deconvoluted && experimental_dec.Count > 0)
             {
-                //plotExp_chkBox.Invoke(new Action(() => plotExp_chkBox.Enabled = plotExp_chkBox.Checked = true));   //thread safe call
                 peak_points.Clear();
                 for (int exp = 0; exp < experimental_dec.Count; exp++)
                 {
@@ -1332,17 +1321,13 @@ namespace Isotope_fitting
                     {
                         peak_points.Add(new double[] { exp, experimental_dec[exp][g][0], experimental_dec[exp][g][1], 10000, 0, experimental_dec[exp][g][1] });
                     }
-                }
-                //plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Enabled = true));   //thread safe call
-                //plotCentr_chkBox.Invoke(new Action(() => plotCentr_chkBox.Checked = true));   //thread safe call
+                }               
                 LC_1.BeginUpdate();
                 LC_1.ViewXY.ZoomToFit();
                 LC_1.EndUpdate();
             }
         }
-        /// <summary>
-        /// Create the experimental profile that corresponds to the experimental peaks of the inserted deconvoluted spectra
-        /// </summary>
+        /// <summary> Case of a deconvoluted experimental file:Create the experimental profile that corresponds to the experimental peaks of the inserted deconvoluted spectra </summary>
         void find_resolution(object sender, DoWorkEventArgs e)
         {
             if (!is_exp_deconvoluted) return;
@@ -1488,6 +1473,7 @@ namespace Isotope_fitting
 
             return;
         }
+        /// <summary> Case of a deconvoluted experimental file:Merge all the Experimental profile data in one list and remove the duplicates </summary>
         private List<double> Range_Final_Exp(List<List<double[]>> exp_groups)
         {
             List<double> final = new List<double>();
@@ -1507,6 +1493,7 @@ namespace Isotope_fitting
             }
             return final;
         }
+        /// <summary> Case of a deconvoluted experimental file:Creates a list of m/z measurements within an m/z region </summary>
         private IEnumerable<double> Range_Exp(double start, double end, List<double[]> initial, Func<double, double> step)
         {
             if (initial.Count < 2)
@@ -1534,6 +1521,7 @@ namespace Isotope_fitting
                 }
             }
         }
+        /// <summary> Case of a deconvoluted experimental file: Calculate the profile of each group of experimental peaks </summary>
         private List<double[]> Envelope_Experimental(List<double[]> initial, double resolution, double frac = 0.3, int filter = 1)
         {
             //Peak shape function "Gaussian"
@@ -1548,7 +1536,6 @@ namespace Isotope_fitting
             var array = initial.Select(x => x[0]).ToArray();
             //double average = array.Average();
             double dmz2 = initial[0][0] / resolution;
-            //double a_max = initial.Max(x => x[1]);
             double a_max = initial[0][1];
 
             IEnumerable<double> traceit = Range_Exp(initial[0][0] - extend, initial.Last()[0] + extend, initial, x => x + (dmz2 * frac));
@@ -1558,16 +1545,12 @@ namespace Isotope_fitting
                 for (int i = index_prev_m; i < initial.Count; i++)
                 {
                     double mk = initial[i][0];
-                    //if(tr== mk) a_max = mk;
                     double ab = initial[i][1];
                     double v = ab * Math.Exp(-1.0 * (Math.Pow(tr - mk, 2.0) * Math.Pow(resolution, 2.0) * Math.Log(256)) / (2.0 * Math.Pow(mk, 2.0)));
                     if (tr < mk)
                     {
                         double threshold = a_max * Math.Exp(-1.0 * (Math.Pow(tr - mk, 2.0) * Math.Pow(resolution, 2.0) * Math.Log(256.0)) / (2.0 * Math.Pow(mk, 2.0)));
-                        if (threshold == 0.0)
-                        {
-                            break;
-                        }
+                        if (threshold == 0.0){ break; }
                     }
                     if (tr > mk)
                     {
@@ -1583,26 +1566,16 @@ namespace Isotope_fitting
                 }
                 if (c > 0)
                 {
-                    if (value > 0.0 || (value == 0.0 && final[c - 1][1] > 0.0))
-                    {
-                        final.Add(new double[] { tr, value });
-                        c++;
-                    }
+                    if (value > 0.0 || (value == 0.0 && final[c - 1][1] > 0.0)){final.Add(new double[] { tr, value });c++;}
                 }
                 else
                 {
-                    if (value > 0.0)
-                    {
-                        final.Add(new double[] { tr, value }); c++;
-                    }
+                    if (value > 0.0) {  final.Add(new double[] { tr, value }); c++; }
                 }
-                //final.Add(new double[] { tr, value }); c++;
             }
             return final;
         }
-        /// <summary>
-        /// Recalculation of the experimental peaks when the user changes the initial set up
-        /// </summary>
+        /// <summary> Recalculation of the experimental peaks when the user changes the initial set up</summary>
         public void recalc_peaks()
         {
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
@@ -1625,7 +1598,7 @@ namespace Isotope_fitting
             }
 
             loadMS_Btn.Enabled = false; 
-            ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
+            ms_light_chain = false; ms_heavy_chain = false; ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load a fragment file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
             DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
@@ -1673,8 +1646,7 @@ namespace Isotope_fitting
                     else
                     {
                         ms_extension = "_" + extension_dialog.ToString();
-                    }
-                    //ms_tab_mode = true;
+                    }                    
                     DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.Ready to start?", "Message", MessageBoxButtons.OKCancel);
                     if (dialogResult1 != DialogResult.OK) { loadMS_Btn.Enabled = true; return; }
                     foreach (SequenceTab seq in sequenceList)
@@ -2221,7 +2193,7 @@ namespace Isotope_fitting
                 MessageBox.Show("Load 'Riken file', created by the Ariadne software.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://ariadne.riken.jp/index.html", "keyword"); return;
             }
             loadMS_Btn.Enabled = false;
-            ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
+            ms_light_chain = false; ms_heavy_chain = false;  ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load a fragment file.", "No sequence found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
             DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct base sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
@@ -2268,8 +2240,7 @@ namespace Isotope_fitting
                     else
                     {
                         ms_extension = "_" + extension_dialog.ToString();
-                    }
-                    //ms_tab_mode = true;
+                    }                    
                     DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension base sequence.", "Message", MessageBoxButtons.OKCancel);
                     if (dialogResult1 != DialogResult.OK) { loadMS_Btn.Enabled = true; return; }
                     foreach (SequenceTab seq in sequenceList)
@@ -13593,7 +13564,7 @@ namespace Isotope_fitting
         #endregion
 
         #region PROJECT SAVE LOAD CLEAR
-        //clear
+        #region clear
         private void clear_proj_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Clears all data inserted from the user.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
@@ -13668,7 +13639,9 @@ namespace Isotope_fitting
             draw_sequence_panelCopy1.Visible = false;
             draw_sequence_panelCopy2.Visible = false;
         }
-        //load
+        #endregion
+
+        #region load
         private void load_proj_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Loads a project folder into Peak Finder's format.\r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select the project's folder.", "Help", MessageBoxButtons.OK,MessageBoxIcon.Information); return; }
@@ -14135,8 +14108,9 @@ namespace Isotope_fitting
             //fit
             generate_fit_results(true);
         }
+        #endregion
 
-        //save
+        # region save
         private void save_proj_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Saves the current project into Peak Finder's format.. \r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select a new or an already existing folder.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
@@ -14313,6 +14287,7 @@ namespace Isotope_fitting
                 }
             }
         }
+        #endregion
         #endregion
 
         #region fixed list 

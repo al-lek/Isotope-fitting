@@ -66,11 +66,11 @@ namespace Isotope_fitting
             if (temp_riken &&! RNA_Btn.Checked && !DNA_Btn.Checked) { MessageBox.Show("Please select base sequence type (RNA,DNA).");return; }
             if (temp_riken) frm2.is_rna = RNA_Btn.Checked;
             else frm2.is_rna = false;
-            if (frm2.is_riken==temp_riken) { frm2.change_state(false); }
+            if (frm2.is_riken==temp_riken) { frm2.change_application(false); }
             else
             {                
                 frm2.is_riken = temp_riken;
-                frm2.change_state();
+                frm2.change_application();
             }
             this.Close();
         }
