@@ -2087,7 +2087,7 @@ namespace Isotope_fitting
             this.toolStrip3.Location = new System.Drawing.Point(170, 0);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip3.Size = new System.Drawing.Size(144, 40);
+            this.toolStrip3.Size = new System.Drawing.Size(113, 40);
             this.toolStrip3.TabIndex = 29;
             // 
             // primary_settingsBtn
@@ -2107,7 +2107,7 @@ namespace Isotope_fitting
             // 
             this.primary_styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_styleBtn.Image")));
             this.primary_styleBtn.Name = "primary_styleBtn";
-            this.primary_styleBtn.Size = new System.Drawing.Size(113, 36);
+            this.primary_styleBtn.Size = new System.Drawing.Size(194, 36);
             this.primary_styleBtn.Text = "Style";
             this.primary_styleBtn.ToolTipText = "Format the style of the plots in this tab";
             this.primary_styleBtn.Click += new System.EventHandler(this.primary_styleBtn_Click);

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.Label customRes_Btn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24));
             this.panel_calc = new System.Windows.Forms.Panel();
             this.aks_modifChk = new System.Windows.Forms.CheckBox();
@@ -76,23 +75,10 @@
             this.calcBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
             this.frag_sort_Btn2 = new System.Windows.Forms.ToolStripButton();
-            customRes_Btn = new System.Windows.Forms.Label();
             this.panel_calc.SuspendLayout();
             this.toolStrip_basic.SuspendLayout();
             this.toolStrip_fragList.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // customRes_Btn
-            // 
-            customRes_Btn.AutoSize = true;
-            customRes_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            customRes_Btn.ForeColor = System.Drawing.Color.SlateGray;
-            customRes_Btn.Location = new System.Drawing.Point(192, 451);
-            customRes_Btn.Name = "customRes_Btn";
-            customRes_Btn.Size = new System.Drawing.Size(94, 13);
-            customRes_Btn.TabIndex = 22;
-            customRes_Btn.Text = "Custom Resolution";
-            customRes_Btn.Visible = false;
             // 
             // panel_calc
             // 
@@ -106,7 +92,6 @@
             this.panel_calc.Controls.Add(this.toolStrip_basic);
             this.panel_calc.Controls.Add(this.sortIdx_chkBx);
             this.panel_calc.Controls.Add(this.dvw_lstBox);
-            this.panel_calc.Controls.Add(customRes_Btn);
             this.panel_calc.Controls.Add(this.chargeMax_Box);
             this.panel_calc.Controls.Add(this.internal_lstBox);
             this.panel_calc.Controls.Add(this.addin_lstBox);
@@ -201,9 +186,9 @@
             this.uncheck_all_boxBtn,
             this.clear_allBtn});
             this.toolStrip_basic.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
-            this.toolStrip_basic.Location = new System.Drawing.Point(370, 0);
+            this.toolStrip_basic.Location = new System.Drawing.Point(372, 0);
             this.toolStrip_basic.Name = "toolStrip_basic";
-            this.toolStrip_basic.Size = new System.Drawing.Size(32, 556);
+            this.toolStrip_basic.Size = new System.Drawing.Size(30, 556);
             this.toolStrip_basic.TabIndex = 57;
             // 
             // check_all_boxBtn

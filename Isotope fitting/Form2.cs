@@ -111,7 +111,6 @@ namespace Isotope_fitting
         #region old new calculations        
         int exp_res = 0;
         public int neues = 0;
-        public bool mark_neues = false;
         public static bool insert_exp = false;        
         public string file_name = "";
         public bool calc_resolution = true;
@@ -126,8 +125,7 @@ namespace Isotope_fitting
         public bool ms_heavy_chain = false;
         public bool ms_light_chain = false;
         public string ms_extension = String.Empty;
-        public string ms_sequence = String.Empty;
-        
+        public string ms_sequence = String.Empty;        
        
         List<ChemiForm> selectedIons = new List<ChemiForm>();                 
         public static List<FragForm> Fragments2 = new List<FragForm>();
@@ -135,8 +133,7 @@ namespace Isotope_fitting
         bool frag_types_save = false;
         public List<int> selectedFragments = new List<int>();
         public List<int> selectedFragments_fragTypes = new List<int>();
-        public static double max_exp = 0.0;
-       
+        public static double max_exp = 0.0;       
 
         private ListViewItemComparer _lvwItemComparer;
         #region colours     
@@ -178,9 +175,7 @@ namespace Isotope_fitting
         bool is_applying_fit = false;
         private bool is_calc = false;
                 
-        /// <summary>
-        /// [0]index , [1]experimental mz , [2]experimental height , [3]resolution , [4]adjusted relative mz , [5]adjusted height , [6]FWHM dt [bins]
-        /// </summary>
+        /// <summary> [0]index , [1]experimental mz , [2]experimental height , [3]resolution , [4]adjusted relative mz , [5]adjusted height , [6]FWHM dt [bins] </summary>
         public static List<double[]> peak_points = new List<double[]>();
         bool count_distance = false;
 
@@ -225,70 +220,52 @@ namespace Isotope_fitting
 
         public bool entire_spectrum = true;
         public List<ppm_area> ppm_regions = new List<ppm_area>();
-        /// <summary>
-        /// max ppm error
-        /// </summary>
+        /// <summary> max ppm error </summary>
         public double ppmError = 8.0;
-        /// <summary>
-        /// peak detect min intensity
-        /// </summary>
+        /// <summary> peak detect min intensity </summary>
         public double min_intes = 50.0;
-        /// <summary>
-        /// size of fragments groups
-        /// </summary>
+        /// <summary>size of fragments groups </summary>
         public int frag_mzGroups = 40;
-        /// <summary>
-        /// size of fit group
-        /// </summary>
+        /// <summary> size of fit group </summary>
         static public int fit_bunch = 6;
-        /// <summary>
-        /// size of fit overlap
-        /// </summary>
+        /// <summary>  size of fit overlap  </summary>
         static public int fit_cover = 2;
-        /// <summary>
-        /// [1 most intence,2 most intence,3 most intence,half most intence,half(-) most intence,half(+) most intence]
-        /// </summary>
+        /// <summary>  [1 most intence,2 most intence,3 most intence,half most intence,half(-) most intence,half(+) most intence]  </summary>
         public bool[] selection_rule = new bool[] { true, false, false, false, false, false };
+        /// <summary> when this parameter is set to true it prevents function refresh plot to be multiply called</summary>
         bool block_plot_refresh = false;
+        /// <summary> when this parameter is set to true it prevents the Fragment List treeview to expand all nodes when "check all" is selected</summary>
         bool block_expand = false;
+        /// <summary> when Fit results control is under processing this parameter is set to true, and prevents functions related with "fit node check changed" to be multiply called</summary>
         bool block_fit_refresh = false;
-        /// <summary>
-        /// max ppm error used in di and ei calculation during fitting
-        /// </summary>
+        /// <summary> max ppm error used in di and ei calculation during fitting </summary>
         static public double ppmDi = 8.0;
         public bool ignore_ppm_refresh = false;
         private TreeNode _currentNode = new TreeNode();
         #endregion
 
-        #region fit results sorting parameteres
-        /// <summary>
-        /// [Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6)
-        /// </summary>
+        #region Fit results 
+        //sorting parameters
+        /// <summary>[Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6) </summary>
         public static bool[] fit_sort = new bool[] { true, false, false, false, false, false };
-        /// <summary>
-        /// [Mi thres,M thres,di thres,ei thres,dinew thres,sd,sdnew](7)
-        /// </summary>
+        /// <summary>[Mi thres,M thres,di thres,ei thres,dinew thres,sd,sdnew](7) </summary>
         public static double[] fit_thres = new double[] { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 };
-        /// <summary>
-        /// [Mi coef,M coef,di coef,sse coef,ei coef,dinew coef](6)
-        /// </summary>
+        /// <summary>[Mi coef,M coef,di coef,sse coef,ei coef,dinew coef](6)</summary>
         public static double[] a_coef = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
         public static int visible_results = 100;
         public static int best_num_results = 1;
 
-        /// <summary>
-        /// list [Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6)
-        /// </summary>
+        /// <summary> list [Mi sort,M sort,di sort,sse sort, ei sort, dinew sort](6)</summary>
         public static List<bool[]> tab_node = new List<bool[]>();
-        /// <summary>
-        /// list [Mi coef,M coef,di coef,sse coef,ei coef,dinew coef](6)
-        /// </summary>
+        /// <summary>list [Mi coef,M coef,di coef,sse coef,ei coef,dinew coef](6) </summary>
         public static List<double[]> tab_coef = new List<double[]>();
-        /// <summary>
-        ///list [Mi thres,M thres,di thres,ei thres,dinew thres,sd, sdnew](7)
-        /// </summary>
+        /// <summary>list [Mi thres,M thres,di thres,ei thres,dinew thres,sd, sdnew](7) </summary>
         public static List<double[]> tab_thres = new List<double[]>();
+        /// <summary>stores the checked nodes of the Fit Results treeview </summary>
         List<string> labels_checked = new List<string>();
+        /// <summary>Tooltip used for the Fit Results treeview </summary>
+        private ToolTip toolTip_fit = new ToolTip() { InitialDelay = 1, IsBalloon = false, ReshowDelay = 1, UseFading = true, AutoPopDelay = 10000 };
+        string tool_text = "";
         #endregion
 
         #region  Constants for the SendMessage() method.
@@ -300,17 +277,12 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region tooltip tree_view
-
-        private ToolTip toolTip_fit = new ToolTip() { InitialDelay = 1, IsBalloon = false, ReshowDelay = 1, UseFading = true, AutoPopDelay = 10000 };
-        string tool_text = "";
-        #endregion
-
         #region plot area format 
+        /// <summary>Ion types in this application mode </summary>
         public string[] frag = new string[] { "a", "b", "c", "x", "y", "z", "d", "v", "w", "internal a", "internal b", "M" };
-        //fragments labels
+        /// <summary>List with the ion types that are allowed to display the fragments labels in the spectrum plot  </summary>
         public string[] label_frag = new string[] { };
-        //fragments' view
+        /// <summary>List with the ion types that are allowed to be viewed in the spectrum plot  </summary>
         public string[] view_frag = new string[] { };
         // tab1 line isoplot
         public OxyColor fit_color = OxyColors.Black;
@@ -338,17 +310,7 @@ namespace Isotope_fitting
         public string x_numformat = "0";
         public string y_numformat = "0";
         public double annotation_size = 9.0;
-        #endregion
-
-        #region Fragments File aka FF parameters
-        /// <summary>
-        /// max ppm error for Fragments File Calculation (Form 14)
-        /// </summary>
-        public double ppmErrorFF = 100.0;
-        public bool calc_FF = false;
-        public bool ignore_ppm_FF = false;
-        public bool calc_form14 = false;
-        #endregion
+        #endregion               
 
         #endregion
 
@@ -592,6 +554,7 @@ namespace Isotope_fitting
             _bw_deconcoluted_exp_resolution.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_find_exp_resolution_RunWorkerCompleted);
         }
         #region save load bw
+        /// <summary> BackgroundWorker used in save Experimental peaks (Save project) completed its task </summary>
         void _bw_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
@@ -603,6 +566,7 @@ namespace Isotope_fitting
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
+        /// <summary> BackgroundWorker used in save Fragment List (Save project) completed its task </summary>
         void _bw_project_frag_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
@@ -614,6 +578,7 @@ namespace Isotope_fitting
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
+        /// <summary> BackgroundWorker used in save Fit Results (Save project) completed its task </summary>
         void _bw_project_fitResults_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
@@ -624,7 +589,8 @@ namespace Isotope_fitting
                 MessageBox.Show("You are ready!! Save project procedure is completed!");
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString(); }
         }
-         void _bw_load_project_exp_RunWorkerCompletedAsync(object sender, RunWorkerCompletedEventArgs e)
+        /// <summary> BackgroundWorker used in Load Experimental profile (Load project) completed its task </summary>
+        void _bw_load_project_exp_RunWorkerCompletedAsync(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
@@ -634,7 +600,8 @@ namespace Isotope_fitting
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
-         void _bw_load_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        /// <summary> BackgroundWorker used in Load Experimental peaks (Load project) completed its task </summary>
+        void _bw_load_project_peaks_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
@@ -644,7 +611,8 @@ namespace Isotope_fitting
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
-         void _bw_load_project_fragments_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        /// <summary> BackgroundWorker used in Load Fragment List (Load project) completed its task </summary>
+        void _bw_load_project_fragments_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
@@ -654,7 +622,8 @@ namespace Isotope_fitting
                 root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             }
         }
-         void _bw_load_project_fit_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        /// <summary> BackgroundWorker used in Load Fit results (Load project) completed its task </summary>
+        void _bw_load_project_fit_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             all++;
             if (all == 4)
@@ -669,6 +638,7 @@ namespace Isotope_fitting
         {
             this.PerformAutoScale();
         }
+        /// <summary> In treeview when a node is "Visible" the treeview scrolls to the right and as a result the node's checkbox is not visible. This function prevents that effect </summary>
         private void EnsureVisibleWithoutRightScrolling(TreeNode node)
         {
             if (!block_fit_refresh)
@@ -1654,7 +1624,7 @@ namespace Isotope_fitting
                 MessageBox.Show("Load 'MS-Product file', created by the Protein Prospector software.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "http://msviewer.ucsf.edu/prospector2/cgi-bin/msform.cgi?form=msproduct", "keyword");  return;
             }
 
-            loadMS_Btn.Enabled = false; calc_FF = false;
+            loadMS_Btn.Enabled = false; 
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load a fragment file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
             DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -1865,7 +1835,7 @@ namespace Isotope_fitting
             // MSProduct -> C67 H117 N16 O16 S1 --- InputFormula (before fix) C67 H117 N16 O16 S1, Adduct 0
             // InputFormula (after fix) C67 H116 N16 O16 S1, Adduct H3 --- FinalFormula C67 H119 N16 O16 S1 Adduct ? (FinalFormula is not used)
 
-            if (!calc_FF) ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(out is_error, ChemFormulas[i].InputFormula);
+            ChemFormulas[i].PrintFormula = ChemFormulas[i].InputFormula = fix_formula(out is_error, ChemFormulas[i].InputFormula);
             if (is_exp_deconvoluted && dec_charge==0)
             {
                 //in case of a deconvoluted spectra 
@@ -1968,7 +1938,7 @@ namespace Isotope_fitting
         {
             // MS-product does not generate charge states for x fragments. We have to calculate and add them and sort by mz
             //If we are using 'Ultimate Fragmentor' we are not calculating extra x fragments
-            if (!calc_FF && !is_exp_deconvoluted && !is_riken && !is_ult_fragmentor_file) generate_x();
+            if (!is_exp_deconvoluted && !is_riken && !is_ult_fragmentor_file) generate_x();
             ChemFormulas = ChemFormulas.OrderBy(o => Double.Parse(o.Mz)).ToList();
             ms_light_chain = false; ms_heavy_chain = false;
             enable_UIcontrols("post import fragments");
@@ -2250,7 +2220,7 @@ namespace Isotope_fitting
             {
                 MessageBox.Show("Load 'Riken file', created by the Ariadne software.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://ariadne.riken.jp/index.html", "keyword"); return;
             }
-            loadMS_Btn.Enabled = false; calc_FF = false;
+            loadMS_Btn.Enabled = false;
             ms_light_chain = false; ms_heavy_chain = false; /*ms_tab_mode = false;*/ ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load a fragment file.", "No sequence found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); loadMS_Btn.Enabled = true; return; }
             DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct base sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -2446,8 +2416,7 @@ namespace Isotope_fitting
             plotFragProf_chkBox.Checked = true;
         }
         public void fragments_and_calculations_sequence_B()
-        {
-            calc_FF = false;
+        {            
             GC.Collect();
             if (all_data.Count > 1)
             {
@@ -2469,40 +2438,7 @@ namespace Isotope_fitting
             recalculate_all_data_aligned();
             enable_UIcontrols("post calculations");
         }
-        private void calculate_fragments_resolution(List<ChemiForm> selected_fragments)
-        {
-            calc_resolution = true;
-            recalc = true;
-            neues = Fragments2.Count();
-            if (is_exp_deconvoluted)
-            {
-                string machine = deconv_machine;
-                double res = 0.0;
-                if (is_deconv_const_resolution)
-                {
-                    res = dParser(machine);
-                    foreach (ChemiForm chem in selected_fragments) { chem.Resolution = res; }
-                }
-                else
-                {
-                    machine = deconv_machine;
-                    foreach (ChemiForm chem in selected_fragments) { chem.Machine = machine; }
-                }
-            }
-            else
-            {
-                string machine = "";
-                double res = 0.0;
-                if (!string.IsNullOrEmpty(res_string_24)) res = double.Parse(res_string_24, CultureInfo.InvariantCulture.NumberFormat);
-                else if (machine_sel_index != -1) machine = Resolution_List.L.Keys.ToList()[machine_sel_index];
-                else machine = Resolution_List.L.Keys.ToList()[9];
-                foreach (ChemiForm chem in selected_fragments)
-                {
-                    if (res == 0){ chem.Machine = machine; }
-                    else{ chem.Resolution = res;}
-                }
-            }
-        }
+        
         private void calculate_fragment_properties(List<ChemiForm> selected_fragments)
         {
             // main routine for parallel calculation of fragments properties and filtering by ppm and peak rules
@@ -2640,14 +2576,7 @@ namespace Isotope_fitting
             if (!insert_exp || (chem.Fixed && !is_recalc_res)) { add_fragment_to_Fragments2(chem, cen); return; }
             // MAIN decision algorithm
             bool fragment_is_canditate = true;
-            //if (calc_FF)
-            //{
-            //    fragment_is_canditate = decision_algorithmFF(chem, cen);                      
-            //}
-            //else
-            //{
-                fragment_is_canditate = decision_algorithm(chem, cen);
-            //}
+            fragment_is_canditate = decision_algorithm(chem, cen);            
         }
         private bool decision_algorithm(ChemiForm chem, List<PointPlot> cen)
         {
@@ -6592,18 +6521,7 @@ namespace Isotope_fitting
                     }
                 }
                 // Determine the type being compared  //  Columns: 0:Ion type, 1:m/z, 2:charge ,3:Chemical Formula,4:factor,5:code,6:intensity
-                if (Form4.active)
-                {
-                    try
-                    {
-                        compareResult = CompareDecimal(listviewX, listviewY);
-                    }
-                    catch
-                    {
-                        compareResult = CompareString(listviewX, listviewY);
-                    }
-                }
-                else if ((open && ColumnToSort == 3) || ColumnToSort == 0 || ColumnToSort == 4 || (ColumnToSort == 1 && !open))
+                if ((open && ColumnToSort == 3) || ColumnToSort == 0 || ColumnToSort == 4 || (ColumnToSort == 1 && !open))
                 {
                     compareResult = CompareString(listviewX, listviewY);
                 }
@@ -8973,8 +8891,7 @@ namespace Isotope_fitting
         private void add_machine(bool exp_resolution = false)
         {
             string name = "";
-            if (exp_resolution == true)  name = "resolution from file" + exp_res.ToString();            
-            else if (!Form4.new_machine.Equals("no"))name = Form4.new_machine;
+            if (exp_resolution == true)  name = "resolution from file" + exp_res.ToString(); 
             else return;
             if (is_riken)
             {
@@ -13710,9 +13627,7 @@ namespace Isotope_fitting
             loadExp_Btn.Enabled = true;           
             bigPanel.Controls.Clear();
             candidate_fragments = 1;
-            mark_neues = false; 
             neues = 0;
-            Form4.active = false;
             if (frag_tree != null) { frag_tree.Nodes.Clear(); frag_tree.Visible = false; }
             if (fragTypes_tree != null) { fragTypes_tree.Nodes.Clear(); fragTypes_tree.Visible = false; fragTypes_toolStrip.Visible = false; fragStorage_Lbl.Visible = false; }
             if (fit_tree != null) { fit_tree.Nodes.Clear(); fit_tree.Dispose(); fit_tree = null; }

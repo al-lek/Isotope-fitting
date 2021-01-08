@@ -63,12 +63,6 @@ namespace Isotope_fitting
             check_textBox_entry(chargeMax_Box, true, true);
         }
 
-        private void chargeAll_Btn_Click(object sender, EventArgs e)
-        {
-            chargeMin_Box.Text = string.Empty;
-            chargeMax_Box.Text = string.Empty;
-        }
-
         private void resolution_Box_TextChanged(object sender, EventArgs e)
         {
             machine_listBox.ClearSelected();

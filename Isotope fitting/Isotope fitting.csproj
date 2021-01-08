@@ -226,12 +226,6 @@
     <Compile Include="Plot Format\Form13.Designer.cs">
       <DependentUpon>Form13.cs</DependentUpon>
     </Compile>
-    <Compile Include="Peptides\Form14.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Peptides\Form14.Designer.cs">
-      <DependentUpon>Form14.cs</DependentUpon>
-    </Compile>
     <Compile Include="Plot Format\Extract_int.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,12 +291,6 @@
     </Compile>
     <Compile Include="Peptides\Form24.Designer.cs">
       <DependentUpon>Form24.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Peptides\Form4.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Peptides\Form4.Designer.cs">
-      <DependentUpon>Form4.cs</DependentUpon>
     </Compile>
     <Compile Include="Peptides\Form5.cs">
       <SubType>Form</SubType>
@@ -371,9 +359,6 @@
     <EmbeddedResource Include="Plot Format\Form13.resx">
       <DependentUpon>Form13.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\Form14.resx">
-      <DependentUpon>Form14.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Plot Format\Extract_int.resx">
       <DependentUpon>Extract_int.cs</DependentUpon>
     </EmbeddedResource>
@@ -406,9 +391,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Peptides\Form24.resx">
       <DependentUpon>Form24.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\Form4.resx">
-      <DependentUpon>Form4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Peptides\Form5.resx">
       <DependentUpon>Form5.cs</DependentUpon>
