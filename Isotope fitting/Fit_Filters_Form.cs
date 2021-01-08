@@ -12,7 +12,7 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form6 : Form
+    public partial class Fit_Filters_Form : Form
     {
         bool is_node = false;
         int idx ;
@@ -29,7 +29,7 @@ namespace Isotope_fitting
         int best_num;
        
 
-        public Form6(bool node,int node_idx)
+        public Fit_Filters_Form(bool node,int node_idx)
         {
             InitializeComponent();
             numericUpDown1.TextChanged += new EventHandler(numericUpDown1_TextChanged);

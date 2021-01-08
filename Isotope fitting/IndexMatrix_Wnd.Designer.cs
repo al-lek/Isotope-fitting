@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form_matrix
+    partial class IndexMatrix_Wnd
     {
         /// <summary>
         /// Required designer variable.

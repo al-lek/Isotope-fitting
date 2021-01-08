@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form9
+    partial class ExtraFragCalculator
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ColumnHeader z_clmn;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form9));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExtraFragCalculator));
             this.panel_calc = new System.Windows.Forms.Panel();
             this.toolStrip6 = new System.Windows.Forms.ToolStrip();
             this.calc_Btn = new System.Windows.Forms.ToolStripButton();

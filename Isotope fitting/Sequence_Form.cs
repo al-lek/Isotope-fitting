@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form16 : Form
+    public partial class Sequence_Form : Form
     {
         Form2 frm2;
         string user_txt;
@@ -21,7 +21,7 @@ namespace Isotope_fitting
         bool active_txt = false;
         bool initial_set = true;
         bool help = false;
-        public Form16(Form2 f, bool hlp = false)
+        public Sequence_Form(Form2 f, bool hlp = false)
         {
             frm2 =f;
             InitializeComponent();

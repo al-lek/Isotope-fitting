@@ -2087,7 +2087,7 @@ namespace Isotope_fitting
             this.toolStrip3.Location = new System.Drawing.Point(170, 0);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip3.Size = new System.Drawing.Size(113, 40);
+            this.toolStrip3.Size = new System.Drawing.Size(144, 40);
             this.toolStrip3.TabIndex = 29;
             // 
             // primary_settingsBtn
@@ -4548,7 +4548,7 @@ namespace Isotope_fitting
             this.fixed_statistics_Byn.Name = "fixed_statistics_Byn";
             this.fixed_statistics_Byn.Size = new System.Drawing.Size(34, 34);
             this.fixed_statistics_Byn.Text = "Display stats";
-            this.fixed_statistics_Byn.Click += new System.EventHandler(this.fixed_statistics_Byn_Click);
+            this.fixed_statistics_Byn.Click += new System.EventHandler(this.fixed_statistics_Btn_Click);
             // 
             // FragListContainer
             // 

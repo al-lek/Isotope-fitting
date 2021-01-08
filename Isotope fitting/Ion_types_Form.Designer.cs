@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form_types
+    partial class Ion_types_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_types));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ion_types_Form));
             this.flowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.reset_btn = new System.Windows.Forms.ToolStripButton();

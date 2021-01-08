@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form7 : Form
+    public partial class Fit_set_Form : Form
     {
-        public Form7()
+        public Fit_set_Form()
         {
             InitializeComponent();
             fitBunch_numUD.TextChanged += new EventHandler(fitBunch_numUD_TextChanged);

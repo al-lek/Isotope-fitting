@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form6
+    partial class Fit_Filters_Form
     {
         /// <summary>
         /// Required designer variable.

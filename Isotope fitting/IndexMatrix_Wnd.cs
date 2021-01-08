@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form_matrix : Form
+    public partial class IndexMatrix_Wnd : Form
     {
-        public Form_matrix(List<string[]> frags)
+        public IndexMatrix_Wnd(List<string[]> frags)
         {
             InitializeComponent();
             fill_peak_listView(frags);

@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form16
+    partial class Sequence_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form16));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Sequence_Form));
             this.add_tab_page = new System.Windows.Forms.TabPage();
             this.seq_tabControl = new System.Windows.Forms.TabControl();
             this.seq_tab = new System.Windows.Forms.TabPage();

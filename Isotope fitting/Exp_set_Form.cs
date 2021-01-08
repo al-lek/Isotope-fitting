@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form8 : Form
+    public partial class Exp_set_Form : Form
     {
         Form2 frm2;
         bool help = false;
-        public Form8(Form2 f,bool h=false)
+        public Exp_set_Form(Form2 f,bool h=false)
         {
             InitializeComponent();
             frm2 = f;

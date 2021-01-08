@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form8
+    partial class Exp_set_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form8));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Exp_set_Form));
             this.minIntensity_lbl = new System.Windows.Forms.Label();
             this.minIntensity_numUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();

@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form19
+    partial class Filters_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form19));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Filters_Form));
             this.ppm_lbl = new System.Windows.Forms.Label();
             this.fragGrps_lbl = new System.Windows.Forms.Label();
             this.ppm_numUD = new System.Windows.Forms.NumericUpDown();

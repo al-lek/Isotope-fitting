@@ -21,7 +21,7 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form9 : Form
+    public partial class ExtraFragCalculator : Form
     {
         #region parameters
         Form2 frm2;
@@ -48,7 +48,7 @@ namespace Isotope_fitting
         int duplicates = 0;
         int dubs = 0;
         #endregion
-        public Form9(Form2 f,bool h=false)
+        public ExtraFragCalculator(Form2 f,bool h=false)
         {
             frm2 = f;
             help = h;

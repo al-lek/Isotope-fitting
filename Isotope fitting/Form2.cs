@@ -483,8 +483,9 @@ namespace Isotope_fitting
             //run_cmd("", "");
             //rin_python();
         }
-        
+
         #region init
+        /// <summary> Machine listboxes are the ones that contain the Machines with their default resolution list. </summary>
         private void Initialize_machine_listboxes()
         {
             // 
@@ -564,8 +565,9 @@ namespace Isotope_fitting
             machine_listBox1.TabIndex = 21;
             machine_listBox1.SelectedIndex = machine_sel_index;
         }
+        /// <summary> Initialize BackgroundWorkers used in several actions noted analytically in the comments</summary>
         private void Initialize_BW()
-        {
+        {           
             //save .fit file
             _bw_save_envipat.DoWork += new DoWorkEventHandler(Save_frag_envipat);
             _bw_save_envipat.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_bw_save_envipat_RunWorkerCompleted);
@@ -790,47 +792,7 @@ namespace Isotope_fitting
 
         #region TAB FIT     
 
-        #region 0. Preferences and params
-        private void optionBtn_Click(object sender, EventArgs e)
-        {
-            Form19 frm19 = new Form19(this);
-            //frm19.FormClosed += (s, f) => { save_preferences(); };
-            frm19.ShowDialog();
-        }
-
-        private void params_form()
-        {
-            Form params_and_pref = new Form { Text = "Fragment selection filters", FormBorderStyle = FormBorderStyle.FixedDialog, AutoSize = false, Size = new Size(300, 220), MaximizeBox = false, MinimizeBox = false };
-            Label ppm_lbl = new Label { Name = "ppm_lbl", Text = "max ppm error: ", Location = new Point(10, 8), AutoSize = true };
-            NumericUpDown ppm_numUD = new NumericUpDown { Name = "ppm_numUD", Minimum = 1, Increment = 0.1M, DecimalPlaces = 1, Value = (decimal)ppmError, Location = new Point(140, 5), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            ppm_numUD.ValueChanged += (s, e) => { ppmError = (double)ppm_numUD.Value; save_preferences(); };
-
-            Label fragGrps_lbl = new Label { Name = "fragGrps_lbl", Text = "size of fragment group: ", Location = new Point(10, 38), AutoSize = true };
-            NumericUpDown fragGrps_numUD = new NumericUpDown { Name = "fragGrps_numUD", Minimum = 10, Value = frag_mzGroups, Location = new Point(140, 35), Size = new Size(40, 20), TextAlign = System.Windows.Forms.HorizontalAlignment.Center };
-            fragGrps_numUD.ValueChanged += (s, e) => { frag_mzGroups = (int)fragGrps_numUD.Value; save_preferences(); };
-
-            RadioButton one_rdBtn = new RadioButton { Name = "one_rdBtn", Text = "1 most intense", Location = new Point(10, 88), AutoSize = true, Checked = selection_rule[0], TabIndex = 0 };
-            RadioButton two_rdBtn = new RadioButton { Name = "two_rdBtn", Text = "2 most intense", Location = new Point(10, 113), AutoSize = true, Checked = selection_rule[1], TabIndex = 1 };
-            RadioButton three_rdBtn = new RadioButton { Name = "three_rdBtn", Text = "3 most intense", Location = new Point(10, 138), AutoSize = true, Checked = selection_rule[2], TabIndex = 2 };
-            RadioButton half_rdBtn = new RadioButton { Name = "half_rdBtn", Text = "half most intense", Location = new Point(130, 88), AutoSize = true, Checked = selection_rule[3], TabIndex = 3 };
-            RadioButton half_minus_rdBtn = new RadioButton { Name = "half_minus_rdBtn", Text = "half(-) most intense", Location = new Point(130, 113), AutoSize = true, Checked = selection_rule[4], TabIndex = 4 };
-            RadioButton half_plus_rdBtn = new RadioButton { Name = "half_plus_rdBtn", Text = "half(+) most intense", Location = new Point(130, 138), AutoSize = true, Checked = selection_rule[5], TabIndex = 5 };
-
-            params_and_pref.Controls.AddRange(new Control[] { ppm_lbl, ppm_numUD, fragGrps_lbl, fragGrps_numUD, one_rdBtn, two_rdBtn, three_rdBtn, half_rdBtn, half_minus_rdBtn, half_plus_rdBtn });
-            foreach (RadioButton rdBtn in params_and_pref.Controls.OfType<RadioButton>()) rdBtn.CheckedChanged += (s, e) => { if (rdBtn.Checked) update_peakSelection_rule(params_and_pref); };
-            params_and_pref.ShowDialog();
-        }
-
-        private void update_peakSelection_rule(Form options_form)
-        {
-            // update selection rule from all radiobuttons
-            List<RadioButton> rdBtns = GetControls(options_form).OfType<RadioButton>().ToList();
-
-            foreach (RadioButton rdBtn in rdBtns)
-                selection_rule[rdBtn.TabIndex] = rdBtn.Checked;
-
-            save_preferences();
-        }
+        #region 0. Preferences and params      
 
         private void load_preferences()
         {
@@ -1240,16 +1202,15 @@ namespace Isotope_fitting
             try
             {
                 post_load_actions();
-
             }
             catch (Exception l)
             {
                 MessageBox.Show(l.ToString(), "Error in loading experimental data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-            }
-            //plotCentr_chkBox.Enabled = true;
-            //plotExp_chkBox.Checked = true;
+            }          
         }
+        /// <summary>
+        /// Read experimental file information 
+        /// </summary>
         private bool load_experimental()
         {
             if (!is_loading && !is_calc)
@@ -1301,8 +1262,7 @@ namespace Isotope_fitting
                                         else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
                                         if (mz_prev != mz) experimental_dec.Last().Add(new double[] { mz, y });
                                         mz_prev = mz;
-                                    }
-                                   
+                                    }                                   
                                 }                                
                             }
                             else
@@ -1327,6 +1287,9 @@ namespace Isotope_fitting
             }
             else { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return false; }
         }
+        /// <summary>
+        /// Actions taken post experimental data loading or recalculation 
+        /// </summary>
         public void post_load_actions()
         {
             insert_exp = true;
@@ -1334,8 +1297,8 @@ namespace Isotope_fitting
 
             // post load actions
             enable_UIcontrols("post load");
-
-            filename_txtBx.Text = file_name;
+                        
+            filename_txtBx.Text = file_name;//Notify the user for the name of the loaded file
 
             // set experimental line color to black
             if (custom_colors.Count > 0) custom_colors[0] = exp_color;
@@ -1407,6 +1370,9 @@ namespace Isotope_fitting
                 LC_1.EndUpdate();
             }
         }
+        /// <summary>
+        /// Create the experimental profile that corresponds to the experimental peaks of the inserted deconvoluted spectra
+        /// </summary>
         void find_resolution(object sender, DoWorkEventArgs e)
         {
             if (!is_exp_deconvoluted) return;
@@ -1664,6 +1630,9 @@ namespace Isotope_fitting
             }
             return final;
         }
+        /// <summary>
+        /// Recalculation of the experimental peaks when the user changes the initial set up
+        /// </summary>
         public void recalc_peaks()
         {
             Thread peak_detection = new Thread(peakDetect_and_resolutionRef);
@@ -1691,7 +1660,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct AA amino acid sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
-                Form16 frm16 = new Form16(this);
+                Sequence_Form frm16 = new Sequence_Form(this);
                 frm16.ShowDialog();
             }
             if (dialogResult == DialogResult.Cancel)
@@ -2287,7 +2256,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Last check: are you sure you have introduced the correct base sequence?", "Sequence Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No)
             {
-                Form16 frm16 = new Form16(this);
+                Sequence_Form frm16 = new Sequence_Form(this);
                 frm16.ShowDialog();
             }
             if (dialogResult == DialogResult.Cancel)
@@ -2436,7 +2405,7 @@ namespace Isotope_fitting
                 try
                 {
                     clearList();
-                    if (Form9.now && Form9.last_plotted.Count > 0) if (Form9.now && Form9.last_plotted.Count > 0) { Form9.last_plotted.Clear(); }
+                    if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) { ExtraFragCalculator.last_plotted.Clear(); }
                 }
                 catch
                 {
@@ -3197,11 +3166,11 @@ namespace Isotope_fitting
         {
             if (is_frag_calc_recalc) { MessageBox.Show("Please try again in a few seconds.", "Processing in progress.", MessageBoxButtons.OK, MessageBoxIcon.Stop); return; }
             else if ((!Unchecked && string.IsNullOrEmpty(node_name)) || Fragments2.Count == 0) return;
-            if (Form9.now && Form9.last_plotted.Count > 0)
+            if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0)
             {
-                int count = Form9.last_plotted.Count;
-                all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
-                Form9.last_plotted.Clear();
+                int count = ExtraFragCalculator.last_plotted.Count;
+                all_data.RemoveRange(all_data.Count - ExtraFragCalculator.last_plotted.Count, ExtraFragCalculator.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - ExtraFragCalculator.last_plotted.Count, ExtraFragCalculator.last_plotted.Count);
+                ExtraFragCalculator.last_plotted.Clear();
                 //recalc_frm9(count, Form9.last_plotted.Count);
             }
             if (Unchecked)
@@ -4682,7 +4651,7 @@ namespace Isotope_fitting
                 if (sb != null && sb.Length > 0)
                 {
                     error_string = sb.ToString();
-                    Form17 frm17 = new Form17(error_string);
+                    Message_Window_Form frm17 = new Message_Window_Form(error_string);
                     frm17.ShowDialog();
                 }
             }
@@ -4845,7 +4814,7 @@ namespace Isotope_fitting
         }
         private void sort_fit_results_form(bool btn = false)
         {
-            Form6 sort_fit_results = new Form6(false, 1);
+            Fit_Filters_Form sort_fit_results = new Fit_Filters_Form(false, 1);
             sort_fit_results.FormClosed += (s, f) => { save_preferences(); };
             sort_fit_results.ShowDialog();
 
@@ -4952,7 +4921,7 @@ namespace Isotope_fitting
         }
         private void form_sort_fitnode(int index)
         {
-            Form6 sort_node = new Form6(true, index);
+            Fit_Filters_Form sort_node = new Fit_Filters_Form(true, index);
             sort_node.ShowDialog();
         }
 
@@ -5114,7 +5083,7 @@ namespace Isotope_fitting
         private void fitSettings_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Shows the fitting settings dialog. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
-            Form7 fit_settings = new Form7();
+            Fit_set_Form fit_settings = new Fit_set_Form();
             fit_settings.FormClosed += (s, f) => { save_preferences(); };
             fit_settings.ShowDialog();
         }
@@ -5641,21 +5610,21 @@ namespace Isotope_fitting
                         PointLine_addSeries(LC_1, curr_idx, mz, y, Fragments2[curr_idx - 1].Factor);
                     }
                 }
-                if (Form9.now)
+                if (ExtraFragCalculator.now)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
                         int curr_idx = Fragments2.Count + f + 1;
-                        int frag = Form9.last_plotted[f];
+                        int frag = ExtraFragCalculator.last_plotted[f];
                         double[] mz = all_data[curr_idx].Select(a => a[0]).ToArray();
                         double[] y = all_data[curr_idx].Select(a => a[1]).ToArray();
-                        PointLine_addSeries(LC_1, curr_idx, mz, y, Form9.Fragments3[frag].Factor);
+                        PointLine_addSeries(LC_1, curr_idx, mz, y, ExtraFragCalculator.Fragments3[frag].Factor);
                     }
                 }
             }
             if (plotFragCent_chkBox.Checked && all_data.Count > 1)
             {
-                int help = Convert.ToInt32(Form9.now);
+                int help = Convert.ToInt32(ExtraFragCalculator.now);
                 for (int i = 0; i < to_plot.Count; i++)
                 {
                     int curr_idx = to_plot[i];
@@ -5665,17 +5634,17 @@ namespace Isotope_fitting
                         LineCollection_addLines1(LC_1, curr_idx - 1, cenn, Fragments2[curr_idx - 1].Factor);
                     }
                 }
-                if (Form9.now)
+                if (ExtraFragCalculator.now)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
-                        int curr_idx = Form9.last_plotted[f];
+                        int curr_idx = ExtraFragCalculator.last_plotted[f];
                         if (all_data.Count > 1)
                         {
                             // get name of each line to be ploted
-                            string name_str = Form9.Fragments3[curr_idx].Name;
-                            List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
-                            LineCollection_addLines1(LC_1, Fragments2.Count + f, cenn, Form9.Fragments3[curr_idx].Factor);
+                            string name_str = ExtraFragCalculator.Fragments3[curr_idx].Name;
+                            List<PointPlot> cenn = ExtraFragCalculator.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
+                            LineCollection_addLines1(LC_1, Fragments2.Count + f, cenn, ExtraFragCalculator.Fragments3[curr_idx].Factor);
                         }
                     }
                 }
@@ -5722,13 +5691,13 @@ namespace Isotope_fitting
                 Color cc;
                 string name;
                 float width;
-                if (Form9.now == true && i == all_data.Count - Form9.last_plotted.Count)
+                if (ExtraFragCalculator.now == true && i == all_data.Count - ExtraFragCalculator.last_plotted.Count)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
-                        int frag = Form9.last_plotted[f];
-                        cc = Form9.Fragments3[frag].Color.ToColor();
-                        name = Form9.Fragments3[frag].Name;
+                        int frag = ExtraFragCalculator.last_plotted[f];
+                        cc = ExtraFragCalculator.Fragments3[frag].Color.ToColor();
+                        name = ExtraFragCalculator.Fragments3[frag].Name;
                         width = (float)frag_width;
                         Init_PointLineSeries(LC_1, name, cc, width, frag_style);
                     }
@@ -5755,13 +5724,13 @@ namespace Isotope_fitting
 
             for (int i = 1; i < all_data.Count; i++)
             {
-                if (Form9.now == true && i == all_data.Count - Form9.last_plotted.Count)
+                if (ExtraFragCalculator.now == true && i == all_data.Count - ExtraFragCalculator.last_plotted.Count)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
-                        int frag = Form9.last_plotted[f];
-                        Color cc = Form9.Fragments3[frag].Color.ToColor();                      
-                        Init_LineCollection_Plot(LC_1, Form9.Fragments3[frag].Name, cc, (int)cen_width);
+                        int frag = ExtraFragCalculator.last_plotted[f];
+                        Color cc = ExtraFragCalculator.Fragments3[frag].Color.ToColor();                      
+                        Init_LineCollection_Plot(LC_1, ExtraFragCalculator.Fragments3[frag].Name, cc, (int)cen_width);
                     }
                     break;
                 }
@@ -5837,13 +5806,13 @@ namespace Isotope_fitting
                     if (all_data_aligned[i][plot_idxs[j]] > 0)
                         intensity += all_data_aligned[i][plot_idxs[j]] * Fragments2[plot_idxs[j] - 1].Factor;       // all_data_alligned contain experimental, Fragments2 are one idx position back
 
-                if (Form9.now)
+                if (ExtraFragCalculator.now)
                 {
                     int count = all_data_aligned[i].Count();
-                    int count_last_plot = Form9.last_plotted.Count;
+                    int count_last_plot = ExtraFragCalculator.last_plotted.Count;
                     for (int extras = 0; extras < count_last_plot; extras++)
                         if (all_data_aligned[i][count - extras - 1] > 0)
-                            intensity += all_data_aligned[i][count - extras - 1] * Form9.Fragments3[Form9.last_plotted[count_last_plot - extras - 1]].Factor;
+                            intensity += all_data_aligned[i][count - extras - 1] * ExtraFragCalculator.Fragments3[ExtraFragCalculator.last_plotted[count_last_plot - extras - 1]].Factor;
                 }
 
                 summation_temp[i] = new double[] { all_data[0][i][0], intensity };
@@ -6448,7 +6417,7 @@ namespace Isotope_fitting
         private void settingsPeak_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Shows the experimental data settings dialog. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
-            Form8 frm8 = new Form8(this, help_Btn.Checked);
+            Exp_set_Form frm8 = new Exp_set_Form(this, help_Btn.Checked);
             frm8.FormClosed += (s, f) => { save_preferences(); };
             frm8.ShowDialog();
         }
@@ -7915,6 +7884,9 @@ namespace Isotope_fitting
         #endregion
 
         #region FILTER list fragments       
+        /// <summary>
+        /// ppm filter applied when the user refreshes the Fragment List 
+        /// </summary>
         private bool decision_algorithm2(FragForm fra)
         {
             if (experimental.Count == 0) return true;
@@ -8059,7 +8031,8 @@ namespace Isotope_fitting
                 "List after the calculation method, on any step of the mass spectrum interpretation process," +
                 "irrespective of the data origin, for example fitted results file or manual processed file.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            Form19 frm19 = new Form19(this, help_Btn.Checked);
+            //Show the Fragment Selection Filters Form
+            Filters_Form frm19 = new Filters_Form(this, help_Btn.Checked);
             frm19.ShowDialog();
         }
         #endregion
@@ -8079,7 +8052,7 @@ namespace Isotope_fitting
                     frm.BringToFront(); return;
                 }
 
-            Form9 frag_Calc_form = new Form9(this, help_Btn.Checked);
+            ExtraFragCalculator frag_Calc_form = new ExtraFragCalculator(this, help_Btn.Checked);
             frag_Calc_form.Show();
         }
         public void recalc_frm9(int prev_count, int curr_count)
@@ -8353,12 +8326,12 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Clear Fragment List", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.OK)
             {
-                if (Form9.now && Form9.last_plotted.Count > 0)
+                if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0)
                 {
-                    int count = Form9.last_plotted.Count;
-                    all_data.RemoveRange(all_data.Count - Form9.last_plotted.Count, Form9.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - Form9.last_plotted.Count, Form9.last_plotted.Count);
-                    Form9.last_plotted.Clear();
-                    recalc_frm9(count, Form9.last_plotted.Count);
+                    int count = ExtraFragCalculator.last_plotted.Count;
+                    all_data.RemoveRange(all_data.Count - ExtraFragCalculator.last_plotted.Count, ExtraFragCalculator.last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - ExtraFragCalculator.last_plotted.Count, ExtraFragCalculator.last_plotted.Count);
+                    ExtraFragCalculator.last_plotted.Clear();
+                    recalc_frm9(count, ExtraFragCalculator.last_plotted.Count);
                 }
                 clearList();
             }
@@ -8426,7 +8399,7 @@ namespace Isotope_fitting
         }
         private void seqBtn_Click(object sender, EventArgs e)
         {
-            Form16 frm16 = new Form16(this, help_Btn.Checked);
+            Sequence_Form frm16 = new Sequence_Form(this, help_Btn.Checked);
             frm16.ShowDialog();
         }
         private void statistics_Btn_Click(object sender, EventArgs e)
@@ -8645,7 +8618,7 @@ namespace Isotope_fitting
             if (sb != null && sb.Length > 0)
             {
                 message_string = sb.ToString();
-                Form17 frm17 = new Form17(message_string);
+                Message_Window_Form frm17 = new Message_Window_Form(message_string);
                 frm17.Text = "Experimental intensity coverage";
                 frm17.ShowDialog();
             }
@@ -8860,7 +8833,7 @@ namespace Isotope_fitting
        
         private void displayIonTypesListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form_types f = new Form_types(this, false);
+            Ion_types_Form f = new Ion_types_Form(this, false);
             f.Location = MousePosition;
             f.ShowDialog();
         }
@@ -8874,7 +8847,7 @@ namespace Isotope_fitting
         private void view_fragBtn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Opens a new window with all the basic ion types of the visible fragments.\r\nThe user can check the desired ion types press 'ok' button and create his own list. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
-            Form_types f = new Form_types(this, true);
+            Ion_types_Form f = new Ion_types_Form(this, true);
             f.Location = MousePosition;
             f.ShowDialog();
         }
@@ -9191,34 +9164,7 @@ namespace Isotope_fitting
                 seq_extensionBox.Enabled = seq_extensionBoxCopy1.Enabled = seq_extensionBoxCopy2.Enabled = false;
             }
             initialize_ions_todraw(); initialize_plot_tabs();
-        }       
-        private void primary_int_styleBtn_Click(object sender, EventArgs e)
-        {
-            foreach (SequenceTab seq in sequenceList)
-            {
-                if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
-                {
-                    color_primary_indexes = seq.Index_SS_primary.ToList();
-                    break;
-                }
-            }
-            Form12 frm12 = new Form12(this, 0);
-            frm12.FormClosed += (s, f) => { save_preferences(); };
-            frm12.ShowDialog();
-        }       
-        private void primary_charge_styleBtn_Click(object sender, EventArgs e)
-        {
-            foreach (SequenceTab seq in sequenceList)
-            {
-                if (seq.Extension.Equals(seq_extensionBox.SelectedItem))
-                {
-                    color_primary_indexes = seq.Index_SS_primary.ToList();
-                    break;
-                }
-            }
-            Form12 frm12 = new Form12(this, 1);
-            frm12.ShowDialog();
-        }
+        }             
         private void internal_style_Btn_Click(object sender, EventArgs e)
         {
             foreach (SequenceTab seq in sequenceList)
@@ -9357,6 +9303,23 @@ namespace Isotope_fitting
         {
             CloseForm("Form_matrix");
         }
+
+        private void export_panel(bool copy, Panel pnl)
+        {
+            int width = pnl.Size.Width;
+            int height = pnl.Size.Height;
+            Bitmap bm = new Bitmap(width, height);
+            pnl.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
+            if (copy)
+            {
+                Clipboard.SetImage(bm);
+            }
+            else
+            {
+                SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
+                if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
+            }
+        }        
         #endregion
 
         #region sequence
@@ -9492,7 +9455,7 @@ namespace Isotope_fitting
             if (sb != null && sb.Length > 0)
             {
                 message_string = sb.ToString();
-                Form17 frm17 = new Form17(message_string,true, is_riken);
+                Message_Window_Form frm17 = new Message_Window_Form(message_string,true, is_riken);
                 frm17.Text = "Sequence coverage";
                 frm17.ShowDialog();
             }
@@ -9603,7 +9566,7 @@ namespace Isotope_fitting
                     {
                         frags=frags.OrderBy(p=>p[0]).ToList();                       
                     }
-                    Form_matrix frm_matrix = new Form_matrix(frags);
+                    IndexMatrix_Wnd frm_matrix = new IndexMatrix_Wnd(frags);
                     frm_matrix.Text = "Aminoacid: " + s[idx] + " with index: " + (idx + 1).ToString() + " (Extension: " + s_ext + ")";
                     frm_matrix.Show();
                     return;
@@ -12433,30 +12396,6 @@ namespace Isotope_fitting
             return list_index;
         }
 
-       
-
-        #region export and resize panels
-
-        private void export_panel(bool copy, Panel pnl)
-        {
-            int width = pnl.Size.Width;
-            int height = pnl.Size.Height;
-            Bitmap bm = new Bitmap(width, height);
-            pnl.DrawToBitmap(bm, new Rectangle(0, 0, width, height));            
-            if (copy)
-            {
-                Clipboard.SetImage(bm);
-            }
-            else
-            {
-                SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
-                if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
-            }
-        }
-      
-
-        #endregion
-
         #endregion
 
         #region FORM 22 ppm plot settings
@@ -13400,21 +13339,21 @@ namespace Isotope_fitting
                         PointLine_addSeries(temp_plot, curr_idx, mz, y, Fragments2[curr_idx - 1].Factor);
                     }
                 }
-                if (Form9.now)
+                if (ExtraFragCalculator.now)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
                         int curr_idx = Fragments2.Count + f + 1;
-                        int frag = Form9.last_plotted[f];
+                        int frag = ExtraFragCalculator.last_plotted[f];
                         double[] mz = all_data[curr_idx].Select(a => a[0]).ToArray();
                         double[] y = all_data[curr_idx].Select(a => a[1]).ToArray();
-                        PointLine_addSeries(temp_plot, curr_idx, mz, y, Form9.Fragments3[frag].Factor);
+                        PointLine_addSeries(temp_plot, curr_idx, mz, y, ExtraFragCalculator.Fragments3[frag].Factor);
                     }
                 }
             }
             if (plotFragCent_chkBox.Checked && all_data.Count > 1)
             {
-                int help = Convert.ToInt32(Form9.now);
+                int help = Convert.ToInt32(ExtraFragCalculator.now);
                 for (int i = 0; i < to_plot.Count; i++)
                 {
                     int curr_idx = to_plot[i];
@@ -13424,17 +13363,17 @@ namespace Isotope_fitting
                         LineCollection_addLines1(temp_plot, curr_idx - 1, cenn, Fragments2[curr_idx - 1].Factor);
                     }
                 }
-                if (Form9.now)
+                if (ExtraFragCalculator.now)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
-                        int curr_idx = Form9.last_plotted[f];
+                        int curr_idx = ExtraFragCalculator.last_plotted[f];
                         if (all_data.Count > 1)
                         {
                             // get name of each line to be ploted
-                            string name_str = Form9.Fragments3[curr_idx].Name;
-                            List<PointPlot> cenn = Form9.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
-                            LineCollection_addLines1(temp_plot, Fragments2.Count + f, cenn, Form9.Fragments3[curr_idx].Factor);
+                            string name_str = ExtraFragCalculator.Fragments3[curr_idx].Name;
+                            List<PointPlot> cenn = ExtraFragCalculator.Fragments3[curr_idx].Centroid.OrderBy(p => p.X).ToList();
+                            LineCollection_addLines1(temp_plot, Fragments2.Count + f, cenn, ExtraFragCalculator.Fragments3[curr_idx].Factor);
                         }
                     }
                 }
@@ -13477,13 +13416,13 @@ namespace Isotope_fitting
                 Color cc;
                 string name;
                 float width;
-                if (Form9.now == true && i == all_data.Count - Form9.last_plotted.Count)
+                if (ExtraFragCalculator.now == true && i == all_data.Count - ExtraFragCalculator.last_plotted.Count)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
-                        int frag = Form9.last_plotted[f];
-                        cc = Form9.Fragments3[frag].Color.ToColor();
-                        name = Form9.Fragments3[frag].Name;
+                        int frag = ExtraFragCalculator.last_plotted[f];
+                        cc = ExtraFragCalculator.Fragments3[frag].Color.ToColor();
+                        name = ExtraFragCalculator.Fragments3[frag].Name;
                         width = (float)frag_width;
                         Init_PointLineSeries(temp_plot, name, cc, width, frag_style);
                     }
@@ -13509,13 +13448,13 @@ namespace Isotope_fitting
             }
             for (int i = 1; i < all_data.Count; i++)
             {
-                if (Form9.now == true && i == all_data.Count - Form9.last_plotted.Count)
+                if (ExtraFragCalculator.now == true && i == all_data.Count - ExtraFragCalculator.last_plotted.Count)
                 {
-                    for (int f = 0; f < Form9.last_plotted.Count; f++)
+                    for (int f = 0; f < ExtraFragCalculator.last_plotted.Count; f++)
                     {
-                        int frag = Form9.last_plotted[f];
-                        Color cc = Form9.Fragments3[frag].Color.ToColor();
-                        Init_LineCollection_Plot(temp_plot, Form9.Fragments3[frag].Name, cc, (int)cen_width);
+                        int frag = ExtraFragCalculator.last_plotted[f];
+                        Color cc = ExtraFragCalculator.Fragments3[frag].Color.ToColor();
+                        Init_LineCollection_Plot(temp_plot, ExtraFragCalculator.Fragments3[frag].Name, cc, (int)cen_width);
                     }
                     break;
                 }
@@ -13744,6 +13683,7 @@ namespace Isotope_fitting
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to proceed?", "Clear all data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.OK) Clear_all();
         }
+        /// <summary>Clear all the data (loaded & calculated) </summary>
         private bool Clear_all()
         {
             block_plot_refresh = true;
@@ -13799,6 +13739,7 @@ namespace Isotope_fitting
             clear_sequence_panel_info();
             return true;
         }
+        /// <summary>Clear the UI user selection from the sequence panel (used when user selects clear all option)   </summary>
         private void clear_sequence_panel_info()
         {
             List<Panel> seq_pnls = new List<Panel>();
@@ -13811,7 +13752,6 @@ namespace Isotope_fitting
             }
             draw_sequence_panelCopy1.Visible = false;
             draw_sequence_panelCopy2.Visible = false;
-
         }
         //load
         private void load_proj_Btn_Click(object sender, EventArgs e)
@@ -13819,6 +13759,7 @@ namespace Isotope_fitting
             if (help_Btn.Checked) { MessageBox.Show("Loads a project folder into Peak Finder's format.\r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select the project's folder.", "Help", MessageBoxButtons.OK,MessageBoxIcon.Information); return; }
             project_load();
         }
+        /// <summary> Load project: load a project folder which contains 4 files (settings, Fragments List, Experimental profile, Experimental peaks, Fit Results(if there are any)) </summary>
         private void project_load()
         {
             all = 0;
@@ -13828,8 +13769,8 @@ namespace Isotope_fitting
                 if (!Clear_all()) return;
                 // The user selected a folder and pressed the OK button.                
                 string folderName = folderBrowserDialog1.SelectedPath;
-                root_path = folderName;
-                load_preferences();
+                root_path = folderName;                
+                load_preferences();//for the settings file
                 string path_experimental = System.IO.Path.Combine(folderName, "Experimental Data.txt");
                 string path_peaks = System.IO.Path.Combine(folderName, "Peak Data.txt");
                 string path_fragments = System.IO.Path.Combine(folderName, "Fragment Data.txt");
@@ -13850,6 +13791,7 @@ namespace Isotope_fitting
             }
 
         }
+        /// <summary> Load project part 1 of 5: load Experimental profile </summary>
         void Project_load_experimental(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
@@ -13886,6 +13828,7 @@ namespace Isotope_fitting
             }
 
         }
+        /// <summary>Load project part 1 of 5: load Experimental peaks </summary>
         void Project_load_peaks(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
@@ -13939,10 +13882,11 @@ namespace Isotope_fitting
                 }
             }           
         }
+        /// <summary> Load project part 1 of 5: load Fit Results </summary>
         void Project_load_fit_results(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
-            if (!File.Exists(filename)) return;
+            if (!File.Exists(filename)) return;//the case when the loaded project does not include the fit results
             int mode = 0;
             List<string> lista = new List<string>();
             StreamReader objReader = new StreamReader(filename);
@@ -14029,6 +13973,7 @@ namespace Isotope_fitting
                 catch { MessageBox.Show("Error in data file " + filename + " in line: " + j.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
             }
         }
+        /// <summary> Load project part 1 of 5: load Fragment List</summary>
         void Project_load_fragments(object sender, DoWorkEventArgs e)
         {
             string filename = (string)e.Argument;
@@ -14209,6 +14154,7 @@ namespace Isotope_fitting
             exclude_list_make_lists();
             return;
         }
+        /// <summary> Function created to fix an error to previously saved project folders, more specifically in the Fragments List file</summary>
         private int check_false_sort_idxFragform(FragForm fra)
         {
             string s = string.Empty;
@@ -14225,6 +14171,7 @@ namespace Isotope_fitting
             else { sort_index = 0; MessageBox.Show("Error in fragment " + fra.Name + " index.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
             return sort_index;
         }
+        /// <summary> After Load project --> actions to fill the relevant fields, refresh plots, create treeviews etc</summary>
         private void Project_after_load()
         {
             block_plot_refresh = true;
@@ -14274,13 +14221,13 @@ namespace Isotope_fitting
             generate_fit_results(true);
         }
 
-        
         //save
         private void save_proj_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Saves the current project into Peak Finder's format.. \r\nThe project consists of the preferences file, the experimental data, the fragment list and the fit results.\r\nJust select a new or an already existing folder.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
             project_save();
         }
+        /// <summary> Save project: Save settings, Fragments List , Experimental profile, Experimental peaks, Fit Results(if there are any) --> as 5 files in a project folder  </summary>
         private void project_save()
         {
             save_preferences();
@@ -14387,6 +14334,7 @@ namespace Isotope_fitting
                 writer.WriteLine(line_write);
             }
         }
+        /// <summary>  Save project part 1 of 5: Save the experimental peaks </summary>
         void Project_save_peaks(object sender, DoWorkEventArgs e)
         {
             string path = e.Argument.ToString();
@@ -14399,6 +14347,7 @@ namespace Isotope_fitting
                 }
             }
         }
+        /// <summary>   Save project part 1 of 5: Save the experimental profile </summary>
         public void Project_save_experimental(string path)
         {
             if (!is_exp_deconvoluted) { return; }
@@ -14411,6 +14360,7 @@ namespace Isotope_fitting
                 }
             }
         }
+        /// <summary> Save project part 1 of 5: Save all the fragments in the Fragments List (Fragments2) </summary>
         void Project_save_fragments(object sender, DoWorkEventArgs e)
         {
             string path = e.Argument.ToString();
@@ -14451,7 +14401,12 @@ namespace Isotope_fitting
         #endregion
 
         #region fixed list 
-        //fixed saved list
+        //Fixed List refers to a .fit of fragments that the user is sure that are present in the experimental spectra. So when conducting a case study:
+        //(1)the user loads the .fit file from the "fixed_listBtn_Click", and this list is saved in Fragments5 list (only the fragments'names in order to save up space).
+        //This list is not present to the user
+        //(2)Then the user follows the usual steps to see how well the program works(load experimental file, load fragment file, conduct isotopic distribution calculation and fitting process and so on)
+        //(3)Then the user can click the button "fixed_statistics_Btn_Click" and the algorithm detects how many fragments from the Fragments5 list have equal name with the checked fragments in Fragments2 list. And displays this number.
+        /// <summary> loads the .fit file with the correct fragments, and this list is saved in Fragments5 list (only the fragments'names in order to save up space).This list is not present to the user </summary>
         private void fixed_listBtn_Click(object sender, EventArgs e)
         {
             duplicate_count = 0; added = 0;
@@ -14575,6 +14530,7 @@ namespace Isotope_fitting
             }
             else { return; }
         }
+        /// <summary> Check if the fragment's name is present in Fragment5 list.If yes this means that the fragment is true positive. (Fragments5 list contains fragments that the user has found in a previous spectrum analysis and is sure of their presence)  </summary>
         private void check_tp(FragForm fra)
         {
             if (Fragments5.Count == 0) return;
@@ -14585,7 +14541,8 @@ namespace Isotope_fitting
             }
             fra.True_positive = false;
         }
-        private void fixed_statistics_Byn_Click(object sender, EventArgs e)
+        /// <summary>Detects how many fragments from the Fragments5 list have equal name with the checked fragments in Fragments2 list. And displays this number. </summary>
+        private void fixed_statistics_Btn_Click(object sender, EventArgs e)
         {
             if (Fragments5.Count == 0) return;
             int counter = 0;
@@ -14599,6 +14556,8 @@ namespace Isotope_fitting
         #endregion
 
         #region Ultimate Fragment Calculator Manipulation
+        /// <summary> Write the user defined parameters for the Ultimate Fragmentor algorithm in a json file. </summary>
+        /// <param name="path">The "path" in which the output json file will be created or overwritten </param>
         private void write_params_input_json(string path="")
         {
             if (path == "")
@@ -14614,8 +14573,10 @@ namespace Isotope_fitting
                 //serialize object directly into file stream
                 serializer.Serialize(file, _data);
             }
-        }       
-
+        }
+        /// <summary>Read Utimate Fragmentor File (csv) and load the fragments.</summary>
+        /// <param name="is_calculation">If is false then the loaded fragments are inserted in Chemformulas List and the isotopic distributions of the fragments are not calculated.If true then the loaded fragments are inserted in Fragments2 List and the isotopic distributions of the fragments are calculated as if the user had inserted a .fit file. </param>
+        /// <param name="file">The path to the csv file </param> 
         public void read_csv_and_Calculate(string file,bool is_calculation=false)
         {            
             //csv example 
@@ -14650,7 +14611,7 @@ namespace Isotope_fitting
                         try
                         {
                             clearList();
-                            if (Form9.now && Form9.last_plotted.Count > 0) if (Form9.now && Form9.last_plotted.Count > 0) { Form9.last_plotted.Clear(); }
+                            if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) { ExtraFragCalculator.last_plotted.Clear(); }
                         }
                         catch
                         {
@@ -14670,6 +14631,9 @@ namespace Isotope_fitting
                 else { ChemFormulas.AddRange(selected_fragments); }
             }
         }
+        /// <summary>Assign the info in each line of the csv file to a ChemiForm fragment</summary>
+        /// <param name="Utimate_Frag_List">The list in which the ChemiForm fragment will be inserted </param>
+        /// <param name="frag_info">Information in a line in the Utimate Fragmentor output csv file </param>       
         private void assign_Ultimate_Fragmentor_fragment(string[] frag_info,List<ChemiForm> Utimate_Frag_List)
         {
             //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
@@ -14756,6 +14720,7 @@ namespace Isotope_fitting
             else if (Utimate_Frag_List[i].Charge < 0) Utimate_Frag_List[i].Name = lbl + "_" + Math.Abs(Utimate_Frag_List[i].Charge).ToString() + "-" + ms_extension;
             else Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + ms_extension;          
         }
+        /// <summary>Assign the info in each line of the csv file to a ChemiForm fragment </summary>       
         private void loadUltimateFragmentorFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog loadData = new OpenFileDialog() { Multiselect = false, Title = "Load Ultimate Fragmentor data", FileName = "", Filter = "data file|*.csv;|All files|*.*" };

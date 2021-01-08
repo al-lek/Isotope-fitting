@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form7
+    partial class Fit_set_Form
     {
         /// <summary>
         /// Required designer variable.

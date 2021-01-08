@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Isotope_fitting
 {
-    public class ChemForm
+    public class IsotopesInfo
     {
         public struct Isotopes2
         {

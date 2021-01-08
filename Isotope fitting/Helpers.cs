@@ -679,21 +679,21 @@ namespace Isotope_fitting
                 }
             }
             FORMULA = f.Replace(" ", "");
-            string[] elem = new string[ChemForm.isoTable.Length];
+            string[] elem = new string[IsotopesInfo.isoTable.Length];
             Regex rgx = new Regex("[A-Z]");          
 
-            for (int k = 0; k < ChemForm.isoTable.Length; k++)
+            for (int k = 0; k < IsotopesInfo.isoTable.Length; k++)
             {
-                elem[k] = ChemForm.isoTable[k].element;
+                elem[k] = IsotopesInfo.isoTable[k].element;
             }
             //group isoTable list according to each element and sort each element isotope in descending abundance order
-            var elementGroup = ChemForm.isoTable.GroupBy(el => el.element, el => el)
+            var elementGroup = IsotopesInfo.isoTable.GroupBy(el => el.element, el => el)
                 .Select(grp => new {
                     grp.Key,
                     sorted_Ab = grp.OrderByDescending(x => x.abundance).TakeWhile(x => x.abundance > 0)
                 }).ToList();
             //keep from isoTable for each element isotope only the most abundant one
-            var elementGroupMax = ChemForm.isoTable.GroupBy(el => el.element, el => el)
+            var elementGroupMax = IsotopesInfo.isoTable.GroupBy(el => el.element, el => el)
                    .Select(grp => new
                    {
                        grp.Key,
@@ -943,13 +943,13 @@ namespace Isotope_fitting
                                 Number = l.Number,
                                 Iso_amount = l.Clues.Count(),
                                 All_iso_calc_amount = 0,
-                                Isotopes = new List<ChemForm.Isotopes2>(),
-                                Isotopes_single = new List<ChemForm.Isotopes2>()
+                                Isotopes = new List<IsotopesInfo.Isotopes2>(),
+                                Isotopes_single = new List<IsotopesInfo.Isotopes2>()
                             }
                             );
                             for (int a = 0; a < l.Clues.Count(); a++)
                             {
-                                Elements_set[b].Isotopes.Add(new ChemForm.Isotopes2
+                                Elements_set[b].Isotopes.Add(new IsotopesInfo.Isotopes2
                                 {
                                     isotope = l.Clues.ElementAt(a).isotope,
                                     abundance = l.Clues.ElementAt(a).abundance,
@@ -973,7 +973,7 @@ namespace Isotope_fitting
                             {
                                 for (Int16 i = 1; i < el.Isotopes.Count; i++)
                                 {
-                                    el.Isotopes_single.Add(new ChemForm.Isotopes2 { isotope = el.Isotopes[i].isotope, abundance = el.Isotopes[i].abundance, mass = el.Isotopes[i].mass, element_nr = i, iso_e_nr = i, element = el.Name, number = el.Number });
+                                    el.Isotopes_single.Add(new IsotopesInfo.Isotopes2 { isotope = el.Isotopes[i].isotope, abundance = el.Isotopes[i].abundance, mass = el.Isotopes[i].mass, element_nr = i, iso_e_nr = i, element = el.Name, number = el.Number });
                                 }
                             }
                             //isotopes(except the most abundant ones) of each element ordered in DESCENDING order

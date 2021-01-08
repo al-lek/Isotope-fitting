@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form17
+    partial class Message_Window_Form
     {
         /// <summary>
         /// Required designer variable.

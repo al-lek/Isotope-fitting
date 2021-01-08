@@ -12,11 +12,11 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form_types : Form
+    public partial class Ion_types_Form : Form
     {
         Form2 frm2;
         bool is_view = false;
-        public Form_types(Form2 f,bool v)
+        public Ion_types_Form(Form2 f,bool v)
         {
             InitializeComponent();
             frm2 = f;

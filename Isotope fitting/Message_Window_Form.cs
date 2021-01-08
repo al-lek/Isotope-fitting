@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form17 : Form
+    public partial class Message_Window_Form : Form
     {
         string message ="";      
-        public Form17(string m,bool is_seq=false, bool is_rik=false)
+        public Message_Window_Form(string m,bool is_seq=false, bool is_rik=false)
         {
             InitializeComponent();            
             message = m;
