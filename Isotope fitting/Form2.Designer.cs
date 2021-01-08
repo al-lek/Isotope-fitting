@@ -2107,7 +2107,7 @@ namespace Isotope_fitting
             // 
             this.primary_styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("primary_styleBtn.Image")));
             this.primary_styleBtn.Name = "primary_styleBtn";
-            this.primary_styleBtn.Size = new System.Drawing.Size(194, 36);
+            this.primary_styleBtn.Size = new System.Drawing.Size(113, 36);
             this.primary_styleBtn.Text = "Style";
             this.primary_styleBtn.ToolTipText = "Format the style of the plots in this tab";
             this.primary_styleBtn.Click += new System.EventHandler(this.primary_styleBtn_Click);
@@ -6259,7 +6259,7 @@ namespace Isotope_fitting
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Peak Finder v28.4.2";
+            this.Text = "Peak Finder v28.4.3";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form2_DpiChanged);
             this.Resize += new System.EventHandler(this.Form2_Resize);
