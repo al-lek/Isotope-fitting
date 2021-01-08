@@ -1279,6 +1279,7 @@ namespace Isotope_fitting
                         try
                         {
                             string[] tmp_str = lista[j].Split('\t');
+                            if(tmp_str.Length<2)tmp_str = lista[j].Split(',');
                             double mz = dParser(tmp_str[0]);
                             double y = dParser(tmp_str[1]);
                             if (tmp_str.Length == 2)
