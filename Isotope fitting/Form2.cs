@@ -1274,6 +1274,9 @@ namespace Isotope_fitting
                     progress_display_start(lista.Count, "Loading experimental data...");
                     max_exp = 0.0;
                     double mz_prev = 0;
+                    //sometimes the experimental is shifted in the Y axis and the minimum intensity is not 0,
+                    //in this case we shift it back to 0 on order to have the calculations executed correctly
+                    double Y_shift = 0;
                     for (int j = 0; j != (lista.Count); j++)
                     {
                         try
@@ -1286,14 +1289,20 @@ namespace Isotope_fitting
                             {
                                 if (!Double.IsNaN(mz)&& !Double.IsNaN(y))
                                 {
-                                    experimental.Add(new double[] { mz, y });
-                                    if (is_exp_deconvoluted)
+                                    //we don't use Yshift in a deconvoluted spectra input as the measurements are peaks not profiles
+                                    if (j == 0 && !is_exp_deconvoluted)
                                     {
+                                        Y_shift = y;
+                                    }
+                                    experimental.Add(new double[] { mz, y- Y_shift });
+                                    if (is_exp_deconvoluted)
+                                    {                                        
                                         if (experimental_dec.Count == 0) { experimental_dec.Add(new List<double[]>()); }
                                         else if (mz - mz_prev > 2) { experimental_dec.Add(new List<double[]>()); }
                                         if (mz_prev != mz) experimental_dec.Last().Add(new double[] { mz, y });
                                         mz_prev = mz;
                                     }
+                                   
                                 }                                
                             }
                             else
@@ -6216,7 +6225,7 @@ namespace Isotope_fitting
             for (int i = 0; i < dataY.Length - 1; i++)
                 diff_y[i] = dataY[i + 1] - dataY[i];
 
-            int starting_points_to_omit = 0;
+            int starting_points_to_omit = 1;
             int progress = 0;
             Parallel.For(starting_points_to_omit, len - peak_width - 1, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
             {
@@ -6234,12 +6243,29 @@ namespace Isotope_fitting
                     if (diff_y[i] >= 0 & diff_y[i + 1] <= 0)
                     {
                         local_max = true;
+                        try
+                        {
+                            for (int j = i - peak_width + 1; j < i; j++)
+                            {
+                                if (j < 0) { if (diff_y[0] < 0) local_max = false; }
+                                else
+{
+                                    try { if (diff_y[j] < 0) local_max = false; }
+                                    catch (Exception e1) { Debug.WriteLine("j " + j + " i " + i + " length " + diff_y.Length + "    " + e1); };
+                                }
+                                
+                            }                               
 
-                        for (int j = i - peak_width + 1; j < i; j++)
-                            if (diff_y[j] < 0) local_max = false;
+                            for (int j = i + 2; j < i + peak_width + 1; j++)
+                            {
+                                if (diff_y[j] > 0) local_max = false;
+                            }
+                        }
+                        catch (Exception e1)
+                        {
+                            Debug.WriteLine(e1);
+                        };
 
-                        for (int j = i + 2; j < i + peak_width + 1; j++)
-                            if (diff_y[j] > 0) local_max = false;
                     }
                     if (local_max)
                     {
@@ -6392,13 +6418,19 @@ namespace Isotope_fitting
 
             double[] dataY = ((double[])((object[])data)[0]);
             int idx = ((int)((object[])data)[1]);
-
             for (int i = 8; i < 13; i++)
             {
                 temp2 = ((double)i - 10.0 - x[1]) / (1.4142 * x[0]);
                 gauss_point = x[2] * Math.Exp(-1.0 * temp2 * temp2);
-                temp = dataY[idx + (i - 10)] - gauss_point;
-                func[0] += temp * temp;
+                try
+                {
+                    temp = dataY[idx + (i - 10)] - gauss_point;
+                    func[0] += temp * temp;
+                }
+                catch (Exception e1)
+                {
+                    Debug.WriteLine("idx " + idx + " i " + i + " length " + dataY.Length + "    " + e1);
+                }
             }
         }
         private void displayPeakList_btn_Click(object sender, EventArgs e)

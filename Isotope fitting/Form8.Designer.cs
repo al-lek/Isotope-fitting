@@ -67,6 +67,7 @@
             // 
             // minIntensity_numUD
             // 
+            this.minIntensity_numUD.DecimalPlaces = 10;
             this.minIntensity_numUD.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.minIntensity_numUD.Increment = new decimal(new int[] {
             10,
@@ -83,9 +84,9 @@
             1,
             0,
             0,
-            0});
+            655360});
             this.minIntensity_numUD.Name = "minIntensity_numUD";
-            this.minIntensity_numUD.Size = new System.Drawing.Size(73, 21);
+            this.minIntensity_numUD.Size = new System.Drawing.Size(100, 21);
             this.minIntensity_numUD.TabIndex = 1;
             this.minIntensity_numUD.Value = new decimal(new int[] {
             10,
@@ -165,7 +166,7 @@
             "TripleTOF6600_R30000@400             "});
             this.resolution_list_combBox.Location = new System.Drawing.Point(102, 80);
             this.resolution_list_combBox.Name = "resolution_list_combBox";
-            this.resolution_list_combBox.Size = new System.Drawing.Size(122, 21);
+            this.resolution_list_combBox.Size = new System.Drawing.Size(158, 21);
             this.resolution_list_combBox.TabIndex = 6;
             this.resolution_list_combBox.Click += new System.EventHandler(this.resolution_list_combBox_Click);
             // 
@@ -183,7 +184,7 @@
             "280000"});
             this.selection_list_1.Location = new System.Drawing.Point(102, 36);
             this.selection_list_1.Name = "selection_list_1";
-            this.selection_list_1.Size = new System.Drawing.Size(122, 21);
+            this.selection_list_1.Size = new System.Drawing.Size(158, 21);
             this.selection_list_1.TabIndex = 5;
             this.selection_list_1.Click += new System.EventHandler(this.selection_list_1_Click);
             // 
@@ -195,7 +196,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(246, 181);
+            this.tabControl1.Size = new System.Drawing.Size(276, 181);
             this.tabControl1.TabIndex = 24;
             // 
             // tabPage1
@@ -206,7 +207,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(241, 161);
+            this.tabPage1.Size = new System.Drawing.Size(268, 155);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Peak Detection";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -220,9 +221,9 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.save_peakBtn,
             this.recalc_peakBtn});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 121);
+            this.toolStrip1.Location = new System.Drawing.Point(3, 115);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(235, 37);
+            this.toolStrip1.Size = new System.Drawing.Size(262, 37);
             this.toolStrip1.TabIndex = 25;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -259,7 +260,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(238, 155);
+            this.tabPage2.Size = new System.Drawing.Size(268, 155);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Deconvolution";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -276,7 +277,7 @@
             this.save_decovBtn});
             this.toolStrip2.Location = new System.Drawing.Point(3, 115);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(232, 37);
+            this.toolStrip2.Size = new System.Drawing.Size(262, 37);
             this.toolStrip2.TabIndex = 26;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -317,7 +318,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(246, 181);
+            this.ClientSize = new System.Drawing.Size(276, 181);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
