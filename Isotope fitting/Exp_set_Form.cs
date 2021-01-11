@@ -24,28 +24,14 @@ namespace Isotope_fitting
             constRes_radBtn.Checked = frm2.is_deconv_const_resolution;
             listRes_radBtn.Checked = !constRes_radBtn.Checked;
         }
-
-        //private void minIntensity_numUD_ValueChanged(object sender, EventArgs e)
-        //{
-        //    Form2.min_intes = (double)minIntensity_numUD.Value;
-        //}
-        //void minIntensity_numUD_TextChanged(object sender, EventArgs e)
-        //{
-        //    if (minIntensity_numUD.ActiveControl != null && !string.IsNullOrEmpty(minIntensity_numUD.ActiveControl.Text))
-        //    {
-        //        Form2.min_intes = double.Parse(minIntensity_numUD.ActiveControl.Text);
-        //    }
-        //}
+       
 
         private void Form8_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }
 
-        private void Form8_Load(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void save_btn_Click(object sender, EventArgs e)
         {

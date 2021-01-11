@@ -3898,9 +3898,7 @@ namespace Isotope_fitting
             List<int[]> set_copy = new List<int[]>();
 
             // powerSet is [1,2,3...] which means [1st, 2nd, 3rd,...] SELECTED (checked) fragment. They are in accordance with aligned_intensities
-            //progress_display_start(powerSet.Count + 1, "Calculating fragment fit...");
-
-            //cxalculate experimental surface area in the current fit region
+            //calculate experimental surface area in the current fit region
             double experimental_max = all_data_aligned[0].Max();
             double experimental_sum = 0.0;
             int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());
@@ -3922,8 +3920,8 @@ namespace Isotope_fitting
 
                     lock (_locker)
                     {
-                        centroid_LSE(set[i].ToArray(), tmp);
-                        di_aligned(set[i].ToArray(), tmp);
+                        calc_di(set[i].ToArray(), tmp);
+                        calc_di_aligned(set[i].ToArray(), tmp);
                         res.Add(tmp);
                         set_copy.Add(set[i]);
                     }
@@ -3934,104 +3932,89 @@ namespace Isotope_fitting
                 }
 
             });
-
-            // sort res and powerSet by least SSE
+           
             // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE,centroid LSE,%of total area,%of fragment's area]. 
             double[][] tmp1 = res.ToArray();
             //int[][] tmp2 = powerSet.ToArray();
             int[][] tmp2 = set_copy.ToArray();
-
-            ////array is sorted in descending fit coverage !!!
-            //IComparer myComparer = new lastElement();
-            //Array.Sort(tmp1, tmp2, myComparer);
-
             res = tmp1.ToList();
             set = tmp2.ToList();
-            //remove_lse_1(res,set);
             return (res, set);
         }
 
-        /// <summary>
-        /// Calculate di score and ei score
-        /// </summary>
-        private void centroid_LSE(int[] set_array, double[] tmp)
+        /// <summary> Calculate di score and ei score </summary>
+        /// <param name="set_array">an array with the indexes of the fragments contained in this fit group solution </param>
+        /// <param name="tmp">an array with the factors and the scores of the fragments contained in this fit group solution </param>
+        private void calc_di(int[] set_array, double[] tmp)
         {
-            double lse = 0.0;
-            List<double[]> lse_fragments = new List<double[]>();
-
+            double group_di = 0.0;
+            List<double> fragments_scores = new List<double>();
             for (int ss = 0; ss < set_array.Length; ss++)
             {
                 int frag_index = set_array[ss] - 1;
-                double frag_factor = tmp[ss];
-                int absent_isotope = 0;
-                double absent_factor = 0.0;
-                List<PointPlot> sorted_cen = new List<PointPlot>();
+                double frag_factor = tmp[ss];//the factor that was calculated during fitting to adjust the fragment's intensity to match with the experimental intensity
+                int absent_isotope = 0;//counts the theoretical isotopes of the fragment that are NOT present in the experimental spectrum
+                double absent_factor = 0.0;//is used for the ei calculation
+                List<PointPlot> sorted_cen = new List<PointPlot>();//the list with the fragment's centroids
                 double max_cen = Fragments2[frag_index].Centroid[0].Y;
+                //sort the fragment's centroid list by m/z
                 sorted_cen = Fragments2[frag_index].Centroid.OrderBy(p => p.X).ToList();
-                double summ = 0.0;
-                foreach (PointPlot p in sorted_cen)
-                {
-                    summ += p.Y;
-                }
-                lse_fragments.Add(new double[3]);
-                double iso_lse_sum = 0.0;
+                double summ = 0.0;//the summation of the intensity of the centroids of the fragment
+                foreach (PointPlot p in sorted_cen){ summ += p.Y;}
+                //adj stands for adjusted
+                double error_adj_sum = 0.0;
                 int start_idx = 1;
                 double[] tmp_error = new double[sorted_cen.Count()];
                 for (int c = 0; c < sorted_cen.Count(); c++)
                 {
-                    double exp_cen, curr_diff, ppm, exp_intensity;
+                    double exp_mz, curr_diff, curr_ppm, exp_intensity;
                     int closest_idx = 0;
                     double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - sorted_cen[c].X);
                     for (int i = start_idx; i < peak_points.Count; i++)
                     {
-                        exp_cen = peak_points[i][1] + peak_points[i][4];
-                        curr_diff = Math.Abs(exp_cen - sorted_cen[c].X);
-
+                        exp_mz = peak_points[i][1] + peak_points[i][4];
+                        curr_diff = Math.Abs(exp_mz - sorted_cen[c].X);
                         if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                        else { start_idx = i; break; }
+                        else { start_idx = i; break; }//we store the last used index of the peak list, in order to avoid unnecessary calculations (both peak_points and sorted_cen are sorted by m/z)
                     }
-                    exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
-                    ppm = Math.Abs(exp_cen - sorted_cen[c].X) * 1e6 / (exp_cen);
+                    exp_mz = peak_points[closest_idx][1] + peak_points[closest_idx][4];
+                    curr_ppm = Math.Abs(exp_mz - sorted_cen[c].X) * 1e6 / (exp_mz);
                     exp_intensity = peak_points[closest_idx][5];
-                    if (ppm < ppmDi)
+                    double er_j = 1.0; double error_adj = 0.0;
+                    if (curr_ppm < ppmDi)//ppmDi is set by the user
                     {
-                        double ee1 = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);
-                        double ee = ee1 * sorted_cen[c].Y;
-                        iso_lse_sum += ee; tmp_error[c] = ee1;                                         
+                        er_j = Math.Abs(exp_intensity - sorted_cen[c].Y * frag_factor) / Math.Max(sorted_cen[c].Y * frag_factor, exp_intensity);                                                             
                     }
                     else
                     {
-                        tmp_error[c] = 1.0;
-                        iso_lse_sum += tmp_error[c] * sorted_cen[c].Y; absent_factor += tmp_error[c] * sorted_cen[c].Y; absent_isotope++;
+                        absent_factor += sorted_cen[c].Y; absent_isotope++;
                     }
+                    tmp_error[c] = er_j;
+                    error_adj = er_j * sorted_cen[c].Y;
+                    error_adj_sum += error_adj;
                 }
-                lse_fragments.Last()[0] = 100 * absent_isotope / sorted_cen.Count();
-                lse_fragments.Last()[1] = iso_lse_sum / summ;
-                lse_fragments.Last()[2] = (iso_lse_sum - absent_isotope) / (sorted_cen.Count() - absent_isotope);
-                lse += lse_fragments.Last()[1];
+                double di = error_adj_sum / summ;//di score
+                double ei = 100.00 * absent_factor / summ;//ei score
+                fragments_scores.Add(di);               
+                group_di += di;
                 double sd = 0.0;
                 for (int d = 0; d < tmp_error.Length; d++)
                 {
-                    sd += sorted_cen[d].Y * Math.Pow((tmp_error[d] - lse_fragments.Last()[1]), 2);
+                    sd += sorted_cen[d].Y * Math.Pow((tmp_error[d] - di), 2);
                 }
                 tmp[ss + 2 * set_array.Length] = 100.00 * Math.Sqrt(sd / (summ));
-                tmp[ss + set_array.Length] = 100.00 * lse_fragments.Last()[1];
-                tmp[ss + 3 * set_array.Length] = 100.00 * absent_factor / summ;
+                tmp[ss + set_array.Length] = 100.00 * di;
+                tmp[ss + 3 * set_array.Length] = ei;
             }
-            lse = 100.00 * lse / set_array.Length;
-            tmp[6 * set_array.Length + 2] = lse;
+            group_di = 100.00 * group_di / set_array.Length;
+            tmp[6 * set_array.Length + 2] = group_di;
             return;
         }
-        /// <summary>
-        /// Calculate di' or dinew score
-        /// </summary>
-        private void di_aligned(int[] set_array, double[] tmp)
+        /// <summary> Calculate di' score</summary>
+        private void calc_di_aligned(int[] set_array, double[] tmp)
         {
-            List<double[]> lse_fragments = new List<double[]>();
-            double dinew_average = 0.0; double ei_average = 0.0;
-            /// <summary>
-            /// for each fragment [exp m/z, exp intensity, centroid*factor,weight,fragment index in tmp,multiplicity,di]
-            /// </summary>
+            double group_dinew = 0.0; double group_ei = 0.0;
+            // for each fragment [(0)exp m/z,(1) exp intensity,(2) centroid*factor,(3)weight (fj),(4)fragment index in tmp,(5)multiplicity,(6)di]
             List<double[]> frag_info = new List<double[]>();
             List<double[]> frag_info_sorted = new List<double[]>();
             for (int ss = 0; ss < set_array.Length; ss++)
@@ -4040,36 +4023,36 @@ namespace Isotope_fitting
                 double frag_factor = tmp[ss];
                 double absent_factor = 0.0;
                 List<PointPlot> sorted_cen = new List<PointPlot>();
+                //sort the fragment's centroid list by m/z
                 sorted_cen = Fragments2[frag_index].Centroid.OrderBy(p => p.X).ToList();
-                double summ = 0.0;
+                double summ = 0.0;//the summation of the intensity of the centroids of the fragment
                 foreach (PointPlot p in sorted_cen) { summ += p.Y; }
                 int start_idx = 1;
                 double[] tmp_error = new double[sorted_cen.Count()];
                 for (int c = 0; c < sorted_cen.Count(); c++)
                 {
-                    double exp_cen, curr_diff, ppm, exp_intensity;
+                    double exp_mz, curr_diff, curr_ppm, exp_intensity;
                     int closest_idx = 0;
                     double min_diff = Math.Abs(peak_points[0][1] + peak_points[0][4] - sorted_cen[c].X);
                     for (int i = start_idx; i < peak_points.Count; i++)
                     {
-                        exp_cen = peak_points[i][1] + peak_points[i][4];
-                        curr_diff = Math.Abs(exp_cen - sorted_cen[c].X);
-
+                        exp_mz = peak_points[i][1] + peak_points[i][4];
+                        curr_diff = Math.Abs(exp_mz - sorted_cen[c].X);
                         if (curr_diff < min_diff) { min_diff = curr_diff; closest_idx = i; }
-                        else { start_idx = i; break; }
+                        else { start_idx = i; break; }//we store the last used index of the peak list, in order to avoid unnecessary calculations (both peak_points and sorted_cen are sorted by m/z)
                     }
-                    exp_cen = peak_points[closest_idx][1] + peak_points[closest_idx][4];
-                    ppm = Math.Abs(exp_cen - sorted_cen[c].X) * 1e6 / (exp_cen);
+                    exp_mz = peak_points[closest_idx][1] + peak_points[closest_idx][4];
+                    curr_ppm = Math.Abs(exp_mz - sorted_cen[c].X) * 1e6 / (exp_mz);
                     exp_intensity = peak_points[closest_idx][5];
-                    if (ppm > ppmDi)
+                    if (curr_ppm > ppmDi)//ppmDi is set by the user
                     {
-                        exp_intensity = 0; exp_cen = 0; absent_factor += sorted_cen[c].Y / summ;
+                        exp_intensity = 0; exp_mz = 0; absent_factor += sorted_cen[c].Y / summ;
                     }
                     double frag_int = sorted_cen[c].Y * frag_factor;
-                    frag_info.Add(new double[] { exp_cen, exp_intensity, frag_int, sorted_cen[c].Y / summ, ss, frag_int, sorted_cen[c].Y / summ });
+                    frag_info.Add(new double[] { exp_mz, exp_intensity, frag_int, sorted_cen[c].Y / summ, ss, frag_int, sorted_cen[c].Y / summ });
                 }
                 tmp[ss + 3 * set_array.Length] = 100.00 * absent_factor;
-                ei_average += absent_factor;
+                group_ei += absent_factor;
             }
             frag_info_sorted = frag_info.OrderBy(p => p[0]).ToList(); //sorted by m/z
             for (int a = 0; a < frag_info_sorted.Count; a++)
@@ -4092,6 +4075,7 @@ namespace Isotope_fitting
                             }
                             else if (frag_info_sorted[a][0] < frag_info_sorted[b][0])
                             {
+                                //di'=||
                                 frag_info_sorted[a][6] = (Math.Abs(frag_info_sorted[a][1] - frag_info_sorted[a][2]) * frag_info_sorted[a][3] * frag_info_sorted[a][2]) / (Math.Max(frag_info_sorted[a][1], frag_info_sorted[a][2]) * frag_info_sorted[a][5]);
                                 break;
                             }
@@ -4103,18 +4087,19 @@ namespace Isotope_fitting
             //di' aka dinew calculation and dinew_average calculation
             for (int a = 0; a < frag_info.Count; a++)
             {
-                dinew_average += frag_info[a][6];
-                tmp[(int)frag_info[a][4] + 4 * set_array.Length] += frag_info[a][6];
+                group_dinew += frag_info[a][6];//sum of fragments' di' scores 
+                tmp[(int)frag_info[a][4] + 4 * set_array.Length] += frag_info[a][6];//fragment's di' score
             }
-            dinew_average = dinew_average * 100 / set_array.Length;
-            ei_average = ei_average * 100 / set_array.Length;
-            tmp[6 * set_array.Length] = dinew_average;
-            tmp[6 * set_array.Length + 1] = ei_average;
+            group_dinew = group_dinew * 100 / set_array.Length;//group di' score average
+            group_ei = group_ei * 100 / set_array.Length;//group ei score average
+            tmp[6 * set_array.Length] = group_dinew;//group average di'
+            tmp[6 * set_array.Length + 1] = group_ei;//group average ei
 
             //sdi' calcalculation
             for (int a = 0; a < frag_info.Count; a++)
             {
-                tmp[(int)frag_info[a][4] + 5 * set_array.Length] += frag_info[a][3] * Math.Pow((Math.Abs(frag_info[a][1] - frag_info[a][2]) / Math.Max(frag_info[a][1], frag_info[a][2]) / frag_info[a][5]) - (tmp[(int)frag_info[a][4] + 4 * set_array.Length]/*/ frag_info[a][3]*/), 2);
+                //sd'=(Ith/Summ)*[(er_j/mj)-di]^2
+                tmp[(int)frag_info[a][4] + 5 * set_array.Length] += frag_info[a][3] * Math.Pow((Math.Abs(frag_info[a][1] - frag_info[a][2]) * frag_info[a][2] / (Math.Max(frag_info[a][1], frag_info[a][2])* frag_info[a][5])) - (tmp[(int)frag_info[a][4] + 4 * set_array.Length]), 2);
             }
             for (int ss = 0; ss < set_array.Length; ss++)
             {
@@ -4124,9 +4109,7 @@ namespace Isotope_fitting
 
             return;
         }
-        /// <summary>
-        /// Find fit groups' boundaries 
-        /// </summary>
+        /// <summary> Find fit groups' boundaries </summary>
         private int[] find_set_boundaries(int[] set)
         {
             int[] set_index = new int[2];
@@ -4153,28 +4136,7 @@ namespace Isotope_fitting
             }
             set_index[0] = start; set_index[1] = end;
             return set_index;
-        }
-        private double calc_surface_area(int[] boundaries)
-        {
-            double temp = 0;
-            for (int i = boundaries[0]; i < boundaries[1] + 1; i++)
-            {
-                if (i != boundaries[1])
-                {
-                    double mulA = experimental[i][0] * experimental[i + 1][1];
-                    double mulB = experimental[i + 1][0] * experimental[i][1];
-                    temp = temp + (mulA - mulB);
-                }
-                else
-                {
-                    double mulA = experimental[i][0] * experimental[0][1];
-                    double mulB = experimental[0][0] * experimental[i][1];
-                    temp = temp + (mulA - mulB);
-                }
-            }
-            temp *= 0.5f;
-            return Math.Abs(temp);
-        }
+        }       
         private double[] estimate_fragment_height_multiFactor(List<double[]> aligned_intensities_subSet, List<double> UI_intensities, double experimental_sum)
         {
             //check if aligned_intensities_subSet is empty
@@ -12466,7 +12428,7 @@ namespace Isotope_fitting
             minus_plot.Model.Axes[0].Zoom(original_plotview_minus.Model.Axes[0].ActualMinimum, original_plotview_minus.Model.Axes[0].ActualMaximum);
             paint_annotations_in_temp_graphs(1, plus_plot);
             paint_annotations_in_temp_graphs(1, minus_plot);
-            Form11 frm11 = new Form11(plus_plot,minus_plot,true);
+            Extract_plotview frm11 = new Extract_plotview(plus_plot,minus_plot,true);
             frm11.Show();
         }
         private Color[] return_check_boxes_colors(string type, Panel checks_panel)
@@ -12998,7 +12960,7 @@ namespace Isotope_fitting
             ppm_plot_init(temp_plot);
             temp_plot.Model.Axes[1].Zoom(ppm_plot.Model.Axes[1].ActualMinimum, ppm_plot.Model.Axes[1].ActualMaximum);
             temp_plot.Model.Axes[0].Zoom(ppm_plot.Model.Axes[0].ActualMinimum, ppm_plot.Model.Axes[0].ActualMaximum);
-            Form11 frm11 = new Form11(temp_plot, temp_plot);
+            Extract_plotview frm11 = new Extract_plotview(temp_plot, temp_plot);
             frm11.Show();
         }
         #endregion
@@ -13341,7 +13303,7 @@ namespace Isotope_fitting
             }
             paint_annotations_in_temp_graphs(2, temp_index_plot);
             //refresh_temp_internal(temp_index_plot, tempindex_Intensity_plot);
-            Form15 frm15 = new Form15(temp_index_plot, tempindex_Intensity_plot);
+            Extract_int frm15 = new Extract_int(temp_index_plot, tempindex_Intensity_plot);
             frm15.Show();
         }
         private void extractPlotToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -13411,7 +13373,7 @@ namespace Isotope_fitting
             temp_plot.Model.Axes[1].Zoom(original_plotview.Model.Axes[1].ActualMinimum, original_plotview.Model.Axes[1].ActualMaximum);
             temp_plot.Model.Axes[0].Zoom(original_plotview.Model.Axes[0].ActualMinimum, original_plotview.Model.Axes[0].ActualMaximum);
             paint_annotations_in_temp_graphs(1, temp_plot);
-            Form11 frm11 = new Form11(temp_plot, temp_plot);
+            Extract_plotview frm11 = new Extract_plotview(temp_plot, temp_plot);
             frm11.Show();
         }
 

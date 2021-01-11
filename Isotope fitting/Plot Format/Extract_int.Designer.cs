@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form15
+    partial class Extract_int
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form15));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Extract_int));
             this.panel_frm11 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.toolStrip_frm11 = new System.Windows.Forms.ToolStrip();

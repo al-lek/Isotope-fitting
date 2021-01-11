@@ -328,7 +328,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Experimental Data Settings";
-            this.Load += new System.EventHandler(this.Form8_Load);
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form8_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).EndInit();
             this.tabControl1.ResumeLayout(false);

@@ -202,17 +202,17 @@
     <Compile Include="Plot Format\Format_spectra.Designer.cs">
       <DependentUpon>Format_spectra.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Form11.cs">
+    <Compile Include="Plot Format\Extract_plotview.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Form11.Designer.cs">
-      <DependentUpon>Form11.cs</DependentUpon>
+    <Compile Include="Plot Format\Extract_plotview.Designer.cs">
+      <DependentUpon>Extract_plotview.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Form12.cs">
+    <Compile Include="Plot Format\Format_primary_plot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Form12.Designer.cs">
-      <DependentUpon>Form12.cs</DependentUpon>
+    <Compile Include="Plot Format\Format_primary_plot.Designer.cs">
+      <DependentUpon>Format_primary_plot.cs</DependentUpon>
     </Compile>
     <Compile Include="Plot Format\Form12_2.cs">
       <SubType>Form</SubType>
@@ -347,11 +347,11 @@
     <EmbeddedResource Include="Plot Format\Format_spectra.resx">
       <DependentUpon>Format_spectra.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Form11.resx">
-      <DependentUpon>Form11.cs</DependentUpon>
+    <EmbeddedResource Include="Plot Format\Extract_plotview.resx">
+      <DependentUpon>Extract_plotview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Form12.resx">
-      <DependentUpon>Form12.cs</DependentUpon>
+    <EmbeddedResource Include="Plot Format\Format_primary_plot.resx">
+      <DependentUpon>Format_primary_plot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Plot Format\Form12_2.resx">
       <DependentUpon>Form12_2.cs</DependentUpon>

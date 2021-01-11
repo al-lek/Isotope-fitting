@@ -15,14 +15,14 @@ using OxyPlot.WindowsForms;
 
 namespace Isotope_fitting
 {
-    public partial class Form11 : Form
+    public partial class Extract_plotview : Form
     {
         bool text = false;
         PlotView plot = new PlotView();
         PlotView b_plot = new PlotView();
         bool is_double_plot = false;
 
-        public Form11(PlotView p, PlotView p1,bool is_d=false)
+        public Extract_plotview(PlotView p, PlotView p1,bool is_d=false)
         {
             InitializeComponent();
             plot = p;

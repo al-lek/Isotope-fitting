@@ -11,13 +11,13 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form15 : Form
+    public partial class Extract_int : Form
     {
         PlotView plot = new PlotView();
         PlotView plotInt = new PlotView();
         bool text = false;
 
-        public Form15(PlotView p,PlotView pint)
+        public Extract_int(PlotView p,PlotView pint)
         {
             InitializeComponent();
             plot = p;  plotInt = pint;

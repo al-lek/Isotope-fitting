@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form11
+    partial class Extract_plotview
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form11));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Extract_plotview));
             this.toolStrip_frm11 = new System.Windows.Forms.ToolStrip();
             this.Save_Btn = new System.Windows.Forms.ToolStripButton();
             this.Copy_Btn = new System.Windows.Forms.ToolStripButton();
