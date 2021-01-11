@@ -3901,7 +3901,7 @@ namespace Isotope_fitting
             //calculate experimental surface area in the current fit region
             double experimental_max = all_data_aligned[0].Max();
             double experimental_sum = 0.0;
-            int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());
+            int[] exp_boundaries = find_set_boundaries(set.Last().ToArray());//find fit group's mz boundaries indexes(based on the experimental measurements)
             for (int i = exp_boundaries[0]; i < exp_boundaries[1] + 1; i++) { experimental_sum += experimental[i][1]; }
 
             Parallel.For(0, set.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 }, (i, state) =>
@@ -3917,6 +3917,8 @@ namespace Isotope_fitting
                 {
                     // call optimizer for the specific subset of fragments
                     double[] tmp = estimate_fragment_height_multiFactor(aligned_intensities_subSet, UI_intensities, experimental_sum);
+                    //for a group of 2 fragments for example
+                    //tmp = [frag1_int, frag2_int,frag1_di,frag2_di,frag1_sd,frag2_sd,frag1_ei,frag2_ei,frag1_di',frag2_di',frag1_sd',frag2_sd',di'_average,ei_average,di_average, SSE,Mi,M]
 
                     lock (_locker)
                     {
@@ -3933,7 +3935,7 @@ namespace Isotope_fitting
 
             });
            
-            // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE,centroid LSE,%of total area,%of fragment's area]. 
+            // res is a list of doubles. res = [frag1_factor, frag2_factor,...., SSE,di,%M,%Mi]. 
             double[][] tmp1 = res.ToArray();
             //int[][] tmp2 = powerSet.ToArray();
             int[][] tmp2 = set_copy.ToArray();
@@ -4146,11 +4148,12 @@ namespace Isotope_fitting
                 double[] coeficients = new double[frag_count];
                 for (int i = 0; i < frag_count; i++) coeficients[i] = 0.0;
                 // 2. save result
-                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Mi,M]
+                //for a group of 2 fragments for example,frag_count=2
+                //result = [frag1_int, frag2_int,frag1_di,frag2_di,frag1_sd,frag2_sd,frag1_ei,frag2_ei,frag1_di',frag2_di',frag1_sd',frag2_sd',di'_average,ei_average,di_average, SSE,Mi,M]
                 double[] result = new double[6 * frag_count + 6];
                 for (int i = 0; i < frag_count; i++) { result[i] = coeficients[i]; result[i + 4 * frag_count] = 0; result[i + 5 * frag_count] = 0; } //initialize di error and sd
-                result[6 * frag_count + 3] = 0;
-                result[6 * frag_count + 4] = 100; result[6 * frag_count + 5] = 100;
+                result[6 * frag_count + 3] = 0;//SSE
+                result[6 * frag_count + 4] = 100; result[6 * frag_count + 5] = 100;//Mi, M
                 return result;
             }
             else
@@ -4158,32 +4161,33 @@ namespace Isotope_fitting
                 // 1. initialize needed params
                 // in coefficients[0] refers to 1st frag, and in aligned_intensities[0] refers to experimental
                 // UI_intensities is initial values to make a starting point
-                int distros_num = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
+                int frag_count = aligned_intensities_subSet[0].Length - 1;//osa kai ta fragments pou einai sto subset
 
                 double[] coeficients = UI_intensities.ToArray();
-                double[] bndl = new double[distros_num];
-                double[] bndh = new double[distros_num];
-                for (int i = 0; i < distros_num; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i]; }
+                double[] bndl = new double[frag_count];
+                double[] bndh = new double[frag_count];
+                for (int i = 0; i < frag_count; i++) { bndl[i] = coeficients[i] * 1e-5; bndh[i] = coeficients[i]; }
                 double max_exp = aligned_intensities_subSet.Max(p=>p[0]);
-                double[] max_frag = new double[distros_num];
+                double[] max_frag = new double[frag_count];
                
                 double epsx = 0.000001;
                 int maxits = 1000000;
                 alglib.minlmstate state;
                 alglib.minlmreport rep;
                 double diffstep = 0.001;
-                alglib.minlmcreatev(distros_num, coeficients, diffstep, out state);
+                alglib.minlmcreatev(frag_count, coeficients, diffstep, out state);
                 alglib.minlmsetbc(state, bndl, bndh);                                            // boundary conditions
                 alglib.minlmsetcond(state, epsx, maxits);
                 alglib.minlmoptimize(state, sse_multiFactor, null, aligned_intensities_subSet);
                 alglib.minlmresults(state, out coeficients, out rep);
 
-                // 2. save result
-                // save all the coefficients and last cell is the minimized value of SSE. result = [frag1_int, frag2_int,....,di_new,ei,di, SSE,Mi,M]
-                double[] result = new double[6 * distros_num + 6];
-                for (int i = 0; i < distros_num; i++) { result[i] = coeficients[i]; result[i + 4 * distros_num] = 0; result[i + 5 * distros_num] = 0; } //initialize di error and sd
-                result[6 * distros_num + 3] = state.fi[0];
-                (result[6 * distros_num + 4], result[6 * distros_num + 5]) = maxmin_area_ratio(aligned_intensities_subSet, coeficients, experimental_sum);
+                // 2. save result 
+                //for a group of 2 fragments for example,frag_count=2
+                //result = [frag1_int, frag2_int,frag1_di,frag2_di,frag1_sd,frag2_sd,frag1_ei,frag2_ei,frag1_di',frag2_di',frag1_sd',frag2_sd',di'_average,ei_average,di_average, SSE,Mi,M]
+                double[] result = new double[6 * frag_count + 6];
+                for (int i = 0; i < frag_count; i++) { result[i] = coeficients[i]; result[i + 4 * frag_count] = 0; result[i + 5 * frag_count] = 0; } //initialize di error and sd
+                result[6 * frag_count + 3] = state.fi[0];//SSE
+                (result[6 * frag_count + 4], result[6 * frag_count + 5]) = calc_Mi_M(aligned_intensities_subSet, coeficients, experimental_sum);//Mi, M
                               
                 return result;
             }
@@ -4214,8 +4218,9 @@ namespace Isotope_fitting
                 //else if (distros_sum != 0.0) factor = distros_sum;
                 //func[0] += (Math.Pow((exp_and_distros[i][0] - distros_sum), 2) / factor);
             }
-        }             
-        private (double, double) maxmin_area_ratio(List<double[]> aligned_intensities_subSet, double[] coeficients,/* int[] set_array, double[] tmp,*/ double exp_sum)
+        }
+        /// <summary> M, Mi scores calculation  </summary>
+        private (double, double) calc_Mi_M(List<double[]> aligned_intensities_subSet, double[] coeficients, double exp_sum)
         {            
             double ovrlp_area = 0.0;
             double exp_area = 0.0;            
@@ -4233,9 +4238,9 @@ namespace Isotope_fitting
                     exp_area += aligned_intensities_subSet[i][0];
                 }
             }
-            double ratio = (1 - (ovrlp_area / exp_area)) * 100;
-            double ratio_all = (1 - (ovrlp_area / exp_sum)) * 100;
-            return (ratio, ratio_all);
+            double ratio_Mi = (1 - (ovrlp_area / exp_area)) * 100;
+            double ratio_M = (1 - (ovrlp_area / exp_sum)) * 100;
+            return (ratio_Mi, ratio_M);
         }
         /// <summary> Create Fit Results  treeview  </summary>
         private void generate_fit_results(bool project = false)
