@@ -14183,7 +14183,7 @@ namespace Isotope_fitting
         #endregion
         #endregion
 
-        #region fixed list 
+        #region fixed list_Maro        
         //Fixed List refers to a .fit of fragments that the user is sure that are present in the experimental spectra. So when conducting a case study:
         //(1)the user loads the .fit file from the "fixed_listBtn_Click", and this list is saved in Fragments5 list (only the fragments'names in order to save up space).
         //This list is not present to the user
@@ -14338,25 +14338,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region Ultimate Fragment Calculator Manipulation
-        /// <summary> Write the user defined parameters for the Ultimate Fragmentor algorithm in a json file. </summary>
-        /// <param name="path">The "path" in which the output json file will be created or overwritten </param>
-        private void write_params_input_json(string path="")
-        {
-            if (path == "")
-            {
-                root_path = AppDomain.CurrentDomain.BaseDirectory.ToString();
-                path = root_path + "\\input.json";
-            }           
-            if (_data == null) return;
-            //open file stream
-            using (StreamWriter file = File.CreateText(path))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                //serialize object directly into file stream
-                serializer.Serialize(file, _data);
-            }
-        }
+        #region Ultimate Fragment Calculator Manipulation   
         /// <summary>Read Utimate Fragmentor File (csv) and load the fragments.</summary>
         /// <param name="is_calculation">If is false then the loaded fragments are inserted in Chemformulas List and the isotopic distributions of the fragments are not calculated.If true then the loaded fragments are inserted in Fragments2 List and the isotopic distributions of the fragments are calculated as if the user had inserted a .fit file. </param>
         /// <param name="file">The path to the csv file </param> 
@@ -14516,90 +14498,7 @@ namespace Isotope_fitting
             }
             else { return; }
         }
-
-        //public void PatchParameter(string parameter, int serviceid)
-        //{
-        //    // 1) Create engine
-        //    ScriptEngine engine = Python.CreateEngine();
-        //    var paths = engine.GetSearchPaths();
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\");
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\.idea");
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\fragment_lib");
-        //    paths.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\params");
-
-        //    engine.SetSearchPaths(paths);
-        //    // 2) Provide script and arguments
-        //    var script = @"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\ultimate_fragmentor.py";
-        //    ScriptSource source = engine.CreateScriptSourceFromFile(script);
-
-        //    var argv = new List<string>();
-        //    argv.Add("");
-        //    //argv.Add("input.json");
-        //    argv.Add(@"C:\\Users\\Maro\\Utlimate_Fragment\\Utlimate_Fragment\\input.json");
-
-        //    engine.GetSysModule().SetVariable("argv", argv);
-
-        //    // 3) Output redirect
-        //    var eIO = engine.Runtime.IO;
-
-        //    var errors = new MemoryStream();
-        //    eIO.SetErrorOutput(errors, Encoding.Default);
-
-        //    var results = new MemoryStream();
-        //    eIO.SetOutput(results, Encoding.Default);
-
-        //    // 4) Execute script
-        //    //engine.ExecuteFile(script);
-        //    //var scope = engine.CreateScope();
-        //    //source.Execute(scope);
-        //    source.Execute();
-
-        //    //// 5) Display output
-        //    //string str(byte[] x) => Encoding.Default.GetString(x);
-
-        //    //Console.WriteLine("ERRORS:");
-        //    //Console.WriteLine(str(errors.ToArray()));
-        //    //Console.WriteLine();
-        //    //Console.WriteLine("Results:");
-        //    //Console.WriteLine(str(results.ToArray()));
-        //}
-        //private void run_cmd(string cmd, string args)
-        //{
-        //    ProcessStartInfo start = new ProcessStartInfo();
-        //    start.FileName = "my/full/path/to/python.exe";
-        //    start.Arguments = string.Format("{0} {1}", cmd, args);
-        //    start.UseShellExecute = false;
-        //    start.RedirectStandardOutput = true;
-        //    using (Process process = Process.Start(start))
-        //    {
-        //        using (StreamReader reader = process.StandardOutput)
-        //        {
-        //            string result = reader.ReadToEnd();
-        //            Console.Write(result);
-        //        }
-        //    }
-        //}
-        //public void rin_python()
-        //{
-        //    string progToRun = "C:\\Users\\Maro\\Utlimate_Fragment\\setup.py";
-        //    Process proc = new Process();
-        //    proc.StartInfo.FileName = "C:\\Users\\Maro\\anaconda3\\python.exe";
-        //    proc.StartInfo.RedirectStandardOutput = true;
-        //    proc.StartInfo.UseShellExecute = false;
-        //    proc.StartInfo.WorkingDirectory = "C:\\Users\\Maro\\Utlimate_Fragment";
-        //    proc.StartInfo.Arguments = progToRun;
-
-        //    proc.Start();
-
-        //    //StreamReader sReader = proc.StandardOutput;
-        //    //string[] output = sReader.ReadToEnd().Split('\r');
-
-        //    //foreach (string s in output)
-        //    //    Console.WriteLine(s);
-
-        //    proc.WaitForExit();
-        //}
-
+    
         #endregion
 
     }
