@@ -8,6 +8,7 @@ namespace Isotope_fitting
 {
     public class Calculator_input
     {
+        //for Ultimate Fragmentor
         private string sequence;       
         private string output_csv_file;
         private string output_excel_file;

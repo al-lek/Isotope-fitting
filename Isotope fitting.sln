@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isotope fitting", "Isotope fitting\Isotope fitting.csproj", "{079A2064-2901-402E-B2E9-77321C57B9D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peak_Finder", "Isotope fitting\Peak_Finder.csproj", "{079A2064-2901-402E-B2E9-77321C57B9D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +24,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28561515-059E-4658-AE59-BE5CF7FC3539}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
