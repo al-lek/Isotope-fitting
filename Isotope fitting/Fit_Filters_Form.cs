@@ -324,7 +324,7 @@ namespace Isotope_fitting
                 else if (coeff_matrix[i] == 0) { sort[i] = false; }
             }
         }
-        private void Form6_FormClosing(object sender, FormClosingEventArgs e)
+        private void Fit_Filters_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             vital_refresh();
             if (is_node)
@@ -413,7 +413,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void Form6_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Fit_Filters_Form_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

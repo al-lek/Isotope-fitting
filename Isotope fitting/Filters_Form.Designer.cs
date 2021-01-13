@@ -928,7 +928,7 @@
             this.ignore_ppm_chkBox.Text = "ignore ppm";
             this.ignore_ppm_chkBox.CheckStateChanged += new System.EventHandler(this.ignore_ppm_chkBox_CheckStateChanged);
             // 
-            // Form19
+            // Filters_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -944,12 +944,12 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form19";
+            this.Name = "Filters_Form";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fragment selection filters";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form19_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Filters_Form_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.ppm_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fragGrps_numUD)).EndInit();
             this.entire_grpBx.ResumeLayout(false);

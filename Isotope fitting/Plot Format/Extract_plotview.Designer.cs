@@ -100,7 +100,7 @@
             this.panel_frm11.TabIndex = 28;
             this.panel_frm11.Resize += new System.EventHandler(this.panel_frm11_Resize);
             // 
-            // Form11
+            // Extract_plotview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -111,12 +111,12 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(200, 200);
-            this.Name = "Form11";
+            this.Name = "Extract_plotview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Extract Plot";
             this.TopMost = true;
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form11_DpiChanged);
-            this.Resize += new System.EventHandler(this.Form11_Resize);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Extract_plotview_DpiChanged);
+            this.Resize += new System.EventHandler(this.Extract_plotview_Resize);
             this.toolStrip_frm11.ResumeLayout(false);
             this.toolStrip_frm11.PerformLayout();
             this.ResumeLayout(false);

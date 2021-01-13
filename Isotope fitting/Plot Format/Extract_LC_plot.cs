@@ -19,11 +19,11 @@ using System.Diagnostics;
 
 namespace Isotope_fitting
 {
-    public partial class Form20 : Form
+    public partial class Extract_LC_plot : Form
     {
         bool text = false;
         LightningChartUltimate plot =new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { };
-        public Form20(LightningChartUltimate p,double minx, double maxx, double miny, double maxy)
+        public Extract_LC_plot(LightningChartUltimate p,double minx, double maxx, double miny, double maxy)
         {
             InitializeComponent();
             plot = p as LightningChartUltimate;            
@@ -92,7 +92,7 @@ namespace Isotope_fitting
         
         }
 
-        private void Form20_Resize(object sender, EventArgs e)
+        private void Extract_LC_plot_Resize(object sender, EventArgs e)
         {
             if (!text)
             {
@@ -105,7 +105,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void Form20_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Extract_LC_plot_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

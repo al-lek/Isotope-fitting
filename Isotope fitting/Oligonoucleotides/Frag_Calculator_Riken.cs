@@ -14,13 +14,13 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form24_2 : Form
+    public partial class Frag_Calculator_Riken : Form
     {
         Form2 frm2;
          bool has_adduct = false;
          string extra_adduct = "";
 
-        public Form24_2(Form2 f)
+        public Frag_Calculator_Riken(Form2 f)
         {
             frm2 = f;
             InitializeComponent();
@@ -30,8 +30,7 @@ namespace Isotope_fitting
                 mzMax_Box.Text = ChemFormulas.Last().Mz.ToString();
             }
             if (!string.IsNullOrEmpty(frm2.res_string_24)) resolution_Box.Text = frm2.res_string_24;
-            //else if (frm2.machine_sel_index != -1) Form24_2.machine_listBox1.SelectedIndex = frm2.machine_sel_index;
-            //else Form24_2.machine_listBox1.SelectedIndex = 9;
+           
             panel_calc.Controls.Add(machine_listBox1);
             if (!machine_listBox1_eventAddedFlag)
             {
@@ -761,7 +760,7 @@ namespace Isotope_fitting
             }
 
         }         
-        private void Form24_2_FormClosing(object sender, FormClosingEventArgs e)
+        private void Frag_Calculator_Riken_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {

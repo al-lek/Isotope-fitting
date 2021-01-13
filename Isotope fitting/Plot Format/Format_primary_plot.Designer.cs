@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form12
+    partial class Format_primary_plot
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form12));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Format_primary_plot));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.axisY_Charge_grpBx = new System.Windows.Forms.GroupBox();
             this.y_charge_stepmajor_UD12 = new System.Windows.Forms.NumericUpDown();
@@ -892,7 +892,7 @@
             this.textBox1.TabIndex = 0;
             this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             // 
-            // Form12
+            // Format_primary_plot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -903,11 +903,11 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form12";
+            this.Name = "Format_primary_plot";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Properties";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form12_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Format_primary_plot_DpiChanged);
             this.tabPage2.ResumeLayout(false);
             this.axisY_Charge_grpBx.ResumeLayout(false);
             this.axisY_Charge_grpBx.PerformLayout();

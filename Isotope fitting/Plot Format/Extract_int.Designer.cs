@@ -132,7 +132,7 @@
             this.y_Box.Size = new System.Drawing.Size(40, 22);
             this.y_Box.KeyUp += new System.Windows.Forms.KeyEventHandler(this.y_Box_KeyUp);
             // 
-            // Form15
+            // Extract_int
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -145,11 +145,11 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(400, 200);
-            this.Name = "Form15";
+            this.Name = "Extract_int";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Extract Plot";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form15_DpiChanged);
-            this.Resize += new System.EventHandler(this.Form15_Resize);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Extract_int_DpiChanged);
+            this.Resize += new System.EventHandler(this.Extract_int_Resize);
             this.panel_frm11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);

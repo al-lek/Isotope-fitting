@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form13
+    partial class Format_int_plot
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form13));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Format_int_plot));
             this.bar_grpBox13 = new System.Windows.Forms.GroupBox();
             this.intLine_numUD13 = new System.Windows.Forms.NumericUpDown();
             this.line_width_Lbl13 = new System.Windows.Forms.Label();
@@ -612,7 +612,7 @@
             this.textBox1.TabIndex = 0;
             this.toolTip1.SetToolTip(this.textBox1, "Fill it with the numbers of the areas you want to be colored  e.g.1-3,6-8");
             // 
-            // Form13
+            // Format_int_plot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -624,12 +624,12 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form13";
+            this.Name = "Format_int_plot";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Properties";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form13_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Format_int_plot_DpiChanged);
             this.bar_grpBox13.ResumeLayout(false);
             this.bar_grpBox13.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.intLine_numUD13)).EndInit();

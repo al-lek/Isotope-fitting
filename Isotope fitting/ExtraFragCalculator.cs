@@ -65,7 +65,7 @@ namespace Isotope_fitting
         }
 
         #region Initialisation
-        private void Form9_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void ExtraFragCalculator_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }
@@ -167,9 +167,9 @@ namespace Isotope_fitting
             }
         }
 
-        private void ignore_ppm_form9_CheckedChanged(object sender, EventArgs e)
+        private void ignore_ppm_ExtraFragCalculator_CheckedChanged(object sender, EventArgs e)
         {
-            resolution_Box.Enabled = ignore_ppm_form9.Checked;
+            resolution_Box.Enabled = ignore_ppm_ExtraFragCalculator.Checked;
         }
         void thre_numUD_TextChanged(object sender, EventArgs e)
         {
@@ -380,7 +380,7 @@ namespace Isotope_fitting
             if (help) { MessageBox.Show("  ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
         }
 
-        private void ignore_ppm_form9_Click(object sender, EventArgs e)
+        private void ignore_ppm_ExtraFragCalculator_Click(object sender, EventArgs e)
         {
             if (help)
             {
@@ -587,7 +587,7 @@ namespace Isotope_fitting
                 {
                     all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                     last_plotted.Clear();
-                    frm2.recalc_frm9(count, last_plotted.Count);
+                    frm2.recalc_ExtraFragCalculator(count, last_plotted.Count);
                 }
                 //when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
                 //we don't want to refresh fragment trees in the basic form
@@ -671,7 +671,7 @@ namespace Isotope_fitting
                     int i = System.Convert.ToInt32(item.SubItems[5].Text);
                     double max_x =Fragments3[i].Profile.Last().X;
                     double min_x =Fragments3[i].Profile[0].X;
-                    frm2.zoom_to_frag_frm9(min_x, max_x);
+                    frm2.zoom_to_frag_ExtraFragCalculator(min_x, max_x);
                 }                
             }
 
@@ -709,7 +709,7 @@ namespace Isotope_fitting
             }
             factor_panel9.Visible = false;
             calc_Btn.Enabled = true;
-            //the basic algorithm with small changes for the specific form9
+            //the basic algorithm with small changes for the specific ExtraFragCalculator
             fragments_and_calculations_sequence_A_frm9();
         }
         private void fragments_and_calculations_sequence_A_frm9()
@@ -2129,7 +2129,7 @@ namespace Isotope_fitting
                     catch { }                   
                 }
             }
-            if (!fragment_is_canditate && !ignore_ppm_form9.Checked) { return false; }
+            if (!fragment_is_canditate && !ignore_ppm_ExtraFragCalculator.Checked) { return false; }
             if (fragment_is_canditate /*&& !frm2.is_exp_deconvoluted*/ &&!is_res_user_defined)
             {
                 chem.Resolution = (double)results.Average(p => p[1]);
@@ -2148,12 +2148,12 @@ namespace Isotope_fitting
                 }
             }                
             // Prog: Very important memory leak!!! Clear envelope and isopatern of unmatched fragments to reduce waste of memory DURING calculations!
-            if (!fragment_is_canditate && !ignore_ppm_form9.Checked) { return false; }
+            if (!fragment_is_canditate && !ignore_ppm_ExtraFragCalculator.Checked) { return false; }
             chem.PPM_Error = results.Average(p => p[0]);
             if (results.Count > 1) { chem.maxPPM_Error = results.Max(p => p[0]); chem.minPPM_Error = results.Min(p => p[0]); }
             else { chem.maxPPM_Error = 0.0; chem.minPPM_Error = 0.0; }
             if (fragment_is_canditate){add_fragment_to_Fragments3(chem, cen);}
-            else if (ignore_ppm_form9.Checked){add_fragment_to_Fragments3(chem, cen, false);}
+            else if (ignore_ppm_ExtraFragCalculator.Checked){add_fragment_to_Fragments3(chem, cen, false);}
             else{chem.Points.Clear(); chem.Profile.Clear(); chem.Centroid.Clear(); chem.Intensoid.Clear();}
             return fragment_is_canditate;
         }
@@ -2252,7 +2252,7 @@ namespace Isotope_fitting
             last_plotted.Clear();
             //important step otherwise when the user clicks another fragment from the new listview the algorithm will remove the last element of all_data in order to all the new fragment 
             first = true;
-            frm2.add_frag_frm9();
+            frm2.add_frag_from_ExtraFragCalculator();
             int count = 0;
             SortedSet<int> remove_codes_list = new SortedSet<int>();
             foreach (ListViewItem item in fragListView9.CheckedItems)
@@ -2312,7 +2312,7 @@ namespace Isotope_fitting
             }
             if (last_plotted.Count != 0 || count!=0)
             {
-                frm2.recalc_frm9(count, last_plotted.Count);
+                frm2.recalc_ExtraFragCalculator(count, last_plotted.Count);
             }
         }
         private void rem_Btn_Click(object sender, EventArgs e)
@@ -2330,7 +2330,7 @@ namespace Isotope_fitting
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-               if(recalc) frm2.recalc_frm9(count, last_plotted.Count);
+               if(recalc) frm2.recalc_ExtraFragCalculator(count, last_plotted.Count);
             }
         }
         #endregion
@@ -2491,7 +2491,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void Form9_FormClosing(object sender, FormClosingEventArgs e)
+        private void ExtraFragCalculator_FormClosing(object sender, FormClosingEventArgs e)
         {
             int count = last_plotted.Count;
             //when closing the form public data from this form are restored in their initial values
@@ -2500,11 +2500,8 @@ namespace Isotope_fitting
             {
                 all_data.RemoveRange(all_data.Count - last_plotted.Count, last_plotted.Count); custom_colors.RemoveRange(custom_colors.Count - last_plotted.Count, last_plotted.Count);
                 last_plotted.Clear();
-                frm2.recalc_frm9(count, last_plotted.Count);
-            }
-            ////when the form closes we refresh all_data , all_data_aligned etc... list anyway based on Fragments2 list
-            ////we don't want to refresh fragment trees in the basic form
-            //frm2.ending_frm9();
+                frm2.recalc_ExtraFragCalculator(count, last_plotted.Count);
+            }           
         }
 
       

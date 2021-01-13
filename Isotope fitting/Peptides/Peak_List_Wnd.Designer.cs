@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form5
+    partial class Peak_List_Wnd
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form5));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Peak_List_Wnd));
             this.peak_listView = new System.Windows.Forms.ListView();
             this.peak_xClmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.peak_yClmn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -88,7 +88,7 @@
             this.copyToClipboardToolStripMenuItem.Text = "Copy to Clipboard";
             this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
             // 
-            // Form5
+            // Peak_List_Wnd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -97,12 +97,12 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(350, 1000);
             this.MinimumSize = new System.Drawing.Size(350, 500);
-            this.Name = "Form5";
+            this.Name = "Peak_List_Wnd";
             this.Opacity = 0.85D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Peak Detection";
             this.TopMost = true;
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form5_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Peak_List_Wnd_DpiChanged);
             this.contextMenuStripCopy.ResumeLayout(false);
             this.ResumeLayout(false);
 

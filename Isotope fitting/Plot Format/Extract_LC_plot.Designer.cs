@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form20
+    partial class Extract_LC_plot
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form20));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Extract_LC_plot));
             this.toolStrip_frm11 = new System.Windows.Forms.ToolStrip();
             this.Save_Btn = new System.Windows.Forms.ToolStripButton();
             this.Copy_Btn = new System.Windows.Forms.ToolStripButton();
@@ -100,7 +100,7 @@
             this.panel_frm20.Size = new System.Drawing.Size(757, 450);
             this.panel_frm20.TabIndex = 29;
             // 
-            // Form20
+            // Extract_LC_plot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -109,11 +109,11 @@
             this.Controls.Add(this.panel_frm20);
             this.Controls.Add(this.toolStrip_frm11);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form20";
+            this.Name = "Extract_LC_plot";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Extract Plot";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form20_DpiChanged);
-            this.Resize += new System.EventHandler(this.Form20_Resize);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Extract_LC_plot_DpiChanged);
+            this.Resize += new System.EventHandler(this.Extract_LC_plot_Resize);
             this.toolStrip_frm11.ResumeLayout(false);
             this.toolStrip_frm11.PerformLayout();
             this.ResumeLayout(false);

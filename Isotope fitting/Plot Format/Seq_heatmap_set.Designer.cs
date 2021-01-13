@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form23
+    partial class Seq_heatmap_set
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form23));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Seq_heatmap_set));
             this.label1 = new System.Windows.Forms.Label();
             this.rgb_rdBtn = new System.Windows.Forms.RadioButton();
             this.hightColor_rdBtn = new System.Windows.Forms.RadioButton();
@@ -233,7 +233,7 @@
             this.hightlight_clr_Btn.Text = "Color";
             this.hightlight_clr_Btn.Click += new System.EventHandler(this.hightlight_clr_Btn_Click);
             // 
-            // Form23
+            // Seq_heatmap_set
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -255,7 +255,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form23";
+            this.Name = "Seq_heatmap_set";
             this.ShowInTaskbar = false;
             this.Text = "Heatmap options";
             ((System.ComponentModel.ISupportInitialize)(this.min_numUD)).EndInit();

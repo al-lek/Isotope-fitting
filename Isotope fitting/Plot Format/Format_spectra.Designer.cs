@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form10
+    partial class Format_spectra
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form10));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Format_spectra));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
@@ -1030,7 +1030,7 @@
             this.axisxtick_Lbl.TabIndex = 0;
             this.axisxtick_Lbl.Text = "Tick Marks";
             // 
-            // Form10
+            // Format_spectra
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -1038,12 +1038,12 @@
             this.ClientSize = new System.Drawing.Size(831, 324);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form10";
+            this.Name = "Format_spectra";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Format Plot Area : Style";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form10_FormClosing);
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form10_DpiChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Format_spectra_FormClosing);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Format_spectra_DpiChanged);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

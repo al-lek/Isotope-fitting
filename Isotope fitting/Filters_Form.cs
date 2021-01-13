@@ -334,7 +334,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        private void Form19_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Filters_Form_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }
@@ -343,7 +343,7 @@ namespace Isotope_fitting
         {
             if (help) { MessageBox.Show("Displays the 'Exclusion list' panel, where the user can set the ion types and indexes that will be excluded from the Fragment Calculation.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);  }
 
-            Form21 frm21 = new Form21(frm2);            
+            ExclusionList_Wnd frm21 = new ExclusionList_Wnd(frm2);            
             frm21.ShowDialog();
         }
       

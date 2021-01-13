@@ -75,16 +75,16 @@
             // 
             this.columnHeader4.Text = "k";
             // 
-            // Form_matrix
+            // IndexMatrix_Wnd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 553);
             this.Controls.Add(this.frag_listView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "Form_matrix";
+            this.Name = "IndexMatrix_Wnd";
             this.ShowIcon = false;
-            this.Text = "Form_matrix";
+            this.Text = "IndexMatrix_Wnd";
             this.ResumeLayout(false);
 
         }

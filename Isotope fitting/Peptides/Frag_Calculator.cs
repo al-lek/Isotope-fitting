@@ -15,13 +15,13 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form24 : Form
+    public partial class Frag_Calculator : Form
     {
         Form2 frm2;
         bool has_adduct = false;
         string extra_adduct = "";
         //ListBox temp_machine;
-        public Form24(Form2 f)
+        public Frag_Calculator(Form2 f)
         {
             frm2 = f;           
             InitializeComponent();
@@ -593,7 +593,7 @@ namespace Isotope_fitting
             un_check_all_checkboxes_ListBx(this, false);
         }
 
-        private void Form24_FormClosing(object sender, FormClosingEventArgs e)
+        private void Frag_Calculator_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {

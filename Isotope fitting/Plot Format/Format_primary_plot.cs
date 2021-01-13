@@ -13,10 +13,10 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form12 : Form
+    public partial class Format_primary_plot : Form
     {
         Form2 frm2;
-        public Form12(Form2 f,int tab)
+        public Format_primary_plot(Form2 f,int tab)
         {
             InitializeComponent();
             frm2 = f;
@@ -296,7 +296,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        private void Form12_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Format_primary_plot_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

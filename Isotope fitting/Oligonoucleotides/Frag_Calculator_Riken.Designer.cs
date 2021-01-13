@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form24_2
+    partial class Frag_Calculator_Riken
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24_2));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frag_Calculator_Riken));
             this.panel_calc = new System.Windows.Forms.Panel();
             this.aks_modifChk = new System.Windows.Forms.CheckBox();
             this.AdductBtn = new System.Windows.Forms.RadioButton();
@@ -719,7 +719,7 @@
             this.internal_Label.TabIndex = 33;
             this.internal_Label.Text = "internal";
             // 
-            // Form24_2
+            // Frag_Calculator_Riken
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -729,9 +729,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form24_2";
+            this.Name = "Frag_Calculator_Riken";
             this.Text = "Calculator";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form24_2_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Frag_Calculator_Riken_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.toolStrip_riken.ResumeLayout(false);

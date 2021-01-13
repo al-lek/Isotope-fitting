@@ -61,7 +61,7 @@ namespace Isotope_fitting
             Form2.ppmDi = (double)ppmDi_numUD.Value;
         }
 
-        private void Form7_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Fit_set_Form_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

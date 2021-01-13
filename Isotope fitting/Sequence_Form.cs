@@ -408,7 +408,7 @@ namespace Isotope_fitting
         }
         #endregion
                
-        private void Form16_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Sequence_Form_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

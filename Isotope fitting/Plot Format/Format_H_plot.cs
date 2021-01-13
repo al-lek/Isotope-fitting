@@ -12,10 +12,10 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {   
-    public partial class Form12_2 : Form
+    public partial class Format_H_plot : Form
     {
         Form2 frm2;
-        public Form12_2(Form2 f)
+        public Format_H_plot(Form2 f)
         {
             InitializeComponent();
             frm2 = f;

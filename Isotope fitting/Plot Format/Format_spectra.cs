@@ -13,10 +13,10 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form10 : Form
+    public partial class Format_spectra : Form
     {
         Form2 frm2;
-        public Form10(Form2 f)
+        public Format_spectra(Form2 f)
         {
             InitializeComponent();
             frm2 = f;
@@ -242,7 +242,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        private void Form10_FormClosing(object sender, FormClosingEventArgs e)
+        private void Format_spectra_FormClosing(object sender, FormClosingEventArgs e)
         {
             frm2.save_preferences();
         }
@@ -271,7 +271,7 @@ namespace Isotope_fitting
             frm2.oxy_changes();
         }
 
-        private void Form10_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Format_spectra_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

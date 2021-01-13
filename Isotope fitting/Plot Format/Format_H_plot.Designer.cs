@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form12_2
+    partial class Format_H_plot
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form12_2));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Format_H_plot));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.refresh_Btn = new System.Windows.Forms.ToolStripButton();
@@ -545,7 +545,7 @@
             this.panel1.Size = new System.Drawing.Size(290, 252);
             this.panel1.TabIndex = 29;
             // 
-            // Form12_2
+            // Format_H_plot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -554,7 +554,7 @@
             this.Controls.Add(this.units_grpBx12);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form12_2";
+            this.Name = "Format_H_plot";
             this.Text = "Properties";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

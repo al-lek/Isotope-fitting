@@ -44,19 +44,19 @@
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "";
             // 
-            // Form17
+            // Message_Window_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(548, 456);
             this.Controls.Add(this.textBox1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "Form17";
+            this.Name = "Message_Window_Form";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Calculation of di score ";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form17_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Message_Window_Form_DpiChanged);
             this.ResumeLayout(false);
 
         }

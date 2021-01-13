@@ -55,7 +55,7 @@ namespace Isotope_fitting
         }
 
 
-        private void Form15_Resize(object sender, EventArgs e)
+        private void Extract_int_Resize(object sender, EventArgs e)
         {
             if (!text)
             {
@@ -68,7 +68,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void Form15_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Extract_int_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

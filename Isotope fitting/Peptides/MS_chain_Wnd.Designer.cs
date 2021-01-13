@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form18
+    partial class MS_chain_Wnd
     {
         /// <summary>
         /// Required designer variable.
@@ -81,7 +81,7 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // Form18
+            //  MS_chain_Wnd
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -96,13 +96,13 @@
             this.Controls.Add(this.LightradioButton2);
             this.Controls.Add(this.HeavyradioButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form18";
+            this.Name = " MS_chain_Wnd";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MS file type";
             this.TopMost = true;
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form18_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.MS_chain_Wnd_DpiChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

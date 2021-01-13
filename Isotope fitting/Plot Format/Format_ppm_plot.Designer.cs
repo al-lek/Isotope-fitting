@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form22
+    partial class Format_ppm_plot
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form22));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Format_ppm_plot));
             this.axisX_Charge_grpBx = new System.Windows.Forms.GroupBox();
             this.end_valUD = new System.Windows.Forms.NumericUpDown();
             this.start_valUD = new System.Windows.Forms.NumericUpDown();
@@ -535,7 +535,7 @@
             this.label2.TabIndex = 26;
             this.label2.Text = "Point size factor";
             // 
-            // Form22
+            // Format_ppm_plot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -546,7 +546,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form22";
+            this.Name = "Format_ppm_plot";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Properties";

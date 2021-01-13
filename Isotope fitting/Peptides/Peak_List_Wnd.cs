@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form5 : Form
+    public partial class Peak_List_Wnd : Form
     {
         ListViewColumnSorter lvwColumnSorter;
 
-        public Form5()
+        public Peak_List_Wnd()
         {
             InitializeComponent();
             init_peak_listView();
@@ -76,7 +76,7 @@ namespace Isotope_fitting
             if (sb != null && sb.Length > 0) Clipboard.SetText(sb.ToString());
         }
 
-        private void Form5_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Peak_List_Wnd_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

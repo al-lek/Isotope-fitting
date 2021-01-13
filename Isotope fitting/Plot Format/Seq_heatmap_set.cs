@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form23 : Form
+    public partial class Seq_heatmap_set : Form
     {
         Form2 frm2;
         Color temp_highlight_color ;
-        public Form23(Form2 f)
+        public Seq_heatmap_set(Form2 f)
         {
             InitializeComponent();
             frm2 = f;

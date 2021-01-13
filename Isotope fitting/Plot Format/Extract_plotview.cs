@@ -86,7 +86,7 @@ namespace Isotope_fitting
                 if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
             }
         }
-        private void Form11_Resize(object sender, EventArgs e)
+        private void Extract_plotview_Resize(object sender, EventArgs e)
         {
             if (!text)
             {
@@ -99,7 +99,7 @@ namespace Isotope_fitting
             }
         }
 
-        private void Form11_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Extract_plotview_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

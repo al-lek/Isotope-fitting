@@ -163,7 +163,7 @@
             this.label2.TabIndex = 23;
             this.label2.Text = "max ppm Error for di εi calculation  ";
             // 
-            // Form7
+            // Fit_set_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -177,12 +177,12 @@
             this.Controls.Add(this.fitCover_lbl);
             this.Controls.Add(this.fitBunch_lbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form7";
+            this.Name = "Fit_set_Form";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fitting calculations";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form7_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Fit_set_Form_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.fitCover_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fitBunch_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppmDi_numUD)).EndInit();

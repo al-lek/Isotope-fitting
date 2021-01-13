@@ -726,7 +726,7 @@
             this.label11.TabIndex = 38;
             this.label11.Text = "sd\' ≤";
             // 
-            // Form6
+            // Fit_Filters_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -774,13 +774,13 @@
             this.Controls.Add(this.Ai_coef_numUD);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form6";
+            this.Name = "Fit_Filters_Form";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "\'Filter & Sort\' fitting results";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form6_FormClosing);
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form6_DpiChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Fit_Filters_Form_FormClosing);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Fit_Filters_Form_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.Ai_coef_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.A_coef_numUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

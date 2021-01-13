@@ -314,7 +314,7 @@
             this.save_decovBtn.ToolTipText = "Save Profile";
             this.save_decovBtn.Click += new System.EventHandler(this.save_decovBtn_Click);
             // 
-            // Form8
+            // Exp_set_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -323,12 +323,12 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form8";
+            this.Name = "Exp_set_Form";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Experimental Data Settings";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form8_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Exp_set_Form_DpiChanged);
             ((System.ComponentModel.ISupportInitialize)(this.minIntensity_numUD)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

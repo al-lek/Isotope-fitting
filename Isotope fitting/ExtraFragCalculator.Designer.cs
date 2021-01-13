@@ -38,7 +38,7 @@
             this.thre_numUD = new System.Windows.Forms.NumericUpDown();
             this.resolution_Box = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.ignore_ppm_form9 = new System.Windows.Forms.CheckBox();
+            this.ignore_ppm_ExtraFragCalculator = new System.Windows.Forms.CheckBox();
             this.FragCalc_TabControl = new System.Windows.Forms.TabControl();
             this.chemForm_tab = new System.Windows.Forms.TabPage();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
@@ -236,7 +236,7 @@
             this.panel_calc.Controls.Add(this.thre_numUD);
             this.panel_calc.Controls.Add(this.resolution_Box);
             this.panel_calc.Controls.Add(this.label1);
-            this.panel_calc.Controls.Add(this.ignore_ppm_form9);
+            this.panel_calc.Controls.Add(this.ignore_ppm_ExtraFragCalculator);
             this.panel_calc.Controls.Add(this.FragCalc_TabControl);
             this.panel_calc.Controls.Add(this.half_minus_rdBtn);
             this.panel_calc.Controls.Add(this.calc_param9Lbl);
@@ -348,22 +348,22 @@
             this.label1.Text = "Resolution";
             this.label1.Click += new System.EventHandler(this.res_label1_Click);
             // 
-            // ignore_ppm_form9
+            // ignore_ppm_ExtraFragCalculator
             // 
-            this.ignore_ppm_form9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ignore_ppm_form9.AutoSize = true;
-            this.ignore_ppm_form9.Checked = true;
-            this.ignore_ppm_form9.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ignore_ppm_form9.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.ignore_ppm_form9.Location = new System.Drawing.Point(190, 487);
-            this.ignore_ppm_form9.Name = "ignore_ppm_form9";
-            this.ignore_ppm_form9.Size = new System.Drawing.Size(78, 17);
-            this.ignore_ppm_form9.TabIndex = 58;
-            this.ignore_ppm_form9.Text = "ignore ppm";
-            this.toolTip1.SetToolTip(this.ignore_ppm_form9, "Show all fragments regardless of whether they within acceptable ppm bound");
-            this.ignore_ppm_form9.UseVisualStyleBackColor = true;
-            this.ignore_ppm_form9.CheckedChanged += new System.EventHandler(this.ignore_ppm_form9_CheckedChanged);
-            this.ignore_ppm_form9.Click += new System.EventHandler(this.ignore_ppm_form9_Click);
+            this.ignore_ppm_ExtraFragCalculator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ignore_ppm_ExtraFragCalculator.AutoSize = true;
+            this.ignore_ppm_ExtraFragCalculator.Checked = true;
+            this.ignore_ppm_ExtraFragCalculator.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ignore_ppm_ExtraFragCalculator.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.ignore_ppm_ExtraFragCalculator.Location = new System.Drawing.Point(190, 487);
+            this.ignore_ppm_ExtraFragCalculator.Name = "ignore_ppm_ExtraFragCalculator";
+            this.ignore_ppm_ExtraFragCalculator.Size = new System.Drawing.Size(78, 17);
+            this.ignore_ppm_ExtraFragCalculator.TabIndex = 58;
+            this.ignore_ppm_ExtraFragCalculator.Text = "ignore ppm";
+            this.toolTip1.SetToolTip(this.ignore_ppm_ExtraFragCalculator, "Show all fragments regardless of whether they within acceptable ppm bound");
+            this.ignore_ppm_ExtraFragCalculator.UseVisualStyleBackColor = true;
+            this.ignore_ppm_ExtraFragCalculator.CheckedChanged += new System.EventHandler(this.ignore_ppm_ExtraFragCalculator_CheckedChanged);
+            this.ignore_ppm_ExtraFragCalculator.Click += new System.EventHandler(this.ignore_ppm_ExtraFragCalculator_Click);
             // 
             // FragCalc_TabControl
             // 
@@ -2337,7 +2337,7 @@
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
             // 
-            // Form9
+            // ExtraFragCalculator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -2350,11 +2350,11 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(740, 700);
-            this.Name = "Form9";
+            this.Name = "ExtraFragCalculator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fragment Calculator";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form9_FormClosing);
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form9_DpiChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExtraFragCalculator_FormClosing);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.ExtraFragCalculator_DpiChanged);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.toolStrip6.ResumeLayout(false);
@@ -2467,7 +2467,7 @@
         private System.Windows.Forms.TextBox chemForm_txtBox;
         private System.Windows.Forms.TextBox ion_txtBox;
         private System.Windows.Forms.Label chem_ion_Lbl;
-        private System.Windows.Forms.CheckBox ignore_ppm_form9;
+        private System.Windows.Forms.CheckBox ignore_ppm_ExtraFragCalculator;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox resolution_Box;
         private System.Windows.Forms.ToolTip toolTip1;

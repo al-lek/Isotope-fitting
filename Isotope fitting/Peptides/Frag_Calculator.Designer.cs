@@ -1,6 +1,6 @@
 ﻿namespace Isotope_fitting
 {
-    partial class Form24
+    partial class Frag_Calculator
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form24));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frag_Calculator));
             this.panel_calc = new System.Windows.Forms.Panel();
             this.aks_modifChk = new System.Windows.Forms.CheckBox();
             this.AdductBtn = new System.Windows.Forms.RadioButton();
@@ -681,7 +681,7 @@
             this.frag_sort_Btn2.Text = "Filter";
             this.frag_sort_Btn2.Click += new System.EventHandler(this.frag_sort_Btn2_Click);
             // 
-            // Form24
+            // Frag_Calculator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -692,9 +692,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form24";
+            this.Name = "Frag_Calculator";
             this.Text = "Calculator";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form24_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Frag_Calculator_FormClosing);
             this.panel_calc.ResumeLayout(false);
             this.panel_calc.PerformLayout();
             this.toolStrip_basic.ResumeLayout(false);

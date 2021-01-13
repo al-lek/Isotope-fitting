@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form18 : Form
+    public partial class MS_chain_Wnd : Form
     {
         Form2 frm2;
-        public Form18(Form2 f)
+        public MS_chain_Wnd(Form2 f)
         {
             InitializeComponent();
             frm2 = f;
@@ -45,7 +45,7 @@ namespace Isotope_fitting
             this.Close();
         }
 
-        private void Form18_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void MS_chain_Wnd_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }

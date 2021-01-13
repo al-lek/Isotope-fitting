@@ -13,11 +13,11 @@ using static Isotope_fitting.Helpers;
 
 namespace Isotope_fitting
 {
-    public partial class Form21 : Form
+    public partial class ExclusionList_Wnd : Form
     {
         Form2 frm2;
         private ListViewItemComparer _lvwItemComparer;
-        public Form21(Form2 f)
+        public ExclusionList_Wnd(Form2 f)
         {
             frm2 = f;
             InitializeComponent();

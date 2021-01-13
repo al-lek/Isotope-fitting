@@ -990,7 +990,9 @@ namespace Isotope_fitting
             }
             return mono_mass;
         }
-
+        /// <summary>
+        ///Multiply the elements within () of a chemical formula. For example (CH)2 --> C2H2
+        /// </summary>
         public static string square_brackets_formula(string FORMULA)
         {
             if (FORMULA.Length == 0) { return FORMULA; }            
@@ -1135,7 +1137,9 @@ namespace Isotope_fitting
             }           
             return wordCount;
         }
-
+        /// <summary>
+        ///Check if a base loss -B() is possible for a certain ion. For example if an ion does not contain the base A it is not possoble to have a loss -B(A) 
+        /// </summary>
         public static bool check_ion_for_base(ChemiForm chem, string adduct, List<SequenceTab> TEMP_sequenceList)
         {
             if (TEMP_sequenceList == null || TEMP_sequenceList.Count == 0 || chem.Ion_type.Equals("B()") || chem.Ion_type.Contains("known MS2")) return false;
@@ -1166,10 +1170,13 @@ namespace Isotope_fitting
                 else return base_present;
             }
             else return base_present;
-            if (check_base(sub_ss, "A", chem.Ion_type, adduct) && check_base(sub_ss, "G", chem.Ion_type, adduct) && check_base(sub_ss, "T", chem.Ion_type, adduct)) base_present = true;
+            if (check_base_presence(sub_ss, "A", chem.Ion_type, adduct) && check_base_presence(sub_ss, "G", chem.Ion_type, adduct) && check_base_presence(sub_ss, "T", chem.Ion_type, adduct)) base_present = true;
             return base_present;
         }
-        public static bool check_base(string sub_ss, string base_s, string ion_type, string adduct)
+        /// <summary>
+        ///Check if a base is present in an ion's sequence 
+        /// </summary>
+        public static bool check_base_presence(string sub_ss, string base_s, string ion_type, string adduct)
         {
             int count = 0;
             int count_B = CountOccurenceswWithinString(sub_ss, base_s);
@@ -1179,6 +1186,9 @@ namespace Isotope_fitting
             if (count > count_B) return false;
             else return true;
         }
+        /// <summary>
+        ///Check if a ChemiForm chem1 fragment exists in the selRes list
+        /// </summary>
         public static bool check_duplicates_SelectedFragments(ChemiForm chem1, List<ChemiForm> selRes)
         {
             if (selRes.Count > 0)
@@ -1193,6 +1203,9 @@ namespace Isotope_fitting
             }
             return true;
         }
+        /// <summary>
+        ///Check if it is possible and calculate the modified ion 
+        /// </summary>
         public static ChemiForm check_adduct(out bool is_error, ChemiForm chem, string adduct, string deduct, string extra_name, bool has_Adduct, bool name = false,bool is_riken=false)
         {
             is_error = true;
@@ -1213,8 +1226,6 @@ namespace Isotope_fitting
                 last_chem.InputFormula = last_chem.PrintFormula = temp_chem.FinalFormula;
                 last_chem.Has_adduct = has_Adduct;
                 if (ion_adducts.Contains(last_chem.Ion_type)) { last_chem.Has_adduct = false; }
-                //last_chem.Mz = temp_chem.Mz;
-
                 if (name)
                 {
                     string new_type = temp_chem.Ion_type;
@@ -1236,7 +1247,9 @@ namespace Isotope_fitting
             }
             return null;
         }
-
+        /// <summary>
+        ///Remove empty spaces from the beginning and the ending of a string 
+        /// </summary>
         public static string remove_empty_spaces(string initial)
         {
             string final = "";            

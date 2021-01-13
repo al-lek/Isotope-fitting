@@ -114,7 +114,7 @@
             this.seq_Btn.Text = "Save Sequence";
             this.seq_Btn.Click += new System.EventHandler(this.seq_Btn_Click);
             // 
-            // Form16
+            // Sequence_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -125,10 +125,10 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(500, 445);
-            this.Name = "Form16";
+            this.Name = "Sequence_Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AA amino acid sequence Editor";
-            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Form16_DpiChanged);
+            this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.Sequence_Form_DpiChanged);
             this.seq_tabControl.ResumeLayout(false);
             this.seq_tab.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);

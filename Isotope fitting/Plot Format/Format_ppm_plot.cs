@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
-    public partial class Form22 : Form
+    public partial class Format_ppm_plot : Form
     {
         Form2 frm2;
-        public Form22(Form2 f)
+        public Format_ppm_plot(Form2 f)
         {
             InitializeComponent();
             frm2 = f;

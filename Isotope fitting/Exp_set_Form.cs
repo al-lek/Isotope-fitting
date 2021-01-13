@@ -26,7 +26,7 @@ namespace Isotope_fitting
         }
        
 
-        private void Form8_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void Exp_set_Form_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             this.PerformAutoScale();
         }
