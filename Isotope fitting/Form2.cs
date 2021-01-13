@@ -34,8 +34,6 @@ using Arction.WinForms.Charting.Annotations;
 using System.ComponentModel;
 using OxyPlot.Axes;
 using Newtonsoft.Json;
-//using IronPython.Hosting;
-//using Microsoft.Scripting.Hosting;
 
 namespace Isotope_fitting
 {   
@@ -12944,7 +12942,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region EXTRACT PLOTS
+        #region Extract plots
 
         #region extract ppm_plot
         private void extractPlotToolStripMenuItem9_Click(object sender, EventArgs e)
@@ -13457,7 +13455,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region PROJECT SAVE LOAD CLEAR
+        #region PROJECT save load clear
         #region clear
         private void clear_proj_Btn_Click(object sender, EventArgs e)
         {
