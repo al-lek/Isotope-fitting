@@ -13850,7 +13850,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region FORM 20 extract plot isoplot
+        #region Extract spectrum plot
         public void plotview_rebuild()
         {
             LightningChartUltimate temp_plot = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray };
@@ -14138,7 +14138,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region FORM 15 extract internal fragments plot
+        #region Extract internal fragments plot
         private void extractPlotToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             internal_panel_plotview_rebuild();
@@ -14197,7 +14197,7 @@ namespace Isotope_fitting
         }
         #endregion
 
-        #region extract primary fragments plot
+        #region Extract primary fragments plot
 
         private void extractPlotToolStripMenuItem3_Click(object sender, EventArgs e)
         {

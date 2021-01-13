@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
+    /// <summary>The window with the Peak List of the Experimental profile </summary>
     public partial class Peak_List_Wnd : Form
     {
         ListViewColumnSorter lvwColumnSorter;

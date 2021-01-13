@@ -168,13 +168,13 @@
     <Compile Include="ChangeStateForm.Designer.cs">
       <DependentUpon>ChangeStateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IsotopesInfo.cs" />
-    <Compile Include="ChemiForm.cs" />
-    <Compile Include="ExcludeTypes.cs" />
-    <Compile Include="IndexMatrix_Wnd.cs">
+    <Compile Include="3.Envipat_Calculations_Data\IsotopesInfo.cs" />
+    <Compile Include="3.Envipat_Calculations_Data\ChemiForm.cs" />
+    <Compile Include="2.Calculators\2.a.Peptides\ExcludeTypes.cs" />
+    <Compile Include="7.Sequence\IndexMatrix_Wnd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IndexMatrix_Wnd.Designer.cs">
+    <Compile Include="7.Sequence\IndexMatrix_Wnd.Designer.cs">
       <DependentUpon>IndexMatrix_Wnd.cs</DependentUpon>
     </Compile>
     <Compile Include="Ion_types_Form.cs">
@@ -183,59 +183,59 @@
     <Compile Include="Ion_types_Form.Designer.cs">
       <DependentUpon>Ion_types_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Frag_properties.cs">
+    <Compile Include="5.FragList+Filters\Frag_properties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Frag_properties.Designer.cs">
+    <Compile Include="5.FragList+Filters\Frag_properties.Designer.cs">
       <DependentUpon>Frag_properties.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers.cs" />
-    <Compile Include="Oligonoucleotides\Frag_Calculator_Riken.cs">
+    <Compile Include="2.Calculators\2.b.Oligonoucleotides\Frag_Calculator_Riken.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Oligonoucleotides\Frag_Calculator_Riken.Designer.cs">
+    <Compile Include="2.Calculators\2.b.Oligonoucleotides\Frag_Calculator_Riken.Designer.cs">
       <DependentUpon>Frag_Calculator_Riken.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Format_spectra.cs">
+    <Compile Include="6.Plot Format\Format_spectra.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Format_spectra.Designer.cs">
+    <Compile Include="6.Plot Format\Format_spectra.Designer.cs">
       <DependentUpon>Format_spectra.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Extract_plotview.cs">
+    <Compile Include="6.Plot Format\Extract_plotview.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Extract_plotview.Designer.cs">
+    <Compile Include="6.Plot Format\Extract_plotview.Designer.cs">
       <DependentUpon>Extract_plotview.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Format_primary_plot.cs">
+    <Compile Include="6.Plot Format\Format_primary_plot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Format_primary_plot.Designer.cs">
+    <Compile Include="6.Plot Format\Format_primary_plot.Designer.cs">
       <DependentUpon>Format_primary_plot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Format_H_plot.cs">
+    <Compile Include="6.Plot Format\Format_H_plot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Format_H_plot.Designer.cs">
+    <Compile Include="6.Plot Format\Format_H_plot.Designer.cs">
       <DependentUpon>Format_H_plot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Format_int_plot.cs">
+    <Compile Include="6.Plot Format\Format_int_plot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Format_int_plot.Designer.cs">
+    <Compile Include="6.Plot Format\Format_int_plot.Designer.cs">
       <DependentUpon>Format_int_plot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Extract_int.cs">
+    <Compile Include="6.Plot Format\Extract_int.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Extract_int.Designer.cs">
+    <Compile Include="6.Plot Format\Extract_int.Designer.cs">
       <DependentUpon>Extract_int.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sequence_Form.cs">
+    <Compile Include="7.Sequence\Sequence_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Sequence_Form.Designer.cs">
+    <Compile Include="7.Sequence\Sequence_Form.Designer.cs">
       <DependentUpon>Sequence_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Message_Window_Form.cs">
@@ -244,16 +244,16 @@
     <Compile Include="Message_Window_Form.Designer.cs">
       <DependentUpon>Message_Window_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Peptides\MS_chain_Wnd.cs">
+    <Compile Include="2.Calculators\2.a.Peptides\MS_chain_Wnd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Peptides\MS_chain_Wnd.Designer.cs">
+    <Compile Include="2.Calculators\2.a.Peptides\MS_chain_Wnd.Designer.cs">
       <DependentUpon>MS_chain_Wnd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Filters_Form.cs">
+    <Compile Include="5.FragList+Filters\Filters_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Filters_Form.Designer.cs">
+    <Compile Include="5.FragList+Filters\Filters_Form.Designer.cs">
       <DependentUpon>Filters_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Form2.cs">
@@ -262,64 +262,64 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Extract_LC_plot.cs">
+    <Compile Include="6.Plot Format\Extract_LC_plot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Extract_LC_plot.Designer.cs">
+    <Compile Include="6.Plot Format\Extract_LC_plot.Designer.cs">
       <DependentUpon>Extract_LC_plot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Peptides\ExclusionList_Wnd.cs">
+    <Compile Include="2.Calculators\2.a.Peptides\ExclusionList_Wnd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Peptides\ExclusionList_Wnd.Designer.cs">
+    <Compile Include="2.Calculators\2.a.Peptides\ExclusionList_Wnd.Designer.cs">
       <DependentUpon>ExclusionList_Wnd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Format_ppm_plot.cs">
+    <Compile Include="6.Plot Format\Format_ppm_plot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Format_ppm_plot.Designer.cs">
+    <Compile Include="6.Plot Format\Format_ppm_plot.Designer.cs">
       <DependentUpon>Format_ppm_plot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plot Format\Seq_heatmap_set.cs">
+    <Compile Include="6.Plot Format\Seq_heatmap_set.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plot Format\Seq_heatmap_set.Designer.cs">
+    <Compile Include="6.Plot Format\Seq_heatmap_set.Designer.cs">
       <DependentUpon>Seq_heatmap_set.cs</DependentUpon>
     </Compile>
-    <Compile Include="Peptides\Frag_Calculator.cs">
+    <Compile Include="2.Calculators\2.a.Peptides\Frag_Calculator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Peptides\Frag_Calculator.Designer.cs">
+    <Compile Include="2.Calculators\2.a.Peptides\Frag_Calculator.Designer.cs">
       <DependentUpon>Frag_Calculator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Peptides\Peak_List_Wnd.cs">
+    <Compile Include="1.Experimental\Peak_List_Wnd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Peptides\Peak_List_Wnd.Designer.cs">
+    <Compile Include="1.Experimental\Peak_List_Wnd.Designer.cs">
       <DependentUpon>Peak_List_Wnd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fit_Filters_Form.cs">
+    <Compile Include="4.Fitting\Fit_Filters_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fit_Filters_Form.Designer.cs">
+    <Compile Include="4.Fitting\Fit_Filters_Form.Designer.cs">
       <DependentUpon>Fit_Filters_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fit_set_Form.cs">
+    <Compile Include="4.Fitting\Fit_set_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fit_set_Form.Designer.cs">
+    <Compile Include="4.Fitting\Fit_set_Form.Designer.cs">
       <DependentUpon>Fit_set_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Exp_set_Form.cs">
+    <Compile Include="1.Experimental\Exp_set_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Exp_set_Form.Designer.cs">
+    <Compile Include="1.Experimental\Exp_set_Form.Designer.cs">
       <DependentUpon>Exp_set_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExtraFragCalculator.cs">
+    <Compile Include="2.Calculators\ExtraFragCalculator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExtraFragCalculator.Designer.cs">
+    <Compile Include="2.Calculators\ExtraFragCalculator.Designer.cs">
       <DependentUpon>ExtraFragCalculator.cs</DependentUpon>
     </Compile>
     <Compile Include="FragForm.cs" />
@@ -327,84 +327,84 @@
     <Compile Include="ppm_area.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resolution_List.cs" />
-    <Compile Include="SequenceTab.cs" />
+    <Compile Include="3.Envipat_Calculations_Data\Resolution_List.cs" />
+    <Compile Include="7.Sequence\SequenceTab.cs" />
     <EmbeddedResource Include="ChangeStateForm.resx">
       <DependentUpon>ChangeStateForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IndexMatrix_Wnd.resx">
+    <EmbeddedResource Include="7.Sequence\IndexMatrix_Wnd.resx">
       <DependentUpon>IndexMatrix_Wnd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ion_types_Form.resx">
       <DependentUpon>Ion_types_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Frag_properties.resx">
+    <EmbeddedResource Include="5.FragList+Filters\Frag_properties.resx">
       <DependentUpon>Frag_properties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Oligonoucleotides\Frag_Calculator_Riken.resx">
+    <EmbeddedResource Include="2.Calculators\2.b.Oligonoucleotides\Frag_Calculator_Riken.resx">
       <DependentUpon>Frag_Calculator_Riken.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Format_spectra.resx">
+    <EmbeddedResource Include="6.Plot Format\Format_spectra.resx">
       <DependentUpon>Format_spectra.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Extract_plotview.resx">
+    <EmbeddedResource Include="6.Plot Format\Extract_plotview.resx">
       <DependentUpon>Extract_plotview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Format_primary_plot.resx">
+    <EmbeddedResource Include="6.Plot Format\Format_primary_plot.resx">
       <DependentUpon>Format_primary_plot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Format_H_plot.resx">
+    <EmbeddedResource Include="6.Plot Format\Format_H_plot.resx">
       <DependentUpon>Format_H_plot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Format_int_plot.resx">
+    <EmbeddedResource Include="6.Plot Format\Format_int_plot.resx">
       <DependentUpon>Format_int_plot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Extract_int.resx">
+    <EmbeddedResource Include="6.Plot Format\Extract_int.resx">
       <DependentUpon>Extract_int.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sequence_Form.resx">
+    <EmbeddedResource Include="7.Sequence\Sequence_Form.resx">
       <DependentUpon>Sequence_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Message_Window_Form.resx">
       <DependentUpon>Message_Window_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\MS_chain_Wnd.resx">
+    <EmbeddedResource Include="2.Calculators\2.a.Peptides\MS_chain_Wnd.resx">
       <DependentUpon>MS_chain_Wnd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Filters_Form.resx">
+    <EmbeddedResource Include="5.FragList+Filters\Filters_Form.resx">
       <DependentUpon>Filters_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Extract_LC_plot.resx">
+    <EmbeddedResource Include="6.Plot Format\Extract_LC_plot.resx">
       <DependentUpon>Extract_LC_plot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\ExclusionList_Wnd.resx">
+    <EmbeddedResource Include="2.Calculators\2.a.Peptides\ExclusionList_Wnd.resx">
       <DependentUpon>ExclusionList_Wnd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Format_ppm_plot.resx">
+    <EmbeddedResource Include="6.Plot Format\Format_ppm_plot.resx">
       <DependentUpon>Format_ppm_plot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plot Format\Seq_heatmap_set.resx">
+    <EmbeddedResource Include="6.Plot Format\Seq_heatmap_set.resx">
       <DependentUpon>Seq_heatmap_set.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\Frag_Calculator.resx">
+    <EmbeddedResource Include="2.Calculators\2.a.Peptides\Frag_Calculator.resx">
       <DependentUpon>Frag_Calculator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Peptides\Peak_List_Wnd.resx">
+    <EmbeddedResource Include="1.Experimental\Peak_List_Wnd.resx">
       <DependentUpon>Peak_List_Wnd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fit_Filters_Form.resx">
+    <EmbeddedResource Include="4.Fitting\Fit_Filters_Form.resx">
       <DependentUpon>Fit_Filters_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fit_set_Form.resx">
+    <EmbeddedResource Include="4.Fitting\Fit_set_Form.resx">
       <DependentUpon>Fit_set_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Exp_set_Form.resx">
+    <EmbeddedResource Include="1.Experimental\Exp_set_Form.resx">
       <DependentUpon>Exp_set_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExtraFragCalculator.resx">
+    <EmbeddedResource Include="2.Calculators\ExtraFragCalculator.resx">
       <DependentUpon>ExtraFragCalculator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace Isotope_fitting
 {
+    /// <summary>A window through which the user selects the sequence chain type (heavy, light) of the sequence related to the loaded MS Product Fragment List </summary>
     public partial class MS_chain_Wnd : Form
     {
         Form2 frm2;
@@ -17,9 +18,7 @@ namespace Isotope_fitting
         {
             InitializeComponent();
             frm2 = f;
-        }
-
-       
+        }      
 
         private void button2_Click(object sender, EventArgs e)
         {

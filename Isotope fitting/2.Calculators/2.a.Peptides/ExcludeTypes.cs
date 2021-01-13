@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Isotope_fitting
 {
+    /// <summary> Contains which ion types will be excluded from the Fragment List [User Defined-->see Peptides\ExclusionList_Wnd.cs] </summary>
     public class ExcludeTypes
     {
         private List<int[]> index1;
