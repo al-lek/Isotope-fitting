@@ -24,7 +24,19 @@ namespace Isotope_fitting
         private string extension;
         private int chain_type;
         private bool has_adduct;
+        private string modif_formula;
+        private string modif_name;
 
+        public string Modif_formula
+        {
+            get { return this.modif_formula; }
+            set { this.modif_formula = value; }
+        }
+        public string Modif_name
+        {
+            get { return this.modif_name; }
+            set { this.modif_name = value; }
+        }
         public Color Color
         {
             get { return this.color; }

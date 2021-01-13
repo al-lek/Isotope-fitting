@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Isotope_fitting
 {
+    /// <summary> The Class used to store the input parameters that will be passed as inputs in the Ultimate Fragmentor </summary>
     public class Calculator_input
     {
         //for Ultimate Fragmentor
