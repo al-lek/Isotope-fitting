@@ -34,6 +34,8 @@ namespace Isotope_fitting
                 Ion_type = fra.Ion_type,
                 Has_adduct = fra.Has_adduct,
                 Fixed = fra.Fixed,
+                Modif_name=fra.Modif_name,
+                Modif_formula=fra.Modif_formula
             };
             initialize_List(initial_fra);
         }
@@ -46,6 +48,9 @@ namespace Isotope_fitting
             label5.Text = "Index in AA sequence \n(count from left)";
             label6.Text = "Saved";
             label7.Text = "Modified";
+            label8.Text = "Modification";
+            label9.Text = "Modification\nChemical Formula";
+
         }
         private void initialize_List(FragForm fra)
         {
@@ -56,6 +61,8 @@ namespace Isotope_fitting
             textBox5.Text = fra.SortIdx.ToString();
             checkBox1.Checked = fra.Fixed;
             checkBox2.Checked = fra.Has_adduct;
+            textBox6.Text = fra.Modif_name.ToString();
+            textBox7.Text = fra.Modif_formula.ToString();
         }
 
         private void save_Btn_Click(object sender, EventArgs e)
@@ -76,7 +83,9 @@ namespace Isotope_fitting
                 SortIdx = indexsort,
                 Ion_type = textBox2.Text.ToString(),
                 Has_adduct = checkBox2.Checked,
-                Fixed = checkBox1.Checked
+                Fixed = checkBox1.Checked,
+                Modif_name = textBox6.Text.ToString(),
+                Modif_formula = textBox7.Text.ToString()
             };
             frm2.change_Fragment(initial_fra, index_list);
         }

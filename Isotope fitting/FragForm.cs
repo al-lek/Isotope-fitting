@@ -44,6 +44,7 @@ namespace Isotope_fitting
         private bool has_adduct;
         private string modif_formula;
         private string modif_name;
+       
         public string Modif_formula
         {
             get { return this.modif_formula; }

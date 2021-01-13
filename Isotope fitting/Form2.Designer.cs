@@ -709,7 +709,7 @@ namespace Isotope_fitting
             this.delele_sequencePnl2.TabIndex = 13;
             this.toolTip1.SetToolTip(this.delele_sequencePnl2, "Delete");
             this.delele_sequencePnl2.UseVisualStyleBackColor = true;
-            this.delele_sequencePnl2.Click += new System.EventHandler(this.delele_sequencePnl2_Click);
+            this.delele_sequencePnl2.Click += new System.EventHandler(this.delete_sequencePnl2_Click);
             // 
             // delele_sequencePnl1
             // 
@@ -723,7 +723,7 @@ namespace Isotope_fitting
             this.delele_sequencePnl1.TabIndex = 14;
             this.toolTip1.SetToolTip(this.delele_sequencePnl1, "Delete ");
             this.delele_sequencePnl1.UseVisualStyleBackColor = true;
-            this.delele_sequencePnl1.Click += new System.EventHandler(this.delele_sequencePnl1_Click);
+            this.delele_sequencePnl1.Click += new System.EventHandler(this.delete_sequencePnl1_Click);
             // 
             // add_sequencePanel1
             // 
