@@ -23,6 +23,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using static alglib;
 using System.Runtime.InteropServices;
 using static Isotope_fitting.Helpers;
+using Isotope_fitting._2.Calculators._2.a.Peptides;
 
 using Arction.WinForms.Charting;
 using Arction.WinForms.Charting.Axes;
@@ -41,9 +42,16 @@ namespace Isotope_fitting
     {
         #region parameters
         /// <summary> A public color dialog in order to "rememeber" the new colors that the user has created </summary>
-        public static ColorDialog clrDlg = new ColorDialog();       
+        public static ColorDialog clrDlg = new ColorDialog();
 
         #region parameters TAB FIT
+        /// <summary>
+        /// Ultimate Fragmentor Calculator Form
+        /// </summary>
+        private UltimateFragmentorCalc ufc_frm;
+        /// <summary>
+        ///  Declaration of the normal Frag Calculator Form
+        /// </summary>
         private Frag_Calculator frm24;
         private Frag_Calculator_Riken frm24_2;
         /// <summary>Indicates whether "Help" button is checked </summary> 
@@ -14548,8 +14556,33 @@ namespace Isotope_fitting
             }
             else { return; }
         }
-    
+
         #endregion
 
+        #region Ultimate Fragmentor Calculator Button
+        private void ultFragCalc_Btn_Click(object sender, EventArgs e)
+        {
+            if (help_Btn.Checked) { MessageBox.Show("Opens the Ultimate Fragmentor calculator panel.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            if(is_riken)
+            {
+                MessageBox.Show("Ultimate Fragmentor is not available for Riken files yet!", "Feature Not Available", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                if (ufc_frm != null)
+                {
+                    if (!ufc_frm.Visible) ufc_frm.Show();
+                    else ufc_frm.BringToFront();
+                }
+                else
+                {
+                    ufc_frm = new UltimateFragmentorCalc(this);
+                    ufc_frm.ShowDialog();
+                }
+            }
+
+        }
+
+        #endregion
     }
 }

@@ -513,6 +513,7 @@ namespace Isotope_fitting
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
+            this.ultFragCalc_Btn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -4276,7 +4277,8 @@ namespace Isotope_fitting
             this.loadMS_Btn,
             this.ProfCalc_Btn,
             this.plotFragProf_chkBox,
-            this.plotFragCent_chkBox});
+            this.plotFragCent_chkBox,
+            this.ultFragCalc_Btn});
             this.theoretical_toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.theoretical_toolStrip.Location = new System.Drawing.Point(3, 19);
             this.theoretical_toolStrip.Name = "theoretical_toolStrip";
@@ -6248,6 +6250,19 @@ namespace Isotope_fitting
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
             // 
+            // ultFragCalc_Btn
+            // 
+            this.ultFragCalc_Btn.BackColor = System.Drawing.Color.Transparent;
+            this.ultFragCalc_Btn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ultFragCalc_Btn.ForeColor = System.Drawing.Color.SteelBlue;
+            this.ultFragCalc_Btn.Image = ((System.Drawing.Image)(resources.GetObject("ultFragCalc_Btn.Image")));
+            this.ultFragCalc_Btn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ultFragCalc_Btn.Name = "ultFragCalc_Btn";
+            this.ultFragCalc_Btn.Size = new System.Drawing.Size(34, 34);
+            this.ultFragCalc_Btn.Text = "toolStripButton3";
+            this.ultFragCalc_Btn.ToolTipText = "Ultimate Fragmentor";
+            this.ultFragCalc_Btn.Click += new System.EventHandler(this.ultFragCalc_Btn_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6918,5 +6933,6 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton seq_primary_chkBx;
         private System.Windows.Forms.ToolStripButton seq_has_adduct_chkBx;
         private System.Windows.Forms.ToolStripMenuItem loadUltimateFragmentorFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton ultFragCalc_Btn;
     }
 }
