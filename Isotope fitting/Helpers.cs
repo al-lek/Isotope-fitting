@@ -1215,7 +1215,7 @@ namespace Isotope_fitting
                 temp_chem.Adduct = adduct; temp_chem.Deduct = deduct;
                 ChemiForm.CheckChem(temp_chem);
             }
-            catch (Exception eee) { return null; }
+            catch (Exception e) { return null; }
             if (!temp_chem.Error)
             {
                 List<string> ion_adducts = new List<string>() {"a-NH3","b-NH3","b-H2O","b+H2O","y-NH3","y-H2O","b-2NH3","b-2H2O","y-2NH3","y-2H2O","b-N2H6","b-H4O2","y-N2H6","y-H4O2","b-2(NH3)","b-2(H2O)","y-2(NH3)","y-2(H2O)","b-(NH3)2","b-(H2O)2","y-(NH3)2","y-(H2O)2","b-H2O-NH3","b-NH3-H2O",

@@ -8847,6 +8847,7 @@ namespace Isotope_fitting
             CloseAllOpenForm("Form2");
             if (frm24_2 != null) { frm24_2 = null; }
             if (frm24 != null) { frm24 = null; }
+            if (ufc_frm != null) { ufc_frm = null; }
             MSproduct_treeView.Visible = false;
             is_exp_deconvoluted = false;
             labels_checked.Clear();
@@ -14563,6 +14564,7 @@ namespace Isotope_fitting
         private void ultFragCalc_Btn_Click(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("Opens the Ultimate Fragmentor calculator panel.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            if (this.sequenceList.Count == 0) { MessageBox.Show("You must first enter a valid amino-acid sequence!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             if(is_riken)
             {
                 MessageBox.Show("Ultimate Fragmentor is not available for Riken files yet!", "Feature Not Available", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -14577,10 +14579,19 @@ namespace Isotope_fitting
                 else
                 {
                     ufc_frm = new UltimateFragmentorCalc(this);
-                    ufc_frm.ShowDialog();
+                    ufc_frm.FormClosed += instanceHasBeenClosed;
+                    // UltimateFragmentorCalc ufc_frm = new UltimateFragmentorCalc(this);
+                    ufc_frm.Show();
                 }
+
+                
             }
 
+        }
+
+        private void instanceHasBeenClosed(object sender, FormClosedEventArgs e)
+        {
+            ufc_frm = null;
         }
 
         #endregion
