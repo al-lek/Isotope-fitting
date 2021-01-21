@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -19,6 +20,12 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
 {
     public partial class UltimateFragmentorCalc : Form
     {
+        private bool isModLoaded = false;
+        private bool isElemLoaded = false;
+        private bool isScLoaded = false;
+        private List<CheckBox> ionBoxes { get; set; }
+        public string folderPath { get; set; }
+
         Form2 frm2;
         public UltimateFragmentorCalc(Form2 f)
         {
@@ -29,7 +36,7 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
             seqTxt.Text = frm2.sequenceList[0].Sequence;
             allMods.Sorting = SortOrder.Ascending;
 
-            List<CheckBox> ionBoxes = new List<CheckBox>
+            ionBoxes = new List<CheckBox>
             {
                 aChkBox,
                 bChkBox,
@@ -93,8 +100,6 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
             FolderBrowserDialog ufLoader = new FolderBrowserDialog();
             ufLoader.Description = "Select the Ultimate Fragmentor folder.";
 
-            string folderPath;
-
             if (ufLoader.ShowDialog() != DialogResult.Cancel)
             {
                 folderPath = ufLoader.SelectedPath;
@@ -122,9 +127,11 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
 
                         allMods.Items.Add(item);
 
-                        modsList.Items.Add(kv.Value.description);
+                        modsList.Items.Add(kv.Key);
 
                     }
+
+                    isModLoaded = true;
                     #endregion
 
                     #region Elements Loader
@@ -142,6 +149,8 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
 
                         elemList.Items.Add(item);
                     }
+
+                    isElemLoaded = true;
 
                     #endregion
 
@@ -167,6 +176,8 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
                         scList.Items.Add(item);
 
                     }
+
+                    isScLoaded = true;
 
                     #endregion
                 }
@@ -215,7 +226,7 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
 
                             allMods.Items.Add(item);
 
-                            modsList.Items.Add(kv.Value.description);
+                            modsList.Items.Add(kv.Key);
                                                        
                         }
                        
@@ -452,7 +463,7 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
         }
         #endregion
 
-        #region Modifications Base Class
+        #region Modifications Base Classes
 
         public class Mod
         {
@@ -463,6 +474,12 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
             public string affect_position { get; set; }
             public string description { get; set; }
 
+        }
+
+        public class ModType
+        {
+            public string name { get; set; }
+            public Mod mod { get; set; }
         }
 
         #endregion
@@ -498,7 +515,145 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
         }
         #endregion
 
+        #region Calculator Button Usage
         
+        private bool checkFiles()
+        {
+            bool everythingOK = false;
+            if (isModLoaded && isElemLoaded && isScLoaded)
+            {
+                everythingOK = true;
+            }
+            return everythingOK;
+        }
+
+        private string inputTabToJSON()
+        {
+            List<string> selMods = new List<string>();
+            List<string> selIons = new List<string>();
+
+            selMods = getCheckedItems();
+            selIons = getCheckedIons();
+
+            InputFormat inp = new InputFormat
+            {
+                sequence = seqTxt.Text,
+                modifications = selMods.ToArray(),
+                charge_max = int.Parse(cMaxTxt.Text),
+                charge_min = int.Parse(cMinTxt.Text),
+                ions_series = selIons.ToArray(),
+                output_csv_file = "out.csv" +
+                ""
+
+            };
+
+            string output = JsonConvert.SerializeObject(inp);            
+
+            return output;
+        }
+
+        private List<string> getCheckedItems()
+        {
+            List<string> chked = new List<string>();
+
+            try
+            {
+                if (modsList.CheckedItems.Count == 0)
+                {
+                    MessageBox.Show("You have selected no modifications. Are you sure you want to proceed with the calculation?", "Warning!",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                }
+
+                foreach(var modChecked in modsList.CheckedItems)
+                {
+                    chked.Add(modChecked.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An exception occured: " + ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+            return chked;
+        }
+
+        private List<string> getCheckedIons()
+        {
+            List<string> ions = new List<string>();
+
+            foreach(var chkbox in ionBoxes)
+            {
+                if (chkbox.Checked)
+                {
+                    ions.Add(chkbox.Text);
+                }
+            }
+
+            return ions;
+        }
+
+        private void calc_Btn_Click(object sender, EventArgs e)
+        {
+            bool allOK = checkFiles();
+
+            if (allOK)
+            {
+                string json = inputTabToJSON();
+                System.Diagnostics.Debug.WriteLine(json);
+
+                runUltFrag();
+
+                string csvPath = folderPath + Path.DirectorySeparatorChar + "out.csv";
+                frm2.read_csv_and_Calculate(csvPath, true);
+            }
+            else
+            {
+                MessageBox.Show("You must first load the Ultimate Fragmentor folder!", "Ultimate Fragmentor not loaded!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public class InputFormat
+        {
+            public string sequence { get; set; }
+            public string[] modifications { get; set; }
+            public int charge_max { get; set; }
+            public int charge_min { get; set; }
+            public string[]  ions_series { get; set; }
+            public string output_csv_file = "ult_frag.csv";
+        }
+        #endregion
+
+        #region Run Ultimate Fragmentor
+        
+        private void runUltFrag()
+        {
+            try
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = "cmd.exe";
+                proc.StartInfo.CreateNoWindow = false;
+                proc.StartInfo.RedirectStandardInput = true;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.UseShellExecute = false;
+                proc.Start();
+
+                proc.StandardInput.WriteLine("powershell");
+                proc.StandardInput.WriteLine("cd " + folderPath + Path.DirectorySeparatorChar + "dist");
+                proc.StandardInput.WriteLine("./ultimate_fragmentor.exe");
+                proc.StandardInput.Flush();
+                proc.StandardInput.Close();
+                proc.WaitForExit();
+
+                MessageBox.Show("The selected calculation has been completed successfully.", "Calculation Complete", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("An exception has occured: " + e.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        
+        #endregion
     }
 
 

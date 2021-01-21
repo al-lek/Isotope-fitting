@@ -33,8 +33,16 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.input_Tab = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.loadUltfrag = new System.Windows.Forms.Button();
+            this.seqTxt = new System.Windows.Forms.TextBox();
+            this.xChkBox = new System.Windows.Forms.CheckBox();
+            this.yChkBox = new System.Windows.Forms.CheckBox();
+            this.zChkBox = new System.Windows.Forms.CheckBox();
+            this.cChkBox = new System.Windows.Forms.CheckBox();
+            this.bChkBox = new System.Windows.Forms.CheckBox();
+            this.aChkBox = new System.Windows.Forms.CheckBox();
+            this.cMinTxt = new System.Windows.Forms.TextBox();
+            this.cMaxTxt = new System.Windows.Forms.TextBox();
             this.modsList = new System.Windows.Forms.CheckedListBox();
             this.mods = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -79,14 +87,6 @@
             this.gammaSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.deltaSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.epsSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.seqTxt = new System.Windows.Forms.TextBox();
-            this.aChkBox = new System.Windows.Forms.CheckBox();
-            this.xChkBox = new System.Windows.Forms.CheckBox();
-            this.yChkBox = new System.Windows.Forms.CheckBox();
-            this.zChkBox = new System.Windows.Forms.CheckBox();
-            this.cChkBox = new System.Windows.Forms.CheckBox();
-            this.bChkBox = new System.Windows.Forms.CheckBox();
-            this.loadUltfrag = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.input_Tab.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -103,6 +103,7 @@
             this.calc_Btn.TabIndex = 1;
             this.calc_Btn.Text = "Calculate";
             this.calc_Btn.UseVisualStyleBackColor = true;
+            this.calc_Btn.Click += new System.EventHandler(this.calc_Btn_Click);
             // 
             // tabControl1
             // 
@@ -143,8 +144,8 @@
             this.groupBox1.Controls.Add(this.cChkBox);
             this.groupBox1.Controls.Add(this.bChkBox);
             this.groupBox1.Controls.Add(this.aChkBox);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.cMinTxt);
+            this.groupBox1.Controls.Add(this.cMaxTxt);
             this.groupBox1.Controls.Add(this.modsList);
             this.groupBox1.Controls.Add(this.calc_Btn);
             this.groupBox1.Controls.Add(this.mods);
@@ -159,19 +160,97 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fields for the Ultimate Fragmentor input.json";
             // 
-            // textBox2
+            // loadUltfrag
             // 
-            this.textBox2.Location = new System.Drawing.Point(116, 256);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 12;
+            this.loadUltfrag.Location = new System.Drawing.Point(466, 408);
+            this.loadUltfrag.Name = "loadUltfrag";
+            this.loadUltfrag.Size = new System.Drawing.Size(147, 23);
+            this.loadUltfrag.TabIndex = 20;
+            this.loadUltfrag.Text = "Load Ultimate Fragmentor";
+            this.loadUltfrag.UseVisualStyleBackColor = true;
+            this.loadUltfrag.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
+            // seqTxt
             // 
-            this.textBox1.Location = new System.Drawing.Point(116, 223);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 11;
+            this.seqTxt.Location = new System.Drawing.Point(116, 38);
+            this.seqTxt.Multiline = true;
+            this.seqTxt.Name = "seqTxt";
+            this.seqTxt.Size = new System.Drawing.Size(497, 48);
+            this.seqTxt.TabIndex = 19;
+            // 
+            // xChkBox
+            // 
+            this.xChkBox.AutoSize = true;
+            this.xChkBox.Location = new System.Drawing.Point(116, 363);
+            this.xChkBox.Name = "xChkBox";
+            this.xChkBox.Size = new System.Drawing.Size(31, 17);
+            this.xChkBox.TabIndex = 18;
+            this.xChkBox.Text = "x";
+            this.xChkBox.UseVisualStyleBackColor = true;
+            // 
+            // yChkBox
+            // 
+            this.yChkBox.AutoSize = true;
+            this.yChkBox.Location = new System.Drawing.Point(184, 363);
+            this.yChkBox.Name = "yChkBox";
+            this.yChkBox.Size = new System.Drawing.Size(31, 17);
+            this.yChkBox.TabIndex = 17;
+            this.yChkBox.Text = "y";
+            this.yChkBox.UseVisualStyleBackColor = true;
+            // 
+            // zChkBox
+            // 
+            this.zChkBox.AutoSize = true;
+            this.zChkBox.Location = new System.Drawing.Point(250, 363);
+            this.zChkBox.Name = "zChkBox";
+            this.zChkBox.Size = new System.Drawing.Size(31, 17);
+            this.zChkBox.TabIndex = 16;
+            this.zChkBox.Text = "z";
+            this.zChkBox.UseVisualStyleBackColor = true;
+            // 
+            // cChkBox
+            // 
+            this.cChkBox.AutoSize = true;
+            this.cChkBox.Location = new System.Drawing.Point(250, 317);
+            this.cChkBox.Name = "cChkBox";
+            this.cChkBox.Size = new System.Drawing.Size(32, 17);
+            this.cChkBox.TabIndex = 15;
+            this.cChkBox.Text = "c";
+            this.cChkBox.UseVisualStyleBackColor = true;
+            // 
+            // bChkBox
+            // 
+            this.bChkBox.AutoSize = true;
+            this.bChkBox.Location = new System.Drawing.Point(184, 317);
+            this.bChkBox.Name = "bChkBox";
+            this.bChkBox.Size = new System.Drawing.Size(32, 17);
+            this.bChkBox.TabIndex = 14;
+            this.bChkBox.Text = "b";
+            this.bChkBox.UseVisualStyleBackColor = true;
+            // 
+            // aChkBox
+            // 
+            this.aChkBox.AutoSize = true;
+            this.aChkBox.Location = new System.Drawing.Point(116, 317);
+            this.aChkBox.Name = "aChkBox";
+            this.aChkBox.Size = new System.Drawing.Size(32, 17);
+            this.aChkBox.TabIndex = 13;
+            this.aChkBox.Text = "a";
+            this.aChkBox.UseVisualStyleBackColor = true;
+            // 
+            // cMinTxt
+            // 
+            this.cMinTxt.Location = new System.Drawing.Point(116, 256);
+            this.cMinTxt.Name = "cMinTxt";
+            this.cMinTxt.Size = new System.Drawing.Size(100, 20);
+            this.cMinTxt.TabIndex = 12;
+            // 
+            // cMaxTxt
+            // 
+            this.cMaxTxt.Location = new System.Drawing.Point(116, 223);
+            this.cMaxTxt.Name = "cMaxTxt";
+            this.cMaxTxt.Size = new System.Drawing.Size(100, 20);
+            this.cMaxTxt.TabIndex = 11;
             // 
             // modsList
             // 
@@ -557,84 +636,6 @@
             // 
             this.epsSC.Text = "Epsilon Side Chain";
             // 
-            // seqTxt
-            // 
-            this.seqTxt.Location = new System.Drawing.Point(116, 38);
-            this.seqTxt.Multiline = true;
-            this.seqTxt.Name = "seqTxt";
-            this.seqTxt.Size = new System.Drawing.Size(497, 48);
-            this.seqTxt.TabIndex = 19;
-            // 
-            // aChkBox
-            // 
-            this.aChkBox.AutoSize = true;
-            this.aChkBox.Location = new System.Drawing.Point(116, 317);
-            this.aChkBox.Name = "aChkBox";
-            this.aChkBox.Size = new System.Drawing.Size(32, 17);
-            this.aChkBox.TabIndex = 13;
-            this.aChkBox.Text = "a";
-            this.aChkBox.UseVisualStyleBackColor = true;
-            // 
-            // xChkBox
-            // 
-            this.xChkBox.AutoSize = true;
-            this.xChkBox.Location = new System.Drawing.Point(116, 363);
-            this.xChkBox.Name = "xChkBox";
-            this.xChkBox.Size = new System.Drawing.Size(31, 17);
-            this.xChkBox.TabIndex = 18;
-            this.xChkBox.Text = "x";
-            this.xChkBox.UseVisualStyleBackColor = true;
-            // 
-            // yChkBox
-            // 
-            this.yChkBox.AutoSize = true;
-            this.yChkBox.Location = new System.Drawing.Point(184, 363);
-            this.yChkBox.Name = "yChkBox";
-            this.yChkBox.Size = new System.Drawing.Size(31, 17);
-            this.yChkBox.TabIndex = 17;
-            this.yChkBox.Text = "y";
-            this.yChkBox.UseVisualStyleBackColor = true;
-            // 
-            // zChkBox
-            // 
-            this.zChkBox.AutoSize = true;
-            this.zChkBox.Location = new System.Drawing.Point(250, 363);
-            this.zChkBox.Name = "zChkBox";
-            this.zChkBox.Size = new System.Drawing.Size(31, 17);
-            this.zChkBox.TabIndex = 16;
-            this.zChkBox.Text = "z";
-            this.zChkBox.UseVisualStyleBackColor = true;
-            // 
-            // cChkBox
-            // 
-            this.cChkBox.AutoSize = true;
-            this.cChkBox.Location = new System.Drawing.Point(250, 317);
-            this.cChkBox.Name = "cChkBox";
-            this.cChkBox.Size = new System.Drawing.Size(32, 17);
-            this.cChkBox.TabIndex = 15;
-            this.cChkBox.Text = "c";
-            this.cChkBox.UseVisualStyleBackColor = true;
-            // 
-            // bChkBox
-            // 
-            this.bChkBox.AutoSize = true;
-            this.bChkBox.Location = new System.Drawing.Point(184, 317);
-            this.bChkBox.Name = "bChkBox";
-            this.bChkBox.Size = new System.Drawing.Size(32, 17);
-            this.bChkBox.TabIndex = 14;
-            this.bChkBox.Text = "b";
-            this.bChkBox.UseVisualStyleBackColor = true;
-            // 
-            // loadUltfrag
-            // 
-            this.loadUltfrag.Location = new System.Drawing.Point(466, 408);
-            this.loadUltfrag.Name = "loadUltfrag";
-            this.loadUltfrag.Size = new System.Drawing.Size(147, 23);
-            this.loadUltfrag.TabIndex = 20;
-            this.loadUltfrag.Text = "Load Ultimate Fragmentor";
-            this.loadUltfrag.UseVisualStyleBackColor = true;
-            this.loadUltfrag.Click += new System.EventHandler(this.button1_Click);
-            // 
             // UltimateFragmentorCalc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -672,8 +673,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label seq;
         private System.Windows.Forms.CheckedListBox modsList;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox cMinTxt;
+        private System.Windows.Forms.TextBox cMaxTxt;
         private System.Windows.Forms.Button clrModsList;
         private System.Windows.Forms.Button loadModsJSON;
         private System.Windows.Forms.ListView allMods;
