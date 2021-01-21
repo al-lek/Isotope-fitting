@@ -25,7 +25,18 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
             frm2 = f;
             InitializeComponent();
 
-            seqLabel.Text = frm2.sequenceList[0].Sequence;
+            //seqLabel.Text = frm2.sequenceList[0].Sequence;
+            seqTxt.Text = frm2.sequenceList[0].Sequence;
+
+            List<CheckBox> ionBoxes = new List<CheckBox>
+            {
+                aChkBox,
+                bChkBox,
+                cChkBox,
+                xChkBox,
+                yChkBox,
+                zChkBox
+            };
         }
 
         private void UltimateFragmentorCalc_FormClosing(object sender, FormClosingEventArgs e)
@@ -42,16 +53,30 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
 
         private void addModBtn_Click(object sender, EventArgs e)
         {
-            ModEditForm meForm = new ModEditForm();
+            ModEditForm meAddForm = new ModEditForm();
 
-            meForm.ShowDialog();
+            meAddForm.ShowDialog();
+
+            if (meAddForm.inputVals[0] != null)
+            {
+                ListViewItem newItem = new ListViewItem(meAddForm.inputVals[0]);
+                newItem.SubItems.Add(meAddForm.inputVals[1]);
+                newItem.SubItems.Add(meAddForm.inputVals[2]);
+                newItem.SubItems.Add(meAddForm.inputVals[3]);
+                newItem.SubItems.Add(meAddForm.inputVals[4]);
+                newItem.SubItems.Add(meAddForm.inputVals[5]);
+                newItem.SubItems.Add(meAddForm.inputVals[6]);
+
+                allMods.Items.Add(newItem);
+                modsList.Items.Add(meAddForm.inputVals[meAddForm.inputVals.Count-1]);
+            }
         }
 
         private void editModBtn_Click(object sender, EventArgs e)
         {
-            ModEditForm meForm = new ModEditForm();
+            ModEditForm meEditForm = new ModEditForm();
 
-            meForm.ShowDialog();
+            meEditForm.ShowDialog();
         }
 
         private void delModBtn_Click(object sender, EventArgs e)

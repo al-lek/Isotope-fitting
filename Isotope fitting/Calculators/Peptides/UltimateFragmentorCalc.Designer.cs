@@ -33,22 +33,18 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.input_Tab = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.xChkBox = new System.Windows.Forms.CheckBox();
-            this.yChkBox = new System.Windows.Forms.CheckBox();
-            this.zChkBox = new System.Windows.Forms.CheckBox();
-            this.cChkBox = new System.Windows.Forms.CheckBox();
-            this.bChkBox = new System.Windows.Forms.CheckBox();
-            this.aChkBox = new System.Windows.Forms.CheckBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.modsList = new System.Windows.Forms.CheckedListBox();
-            this.seqLabel = new System.Windows.Forms.Label();
             this.mods = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.seq = new System.Windows.Forms.Label();
             this.mods_Tab = new System.Windows.Forms.TabPage();
+            this.delModBtn = new System.Windows.Forms.Button();
+            this.editModBtn = new System.Windows.Forms.Button();
+            this.addModBtn = new System.Windows.Forms.Button();
             this.clrModsList = new System.Windows.Forms.Button();
             this.loadModsJSON = new System.Windows.Forms.Button();
             this.allMods = new System.Windows.Forms.ListView();
@@ -60,21 +56,18 @@
             this.aPos = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.desc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.elem_Tab = new System.Windows.Forms.TabPage();
-            this.sidec_Tab = new System.Windows.Forms.TabPage();
-            this.elemList = new System.Windows.Forms.ListView();
-            this.elem = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.mass = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.loadElemBtn = new System.Windows.Forms.Button();
-            this.clrElemBtn = new System.Windows.Forms.Button();
-            this.addModBtn = new System.Windows.Forms.Button();
-            this.editModBtn = new System.Windows.Forms.Button();
-            this.delModBtn = new System.Windows.Forms.Button();
             this.delElemBtn = new System.Windows.Forms.Button();
             this.editElemBtn = new System.Windows.Forms.Button();
             this.addElemBtn = new System.Windows.Forms.Button();
-            this.scList = new System.Windows.Forms.ListView();
+            this.clrElemBtn = new System.Windows.Forms.Button();
+            this.loadElemBtn = new System.Windows.Forms.Button();
+            this.elemList = new System.Windows.Forms.ListView();
+            this.elem = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mass = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.sidec_Tab = new System.Windows.Forms.TabPage();
             this.clrSC = new System.Windows.Forms.Button();
             this.loadScJSON = new System.Windows.Forms.Button();
+            this.scList = new System.Windows.Forms.ListView();
             this.nameSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.single_let = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.three_let = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -83,9 +76,16 @@
             this.massAvg = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fullSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.betaSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.deltaSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gammaSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.deltaSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.epsSC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.seqTxt = new System.Windows.Forms.TextBox();
+            this.aChkBox = new System.Windows.Forms.CheckBox();
+            this.xChkBox = new System.Windows.Forms.CheckBox();
+            this.yChkBox = new System.Windows.Forms.CheckBox();
+            this.zChkBox = new System.Windows.Forms.CheckBox();
+            this.cChkBox = new System.Windows.Forms.CheckBox();
+            this.bChkBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.input_Tab.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -134,6 +134,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.seqTxt);
             this.groupBox1.Controls.Add(this.xChkBox);
             this.groupBox1.Controls.Add(this.yChkBox);
             this.groupBox1.Controls.Add(this.zChkBox);
@@ -144,7 +145,6 @@
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.modsList);
             this.groupBox1.Controls.Add(this.calc_Btn);
-            this.groupBox1.Controls.Add(this.seqLabel);
             this.groupBox1.Controls.Add(this.mods);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -156,66 +156,6 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fields for the Ultimate Fragmentor input.json";
-            // 
-            // xChkBox
-            // 
-            this.xChkBox.AutoSize = true;
-            this.xChkBox.Location = new System.Drawing.Point(116, 363);
-            this.xChkBox.Name = "xChkBox";
-            this.xChkBox.Size = new System.Drawing.Size(31, 17);
-            this.xChkBox.TabIndex = 18;
-            this.xChkBox.Text = "x";
-            this.xChkBox.UseVisualStyleBackColor = true;
-            // 
-            // yChkBox
-            // 
-            this.yChkBox.AutoSize = true;
-            this.yChkBox.Location = new System.Drawing.Point(184, 363);
-            this.yChkBox.Name = "yChkBox";
-            this.yChkBox.Size = new System.Drawing.Size(31, 17);
-            this.yChkBox.TabIndex = 17;
-            this.yChkBox.Text = "y";
-            this.yChkBox.UseVisualStyleBackColor = true;
-            // 
-            // zChkBox
-            // 
-            this.zChkBox.AutoSize = true;
-            this.zChkBox.Location = new System.Drawing.Point(250, 363);
-            this.zChkBox.Name = "zChkBox";
-            this.zChkBox.Size = new System.Drawing.Size(31, 17);
-            this.zChkBox.TabIndex = 16;
-            this.zChkBox.Text = "z";
-            this.zChkBox.UseVisualStyleBackColor = true;
-            // 
-            // cChkBox
-            // 
-            this.cChkBox.AutoSize = true;
-            this.cChkBox.Location = new System.Drawing.Point(250, 317);
-            this.cChkBox.Name = "cChkBox";
-            this.cChkBox.Size = new System.Drawing.Size(32, 17);
-            this.cChkBox.TabIndex = 15;
-            this.cChkBox.Text = "c";
-            this.cChkBox.UseVisualStyleBackColor = true;
-            // 
-            // bChkBox
-            // 
-            this.bChkBox.AutoSize = true;
-            this.bChkBox.Location = new System.Drawing.Point(184, 317);
-            this.bChkBox.Name = "bChkBox";
-            this.bChkBox.Size = new System.Drawing.Size(32, 17);
-            this.bChkBox.TabIndex = 14;
-            this.bChkBox.Text = "b";
-            this.bChkBox.UseVisualStyleBackColor = true;
-            // 
-            // aChkBox
-            // 
-            this.aChkBox.AutoSize = true;
-            this.aChkBox.Location = new System.Drawing.Point(116, 317);
-            this.aChkBox.Name = "aChkBox";
-            this.aChkBox.Size = new System.Drawing.Size(32, 17);
-            this.aChkBox.TabIndex = 13;
-            this.aChkBox.Text = "a";
-            this.aChkBox.UseVisualStyleBackColor = true;
             // 
             // textBox2
             // 
@@ -241,16 +181,6 @@
             this.modsList.ScrollAlwaysVisible = true;
             this.modsList.Size = new System.Drawing.Size(497, 109);
             this.modsList.TabIndex = 10;
-            // 
-            // seqLabel
-            // 
-            this.seqLabel.AutoSize = true;
-            this.seqLabel.ForeColor = System.Drawing.Color.Red;
-            this.seqLabel.Location = new System.Drawing.Point(113, 41);
-            this.seqLabel.Name = "seqLabel";
-            this.seqLabel.Size = new System.Drawing.Size(169, 13);
-            this.seqLabel.TabIndex = 6;
-            this.seqLabel.Text = "Protein sequence to be calculated";
             // 
             // mods
             // 
@@ -317,6 +247,36 @@
             this.mods_Tab.Size = new System.Drawing.Size(712, 443);
             this.mods_Tab.TabIndex = 1;
             this.mods_Tab.Text = "Modifications";
+            // 
+            // delModBtn
+            // 
+            this.delModBtn.Location = new System.Drawing.Point(168, 404);
+            this.delModBtn.Name = "delModBtn";
+            this.delModBtn.Size = new System.Drawing.Size(75, 23);
+            this.delModBtn.TabIndex = 5;
+            this.delModBtn.Text = "Remove";
+            this.delModBtn.UseVisualStyleBackColor = true;
+            this.delModBtn.Click += new System.EventHandler(this.delModBtn_Click);
+            // 
+            // editModBtn
+            // 
+            this.editModBtn.Location = new System.Drawing.Point(87, 404);
+            this.editModBtn.Name = "editModBtn";
+            this.editModBtn.Size = new System.Drawing.Size(75, 23);
+            this.editModBtn.TabIndex = 4;
+            this.editModBtn.Text = "Edit";
+            this.editModBtn.UseVisualStyleBackColor = true;
+            this.editModBtn.Click += new System.EventHandler(this.editModBtn_Click);
+            // 
+            // addModBtn
+            // 
+            this.addModBtn.Location = new System.Drawing.Point(6, 404);
+            this.addModBtn.Name = "addModBtn";
+            this.addModBtn.Size = new System.Drawing.Size(75, 23);
+            this.addModBtn.TabIndex = 3;
+            this.addModBtn.Text = "Add";
+            this.addModBtn.UseVisualStyleBackColor = true;
+            this.addModBtn.Click += new System.EventHandler(this.addModBtn_Click);
             // 
             // clrModsList
             // 
@@ -408,17 +368,51 @@
             this.elem_Tab.TabIndex = 2;
             this.elem_Tab.Text = "Elements";
             // 
-            // sidec_Tab
+            // delElemBtn
             // 
-            this.sidec_Tab.BackColor = System.Drawing.SystemColors.Control;
-            this.sidec_Tab.Controls.Add(this.clrSC);
-            this.sidec_Tab.Controls.Add(this.loadScJSON);
-            this.sidec_Tab.Controls.Add(this.scList);
-            this.sidec_Tab.Location = new System.Drawing.Point(4, 22);
-            this.sidec_Tab.Name = "sidec_Tab";
-            this.sidec_Tab.Size = new System.Drawing.Size(712, 443);
-            this.sidec_Tab.TabIndex = 3;
-            this.sidec_Tab.Text = "Side Chains";
+            this.delElemBtn.Location = new System.Drawing.Point(165, 411);
+            this.delElemBtn.Name = "delElemBtn";
+            this.delElemBtn.Size = new System.Drawing.Size(75, 23);
+            this.delElemBtn.TabIndex = 8;
+            this.delElemBtn.Text = "Remove";
+            this.delElemBtn.UseVisualStyleBackColor = true;
+            // 
+            // editElemBtn
+            // 
+            this.editElemBtn.Location = new System.Drawing.Point(84, 411);
+            this.editElemBtn.Name = "editElemBtn";
+            this.editElemBtn.Size = new System.Drawing.Size(75, 23);
+            this.editElemBtn.TabIndex = 7;
+            this.editElemBtn.Text = "Edit";
+            this.editElemBtn.UseVisualStyleBackColor = true;
+            // 
+            // addElemBtn
+            // 
+            this.addElemBtn.Location = new System.Drawing.Point(3, 411);
+            this.addElemBtn.Name = "addElemBtn";
+            this.addElemBtn.Size = new System.Drawing.Size(75, 23);
+            this.addElemBtn.TabIndex = 6;
+            this.addElemBtn.Text = "Add";
+            this.addElemBtn.UseVisualStyleBackColor = true;
+            // 
+            // clrElemBtn
+            // 
+            this.clrElemBtn.Location = new System.Drawing.Point(627, 411);
+            this.clrElemBtn.Name = "clrElemBtn";
+            this.clrElemBtn.Size = new System.Drawing.Size(75, 23);
+            this.clrElemBtn.TabIndex = 2;
+            this.clrElemBtn.Text = "Clear";
+            this.clrElemBtn.UseVisualStyleBackColor = true;
+            // 
+            // loadElemBtn
+            // 
+            this.loadElemBtn.Location = new System.Drawing.Point(494, 411);
+            this.loadElemBtn.Name = "loadElemBtn";
+            this.loadElemBtn.Size = new System.Drawing.Size(127, 23);
+            this.loadElemBtn.TabIndex = 1;
+            this.loadElemBtn.Text = "Load Elements JSON";
+            this.loadElemBtn.UseVisualStyleBackColor = true;
+            this.loadElemBtn.Click += new System.EventHandler(this.loadElemBtn_Click);
             // 
             // elemList
             // 
@@ -447,81 +441,42 @@
             this.mass.Text = "Mass";
             this.mass.Width = 482;
             // 
-            // loadElemBtn
+            // sidec_Tab
             // 
-            this.loadElemBtn.Location = new System.Drawing.Point(494, 411);
-            this.loadElemBtn.Name = "loadElemBtn";
-            this.loadElemBtn.Size = new System.Drawing.Size(127, 23);
-            this.loadElemBtn.TabIndex = 1;
-            this.loadElemBtn.Text = "Load Elements JSON";
-            this.loadElemBtn.UseVisualStyleBackColor = true;
-            this.loadElemBtn.Click += new System.EventHandler(this.loadElemBtn_Click);
+            this.sidec_Tab.BackColor = System.Drawing.SystemColors.Control;
+            this.sidec_Tab.Controls.Add(this.clrSC);
+            this.sidec_Tab.Controls.Add(this.loadScJSON);
+            this.sidec_Tab.Controls.Add(this.scList);
+            this.sidec_Tab.Location = new System.Drawing.Point(4, 22);
+            this.sidec_Tab.Name = "sidec_Tab";
+            this.sidec_Tab.Size = new System.Drawing.Size(712, 443);
+            this.sidec_Tab.TabIndex = 3;
+            this.sidec_Tab.Text = "Side Chains";
             // 
-            // clrElemBtn
+            // clrSC
             // 
-            this.clrElemBtn.Location = new System.Drawing.Point(627, 411);
-            this.clrElemBtn.Name = "clrElemBtn";
-            this.clrElemBtn.Size = new System.Drawing.Size(75, 23);
-            this.clrElemBtn.TabIndex = 2;
-            this.clrElemBtn.Text = "Clear";
-            this.clrElemBtn.UseVisualStyleBackColor = true;
+            this.clrSC.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clrSC.Location = new System.Drawing.Point(627, 413);
+            this.clrSC.Name = "clrSC";
+            this.clrSC.Size = new System.Drawing.Size(75, 23);
+            this.clrSC.TabIndex = 4;
+            this.clrSC.Text = "Clear";
+            this.clrSC.UseVisualStyleBackColor = true;
             // 
-            // addModBtn
+            // loadScJSON
             // 
-            this.addModBtn.Location = new System.Drawing.Point(6, 404);
-            this.addModBtn.Name = "addModBtn";
-            this.addModBtn.Size = new System.Drawing.Size(75, 23);
-            this.addModBtn.TabIndex = 3;
-            this.addModBtn.Text = "Add";
-            this.addModBtn.UseVisualStyleBackColor = true;
-            this.addModBtn.Click += new System.EventHandler(this.addModBtn_Click);
-            // 
-            // editModBtn
-            // 
-            this.editModBtn.Location = new System.Drawing.Point(87, 404);
-            this.editModBtn.Name = "editModBtn";
-            this.editModBtn.Size = new System.Drawing.Size(75, 23);
-            this.editModBtn.TabIndex = 4;
-            this.editModBtn.Text = "Edit";
-            this.editModBtn.UseVisualStyleBackColor = true;
-            this.editModBtn.Click += new System.EventHandler(this.editModBtn_Click);
-            // 
-            // delModBtn
-            // 
-            this.delModBtn.Location = new System.Drawing.Point(168, 404);
-            this.delModBtn.Name = "delModBtn";
-            this.delModBtn.Size = new System.Drawing.Size(75, 23);
-            this.delModBtn.TabIndex = 5;
-            this.delModBtn.Text = "Remove";
-            this.delModBtn.UseVisualStyleBackColor = true;
-            this.delModBtn.Click += new System.EventHandler(this.delModBtn_Click);
-            // 
-            // delElemBtn
-            // 
-            this.delElemBtn.Location = new System.Drawing.Point(165, 411);
-            this.delElemBtn.Name = "delElemBtn";
-            this.delElemBtn.Size = new System.Drawing.Size(75, 23);
-            this.delElemBtn.TabIndex = 8;
-            this.delElemBtn.Text = "Remove";
-            this.delElemBtn.UseVisualStyleBackColor = true;
-            // 
-            // editElemBtn
-            // 
-            this.editElemBtn.Location = new System.Drawing.Point(84, 411);
-            this.editElemBtn.Name = "editElemBtn";
-            this.editElemBtn.Size = new System.Drawing.Size(75, 23);
-            this.editElemBtn.TabIndex = 7;
-            this.editElemBtn.Text = "Edit";
-            this.editElemBtn.UseVisualStyleBackColor = true;
-            // 
-            // addElemBtn
-            // 
-            this.addElemBtn.Location = new System.Drawing.Point(3, 411);
-            this.addElemBtn.Name = "addElemBtn";
-            this.addElemBtn.Size = new System.Drawing.Size(75, 23);
-            this.addElemBtn.TabIndex = 6;
-            this.addElemBtn.Text = "Add";
-            this.addElemBtn.UseVisualStyleBackColor = true;
+            this.loadScJSON.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadScJSON.Location = new System.Drawing.Point(472, 413);
+            this.loadScJSON.Name = "loadScJSON";
+            this.loadScJSON.Size = new System.Drawing.Size(149, 23);
+            this.loadScJSON.TabIndex = 3;
+            this.loadScJSON.Text = "Load Side Chains JSON";
+            this.loadScJSON.UseVisualStyleBackColor = true;
+            this.loadScJSON.Click += new System.EventHandler(this.loadScJSON_Click);
             // 
             // scList
             // 
@@ -548,31 +503,6 @@
             this.scList.TabIndex = 0;
             this.scList.UseCompatibleStateImageBehavior = false;
             this.scList.View = System.Windows.Forms.View.Details;
-            // 
-            // clrSC
-            // 
-            this.clrSC.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.clrSC.Location = new System.Drawing.Point(627, 413);
-            this.clrSC.Name = "clrSC";
-            this.clrSC.Size = new System.Drawing.Size(75, 23);
-            this.clrSC.TabIndex = 4;
-            this.clrSC.Text = "Clear";
-            this.clrSC.UseVisualStyleBackColor = true;
-            // 
-            // loadScJSON
-            // 
-            this.loadScJSON.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadScJSON.Location = new System.Drawing.Point(472, 413);
-            this.loadScJSON.Name = "loadScJSON";
-            this.loadScJSON.Size = new System.Drawing.Size(149, 23);
-            this.loadScJSON.TabIndex = 3;
-            this.loadScJSON.Text = "Load Side Chains JSON";
-            this.loadScJSON.UseVisualStyleBackColor = true;
-            this.loadScJSON.Click += new System.EventHandler(this.loadScJSON_Click);
             // 
             // nameSC
             // 
@@ -610,20 +540,88 @@
             // 
             this.betaSC.Text = "Side Chain Beta";
             // 
-            // deltaSC
-            // 
-            this.deltaSC.DisplayIndex = 8;
-            this.deltaSC.Text = "Delta Side Chain";
-            // 
             // gammaSC
             // 
             this.gammaSC.DisplayIndex = 9;
             this.gammaSC.Text = "Gamma Side Chain";
             this.gammaSC.Width = 84;
             // 
+            // deltaSC
+            // 
+            this.deltaSC.DisplayIndex = 8;
+            this.deltaSC.Text = "Delta Side Chain";
+            // 
             // epsSC
             // 
             this.epsSC.Text = "Epsilon Side Chain";
+            // 
+            // seqTxt
+            // 
+            this.seqTxt.Location = new System.Drawing.Point(116, 38);
+            this.seqTxt.Multiline = true;
+            this.seqTxt.Name = "seqTxt";
+            this.seqTxt.Size = new System.Drawing.Size(497, 48);
+            this.seqTxt.TabIndex = 19;
+            // 
+            // aChkBox
+            // 
+            this.aChkBox.AutoSize = true;
+            this.aChkBox.Location = new System.Drawing.Point(116, 317);
+            this.aChkBox.Name = "aChkBox";
+            this.aChkBox.Size = new System.Drawing.Size(32, 17);
+            this.aChkBox.TabIndex = 13;
+            this.aChkBox.Text = "a";
+            this.aChkBox.UseVisualStyleBackColor = true;
+            // 
+            // xChkBox
+            // 
+            this.xChkBox.AutoSize = true;
+            this.xChkBox.Location = new System.Drawing.Point(116, 363);
+            this.xChkBox.Name = "xChkBox";
+            this.xChkBox.Size = new System.Drawing.Size(31, 17);
+            this.xChkBox.TabIndex = 18;
+            this.xChkBox.Text = "x";
+            this.xChkBox.UseVisualStyleBackColor = true;
+            // 
+            // yChkBox
+            // 
+            this.yChkBox.AutoSize = true;
+            this.yChkBox.Location = new System.Drawing.Point(184, 363);
+            this.yChkBox.Name = "yChkBox";
+            this.yChkBox.Size = new System.Drawing.Size(31, 17);
+            this.yChkBox.TabIndex = 17;
+            this.yChkBox.Text = "y";
+            this.yChkBox.UseVisualStyleBackColor = true;
+            // 
+            // zChkBox
+            // 
+            this.zChkBox.AutoSize = true;
+            this.zChkBox.Location = new System.Drawing.Point(250, 363);
+            this.zChkBox.Name = "zChkBox";
+            this.zChkBox.Size = new System.Drawing.Size(31, 17);
+            this.zChkBox.TabIndex = 16;
+            this.zChkBox.Text = "z";
+            this.zChkBox.UseVisualStyleBackColor = true;
+            // 
+            // cChkBox
+            // 
+            this.cChkBox.AutoSize = true;
+            this.cChkBox.Location = new System.Drawing.Point(250, 317);
+            this.cChkBox.Name = "cChkBox";
+            this.cChkBox.Size = new System.Drawing.Size(32, 17);
+            this.cChkBox.TabIndex = 15;
+            this.cChkBox.Text = "c";
+            this.cChkBox.UseVisualStyleBackColor = true;
+            // 
+            // bChkBox
+            // 
+            this.bChkBox.AutoSize = true;
+            this.bChkBox.Location = new System.Drawing.Point(184, 317);
+            this.bChkBox.Name = "bChkBox";
+            this.bChkBox.Size = new System.Drawing.Size(32, 17);
+            this.bChkBox.TabIndex = 14;
+            this.bChkBox.Text = "b";
+            this.bChkBox.UseVisualStyleBackColor = true;
             // 
             // UltimateFragmentorCalc
             // 
@@ -661,16 +659,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label seq;
-        private System.Windows.Forms.Label seqLabel;
         private System.Windows.Forms.CheckedListBox modsList;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.CheckBox xChkBox;
-        private System.Windows.Forms.CheckBox yChkBox;
-        private System.Windows.Forms.CheckBox zChkBox;
-        private System.Windows.Forms.CheckBox cChkBox;
-        private System.Windows.Forms.CheckBox bChkBox;
-        private System.Windows.Forms.CheckBox aChkBox;
         private System.Windows.Forms.Button clrModsList;
         private System.Windows.Forms.Button loadModsJSON;
         private System.Windows.Forms.ListView allMods;
@@ -706,5 +697,12 @@
         private System.Windows.Forms.ColumnHeader gammaSC;
         private System.Windows.Forms.ColumnHeader deltaSC;
         private System.Windows.Forms.ColumnHeader epsSC;
+        private System.Windows.Forms.TextBox seqTxt;
+        private System.Windows.Forms.CheckBox xChkBox;
+        private System.Windows.Forms.CheckBox yChkBox;
+        private System.Windows.Forms.CheckBox zChkBox;
+        private System.Windows.Forms.CheckBox cChkBox;
+        private System.Windows.Forms.CheckBox bChkBox;
+        private System.Windows.Forms.CheckBox aChkBox;
     }
 }
