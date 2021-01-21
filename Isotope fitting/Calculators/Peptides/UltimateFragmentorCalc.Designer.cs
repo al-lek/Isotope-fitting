@@ -86,6 +86,7 @@
             this.zChkBox = new System.Windows.Forms.CheckBox();
             this.cChkBox = new System.Windows.Forms.CheckBox();
             this.bChkBox = new System.Windows.Forms.CheckBox();
+            this.loadUltfrag = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.input_Tab.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -134,6 +135,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.loadUltfrag);
             this.groupBox1.Controls.Add(this.seqTxt);
             this.groupBox1.Controls.Add(this.xChkBox);
             this.groupBox1.Controls.Add(this.yChkBox);
@@ -623,6 +625,16 @@
             this.bChkBox.Text = "b";
             this.bChkBox.UseVisualStyleBackColor = true;
             // 
+            // loadUltfrag
+            // 
+            this.loadUltfrag.Location = new System.Drawing.Point(466, 408);
+            this.loadUltfrag.Name = "loadUltfrag";
+            this.loadUltfrag.Size = new System.Drawing.Size(147, 23);
+            this.loadUltfrag.TabIndex = 20;
+            this.loadUltfrag.Text = "Load Ultimate Fragmentor";
+            this.loadUltfrag.UseVisualStyleBackColor = true;
+            this.loadUltfrag.Click += new System.EventHandler(this.button1_Click);
+            // 
             // UltimateFragmentorCalc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -704,5 +716,6 @@
         private System.Windows.Forms.CheckBox cChkBox;
         private System.Windows.Forms.CheckBox bChkBox;
         private System.Windows.Forms.CheckBox aChkBox;
+        private System.Windows.Forms.Button loadUltfrag;
     }
 }

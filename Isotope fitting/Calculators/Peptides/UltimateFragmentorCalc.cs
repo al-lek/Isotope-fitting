@@ -27,6 +27,7 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
 
             //seqLabel.Text = frm2.sequenceList[0].Sequence;
             seqTxt.Text = frm2.sequenceList[0].Sequence;
+            allMods.Sorting = SortOrder.Ascending;
 
             List<CheckBox> ionBoxes = new List<CheckBox>
             {
@@ -84,6 +85,99 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
             foreach (ListViewItem eachItem in allMods.SelectedItems)
             {
                 allMods.Items.Remove(eachItem);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog ufLoader = new FolderBrowserDialog();
+            ufLoader.Description = "Select the Ultimate Fragmentor folder.";
+
+            string folderPath;
+
+            if (ufLoader.ShowDialog() != DialogResult.Cancel)
+            {
+                folderPath = ufLoader.SelectedPath;
+                string paramsPath = folderPath + Path.DirectorySeparatorChar + "params";
+
+                try
+                {
+                    string elemsPath = paramsPath + Path.DirectorySeparatorChar + "elements.json";
+                    string modsPath = paramsPath + Path.DirectorySeparatorChar + "modifications.json";
+                    string scPath = paramsPath + Path.DirectorySeparatorChar + "side_chains.json";
+
+                    #region Mods Loader
+                    Dictionary<string, Mod> modDict = new Dictionary<string, Mod>();
+                    modDict = parseModJSON(modsPath);
+
+                    foreach (var kv in modDict)
+                    {
+                        ListViewItem item = new ListViewItem(kv.Key);
+                        item.SubItems.Add(kv.Value.formula_gain);
+                        item.SubItems.Add(kv.Value.formula_loss);
+                        item.SubItems.Add(kv.Value.affects_residues);
+                        item.SubItems.Add(kv.Value.affects_ions);
+                        item.SubItems.Add(kv.Value.affect_position);
+                        item.SubItems.Add(kv.Value.description);
+
+                        allMods.Items.Add(item);
+
+                        modsList.Items.Add(kv.Value.description);
+
+                    }
+                    #endregion
+
+                    #region Elements Loader
+
+                    JObject elemFile = new JObject();
+
+                    string json = File.ReadAllText(elemsPath);
+                    elemFile = JObject.Parse(json);
+
+                    foreach (var obj in elemFile)
+                    {
+                        ListViewItem item = new ListViewItem(obj.Key);
+                        item.SubItems.Add((string)obj.Value);
+                        System.Diagnostics.Debug.Write(obj.Key + " " + (string)obj.Value + "\n");
+
+                        elemList.Items.Add(item);
+                    }
+
+                    #endregion
+
+                    #region Side Chains Loader
+                    Dictionary<string, SideChain> chainDict = new Dictionary<string, SideChain>();
+
+                    chainDict = parseScJSON(scPath);
+
+                    foreach (var kv in chainDict)
+                    {
+                        ListViewItem item = new ListViewItem(kv.Value.name);
+                        item.SubItems.Add(kv.Value.single_letter);
+                        item.SubItems.Add(kv.Value.three_letter);
+                        item.SubItems.Add(kv.Value.elemental);
+                        item.SubItems.Add(kv.Value.mass_mono);
+                        item.SubItems.Add(kv.Value.mass_avg);
+                        item.SubItems.Add(kv.Value.scDet.full);
+                        item.SubItems.Add(kv.Value.scDet.beta);
+                        item.SubItems.Add(kv.Value.scDet.gamma);
+                        item.SubItems.Add(kv.Value.scDet.delta);
+                        item.SubItems.Add(kv.Value.scDet.epsilon);
+
+                        scList.Items.Add(item);
+
+                    }
+
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occured: " + ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                folderPath = String.Empty;
             }
         }
 
@@ -224,6 +318,11 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
                     MessageBox.Show("An error occured: " + ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void parseElemJSON(string filename)
+        {
+
         }
 
         private void loadScJSON_Click(object sender, EventArgs e)
@@ -399,6 +498,7 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
         }
         #endregion
 
+        
     }
 
 
