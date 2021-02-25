@@ -604,7 +604,16 @@ namespace Isotope_fitting._2.Calculators._2.a.Peptides
                 runUltFrag();
 
                 string csvPath = folderPath + Path.DirectorySeparatorChar + "out.csv";
-                frm2.read_csv_and_Calculate(csvPath, true);
+
+                if (File.Exists(csvPath))
+                {
+                    frm2.read_csv_and_Calculate(csvPath, true);
+                }
+                else
+                {
+                    MessageBox.Show("The Ultimate Fragmentor csv was not created!", "Error locating out.csv", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
             }
             else
             {

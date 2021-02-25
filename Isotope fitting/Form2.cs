@@ -3040,7 +3040,7 @@ namespace Isotope_fitting
                 {
                     foreach (FragForm fra in Fragments2)
                     {
-                        if (fra.Mz.Equals(chem1.Mz) && fra.Index.Equals(chem1.Index) && fra.IndexTo.Equals(chem1.IndexTo) && fra.Ion_type.Equals(chem1.Ion_type) && fra.Chain_type.Equals(chem1.Chain_type) && fra.Charge.Equals(chem1.Charge))
+                        if (fra.Mz.Equals(chem1.Mz) && fra.Index.Equals(chem1.Index) && fra.IndexTo.Equals(chem1.IndexTo) && fra.Ion_type.Equals(chem1.Ion_type) && fra.Chain_type.Equals(chem1.Chain_type) && fra.Charge.Equals(chem1.Charge) && fra.Name.Equals(chem1.Name))
                         {
                             if (fra.Extension.Equals(chem1.Extension))
                             {
@@ -10229,6 +10229,8 @@ namespace Isotope_fitting
             }
             int grp_num = 25;
             if (rdBtn50_temp.Checked) grp_num = 50;
+            System.Diagnostics.Debug.WriteLine(s.Length);
+            System.Diagnostics.Debug.WriteLine(s);
             for (int idx = 0; idx < s.Length; idx++)
             {
                 if (temp_x <= x && temp_x + step_x >= x && temp_y <= y && temp_y + 15 >= y)
@@ -14465,6 +14467,7 @@ namespace Isotope_fitting
             Utimate_Frag_List.Add(new ChemiForm
             {
                 InputFormula = frag_info[6],
+                Name = frag_info[1],
                 Adduct = string.Empty,
                 Deduct = string.Empty,
                 Multiplier = 1,
@@ -14498,19 +14501,11 @@ namespace Isotope_fitting
 
             int i = Utimate_Frag_List.Count - 1;
             if (!string.IsNullOrEmpty(frag_info[5])) { Utimate_Frag_List[i].Has_adduct = true; }
-            if (!frag_info[9].EndsWith(frag_info[7]))
-            {
-                //in case of w,x,y,z
-                string index = frag_info[1].Replace(frag_info[0], "");
-                Utimate_Frag_List[i].Index = index;
-                Utimate_Frag_List[i].IndexTo = index;
-            }
             if (ms_heavy_chain) Utimate_Frag_List[i].Chain_type = 1;
             else if (ms_light_chain) Utimate_Frag_List[i].Chain_type = 2;
             else Utimate_Frag_List[i].Chain_type = 0;
             Utimate_Frag_List[i].SortIdx = Int32.Parse(frag_info[7]);
-            //remove the extra Hydrogen from the chemical Formula
-            Utimate_Frag_List[i].PrintFormula = Utimate_Frag_List[i].InputFormula = fix_formula(out is_error, Utimate_Frag_List[i].InputFormula);
+            //Utimate_Frag_List[i].PrintFormula = Utimate_Frag_List[i].InputFormula = fix_formula(out is_error, Utimate_Frag_List[i].InputFormula);
             if (is_exp_deconvoluted && dec_charge == 0)
             {
                 //in case of a deconvoluted spectra 
@@ -14539,10 +14534,10 @@ namespace Isotope_fitting
             string lbl = "";
             if (Utimate_Frag_List[i].Ion_type.Length == 1) { lbl = frag_info[1]; }
             else { lbl = "(" + Utimate_Frag_List[i].Ion_type + ")" + Utimate_Frag_List[i].Index; }
-            if (Utimate_Frag_List[i].Charge > 0) Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + "+" + ms_extension;
-            else if (Utimate_Frag_List[i].Charge < 0) Utimate_Frag_List[i].Name = lbl + "_" + Math.Abs(Utimate_Frag_List[i].Charge).ToString() + "-" + ms_extension;
-            else Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + ms_extension;
-            if (Utimate_Frag_List[i].Modif_name != "") Utimate_Frag_List[i].Name +="_"+ Utimate_Frag_List[i].Modif_name;
+            //if (Utimate_Frag_List[i].Charge > 0) Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + "+" + ms_extension;
+            //else if (Utimate_Frag_List[i].Charge < 0) Utimate_Frag_List[i].Name = lbl + "_" + Math.Abs(Utimate_Frag_List[i].Charge).ToString() + "-" + ms_extension;
+            //else Utimate_Frag_List[i].Name = lbl + "_" + Utimate_Frag_List[i].Charge.ToString() + ms_extension;
+            //if (Utimate_Frag_List[i].Modif_name != "") Utimate_Frag_List[i].Name +="_"+ Utimate_Frag_List[i].Modif_name;
         }
         /// <summary>Assign the info in each line of the csv file to a ChemiForm fragment </summary>       
         private void loadUltimateFragmentorFileToolStripMenuItem_Click(object sender, EventArgs e)
