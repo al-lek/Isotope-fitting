@@ -14460,7 +14460,9 @@ namespace Isotope_fitting
         /// <param name="frag_info">Information in a line in the Utimate Fragmentor output csv file </param>       
         private void assign_Ultimate_Fragmentor_fragment(string[] frag_info,List<ChemiForm> Utimate_Frag_List)
         {
-            //[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
+            //old csv file-->[0]ion type,[1]name,[2]charge,[3]sequence,[4]mass,[5]modification,[6]formula,[7]bond digested,[8]seq_start,[9]seq_end
+            //new csv file input--> [0]z,[1]z11_1+[K-C3H8N-H]_Carbamidomethyl,[2]1,[3]KEACFAVEGPK,[4]1160.516661,[5]Carbamidomethyl,[6]C51H75N12O17S,[7]11,[8]-420309151,[9]32762
+            //new csv file input for internal-->[0]internal_a,[1]internal_a[2-3]_1+,[2]1,[3]CA,[4]147.058660,[5],[6]C5H10N2OS,[7]2,[8]2,[9]3
             int charge = Int32.Parse(frag_info[2]);
             if (is_exp_deconvoluted && charge > 1) { return; }
             bool is_error = false;
@@ -14473,8 +14475,9 @@ namespace Isotope_fitting
                 Multiplier = 1,
                 Mz = frag_info[4],
                 Ion = frag_info[0],
-                Index = frag_info[7],
-                IndexTo = frag_info[7],
+                Ion_type= frag_info[0],
+                Index = frag_info[7],//this is the index of the name of the fragment for example for y9 index=9
+                IndexTo = frag_info[7],//this is the second index in case of internal fragment
                 Error = false,
                 Elements_set = new List<Element_set>(),
                 Iso_total_amount = 0,
@@ -14498,13 +14501,23 @@ namespace Isotope_fitting
                 Modif_formula="",
                 Modif_name = frag_info[5]
             });
-
             int i = Utimate_Frag_List.Count - 1;
             if (!string.IsNullOrEmpty(frag_info[5])) { Utimate_Frag_List[i].Has_adduct = true; }
             if (ms_heavy_chain) Utimate_Frag_List[i].Chain_type = 1;
             else if (ms_light_chain) Utimate_Frag_List[i].Chain_type = 2;
             else Utimate_Frag_List[i].Chain_type = 0;
             Utimate_Frag_List[i].SortIdx = Int32.Parse(frag_info[7]);
+            //////////////////////////////////////////////////////
+            //in case of w, x , y, z, v, sortIdx is not the same as index. Index of fragments   w, x , y, z, v counts from the right, while sortIdx counts from the left
+            if (Utimate_Frag_List[i].Ion.StartsWith("w") || Utimate_Frag_List[i].Ion.StartsWith("v") || Utimate_Frag_List[i].Ion.StartsWith("x") || Utimate_Frag_List[i].Ion.StartsWith("y") || Utimate_Frag_List[i].Ion.StartsWith("z") || Utimate_Frag_List[i].Ion.StartsWith("(x") || Utimate_Frag_List[i].Ion.StartsWith("(y") || Utimate_Frag_List[i].Ion.StartsWith("(z") || Utimate_Frag_List[i].Ion.StartsWith("(v") || Utimate_Frag_List[i].Ion.StartsWith("(w"))
+            {
+                Utimate_Frag_List[i].SortIdx = ms_sequence.Length - Utimate_Frag_List[i].SortIdx;
+            }
+            if (Utimate_Frag_List[i].Ion.Contains("internal"))//in case of internal fragment indexTo value indicates the second index indicated in the name of the fragment
+            {
+                Utimate_Frag_List[i].IndexTo = frag_info[9];
+            }
+            ////////////////////////////////////////////////////////
             //Utimate_Frag_List[i].PrintFormula = Utimate_Frag_List[i].InputFormula = fix_formula(out is_error, Utimate_Frag_List[i].InputFormula);
             if (is_exp_deconvoluted && dec_charge == 0)
             {
@@ -14519,8 +14532,7 @@ namespace Isotope_fitting
                 //all ions have as many H in Adduct as their charge
                 Utimate_Frag_List[i].Adduct = "H" + Utimate_Frag_List[i].Charge.ToString();
             }
-            // normal fragment
-            Utimate_Frag_List[i].Ion_type = Utimate_Frag_List[i].Ion;
+            // normal fragment           
             if (Utimate_Frag_List[i].Ion.StartsWith("d")) Utimate_Frag_List[i].Color = OxyColors.Turquoise;
             if (Utimate_Frag_List[i].Ion.StartsWith("v")) Utimate_Frag_List[i].Color = OxyColors.Turquoise;
             if (Utimate_Frag_List[i].Ion.StartsWith("w")) Utimate_Frag_List[i].Color = OxyColors.Turquoise;
@@ -14542,15 +14554,66 @@ namespace Isotope_fitting
         /// <summary>Assign the info in each line of the csv file to a ChemiForm fragment </summary>       
         private void loadUltimateFragmentorFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog loadData = new OpenFileDialog() { Multiselect = false, Title = "Load Ultimate Fragmentor data", FileName = "", Filter = "data file|*.csv;|All files|*.*" };
-
-            if (loadData.ShowDialog() != DialogResult.Cancel)
+            bool is_sequence_found = false;
+            ms_extension = ""; ms_sequence = Peptide;
+            if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load an ultimate fragmentor file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+            if (sequenceList.Count == 1)
             {
-                selectedFragments.Clear();
-                string FileName = loadData.FileName;
-                read_csv_and_Calculate(FileName, true);
+                ms_sequence = sequenceList[0].Sequence;
+                if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("Oops...the aminoacid sequence corresponding to the selected extension is empty!Please check again your input.", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                is_sequence_found = true;
             }
-            else { return; }
+            else if (sequenceList.Count == 2)
+            {
+                ms_sequence = sequenceList[1].Sequence; ms_extension = "_" + sequenceList[1].Extension;
+                if (sequenceList[1].Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
+                else { ms_light_chain = true; ms_heavy_chain = false; }
+                if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("Oops...the aminoacid sequence corresponding to the selected extension is empty!Please check again your input.", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
+                is_sequence_found = true;
+            }
+            else
+            {
+                var extension_dialog = this.ShowTabModeDialog();
+                if (string.IsNullOrEmpty(extension_dialog.ToString()) && string.IsNullOrEmpty(sequenceList[0].Sequence))
+                {
+                    MessageBox.Show("No extension selected!Therefore, Loading fragments procedure is cancelled.", "Loading Fragments"); return;
+                }
+                else
+                {
+                    ms_extension = "_" + extension_dialog.ToString();
+                }
+                DialogResult dialogResult1 = MessageBox.Show("The calculation will proceed as for " + ms_extension + " extension AA amino acid sequence.Ready to start?", "Message", MessageBoxButtons.OKCancel);
+                if (dialogResult1 != DialogResult.OK) {  return; }
+                foreach (SequenceTab seq in sequenceList)
+                {
+                    if (("_" + seq.Extension).Equals(ms_extension))
+                    {
+                        ms_sequence = seq.Sequence;
+                        if (string.IsNullOrEmpty(ms_sequence)) { MessageBox.Show("The aminoacid sequence corresponding to the selected extension is empty!", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);  return; }
+                        if (seq.Type == 1) { ms_heavy_chain = true; ms_light_chain = false; }
+                        else { ms_light_chain = true; ms_heavy_chain = false; }
+                        is_sequence_found = true;
+                        break;
+                    }
+                }
+            }
+            if(is_sequence_found)
+            {
+                OpenFileDialog loadData = new OpenFileDialog() { Multiselect = false, Title = "Load Ultimate Fragmentor data", FileName = "", Filter = "data file|*.csv;|All files|*.*" };
+
+                if (loadData.ShowDialog() != DialogResult.Cancel)
+                {
+                    selectedFragments.Clear();
+                    string FileName = loadData.FileName;
+                    read_csv_and_Calculate(FileName, true);
+                }
+                else { return; }
+            }
+            else
+            {
+                 MessageBox.Show("Sorry no sequence was found!", "Error in loading Fragments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            }
         }
 
         #endregion
