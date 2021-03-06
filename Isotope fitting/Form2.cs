@@ -7396,10 +7396,11 @@ namespace Isotope_fitting
                                                 else { fitted_chem.Last().maxFactor = 0.0; }
                                                 if (str.Length > 22) { fitted_chem.Last().Modif_name = str[21]; fitted_chem.Last().Modif_formula = str[22]; }
                                                 else { fitted_chem.Last().Modif_name = ""; fitted_chem.Last().Modif_formula = "";  }
-                                                if ((fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
+                                                if ((fitted_chem.Last().Ion_type.StartsWith("(z") || fitted_chem.Last().Ion_type.StartsWith("(x") || fitted_chem.Last().Ion_type.StartsWith("(y") || fitted_chem.Last().Ion_type.StartsWith("z") || fitted_chem.Last().Ion_type.StartsWith("x") || fitted_chem.Last().Ion_type.StartsWith("y") || fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
                                                 {
                                                     fitted_chem.Last().SortIdx = 0;
                                                 }
+                                           
                                             }
                                             if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                             {
@@ -7409,7 +7410,8 @@ namespace Isotope_fitting
                                             {
                                                 fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
                                             }
-                                            arrayPositionIndex++;
+
+                                        arrayPositionIndex++;
                                             j++;
                                             str = lista[j].Split('\t');
                                             if (lista[j].StartsWith("Prof"))
@@ -7445,8 +7447,21 @@ namespace Isotope_fitting
                                             {
                                                 MessageBox.Show("Error in data file in line: " + arrayPositionIndex.ToString() + "\r\n" + lista[j], "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return;
                                             }
-
-                                            if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
+                                        ///correct wrong calculated internal fragments
+                                        if (fitted_chem.Last().Name.Contains("internal") && fitted_chem.Last().Index.Equals(fitted_chem.Last().IndexTo))
+                                        {
+                                            string sub_index_string = "[" + fitted_chem.Last().Index + "-";
+                                            int ii = fitted_chem.Last().Name.IndexOf(sub_index_string);
+                                            ii += sub_index_string.Length;
+                                            string sub_index_to = "";
+                                            for (int kkk = ii; kkk < fitted_chem.Last().Name.Length; kkk++)
+                                            {
+                                                if (fitted_chem.Last().Name[kkk] == ']') { break; }
+                                                sub_index_to += fitted_chem.Last().Name[kkk];
+                                            }
+                                            fitted_chem.Last().IndexTo = sub_index_to;
+                                        }
+                                        if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
                                         }
                                         else
                                         {
@@ -7749,9 +7764,9 @@ namespace Isotope_fitting
                                                 else { fitted_chem.Last().maxFactor = 0.0; }
                                                 if (str.Length > 22) { fitted_chem.Last().Modif_name = str[21]; fitted_chem.Last().Modif_formula = str[22]; }
                                                 else { fitted_chem.Last().Modif_name = ""; fitted_chem.Last().Modif_formula = ""; }
-                                            if ((fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
+                                                if ((fitted_chem.Last().Ion_type.StartsWith("(z") || fitted_chem.Last().Ion_type.StartsWith("(x") || fitted_chem.Last().Ion_type.StartsWith("(y") || fitted_chem.Last().Ion_type.StartsWith("z") || fitted_chem.Last().Ion_type.StartsWith("x") || fitted_chem.Last().Ion_type.StartsWith("y") || fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
                                                 {
-                                                    fitted_chem.Last().SortIdx = 0;
+                                                     fitted_chem.Last().SortIdx = 0;
                                                 }
                                             }
                                             if (fitted_chem.Last().Name.EndsWith("_L") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
@@ -7761,6 +7776,20 @@ namespace Isotope_fitting
                                             else if (fitted_chem.Last().Name.EndsWith("_H") && string.IsNullOrEmpty(fitted_chem.Last().Extension))
                                             {
                                                 fitted_chem.Last().Extension = "_H"; fitted_chem.Last().Chain_type = 1;
+                                            }
+                                            ///correct wrong calculated internal fragments
+                                            if (fitted_chem.Last().Name.Contains("internal")&& fitted_chem.Last().Index.Equals(fitted_chem.Last().IndexTo))
+                                            {
+                                                string sub_index_string = "["+fitted_chem.Last().Index + "-";
+                                                int ii = fitted_chem.Last().Name.IndexOf(sub_index_string);
+                                                ii += sub_index_string.Length;
+                                                string sub_index_to = "";
+                                                for (int kkk=ii; kkk< fitted_chem.Last().Name.Length; kkk++)
+                                                {
+                                                    if (fitted_chem.Last().Name[kkk] == ']') { break; }
+                                                    sub_index_to += fitted_chem.Last().Name[kkk];
+                                                }
+                                                fitted_chem.Last().IndexTo = sub_index_to;
                                             }
                                             if (fitted_chem.Last().SortIdx == 0) { fitted_chem.Last().SortIdx = check_false_sort_idx(fitted_chem.Last()); }
                                             if (fitted_chem.Last().Name.Contains("SH"))
@@ -7816,7 +7845,7 @@ namespace Isotope_fitting
                         {
                             if ((seq.Extension != "" && recognise_extension(chem.Extension, seq.Extension)) || (seq.Extension == "" && chem.Extension == ""))
                             {
-                                found = true; break;
+                            found = true; s = seq.Sequence.ToString(); break;
                             }
                         }
                         if (found) { sort_index = s.Length - Int32.Parse(chem.Index); }
@@ -7840,7 +7869,7 @@ namespace Isotope_fitting
                         {
                             if ((seq.Extension != "" && recognise_extension(chem.Extension, seq.Extension)) || (seq.Extension == "" && chem.Extension == ""))
                             {
-                                found = true; break;
+                                found = true; s = seq.Sequence.ToString(); break;
                             }
                         }
                         if (found) { sort_index = s.Length - Int32.Parse(chem.Index); }
@@ -9327,7 +9356,7 @@ namespace Isotope_fitting
             {
                 if ((seq.Extension != "" && recognise_extension(fra.Extension, seq.Extension)) || (seq.Extension == "" && fra.Extension == ""))
                 {
-                    found = true; break;
+                    found = true; s = seq.Sequence.ToString(); break;
                 }
             }
             if (found) { sort_index = s.Length - Int32.Parse(fra.Index); }
