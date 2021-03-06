@@ -10175,6 +10175,7 @@ namespace Isotope_fitting
             }
         }
         //mouse down
+        /// <summary>[Sequence Tab] The control for when the user clicks on a letter of a sequence and wants to see the fragments of this index </summary>
         private void sequence_Pnl_MouseDown(object sender, MouseEventArgs e)
         {
             CloseForm("IndexMatrix_Wnd");
@@ -10294,8 +10295,9 @@ namespace Isotope_fitting
                     if ((idx + 1) % grp_num == 0) { temp_x = temp_x_init; temp_y = temp_y + step_y; }
                 }
             }
-        }        
+        }
         //draw       
+        /// <summary>[Sequence Tab] Draws the fragments in the sequence panel-->peptides </summary>
         private void sequence_draw_general(Graphics g,Panel draw_sequence_panel_temp)
         {
             PictureBox color_range_picBox_temp = GetControls(draw_sequence_panel_temp).OfType<PictureBox>().Where(l => l.Name.Contains("color_range_picBox")).ToList().FirstOrDefault();
@@ -10540,6 +10542,7 @@ namespace Isotope_fitting
             }
             return;
         }
+        /// <summary>[Sequence Tab] Draws the fragments in the sequence panel-->RIKEN </summary>
         private void sequence_draw_general_Riken(Graphics g, Panel draw_sequence_panel_temp)
         {
             PictureBox color_range_picBox_temp = GetControls(draw_sequence_panel_temp).OfType<PictureBox>().Where(l => l.Name.Contains("color_range_picBox")).ToList().FirstOrDefault();
@@ -10812,6 +10815,8 @@ namespace Isotope_fitting
             }
             return;
         }
+        /// <summary>[Sequence Tab] Draws the internal fragments line in the sequence panel in the case that only internal fragments are displayed(no primary,
+        /// because when primary are displayed internals are shown as a vertical line only) </summary>
         private void draw_internal_riken_line(Point pf, bool left, bool up, int step, Color color_draw, Graphics g, bool legend = false)
         {
             //0.707 * 10=7.07 
@@ -10870,6 +10875,7 @@ namespace Isotope_fitting
             Point[] points = { new Point(x1, y1), new Point(x2, y2), new Point(x3, y3) };
             g.DrawLines(mypen, points);
         }
+        /// <summary>[Sequence Tab] The control of the Paint of the Panel--> how sequence is plotted </summary>
         private void sequence_Pnl_Paint(object sender, PaintEventArgs e)
         {
             if (is_riken)
@@ -10884,6 +10890,7 @@ namespace Isotope_fitting
             }           
         }
         //color internal
+        /// <summary>[Sequence Tab] Draws the fragments in the sequence panel-->Peptides. This is the case when the user has selected the "Heatmap"mode </summary>
         private void draw_internal_general(Graphics g, Color paint_color, Panel draw_sequence_panel_temp)
         {
             PictureBox color_range_picBox_temp = GetControls(draw_sequence_panel_temp).OfType<PictureBox>().Where(l => l.Name.Contains("color_range_picBox")).ToList().FirstOrDefault();
@@ -11138,6 +11145,7 @@ namespace Isotope_fitting
 
             return;
         }
+        /// <summary>[Sequence Tab] Draws the fragments in the sequence panel-->RIKEN. This is the case when the user has selected the "Heatmap"mode </summary>
         private void draw_internal_generalRiken(Graphics g, Color paint_color, Panel draw_sequence_panel_temp)
         {
             PictureBox color_range_picBox_temp = GetControls(draw_sequence_panel_temp).OfType<PictureBox>().Where(l => l.Name.Contains("color_range_picBox")).ToList().FirstOrDefault();
@@ -11397,12 +11405,14 @@ namespace Isotope_fitting
 
             return;
         }
+        /// <summary>[Sequence Tab] Draws the letter of the sequence </summary>
         private void draw_letter(Graphics g,string letter,Panel sequence_Pnl_temp, SolidBrush sb, Point pp)
         {
             Point pp_final = new Point(pp.X, pp.Y);
             if(letter.Equals("I")) pp_final = new Point(pp.X+4, pp.Y);
             g.DrawString(letter, sequence_Pnl_temp.Font, sb, pp_final);
         }
+        /// <summary>[Sequence Tab] Draws the the colored rectangle in the case of the heatmap </summary>
         private void draw_rectangle(Point pf, Color color_draw, Graphics g)
         {
             //Pen mypen = new Pen(Color.FromArgb(intesity, color_draw), 1F);
@@ -11418,6 +11428,7 @@ namespace Isotope_fitting
             // Fill rectangle to screen.
             g.FillRectangle(blueBrush, rect);
         }
+        /// <summary>[Sequence Tab] Button control of the Heatmap mode </summary>
         private void highlight_ibt_ckBx_CheckedChanged(object sender, EventArgs e)
         {
             if (help_Btn.Checked) { MessageBox.Show("When checked, a heatmap of the internal fragments' intensity is displayed on the sequence based on their fragmentation indexes. ", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
@@ -14554,6 +14565,7 @@ namespace Isotope_fitting
         /// <summary>Assign the info in each line of the csv file to a ChemiForm fragment </summary>       
         private void loadUltimateFragmentorFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            /////////////////////////////////////////////////////
             bool is_sequence_found = false;
             ms_extension = ""; ms_sequence = Peptide;
             if (sequenceList == null || sequenceList.Count == 0) { MessageBox.Show("You must first insert Sequence and then load an ultimate fragmentor file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); return; }
@@ -14597,6 +14609,7 @@ namespace Isotope_fitting
                     }
                 }
             }
+            /////////////////////////////////////////////////
             if(is_sequence_found)
             {
                 OpenFileDialog loadData = new OpenFileDialog() { Multiselect = false, Title = "Load Ultimate Fragmentor data", FileName = "", Filter = "data file|*.csv;|All files|*.*" };
