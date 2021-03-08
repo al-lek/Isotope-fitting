@@ -2693,9 +2693,9 @@ namespace Isotope_fitting
                 // this the main sequence after loading data
                 // 1. select fragments according to UI
                 added = 0;
-                Fragments2.Clear();
-                selectedFragments.Clear();
-                custom_colors.Clear();
+                //Fragments2.Clear();
+                //selectedFragments.Clear();
+                //custom_colors.Clear();
                 custom_colors.Add(exp_color);
                 sw1.Reset(); sw1.Start();
                 //List<ChemiForm> selected_fragments = select_fragments2();
@@ -14474,8 +14474,8 @@ namespace Isotope_fitting
                     {
                         try
                         {
-                            clearList();
-                            if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) { ExtraFragCalculator.last_plotted.Clear(); }
+                            //clearList();
+                            //if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) if (ExtraFragCalculator.now && ExtraFragCalculator.last_plotted.Count > 0) { ExtraFragCalculator.last_plotted.Clear(); }
                         }
                         catch
                         {
@@ -14645,7 +14645,7 @@ namespace Isotope_fitting
 
                 if (loadData.ShowDialog() != DialogResult.Cancel)
                 {
-                    selectedFragments.Clear();
+                    //selectedFragments.Clear();
                     string FileName = loadData.FileName;
                     read_csv_and_Calculate(FileName, true);
                 }
