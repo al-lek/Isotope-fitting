@@ -2694,8 +2694,8 @@ namespace Isotope_fitting
                 // 1. select fragments according to UI
                 added = 0;
                 //Fragments2.Clear();
-                //selectedFragments.Clear();
-                //custom_colors.Clear();
+                selectedFragments.Clear();
+                custom_colors.Clear();
                 custom_colors.Add(exp_color);
                 sw1.Reset(); sw1.Start();
                 //List<ChemiForm> selected_fragments = select_fragments2();
@@ -7390,12 +7390,12 @@ namespace Isotope_fitting
                                                 fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                                 fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                                 fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                                if (str.Length > 19) { fitted_chem.Last().Has_adduct = string_to_bool(str[19]); }
-                                                else { fitted_chem.Last().Has_adduct = false; }
+                                                //if (str.Length > 19) { fitted_chem.Last().Has_adduct = string_to); }
+                                                //else { fitted_chem.Last().Has_adduct = false; }
                                                 if (str.Length > 20) { fitted_chem.Last().maxFactor = dParser(str[20]); }
                                                 else { fitted_chem.Last().maxFactor = 0.0; }
-                                                if (str.Length > 22) { fitted_chem.Last().Modif_name = str[21]; fitted_chem.Last().Modif_formula = str[22]; }
-                                                else { fitted_chem.Last().Modif_name = ""; fitted_chem.Last().Modif_formula = "";  }
+                                                //if (str.Length > 22) { fitted_chem.Last().Modif_name = str[21]; fitted_chem.Last().Modif_formula = str[22]; }
+                                                //else { fitted_chem.Last().Modif_name = ""; fitted_chem.Last().Modif_formula = "";  }
                                                 if ((fitted_chem.Last().Ion_type.StartsWith("(z") || fitted_chem.Last().Ion_type.StartsWith("(x") || fitted_chem.Last().Ion_type.StartsWith("(y") || fitted_chem.Last().Ion_type.StartsWith("z") || fitted_chem.Last().Ion_type.StartsWith("x") || fitted_chem.Last().Ion_type.StartsWith("y") || fitted_chem.Last().Ion_type.StartsWith("w") || fitted_chem.Last().Ion_type.StartsWith("(w") || fitted_chem.Last().Ion_type.StartsWith("v") || fitted_chem.Last().Ion_type.StartsWith("(v")) && str[16].Equals(str[2]))
                                                 {
                                                     fitted_chem.Last().SortIdx = 0;
@@ -7755,7 +7755,7 @@ namespace Isotope_fitting
                                                 fitted_chem.Last().Chain_type = Convert.ToInt32(str[17]);
                                                 fitted_chem.Last().maxPPM_Error = dParser(str[15]);
                                                 fitted_chem.Last().minPPM_Error = dParser(str[14]);
-                                                if (str.Length > 19) { fitted_chem.Last().Has_adduct = string_to_bool(str[19]); }
+                                                if (str.Length > 19) { fitted_chem.Last().Has_adduct = false; }
                                                 else
                                                 {
                                                     fitted_chem.Last().Has_adduct = false;
