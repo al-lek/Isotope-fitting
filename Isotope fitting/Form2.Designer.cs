@@ -398,7 +398,7 @@ namespace Isotope_fitting
             this.statusStrp = new System.Windows.Forms.StatusStrip();
             this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tab_plot_control = new System.Windows.Forms.TabControl();
             this.tab_Hydrogens = new System.Windows.Forms.TabPage();
             this.losses_splitContainer = new System.Windows.Forms.SplitContainer();
             this.losses_groupBox_d = new System.Windows.Forms.GroupBox();
@@ -510,10 +510,30 @@ namespace Isotope_fitting
             this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.losses_style_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.losses_label = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.aacGroupBox = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pltSelectedBtn = new System.Windows.Forms.Button();
+            this.pltFragsChkBox = new System.Windows.Forms.CheckedListBox();
+            this.clearFitListBtn = new System.Windows.Forms.Button();
+            this.fit_files_list = new System.Windows.Forms.ListView();
+            this.nameCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.numfragCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.button1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.frag_lbl_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.displayIonTypesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartManager1 = new Arction.WinForms.Charting.ChartManager.ChartManager(this.components);
+            this.absInt_RB = new System.Windows.Forms.RadioButton();
+            this.relInt_RB = new System.Windows.Forms.RadioButton();
+            this.intGroupBox = new System.Windows.Forms.GroupBox();
+            this.saveAAPlt = new System.Windows.Forms.Button();
+            this.copyAAPlt = new System.Windows.Forms.Button();
+            this.sortAA_GB = new System.Windows.Forms.GroupBox();
+            this.hydro_RB = new System.Windows.Forms.RadioButton();
+            this.pI_RB = new System.Windows.Forms.RadioButton();
+            this.mrgCustom_RB = new System.Windows.Forms.RadioButton();
             this.contextMenuStrip_MSproduct.SuspendLayout();
             this.tabInternal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -587,7 +607,7 @@ namespace Isotope_fitting
             this.toolStrip_fragList.SuspendLayout();
             this.fragTypes_toolStrip.SuspendLayout();
             this.statusStrp.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tab_plot_control.SuspendLayout();
             this.tab_Hydrogens.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.losses_splitContainer)).BeginInit();
             this.losses_splitContainer.Panel1.SuspendLayout();
@@ -611,7 +631,11 @@ namespace Isotope_fitting
             this.losses_toolStrip2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.frag_lbl_contextMenuStrip1.SuspendLayout();
+            this.intGroupBox.SuspendLayout();
+            this.sortAA_GB.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_MSproduct
@@ -3944,7 +3968,7 @@ namespace Isotope_fitting
             // 
             this.styleFormatBtn.Image = ((System.Drawing.Image)(resources.GetObject("styleFormatBtn.Image")));
             this.styleFormatBtn.Name = "styleFormatBtn";
-            this.styleFormatBtn.Size = new System.Drawing.Size(148, 36);
+            this.styleFormatBtn.Size = new System.Drawing.Size(194, 36);
             this.styleFormatBtn.Text = "Style";
             this.styleFormatBtn.Click += new System.EventHandler(this.styleFormatBtn_Click);
             // 
@@ -3952,7 +3976,7 @@ namespace Isotope_fitting
             // 
             this.extractPlotToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("extractPlotToolStripMenuItem.Image")));
             this.extractPlotToolStripMenuItem.Name = "extractPlotToolStripMenuItem";
-            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(148, 36);
+            this.extractPlotToolStripMenuItem.Size = new System.Drawing.Size(194, 36);
             this.extractPlotToolStripMenuItem.Text = "Extract plot";
             this.extractPlotToolStripMenuItem.Click += new System.EventHandler(this.extractPlotToolStripMenuItem_Click);
             // 
@@ -4925,20 +4949,21 @@ namespace Isotope_fitting
             this.ProgressBar.Name = "ProgressBar";
             this.ProgressBar.Size = new System.Drawing.Size(600, 15);
             // 
-            // tabControl1
+            // tab_plot_control
             // 
-            this.tabControl1.Controls.Add(this.tabFit);
-            this.tabControl1.Controls.Add(this.tabDiagram);
-            this.tabControl1.Controls.Add(this.tabPrimary);
-            this.tabControl1.Controls.Add(this.tabInternal);
-            this.tabControl1.Controls.Add(this.tab_Hydrogens);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1370, 749);
-            this.tabControl1.TabIndex = 0;
+            this.tab_plot_control.Controls.Add(this.tabFit);
+            this.tab_plot_control.Controls.Add(this.tabDiagram);
+            this.tab_plot_control.Controls.Add(this.tabPrimary);
+            this.tab_plot_control.Controls.Add(this.tabInternal);
+            this.tab_plot_control.Controls.Add(this.tab_Hydrogens);
+            this.tab_plot_control.Controls.Add(this.tabPage1);
+            this.tab_plot_control.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tab_plot_control.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tab_plot_control.Location = new System.Drawing.Point(0, 0);
+            this.tab_plot_control.Name = "tab_plot_control";
+            this.tab_plot_control.SelectedIndex = 0;
+            this.tab_plot_control.Size = new System.Drawing.Size(1370, 749);
+            this.tab_plot_control.TabIndex = 0;
             // 
             // tab_Hydrogens
             // 
@@ -6266,6 +6291,138 @@ namespace Isotope_fitting
             this.losses_label.Text = "Intramolecular Hydrogen Atom Rearrangements";
             this.losses_label.Click += new System.EventHandler(this.losses_label_Click);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.aacGroupBox);
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1362, 723);
+            this.tabPage1.TabIndex = 6;
+            this.tabPage1.Text = "AA Cleavage";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // aacGroupBox
+            // 
+            this.aacGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.aacGroupBox.Location = new System.Drawing.Point(304, 6);
+            this.aacGroupBox.Name = "aacGroupBox";
+            this.aacGroupBox.Size = new System.Drawing.Size(1052, 709);
+            this.aacGroupBox.TabIndex = 3;
+            this.aacGroupBox.TabStop = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.sortAA_GB);
+            this.groupBox1.Controls.Add(this.copyAAPlt);
+            this.groupBox1.Controls.Add(this.saveAAPlt);
+            this.groupBox1.Controls.Add(this.intGroupBox);
+            this.groupBox1.Controls.Add(this.pltSelectedBtn);
+            this.groupBox1.Controls.Add(this.pltFragsChkBox);
+            this.groupBox1.Controls.Add(this.clearFitListBtn);
+            this.groupBox1.Controls.Add(this.fit_files_list);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Location = new System.Drawing.Point(11, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(287, 709);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            // 
+            // pltSelectedBtn
+            // 
+            this.pltSelectedBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pltSelectedBtn.Location = new System.Drawing.Point(6, 674);
+            this.pltSelectedBtn.Name = "pltSelectedBtn";
+            this.pltSelectedBtn.Size = new System.Drawing.Size(127, 29);
+            this.pltSelectedBtn.TabIndex = 5;
+            this.pltSelectedBtn.Text = "Plot Selected";
+            this.pltSelectedBtn.UseVisualStyleBackColor = true;
+            this.pltSelectedBtn.Click += new System.EventHandler(this.pltSelectedBtn_Click);
+            // 
+            // pltFragsChkBox
+            // 
+            this.pltFragsChkBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pltFragsChkBox.CheckOnClick = true;
+            this.pltFragsChkBox.FormattingEnabled = true;
+            this.pltFragsChkBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pltFragsChkBox.Items.AddRange(new object[] {
+            "a",
+            "b",
+            "c",
+            "x",
+            "y",
+            "z",
+            "d",
+            "v",
+            "w"});
+            this.pltFragsChkBox.Location = new System.Drawing.Point(6, 499);
+            this.pltFragsChkBox.Name = "pltFragsChkBox";
+            this.pltFragsChkBox.Size = new System.Drawing.Size(127, 169);
+            this.pltFragsChkBox.TabIndex = 4;
+            // 
+            // clearFitListBtn
+            // 
+            this.clearFitListBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.clearFitListBtn.Location = new System.Drawing.Point(139, 674);
+            this.clearFitListBtn.Name = "clearFitListBtn";
+            this.clearFitListBtn.Size = new System.Drawing.Size(142, 29);
+            this.clearFitListBtn.TabIndex = 3;
+            this.clearFitListBtn.Text = "Clear All";
+            this.clearFitListBtn.UseVisualStyleBackColor = true;
+            this.clearFitListBtn.Click += new System.EventHandler(this.clearFitListBtn_Click);
+            // 
+            // fit_files_list
+            // 
+            this.fit_files_list.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.fit_files_list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.nameCol,
+            this.numfragCol});
+            this.fit_files_list.GridLines = true;
+            this.fit_files_list.HideSelection = false;
+            this.fit_files_list.Location = new System.Drawing.Point(6, 17);
+            this.fit_files_list.Name = "fit_files_list";
+            this.fit_files_list.Size = new System.Drawing.Size(275, 398);
+            this.fit_files_list.TabIndex = 2;
+            this.fit_files_list.UseCompatibleStateImageBehavior = false;
+            this.fit_files_list.View = System.Windows.Forms.View.Details;
+            // 
+            // nameCol
+            // 
+            this.nameCol.Text = "Peptide Sequence";
+            this.nameCol.Width = 128;
+            // 
+            // numfragCol
+            // 
+            this.numfragCol.Text = "# Fitted Fragments";
+            this.numfragCol.Width = 167;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(6, 421);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(275, 29);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Load .fit Files";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 13);
+            this.label3.TabIndex = 1;
+            // 
             // toolStripButton4
             // 
             this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -6295,13 +6452,127 @@ namespace Isotope_fitting
             this.chartManager1.MemoryGarbageCollecting = false;
             this.chartManager1.Name = "";
             // 
+            // absInt_RB
+            // 
+            this.absInt_RB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.absInt_RB.AutoSize = true;
+            this.absInt_RB.Location = new System.Drawing.Point(6, 19);
+            this.absInt_RB.Name = "absInt_RB";
+            this.absInt_RB.Size = new System.Drawing.Size(108, 17);
+            this.absInt_RB.TabIndex = 6;
+            this.absInt_RB.TabStop = true;
+            this.absInt_RB.Text = "Absolute Intensity";
+            this.absInt_RB.UseVisualStyleBackColor = true;
+            this.absInt_RB.CheckedChanged += new System.EventHandler(this.absInt_RB_CheckedChanged);
+            // 
+            // relInt_RB
+            // 
+            this.relInt_RB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.relInt_RB.AutoSize = true;
+            this.relInt_RB.Location = new System.Drawing.Point(6, 42);
+            this.relInt_RB.Name = "relInt_RB";
+            this.relInt_RB.Size = new System.Drawing.Size(106, 17);
+            this.relInt_RB.TabIndex = 7;
+            this.relInt_RB.TabStop = true;
+            this.relInt_RB.Text = "Relative Intensity";
+            this.relInt_RB.UseVisualStyleBackColor = true;
+            this.relInt_RB.CheckedChanged += new System.EventHandler(this.relInt_RB_CheckedChanged);
+            // 
+            // intGroupBox
+            // 
+            this.intGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.intGroupBox.Controls.Add(this.relInt_RB);
+            this.intGroupBox.Controls.Add(this.absInt_RB);
+            this.intGroupBox.Location = new System.Drawing.Point(139, 601);
+            this.intGroupBox.Name = "intGroupBox";
+            this.intGroupBox.Size = new System.Drawing.Size(142, 67);
+            this.intGroupBox.TabIndex = 8;
+            this.intGroupBox.TabStop = false;
+            this.intGroupBox.Text = "Intensity Format";
+            // 
+            // saveAAPlt
+            // 
+            this.saveAAPlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveAAPlt.Location = new System.Drawing.Point(6, 459);
+            this.saveAAPlt.Name = "saveAAPlt";
+            this.saveAAPlt.Size = new System.Drawing.Size(127, 29);
+            this.saveAAPlt.TabIndex = 9;
+            this.saveAAPlt.Text = "Save Plot State";
+            this.saveAAPlt.UseVisualStyleBackColor = true;
+            this.saveAAPlt.Click += new System.EventHandler(this.saveAAPlt_Click);
+            // 
+            // copyAAPlt
+            // 
+            this.copyAAPlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.copyAAPlt.Location = new System.Drawing.Point(139, 459);
+            this.copyAAPlt.Name = "copyAAPlt";
+            this.copyAAPlt.Size = new System.Drawing.Size(142, 29);
+            this.copyAAPlt.TabIndex = 10;
+            this.copyAAPlt.Text = "Copy Plot State";
+            this.copyAAPlt.UseVisualStyleBackColor = true;
+            this.copyAAPlt.Click += new System.EventHandler(this.copyAAPlt_Click);
+            // 
+            // sortAA_GB
+            // 
+            this.sortAA_GB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.sortAA_GB.Controls.Add(this.mrgCustom_RB);
+            this.sortAA_GB.Controls.Add(this.pI_RB);
+            this.sortAA_GB.Controls.Add(this.hydro_RB);
+            this.sortAA_GB.Location = new System.Drawing.Point(139, 495);
+            this.sortAA_GB.Name = "sortAA_GB";
+            this.sortAA_GB.Size = new System.Drawing.Size(142, 100);
+            this.sortAA_GB.TabIndex = 11;
+            this.sortAA_GB.TabStop = false;
+            this.sortAA_GB.Text = "Sort AA By";
+            // 
+            // hydro_RB
+            // 
+            this.hydro_RB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.hydro_RB.AutoSize = true;
+            this.hydro_RB.Location = new System.Drawing.Point(6, 19);
+            this.hydro_RB.Name = "hydro_RB";
+            this.hydro_RB.Size = new System.Drawing.Size(79, 17);
+            this.hydro_RB.TabIndex = 8;
+            this.hydro_RB.TabStop = true;
+            this.hydro_RB.Text = "Hydropathy";
+            this.hydro_RB.UseVisualStyleBackColor = true;
+            // 
+            // pI_RB
+            // 
+            this.pI_RB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pI_RB.AutoSize = true;
+            this.pI_RB.Location = new System.Drawing.Point(6, 42);
+            this.pI_RB.Name = "pI_RB";
+            this.pI_RB.Size = new System.Drawing.Size(34, 17);
+            this.pI_RB.TabIndex = 9;
+            this.pI_RB.TabStop = true;
+            this.pI_RB.Text = "pI";
+            this.pI_RB.UseVisualStyleBackColor = true;
+            // 
+            // mrgCustom_RB
+            // 
+            this.mrgCustom_RB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.mrgCustom_RB.AutoSize = true;
+            this.mrgCustom_RB.Location = new System.Drawing.Point(6, 65);
+            this.mrgCustom_RB.Name = "mrgCustom_RB";
+            this.mrgCustom_RB.Size = new System.Drawing.Size(88, 17);
+            this.mrgCustom_RB.TabIndex = 10;
+            this.mrgCustom_RB.TabStop = true;
+            this.mrgCustom_RB.Text = "MRG Custom";
+            this.mrgCustom_RB.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1370, 749);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tab_plot_control);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1364, 726);
             this.Name = "Form2";
@@ -6437,7 +6708,7 @@ namespace Isotope_fitting
             this.fragTypes_toolStrip.PerformLayout();
             this.statusStrp.ResumeLayout(false);
             this.statusStrp.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
+            this.tab_plot_control.ResumeLayout(false);
             this.tab_Hydrogens.ResumeLayout(false);
             this.losses_splitContainer.Panel1.ResumeLayout(false);
             this.losses_splitContainer.Panel2.ResumeLayout(false);
@@ -6479,7 +6750,14 @@ namespace Isotope_fitting
             this.panel3.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.frag_lbl_contextMenuStrip1.ResumeLayout(false);
+            this.intGroupBox.ResumeLayout(false);
+            this.intGroupBox.PerformLayout();
+            this.sortAA_GB.ResumeLayout(false);
+            this.sortAA_GB.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -6771,7 +7049,7 @@ namespace Isotope_fitting
         private System.Windows.Forms.GroupBox expData_grpBx;
         private System.Windows.Forms.TextBox filename_txtBx;
         private System.Windows.Forms.GroupBox fitOptions_grpBox;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tab_plot_control;
         private System.Windows.Forms.TabPage tab_Hydrogens;
         private System.Windows.Forms.GroupBox losses_groupBox_a;
         private System.Windows.Forms.Panel losses_plot_panel1;
@@ -6966,5 +7244,25 @@ namespace Isotope_fitting
         private System.Windows.Forms.ToolStripButton seq_has_adduct_chkBx;
         private System.Windows.Forms.ToolStripMenuItem loadUltimateFragmentorFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton ultFragCalc_Btn;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListView fit_files_list;
+        private System.Windows.Forms.Button clearFitListBtn;
+        private System.Windows.Forms.ColumnHeader nameCol;
+        private System.Windows.Forms.ColumnHeader numfragCol;
+        private System.Windows.Forms.GroupBox aacGroupBox;
+        private System.Windows.Forms.Button pltSelectedBtn;
+        private System.Windows.Forms.CheckedListBox pltFragsChkBox;
+        private System.Windows.Forms.RadioButton relInt_RB;
+        private System.Windows.Forms.RadioButton absInt_RB;
+        private System.Windows.Forms.GroupBox intGroupBox;
+        private System.Windows.Forms.Button saveAAPlt;
+        private System.Windows.Forms.Button copyAAPlt;
+        private System.Windows.Forms.GroupBox sortAA_GB;
+        private System.Windows.Forms.RadioButton mrgCustom_RB;
+        private System.Windows.Forms.RadioButton pI_RB;
+        private System.Windows.Forms.RadioButton hydro_RB;
     }
 }

@@ -468,6 +468,7 @@ namespace Isotope_fitting
             change_application(true);
             //call change state window
             initiate_change_app_mode_form();
+            aac_chart_init();
             //PatchParameter("", 0);
             //run_cmd("", "");
             //rin_python();
@@ -13830,7 +13831,7 @@ namespace Isotope_fitting
         }
         public void inval_style_Refresh_Btn()
         {
-            tabControl1.TabPages["tab_Hydrogens"].Invalidate();
+            tab_plot_control.TabPages["tab_Hydrogens"].Invalidate();
         }
         private double round_to_10_power(double initial, bool is_minimum)
         {
@@ -13920,6 +13921,519 @@ namespace Isotope_fitting
             Panel pnl = GetControls(grp).OfType<Panel>().Where(l => l.Name.Contains("plot")).First();
             pnl.Invalidate();
         }
+        #endregion
+
+        #region [tab 6] AA Cleavage Tab
+
+        #region Loading
+
+        #region Load Initial Data
+
+        public Dictionary<string, List<FittedFrag>> ff_dict;
+        string[] possible_frags = { "a", "b", "c", "x", "y", "z", "d", "v", "w" };
+        public Dictionary<char, Dictionary<string, List<FittedFrag>>> aa_frags;
+        public Dictionary<char, double> aa_ints;
+        int num_experiments = 0;
+        public Dictionary<char, float> hydropathy_aa = new Dictionary<char, float>()
+        {
+            {'I', 4.5f},
+            {'V', 4.2f},
+            {'L', 3.8f},
+            {'F', 2.8f},
+            {'C', 2.5f},
+            {'M', 1.9f},
+            {'A', 1.8f},
+            {'G', -0.4f},
+            {'T', -0.7f},
+            {'W', -0.9f},
+            {'S', -0.8f},
+            {'Y', -1.3f},
+            {'P', -1.6f},
+            {'H', -3.2f},
+            {'E', -3.5f},
+            {'Q', -3.5f},
+            {'D', -3.5f},
+            {'N', -3.5f},
+            {'K', -3.9f},
+            {'R', -4.5f},
+        };
+
+        public Dictionary<char, float> pI_aa = new Dictionary<char, float>()
+        {
+            {'I', 6.02f},
+            {'V', 5.96f},
+            {'L', 5.98f},
+            {'F', 5.48f},
+            {'C', 5.07f},
+            {'M', 5.74f},
+            {'A', 6.00f},
+            {'G', 5.97f},
+            {'T', 5.60f},
+            {'W', 5.89f},
+            {'S', 5.68f},
+            {'Y', 5.66f},
+            {'P', 6.30f},
+            {'H', 7.59f},
+            {'E', 3.22f},
+            {'Q', 5.65f},
+            {'D', 2.77f},
+            {'N', 5.41f},
+            {'K', 9.74f},
+            {'R', 10.76f},
+        };
+
+        public Dictionary<char, float> mrgcustom_aa = new Dictionary<char, float>()
+        {
+            {'I', 5},
+            {'V', 3},
+            {'L', 4},
+            {'F', 6},
+            {'C', 12},
+            {'M', 9},
+            {'A', 2},
+            {'G', 1},
+            {'T', 11},
+            {'W', 7},
+            {'S', 10},
+            {'Y', 13},
+            {'P', 8},
+            {'H', 18},
+            {'E', 16},
+            {'Q', 14},
+            {'D', 17},
+            {'N', 15},
+            {'K', 19},
+            {'R', 20},
+        };
+
+        #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<FittedFrag> ff_list;
+            if (aa_frags == null) { aa_frags = new Dictionary<char, Dictionary<string, List<FittedFrag>>>(); }
+            if (aa_ints == null) { aa_ints = new Dictionary<char, double>(); }
+
+            string peptide = String.Empty;
+            int numFrags = 0;
+
+            OpenFileDialog loadFit = new OpenFileDialog() {
+                Multiselect = true,
+                Title = "Load Fitting Data",
+                InitialDirectory = Application.StartupPath, 
+                Filter = "Fit Files|*.fit;",
+                FilterIndex = 1,
+                RestoreDirectory = true,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+
+            if (loadFit.ShowDialog() != DialogResult.Cancel)
+            {
+                int fileCount = loadFit.FileNames.Length;
+                for (int i = 0; i < fileCount; i++)
+                {
+                    num_experiments++;
+                    List<string> lista = new List<string>();
+                    // dictionary to count the number of times each amino acid appears in the sequence
+                    Dictionary<char, int> num_aa_in_seq = new Dictionary<char, int>();
+                    // Read the contents of each selected file into the lines list
+                    string file_name = loadFit.FileNames[i];
+                    double current_max = 0.0;
+
+                    StreamReader reader = new StreamReader(file_name);
+                    do { lista.Add(reader.ReadLine()); }
+                    while (reader.Peek() != -1);
+                    reader.Close();
+
+                    // find the maximum intensity of the primary fragments of this file
+                    for (int j = 0; j < lista.Count; j++)
+                    {
+                        string[] str = lista[j].Split('\t');
+                        if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("\t") || lista[j].StartsWith("Name") || lista[j].StartsWith("Mode")) continue; // comments
+                        else if (lista[j].StartsWith("Extension")) continue;
+                        else if (lista[j].StartsWith("Multiple")) continue;
+                        else if (lista[j].StartsWith("Fitted")) continue;
+                        else if (lista[j].StartsWith("Exclusion")) continue;
+                        else 
+                        {
+                            FittedFrag ff = new FittedFrag();
+                            ff.IonType = str[1];
+                            ff.Intensity = double.Parse(str[6]);
+                            if (ff.IonType.StartsWith("x") || ff.IonType.StartsWith("y") || ff.IonType.StartsWith("z") || ff.IonType.StartsWith("(x") || ff.IonType.StartsWith("(y") || ff.IonType.StartsWith("(z") || ff.IonType.StartsWith("v") || ff.IonType.StartsWith("w"))
+                            {
+                                if (ff.Intensity > current_max) { current_max = ff.Intensity; }
+                            }
+                            else if (ff.IonType.StartsWith("a") || ff.IonType.StartsWith("b") || ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(a") || ff.IonType.StartsWith("(b") || ff.IonType.StartsWith("(c") || ff.IonType.StartsWith("d"))
+                            {
+                                if (ff.Intensity > current_max) { current_max = ff.Intensity; }
+                            }
+                        }
+                    }
+                    
+                    // Read each line
+                    for (int j = 0; j < lista.Count; j++)
+                    {
+                        string[] str = lista[j].Split('\t');
+
+                        if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("\t") || lista[j].StartsWith("Name") || lista[j].StartsWith("Mode")) continue; // comments
+                        else if (lista[j].StartsWith("Extension"))
+                        {
+                            peptide = str[3];
+                            string allAA = new String(peptide.Distinct().ToArray());
+
+                            // count each amino acid in peptide
+                            // Initialise the AA-Fragment dictionary
+                            foreach (char aa in allAA)
+                            {
+                                if (!aa_frags.ContainsKey(aa))
+                                {
+                                    ff_dict = new Dictionary<string, List<FittedFrag>>();
+                                    foreach(string pf in possible_frags)
+                                    {
+                                        ff_list = new List<FittedFrag>();
+                                        ff_dict.Add(pf, ff_list);
+                                    }
+                                    aa_frags.Add(aa, ff_dict);
+                                }
+                                int freq = peptide.Count(f => (f == aa));
+                                num_aa_in_seq.Add(aa, freq);
+                            }
+                        }
+                        else if (lista[j].StartsWith("Multiple")) { }
+                        else if (lista[j].StartsWith("Fitted")) { numFrags = Convert.ToInt32(str[1]); }
+                        else if (lista[j].StartsWith("Exclusion")) { }
+                        else
+                        {
+                            FittedFrag ff = new FittedFrag();
+                            ff.Name = str[0];
+                            ff.IonType = str[1];
+                            ff.Idx = int.Parse(str[2]);
+                            ff.IdxTo = int.Parse(str[3]);
+                            ff.Charge = int.Parse(str[4]);
+                            ff.Mz = double.Parse(str[5]);                           
+                            ff.Formula = str[9];
+                            if (ff.IonType.StartsWith("x") || ff.IonType.StartsWith("y") || ff.IonType.StartsWith("z") || ff.IonType.StartsWith("(x") || ff.IonType.StartsWith("(y") || ff.IonType.StartsWith("(z") || ff.IonType.StartsWith("v") || ff.IonType.StartsWith("w"))
+                            {
+                                ff.AminoAcid = peptide.Substring(peptide.Length - ff.Idx)[0];
+                                if (ff.IonType.StartsWith("x") || ff.IonType.StartsWith("(x")) { aa_frags[ff.AminoAcid]["x"].Add(ff); }
+                                else if (ff.IonType.StartsWith("y") || ff.IonType.StartsWith("(y")) { aa_frags[ff.AminoAcid]["y"].Add(ff); }
+                                else if (ff.IonType.StartsWith("z") || ff.IonType.StartsWith("(z")) { aa_frags[ff.AminoAcid]["z"].Add(ff); }
+                                else if (ff.IonType.StartsWith("v") || ff.IonType.StartsWith("(v")) { aa_frags[ff.AminoAcid]["v"].Add(ff); }
+                                else if (ff.IonType.StartsWith("w") || ff.IonType.StartsWith("(w")) { aa_frags[ff.AminoAcid]["w"].Add(ff); }
+                                ff.AA_Count = num_aa_in_seq[ff.AminoAcid];
+                                ff.Intensity = (double.Parse(str[6])) / ff.AA_Count;
+
+                            }
+                            else if (ff.IonType.StartsWith("a") || ff.IonType.StartsWith("b") || ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(a") || ff.IonType.StartsWith("(b") || ff.IonType.StartsWith("(c") || ff.IonType.StartsWith("d"))
+                            {
+                                ff.AminoAcid = peptide.Substring(ff.Idx - 1)[0];
+                                if (ff.IonType.StartsWith("a") || ff.IonType.StartsWith("(a")) { aa_frags[ff.AminoAcid]["a"].Add(ff); }
+                                else if (ff.IonType.StartsWith("b") || ff.IonType.StartsWith("(b")) { aa_frags[ff.AminoAcid]["b"].Add(ff); }
+                                else if (ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(c")) { aa_frags[ff.AminoAcid]["c"].Add(ff); }
+                                else if (ff.IonType.StartsWith("d") || ff.IonType.StartsWith("(d")) { aa_frags[ff.AminoAcid]["d"].Add(ff); }
+                                ff.AA_Count = num_aa_in_seq[ff.AminoAcid];
+                                ff.Intensity = (double.Parse(str[6])) / ff.AA_Count;
+                            }
+
+                            ff.CurrentMax = current_max;
+                        }
+
+                    }
+
+                    // add each item to the ListView
+                    string[] row = { peptide, numFrags.ToString() };
+                    ListViewItem item = new ListViewItem(row);
+
+                    fit_files_list.Items.Add(item);
+                }
+            }
+        }
+
+        private void clearFitListBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                aa_frags.Clear();
+                fit_files_list.Items.Clear();
+                AAC_1.ViewXY.BarSeries.Clear();
+                num_experiments = 0;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("There is absolutely nothing to clear.", "Clearing Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
+        }
+        #endregion
+
+        #region Plotting
+
+        LightningChartUltimate AAC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
+
+        private void aac_chart_init()
+        {
+            if (AAC_1 != null)
+            {
+                AAC_1.Dispose();
+            }
+            AAC_1 = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
+            
+            relInt_RB.Checked = false; // default intensity format - relative
+            absInt_RB.Checked = true;
+            hydro_RB.Checked = true;
+            pI_RB.Checked = false;
+            mrgCustom_RB.Checked = false;
+
+            AAC_1.BeginUpdate();
+            ViewXY v = AAC_1.ViewXY;
+
+            AAC_1.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            v.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            AAC_1.Parent = aacGroupBox;
+            AAC_1.Title.Visible = false;
+            AAC_1.ViewXY.LegendBox.Visible = true;           
+
+            AxisX axisX = AAC_1.ViewXY.XAxes[0];
+            axisX.AutoFormatLabels = false;
+            axisX.CustomTicksEnabled = true;
+            axisX.Title.Text = "Amino Acid (Sorted by descending Hydropathy)";
+            axisX.Title.Color = Color.FromArgb(35, 255, 255, 255);
+            axisX.Title.MouseInteraction = false;
+            axisX.MouseInteraction = false;
+            axisX.ScrollMode = XAxisScrollMode.None;
+
+            AxisY axisY = AAC_1.ViewXY.YAxes[0];
+            axisY.Title.Text = "Absolute Intensity";
+            axisY.Title.Color = Color.FromArgb(55, 255, 255, 255);
+            axisY.Title.MouseInteraction = false;
+            axisY.MouseInteraction = false;
+
+            AAC_1.ViewXY.ZoomPanOptions.RightToLeftZoomAction = RightToLeftZoomActionXY.PopFromZoomStack;
+            AAC_1.ViewXY.ZoomPanOptions.AxisMouseWheelAction = AxisMouseWheelAction.PanAll;
+
+            v.AxisLayout.YAxisAutoPlacement = YAxisAutoPlacement.LeftThenRight;
+            v.AxisLayout.XAxisAutoPlacement = XAxisAutoPlacement.BottomThenTop;
+
+            AAC_1.MouseDoubleClick += (s, e) => { v.ZoomToFit(); } ;
+            axisX.RangeChanged += (s, e) =>
+            {
+                e.CancelRendering = true;
+                AAC_1.BeginUpdate();
+                try
+                {
+                    AAC_1.ViewXY.XAxes[0].SetRange(e.NewMin, e.NewMax);
+                }
+                catch
+                {
+                    AAC_1.EndUpdate();
+                    return;
+                }
+                AAC_1.EndUpdate();
+            };
+            axisY.RangeChanged += (s, e) =>
+            {
+                e.CancelRendering = true;
+                AAC_1.BeginUpdate();
+                try
+                {
+                    AAC_1.ViewXY.YAxes[0].SetRange(e.NewMin, e.NewMax);
+                }
+                catch
+                {
+                    AAC_1.EndUpdate();
+                    return;
+                }
+                AAC_1.EndUpdate();
+            };
+
+            AAC_1.EndUpdate();
+
+            aacGroupBox.Controls.Add(AAC_1);
+        }
+
+        private void plot_bars(Dictionary<char, Dictionary<string, List<FittedFrag>>> frag_dict)
+        {
+            Dictionary<char, float> sort_dict = new Dictionary<char, float>();
+
+            AAC_1.ViewXY.XAxes[0].CustomTicks.Clear(); // clear custom ticks
+
+            if (relInt_RB.Checked)
+            {
+                AAC_1.ViewXY.YAxes[0].Title.Text = "Relative Intensity";
+            }
+            else if (absInt_RB.Checked)
+            {
+                AAC_1.ViewXY.YAxes[0].Title.Text = "Absolute Intensity";
+            }
+
+            if (hydro_RB.Checked)
+            {
+                AAC_1.ViewXY.XAxes[0].Title.Text = "Amino Acids (Sorted by descending Hydropathy)";
+                sort_dict = hydropathy_aa;
+            }
+            else if (pI_RB.Checked)
+            {
+                AAC_1.ViewXY.XAxes[0].Title.Text = "Amino Acids (Sorted by ascending pI)";
+                sort_dict = pI_aa;
+            }
+            else if (mrgCustom_RB.Checked)
+            {
+                AAC_1.ViewXY.XAxes[0].Title.Text = "Amino Acids (Custom Sorting)";
+                sort_dict = mrgcustom_aa;
+            }
+
+            Dictionary<char, float> aa_to_int = new Dictionary<char, float>();
+            int counter = 0;
+            try
+            {
+                if (hydro_RB.Checked)
+                {
+                    foreach (var aa in frag_dict.OrderByDescending(i => sort_dict[i.Key]))
+                    {
+                        aa_to_int.Add(aa.Key, counter);
+                        counter++;
+                    }
+                }
+                else if (pI_RB.Checked || mrgCustom_RB.Checked)
+                {
+                    foreach (var aa in frag_dict.OrderBy(i => sort_dict[i.Key]))
+                    {
+                        aa_to_int.Add(aa.Key, counter);
+                        counter++;
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("You first need to insert at least one .fit file!", "Plotting Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
+            if (hydro_RB.Checked)
+            {
+                foreach (var aa in aa_to_int.OrderByDescending(key => key.Value))
+                {
+                    CustomAxisTick tick = new CustomAxisTick(AAC_1.ViewXY.XAxes[0]);
+                    tick.AxisValue = aa.Value;
+                    tick.LabelText = aa.Key.ToString();
+                    tick.Color = Color.FromArgb(35, 255, 255, 255);
+
+                    AAC_1.ViewXY.XAxes[0].CustomTicks.Add(tick);
+                }
+            }
+            else if (pI_RB.Checked || mrgCustom_RB.Checked)
+            {
+                foreach (var aa in aa_to_int.OrderBy(key => key.Value))
+                {
+                    CustomAxisTick tick = new CustomAxisTick(AAC_1.ViewXY.XAxes[0]);
+                    tick.AxisValue = aa.Value;
+                    tick.LabelText = aa.Key.ToString();
+                    tick.Color = Color.FromArgb(35, 255, 255, 255);
+
+                    AAC_1.ViewXY.XAxes[0].CustomTicks.Add(tick);
+                }
+            }
+
+            AAC_1.ViewXY.XAxes[0].InvalidateCustomTicks();
+            AAC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+
+            foreach (var selected_frag in pltFragsChkBox.CheckedItems)
+            {
+                // Create a new BarSeries and add settings
+                var barSeries = new Arction.WinForms.Charting.SeriesXY.BarSeries(AAC_1.ViewXY, AAC_1.ViewXY.XAxes[0], AAC_1.ViewXY.YAxes[0]);
+
+                barSeries.Title.Text = selected_frag.ToString();
+                barSeries.BarThickness = 15;
+                barSeries.Fill.Color = getFragCol(selected_frag.ToString());
+                barSeries.Fill.GradientFill = GradientFill.Solid;
+
+                List<BarSeriesValue> barvals = new List<BarSeriesValue>();
+                foreach (var aa in frag_dict.Keys)
+                {
+                    double mean = getIntensityMean(frag_dict[aa][selected_frag.ToString()]);
+                    float num_aa = aa_to_int[aa];
+                    barvals.Add(new BarSeriesValue(num_aa, mean, null));
+                }
+
+                barSeries.Values = barvals.ToArray();
+                AAC_1.ViewXY.BarSeries.Add(barSeries);
+            }
+
+            AAC_1.ViewXY.ZoomToFit();
+        }
+
+        private Color getFragCol(string ftype)
+        {
+            OxyColor col = OxyColors.Orange;
+
+            if (ftype.StartsWith("d")) col = OxyColors.DeepPink;
+            if (ftype.StartsWith("v")) col = OxyColors.DeepSkyBlue;
+            if (ftype.StartsWith("w")) col = OxyColors.Turquoise;
+            else if (ftype.StartsWith("a")) col = OxyColors.Green;
+            else if (ftype.StartsWith("b")) col = OxyColors.Blue;
+            else if (ftype.StartsWith("c")) col = OxyColors.Firebrick;
+            else if (ftype.StartsWith("x")) { col = OxyColors.LimeGreen; }
+            else if (ftype.StartsWith("y")) { col = OxyColors.DodgerBlue; }
+            else if (ftype.StartsWith("z")) { col = OxyColors.Tomato; }
+
+            return col.ToColor();
+        }
+
+        private double getIntensityMean(List<FittedFrag> flist)
+        {
+            double mean = 0.0;
+            foreach (var frag in flist)
+            {
+                if (relInt_RB.Checked)
+                {
+                    mean += frag.Intensity / frag.CurrentMax;
+                }
+                else if (absInt_RB.Checked)
+                {
+                    mean += frag.Intensity;
+                }
+                
+            }
+            mean = mean / num_experiments;
+            return mean;
+        }
+
+        private void pltSelectedBtn_Click(object sender, EventArgs e)
+        {
+            AAC_1.ViewXY.BarSeries.Clear();
+            plot_bars(aa_frags);
+        }
+
+        private void relInt_RB_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+        private void absInt_RB_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void saveAAPlt_Click(object sender, EventArgs e)
+        {
+            int width = aacGroupBox.Size.Width;
+            int height = aacGroupBox.Size.Height;
+            Bitmap bm = new Bitmap(width, height);
+            aacGroupBox.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
+
+            SaveFileDialog save = new SaveFileDialog() { Title = "Save image", FileName = "", Filter = "image file|*.png|all files|*.*", OverwritePrompt = true, AddExtension = true };
+            if (save.ShowDialog() == DialogResult.OK) { bm.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png); }
+
+        }
+
+        private void copyAAPlt_Click(object sender, EventArgs e)
+        {
+            int width = aacGroupBox.Size.Width;
+            int height = aacGroupBox.Size.Height;
+            Bitmap bm = new Bitmap(width, height);
+            aacGroupBox.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
+            Clipboard.SetImage(bm);
+        }
+        #endregion
+
         #endregion
 
         #endregion
@@ -14694,6 +15208,10 @@ namespace Isotope_fitting
             ufc_frm = null;
         }
 
+
+
+
         #endregion
+ 
     }
 }

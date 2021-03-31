@@ -180,6 +180,7 @@
     <Compile Include="ChangeStateForm.Designer.cs">
       <DependentUpon>ChangeStateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fragment.cs" />
     <Compile Include="Envipat_Calculations_Data\IsotopesInfo.cs" />
     <Compile Include="Envipat_Calculations_Data\ChemiForm.cs" />
     <Compile Include="Calculators\Peptides\ExcludeTypes.cs" />
