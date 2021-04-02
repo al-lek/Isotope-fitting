@@ -469,6 +469,7 @@ namespace Isotope_fitting
             //call change state window
             initiate_change_app_mode_form();
             aac_chart_init();
+            init_comp_plots();
             //PatchParameter("", 0);
             //run_cmd("", "");
             //rin_python();
@@ -9752,7 +9753,8 @@ namespace Isotope_fitting
 
         #endregion
 
-        #region [tabs 2-5] DIAGRAMS
+        #region [tabs 2-7] DIAGRAMS
+
         #region class init
         public class CustomPlotController : PlotController
         {
@@ -14337,6 +14339,7 @@ namespace Isotope_fitting
 
             AAC_1.ViewXY.XAxes[0].InvalidateCustomTicks();
             AAC_1.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+            AAC_1.ViewXY.BarViewOptions.Stacking = BarsStacking.Stack;
 
             foreach (var selected_frag in pltFragsChkBox.CheckedItems)
             {
@@ -14402,7 +14405,15 @@ namespace Isotope_fitting
         private void pltSelectedBtn_Click(object sender, EventArgs e)
         {
             AAC_1.ViewXY.BarSeries.Clear();
-            plot_bars(aa_frags);
+            try
+            {
+                plot_bars(aa_frags);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An exception occured while trying to plot selections: " + ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
 
         private void relInt_RB_CheckedChanged(object sender, EventArgs e)
@@ -14435,6 +14446,591 @@ namespace Isotope_fitting
         #endregion
 
         #endregion
+
+        #region [tab 7] Complimentarity Tab
+
+        #region Data Loading
+
+        public Dictionary<string, Dictionary<string, Dictionary<string, List<FittedFrag>>>> d_per_file; // filename -> aa -> fragment_type -> fragment
+        public Dictionary<string, Dictionary<string, List<FittedFrag>>> comp_aa_dict; // aa -> fragment_type -> fragment
+        public Dictionary<string, List<FittedFrag>> comp_ff_dict; // fragment_type -> fragment
+        public List<FittedFrag> comp_ff_list; // fragment list
+
+        // peptide csv file dict
+        public Dictionary<string, Dictionary<int, double>> peptide_info_csv; // peptide -> charge -> mass_mono
+
+        // complimentarity data
+        string[] comp_possible_frags = { "a", "b", "c", "x", "y", "z" };
+        string[] possible_comp_pairs = { "a-x", "b-y", "c-z" };
+
+        private void compLoadFit_Btn_Click(object sender, EventArgs e)
+        {
+            if (peptide_info_csv != null)
+            {
+                // if not initialised, create new appropriate container instances
+                if (d_per_file == null) { d_per_file = new Dictionary<string, Dictionary<string, Dictionary<string, List<FittedFrag>>>>(); }
+
+                OpenFileDialog loadFit = new OpenFileDialog()
+                {
+                    Multiselect = true,
+                    Title = "Load Fitting Data",
+                    InitialDirectory = Application.StartupPath,
+                    Filter = "Fit Files|*.fit;",
+                    FilterIndex = 1,
+                    RestoreDirectory = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true
+                };
+
+                if (loadFit.ShowDialog() != DialogResult.Cancel)
+                {
+                    int fileCount = loadFit.FileNames.Length;
+                    for (int i = 0; i < fileCount; i++)
+                    {
+                        List<string> lista = new List<string>();
+                        string file_name = loadFit.FileNames[i];
+                        string peptide = "";
+                        int numFrags = 0;
+
+                        // initialise dictionary per loaded file
+                        comp_aa_dict = new Dictionary<string, Dictionary<string, List<FittedFrag>>>();
+
+                        StreamReader reader = new StreamReader(file_name);
+                        do { lista.Add(reader.ReadLine()); }
+                        while (reader.Peek() != -1);
+                        reader.Close();
+
+                        for (int j = 0; j < lista.Count; j++)
+                        {
+                            string[] str = lista[j].Split('\t');
+
+                            if (lista[j] == "" || lista[j].StartsWith("-") || lista[j].StartsWith("[m/z") || lista[j].StartsWith("\t") || lista[j].StartsWith("Name") || lista[j].StartsWith("Mode")) continue; // comments
+                            else if (lista[j].StartsWith("Extension"))
+                            {
+                                peptide = str[3];
+                                int idx = 1;
+                                foreach (char aa in peptide)
+                                {
+                                    comp_ff_dict = new Dictionary<string, List<FittedFrag>>();
+                                    foreach (var ftype in comp_possible_frags)
+                                    {
+                                        comp_ff_list = new List<FittedFrag>();
+                                        comp_ff_dict.Add(ftype, comp_ff_list);
+                                    }
+                                    comp_aa_dict.Add(aa.ToString() + idx.ToString(), comp_ff_dict);
+                                    idx++;
+                                }
+                            }
+                            else if (lista[j].StartsWith("Multiple")) { }
+                            else if (lista[j].StartsWith("Fitted")) { numFrags = Convert.ToInt32(str[1]); }
+                            else if (lista[j].StartsWith("Exclusion")) { }
+                            else
+                            {
+                                FittedFrag ff = new FittedFrag();
+                                ff.Name = str[0];
+                                ff.IonType = str[1];
+                                ff.Idx = int.Parse(str[2]);
+                                ff.IdxTo = int.Parse(str[3]);
+                                ff.Charge = int.Parse(str[4]);
+                                ff.Mz = double.Parse(str[5]);
+                                ff.Formula = str[9];
+                                ff.Intensity = double.Parse(str[6]);
+                                if (ff.IonType.StartsWith("x") || ff.IonType.StartsWith("y") || ff.IonType.StartsWith("z") || ff.IonType.StartsWith("(x") || ff.IonType.StartsWith("(y") || ff.IonType.StartsWith("(z"))
+                                {
+                                    ff.AminoAcid = peptide.Substring(peptide.Length - ff.Idx - 1)[0];
+                                    string idx_str = (peptide.Length - ff.Idx).ToString();
+                                    if (ff.IonType.StartsWith("x") || ff.IonType.StartsWith("(x")) { comp_aa_dict[ff.AminoAcid.ToString() + idx_str]["x"].Add(ff); }
+                                    else if (ff.IonType.StartsWith("y") || ff.IonType.StartsWith("(y")) { comp_aa_dict[ff.AminoAcid.ToString() + idx_str]["y"].Add(ff); }
+                                    else if (ff.IonType.StartsWith("z") || ff.IonType.StartsWith("(z")) { comp_aa_dict[ff.AminoAcid.ToString() + idx_str]["z"].Add(ff); }
+
+                                }
+                                else if (ff.IonType.StartsWith("a") || ff.IonType.StartsWith("b") || ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(a") || ff.IonType.StartsWith("(b") || ff.IonType.StartsWith("(c"))
+                                {
+                                    ff.AminoAcid = peptide.Substring(ff.Idx - 1)[0];
+                                    if (ff.IonType.StartsWith("a") || ff.IonType.StartsWith("(a")) { comp_aa_dict[ff.AminoAcid.ToString() + ff.Idx.ToString()]["a"].Add(ff); }
+                                    else if (ff.IonType.StartsWith("b") || ff.IonType.StartsWith("(b")) { comp_aa_dict[ff.AminoAcid.ToString() + ff.Idx.ToString()]["b"].Add(ff); }
+                                    else if (ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(c")) { comp_aa_dict[ff.AminoAcid.ToString() + ff.Idx.ToString()]["c"].Add(ff); }
+
+                                }
+
+                            }
+                        }
+                        try
+                        {
+                            d_per_file.Add(file_name, comp_aa_dict);
+                        }
+                        catch (Exception ex)
+                        {
+                            d_per_file.Clear();
+                            compPlt_LV.Items.Clear();
+                            MessageBox.Show("The following exception has occured: " + ex.Message + "Please try again.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        // add each item to the ListView
+                        try
+                        {
+                            string[] row = { peptide, selMCharge.Value.ToString(), peptide_info_csv[peptide][(int)selMCharge.Value].ToString(), file_name};
+                            
+                            ListViewItem item = new ListViewItem(row);
+                            compPlt_LV.Items.Add(item);
+
+                            bool contains = false;
+                            foreach (var it in comp_charge_CB.Items)
+                            {
+                                if (it.ToString() == ((int)selMCharge.Value).ToString()) { contains = true; }
+                            }
+
+                            if (!contains)
+                            {
+                                comp_charge_CB.Items.Insert(0, ((int)selMCharge.Value).ToString());
+                            }
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            d_per_file.Clear();
+                            compPlt_LV.Items.Clear();
+                            MessageBox.Show("An exception has occured for " + peptide + " : " + ex.Message, "Exception!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("You first need to load a peptide info .csv file!", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void loadPeptCsv_Btn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog loadPeptCsv = new OpenFileDialog()
+            {
+                Multiselect = false,
+                Title = "Load Peptide Information CSV",
+                InitialDirectory = Application.StartupPath,
+                Filter = "Fit Files|*.csv;",
+                FilterIndex = 1,
+                RestoreDirectory = true,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+
+            if (loadPeptCsv.ShowDialog() != DialogResult.Cancel)
+            {
+                List<string> lista = new List<string>();
+                string file_name = loadPeptCsv.FileName;
+
+                StreamReader reader = new StreamReader(file_name);
+                do { lista.Add(reader.ReadLine()); }
+                while (reader.Peek() != -1);
+                reader.Close();
+
+                peptide_info_csv = new Dictionary<string, Dictionary<int, double>>();
+
+                for (int j = 0; j < lista.Count; j++)
+                {
+                    string[] str   = lista[j].Split(',');
+                    string peptide = str[0];
+                    int charge     = int.Parse(str[1]);
+                    double mass    = double.Parse(str[3]);
+
+                    Dictionary<int, double> charge_mass_dict = new Dictionary<int, double>() { {charge, mass } };
+                    if (peptide_info_csv.ContainsKey(peptide))
+                    {
+                        peptide_info_csv[peptide].Add(charge, mass);
+                    }
+                    else
+                    {
+                        peptide_info_csv.Add(peptide, charge_mass_dict);
+                    }
+                }
+            }
+        }
+
+        #endregion // data loading
+
+        #region Plotting
+
+        LightningChartUltimate seqCov_plt;
+        LightningChartUltimate compPairs_plt = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
+        private void init_comp_plots()
+        {
+            if (seqCov_plt != null)
+            {
+                seqCov_plt.Dispose();
+            }
+            seqCov_plt = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
+            seqCov_plt.BeginUpdate();
+
+            ViewXY v = seqCov_plt.ViewXY;
+
+            seqCov_plt.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            v.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            seqCov_plt.Parent = aacGroupBox;
+            seqCov_plt.Title.Visible = true;
+            seqCov_plt.Title.Text = "Sequence Coverage and Complementarity";
+            seqCov_plt.Title.Color = Color.FromArgb(35, 255, 255, 255);
+            seqCov_plt.ViewXY.LegendBox.Visible = true;
+
+            AxisX axisX = seqCov_plt.ViewXY.XAxes[0];
+            axisX.ValueType = AxisValueType.Number;
+            axisX.AutoFormatLabels = false;
+            axisX.CustomTicksEnabled = false;
+            axisX.Title.Text = "m/z";
+            axisX.Title.Color = Color.FromArgb(35, 255, 255, 255);
+            axisX.Title.MouseInteraction = false;
+            axisX.MouseInteraction = false;
+            axisX.ScrollMode = XAxisScrollMode.None;
+
+            AxisY axisY = seqCov_plt.ViewXY.YAxes[0];
+            axisY.Title.Text = "Percentage [%]";
+            axisY.Title.Color = Color.FromArgb(55, 255, 255, 255);
+            axisY.Title.MouseInteraction = false;
+            axisY.MouseInteraction = false;
+            axisY.SetRange(0, 100);
+
+            seqCov_plt.ViewXY.ZoomPanOptions.RightToLeftZoomAction = RightToLeftZoomActionXY.PopFromZoomStack;
+            seqCov_plt.ViewXY.ZoomPanOptions.AxisMouseWheelAction = AxisMouseWheelAction.PanAll;
+
+            v.AxisLayout.YAxisAutoPlacement = YAxisAutoPlacement.LeftThenRight;
+            v.AxisLayout.XAxisAutoPlacement = XAxisAutoPlacement.BottomThenTop;
+
+            seqCov_Pnl.Controls.Add(seqCov_plt);
+
+            seqCov_plt.EndUpdate();
+
+            if (compPairs_plt != null)
+            {
+                compPairs_plt.Dispose();
+            }
+            compPairs_plt = new LightningChartUltimate("Licensed User/LightningChart Ultimate SDK Full Version/LightningChartUltimate/5V2D2K3JP7Y4CL32Q68CYZ5JFS25LWSZA3W3") { Dock = DockStyle.Fill, ColorTheme = ColorTheme.LightGray, AutoScaleMode = AutoScaleMode.Inherit };
+            compPairs_plt.BeginUpdate();
+
+            ViewXY v1 = compPairs_plt.ViewXY;
+
+            compPairs_plt.Background = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            v1.GraphBackground = new Fill() { Color = Color.White, GradientColor = Color.White, Style = RectFillStyle.ColorOnly };
+            compPairs_plt.Parent = aacGroupBox;
+            compPairs_plt.Title.Visible = true;
+            compPairs_plt.ViewXY.LegendBox.Visible = true;
+
+            compPairs_plt.Title.Text = "Complementary Pairs";
+            compPairs_plt.Title.Color = Color.FromArgb(35, 255, 255, 255);
+
+            AxisX axisX2 = compPairs_plt.ViewXY.XAxes[0];
+            axisX2.ValueType = AxisValueType.Number;
+            axisX2.AutoFormatLabels = false;
+            axisX2.CustomTicksEnabled = false;
+            axisX2.Title.Text = "m/z";
+            axisX2.Title.Color = Color.FromArgb(35, 255, 255, 255);
+            axisX2.Title.MouseInteraction = false;
+            axisX2.MouseInteraction = false;
+            axisX2.ScrollMode = XAxisScrollMode.None;
+
+            AxisY axisY2 = compPairs_plt.ViewXY.YAxes[0];
+            axisY2.Title.Text = "Fitted Pairs / Theoretical Number of Pairs [%]";
+            axisY2.Title.Color = Color.FromArgb(55, 255, 255, 255);
+            axisY2.Title.MouseInteraction = false;
+            axisY2.MouseInteraction = false;
+
+            compPairs_plt.ViewXY.ZoomPanOptions.RightToLeftZoomAction = RightToLeftZoomActionXY.PopFromZoomStack;
+            compPairs_plt.ViewXY.ZoomPanOptions.AxisMouseWheelAction = AxisMouseWheelAction.PanAll;
+
+            v1.AxisLayout.YAxisAutoPlacement = YAxisAutoPlacement.LeftThenRight;
+            v1.AxisLayout.XAxisAutoPlacement = XAxisAutoPlacement.BottomThenTop;
+
+            compPairs_Pnl.Controls.Add(compPairs_plt);
+
+            compPairs_plt.EndUpdate();
+
+            axisX.RangeChanged += xAxis_RC;
+            axisY.RangeChanged += yAxis_RC;
+            compPairs_plt.ViewXY.XAxes[0].RangeChanged += xAxis_pairs_RC;
+
+            seqCov_plt.MouseDoubleClick += (s, e) => { v.ZoomToFit(); };
+            }
+
+        private void yAxis_RC(object sender, RangeChangedEventArgs e)
+        {
+            //Set the same range for secondary Y axis
+            e.CancelRendering = true;
+            seqCov_plt.BeginUpdate();
+            try
+            {
+                seqCov_plt.ViewXY.YAxes[0].SetRange(e.NewMin, e.NewMax);
+            }
+            catch
+            {
+                seqCov_plt.EndUpdate();
+                return;
+            }
+            seqCov_plt.EndUpdate();
+        }
+
+        private void xAxis_RC(object sender, RangeChangedEventArgs e)
+        {
+            //Set the same range for secondary X axis
+            e.CancelRendering = true;
+            double x_min = e.NewMin;
+            double x_max = e.NewMax;
+            try
+            {
+                x_for_y(e.NewMin, e.NewMax);
+            }
+            catch
+            {
+                seqCov_plt.EndUpdate();
+                compPairs_plt.EndUpdate();
+            }
+        }
+
+        private void xAxis_pairs_RC(object sender, RangeChangedEventArgs e)
+        {
+            //Set the same range for secondary Y axis
+            e.CancelRendering = true;
+            compPairs_plt.BeginUpdate();
+            bool scaleChanged = false;
+            try
+            {
+                compPairs_plt.ViewXY.YAxes[0].Fit(10.0, out scaleChanged, true, false);
+            }
+            catch
+            {
+                compPairs_plt.EndUpdate();
+                return;
+            }
+            compPairs_plt.EndUpdate();
+        }
+
+        private void x_for_y(double x_min, double x_max)
+        {
+            seqCov_plt.BeginUpdate();
+            compPairs_plt.BeginUpdate();
+
+            seqCov_plt.ViewXY.XAxes[0].SetRange(x_min, x_max);
+            compPairs_plt.ViewXY.XAxes[0].SetRange(x_min, x_max);
+
+            seqCov_plt.EndUpdate();
+            compPairs_plt.EndUpdate();
+        }
+
+        private void pltCompPlts_Btn_Click(object sender, EventArgs e)
+        {
+            pltFirstComps((int)selMCharge.Value);
+            pltSecondComps((int)selMCharge.Value);
+        }
+
+        private void pltFirstComps(int charge_state)
+        {
+
+            seqCov_plt.ViewXY.BarSeries.Clear();
+
+            var bs_sc = new Arction.WinForms.Charting.SeriesXY.BarSeries(seqCov_plt.ViewXY, seqCov_plt.ViewXY.XAxes[0], seqCov_plt.ViewXY.YAxes[0]);
+
+            bs_sc.Title.Text = "Sequence Coverage";
+            bs_sc.BarThickness = 15;
+            bs_sc.Fill.Color = OxyColors.ForestGreen.ToColor();
+            bs_sc.Fill.GradientFill = GradientFill.Solid;
+
+            var bs_c = new Arction.WinForms.Charting.SeriesXY.BarSeries(seqCov_plt.ViewXY, seqCov_plt.ViewXY.XAxes[0], seqCov_plt.ViewXY.YAxes[0]);
+
+            bs_c.Title.Text = "Complimentarity";
+            bs_c.BarThickness = 15;
+            bs_c.Fill.Color = OxyColors.DarkOliveGreen.ToColor();
+            bs_c.Fill.GradientFill = GradientFill.Solid;
+
+            var bs_b = new Arction.WinForms.Charting.SeriesXY.BarSeries(seqCov_plt.ViewXY, seqCov_plt.ViewXY.XAxes[0], seqCov_plt.ViewXY.YAxes[0]);
+
+            bs_b.Title.Text = "Sequence Name";
+            bs_b.BarThickness = 15;
+            bs_b.Fill.Color = OxyColors.White.ToColor();
+            bs_b.Fill.GradientFill = GradientFill.Solid;
+            bs_b.BorderWidth = 0.0f;
+            bs_b.LabelStyle.Color = OxyColors.Black.ToColor();
+            bs_b.LabelStyle.Shadow = null;
+
+            List<BarSeriesValue> barvals_sc = new List<BarSeriesValue>();
+            List<BarSeriesValue> barvals_c = new List<BarSeriesValue>();
+            List<BarSeriesValue> barvals_b = new List<BarSeriesValue>();
+
+            seqCov_plt.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+            seqCov_plt.ViewXY.XAxes[0].Title.Text = "Peptide Monoisotopic Mass [Da]";
+            seqCov_plt.Title.Text = "Sequence Coverage and Complimentarity [M" + charge_state.ToString() + "+]";
+            // calculate sequence coverage, complimentarity and plot appropriate bars 
+            foreach (ListViewItem item in compPlt_LV.Items)
+            {
+                float seq_coverage, complimentarity;
+                if (item.SubItems[1].Text == charge_state.ToString())
+                {
+                    seq_coverage = calc_seq_coverage(d_per_file[item.SubItems[3].Text]);
+                    complimentarity = calc_basic_complimentarity(d_per_file[item.SubItems[3].Text]);
+                    //Console.WriteLine("SeqCov: " + seq_coverage.ToString() + " and Comp:" + complimentarity.ToString() + " for " + item.SubItems[0].Text);
+
+                    barvals_sc.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), seq_coverage, null));
+                    barvals_c.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), complimentarity, null));
+                    barvals_b.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), seq_coverage, item.SubItems[0].Text));
+                }
+            }
+
+            bs_b.Values = barvals_b.ToArray();
+            bs_sc.Values = barvals_sc.ToArray();
+            bs_c.Values = barvals_c.ToArray();
+
+            seqCov_plt.ViewXY.BarSeries.Add(bs_b);
+            seqCov_plt.ViewXY.BarSeries.Add(bs_sc);
+            seqCov_plt.ViewXY.BarSeries.Add(bs_c);
+
+            seqCov_plt.ViewXY.ZoomToFit();
+
+        }
+
+        private void pltSecondComps(int charge_state)
+        {
+            compPairs_plt.ViewXY.BarSeries.Clear();
+
+            float p_val;
+
+            compPairs_plt.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
+            compPairs_plt.ViewXY.XAxes[0].Title.Text = "Peptide Monoisotopic Mass [Da]";
+            compPairs_plt.Title.Text = "Complementary Pairs [M" + charge_state.ToString() + "+]";
+
+            foreach (var c_pair in possible_comp_pairs)
+            {
+                var bs_sc = new Arction.WinForms.Charting.SeriesXY.BarSeries(compPairs_plt.ViewXY, compPairs_plt.ViewXY.XAxes[0], compPairs_plt.ViewXY.YAxes[0]);
+
+                bs_sc.Title.Text = c_pair + " pairs";
+                bs_sc.BarThickness = 15;
+                bs_sc.Fill.Color = getCompColor(c_pair);
+                bs_sc.Fill.GradientFill = GradientFill.Solid;
+
+                List<BarSeriesValue> barvals_c = new List<BarSeriesValue>();
+
+                foreach (ListViewItem item in compPlt_LV.Items)
+                {
+                    if (item.SubItems[1].Text == charge_state.ToString())
+                    {
+                        p_val = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], c_pair);
+                        barvals_c.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), p_val, null));
+                    }
+                }
+
+                bs_sc.Values = barvals_c.ToArray();
+                compPairs_plt.ViewXY.BarSeries.Add(bs_sc);
+            }
+
+            seqCov_plt.ViewXY.ZoomToFit();
+        }
+
+        private Color getCompColor(string pair)
+        {
+            Color c = OxyColors.Black.ToColor(); 
+
+            if      (pair == "a-x") { c =  OxyColors.Green.ToColor(); }
+            else if (pair == "b-y") { c =  OxyColors.Blue.ToColor(); }
+            else if (pair == "c-z") { c =  OxyColors.Firebrick.ToColor(); }
+
+            return c;
+        }
+
+        private float calc_second_complimentarity(Dictionary<string, Dictionary<string, List<FittedFrag>>> ff_dict, string pair)
+        {
+            float total = 0.0f, comp, n = 0.0f;
+
+            foreach(var kv in ff_dict)
+            {
+                if ((pair == "a-x") && (kv.Value["a"].Count != 0) && (kv.Value["x"].Count != 0))
+                {
+                    n++;
+                }
+                else if ((pair == "b-y") && (kv.Value["b"].Count != 0) && (kv.Value["y"].Count != 0))
+                {
+                    n++;
+                }
+                else if ((pair == "c-z") && (kv.Value["c"].Count != 0) && (kv.Value["z"].Count != 0))
+                {
+                    n++;
+                }
+                total++;
+            }
+
+            comp = (n / (total - 1.0f)) * 100.0f;
+
+            return comp;
+        }
+
+        private float calc_basic_complimentarity(Dictionary<string, Dictionary<string, List<FittedFrag>>> aa_ff_dict)
+        {
+            float comp;
+            float n1 = 0.0f, total_n = 0.0f;
+
+            foreach(var kv in aa_ff_dict)
+            {
+                if ((kv.Value["a"].Count != 0) && (kv.Value["x"].Count != 0))
+                {
+                    n1++;
+                }
+                else if ((kv.Value["b"].Count != 0) && (kv.Value["y"].Count != 0))
+                {
+                    n1++;
+                }
+                else if ((kv.Value["c"].Count != 0) && (kv.Value["z"].Count != 0))
+                {
+                    n1++;
+                }
+                total_n++;
+            }
+
+            comp = (n1 / (total_n - 1.0f)) * 100.0f;
+
+            return comp;
+        }
+
+        private float calc_seq_coverage(Dictionary<string, Dictionary<string, List<FittedFrag>>> ff_dict)
+        {
+            float seq_cov;
+            float n1 = 0.0f, total_n = 0.0f;
+            foreach (var kv in ff_dict)
+            {
+                if ((kv.Value["a"].Count != 0) || (kv.Value["x"].Count != 0))
+                {
+                    n1++;
+                }
+                else if ((kv.Value["b"].Count != 0) || (kv.Value["y"].Count != 0))
+                {
+                    n1++;
+                }
+                else if ((kv.Value["c"].Count != 0) || (kv.Value["z"].Count != 0))
+                {
+                    n1++;
+                }
+                total_n++;
+            }
+
+            seq_cov = (n1 / (total_n - 1.0f)) * 100.0f;
+
+            return seq_cov;
+        }
+
+        private void clearAllComp_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                seqCov_plt.ViewXY.BarSeries.Clear();
+                compPairs_plt.ViewXY.BarSeries.Clear();
+                d_per_file.Clear();
+                compPlt_LV.Clear();
+                comp_charge_CB.Items.Clear();
+            }
+            catch(Exception ex) 
+            {
+                MessageBox.Show("There is absolutely nothing to clear.", "Clearing Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        #endregion
+
+        #endregion // complimentarity tab
 
         #endregion
 
@@ -15208,10 +15804,7 @@ namespace Isotope_fitting
             ufc_frm = null;
         }
 
-
-
-
         #endregion
- 
+
     }
 }
