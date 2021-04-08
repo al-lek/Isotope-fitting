@@ -15234,13 +15234,20 @@ namespace Isotope_fitting
                 {
                     using (StreamWriter output_stream = new StreamWriter(saveFileDialog.FileName))
                     {
-                        output_stream.WriteLine("Sequence");
+                        output_stream.WriteLine("Sequence,Charge,Sequence Coverage,Complemetarity,a-x,b-y,c-z");
                         foreach (ListViewItem item in compPlt_LV.Items)
                         {
                             int charge = int.Parse(item.SubItems[1].Text);
                             string peptide = item.SubItems[0].Text;
                             float seq_coverage = calc_seq_coverage(d_per_file[item.SubItems[3].Text]);
                             float complimentarity = calc_basic_complimentarity(d_per_file[item.SubItems[3].Text]);
+                            float ax = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], "a-x");
+                            float by = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], "b-y");
+                            float cz = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], "c-z");
+
+                            output_stream.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6}",
+                                peptide, charge.ToString(), seq_coverage.ToString(), complimentarity.ToString(),
+                                ax.ToString(), by.ToString(), cz.ToString()));
                         }
 
                     }
