@@ -513,6 +513,8 @@ namespace Isotope_fitting
             this.tabAACleav = new System.Windows.Forms.TabPage();
             this.aacGroupBox = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.aa_cleav_LV_rms_Btn = new System.Windows.Forms.Button();
+            this.export_aa_to_csv_Btn = new System.Windows.Forms.Button();
             this.copyAAPlt = new System.Windows.Forms.Button();
             this.sortAA_GB = new System.Windows.Forms.GroupBox();
             this.mrgCustom_RB = new System.Windows.Forms.RadioButton();
@@ -535,9 +537,12 @@ namespace Isotope_fitting
             this.compPairs_Pnl = new System.Windows.Forms.Panel();
             this.seqCov_Pnl = new System.Windows.Forms.Panel();
             this.compPltControls_GB = new System.Windows.Forms.GroupBox();
+            this.comp_plt_LV_rms_Btn = new System.Windows.Forms.Button();
             this.loadPeptCsv_Btn = new System.Windows.Forms.Button();
             this.selMCharge = new System.Windows.Forms.NumericUpDown();
             this.compPltSett_GB = new System.Windows.Forms.GroupBox();
+            this.comp_ordering_CV = new System.Windows.Forms.CheckedListBox();
+            this.compPlt_export_Btn = new System.Windows.Forms.Button();
             this.clearAllComp_Btn = new System.Windows.Forms.Button();
             this.saveCompPlt_Btn = new System.Windows.Forms.Button();
             this.copyComp_plt = new System.Windows.Forms.Button();
@@ -1329,6 +1334,7 @@ namespace Isotope_fitting
             // dzcharge_X_Box
             // 
             this.dzcharge_X_Box.AutoSize = false;
+            this.dzcharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dzcharge_X_Box.Name = "dzcharge_X_Box";
             this.dzcharge_X_Box.ReadOnly = true;
             this.dzcharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1337,6 +1343,7 @@ namespace Isotope_fitting
             // dzcharge_Y_Box
             // 
             this.dzcharge_Y_Box.AutoSize = false;
+            this.dzcharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dzcharge_Y_Box.Name = "dzcharge_Y_Box";
             this.dzcharge_Y_Box.ReadOnly = true;
             this.dzcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1451,6 +1458,7 @@ namespace Isotope_fitting
             // czcharge_X_Box
             // 
             this.czcharge_X_Box.AutoSize = false;
+            this.czcharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.czcharge_X_Box.Name = "czcharge_X_Box";
             this.czcharge_X_Box.ReadOnly = true;
             this.czcharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1459,6 +1467,7 @@ namespace Isotope_fitting
             // czcharge_Y_Box
             // 
             this.czcharge_Y_Box.AutoSize = false;
+            this.czcharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.czcharge_Y_Box.Name = "czcharge_Y_Box";
             this.czcharge_Y_Box.ReadOnly = true;
             this.czcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1573,6 +1582,7 @@ namespace Isotope_fitting
             // bycharge_X_Box
             // 
             this.bycharge_X_Box.AutoSize = false;
+            this.bycharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bycharge_X_Box.Name = "bycharge_X_Box";
             this.bycharge_X_Box.ReadOnly = true;
             this.bycharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1581,6 +1591,7 @@ namespace Isotope_fitting
             // bycharge_Y_Box
             // 
             this.bycharge_Y_Box.AutoSize = false;
+            this.bycharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bycharge_Y_Box.Name = "bycharge_Y_Box";
             this.bycharge_Y_Box.ReadOnly = true;
             this.bycharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1698,6 +1709,7 @@ namespace Isotope_fitting
             // axcharge_X_Box
             // 
             this.axcharge_X_Box.AutoSize = false;
+            this.axcharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.axcharge_X_Box.Name = "axcharge_X_Box";
             this.axcharge_X_Box.ReadOnly = true;
             this.axcharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1706,6 +1718,7 @@ namespace Isotope_fitting
             // axcharge_Y_Box
             // 
             this.axcharge_Y_Box.AutoSize = false;
+            this.axcharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.axcharge_Y_Box.Name = "axcharge_Y_Box";
             this.axcharge_Y_Box.ReadOnly = true;
             this.axcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1813,6 +1826,7 @@ namespace Isotope_fitting
             // dz_X_Box
             // 
             this.dz_X_Box.AutoSize = false;
+            this.dz_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dz_X_Box.Name = "dz_X_Box";
             this.dz_X_Box.ReadOnly = true;
             this.dz_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1821,6 +1835,7 @@ namespace Isotope_fitting
             // dz_Y_Box
             // 
             this.dz_Y_Box.AutoSize = false;
+            this.dz_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dz_Y_Box.Name = "dz_Y_Box";
             this.dz_Y_Box.ReadOnly = true;
             this.dz_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1907,6 +1922,7 @@ namespace Isotope_fitting
             // cz_X_Box
             // 
             this.cz_X_Box.AutoSize = false;
+            this.cz_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cz_X_Box.Name = "cz_X_Box";
             this.cz_X_Box.ReadOnly = true;
             this.cz_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1915,6 +1931,7 @@ namespace Isotope_fitting
             // cz_Y_Box
             // 
             this.cz_Y_Box.AutoSize = false;
+            this.cz_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cz_Y_Box.Name = "cz_Y_Box";
             this.cz_Y_Box.ReadOnly = true;
             this.cz_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -2001,6 +2018,7 @@ namespace Isotope_fitting
             // by_X_Box
             // 
             this.by_X_Box.AutoSize = false;
+            this.by_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.by_X_Box.Name = "by_X_Box";
             this.by_X_Box.ReadOnly = true;
             this.by_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -2009,6 +2027,7 @@ namespace Isotope_fitting
             // by_Y_Box
             // 
             this.by_Y_Box.AutoSize = false;
+            this.by_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.by_Y_Box.Name = "by_Y_Box";
             this.by_Y_Box.ReadOnly = true;
             this.by_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -2097,6 +2116,7 @@ namespace Isotope_fitting
             // ax_X_Box
             // 
             this.ax_X_Box.AutoSize = false;
+            this.ax_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ax_X_Box.Name = "ax_X_Box";
             this.ax_X_Box.ReadOnly = true;
             this.ax_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -2105,6 +2125,7 @@ namespace Isotope_fitting
             // ax_Y_Box
             // 
             this.ax_Y_Box.AutoSize = false;
+            this.ax_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ax_Y_Box.Name = "ax_Y_Box";
             this.ax_Y_Box.ReadOnly = true;
             this.ax_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -5149,6 +5170,7 @@ namespace Isotope_fitting
             // losses_X_Box7
             // 
             this.losses_X_Box7.AutoSize = false;
+            this.losses_X_Box7.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box7.Name = "losses_X_Box7";
             this.losses_X_Box7.ReadOnly = true;
             this.losses_X_Box7.Size = new System.Drawing.Size(40, 22);
@@ -5157,6 +5179,7 @@ namespace Isotope_fitting
             // losses_Y_Box7
             // 
             this.losses_Y_Box7.AutoSize = false;
+            this.losses_Y_Box7.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box7.Name = "losses_Y_Box7";
             this.losses_Y_Box7.ReadOnly = true;
             this.losses_Y_Box7.Size = new System.Drawing.Size(40, 22);
@@ -5300,6 +5323,7 @@ namespace Isotope_fitting
             // losses_X_Box5
             // 
             this.losses_X_Box5.AutoSize = false;
+            this.losses_X_Box5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box5.Name = "losses_X_Box5";
             this.losses_X_Box5.ReadOnly = true;
             this.losses_X_Box5.Size = new System.Drawing.Size(40, 22);
@@ -5308,6 +5332,7 @@ namespace Isotope_fitting
             // losses_Y_Box5
             // 
             this.losses_Y_Box5.AutoSize = false;
+            this.losses_Y_Box5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box5.Name = "losses_Y_Box5";
             this.losses_Y_Box5.ReadOnly = true;
             this.losses_Y_Box5.Size = new System.Drawing.Size(40, 22);
@@ -5451,6 +5476,7 @@ namespace Isotope_fitting
             // losses_X_Box3
             // 
             this.losses_X_Box3.AutoSize = false;
+            this.losses_X_Box3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box3.Name = "losses_X_Box3";
             this.losses_X_Box3.ReadOnly = true;
             this.losses_X_Box3.Size = new System.Drawing.Size(40, 22);
@@ -5459,6 +5485,7 @@ namespace Isotope_fitting
             // losses_Y_Box3
             // 
             this.losses_Y_Box3.AutoSize = false;
+            this.losses_Y_Box3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box3.Name = "losses_Y_Box3";
             this.losses_Y_Box3.ReadOnly = true;
             this.losses_Y_Box3.Size = new System.Drawing.Size(40, 22);
@@ -5603,6 +5630,7 @@ namespace Isotope_fitting
             // losses_X_Box1
             // 
             this.losses_X_Box1.AutoSize = false;
+            this.losses_X_Box1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box1.Name = "losses_X_Box1";
             this.losses_X_Box1.ReadOnly = true;
             this.losses_X_Box1.Size = new System.Drawing.Size(40, 22);
@@ -5611,6 +5639,7 @@ namespace Isotope_fitting
             // losses_Y_Box1
             // 
             this.losses_Y_Box1.AutoSize = false;
+            this.losses_Y_Box1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box1.Name = "losses_Y_Box1";
             this.losses_Y_Box1.ReadOnly = true;
             this.losses_Y_Box1.Size = new System.Drawing.Size(40, 22);
@@ -5754,6 +5783,7 @@ namespace Isotope_fitting
             // losses_X_Box8
             // 
             this.losses_X_Box8.AutoSize = false;
+            this.losses_X_Box8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box8.Name = "losses_X_Box8";
             this.losses_X_Box8.ReadOnly = true;
             this.losses_X_Box8.Size = new System.Drawing.Size(40, 22);
@@ -5762,6 +5792,7 @@ namespace Isotope_fitting
             // losses_Y_Box8
             // 
             this.losses_Y_Box8.AutoSize = false;
+            this.losses_Y_Box8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box8.Name = "losses_Y_Box8";
             this.losses_Y_Box8.ReadOnly = true;
             this.losses_Y_Box8.Size = new System.Drawing.Size(40, 22);
@@ -5905,6 +5936,7 @@ namespace Isotope_fitting
             // losses_X_Box6
             // 
             this.losses_X_Box6.AutoSize = false;
+            this.losses_X_Box6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box6.Name = "losses_X_Box6";
             this.losses_X_Box6.ReadOnly = true;
             this.losses_X_Box6.Size = new System.Drawing.Size(40, 22);
@@ -5913,6 +5945,7 @@ namespace Isotope_fitting
             // losses_Y_Box6
             // 
             this.losses_Y_Box6.AutoSize = false;
+            this.losses_Y_Box6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box6.Name = "losses_Y_Box6";
             this.losses_Y_Box6.ReadOnly = true;
             this.losses_Y_Box6.Size = new System.Drawing.Size(40, 22);
@@ -6056,6 +6089,7 @@ namespace Isotope_fitting
             // losses_X_Box4
             // 
             this.losses_X_Box4.AutoSize = false;
+            this.losses_X_Box4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box4.Name = "losses_X_Box4";
             this.losses_X_Box4.ReadOnly = true;
             this.losses_X_Box4.Size = new System.Drawing.Size(40, 22);
@@ -6064,6 +6098,7 @@ namespace Isotope_fitting
             // losses_Y_Box4
             // 
             this.losses_Y_Box4.AutoSize = false;
+            this.losses_Y_Box4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box4.Name = "losses_Y_Box4";
             this.losses_Y_Box4.ReadOnly = true;
             this.losses_Y_Box4.Size = new System.Drawing.Size(40, 22);
@@ -6207,6 +6242,7 @@ namespace Isotope_fitting
             // losses_X_Box2
             // 
             this.losses_X_Box2.AutoSize = false;
+            this.losses_X_Box2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box2.Name = "losses_X_Box2";
             this.losses_X_Box2.ReadOnly = true;
             this.losses_X_Box2.Size = new System.Drawing.Size(40, 22);
@@ -6215,6 +6251,7 @@ namespace Isotope_fitting
             // losses_Y_Box2
             // 
             this.losses_Y_Box2.AutoSize = false;
+            this.losses_Y_Box2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box2.Name = "losses_Y_Box2";
             this.losses_Y_Box2.ReadOnly = true;
             this.losses_Y_Box2.Size = new System.Drawing.Size(40, 22);
@@ -6312,6 +6349,8 @@ namespace Isotope_fitting
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.aa_cleav_LV_rms_Btn);
+            this.groupBox1.Controls.Add(this.export_aa_to_csv_Btn);
             this.groupBox1.Controls.Add(this.copyAAPlt);
             this.groupBox1.Controls.Add(this.sortAA_GB);
             this.groupBox1.Controls.Add(this.saveAAPlt);
@@ -6328,10 +6367,32 @@ namespace Isotope_fitting
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Plotting Controls";
             // 
+            // aa_cleav_LV_rms_Btn
+            // 
+            this.aa_cleav_LV_rms_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.aa_cleav_LV_rms_Btn.Location = new System.Drawing.Point(139, 381);
+            this.aa_cleav_LV_rms_Btn.Name = "aa_cleav_LV_rms_Btn";
+            this.aa_cleav_LV_rms_Btn.Size = new System.Drawing.Size(142, 29);
+            this.aa_cleav_LV_rms_Btn.TabIndex = 13;
+            this.aa_cleav_LV_rms_Btn.Text = "Remove Selected";
+            this.aa_cleav_LV_rms_Btn.UseVisualStyleBackColor = true;
+            this.aa_cleav_LV_rms_Btn.Click += new System.EventHandler(this.aa_cleav_LV_rms_Btn_Click);
+            // 
+            // export_aa_to_csv_Btn
+            // 
+            this.export_aa_to_csv_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.export_aa_to_csv_Btn.Location = new System.Drawing.Point(6, 661);
+            this.export_aa_to_csv_Btn.Name = "export_aa_to_csv_Btn";
+            this.export_aa_to_csv_Btn.Size = new System.Drawing.Size(275, 29);
+            this.export_aa_to_csv_Btn.TabIndex = 12;
+            this.export_aa_to_csv_Btn.Text = "Export to CSV file";
+            this.export_aa_to_csv_Btn.UseVisualStyleBackColor = true;
+            this.export_aa_to_csv_Btn.Click += new System.EventHandler(this.export_aa_to_csv_Btn_Click);
+            // 
             // copyAAPlt
             // 
             this.copyAAPlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.copyAAPlt.Location = new System.Drawing.Point(139, 666);
+            this.copyAAPlt.Location = new System.Drawing.Point(139, 626);
             this.copyAAPlt.Name = "copyAAPlt";
             this.copyAAPlt.Size = new System.Drawing.Size(142, 29);
             this.copyAAPlt.TabIndex = 10;
@@ -6345,7 +6406,7 @@ namespace Isotope_fitting
             this.sortAA_GB.Controls.Add(this.mrgCustom_RB);
             this.sortAA_GB.Controls.Add(this.pI_RB);
             this.sortAA_GB.Controls.Add(this.hydro_RB);
-            this.sortAA_GB.Location = new System.Drawing.Point(139, 456);
+            this.sortAA_GB.Location = new System.Drawing.Point(139, 416);
             this.sortAA_GB.Name = "sortAA_GB";
             this.sortAA_GB.Size = new System.Drawing.Size(142, 100);
             this.sortAA_GB.TabIndex = 11;
@@ -6394,7 +6455,7 @@ namespace Isotope_fitting
             // saveAAPlt
             // 
             this.saveAAPlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveAAPlt.Location = new System.Drawing.Point(6, 666);
+            this.saveAAPlt.Location = new System.Drawing.Point(6, 626);
             this.saveAAPlt.Name = "saveAAPlt";
             this.saveAAPlt.Size = new System.Drawing.Size(127, 29);
             this.saveAAPlt.TabIndex = 9;
@@ -6407,7 +6468,7 @@ namespace Isotope_fitting
             this.intGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.intGroupBox.Controls.Add(this.relInt_RB);
             this.intGroupBox.Controls.Add(this.absInt_RB);
-            this.intGroupBox.Location = new System.Drawing.Point(139, 558);
+            this.intGroupBox.Location = new System.Drawing.Point(139, 518);
             this.intGroupBox.Name = "intGroupBox";
             this.intGroupBox.Size = new System.Drawing.Size(142, 67);
             this.intGroupBox.TabIndex = 8;
@@ -6445,7 +6506,7 @@ namespace Isotope_fitting
             // pltSelectedBtn
             // 
             this.pltSelectedBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pltSelectedBtn.Location = new System.Drawing.Point(6, 631);
+            this.pltSelectedBtn.Location = new System.Drawing.Point(6, 591);
             this.pltSelectedBtn.Name = "pltSelectedBtn";
             this.pltSelectedBtn.Size = new System.Drawing.Size(127, 29);
             this.pltSelectedBtn.TabIndex = 5;
@@ -6470,7 +6531,7 @@ namespace Isotope_fitting
             "d",
             "v",
             "w"});
-            this.pltFragsChkBox.Location = new System.Drawing.Point(6, 456);
+            this.pltFragsChkBox.Location = new System.Drawing.Point(6, 416);
             this.pltFragsChkBox.Name = "pltFragsChkBox";
             this.pltFragsChkBox.Size = new System.Drawing.Size(127, 169);
             this.pltFragsChkBox.TabIndex = 4;
@@ -6478,7 +6539,7 @@ namespace Isotope_fitting
             // clearFitListBtn
             // 
             this.clearFitListBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.clearFitListBtn.Location = new System.Drawing.Point(139, 631);
+            this.clearFitListBtn.Location = new System.Drawing.Point(139, 591);
             this.clearFitListBtn.Name = "clearFitListBtn";
             this.clearFitListBtn.Size = new System.Drawing.Size(142, 29);
             this.clearFitListBtn.TabIndex = 3;
@@ -6497,7 +6558,7 @@ namespace Isotope_fitting
             this.fit_files_list.HideSelection = false;
             this.fit_files_list.Location = new System.Drawing.Point(6, 17);
             this.fit_files_list.Name = "fit_files_list";
-            this.fit_files_list.Size = new System.Drawing.Size(275, 398);
+            this.fit_files_list.Size = new System.Drawing.Size(275, 358);
             this.fit_files_list.TabIndex = 2;
             this.fit_files_list.UseCompatibleStateImageBehavior = false;
             this.fit_files_list.View = System.Windows.Forms.View.Details;
@@ -6515,9 +6576,9 @@ namespace Isotope_fitting
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(6, 421);
+            this.button1.Location = new System.Drawing.Point(6, 381);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(275, 29);
+            this.button1.Size = new System.Drawing.Size(127, 29);
             this.button1.TabIndex = 1;
             this.button1.Text = "Load .fit Files";
             this.button1.UseVisualStyleBackColor = true;
@@ -6539,7 +6600,7 @@ namespace Isotope_fitting
             this.tabCompl.Name = "tabCompl";
             this.tabCompl.Size = new System.Drawing.Size(1362, 723);
             this.tabCompl.TabIndex = 7;
-            this.tabCompl.Text = "Complimentarity";
+            this.tabCompl.Text = "Complementarity";
             this.tabCompl.UseVisualStyleBackColor = true;
             // 
             // compPlt_GB
@@ -6578,6 +6639,7 @@ namespace Isotope_fitting
             // 
             this.compPltControls_GB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.compPltControls_GB.Controls.Add(this.comp_plt_LV_rms_Btn);
             this.compPltControls_GB.Controls.Add(this.loadPeptCsv_Btn);
             this.compPltControls_GB.Controls.Add(this.selMCharge);
             this.compPltControls_GB.Controls.Add(this.compPltSett_GB);
@@ -6590,10 +6652,21 @@ namespace Isotope_fitting
             this.compPltControls_GB.TabStop = false;
             this.compPltControls_GB.Text = "Plotting Controls";
             // 
+            // comp_plt_LV_rms_Btn
+            // 
+            this.comp_plt_LV_rms_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comp_plt_LV_rms_Btn.Location = new System.Drawing.Point(150, 443);
+            this.comp_plt_LV_rms_Btn.Name = "comp_plt_LV_rms_Btn";
+            this.comp_plt_LV_rms_Btn.Size = new System.Drawing.Size(123, 20);
+            this.comp_plt_LV_rms_Btn.TabIndex = 6;
+            this.comp_plt_LV_rms_Btn.Text = "Remove Selected";
+            this.comp_plt_LV_rms_Btn.UseVisualStyleBackColor = true;
+            this.comp_plt_LV_rms_Btn.Click += new System.EventHandler(this.comp_plt_LV_rms_Btn_Click);
+            // 
             // loadPeptCsv_Btn
             // 
             this.loadPeptCsv_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.loadPeptCsv_Btn.Location = new System.Drawing.Point(6, 449);
+            this.loadPeptCsv_Btn.Location = new System.Drawing.Point(6, 417);
             this.loadPeptCsv_Btn.Name = "loadPeptCsv_Btn";
             this.loadPeptCsv_Btn.Size = new System.Drawing.Size(273, 20);
             this.loadPeptCsv_Btn.TabIndex = 5;
@@ -6604,7 +6677,7 @@ namespace Isotope_fitting
             // selMCharge
             // 
             this.selMCharge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.selMCharge.Location = new System.Drawing.Point(167, 475);
+            this.selMCharge.Location = new System.Drawing.Point(115, 443);
             this.selMCharge.Maximum = new decimal(new int[] {
             20,
             0,
@@ -6616,7 +6689,7 @@ namespace Isotope_fitting
             0,
             0});
             this.selMCharge.Name = "selMCharge";
-            this.selMCharge.Size = new System.Drawing.Size(112, 20);
+            this.selMCharge.Size = new System.Drawing.Size(29, 20);
             this.selMCharge.TabIndex = 4;
             this.selMCharge.Value = new decimal(new int[] {
             1,
@@ -6627,22 +6700,45 @@ namespace Isotope_fitting
             // compPltSett_GB
             // 
             this.compPltSett_GB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.compPltSett_GB.Controls.Add(this.comp_ordering_CV);
+            this.compPltSett_GB.Controls.Add(this.compPlt_export_Btn);
             this.compPltSett_GB.Controls.Add(this.clearAllComp_Btn);
             this.compPltSett_GB.Controls.Add(this.saveCompPlt_Btn);
             this.compPltSett_GB.Controls.Add(this.copyComp_plt);
             this.compPltSett_GB.Controls.Add(this.pltCompPlts_Btn);
             this.compPltSett_GB.Controls.Add(this.comp_charge_CB);
-            this.compPltSett_GB.Location = new System.Drawing.Point(6, 501);
+            this.compPltSett_GB.Location = new System.Drawing.Point(6, 469);
             this.compPltSett_GB.Name = "compPltSett_GB";
-            this.compPltSett_GB.Size = new System.Drawing.Size(273, 204);
+            this.compPltSett_GB.Size = new System.Drawing.Size(273, 236);
             this.compPltSett_GB.TabIndex = 3;
             this.compPltSett_GB.TabStop = false;
             this.compPltSett_GB.Text = "Settings";
             // 
+            // comp_ordering_CV
+            // 
+            this.comp_ordering_CV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comp_ordering_CV.CheckOnClick = true;
+            this.comp_ordering_CV.FormattingEnabled = true;
+            this.comp_ordering_CV.Location = new System.Drawing.Point(139, 19);
+            this.comp_ordering_CV.Name = "comp_ordering_CV";
+            this.comp_ordering_CV.Size = new System.Drawing.Size(128, 94);
+            this.comp_ordering_CV.TabIndex = 6;
+            // 
+            // compPlt_export_Btn
+            // 
+            this.compPlt_export_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.compPlt_export_Btn.Location = new System.Drawing.Point(6, 178);
+            this.compPlt_export_Btn.Name = "compPlt_export_Btn";
+            this.compPlt_export_Btn.Size = new System.Drawing.Size(261, 23);
+            this.compPlt_export_Btn.TabIndex = 5;
+            this.compPlt_export_Btn.Text = "Export to .csv";
+            this.compPlt_export_Btn.UseVisualStyleBackColor = true;
+            this.compPlt_export_Btn.Click += new System.EventHandler(this.compPlt_export_Btn_Click);
+            // 
             // clearAllComp_Btn
             // 
             this.clearAllComp_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.clearAllComp_Btn.Location = new System.Drawing.Point(6, 175);
+            this.clearAllComp_Btn.Location = new System.Drawing.Point(6, 207);
             this.clearAllComp_Btn.Name = "clearAllComp_Btn";
             this.clearAllComp_Btn.Size = new System.Drawing.Size(261, 23);
             this.clearAllComp_Btn.TabIndex = 4;
@@ -6653,7 +6749,7 @@ namespace Isotope_fitting
             // saveCompPlt_Btn
             // 
             this.saveCompPlt_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveCompPlt_Btn.Location = new System.Drawing.Point(139, 146);
+            this.saveCompPlt_Btn.Location = new System.Drawing.Point(139, 149);
             this.saveCompPlt_Btn.Name = "saveCompPlt_Btn";
             this.saveCompPlt_Btn.Size = new System.Drawing.Size(128, 23);
             this.saveCompPlt_Btn.TabIndex = 3;
@@ -6663,7 +6759,7 @@ namespace Isotope_fitting
             // copyComp_plt
             // 
             this.copyComp_plt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.copyComp_plt.Location = new System.Drawing.Point(6, 146);
+            this.copyComp_plt.Location = new System.Drawing.Point(6, 149);
             this.copyComp_plt.Name = "copyComp_plt";
             this.copyComp_plt.Size = new System.Drawing.Size(127, 23);
             this.copyComp_plt.TabIndex = 2;
@@ -6673,7 +6769,7 @@ namespace Isotope_fitting
             // pltCompPlts_Btn
             // 
             this.pltCompPlts_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pltCompPlts_Btn.Location = new System.Drawing.Point(6, 117);
+            this.pltCompPlts_Btn.Location = new System.Drawing.Point(6, 120);
             this.pltCompPlts_Btn.Name = "pltCompPlts_Btn";
             this.pltCompPlts_Btn.Size = new System.Drawing.Size(261, 23);
             this.pltCompPlts_Btn.TabIndex = 1;
@@ -6686,19 +6782,19 @@ namespace Isotope_fitting
             this.comp_charge_CB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.comp_charge_CB.CheckOnClick = true;
             this.comp_charge_CB.FormattingEnabled = true;
-            this.comp_charge_CB.Location = new System.Drawing.Point(6, 17);
+            this.comp_charge_CB.Location = new System.Drawing.Point(6, 20);
             this.comp_charge_CB.Name = "comp_charge_CB";
-            this.comp_charge_CB.Size = new System.Drawing.Size(261, 94);
+            this.comp_charge_CB.Size = new System.Drawing.Size(127, 94);
             this.comp_charge_CB.TabIndex = 0;
             // 
             // compLoadFit_Btn
             // 
             this.compLoadFit_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.compLoadFit_Btn.Location = new System.Drawing.Point(6, 475);
+            this.compLoadFit_Btn.Location = new System.Drawing.Point(6, 443);
             this.compLoadFit_Btn.Name = "compLoadFit_Btn";
-            this.compLoadFit_Btn.Size = new System.Drawing.Size(155, 20);
+            this.compLoadFit_Btn.Size = new System.Drawing.Size(103, 20);
             this.compLoadFit_Btn.TabIndex = 2;
-            this.compLoadFit_Btn.Text = "Load .fit files for charge ->";
+            this.compLoadFit_Btn.Text = "Load .fit files for ->";
             this.compLoadFit_Btn.UseVisualStyleBackColor = true;
             this.compLoadFit_Btn.Click += new System.EventHandler(this.compLoadFit_Btn_Click);
             // 
@@ -6717,7 +6813,7 @@ namespace Isotope_fitting
             this.compPlt_LV.Location = new System.Drawing.Point(6, 20);
             this.compPlt_LV.MultiSelect = false;
             this.compPlt_LV.Name = "compPlt_LV";
-            this.compPlt_LV.Size = new System.Drawing.Size(273, 423);
+            this.compPlt_LV.Size = new System.Drawing.Size(273, 391);
             this.compPlt_LV.TabIndex = 0;
             this.compPlt_LV.UseCompatibleStateImageBehavior = false;
             this.compPlt_LV.View = System.Windows.Forms.View.Details;
@@ -7493,5 +7589,10 @@ namespace Isotope_fitting
         private System.Windows.Forms.Button clearAllComp_Btn;
         private System.Windows.Forms.ColumnHeader peptideMonoMass;
         private System.Windows.Forms.ColumnHeader fnCol;
+        private System.Windows.Forms.Button compPlt_export_Btn;
+        private System.Windows.Forms.Button export_aa_to_csv_Btn;
+        private System.Windows.Forms.Button aa_cleav_LV_rms_Btn;
+        private System.Windows.Forms.Button comp_plt_LV_rms_Btn;
+        private System.Windows.Forms.CheckedListBox comp_ordering_CV;
     }
 }

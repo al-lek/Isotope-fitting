@@ -14167,6 +14167,22 @@ namespace Isotope_fitting
             }
             
         }
+
+        private void aa_cleav_LV_rms_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach(ListViewItem item in fit_files_list.SelectedItems)
+                {
+                    fit_files_list.Items.Remove(item);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         #endregion
 
         #region Plotting
@@ -14206,7 +14222,7 @@ namespace Isotope_fitting
             axisX.ScrollMode = XAxisScrollMode.None;
 
             AxisY axisY = AAC_1.ViewXY.YAxes[0];
-            axisY.Title.Text = "Absolute Intensity";
+            axisY.Title.Text = "Mean Absolute Intensity";
             axisY.Title.Color = Color.FromArgb(55, 255, 255, 255);
             axisY.Title.MouseInteraction = false;
             axisY.MouseInteraction = false;
@@ -14262,11 +14278,11 @@ namespace Isotope_fitting
 
             if (relInt_RB.Checked)
             {
-                AAC_1.ViewXY.YAxes[0].Title.Text = "Relative Intensity";
+                AAC_1.ViewXY.YAxes[0].Title.Text = "Mean Relative Intensity";
             }
             else if (absInt_RB.Checked)
             {
-                AAC_1.ViewXY.YAxes[0].Title.Text = "Absolute Intensity";
+                AAC_1.ViewXY.YAxes[0].Title.Text = "Mean Absolute Intensity";
             }
 
             if (hydro_RB.Checked)
@@ -14443,6 +14459,50 @@ namespace Isotope_fitting
             aacGroupBox.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
             Clipboard.SetImage(bm);
         }
+
+        private void export_aa_to_csv_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 2;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter output_stream = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        output_stream.WriteLine("AA,a,b,c,x,y,z,d,v,w,Hydropathy,pI,MRG_Custom");
+                        foreach (var aa_kvp in aa_frags)
+                        {
+                            float hydro = hydropathy_aa[aa_kvp.Key];
+                            float pi = pI_aa[aa_kvp.Key];
+                            float mrg_c = mrgcustom_aa[aa_kvp.Key];
+                            Dictionary<string, double> f_int = new Dictionary<string, double>();
+
+                            foreach (var flist in aa_kvp.Value)
+                            {
+                                double mean = getIntensityMean(flist.Value);
+                                string f = flist.Key;
+                                f_int.Add(f, mean);
+                            }
+
+                            output_stream.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
+                                aa_kvp.Key, f_int["a"].ToString(), f_int["b"].ToString(), f_int["c"].ToString(), f_int["x"].ToString(),
+                                f_int["y"].ToString(), f_int["z"].ToString(), f_int["d"].ToString(), f_int["v"].ToString(), f_int["w"].ToString(),
+                                hydro.ToString(), pi.ToString(), mrg_c.ToString()));
+                        }
+                    }         
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
         #endregion
 
         #endregion
@@ -14458,6 +14518,34 @@ namespace Isotope_fitting
 
         // peptide csv file dict
         public Dictionary<string, Dictionary<int, double>> peptide_info_csv; // peptide -> charge -> mass_mono
+        public bool comp_has_order = false; // sort by a specific order present in the peptide.csv
+        public Dictionary<string, float> cust_ord;
+
+        public struct PepInfo
+        {
+            public PepInfo(string[] row, string[] title)
+            {
+                peptide = row[0];
+                mono = float.Parse(row[3]);
+                mz = float.Parse(row[2]);
+                charge = int.Parse(row[1]);
+                custom_order = new Dictionary<string, float>();
+                if (row.Length >= 5)
+                {
+                    for (int i = 4; i < row.Length; i++)
+                    {
+                        custom_order.Add(title[i], float.Parse(row[i]));
+                    }
+                }
+            }
+            public string peptide { get; }
+            public float mono { get; }
+            public float mz { get; }
+            public int charge { get; }
+            public Dictionary<string, float> custom_order { get; }
+        };
+
+        public List<PepInfo> pep_list;
 
         // complimentarity data
         string[] comp_possible_frags = { "a", "b", "c", "x", "y", "z" };
@@ -14619,6 +14707,7 @@ namespace Isotope_fitting
             if (loadPeptCsv.ShowDialog() != DialogResult.Cancel)
             {
                 List<string> lista = new List<string>();
+                pep_list = new List<PepInfo>();
                 string file_name = loadPeptCsv.FileName;
 
                 StreamReader reader = new StreamReader(file_name);
@@ -14628,7 +14717,12 @@ namespace Isotope_fitting
 
                 peptide_info_csv = new Dictionary<string, Dictionary<int, double>>();
 
-                for (int j = 0; j < lista.Count; j++)
+                // Parse Title Bar
+                string[] str_f = lista[0].Split(',');
+                comp_ordering_CV.Items.Insert(0, "Monoisotopic Mass");
+                comp_ordering_CV.Items.Insert(1, "m/z");
+
+                for (int j = 1; j < lista.Count; j++)
                 {
                     string[] str   = lista[j].Split(',');
                     string peptide = str[0];
@@ -14644,7 +14738,25 @@ namespace Isotope_fitting
                     {
                         peptide_info_csv.Add(peptide, charge_mass_dict);
                     }
+
+                    PepInfo pi = new PepInfo(str, str_f);
+                    pep_list.Add(pi);
                 }
+            }
+        }
+
+        private void comp_plt_LV_rms_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach(ListViewItem item in compPlt_LV.SelectedItems)
+                {
+                    compPlt_LV.Items.Remove(item);
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -14676,7 +14788,7 @@ namespace Isotope_fitting
             AxisX axisX = seqCov_plt.ViewXY.XAxes[0];
             axisX.ValueType = AxisValueType.Number;
             axisX.AutoFormatLabels = false;
-            axisX.CustomTicksEnabled = false;
+            axisX.CustomTicksEnabled = true;
             axisX.Title.Text = "m/z";
             axisX.Title.Color = Color.FromArgb(35, 255, 255, 255);
             axisX.Title.MouseInteraction = false;
@@ -14721,7 +14833,7 @@ namespace Isotope_fitting
             AxisX axisX2 = compPairs_plt.ViewXY.XAxes[0];
             axisX2.ValueType = AxisValueType.Number;
             axisX2.AutoFormatLabels = false;
-            axisX2.CustomTicksEnabled = false;
+            axisX2.CustomTicksEnabled = true;
             axisX2.Title.Text = "m/z";
             axisX2.Title.Color = Color.FromArgb(35, 255, 255, 255);
             axisX2.Title.MouseInteraction = false;
@@ -14817,14 +14929,41 @@ namespace Isotope_fitting
 
         private void pltCompPlts_Btn_Click(object sender, EventArgs e)
         {
-            pltFirstComps((int)selMCharge.Value);
-            pltSecondComps((int)selMCharge.Value);
+            try
+            {
+                if (comp_charge_CB.Items.Count > 0)
+                {
+                    if (comp_charge_CB.CheckedItems.Count == 1)
+                    {
+                        pltFirstComps(int.Parse(comp_charge_CB.CheckedItems[0].ToString()));
+                        pltSecondComps(int.Parse(comp_charge_CB.CheckedItems[0].ToString()));
+                    }
+                    else
+                    {
+                        MessageBox.Show("There is absolutely nothing to plot.", "Plotting Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("There is absolutely nothing to plot.", "Plotting Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }    
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An exception has occured: " + ex.Message, "Plotting Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
         }
 
         private void pltFirstComps(int charge_state)
         {
 
             seqCov_plt.ViewXY.BarSeries.Clear();
+            if (cust_ord != null) { cust_ord.Clear(); }
+
+            seqCov_plt.ViewXY.XAxes[0].CustomTicks.Clear();
+            compPairs_plt.ViewXY.XAxes[0].CustomTicks.Clear();
 
             var bs_sc = new Arction.WinForms.Charting.SeriesXY.BarSeries(seqCov_plt.ViewXY, seqCov_plt.ViewXY.XAxes[0], seqCov_plt.ViewXY.YAxes[0]);
 
@@ -14835,7 +14974,7 @@ namespace Isotope_fitting
 
             var bs_c = new Arction.WinForms.Charting.SeriesXY.BarSeries(seqCov_plt.ViewXY, seqCov_plt.ViewXY.XAxes[0], seqCov_plt.ViewXY.YAxes[0]);
 
-            bs_c.Title.Text = "Complimentarity";
+            bs_c.Title.Text = "Complementarity";
             bs_c.BarThickness = 15;
             bs_c.Fill.Color = OxyColors.DarkOliveGreen.ToColor();
             bs_c.Fill.GradientFill = GradientFill.Solid;
@@ -14843,7 +14982,7 @@ namespace Isotope_fitting
             var bs_b = new Arction.WinForms.Charting.SeriesXY.BarSeries(seqCov_plt.ViewXY, seqCov_plt.ViewXY.XAxes[0], seqCov_plt.ViewXY.YAxes[0]);
 
             bs_b.Title.Text = "Sequence Name";
-            bs_b.BarThickness = 15;
+            bs_b.BarThickness = 20;
             bs_b.Fill.Color = OxyColors.White.ToColor();
             bs_b.Fill.GradientFill = GradientFill.Solid;
             bs_b.BorderWidth = 0.0f;
@@ -14854,32 +14993,86 @@ namespace Isotope_fitting
             List<BarSeriesValue> barvals_c = new List<BarSeriesValue>();
             List<BarSeriesValue> barvals_b = new List<BarSeriesValue>();
 
-            seqCov_plt.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
             seqCov_plt.ViewXY.XAxes[0].Title.Text = "Peptide Monoisotopic Mass [Da]";
-            seqCov_plt.Title.Text = "Sequence Coverage and Complimentarity [M" + charge_state.ToString() + "+]";
-            // calculate sequence coverage, complimentarity and plot appropriate bars 
+            seqCov_plt.Title.Text = "Sequence Coverage and Complementarity [M" + charge_state.ToString() + "+]";
+
+            // fix ticks
+            cust_ord = new Dictionary<string, float>();
+            if (comp_ordering_CV.CheckedItems.Count == 1)
+            {
+                if (comp_ordering_CV.CheckedItems[0].ToString() == "Monoisotopic Mass")
+                {
+                    float counter = 0.0f;
+                    seqCov_plt.ViewXY.XAxes[0].Title.Text = "Peptide Monoisotopic Mass [Da]";
+                    compPairs_plt.ViewXY.XAxes[0].Title.Text = "Peptide Monoisotopic Mass [Da]";
+                    foreach (var pi in pep_list.OrderBy(p => p.mono))
+                    {
+                        CustomAxisTick tick = new CustomAxisTick(AAC_1.ViewXY.XAxes[0]);
+                        tick.AxisValue = counter;
+                        tick.LabelText = pi.mono.ToString();
+                        tick.Color = Color.FromArgb(35, 255, 255, 255);
+
+                        seqCov_plt.ViewXY.XAxes[0].CustomTicks.Add(tick);
+                        compPairs_plt.ViewXY.XAxes[0].CustomTicks.Add(tick);
+
+                        cust_ord.Add(pi.peptide + "_" + pi.charge.ToString(), counter);
+                        counter++;
+                    }
+                }
+                if (comp_ordering_CV.CheckedItems[0].ToString() == "m/z")
+                {
+                    float counter = 0.0f;
+                    seqCov_plt.ViewXY.XAxes[0].Title.Text = "m/z";
+                    compPairs_plt.ViewXY.XAxes[0].Title.Text = "m/z";
+                    foreach (var pi in pep_list.OrderBy(p => p.mz))
+                    {
+                        CustomAxisTick tick = new CustomAxisTick(AAC_1.ViewXY.XAxes[0]);
+                        tick.AxisValue = counter;
+                        tick.LabelText = pi.mz.ToString();
+                        tick.Color = Color.FromArgb(35, 255, 255, 255);
+
+                        seqCov_plt.ViewXY.XAxes[0].CustomTicks.Add(tick);
+                        compPairs_plt.ViewXY.XAxes[0].CustomTicks.Add(tick);
+
+                        cust_ord.Add(pi.peptide + "_" + pi.charge.ToString(), counter);
+                        counter++;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select only one ordering parameter", "Plotting Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            seqCov_plt.ViewXY.XAxes[0].InvalidateCustomTicks();
+            // calculate sequence coverage, complimentarity and plot appropriate bars
             foreach (ListViewItem item in compPlt_LV.Items)
             {
-                float seq_coverage, complimentarity;
+                //float seq_coverage, complimentarity;
                 if (item.SubItems[1].Text == charge_state.ToString())
                 {
-                    seq_coverage = calc_seq_coverage(d_per_file[item.SubItems[3].Text]);
-                    complimentarity = calc_basic_complimentarity(d_per_file[item.SubItems[3].Text]);
-                    //Console.WriteLine("SeqCov: " + seq_coverage.ToString() + " and Comp:" + complimentarity.ToString() + " for " + item.SubItems[0].Text);
+                    Console.WriteLine("Found");
+                    float seq_coverage = calc_seq_coverage(d_per_file[item.SubItems[3].Text]);
+                    float complimentarity = calc_basic_complimentarity(d_per_file[item.SubItems[3].Text]);
+                    Console.WriteLine("SeqCov: " + seq_coverage.ToString() + " and Comp:" + complimentarity.ToString() + " for " + item.SubItems[0].Text + " in " + item.SubItems[2].Text);
 
-                    barvals_sc.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), seq_coverage, null));
-                    barvals_c.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), complimentarity, null));
-                    barvals_b.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), seq_coverage, item.SubItems[0].Text));
+                    barvals_sc.Add(new BarSeriesValue(cust_ord[item.SubItems[0].Text + "_" + charge_state.ToString()], seq_coverage, null));
+                    barvals_c.Add(new BarSeriesValue(cust_ord[item.SubItems[0].Text + "_" + charge_state.ToString()], complimentarity, null));
+                    barvals_b.Add(new BarSeriesValue(cust_ord[item.SubItems[0].Text + "_" + charge_state.ToString()], seq_coverage, item.SubItems[0].Text));
                 }
             }
 
+            barvals_b.OrderByDescending(b => b.Text);
             bs_b.Values = barvals_b.ToArray();
             bs_sc.Values = barvals_sc.ToArray();
             bs_c.Values = barvals_c.ToArray();
-
+            
             seqCov_plt.ViewXY.BarSeries.Add(bs_b);
             seqCov_plt.ViewXY.BarSeries.Add(bs_sc);
             seqCov_plt.ViewXY.BarSeries.Add(bs_c);
+
+            seqCov_plt.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
 
             seqCov_plt.ViewXY.ZoomToFit();
 
@@ -14892,7 +15085,6 @@ namespace Isotope_fitting
             float p_val;
 
             compPairs_plt.ViewXY.BarViewOptions.Grouping = BarsGrouping.ByLocation;
-            compPairs_plt.ViewXY.XAxes[0].Title.Text = "Peptide Monoisotopic Mass [Da]";
             compPairs_plt.Title.Text = "Complementary Pairs [M" + charge_state.ToString() + "+]";
 
             foreach (var c_pair in possible_comp_pairs)
@@ -14905,13 +15097,14 @@ namespace Isotope_fitting
                 bs_sc.Fill.GradientFill = GradientFill.Solid;
 
                 List<BarSeriesValue> barvals_c = new List<BarSeriesValue>();
+                compPairs_plt.ViewXY.XAxes[0].InvalidateCustomTicks();
 
                 foreach (ListViewItem item in compPlt_LV.Items)
                 {
                     if (item.SubItems[1].Text == charge_state.ToString())
                     {
                         p_val = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], c_pair);
-                        barvals_c.Add(new BarSeriesValue(float.Parse(item.SubItems[2].Text), p_val, null));
+                        barvals_c.Add(new BarSeriesValue(cust_ord[item.SubItems[0].Text + "_" + charge_state.ToString()], p_val, null));
                     }
                 }
 
@@ -15019,12 +15212,44 @@ namespace Isotope_fitting
                 seqCov_plt.ViewXY.BarSeries.Clear();
                 compPairs_plt.ViewXY.BarSeries.Clear();
                 d_per_file.Clear();
-                compPlt_LV.Clear();
+                compPlt_LV.Items.Clear();
                 comp_charge_CB.Items.Clear();
             }
             catch(Exception ex) 
             {
                 MessageBox.Show("There is absolutely nothing to clear.", "Clearing Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void compPlt_export_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 2;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter output_stream = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        output_stream.WriteLine("Sequence");
+                        foreach (ListViewItem item in compPlt_LV.Items)
+                        {
+                            int charge = int.Parse(item.SubItems[1].Text);
+                            string peptide = item.SubItems[0].Text;
+                            float seq_coverage = calc_seq_coverage(d_per_file[item.SubItems[3].Text]);
+                            float complimentarity = calc_basic_complimentarity(d_per_file[item.SubItems[3].Text]);
+                        }
+
+                    }
+                        
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -15803,6 +16028,7 @@ namespace Isotope_fitting
         {
             ufc_frm = null;
         }
+
 
         #endregion
 
