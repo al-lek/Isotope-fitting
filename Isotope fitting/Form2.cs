@@ -14692,6 +14692,7 @@ namespace Isotope_fitting
 
         private void loadPeptCsv_Btn_Click(object sender, EventArgs e)
         {
+
             OpenFileDialog loadPeptCsv = new OpenFileDialog()
             {
                 Multiselect = false,
@@ -14728,6 +14729,7 @@ namespace Isotope_fitting
                     string peptide = str[0];
                     int charge     = int.Parse(str[1]);
                     double mass    = double.Parse(str[3]);
+                    double mz      = double.Parse(str[2]);
 
                     Dictionary<int, double> charge_mass_dict = new Dictionary<int, double>() { {charge, mass } };
                     if (peptide_info_csv.ContainsKey(peptide))
@@ -15063,7 +15065,6 @@ namespace Isotope_fitting
                 }
             }
 
-            barvals_b.OrderByDescending(b => b.Text);
             bs_b.Values = barvals_b.ToArray();
             bs_sc.Values = barvals_sc.ToArray();
             bs_c.Values = barvals_c.ToArray();
@@ -15205,6 +15206,23 @@ namespace Isotope_fitting
             return seq_cov;
         }
 
+        private float calc_f_seq_coverage(Dictionary<string, Dictionary<string, List<FittedFrag>>> ff_dict, string frag)
+        {
+            float seq_cov;
+            float n1 = 0.0f, tot = 0.0f;
+            foreach(var kv in ff_dict)
+            {
+                if (kv.Value[frag].Count != 0)
+                {
+                    n1++;
+                }
+                tot++;
+            }
+            seq_cov = (n1 / (tot - 1.0f)) * 100.0f;
+
+            return seq_cov;
+        }
+
         private void clearAllComp_Btn_Click(object sender, EventArgs e)
         {
             try
@@ -15214,6 +15232,7 @@ namespace Isotope_fitting
                 d_per_file.Clear();
                 compPlt_LV.Items.Clear();
                 comp_charge_CB.Items.Clear();
+                pep_list.Clear();
             }
             catch(Exception ex) 
             {
@@ -15227,26 +15246,37 @@ namespace Isotope_fitting
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
-                saveFileDialog.FilterIndex = 2;
+                saveFileDialog.FilterIndex = 0;
                 saveFileDialog.RestoreDirectory = true;
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     using (StreamWriter output_stream = new StreamWriter(saveFileDialog.FileName))
                     {
-                        output_stream.WriteLine("Sequence,Charge,Sequence Coverage,Complemetarity,a-x,b-y,c-z");
+                        output_stream.WriteLine("Sequence,Charge,Monoisotopic,MZ,a,b,c,x,y,z,Sequence Coverage,Complemetarity,a-x,b-y,c-z");
                         foreach (ListViewItem item in compPlt_LV.Items)
                         {
                             int charge = int.Parse(item.SubItems[1].Text);
                             string peptide = item.SubItems[0].Text;
                             float seq_coverage = calc_seq_coverage(d_per_file[item.SubItems[3].Text]);
                             float complimentarity = calc_basic_complimentarity(d_per_file[item.SubItems[3].Text]);
+                            float m = float.Parse(item.SubItems[2].Text);
+                            double mz = (m + charge*1.00727646677) / charge ;
                             float ax = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], "a-x");
                             float by = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], "b-y");
                             float cz = calc_second_complimentarity(d_per_file[item.SubItems[3].Text], "c-z");
 
-                            output_stream.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6}",
-                                peptide, charge.ToString(), seq_coverage.ToString(), complimentarity.ToString(),
+                            float asc = calc_f_seq_coverage(d_per_file[item.SubItems[3].Text], "a");
+                            float bsc = calc_f_seq_coverage(d_per_file[item.SubItems[3].Text], "b");
+                            float csc = calc_f_seq_coverage(d_per_file[item.SubItems[3].Text], "c");
+                            float xsc = calc_f_seq_coverage(d_per_file[item.SubItems[3].Text], "x");
+                            float ysc = calc_f_seq_coverage(d_per_file[item.SubItems[3].Text], "y");
+                            float zsc = calc_f_seq_coverage(d_per_file[item.SubItems[3].Text], "z");
+
+                            output_stream.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}",
+                                peptide, charge.ToString(), m.ToString(), mz.ToString(),
+                                asc.ToString(), bsc.ToString(), csc.ToString(), xsc.ToString(), ysc.ToString(), zsc.ToString(),
+                                seq_coverage.ToString(), complimentarity.ToString(),
                                 ax.ToString(), by.ToString(), cz.ToString()));
                         }
 
