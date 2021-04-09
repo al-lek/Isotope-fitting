@@ -14649,8 +14649,6 @@ namespace Isotope_fitting
                         }
                         catch (Exception ex)
                         {
-                            d_per_file.Clear();
-                            compPlt_LV.Items.Clear();
                             MessageBox.Show("The following exception has occured: " + ex.Message + "Please try again.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
