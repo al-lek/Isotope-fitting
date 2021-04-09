@@ -15253,7 +15253,7 @@ namespace Isotope_fitting
                 {
                     using (StreamWriter output_stream = new StreamWriter(saveFileDialog.FileName))
                     {
-                        output_stream.WriteLine("Sequence,Charge,Monoisotopic,MZ,a,b,c,x,y,z,Sequence Coverage,Complemetarity,a-x,b-y,c-z");
+                        output_stream.WriteLine("Sequence,Charge,Monoisotopic,m/z,a,b,c,x,y,z,Sequence Coverage,Complemetarity,a-x,b-y,c-z");
                         foreach (ListViewItem item in compPlt_LV.Items)
                         {
                             int charge = int.Parse(item.SubItems[1].Text);
