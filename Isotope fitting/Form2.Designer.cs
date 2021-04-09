@@ -1334,7 +1334,6 @@ namespace Isotope_fitting
             // dzcharge_X_Box
             // 
             this.dzcharge_X_Box.AutoSize = false;
-            this.dzcharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dzcharge_X_Box.Name = "dzcharge_X_Box";
             this.dzcharge_X_Box.ReadOnly = true;
             this.dzcharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1343,7 +1342,6 @@ namespace Isotope_fitting
             // dzcharge_Y_Box
             // 
             this.dzcharge_Y_Box.AutoSize = false;
-            this.dzcharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dzcharge_Y_Box.Name = "dzcharge_Y_Box";
             this.dzcharge_Y_Box.ReadOnly = true;
             this.dzcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1458,7 +1456,6 @@ namespace Isotope_fitting
             // czcharge_X_Box
             // 
             this.czcharge_X_Box.AutoSize = false;
-            this.czcharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.czcharge_X_Box.Name = "czcharge_X_Box";
             this.czcharge_X_Box.ReadOnly = true;
             this.czcharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1467,7 +1464,6 @@ namespace Isotope_fitting
             // czcharge_Y_Box
             // 
             this.czcharge_Y_Box.AutoSize = false;
-            this.czcharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.czcharge_Y_Box.Name = "czcharge_Y_Box";
             this.czcharge_Y_Box.ReadOnly = true;
             this.czcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1582,7 +1578,6 @@ namespace Isotope_fitting
             // bycharge_X_Box
             // 
             this.bycharge_X_Box.AutoSize = false;
-            this.bycharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bycharge_X_Box.Name = "bycharge_X_Box";
             this.bycharge_X_Box.ReadOnly = true;
             this.bycharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1591,7 +1586,6 @@ namespace Isotope_fitting
             // bycharge_Y_Box
             // 
             this.bycharge_Y_Box.AutoSize = false;
-            this.bycharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bycharge_Y_Box.Name = "bycharge_Y_Box";
             this.bycharge_Y_Box.ReadOnly = true;
             this.bycharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1709,7 +1703,6 @@ namespace Isotope_fitting
             // axcharge_X_Box
             // 
             this.axcharge_X_Box.AutoSize = false;
-            this.axcharge_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.axcharge_X_Box.Name = "axcharge_X_Box";
             this.axcharge_X_Box.ReadOnly = true;
             this.axcharge_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1718,7 +1711,6 @@ namespace Isotope_fitting
             // axcharge_Y_Box
             // 
             this.axcharge_Y_Box.AutoSize = false;
-            this.axcharge_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.axcharge_Y_Box.Name = "axcharge_Y_Box";
             this.axcharge_Y_Box.ReadOnly = true;
             this.axcharge_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1826,7 +1818,6 @@ namespace Isotope_fitting
             // dz_X_Box
             // 
             this.dz_X_Box.AutoSize = false;
-            this.dz_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dz_X_Box.Name = "dz_X_Box";
             this.dz_X_Box.ReadOnly = true;
             this.dz_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1835,7 +1826,6 @@ namespace Isotope_fitting
             // dz_Y_Box
             // 
             this.dz_Y_Box.AutoSize = false;
-            this.dz_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dz_Y_Box.Name = "dz_Y_Box";
             this.dz_Y_Box.ReadOnly = true;
             this.dz_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -1922,7 +1912,6 @@ namespace Isotope_fitting
             // cz_X_Box
             // 
             this.cz_X_Box.AutoSize = false;
-            this.cz_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cz_X_Box.Name = "cz_X_Box";
             this.cz_X_Box.ReadOnly = true;
             this.cz_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -1931,7 +1920,6 @@ namespace Isotope_fitting
             // cz_Y_Box
             // 
             this.cz_Y_Box.AutoSize = false;
-            this.cz_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cz_Y_Box.Name = "cz_Y_Box";
             this.cz_Y_Box.ReadOnly = true;
             this.cz_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -2018,7 +2006,6 @@ namespace Isotope_fitting
             // by_X_Box
             // 
             this.by_X_Box.AutoSize = false;
-            this.by_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.by_X_Box.Name = "by_X_Box";
             this.by_X_Box.ReadOnly = true;
             this.by_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -2027,7 +2014,6 @@ namespace Isotope_fitting
             // by_Y_Box
             // 
             this.by_Y_Box.AutoSize = false;
-            this.by_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.by_Y_Box.Name = "by_Y_Box";
             this.by_Y_Box.ReadOnly = true;
             this.by_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -2116,7 +2102,6 @@ namespace Isotope_fitting
             // ax_X_Box
             // 
             this.ax_X_Box.AutoSize = false;
-            this.ax_X_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ax_X_Box.Name = "ax_X_Box";
             this.ax_X_Box.ReadOnly = true;
             this.ax_X_Box.Size = new System.Drawing.Size(40, 22);
@@ -2125,7 +2110,6 @@ namespace Isotope_fitting
             // ax_Y_Box
             // 
             this.ax_Y_Box.AutoSize = false;
-            this.ax_Y_Box.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ax_Y_Box.Name = "ax_Y_Box";
             this.ax_Y_Box.ReadOnly = true;
             this.ax_Y_Box.Size = new System.Drawing.Size(40, 22);
@@ -5170,7 +5154,6 @@ namespace Isotope_fitting
             // losses_X_Box7
             // 
             this.losses_X_Box7.AutoSize = false;
-            this.losses_X_Box7.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box7.Name = "losses_X_Box7";
             this.losses_X_Box7.ReadOnly = true;
             this.losses_X_Box7.Size = new System.Drawing.Size(40, 22);
@@ -5179,7 +5162,6 @@ namespace Isotope_fitting
             // losses_Y_Box7
             // 
             this.losses_Y_Box7.AutoSize = false;
-            this.losses_Y_Box7.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box7.Name = "losses_Y_Box7";
             this.losses_Y_Box7.ReadOnly = true;
             this.losses_Y_Box7.Size = new System.Drawing.Size(40, 22);
@@ -5323,7 +5305,6 @@ namespace Isotope_fitting
             // losses_X_Box5
             // 
             this.losses_X_Box5.AutoSize = false;
-            this.losses_X_Box5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box5.Name = "losses_X_Box5";
             this.losses_X_Box5.ReadOnly = true;
             this.losses_X_Box5.Size = new System.Drawing.Size(40, 22);
@@ -5332,7 +5313,6 @@ namespace Isotope_fitting
             // losses_Y_Box5
             // 
             this.losses_Y_Box5.AutoSize = false;
-            this.losses_Y_Box5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box5.Name = "losses_Y_Box5";
             this.losses_Y_Box5.ReadOnly = true;
             this.losses_Y_Box5.Size = new System.Drawing.Size(40, 22);
@@ -5476,7 +5456,6 @@ namespace Isotope_fitting
             // losses_X_Box3
             // 
             this.losses_X_Box3.AutoSize = false;
-            this.losses_X_Box3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box3.Name = "losses_X_Box3";
             this.losses_X_Box3.ReadOnly = true;
             this.losses_X_Box3.Size = new System.Drawing.Size(40, 22);
@@ -5485,7 +5464,6 @@ namespace Isotope_fitting
             // losses_Y_Box3
             // 
             this.losses_Y_Box3.AutoSize = false;
-            this.losses_Y_Box3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box3.Name = "losses_Y_Box3";
             this.losses_Y_Box3.ReadOnly = true;
             this.losses_Y_Box3.Size = new System.Drawing.Size(40, 22);
@@ -5630,7 +5608,6 @@ namespace Isotope_fitting
             // losses_X_Box1
             // 
             this.losses_X_Box1.AutoSize = false;
-            this.losses_X_Box1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box1.Name = "losses_X_Box1";
             this.losses_X_Box1.ReadOnly = true;
             this.losses_X_Box1.Size = new System.Drawing.Size(40, 22);
@@ -5639,7 +5616,6 @@ namespace Isotope_fitting
             // losses_Y_Box1
             // 
             this.losses_Y_Box1.AutoSize = false;
-            this.losses_Y_Box1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box1.Name = "losses_Y_Box1";
             this.losses_Y_Box1.ReadOnly = true;
             this.losses_Y_Box1.Size = new System.Drawing.Size(40, 22);
@@ -5783,7 +5759,6 @@ namespace Isotope_fitting
             // losses_X_Box8
             // 
             this.losses_X_Box8.AutoSize = false;
-            this.losses_X_Box8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box8.Name = "losses_X_Box8";
             this.losses_X_Box8.ReadOnly = true;
             this.losses_X_Box8.Size = new System.Drawing.Size(40, 22);
@@ -5792,7 +5767,6 @@ namespace Isotope_fitting
             // losses_Y_Box8
             // 
             this.losses_Y_Box8.AutoSize = false;
-            this.losses_Y_Box8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box8.Name = "losses_Y_Box8";
             this.losses_Y_Box8.ReadOnly = true;
             this.losses_Y_Box8.Size = new System.Drawing.Size(40, 22);
@@ -5936,7 +5910,6 @@ namespace Isotope_fitting
             // losses_X_Box6
             // 
             this.losses_X_Box6.AutoSize = false;
-            this.losses_X_Box6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box6.Name = "losses_X_Box6";
             this.losses_X_Box6.ReadOnly = true;
             this.losses_X_Box6.Size = new System.Drawing.Size(40, 22);
@@ -5945,7 +5918,6 @@ namespace Isotope_fitting
             // losses_Y_Box6
             // 
             this.losses_Y_Box6.AutoSize = false;
-            this.losses_Y_Box6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box6.Name = "losses_Y_Box6";
             this.losses_Y_Box6.ReadOnly = true;
             this.losses_Y_Box6.Size = new System.Drawing.Size(40, 22);
@@ -6089,7 +6061,6 @@ namespace Isotope_fitting
             // losses_X_Box4
             // 
             this.losses_X_Box4.AutoSize = false;
-            this.losses_X_Box4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box4.Name = "losses_X_Box4";
             this.losses_X_Box4.ReadOnly = true;
             this.losses_X_Box4.Size = new System.Drawing.Size(40, 22);
@@ -6098,7 +6069,6 @@ namespace Isotope_fitting
             // losses_Y_Box4
             // 
             this.losses_Y_Box4.AutoSize = false;
-            this.losses_Y_Box4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box4.Name = "losses_Y_Box4";
             this.losses_Y_Box4.ReadOnly = true;
             this.losses_Y_Box4.Size = new System.Drawing.Size(40, 22);
@@ -6242,7 +6212,6 @@ namespace Isotope_fitting
             // losses_X_Box2
             // 
             this.losses_X_Box2.AutoSize = false;
-            this.losses_X_Box2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_X_Box2.Name = "losses_X_Box2";
             this.losses_X_Box2.ReadOnly = true;
             this.losses_X_Box2.Size = new System.Drawing.Size(40, 22);
@@ -6251,7 +6220,6 @@ namespace Isotope_fitting
             // losses_Y_Box2
             // 
             this.losses_Y_Box2.AutoSize = false;
-            this.losses_Y_Box2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.losses_Y_Box2.Name = "losses_Y_Box2";
             this.losses_Y_Box2.ReadOnly = true;
             this.losses_Y_Box2.Size = new System.Drawing.Size(40, 22);
@@ -6810,9 +6778,10 @@ namespace Isotope_fitting
             this.compPlt_LV.FullRowSelect = true;
             this.compPlt_LV.GridLines = true;
             this.compPlt_LV.HideSelection = false;
-            this.compPlt_LV.Location = new System.Drawing.Point(6, 20);
+            this.compPlt_LV.Location = new System.Drawing.Point(6, 19);
             this.compPlt_LV.MultiSelect = false;
             this.compPlt_LV.Name = "compPlt_LV";
+            this.compPlt_LV.ShowItemToolTips = true;
             this.compPlt_LV.Size = new System.Drawing.Size(273, 391);
             this.compPlt_LV.TabIndex = 0;
             this.compPlt_LV.UseCompatibleStateImageBehavior = false;
@@ -6821,22 +6790,22 @@ namespace Isotope_fitting
             // pept_TB
             // 
             this.pept_TB.Text = "Sequence";
-            this.pept_TB.Width = 67;
+            this.pept_TB.Width = 66;
             // 
             // mcharge_TB
             // 
             this.mcharge_TB.Text = "Charge";
-            this.mcharge_TB.Width = 66;
+            this.mcharge_TB.Width = 62;
             // 
             // peptideMonoMass
             // 
             this.peptideMonoMass.Text = "Mass";
-            this.peptideMonoMass.Width = 56;
+            this.peptideMonoMass.Width = 46;
             // 
             // fnCol
             // 
             this.fnCol.Text = "File Name";
-            this.fnCol.Width = 90;
+            this.fnCol.Width = 253;
             // 
             // toolStripButton4
             // 
