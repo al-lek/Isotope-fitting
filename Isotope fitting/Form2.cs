@@ -15231,6 +15231,7 @@ namespace Isotope_fitting
                 compPlt_LV.Items.Clear();
                 comp_charge_CB.Items.Clear();
                 pep_list.Clear();
+                comp_ordering_CV.Items.Clear();
             }
             catch(Exception ex) 
             {
