@@ -14023,7 +14023,7 @@ namespace Isotope_fitting
                 Multiselect = true,
                 Title = "Load Fitting Data",
                 InitialDirectory = Application.StartupPath, 
-                Filter = "Fit Files|*.fit;",
+                Filter = "Fit Files (*.fit;*.ifit)|*.fit;*.ifit",
                 FilterIndex = 1,
                 RestoreDirectory = true,
                 CheckFileExists = true,
@@ -14057,6 +14057,8 @@ namespace Isotope_fitting
                         else if (lista[j].StartsWith("Multiple")) continue;
                         else if (lista[j].StartsWith("Fitted")) continue;
                         else if (lista[j].StartsWith("Exclusion")) continue;
+                        else if (lista[j].StartsWith("Prof")) { continue; }
+                        else if (lista[j].StartsWith("Centr")) { continue; }
                         else 
                         {
                             FittedFrag ff = new FittedFrag();
@@ -14104,6 +14106,8 @@ namespace Isotope_fitting
                         }
                         else if (lista[j].StartsWith("Multiple")) { }
                         else if (lista[j].StartsWith("Fitted")) { numFrags = Convert.ToInt32(str[1]); }
+                        else if (lista[j].StartsWith("Prof")) { continue; }
+                        else if (lista[j].StartsWith("Centr")) { continue; }
                         else if (lista[j].StartsWith("Exclusion")) { }
                         else
                         {
@@ -14553,7 +14557,7 @@ namespace Isotope_fitting
 
         private void compLoadFit_Btn_Click(object sender, EventArgs e)
         {
-            if (peptide_info_csv != null)
+            if ((peptide_info_csv != null) || (peptide_info_csv.Count == 0))
             {
                 // if not initialised, create new appropriate container instances
                 if (d_per_file == null) { d_per_file = new Dictionary<string, Dictionary<string, Dictionary<string, List<FittedFrag>>>>(); }
@@ -14563,7 +14567,7 @@ namespace Isotope_fitting
                     Multiselect = true,
                     Title = "Load Fitting Data",
                     InitialDirectory = Application.StartupPath,
-                    Filter = "Fit Files|*.fit;",
+                    Filter = "Fit Files(*.fit;*.ifit)|*.fit;*.ifit",
                     FilterIndex = 1,
                     RestoreDirectory = true,
                     CheckFileExists = true,
@@ -14611,6 +14615,8 @@ namespace Isotope_fitting
                             }
                             else if (lista[j].StartsWith("Multiple")) { }
                             else if (lista[j].StartsWith("Fitted")) { numFrags = Convert.ToInt32(str[1]); }
+                            else if (lista[j].StartsWith("Prof")) { continue; }
+                            else if (lista[j].StartsWith("Centr")) { continue; }
                             else if (lista[j].StartsWith("Exclusion")) { }
                             else
                             {
@@ -15227,6 +15233,7 @@ namespace Isotope_fitting
             {
                 seqCov_plt.ViewXY.BarSeries.Clear();
                 compPairs_plt.ViewXY.BarSeries.Clear();
+                peptide_info_csv.Clear();
                 d_per_file.Clear();
                 compPlt_LV.Items.Clear();
                 comp_charge_CB.Items.Clear();
@@ -15291,7 +15298,7 @@ namespace Isotope_fitting
 
         #endregion
 
-        #endregion // complimentarity tab
+        #endregion // complementarity tab
 
         #endregion
 
