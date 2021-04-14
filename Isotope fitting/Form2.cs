@@ -14063,7 +14063,7 @@ namespace Isotope_fitting
                         {
                             FittedFrag ff = new FittedFrag();
                             ff.IonType = str[1];
-                            ff.Intensity = double.Parse(str[6]);
+                            ff.Intensity = (double.Parse(str[6])) * (double.Parse(str[7]));
                             if (ff.IonType.StartsWith("x") || ff.IonType.StartsWith("y") || ff.IonType.StartsWith("z") || ff.IonType.StartsWith("(x") || ff.IonType.StartsWith("(y") || ff.IonType.StartsWith("(z") || ff.IonType.StartsWith("v") || ff.IonType.StartsWith("w"))
                             {
                                 if (ff.Intensity > current_max) { current_max = ff.Intensity; }
@@ -14128,7 +14128,7 @@ namespace Isotope_fitting
                                 else if (ff.IonType.StartsWith("v") || ff.IonType.StartsWith("(v")) { aa_frags[ff.AminoAcid]["v"].Add(ff); }
                                 else if (ff.IonType.StartsWith("w") || ff.IonType.StartsWith("(w")) { aa_frags[ff.AminoAcid]["w"].Add(ff); }
                                 ff.AA_Count = num_aa_in_seq[ff.AminoAcid];
-                                ff.Intensity = (double.Parse(str[6])) / ff.AA_Count;
+                                ff.Intensity = (double.Parse(str[6]))*(double.Parse(str[7]));
 
                             }
                             else if (ff.IonType.StartsWith("a") || ff.IonType.StartsWith("b") || ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(a") || ff.IonType.StartsWith("(b") || ff.IonType.StartsWith("(c") || ff.IonType.StartsWith("d"))
@@ -14139,7 +14139,7 @@ namespace Isotope_fitting
                                 else if (ff.IonType.StartsWith("c") || ff.IonType.StartsWith("(c")) { aa_frags[ff.AminoAcid]["c"].Add(ff); }
                                 else if (ff.IonType.StartsWith("d") || ff.IonType.StartsWith("(d")) { aa_frags[ff.AminoAcid]["d"].Add(ff); }
                                 ff.AA_Count = num_aa_in_seq[ff.AminoAcid];
-                                ff.Intensity = (double.Parse(str[6])) / ff.AA_Count;
+                                ff.Intensity = (double.Parse(str[6]))*(double.Parse(str[7]));
                             }
 
                             ff.CurrentMax = current_max;
@@ -14148,7 +14148,7 @@ namespace Isotope_fitting
                     }
 
                     // add each item to the ListView
-                    string[] row = { peptide, numFrags.ToString() };
+                    string[] row = { peptide, numFrags.ToString(), file_name};
                     ListViewItem item = new ListViewItem(row);
 
                     fit_files_list.Items.Add(item);
@@ -14288,6 +14288,10 @@ namespace Isotope_fitting
             {
                 AAC_1.ViewXY.YAxes[0].Title.Text = "Mean Absolute Intensity";
             }
+            else if (tAbsInt_RB.Checked)
+            {
+                AAC_1.ViewXY.YAxes[0].Title.Text = "Absolute Intensity";
+            }
 
             if (hydro_RB.Checked)
             {
@@ -14410,15 +14414,19 @@ namespace Isotope_fitting
             {
                 if (relInt_RB.Checked)
                 {
-                    mean += frag.Intensity / frag.CurrentMax;
+                    mean += (frag.Intensity / frag.AA_Count) / frag.CurrentMax;
                 }
                 else if (absInt_RB.Checked)
+                {
+                    mean += frag.Intensity / frag.AA_Count;
+                }
+                else if (tAbsInt_RB.Checked)
                 {
                     mean += frag.Intensity;
                 }
                 
             }
-            mean = mean / num_experiments;
+            if (!tAbsInt_RB.Checked) { mean = mean / num_experiments; }
             return mean;
         }
 
